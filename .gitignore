@@ -1,0 +1,4 @@
+app/
+.betgpt-extract/
+betgpt-source.zip
+node_modules/
