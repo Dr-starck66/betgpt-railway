@@ -62,15 +62,14 @@ async function runPublicGate(reason) {
     { name: "sitemap", path: "/sitemap.xml", need: ["https://betgpt.live/"] },
     { name: "news-sitemap", path: "/news-sitemap.xml", need: ["guinea-bissau-nigeria-brief-2026-09-29"] },
   ];
-  const results = [];
-  let ok = true;
-  for (const check of checks) {
+
+  const results = await Promise.all(checks.map(async (check) => {
     try {
       const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 30_000);
+      const timer = setTimeout(() => controller.abort(), 15_000);
       const res = await fetch(base + check.path, {
         redirect: "follow",
-        headers: { "user-agent": "ASTRA-BetGPT-PublicGate/2.0", "cache-control": "no-cache" },
+        headers: { "user-agent": "ASTRA-BetGPT-PublicGate/2.1", "cache-control": "no-cache" },
         signal: controller.signal,
       });
       const body = await res.text();
@@ -79,15 +78,22 @@ async function runPublicGate(reason) {
       const forbidden = (check.forbid || []).filter((m) => body.includes(m));
       const hasCrest = !check.crest || /\/crests\/\d+\.png|teamlogos\/soccer\/500\/\d+\.png/.test(body);
       const hasProno = !check.prono || /Pronostic|probabilit|Pari conseillé|modèle/i.test(body);
-      const rowOk = res.status === 200 && missing.length === 0 && forbidden.length === 0 && hasCrest && hasProno;
-      results.push({ name: check.name, status: res.status, bytes: Buffer.byteLength(body), missing, forbidden, hasCrest, hasProno, ok: rowOk });
-      ok = ok && rowOk;
+      return {
+        name: check.name,
+        status: res.status,
+        bytes: Buffer.byteLength(body),
+        missing,
+        forbidden,
+        hasCrest,
+        hasProno,
+        ok: res.status === 200 && missing.length === 0 && forbidden.length === 0 && hasCrest && hasProno,
+      };
     } catch (error) {
-      ok = false;
-      results.push({ name: check.name, ok: false, error: error instanceof Error ? error.message : String(error) });
+      return { name: check.name, ok: false, error: error instanceof Error ? error.message : String(error) };
     }
-  }
-  console.log("[public-gate]", reason, JSON.stringify({ ok, results }));
+  }));
+
+  console.log("[public-gate]", reason, JSON.stringify({ ok: results.every((row) => row.ok), results }));
 }
 
 const editorialFirst = setTimeout(async () => {
