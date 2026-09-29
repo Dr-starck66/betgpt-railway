@@ -5,7 +5,7 @@ import { fmtOdds } from "@/lib/utils";
 import { skipEuropeFrenchProno } from "./french-clubs";
 
 const FILE = join(process.cwd(), "data", "prediction-hook.json");
-const DEFAULT_URL = "http://127.0.0.1:8787/prediction";
+const DEFAULT_URL = (process.env.BETGPT_PREDICTION_WEBHOOK_URL ?? "").trim();
 const inflight = new Set<string>();
 
 type Store = {
@@ -150,7 +150,8 @@ export async function pushNewPredictions(desk: {
   try {
     const s = load();
     if ((s.downUntil ?? 0) > Date.now()) return;
-    const url = s.url || DEFAULT_URL;
+    const url = (s.url || DEFAULT_URL).trim();
+    if (!url) return;
     const today = new Date().toLocaleDateString("en-CA", { timeZone: "Europe/Paris" });
     const sent = new Set(s.sent);
     const fresh: Payload[] = [];
