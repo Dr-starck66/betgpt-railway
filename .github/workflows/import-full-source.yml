@@ -5,6 +5,9 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/import-full-source.yml"
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
 
 permissions:
   contents: write
@@ -16,6 +19,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          ref: main
           fetch-depth: 0
 
       - name: Download verified BetGPT archive
