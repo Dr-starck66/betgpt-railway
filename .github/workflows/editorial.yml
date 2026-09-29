@@ -1,0 +1,19 @@
+name: editorial
+on:
+  schedule:
+    # 05:05, 10:30, 16:15 UTC ≈ 07:05, 12:30, 18:15 Paris en été.
+    # Le site publie aussi sans cron : la page calcule le créneau ouvert.
+    - cron: "5 5 * * *"
+    - cron: "30 10 * * *"
+    - cron: "15 16 * * *"
+  workflow_dispatch:
+jobs:
+  news:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm run news
