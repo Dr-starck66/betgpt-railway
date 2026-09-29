@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import type { NoBetApplicableMarket } from "./low-scoring-no-bet-gate.ts";
 import { applyLowScoringNoBetGateToMarkets, lowScoringNoBetGate } from "./low-scoring-no-bet-gate.ts";
 
 test("blocks a match when both expected-goal values are weak and 0-0 risk is elevated", () => {
@@ -54,9 +55,9 @@ test("invalid scoring context fails closed", () => {
 
 
 test("hard-vetoes every market, zeroes stake, and removes premium status", () => {
-  const markets = [
-    { decision: "BET" as const, stakePct: 0.04, premium: true, rejectionReason: undefined },
-    { decision: "WATCH" as const, stakePct: 0, premium: false, rejectionReason: undefined },
+  const markets: NoBetApplicableMarket[] = [
+    { decision: "BET", stakePct: 0.04, premium: true, rejectionReason: undefined },
+    { decision: "WATCH", stakePct: 0, premium: false, rejectionReason: undefined },
   ];
   const d = applyLowScoringNoBetGateToMarkets(markets, {
     source: "MODEL_LAMBDA",
