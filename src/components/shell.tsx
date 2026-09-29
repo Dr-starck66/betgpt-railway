@@ -126,7 +126,6 @@ export function AppShell({ children }: { children: ReactNode }) {
           <nav className="hidden flex-1 items-center justify-end gap-1.5 xl:flex" aria-label="Principal">
             {PRIMARY.map((item) => {
               const active = item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
-              const cta = item.to === "/score-hunter";
               return (
                 <Link
                   key={item.to}
@@ -135,11 +134,9 @@ export function AppShell({ children }: { children: ReactNode }) {
                   aria-current={active ? "page" : undefined}
                   className={cn(
                     "inline-flex min-h-11 shrink-0 items-center rounded-full px-4 text-sm font-semibold transition-colors",
-                    cta && !active
-                      ? "bg-sage text-ink shadow-[0_10px_24px_rgba(124,194,58,0.24)] hover:opacity-95"
-                      : active
-                        ? "bg-sage/12 text-link"
-                        : "text-mist hover:bg-slate-100 hover:text-paper",
+                    active
+                      ? "bg-sage/12 text-link"
+                      : "text-mist hover:bg-slate-100 hover:text-paper",
                   )}
                 >
                   {item.label}
@@ -185,7 +182,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 <Link
                   key={item.to}
                   to={item.to}
-                  preload={item.to === "/chat" ? false : "intent"}
+                  preload="intent"
                   aria-current={active ? "page" : undefined}
                   className={cn(
                     "inline-flex min-h-15 min-w-0 flex-col items-center justify-center gap-1 px-1 text-[11px] font-semibold",
