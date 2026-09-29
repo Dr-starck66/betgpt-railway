@@ -100,7 +100,7 @@ test('xG scoring context can remove an implausible opponent 2-1 hedge without ca
 
 test("low xG plus elevated 0-0 risk hard-vetoes the main bet and commits zero capital", () => {
   const now = Date.parse("2026-09-27T10:00:00Z");
-  const books = [{ book: "A", home: 2.2, draw: 3.1, away: 3.3, observedAt: "2026-09-27T09:59:00Z" }];
+  const books = [b("A", 2.2, 3.3, "2026-09-27T09:59:00Z")];
   const plan = buildCrossBookExecutionPlan({
     books,
     league: "LL",
