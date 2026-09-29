@@ -1088,8 +1088,28 @@ export function bustLive() {
 
 /** Fetch a single ESPN soccer event even after it left the live window. */
 export async function fetchEspnEvent(id) {
-	const eid = String(id ?? "").replace(/^espn-/i, "");
-	if (!/^\d{5,12}$/.test(eid)) return null;
+	const rawId = String(id ?? "");
+	const eid = rawId.replace(/^espn-/i, "");
+	if (!/^\d{5,12}$/.test(eid)) {
+		// Public URLs use human slugs. If the match is outside the in-memory desk,
+		// resolve it directly from the dated ESPN scoreboards instead of returning
+		// a dead dossier page.
+		const dm = rawId.match(/(\d{4}-\d{2}-\d{2})$/);
+		if (!dm) return null;
+		const date = dm[1].replaceAll("-", "");
+		const hits = await Promise.all(
+			LEAGUES.map(async (l) => {
+				try {
+					const board = await fetchBoard(l.slug, [date]);
+					const parsed = parseEvents(board, l.id, l.name, new Map(), {}, "single");
+					return parsed.matches.find((m) => m.slug === rawId) ?? null;
+				} catch {
+					return null;
+				}
+			}),
+		);
+		return hits.find(Boolean) ?? null;
+	}
 	const headers = {
 		"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
 		Accept: "application/json",
