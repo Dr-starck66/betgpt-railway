@@ -42,7 +42,8 @@
     "test:roi5-gate": "node --experimental-strip-types --test src/engine/roi5-dominance-gate.test.ts",
     "test:roi5-continuous": "node --experimental-strip-types --test src/engine/roi5-continuous-learning.test.ts",
     "test:league-expansion": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/engine/roi-league-expansion.test.ts",
-    "roi5:report": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/run-dominance-roi-gate.mjs"
+    "roi5:report": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/run-dominance-roi-gate.mjs",
+    "editorial:publish": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/run-editorial-publish.ts"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.4",
