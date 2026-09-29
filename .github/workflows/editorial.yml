@@ -1,19 +1,43 @@
-name: editorial
+name: editorial-publish
+
 on:
   schedule:
-    # 05:05, 10:30, 16:15 UTC ≈ 07:05, 12:30, 18:15 Paris en été.
-    # Le site publie aussi sans cron : la page calcule le créneau ouvert.
-    - cron: "5 5 * * *"
-    - cron: "30 10 * * *"
-    - cron: "15 16 * * *"
+    # Covers 08:05, 13:05 and 19:05 Europe/Paris in both CET and CEST.
+    # The engine only persists slots whose local opening time has passed.
+    - cron: "5 6,7,11,12,17,18 * * *"
   workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: betgpt-editorial-publish
+  cancel-in-progress: false
+
 jobs:
-  news:
+  publish:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: npm
       - run: npm ci
-      - run: npm run news
+      - name: Generate qualified editorial slots
+        run: npm run editorial:publish
+      - name: Persist published ledger
+        shell: bash
+        run: |
+          git add data/editorial/ledger.json
+          if git diff --cached --quiet; then
+            echo "No new qualified publication for this run."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "content: auto-publish BetGPT editorial ledger"
+          git push origin HEAD:main
