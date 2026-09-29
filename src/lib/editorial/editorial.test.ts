@@ -162,6 +162,7 @@ describe("editorial engine", () => {
     assert.ok(Date.parse("2026-09-20T08:00:00.000Z") < cutoff);
     const bad = qualityGate(
       {
+        articleType: "news",
         title: "INCROYABLE",
         h1: "INCROYABLE !!!",
         lead: "x".repeat(90),
