@@ -1,11 +1,11 @@
-import { defineEventHandler, getHeader } from "h3";
+import { defineEventHandler, getHeader, setResponseStatus } from "h3";
 import { editionFromDesk } from "../../../src/lib/editorial/run.server";
 
 export default defineEventHandler(async (event) => {
   const secret = (process.env.BETGPT_EDITORIAL_CRON_TOKEN ?? "").trim();
   const auth = getHeader(event, "authorization") ?? "";
   if (!secret || auth !== `Bearer ${secret}`) {
-    event.node.res.statusCode = 401;
+    setResponseStatus(event, 401);
     return { ok: false, error: "unauthorized" };
   }
   const { edition, durable } = await editionFromDesk(new Date());
