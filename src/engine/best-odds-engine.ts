@@ -1,5 +1,5 @@
 import type { BookOdds, MarketKind } from "./types.ts";
-import { lowScoringNoBetGate } from "./low-scoring-no-bet-gate.ts";
+import { lowScoringNoBetGate, type LowScoringContext } from "./low-scoring-no-bet-gate.ts";
 import {
   listedHedgeQuotes,
   type ListedExactScoreQuote,
@@ -146,7 +146,7 @@ export function buildCrossBookExecutionPlan(input: {
   mainStake: number;
   p11: number;
   pOpponent21: number;
-  scoringContext?: Parameters<typeof selectiveScoreHedge>[0]["scoringContext"];
+  scoringContext?: LowScoringContext;
   nowMs?: number;
   oddsPolicy?: Partial<CrossBookOddsPolicy>;
   hedgePolicy?: ScoreHedgePolicy;
