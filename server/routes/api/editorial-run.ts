@@ -27,5 +27,6 @@ export default defineEventHandler(async (event) => {
       status: article.status,
       publishedAt: article.publishedAt,
     })),
+    payload: published,
   };
 });
