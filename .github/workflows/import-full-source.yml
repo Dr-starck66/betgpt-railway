@@ -53,12 +53,11 @@ jobs:
         run: |
           set -euo pipefail
           SRC="/tmp/betgpt-import/betgpt_master_final/"
-          rsync -a --delete             --exclude=".git/"             --exclude=".github/workflows/import-full-source.yml"             "$SRC" ./
-          rm -f .github/workflows/import-full-source.yml
-          rmdir .github/workflows 2>/dev/null || true
-          rmdir .github 2>/dev/null || true
+          rsync -a --delete             --exclude=".git/"             --exclude=".github/workflows/"             "$SRC" ./
           COUNT="$(find . -type f ! -path "./.git/*" | wc -l | tr -d ' ')"
           test "$COUNT" = "908"
+          test -f .github/workflows/import-full-source.yml
+          test ! -f .github/workflows/editorial.yml
           test ! -f bootstrap.mjs
           echo "Repository now contains $COUNT source files"
 
