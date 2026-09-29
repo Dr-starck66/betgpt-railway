@@ -24,6 +24,36 @@ const preview = spawn(
   { cwd, stdio: "inherit", env: process.env },
 );
 
+async function runEditorial(reason) {
+  const token = (process.env.BETGPT_EDITORIAL_CRON_TOKEN || "").trim();
+  if (!token) {
+    console.log("[supervisor-editorial] skipped: token missing");
+    return;
+  }
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 90_000);
+    const res = await fetch("http://127.0.0.1:8080/api/editorial-run", {
+      headers: {
+        authorization: `Bearer ${token}`,
+        "user-agent": "BetGPT-Local-Scheduler/1.0",
+        "cache-control": "no-cache",
+      },
+      signal: controller.signal,
+    });
+    const body = await res.text();
+    clearTimeout(timer);
+    console.log("[supervisor-editorial]", reason, res.status, body.slice(0, 4000));
+  } catch (error) {
+    console.error("[supervisor-editorial] FAILED", reason, error instanceof Error ? error.stack ?? error.message : String(error));
+  }
+}
+
+const editorialFirst = setTimeout(() => void runEditorial("startup"), 20_000);
+editorialFirst.unref?.();
+const editorialTimer = setInterval(() => void runEditorial("interval"), 5 * 60 * 1000);
+editorialTimer.unref?.();
+
 let stopping = false;
 function stop(signal = "SIGTERM") {
   if (stopping) return;
