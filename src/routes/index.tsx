@@ -250,6 +250,21 @@ function Home() {
         <Kpi label="Écart moyen" value={fmtPct(data.summary.meanAbsEdge)} helper="edge moyen" />
       </section>
 
+      <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4" aria-label="Outils BetGPT">
+        <Link to="/score-hunter" className="block">
+          <QuickInfo icon={Trophy} title="Score Hunter" text="Scénarios de scores, probabilités et recherche ciblée par match." />
+        </Link>
+        <Link to="/ledger" className="block">
+          <QuickInfo icon={ShieldCheck} title="Bilan ROI public" text="Historique vérifié, résultats, mises et performance réelle du modèle." />
+        </Link>
+        <Link to="/chat" preload={false} className="block">
+          <QuickInfo icon={Sparkles} title="Chat BetGPT" text="Interroger le moteur sur un match, une cote ou un scénario de score." />
+        </Link>
+        <Link to="/methodology" className="block">
+          <QuickInfo icon={Activity} title="Méthodologie" text="Sources, modèles, limites et règles de validation expliqués publiquement." />
+        </Link>
+      </section>
+
       <HomeHunter />
 
       <LatestNews published={data.news.published} planned={data.news.planned} />
