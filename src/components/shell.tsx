@@ -20,6 +20,8 @@ const PRIMARY = [
   { to: "/resultats-football", label: "Résultats" },
   { to: "/actualites", label: "Actualités" },
   { to: "/comparer-cotes", label: "Cotes" },
+  { to: "/ledger", label: "Bilan ROI" },
+  { to: "/chat", label: "Chat IA" },
 ] as const;
 
 const MORE = [
@@ -218,7 +220,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             onKeyDown={(e) => {
               if (e.key === "Escape") setMore(false);
             }}
-            className="border-t border-line/80 bg-white/96 px-4 py-4 backdrop-blur xl:hidden"
+            className="border-t border-line/80 bg-white/96 px-4 py-4 backdrop-blur"
           >
             <div className="mx-auto grid max-w-[1480px] gap-4 sm:grid-cols-2 xl:grid-cols-4">
               <MenuGroup title="Matchs & pronostics">
@@ -313,6 +315,8 @@ export function AppShell({ children }: { children: ReactNode }) {
               <a href="/methodology" className="hover:text-paper">Méthode</a>
               <a href="/data-sources" className="hover:text-paper">Sources</a>
               <a href="/prediction-history" className="hover:text-paper">Historique</a>
+              <a href="/editorial-policy" className="hover:text-paper">Politique éditoriale</a>
+              <a href="/changelog" className="hover:text-paper">Changelog</a>
               <a href="/press" className="hover:text-paper">Presse</a>
               <a href="/mentions-legales" className="hover:text-paper">Mentions légales</a>
               <a href="/cgu" className="hover:text-paper">CGU</a>
