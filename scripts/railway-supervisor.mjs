@@ -1,7 +1,7 @@
 import { spawn } from "node:child_process";
 
 const cwd = process.cwd();
-const intervalMs = Math.max(60_000, Number(process.env.BETGPT_UPDATE_POLL_MS || 300_000));
+const intervalMs = Math.max(60_000, Number(process.env.BETGPT_UPDATE_POLL_MS || 60_000));
 const enabled = process.env.BETGPT_GIT_AUTOUPDATE !== "0";
 
 function run(cmd, args) {
