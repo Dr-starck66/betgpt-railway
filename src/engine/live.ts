@@ -90,6 +90,36 @@ const LEAGUES = [
 		name: "Qualifications Coupe d'Afrique des Nations"
 	}
 ];
+
+const EVENT_ONLY_LEAGUES = [
+  { id: "CL", slug: "uefa.champions_qual", name: "Qualifications Ligue des champions" },
+  { id: "EL", slug: "uefa.europa_qual", name: "Qualifications Ligue Europa" },
+  { id: "EL", slug: "uefa.europa.conf", name: "Ligue Conférence" },
+  { id: "EL", slug: "uefa.europa.conf_qual", name: "Qualifications Ligue Conférence" },
+  { id: "NL", slug: "uefa.euro", name: "Championnat d'Europe" },
+  { id: "NL", slug: "uefa.euroq", name: "Qualifications Euro" },
+  { id: "NL", slug: "fifa.world", name: "Coupe du monde" },
+  { id: "NL", slug: "fifa.worldq", name: "Qualifications Coupe du monde" },
+  { id: "NL", slug: "fifa.worldq.uefa", name: "Qualifications Coupe du monde - UEFA" },
+  { id: "NL", slug: "fifa.worldq.caf", name: "Qualifications Coupe du monde - CAF" },
+  { id: "NL", slug: "fifa.worldq.afc", name: "Qualifications Coupe du monde - AFC" },
+  { id: "NL", slug: "fifa.worldq.concacaf", name: "Qualifications Coupe du monde - CONCACAF" },
+  { id: "NL", slug: "fifa.worldq.conmebol", name: "Qualifications Coupe du monde - CONMEBOL" },
+  { id: "NL", slug: "caf.nations", name: "Coupe d'Afrique des Nations" },
+  { id: "NL", slug: "conmebol.america", name: "Copa América" },
+  { id: "NL", slug: "concacaf.gold", name: "Gold Cup" },
+  { id: "NL", slug: "afc.asian.cup", name: "Coupe d'Asie" },
+  { id: "PL", slug: "eng.fa", name: "FA Cup" },
+  { id: "PL", slug: "eng.league_cup", name: "League Cup" },
+  { id: "LL", slug: "esp.copa_del_rey", name: "Copa del Rey" },
+  { id: "BL", slug: "ger.dfb_pokal", name: "DFB-Pokal" },
+  { id: "SA", slug: "ita.coppa_italia", name: "Coupe d'Italie" },
+  { id: "L1", slug: "fra.coupe_de_france", name: "Coupe de France" },
+  { id: "PT", slug: "por.taca.portugal", name: "Taça de Portugal" },
+] as const;
+
+const EVENT_LEAGUES = [...LEAGUES, ...EVENT_ONLY_LEAGUES];
+
 const TTL_MS = 6e5;
 const SCORE_TTL_MS = 2e4;
 const STALE_MS = 432e5;
@@ -1098,7 +1128,7 @@ export async function fetchEspnEvent(id) {
 		if (!dm) return null;
 		const date = dm[1].replaceAll("-", "");
 		const hits = await Promise.all(
-			LEAGUES.map(async (l) => {
+			EVENT_LEAGUES.map(async (l) => {
 				try {
 					const board = await fetchBoard(l.slug, [date]);
 					const parsed = parseEvents(board, l.id, l.name, new Map(), {}, "single");
@@ -1116,7 +1146,7 @@ export async function fetchEspnEvent(id) {
 		Referer: "https://www.espn.co.uk/",
 		Origin: "https://www.espn.co.uk"
 	};
-	const hits = await Promise.all(LEAGUES.map(async (l) => {
+	const hits = await Promise.all(EVENT_LEAGUES.map(async (l) => {
 		try {
 			const res = await fetch(`https://site.web.api.espn.com/apis/site/v2/sports/soccer/${l.slug}/summary?event=${eid}`, {
 				signal: AbortSignal.timeout(4000),
