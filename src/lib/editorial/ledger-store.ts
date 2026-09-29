@@ -1,10 +1,15 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import type { EditorialArticle } from "@/lib/editorial/types";
-import { getSql } from "@/lib/db";
+import { dbSource, getSql } from "@/lib/db";
 
 const memory = new Map<string, EditorialArticle>();
 const FILE = "data/editorial/ledger.json";
+const REMOTE_LEDGER =
+  (typeof process !== "undefined" && process.env.BETGPT_EDITORIAL_LEDGER_URL?.trim()) ||
+  "https://raw.githubusercontent.com/Dr-starck66/betgpt-railway/main/data/editorial/ledger.json";
+const REMOTE_TTL_MS = 5 * 60 * 1000;
 let hydratedFromDatabase = false;
+let lastRemoteRead = 0;
 
 function remember(articles: EditorialArticle[]): EditorialArticle[] {
   for (const article of articles) {
@@ -24,18 +29,43 @@ export function readLedger(): EditorialArticle[] {
   }
 }
 
-export async function readLedgerDurable(): Promise<EditorialArticle[]> {
-  if (hydratedFromDatabase && memory.size) return [...memory.values()];
+async function readRemoteLedger(): Promise<EditorialArticle[]> {
   try {
-    const sql = await getSql();
-    const rows = await sql.query<{ payload: EditorialArticle }>(
-      "select payload from editorial_articles order by coalesce(published_at, updated_at) desc limit 250",
-    );
-    hydratedFromDatabase = true;
-    if (rows.length) return remember(rows.map((row) => row.payload));
+    const response = await fetch(REMOTE_LEDGER, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(5000),
+      headers: { "user-agent": "BetGPT-Editorial-Ledger/1.0" },
+    });
+    if (!response.ok) return [];
+    const parsed = (await response.json()) as EditorialArticle[];
+    if (!Array.isArray(parsed)) return [];
+    lastRemoteRead = Date.now();
+    return remember(parsed);
   } catch {
-    // Local preview or missing migration: fall back to file/memory below.
+    return [];
   }
+}
+
+export async function readLedgerDurable(): Promise<EditorialArticle[]> {
+  if (dbSource === "neon") {
+    if (hydratedFromDatabase && memory.size) return [...memory.values()];
+    try {
+      const sql = await getSql();
+      const rows = await sql.query<{ payload: EditorialArticle }>(
+        "select payload from editorial_articles order by coalesce(published_at, updated_at) desc limit 250",
+      );
+      hydratedFromDatabase = true;
+      if (rows.length) return remember(rows.map((row) => row.payload));
+    } catch {
+      // Database unavailable: use the Git-backed ledger below.
+    }
+  }
+
+  if (memory.size && Date.now() - lastRemoteRead < REMOTE_TTL_MS) {
+    return [...memory.values()];
+  }
+  const remote = await readRemoteLedger();
+  if (remote.length) return remote;
   return readLedger();
 }
 
@@ -43,7 +73,7 @@ export function writeLedger(articles: EditorialArticle[]): boolean {
   remember(articles);
   try {
     mkdirSync("data/editorial", { recursive: true });
-    writeFileSync(FILE, JSON.stringify([...memory.values()]));
+    writeFileSync(FILE, JSON.stringify([...memory.values()], null, 2) + "\n");
     return true;
   } catch {
     return false;
@@ -53,34 +83,39 @@ export function writeLedger(articles: EditorialArticle[]): boolean {
 export async function writeLedgerDurable(articles: EditorialArticle[]): Promise<boolean> {
   remember(articles);
   if (!articles.length) return true;
-  try {
-    const sql = await getSql();
-    for (const article of articles) {
-      await sql.query(
-        `insert into editorial_articles (id, paris_date, slot, status, published_at, modified_at, payload, updated_at)
-         values ($1, $2, $3, $4, $5, $6, $7::jsonb, now())
-         on conflict (id) do update set
-           paris_date = excluded.paris_date,
-           slot = excluded.slot,
-           status = excluded.status,
-           published_at = excluded.published_at,
-           modified_at = excluded.modified_at,
-           payload = excluded.payload,
-           updated_at = now()`,
-        [
-          article.id,
-          article.parisDate,
-          article.slot,
-          article.status,
-          article.publishedAt,
-          article.modifiedAt,
-          JSON.stringify(article),
-        ],
-      );
+
+  if (dbSource === "neon") {
+    try {
+      const sql = await getSql();
+      for (const article of articles) {
+        await sql.query(
+          `insert into editorial_articles (id, paris_date, slot, status, published_at, modified_at, payload, updated_at)
+           values ($1, $2, $3, $4, $5, $6, $7::jsonb, now())
+           on conflict (id) do update set
+             paris_date = excluded.paris_date,
+             slot = excluded.slot,
+             status = excluded.status,
+             published_at = excluded.published_at,
+             modified_at = excluded.modified_at,
+             payload = excluded.payload,
+             updated_at = now()`,
+          [
+            article.id,
+            article.parisDate,
+            article.slot,
+            article.status,
+            article.publishedAt,
+            article.modifiedAt,
+            JSON.stringify(article),
+          ],
+        );
+      }
+      hydratedFromDatabase = true;
+      return true;
+    } catch {
+      // Fall through to the Git/file ledger.
     }
-    hydratedFromDatabase = true;
-    return true;
-  } catch {
-    return writeLedger(articles);
   }
+
+  return writeLedger(articles);
 }
