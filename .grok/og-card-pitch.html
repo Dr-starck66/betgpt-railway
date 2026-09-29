@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,500;1,9..144,600&family=IBM+Plex+Sans:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body {
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        background: #0c0f0d;
+      }
+      .card {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        background: #0c0f0d;
+        color: #e8ece6;
+      }
+      .bg {
+        position: absolute;
+        inset: -4%;
+        background: url("og-bg-pitch.jpg") center 42% / cover no-repeat;
+        filter: saturate(0.9) contrast(1.05);
+      }
+      .veil {
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(ellipse 64% 58% at 50% 46%, rgb(12 15 13 / 0.18) 0%, rgb(12 15 13 / 0.55) 55%, rgb(12 15 13 / 0.84) 100%);
+      }
+      .lockup {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 72px 160px;
+      }
+      .kicker {
+        font-family: "IBM Plex Sans", ui-sans-serif, sans-serif;
+        font-size: 15px;
+        font-weight: 500;
+        letter-spacing: 0.42em;
+        text-transform: uppercase;
+        color: #8fad7a;
+        margin-bottom: 18px;
+      }
+      h1 {
+        font-family: Fraunces, "Iowan Old Style", Palatino, serif;
+        font-style: italic;
+        font-weight: 500;
+        font-optical-sizing: auto;
+        font-size: 168px;
+        letter-spacing: -0.035em;
+        line-height: 0.88;
+        color: #e8ece6;
+        text-shadow: 0 18px 40px rgb(0 0 0 / 0.5);
+      }
+      .rule {
+        width: 88px;
+        height: 3px;
+        background: #c45c4a;
+        border-radius: 2px;
+        margin: 26px 0 20px;
+      }
+      .tag {
+        font-family: "IBM Plex Sans", ui-sans-serif, sans-serif;
+        font-size: 20px;
+        font-weight: 400;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #c4a574;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="bg"></div>
+      <div class="veil"></div>
+      <div class="lockup">
+        <div class="kicker">Desk</div>
+        <h1>Calibre</h1>
+        <div class="rule"></div>
+        <div class="tag">Football intelligence</div>
+      </div>
+    </div>
+  </body>
+</html>

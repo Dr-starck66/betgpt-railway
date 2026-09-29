@@ -1,0 +1,143 @@
+{
+  "generatedAt": "2026-09-26T23:03:22.497Z",
+  "archivePriorN": 11163,
+  "honestWalkForwardN": 106,
+  "trustTopQuartile": {
+    "n": 28,
+    "wins": 18,
+    "losses": 10,
+    "hitRate": 0.6428571428571429,
+    "avgOdds": 2.0976911638765303,
+    "roiFlat": 0.3112625924479587
+  },
+  "policy": {
+    "minTrust": 0.48,
+    "minProb": 0.36,
+    "maxOdds": 2.5,
+    "minEv": -0.1,
+    "profile": "SIDE_PLUS_BTTS",
+    "status": "SHADOW",
+    "objective": "ROI_FIRST",
+    "baselineHoldout": {
+      "n": 30,
+      "wins": 12,
+      "losses": 18,
+      "hitRate": 0.4,
+      "avgOdds": 2.508666666666667,
+      "roiFlat": -0.0023333333333333426
+    },
+    "accuracyTargetMet": false,
+    "train": {
+      "n": 19,
+      "wins": 16,
+      "losses": 3,
+      "hitRate": 0.8421052631578947,
+      "avgOdds": 2.0655448730812025,
+      "roiFlat": 0.7265975046601497
+    },
+    "trainRecent": {
+      "n": 7,
+      "wins": 6,
+      "losses": 1,
+      "hitRate": 0.8571428571428571,
+      "avgOdds": 2.18,
+      "roiFlat": 0.8614285714285715
+    },
+    "holdout": {
+      "n": 2,
+      "wins": 0,
+      "losses": 2,
+      "hitRate": 0,
+      "avgOdds": 1.93,
+      "roiFlat": -1
+    },
+    "stability": 0.21296398311714393,
+    "candidateCount": 600,
+    "reason": "SHADOW ROI-FIRST : promotion refusée (lift ROI -99.77 pts, stabilité 21 %, n=2)."
+  },
+  "drift": {
+    "detected": true,
+    "earlierHitRate": 0.7391304347826086,
+    "recentHitRate": 0.2,
+    "delta": -0.5391304347826087,
+    "message": "CONCEPT_DRIFT: recalibration accélérée requise"
+  },
+  "toxicSegments": [
+    {
+      "dimension": "odds",
+      "key": "3.40+",
+      "n": 15,
+      "hitRate": 0.06666666666666667,
+      "severity": "AVOID"
+    },
+    {
+      "dimension": "league",
+      "key": "EL",
+      "n": 13,
+      "hitRate": 0.07692307692307693,
+      "severity": "AVOID"
+    },
+    {
+      "dimension": "market",
+      "key": "1X2_D",
+      "n": 5,
+      "hitRate": 0.2,
+      "severity": "WATCH"
+    },
+    {
+      "dimension": "market",
+      "key": "OU_25_U",
+      "n": 11,
+      "hitRate": 0.2727272727272727,
+      "severity": "AVOID"
+    },
+    {
+      "dimension": "league",
+      "key": "NL",
+      "n": 9,
+      "hitRate": 0.3333333333333333,
+      "severity": "WATCH"
+    },
+    {
+      "dimension": "league",
+      "key": "SA",
+      "n": 17,
+      "hitRate": 0.35294117647058826,
+      "severity": "WATCH"
+    },
+    {
+      "dimension": "odds",
+      "key": "2.80–3.39",
+      "n": 16,
+      "hitRate": 0.375,
+      "severity": "WATCH"
+    },
+    {
+      "dimension": "league",
+      "key": "BL",
+      "n": 13,
+      "hitRate": 0.38461538461538464,
+      "severity": "WATCH"
+    },
+    {
+      "dimension": "league",
+      "key": "PL",
+      "n": 13,
+      "hitRate": 0.38461538461538464,
+      "severity": "WATCH"
+    },
+    {
+      "dimension": "market",
+      "key": "1X2_H",
+      "n": 54,
+      "hitRate": 0.3888888888888889,
+      "severity": "WATCH"
+    }
+  ],
+  "lessons": [
+    "Rétro-apprentissage activé sur 11 163 observations historiques pondérées comme prior, sans les compter comme preuve du KPI.",
+    "Walk-forward honnête : 106 tickets scorés uniquement avec l'information disponible avant chacun d'eux.",
+    "Dérive détectée : les segments auparavant fiables se dégradent récemment ; le poids du passé doit être réduit et le challenger reste en shadow.",
+    "Chaque nouveau résultat réglé est ajouté après son scoring : une erreur peut corriger les matchs suivants, jamais son propre passé."
+  ]
+}

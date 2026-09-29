@@ -1,0 +1,184 @@
+{
+  "version": "portfolio-lab-v1",
+  "generatedAt": "2026-09-26T22:56:10.973Z",
+  "mode": "RESEARCH_SHADOW_ONLY",
+  "objective": {
+    "minMainOdds": 1.8,
+    "accuracyTarget": 0.6,
+    "optimize": [
+      "holdout_roi",
+      "holdout_profit",
+      "max_drawdown",
+      "stability"
+    ],
+    "note": "Normalized research exposure is not a real-money staking recommendation."
+  },
+  "discovery": {
+    "baseline": {
+      "train": {
+        "n": 5016,
+        "wins": 2495,
+        "losses": 2521,
+        "hitRate": 0.497408293460925,
+        "profit": 391.85091558905594,
+        "capital": 5016,
+        "roi": 0.07812019848266666,
+        "maxDrawdown": 78.8111605120369,
+        "avgOdds": 2.2034255723559526
+      },
+      "validation": {
+        "n": 1638,
+        "wins": 846,
+        "losses": 792,
+        "hitRate": 0.5164835164835165,
+        "profit": 180.71701035152267,
+        "capital": 1638,
+        "roi": 0.11032784514744974,
+        "maxDrawdown": 21.41108754336949,
+        "avgOdds": 2.1684132272292036
+      },
+      "holdout": {
+        "n": 1656,
+        "wins": 831,
+        "losses": 825,
+        "hitRate": 0.5018115942028986,
+        "profit": 131.90653362870611,
+        "capital": 1656,
+        "roi": 0.07965370388206891,
+        "maxDrawdown": 19.50802755455355,
+        "avgOdds": 2.1731229501550575
+      }
+    },
+    "accuracyRule": {
+      "id": "r161",
+      "market": "ALL",
+      "minOdds": 1.8,
+      "maxOdds": 1.95,
+      "minModelProb": 0,
+      "league": "ALL"
+    },
+    "valueRule": {
+      "id": "r2561",
+      "market": "1X2_A",
+      "minOdds": 1.8,
+      "maxOdds": 3,
+      "minModelProb": 0,
+      "league": "ALL"
+    },
+    "accuracy": {
+      "train": {
+        "n": 599,
+        "wins": 399,
+        "losses": 200,
+        "hitRate": 0.666110183639399,
+        "profit": 150.9023787245396,
+        "capital": 599,
+        "roi": 0.25192383760357195,
+        "maxDrawdown": 11.67971393248368,
+        "avgOdds": 1.8806585755981524
+      },
+      "validation": {
+        "n": 299,
+        "wins": 187,
+        "losses": 112,
+        "hitRate": 0.6254180602006689,
+        "profit": 52.74612122023952,
+        "capital": 299,
+        "roi": 0.17640843217471414,
+        "maxDrawdown": 8.077516959382848,
+        "avgOdds": 1.8795903559892062
+      },
+      "holdout": {
+        "n": 270,
+        "wins": 163,
+        "losses": 107,
+        "hitRate": 0.6037037037037037,
+        "profit": 36.280822857562754,
+        "capital": 270,
+        "roi": 0.13437341799097316,
+        "maxDrawdown": 12.033413333666264,
+        "avgOdds": 1.8794888380441495
+      }
+    },
+    "value": {
+      "train": {
+        "n": 1253,
+        "wins": 686,
+        "losses": 567,
+        "hitRate": 0.547486033519553,
+        "profit": 425.3470217149864,
+        "capital": 1253,
+        "roi": 0.3394629063966372,
+        "maxDrawdown": 14.753479425265823,
+        "avgOdds": 2.4606330490782744
+      },
+      "validation": {
+        "n": 664,
+        "wins": 374,
+        "losses": 290,
+        "hitRate": 0.5632530120481928,
+        "profit": 215.8434786675216,
+        "capital": 664,
+        "roi": 0.32506547992096624,
+        "maxDrawdown": 7.316023391212482,
+        "avgOdds": 2.38213138247209
+      },
+      "holdout": {
+        "n": 652,
+        "wins": 337,
+        "losses": 315,
+        "hitRate": 0.5168711656441718,
+        "profit": 132.76037754772545,
+        "capital": 652,
+        "roi": 0.2036202109627691,
+        "maxDrawdown": 13.654840875887459,
+        "avgOdds": 2.3742416248353893
+      }
+    },
+    "hybrid": {
+      "train": {
+        "n": 1821,
+        "wins": 1061,
+        "losses": 760,
+        "hitRate": 0.5826468973091707,
+        "profit": 459.02855759692534,
+        "capital": 1515.5,
+        "roi": 0.3028891835017653,
+        "maxDrawdown": 12.479024948592837,
+        "avgOdds": 2.2400642793000176
+      },
+      "validation": {
+        "n": 921,
+        "wins": 529,
+        "losses": 392,
+        "hitRate": 0.5743756786102063,
+        "profit": 200.8724694462422,
+        "capital": 765.5,
+        "roi": 0.26240688366589443,
+        "maxDrawdown": 8.48701754340938,
+        "avgOdds": 2.206347216345389
+      },
+      "holdout": {
+        "n": 872,
+        "wins": 465,
+        "losses": 407,
+        "hitRate": 0.533256880733945,
+        "profit": 123.82900102205429,
+        "capital": 721.5,
+        "roi": 0.1716271670437343,
+        "maxDrawdown": 15.377139314820326,
+        "avgOdds": 2.214219988221309
+      }
+    },
+    "gates": {
+      "accuracyPass": true,
+      "valuePass": true,
+      "hybridPass": true
+    }
+  },
+  "warnings": [
+    "Historical bookmaker/exact-score pricing is incomplete or partly synthetic.",
+    "Holdout performance is historical evidence, not a guarantee of future profitability.",
+    "Any live promotion must use timestamped real bookmaker prices collected before kickoff."
+  ]
+}

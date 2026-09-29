@@ -1,0 +1,25 @@
+BETGPT — CODE CORRIGÉ COMPLET, ARCHIVE LÉGÈRE
+
+Cette archive remplace le ZIP tronqué précédemment fourni.
+Elle contient tous les fichiers src/, scripts/, server/, migrations/,
+les fichiers de configuration et le verrouillage npm.
+Les fichiers sont à la racine du ZIP, prêts à fusionner avec le projet existant.
+
+INSTALLATION DANS LE PROJET EXISTANT
+1. Conserver une sauvegarde du projet en place.
+2. Extraire et fusionner le contenu à sa racine, en remplaçant les fichiers de même nom.
+3. CONSERVER les dossiers public/ et data/ existants : ils sont volontairement absents
+   de cette livraison légère, ainsi que node_modules et les sorties de compilation.
+4. Reconstruire le projet pour que les corrections apparaissent dans l'aperçu.
+
+Ce ZIP n'est pas un site HTML autonome et n'est pas déjà déployé.
+Il contient bien les pages, le moteur, le tchat, les routes serveur et les scripts.
+
+VÉRIFICATION DE LA LIVRAISON
+Archive ZIP standard avec répertoire central et fin de ZIP.
+Extraction complète testée ; chaque fichier extrait comparé octet pour octet
+aux sources corrigées. SHA256-FICHIERS.json contient les empreintes des sources.
+Aucun nouveau changement fonctionnel dans cette livraison : reconditionnement
+intégral du code corrigé et testé précédemment.
+Les validations visuelles mobile, xAI réel, base de production et indexation Google
+restent non effectuées, comme indiqué dans le rapport de corrections précédent.

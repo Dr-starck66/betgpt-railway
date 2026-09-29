@@ -1,0 +1,143 @@
+import { Link } from "@tanstack/react-router";
+import { newsArticleLd, breadcrumbLd } from "@/lib/editorial/schema";
+import { formatParis } from "@/lib/editorial/time";
+import type { EditorialArticle } from "@/lib/editorial/types";
+import { ld } from "@/lib/ld";
+
+export function NewsArticleView({ article }: { article: EditorialArticle }) {
+  const published = formatParis(article.publishedAt);
+  const modified =
+    article.modifiedAt && article.publishedAt && article.modifiedAt > article.publishedAt
+      ? formatParis(article.modifiedAt)
+      : null;
+
+  return (
+    <article className="mx-auto max-w-[1240px] space-y-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ld(newsArticleLd(article)) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ld(breadcrumbLd(article)) }} />
+
+      <div className="hero-panel overflow-hidden p-6 sm:p-8 lg:p-10">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start">
+          <div className="min-w-0">
+            <div className="flex flex-wrap gap-2">
+              <span className="chip-pill border-sage/25 bg-sage/10 text-link">{article.category}</span>
+              <span className="chip-pill">{article.competition}</span>
+            </div>
+            <h1 className="mt-5 font-display text-3xl tracking-tight sm:text-4xl lg:text-5xl">{article.h1}</h1>
+            <p className="mt-4 max-w-3xl text-base leading-relaxed text-mist sm:text-lg">{article.lead}</p>
+
+            <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted">
+              <span>Publié le {published} (Europe/Paris)</span>
+              {modified ? <span>Mis à jour le {modified}</span> : null}
+              <span>
+                Par{" "}
+                <Link to="/auteurs/betgpt-editorial" className="font-semibold text-link hover:underline">
+                  BetGPT Editorial
+                </Link>
+              </span>
+            </div>
+          </div>
+
+          <aside className="glass-panel p-5">
+            <p className="text-sm font-semibold text-paper">À retenir</p>
+            <ul className="mt-4 space-y-3 text-sm leading-relaxed text-mist">
+              <li>• Sujet sélectionné pour son intérêt football et sa pertinence en France.</li>
+              <li>• Informations relues à partir de sources identifiées dans l’article.</li>
+              <li>• Mises à jour uniquement lorsque le contenu visible change réellement.</li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+
+      <figure className="section-card overflow-hidden">
+        <img
+          src={article.image.src}
+          alt={article.image.alt}
+          width={article.image.width}
+          height={article.image.height}
+          className="aspect-video w-full object-cover"
+        />
+        <figcaption className="border-t border-line px-4 py-3 text-xs text-muted sm:px-6">
+          {article.image.credit}
+        </figcaption>
+      </figure>
+
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start">
+        <div className="min-w-0 space-y-6">
+          <div className="surface-card p-5 sm:p-6">
+            <p className="readable-prose text-paper">{article.lead}</p>
+          </div>
+
+          {article.paragraphs.map((part) => (
+            <section key={part.h2} className="surface-card space-y-4 p-5 sm:p-7">
+              <h2 className="text-2xl font-semibold tracking-tight">{part.h2}</h2>
+              <p className="readable-prose">{part.body}</p>
+            </section>
+          ))}
+
+          {article.corrections.length ? (
+            <section className="surface-card p-5 text-sm text-mist sm:p-6">
+              <h2 className="text-lg font-semibold text-paper">Corrections</h2>
+              <ul className="mt-3 space-y-2">
+                {article.corrections.map((row) => (
+                  <li key={row.at}>
+                    {formatParis(row.at)} — {row.note}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+        </div>
+
+        <aside className="space-y-4 lg:sticky lg:top-28">
+          <section className="surface-card p-5">
+            <h2 className="text-base font-semibold text-paper">Sources</h2>
+            <ul className="mt-4 space-y-3 text-sm leading-relaxed text-mist">
+              {article.sources.map((source) => (
+                <li key={source.id}>
+                  {source.url ? (
+                    <a href={source.url} rel="nofollow noopener noreferrer" className="font-semibold text-link hover:underline">
+                      {source.label}
+                    </a>
+                  ) : (
+                    <span className="font-semibold text-paper">{source.label}</span>
+                  )}
+                  <div>{source.status}</div>
+                  <div>{source.note}</div>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="surface-card p-5">
+            <h2 className="text-base font-semibold text-paper">À suivre sur BetGPT</h2>
+            <ul className="mt-4 flex flex-wrap gap-2">
+              {article.links.map((link) => (
+                <li key={link.href}>
+                  <a href={link.href} className="chip-pill hover:border-sage/30 hover:text-link">
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          {article.related.length ? (
+            <section className="surface-card p-5">
+              <h2 className="text-base font-semibold text-paper">À lire aussi</h2>
+              <ul className="mt-4 space-y-3 text-sm leading-relaxed">
+                {article.related.map((item) => (
+                  <li key={item.href}>
+                    <a href={item.href} className="font-medium text-paper hover:text-link">
+                      {item.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+        </aside>
+      </div>
+    </article>
+  );
+}

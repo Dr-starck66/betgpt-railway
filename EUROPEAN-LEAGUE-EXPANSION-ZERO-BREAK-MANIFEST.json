@@ -1,0 +1,82 @@
+{
+  "baselineZip": "BETGPT-ASTRA-OMEGA-MASTER-FINAL-ROI5-CONTINUOUS.zip",
+  "baselineSha256": "0791303db3bd4ea7b03a03a2a1f7462d068d3c20f96cdd8da9cb830f0923ea11",
+  "release": "EUROPEAN_LEAGUE_EXPANSION_V1",
+  "activeAddedLeagues": [
+    {
+      "id": "ER",
+      "name": "Eredivisie",
+      "espn": "ned.1"
+    },
+    {
+      "id": "PT",
+      "name": "Primeira Liga",
+      "espn": "por.1"
+    },
+    {
+      "id": "SC",
+      "name": "Premiership écossaise",
+      "espn": "sco.1"
+    },
+    {
+      "id": "TR",
+      "name": "Süper Lig",
+      "espn": "tur.1"
+    }
+  ],
+  "routes": {
+    "baseline": 101,
+    "current": 101
+  },
+  "publicFiles": {
+    "baseline": 230,
+    "current": 230
+  },
+  "serverFiles": {
+    "baseline": 23,
+    "current": 23
+  },
+  "criticalSeoFilesByteIdentical": {
+    "server/routes/sitemap.xml.ts": true,
+    "server/routes/news-sitemap.xml.ts": true,
+    "server/routes/sitemap-images.xml.ts": true,
+    "server/routes/sitemap.html.ts": true,
+    "server/routes/robots.txt.ts": true,
+    "src/lib/sitemap-urls.ts": true,
+    "src/lib/sitemap-metadata.ts": true,
+    "src/lib/robots.ts": true,
+    "vercel.json": true,
+    "vite.config.ts": true
+  },
+  "tests": {
+    "targeted": {
+      "pass": 63,
+      "fail": 0,
+      "file": "EUROPEAN-LEAGUE-EXPANSION-TARGETED-TESTS.txt"
+    },
+    "global": {
+      "pass": 204,
+      "fail": 6,
+      "total": 210,
+      "sameKnownRawHtmlSsrSeoFailures": true,
+      "file": "EUROPEAN-LEAGUE-EXPANSION-GLOBAL-TESTS.txt"
+    },
+    "typecheck": {
+      "status": "BLOCKED_BY_MISSING_SOURCE_ARCHIVE_TYPES",
+      "missing": [
+        "node",
+        "vite/client"
+      ],
+      "file": "EUROPEAN-LEAGUE-EXPANSION-TYPECHECK.txt"
+    }
+  },
+  "researchEvidence": {
+    "method": "same selection strategy replay; OpenFootball results; reconstructed research prices/lambdas",
+    "bigFiveOverallRoi": 0.1052,
+    "bigFiveRecentRoi": 0.1114,
+    "bigFivePlus4OverallRoi": 0.1181,
+    "bigFivePlus4RecentRoi": 0.1289,
+    "notLiveBookmakerProof": true
+  },
+  "liveSafety": "No synthetic live odds; exact-score hedge fails closed when listed timestamped exact-score prices are unavailable."
+}

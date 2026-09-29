@@ -1,0 +1,23 @@
+{
+  "version": "selective-hedge-v1",
+  "status": "SHADOW",
+  "recoveryFraction": 0.5,
+  "mainOddsMin": 1.8,
+  "mainOddsMax": 2.5,
+  "p11Min": 0.143,
+  "allowedLeagues": ["LL"],
+  "minListedExactOdds": 4.5,
+  "minExactScoreEv": 0.05,
+  "maxHedgeStakeFraction": 0.10,
+  "requiresListedBookmakerOdds": true,
+  "evidence": {
+    "train": {"n": 457, "hedgeOnlyRoi": 0.242726, "portfolioRoiDelta": 0.001151, "profitDelta": 8.569276, "drawdownDelta": -1.287828},
+    "validation": {"n": 135, "hedgeOnlyRoi": 0.438335, "portfolioRoiDelta": 0.002057, "profitDelta": 4.573707, "drawdownDelta": -0.113070},
+    "holdout": {"n": 138, "hedgeOnlyRoi": 0.568399, "portfolioRoiDelta": 0.003129, "profitDelta": 6.067939, "drawdownDelta": -0.612262}
+  },
+  "limitations": [
+    "Historical exact-score odds are synthetic, not bookmaker-timestamped.",
+    "Policy remains SHADOW until real listed 1-1 odds are stored and revalidated.",
+    "No guarantee of future profitability."
+  ]
+}

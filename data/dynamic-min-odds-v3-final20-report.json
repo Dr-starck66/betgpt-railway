@@ -1,0 +1,60 @@
+{
+  "version": "dynamic-min-odds-v3-final20",
+  "generatedAt": "2026-09-26T23:12:33.766Z",
+  "mode": "RESEARCH_SHADOW_ONLY",
+  "rows": 11163,
+  "cut": 8930,
+  "warmup": 8930,
+  "plain": {
+    "n": 88,
+    "wins": 51,
+    "losses": 37,
+    "hitRate": 0.5795454545454546,
+    "profit": 33.180780246327956,
+    "capital": 88,
+    "roi": 0.3770543209809995,
+    "maxDrawdown": 5,
+    "hedges": 0,
+    "hedgeHits": 0,
+    "hedgeHitRate": 0,
+    "by": {}
+  },
+  "hedged": {
+    "n": 88,
+    "wins": 51,
+    "losses": 37,
+    "hitRate": 0.5795454545454546,
+    "profit": 33.180780246327956,
+    "capital": 88,
+    "roi": 0.3770543209809995,
+    "maxDrawdown": 5,
+    "hedges": 0,
+    "hedgeHits": 0,
+    "hedgeHitRate": 0,
+    "by": {}
+  },
+  "baseline": {
+    "n": 1656,
+    "wins": 831,
+    "losses": 825,
+    "hitRate": 0.5018115942028986,
+    "profit": 131.90653362870611,
+    "capital": 1656,
+    "roi": 0.07965370388206891,
+    "maxDrawdown": 19.50802755455355,
+    "hedges": 0,
+    "hedgeHits": 0,
+    "hedgeHitRate": 0,
+    "by": {}
+  },
+  "promotions": 2,
+  "rollbacks": 0,
+  "finalChampion": {
+    "id": "roi-2520",
+    "market": "1X2_A",
+    "minOdds": 2.05,
+    "maxOdds": 3,
+    "minModelProb": 0,
+    "league": "SA"
+  }
+}

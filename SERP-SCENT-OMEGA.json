@@ -1,0 +1,29 @@
+{
+  "name": "SERP SCENT ENGINE Ω",
+  "version": "1.0.0",
+  "scope": "past + current + future search/editorial sites",
+  "required": true,
+  "states": [
+    "OBSERVED",
+    "INFERRED",
+    "UNVERIFIED",
+    "BLOCKED"
+  ],
+  "rules": [
+    "analyze query-specific SERP before major creation/refresh",
+    "infer dominant intent, formats, entities, freshness, evidence and media patterns",
+    "inspect outliers and counterexamples",
+    "compare target against observed competitors",
+    "turn gaps into testable hypotheses",
+    "avoid cannibalization",
+    "maintain semantic cocoon",
+    "retest after publication"
+  ],
+  "never_guarantee": [
+    "position #1",
+    "Discover",
+    "Google News",
+    "rich result"
+  ],
+  "integration": "ASTRA SEO ENGINE Ω"
+}

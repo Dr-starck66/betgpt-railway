@@ -1,0 +1,33 @@
+{
+  "engine": "ASTRA SEO ENGINE Ω",
+  "version": "1.0-retroactive",
+  "project": "BETGPT-ASTRA-REFORM-WAVE4-SOURCE(2)",
+  "rules": [
+    "intent-entity-map",
+    "cannibalization-before-publish",
+    "semantic-cocoon-bidirectional",
+    "orphan-detection",
+    "descriptive-image-filenames-before-upload",
+    "contextual-alt",
+    "contextual-video-placement",
+    "specific-valid-structured-data",
+    "canonical-indexability-consistency",
+    "crawlable-html-links",
+    "sitemap-lastmod-consistency",
+    "content-decay-refresh",
+    "no-false-pass"
+  ],
+  "verification": {
+    "html_files": 4,
+    "code_files": 365,
+    "missing_alt_before": 0,
+    "pages_without_canonical_observed": 4,
+    "pages_without_meta_description_observed": 4,
+    "pages_without_h1_observed": 2,
+    "relative_internal_links_observed": 0,
+    "html_files_safely_modified": 3
+  },
+  "note": "Canonical/schema/content changes requiring domain or editorial intent are audit-gated; never fabricated.",
+  "serp_scent_engine": "required",
+  "serp_scent_contract": "SERP-SCENT-OMEGA.json"
+}

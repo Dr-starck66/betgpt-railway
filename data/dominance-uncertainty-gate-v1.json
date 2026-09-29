@@ -1,0 +1,152 @@
+{
+  "version": "dominance-uncertainty-gate-v1",
+  "generatedAt": "2026-09-27T18:36:05.776Z",
+  "mode": "RESEARCH_SHADOW_ONLY",
+  "policy": {
+    "minDominanceMargin": 0.08,
+    "minSegmentEvidence": 15,
+    "rule": "dominance >= 0.08 AND at least 15 earlier dominance-qualified observations in the same league",
+    "lowXgNoBetApplied": true
+  },
+  "rows": 11163,
+  "lowXgBlocked": 0,
+  "prequential": {
+    "baseline": {
+      "n": 393,
+      "wins": 211,
+      "losses": 182,
+      "hitRate": 0.5368956743002544,
+      "profit": 95.44346839337814,
+      "capital": 393,
+      "roi": 0.24285869820198,
+      "maxDrawdown": 17.223594070777438,
+      "hedges": 0,
+      "hedgeHits": 0
+    },
+    "baselineHedged": {
+      "n": 393,
+      "wins": 211,
+      "losses": 182,
+      "hitRate": 0.5368956743002544,
+      "profit": 98.13754791197127,
+      "capital": 395.9605726634046,
+      "roi": 0.247846767297701,
+      "maxDrawdown": 16.28106634243555,
+      "hedges": 21,
+      "hedgeHits": 5
+    },
+    "gated": {
+      "n": 178,
+      "wins": 109,
+      "losses": 69,
+      "hitRate": 0.6123595505617978,
+      "profit": 62.70050514160174,
+      "capital": 178,
+      "roi": 0.352250028885403,
+      "maxDrawdown": 5,
+      "hedges": 0,
+      "hedgeHits": 0
+    },
+    "gatedHedged": {
+      "n": 178,
+      "wins": 109,
+      "losses": 69,
+      "hitRate": 0.6123595505617978,
+      "profit": 64.19932652284028,
+      "capital": 179.9475966266308,
+      "roi": 0.3567667905898516,
+      "maxDrawdown": 5,
+      "hedges": 13,
+      "hedgeHits": 3
+    },
+    "roiLiftPlain": 0.10939133068342302,
+    "roiLiftHedged": 0.10892002329215061
+  },
+  "development80": {
+    "baseline": {
+      "n": 314,
+      "wins": 166,
+      "losses": 148,
+      "hitRate": 0.5286624203821656,
+      "profit": 74.00297245449865,
+      "capital": 314,
+      "roi": 0.235678256224518,
+      "maxDrawdown": 17.223594070777438,
+      "hedges": 0,
+      "hedgeHits": 0
+    },
+    "gated": {
+      "n": 121,
+      "wins": 74,
+      "losses": 47,
+      "hitRate": 0.6115702479338843,
+      "profit": 44.332137209132625,
+      "capital": 121,
+      "roi": 0.36638129924902996,
+      "maxDrawdown": 5,
+      "hedges": 0,
+      "hedgeHits": 0
+    }
+  },
+  "chronologicalValidation20": {
+    "baseline": {
+      "n": 79,
+      "wins": 45,
+      "losses": 34,
+      "hitRate": 0.569620253164557,
+      "profit": 21.440495938879426,
+      "capital": 79,
+      "roi": 0.2713986827706256,
+      "maxDrawdown": 6.318006017937353,
+      "hedges": 0,
+      "hedgeHits": 0
+    },
+    "baselineHedged": {
+      "n": 79,
+      "wins": 45,
+      "losses": 34,
+      "hitRate": 0.569620253164557,
+      "profit": 21.440495938879426,
+      "capital": 79,
+      "roi": 0.2713986827706256,
+      "maxDrawdown": 6.318006017937353,
+      "hedges": 0,
+      "hedgeHits": 0
+    },
+    "gated": {
+      "n": 57,
+      "wins": 35,
+      "losses": 22,
+      "hitRate": 0.6140350877192983,
+      "profit": 18.368367932469123,
+      "capital": 57,
+      "roi": 0.32225206899068637,
+      "maxDrawdown": 3.2871767545117394,
+      "hedges": 0,
+      "hedgeHits": 0
+    },
+    "gatedHedged": {
+      "n": 57,
+      "wins": 35,
+      "losses": 22,
+      "hitRate": 0.6140350877192983,
+      "profit": 18.368367932469123,
+      "capital": 57,
+      "roi": 0.32225206899068637,
+      "maxDrawdown": 3.2871767545117394,
+      "hedges": 0,
+      "hedgeHits": 0
+    },
+    "roiLiftPlain": 0.05085338622006075,
+    "roiLiftHedged": 0.05085338622006075
+  },
+  "promotions": 10,
+  "rollbacks": 2,
+  "integrity": [
+    "Chronological replay only.",
+    "Low-xG 0-0-risk matches are excluded before learning and ROI.",
+    "Dominance gate uses probabilities available before kickoff.",
+    "The final chronological 20% block is reported separately. It is a validation slice, not an untouched external dataset.",
+    "Historical odds are synthetic/reconstructed; live promotion still requires real timestamped prices."
+  ]
+}

@@ -1,0 +1,1398 @@
+
+> test
+> node --test 'scripts/**/*.test.mjs' && node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/app-data/app-data.test.ts src/lib/auth/gate-identity.test.ts src/lib/auth/sign-in-gate.test.ts src/engine/stats.test.ts src/engine/hunter.test.ts src/engine/archive.test.ts src/engine/guard.test.ts src/lib/legal.test.ts src/lib/store.test.ts src/lib/markets.test.ts src/engine/verify.test.ts src/engine/ledger-stats.test.ts src/engine/settle.test.ts src/engine/ticket-log.test.ts src/engine/live-intel.test.ts src/engine/article.test.ts src/engine/team-form.test.ts src/lib/match-clock.test.ts src/lib/seo.test.ts src/lib/serp/serp.test.ts src/lib/seo/money-map.test.ts src/lib/geo/geo.test.ts src/engine/match-resolve.test.ts src/engine/match-intelligence-panel.test.ts src/lib/editorial/editorial.test.ts
+
+TAP version 13
+# Subtest: non-canvas app with no custom card gets a soft BRAND NOTE (utility exception)
+ok 1 - non-canvas app with no custom card gets a soft BRAND NOTE (utility exception)
+  ---
+  duration_ms: 5.368228
+  type: 'test'
+  ...
+# Subtest: non-canvas app with a compliant card is silent
+ok 2 - non-canvas app with a compliant card is silent
+  ---
+  duration_ms: 5.998046
+  type: 'test'
+  ...
+# Subtest: card file without site.json card=custom warns
+ok 3 - card file without site.json card=custom warns
+  ---
+  duration_ms: 1.073276
+  type: 'test'
+  ...
+# Subtest: card file with missing site.json warns for card=custom
+ok 4 - card file with missing site.json warns for card=custom
+  ---
+  duration_ms: 4.246072
+  type: 'test'
+  ...
+# Subtest: card file with invalid site.json warns for card=custom
+ok 5 - card file with invalid site.json warns for card=custom
+  ---
+  duration_ms: 2.404946
+  type: 'test'
+  ...
+# Subtest: oversized card warns for non-canvas apps too
+ok 6 - oversized card warns for non-canvas apps too
+  ---
+  duration_ms: 4.036536
+  type: 'test'
+  ...
+# Subtest: canvas app with no card warns 'missing' and missing og:type
+ok 7 - canvas app with no card warns 'missing' and missing og:type
+  ---
+  duration_ms: 1.081496
+  type: 'test'
+  ...
+# Subtest: canvas card without type still warns for og:type
+ok 8 - canvas card without type still warns for og:type
+  ---
+  duration_ms: 1.96159
+  type: 'test'
+  ...
+# Subtest: oversized card warns on the scraper budget (jpg and legacy png)
+ok 9 - oversized card warns on the scraper budget (jpg and legacy png)
+  ---
+  duration_ms: 10.444049
+  type: 'test'
+  ...
+# Subtest: compliant game (custom card + site.json type + x-banner) is silent
+ok 10 - compliant game (custom card + site.json type + x-banner) is silent
+  ---
+  duration_ms: 5.122322
+  type: 'test'
+  ...
+# Subtest: __root.tsx og:type no longer satisfies the canvas gate
+ok 11 - __root.tsx og:type no longer satisfies the canvas gate
+  ---
+  duration_ms: 3.64174
+  type: 'test'
+  ...
+# Subtest: oversized x-banner warns on the same scraper budget as og.jpg
+ok 12 - oversized x-banner warns on the same scraper budget as og.jpg
+  ---
+  duration_ms: 5.580097
+  type: 'test'
+  ...
+# Subtest: legacy png + site.json type still needs the X feed card
+ok 13 - legacy png + site.json type still needs the X feed card
+  ---
+  duration_ms: 1.668376
+  type: 'test'
+  ...
+# Subtest: siteDeclaresOgTypeGame reads the site contract
+ok 14 - siteDeclaresOgTypeGame reads the site contract
+  ---
+  duration_ms: 0.181527
+  type: 'test'
+  ...
+# Subtest: a fresh og-pending marker silences the whole gate view
+ok 15 - a fresh og-pending marker silences the whole gate view
+  ---
+  duration_ms: 0.938114
+  type: 'test'
+  ...
+# Subtest: a stale og-pending marker is ignored and the warnings return
+ok 16 - a stale og-pending marker is ignored and the warnings return
+  ---
+  duration_ms: 1.008285
+  type: 'test'
+  ...
+# Subtest: the marker goes stale on the clock, not on the file
+ok 17 - the marker goes stale on the clock, not on the file
+  ---
+  duration_ms: 1.872096
+  type: 'test'
+  ...
+# Subtest: no marker means nothing is in flight
+ok 18 - no marker means nothing is in flight
+  ---
+  duration_ms: 0.892604
+  type: 'test'
+  ...
+# Subtest: parseBrandCheckArgs takes --game, --placeholder-ok and --root, and rejects the rest
+ok 19 - parseBrandCheckArgs takes --game, --placeholder-ok and --root, and rejects the rest
+  ---
+  duration_ms: 0.681729
+  type: 'test'
+  ...
+# Subtest: cli: a game missing its card reports JSON and exits 1
+ok 20 - cli: a game missing its card reports JSON and exits 1
+  ---
+  duration_ms: 196.645965
+  type: 'test'
+  ...
+# Subtest: cli: a compliant game passes
+ok 21 - cli: a compliant game passes
+  ---
+  duration_ms: 258.316155
+  type: 'test'
+  ...
+# Subtest: cli: the task's own marker is reported, not honoured
+ok 22 - cli: the task's own marker is reported, not honoured
+  ---
+  duration_ms: 202.806567
+  type: 'test'
+  ...
+# Subtest: cli: a bad argument fails with JSON on stderr
+ok 23 - cli: a bad argument fails with JSON on stderr
+  ---
+  duration_ms: 197.207749
+  type: 'test'
+  ...
+# Subtest: cli: a non-game with no card fails too — the pass exists to produce one
+ok 24 - cli: a non-game with no card fails too — the pass exists to produce one
+  ---
+  duration_ms: 197.81136
+  type: 'test'
+  ...
+# Subtest: cli: --placeholder-ok is how a plain-utility pass reports no card as expected
+ok 25 - cli: --placeholder-ok is how a plain-utility pass reports no card as expected
+  ---
+  duration_ms: 457.729116
+  type: 'test'
+  ...
+# Subtest: cli: a non-game with a compliant card passes
+ok 26 - cli: a non-game with a compliant card passes
+  ---
+  duration_ms: 194.103503
+  type: 'test'
+  ...
+# Subtest: SKILL.md and AGENTS.md name the marker path and bound this script uses
+ok 27 - SKILL.md and AGENTS.md name the marker path and bound this script uses
+  ---
+  duration_ms: 2.092493
+  type: 'test'
+  ...
+# Subtest: the sections that own the brand-task prohibition never affirm a wait
+ok 28 - the sections that own the brand-task prohibition never affirm a wait
+  ---
+  duration_ms: 7.309497
+  type: 'test'
+  ...
+# Subtest: SKILL.md tells the pass to self-check with the flag this CLI accepts
+ok 29 - SKILL.md tells the pass to self-check with the flag this CLI accepts
+  ---
+  duration_ms: 0.754186
+  type: 'test'
+  ...
+# Subtest: normalizes whitespace before hashing
+ok 30 - normalizes whitespace before hashing
+  ---
+  duration_ms: 5.760409
+  type: 'test'
+  ...
+# Subtest: nullish and blank body text normalize to the empty string
+ok 31 - nullish and blank body text normalize to the empty string
+  ---
+  duration_ms: 0.391803
+  type: 'test'
+  ...
+# Subtest: body text prefix is normalized and capped
+ok 32 - body text prefix is normalized and capped
+  ---
+  duration_ms: 0.189905
+  type: 'test'
+  ...
+# Subtest: identical runs do not diverge
+ok 33 - identical runs do not diverge
+  ---
+  duration_ms: 1.451136
+  type: 'test'
+  ...
+# Subtest: status change diverges
+ok 34 - status change diverges
+  ---
+  duration_ms: 0.470724
+  type: 'test'
+  ...
+# Subtest: title change diverges
+ok 35 - title change diverges
+  ---
+  duration_ms: 0.385079
+  type: 'test'
+  ...
+# Subtest: title comparison is skipped when either side lacks one
+ok 36 - title comparison is skipped when either side lacks one
+  ---
+  duration_ms: 0.396797
+  type: 'test'
+  ...
+# Subtest: canvas disappearing diverges; canvas appearing does not
+ok 37 - canvas disappearing diverges; canvas appearing does not
+  ---
+  duration_ms: 0.221033
+  type: 'test'
+  ...
+# Subtest: horizontal overflow appearing diverges; clearing does not
+ok 38 - horizontal overflow appearing diverges; clearing does not
+  ---
+  duration_ms: 0.879584
+  type: 'test'
+  ...
+# Subtest: new console errors diverge
+ok 39 - new console errors diverge
+  ---
+  duration_ms: 0.731923
+  type: 'test'
+  ...
+# Subtest: errors already present in the baseline do not re-diverge
+ok 40 - errors already present in the baseline do not re-diverge
+  ---
+  duration_ms: 0.411059
+  type: 'test'
+  ...
+# Subtest: body text collapse diverges
+ok 41 - body text collapse diverges
+  ---
+  duration_ms: 0.209596
+  type: 'test'
+  ...
+# Subtest: body text dropping to zero reports collapse
+ok 42 - body text dropping to zero reports collapse
+  ---
+  duration_ms: 0.129183
+  type: 'test'
+  ...
+# Subtest: zero-length baseline reports growth via the hash branch, not collapse
+ok 43 - zero-length baseline reports growth via the hash branch, not collapse
+  ---
+  duration_ms: 0.121834
+  type: 'test'
+  ...
+# Subtest: hash mismatch with a trivial length delta and same page start is tolerated
+ok 44 - hash mismatch with a trivial length delta and same page start is tolerated
+  ---
+  duration_ms: 0.097114
+  type: 'test'
+  ...
+# Subtest: hash mismatch with a trivial length delta but changed page start diverges
+ok 45 - hash mismatch with a trivial length delta but changed page start diverges
+  ---
+  duration_ms: 0.291761
+  type: 'test'
+  ...
+# Subtest: prefix check is skipped when either side lacks a prefix
+ok 46 - prefix check is skipped when either side lacks a prefix
+  ---
+  duration_ms: 0.1796
+  type: 'test'
+  ...
+# Subtest: length-delta tolerance boundary: 50 tolerated, 51 diverges (500-char baseline)
+ok 47 - length-delta tolerance boundary: 50 tolerated, 51 diverges (500-char baseline)
+  ---
+  duration_ms: 0.130833
+  type: 'test'
+  ...
+# Subtest: length-delta floor dominates small baselines: 20 tolerated, 21 diverges (100-char baseline)
+ok 48 - length-delta floor dominates small baselines: 20 tolerated, 21 diverges (100-char baseline)
+  ---
+  duration_ms: 0.248195
+  type: 'test'
+  ...
+# Subtest: collapse boundary: exactly half is 'changed', one below is 'collapsed'
+ok 49 - collapse boundary: exactly half is 'changed', one below is 'collapsed'
+  ---
+  duration_ms: 0.371641
+  type: 'test'
+  ...
+# Subtest: missing baseline viewport diverges
+ok 50 - missing baseline viewport diverges
+  ---
+  duration_ms: 0.269629
+  type: 'test'
+  ...
+# Subtest: empty or null baseline diverges for every viewport
+ok 51 - empty or null baseline diverges for every viewport
+  ---
+  duration_ms: 0.381082
+  type: 'test'
+  ...
+# Subtest: degenerate current verdict fails closed
+ok 52 - degenerate current verdict fails closed
+  ---
+  duration_ms: 0.411816
+  type: 'test'
+  ...
+# Subtest: multiple signals across viewports all accumulate
+ok 53 - multiple signals across viewports all accumulate
+  ---
+  duration_ms: 0.367379
+  type: 'test'
+  ...
+# Subtest: baselineComparison round-trips a valid baseline
+ok 54 - baselineComparison round-trips a valid baseline
+  ---
+  duration_ms: 0.758563
+  type: 'test'
+  ...
+# Subtest: baselineComparison fails closed on malformed or wrong-shape baselines
+ok 55 - baselineComparison fails closed on malformed or wrong-shape baselines
+  ---
+  duration_ms: 4.000713
+  type: 'test'
+  ...
+# Subtest: parseSmokeArgs defaults
+ok 56 - parseSmokeArgs defaults
+  ---
+  duration_ms: 0.237333
+  type: 'test'
+  ...
+# Subtest: parseSmokeArgs consumes --baseline without shifting positionals
+ok 57 - parseSmokeArgs consumes --baseline without shifting positionals
+  ---
+  duration_ms: 0.116163
+  type: 'test'
+  ...
+# Subtest: parseSmokeArgs rejects a trailing --baseline flag
+ok 58 - parseSmokeArgs rejects a trailing --baseline flag
+  ---
+  duration_ms: 0.097687
+  type: 'test'
+  ...
+# Subtest: parseSmokeArgs supports the --baseline= form
+ok 59 - parseSmokeArgs supports the --baseline= form
+  ---
+  duration_ms: 0.234196
+  type: 'test'
+  ...
+# Subtest: parseSmokeArgs rejects unknown flags instead of treating them as positionals
+ok 60 - parseSmokeArgs rejects unknown flags instead of treating them as positionals
+  ---
+  duration_ms: 0.180759
+  type: 'test'
+  ...
+# Subtest: parseSmokeArgs env fallback and flag precedence
+ok 61 - parseSmokeArgs env fallback and flag precedence
+  ---
+  duration_ms: 0.12088
+  type: 'test'
+  ...
+# Subtest: derivedPaths handles .png, .PNG, and extensionless inputs
+ok 62 - derivedPaths handles .png, .PNG, and extensionless inputs
+  ---
+  duration_ms: 0.344208
+  type: 'test'
+  ...
+# Subtest: exitCodeFor: clean run exits 0
+ok 63 - exitCodeFor: clean run exits 0
+  ---
+  duration_ms: 0.215773
+  type: 'test'
+  ...
+# Subtest: exitCodeFor: errors in any single viewport exit 2
+ok 64 - exitCodeFor: errors in any single viewport exit 2
+  ---
+  duration_ms: 0.149419
+  type: 'test'
+  ...
+# Subtest: exitCodeFor: navigation failure in any viewport exits 1, beating errors
+ok 65 - exitCodeFor: navigation failure in any viewport exits 1, beating errors
+  ---
+  duration_ms: 0.114088
+  type: 'test'
+  ...
+# Subtest: exitCodeFor: 4xx boundary and missing status
+ok 66 - exitCodeFor: 4xx boundary and missing status
+  ---
+  duration_ms: 0.145721
+  type: 'test'
+  ...
+# Subtest: exitCodeFor: no viewport data is a failure
+ok 67 - exitCodeFor: no viewport data is a failure
+  ---
+  duration_ms: 0.09479
+  type: 'test'
+  ...
+# Subtest: browser-smoke wires the guard and verdict helpers
+ok 68 - browser-smoke wires the guard and verdict helpers
+  ---
+  duration_ms: 0.771838
+  type: 'test'
+  ...
+# Subtest: browser-smoke file I/O only touches guarded paths
+ok 69 - browser-smoke file I/O only touches guarded paths
+  ---
+  duration_ms: 1.423125
+  type: 'test'
+  ...
+# Subtest: canonical OG rewrite
+    # Subtest: replaces grok.me og:image and copies document title/description
+    ok 1 - replaces grok.me og:image and copies document title/description
+      ---
+      duration_ms: 9.163287
+      type: 'test'
+      ...
+    # Subtest: injects og:image when the PWA injector omitted it
+    ok 2 - injects og:image when the PWA injector omitted it
+      ---
+      duration_ms: 1.520315
+      type: 'test'
+      ...
+    # Subtest: copies the page canonical into og:url
+    ok 3 - copies the page canonical into og:url
+      ---
+      duration_ms: 0.548315
+      type: 'test'
+      ...
+    # Subtest: leaves non-HTML untouched
+    ok 4 - leaves non-HTML untouched
+      ---
+      duration_ms: 0.328387
+      type: 'test'
+      ...
+    1..4
+ok 70 - canonical OG rewrite
+  ---
+  duration_ms: 13.754146
+  type: 'suite'
+  ...
+# Subtest: the flag predicate matches src/lib/auth
+ok 71 - the flag predicate matches src/lib/auth
+  ---
+  duration_ms: 3.012763
+  type: 'test'
+  ...
+# Subtest: reads the value a live dev server resolved
+ok 72 - reads the value a live dev server resolved
+  ---
+  duration_ms: 1.317591
+  type: 'test'
+  ...
+# Subtest: a server started without the flag reads as sign-in on
+ok 73 - a server started without the flag reads as sign-in on
+  ---
+  duration_ms: 0.426252
+  type: 'test'
+  ...
+# Subtest: agreement passes
+ok 74 - agreement passes
+  ---
+  duration_ms: 0.394671
+  type: 'test'
+  ...
+# Subtest: divergence fails in either direction
+ok 75 - divergence fails in either direction
+  ---
+  duration_ms: 0.484934
+  type: 'test'
+  ...
+# Subtest: an unobservable dev server is indeterminate, not agreement
+ok 76 - an unobservable dev server is indeterminate, not agreement
+  ---
+  duration_ms: 0.351741
+  type: 'test'
+  ...
+# Subtest: a dev server that cannot be reached probes as null
+ok 77 - a dev server that cannot be reached probes as null
+  ---
+  duration_ms: 0.55651
+  type: 'test'
+  ...
+# Subtest: a server without the endpoint probes as null, not as agreement
+ok 78 - a server without the endpoint probes as null, not as agreement
+  ---
+  duration_ms: 0.590816
+  type: 'test'
+  ...
+# Subtest: only a divergence warns the smoke verdict
+ok 79 - only a divergence warns the smoke verdict
+  ---
+  duration_ms: 2.283648
+  type: 'test'
+  ...
+# Subtest: the build side resolves the template's shipped app-env
+ok 80 - the build side resolves the template's shipped app-env
+  ---
+  duration_ms: 3.827089
+  type: 'test'
+  ...
+# Subtest: the CLI reports rather than silently passing when run via a symlink
+ok 81 - the CLI reports rather than silently passing when run via a symlink
+  ---
+  duration_ms: 300.866368
+  type: 'test'
+  ...
+# Subtest: injects before </head>
+ok 82 - injects before </head>
+  ---
+  duration_ms: 12.225815
+  type: 'test'
+  ...
+# Subtest: injects the extensions script without a project id
+ok 83 - injects the extensions script without a project id
+  ---
+  duration_ms: 0.92332
+  type: 'test'
+  ...
+# Subtest: injects project id on the script and meta when provided
+ok 84 - injects project id on the script and meta when provided
+  ---
+  duration_ms: 0.372907
+  type: 'test'
+  ...
+# Subtest: does not duplicate grok:app_id
+ok 85 - does not duplicate grok:app_id
+  ---
+  duration_ms: 1.329559
+  type: 'test'
+  ...
+# Subtest: omits x:creator tags without both creator values
+ok 86 - omits x:creator tags without both creator values
+  ---
+  duration_ms: 1.478541
+  type: 'test'
+  ...
+# Subtest: injects x:creator tags when both creator values are set
+ok 87 - injects x:creator tags when both creator values are set
+  ---
+  duration_ms: 2.177291
+  type: 'test'
+  ...
+# Subtest: escapes x:creator values
+ok 88 - escapes x:creator values
+  ---
+  duration_ms: 0.445014
+  type: 'test'
+  ...
+# Subtest: does not duplicate x:creator tags
+ok 89 - does not duplicate x:creator tags
+  ---
+  duration_ms: 1.082847
+  type: 'test'
+  ...
+# Subtest: platform chrome overwrites share-card metas and always sets og:title
+ok 90 - platform chrome overwrites share-card metas and always sets og:title
+  ---
+  duration_ms: 5.604928
+  type: 'test'
+  ...
+# Subtest: does not duplicate twitter:card or og:title
+ok 91 - does not duplicate twitter:card or og:title
+  ---
+  duration_ms: 1.331537
+  type: 'test'
+  ...
+# Subtest: a baked site.image is treated as a custom card
+ok 92 - a baked site.image is treated as a custom card
+  ---
+  duration_ms: 1.269829
+  type: 'test'
+  ...
+# Subtest: baked identity does not need a workspace filesystem
+ok 93 - baked identity does not need a workspace filesystem
+  ---
+  duration_ms: 0.71108
+  type: 'test'
+  ...
+# Subtest: a public card file wins over a baked site without card=custom
+ok 94 - a public card file wins over a baked site without card=custom
+  ---
+  duration_ms: 1.100284
+  type: 'test'
+  ...
+# Subtest: public/og.png wins when jpg is absent
+ok 95 - public/og.png wins when jpg is absent
+  ---
+  duration_ms: 3.328652
+  type: 'test'
+  ...
+# Subtest: resolveOgCardAsset: disk file, then bake, then empty (placeholder)
+ok 96 - resolveOgCardAsset: disk file, then bake, then empty (placeholder)
+  ---
+  duration_ms: 1.17542
+  type: 'test'
+  ...
+# Subtest: snapshotOgIdentity stamps card=custom from a public card file
+ok 97 - snapshotOgIdentity stamps card=custom from a public card file
+  ---
+  duration_ms: 1.708575
+  type: 'test'
+  ...
+# Subtest: snapshotOgIdentity stamps banner from public/x-banner.jpg
+ok 98 - snapshotOgIdentity stamps banner from public/x-banner.jpg
+  ---
+  duration_ms: 0.835501
+  type: 'test'
+  ...
+# Subtest: emits x:game:image for a public host when site.banner is set
+ok 99 - emits x:game:image for a public host when site.banner is set
+  ---
+  duration_ms: 0.374488
+  type: 'test'
+  ...
+# Subtest: does not emit x:game:image without a public host or banner
+ok 100 - does not emit x:game:image without a public host or banner
+  ---
+  duration_ms: 0.42266
+  type: 'test'
+  ...
+# Subtest: site title Grok App is a real name, not a sentinel
+ok 101 - site title Grok App is a real name, not a sentinel
+  ---
+  duration_ms: 0.203516
+  type: 'test'
+  ...
+# Subtest: published grok.me slug is still a title fallback
+ok 102 - published grok.me slug is still a title fallback
+  ---
+  duration_ms: 1.053421
+  type: 'test'
+  ...
+# Subtest: rejects Vercel system hosts as og:image origins
+ok 103 - rejects Vercel system hosts as og:image origins
+  ---
+  duration_ms: 0.260851
+  type: 'test'
+  ...
+# Subtest: published VITE_PUBLIC_HOSTNAME wins over request Host for og:image
+ok 104 - published VITE_PUBLIC_HOSTNAME wins over request Host for og:image
+  ---
+  duration_ms: 0.563797
+  type: 'test'
+  ...
+# Subtest: vercel Host without a public hostname emits no og:image
+ok 105 - vercel Host without a public hostname emits no og:image
+  ---
+  duration_ms: 0.277005
+  type: 'test'
+  ...
+# Subtest: emits og:image for a public host and prefers a custom card
+ok 106 - emits og:image for a public host and prefers a custom card
+  ---
+  duration_ms: 0.740875
+  type: 'test'
+  ...
+# Subtest: placeholder og:image appends site.color when it is 6-digit hex
+ok 107 - placeholder og:image appends site.color when it is 6-digit hex
+  ---
+  duration_ms: 0.861743
+  type: 'test'
+  ...
+# Subtest: document title entities are not double-escaped on og:title
+ok 108 - document title entities are not double-escaped on og:title
+  ---
+  duration_ms: 0.333055
+  type: 'test'
+  ...
+# Subtest: site.json title wins over the host slug
+ok 109 - site.json title wins over the host slug
+  ---
+  duration_ms: 0.173403
+  type: 'test'
+  ...
+# Subtest: injects into documents with no head element
+ok 110 - injects into documents with no head element
+  ---
+  duration_ms: 0.536729
+  type: 'test'
+  ...
+# Subtest: streaming injector matches </HEAD> case-insensitively
+ok 111 - streaming injector matches </HEAD> case-insensitively
+  ---
+  duration_ms: 1.10195
+  type: 'test'
+  ...
+# Subtest: does not duplicate the extensions script
+ok 112 - does not duplicate the extensions script
+  ---
+  duration_ms: 0.411885
+  type: 'test'
+  ...
+# Subtest: is idempotent
+ok 113 - is idempotent
+  ---
+  duration_ms: 0.269463
+  type: 'test'
+  ...
+# Subtest: uses the app name in the injected title tag
+ok 114 - uses the app name in the injected title tag
+  ---
+  duration_ms: 0.378976
+  type: 'test'
+  ...
+# Subtest: streaming injector handles </head> split across chunks
+ok 115 - streaming injector handles </head> split across chunks
+  ---
+  duration_ms: 0.758927
+  type: 'test'
+  ...
+# Subtest: streaming injector passes post-head chunks through untouched
+ok 116 - streaming injector passes post-head chunks through untouched
+  ---
+  duration_ms: 0.480222
+  type: 'test'
+  ...
+# Subtest: streaming injector falls back when no </head> is seen
+ok 117 - streaming injector falls back when no </head> is seen
+  ---
+  duration_ms: 0.291249
+  type: 'test'
+  ...
+# Subtest: detects install query
+ok 118 - detects install query
+  ---
+  duration_ms: 0.375843
+  type: 'test'
+  ...
+# Subtest: filters non-document paths
+ok 119 - filters non-document paths
+  ---
+  duration_ms: 0.735401
+  type: 'test'
+  ...
+# Subtest: strips install params from the app link
+ok 120 - strips install params from the app link
+  ---
+  duration_ms: 0.196727
+  type: 'test'
+  ...
+# Subtest: names the install page from host slug
+ok 121 - names the install page from host slug
+  ---
+  duration_ms: 0.173045
+  type: 'test'
+  ...
+# Subtest: rejects hosts that are not plain slugs
+ok 122 - rejects hosts that are not plain slugs
+  ---
+  duration_ms: 0.113973
+  type: 'test'
+  ...
+# Subtest: renders install page markup
+ok 123 - renders install page markup
+  ---
+  duration_ms: 0.588865
+  type: 'test'
+  ...
+# Subtest: escapes host-derived values in the install page
+ok 124 - escapes host-derived values in the install page
+  ---
+  duration_ms: 0.435588
+  type: 'test'
+  ...
+# Subtest: renders the manifest with the per-app name
+ok 125 - renders the manifest with the per-app name
+  ---
+  duration_ms: 0.506361
+  type: 'test'
+  ...
+# Subtest: vite config keeps the nitro serverDir wiring
+ok 126 - vite config keeps the nitro serverDir wiring
+  ---
+  duration_ms: 0.540495
+  type: 'test'
+  ...
+# Subtest: nitro middleware and its bundled assets exist
+ok 127 - nitro middleware and its bundled assets exist
+  ---
+  duration_ms: 0.527837
+  type: 'test'
+  ...
+# Subtest: vite plugin bakes og identity as a virtual module
+ok 128 - vite plugin bakes og identity as a virtual module
+  ---
+  duration_ms: 0.299224
+  type: 'test'
+  ...
+# Subtest: _migrations keys on basename, not path
+ok 129 - _migrations keys on basename, not path
+  ---
+  duration_ms: 2.421217
+  type: 'test'
+  ...
+# Subtest: a file already applied from another directory does not re-apply
+ok 130 - a file already applied from another directory does not re-apply
+  ---
+  duration_ms: 1.607704
+  type: 'test'
+  ...
+# Subtest: pending migrations are returned in name order
+ok 131 - pending migrations are returned in name order
+  ---
+  duration_ms: 28.874868
+  type: 'test'
+  ...
+# Subtest: non-.sql entries are dropped (readdir also yields the auth/ directory)
+ok 132 - non-.sql entries are dropped (readdir also yields the auth/ directory)
+  ---
+  duration_ms: 0.445908
+  type: 'test'
+  ...
+# Subtest: the auth schema ships outside the globbed directory
+ok 133 - the auth schema ships outside the globbed directory
+  ---
+  duration_ms: 1.314289
+  type: 'test'
+  ...
+# Subtest: this workspace's auth schema copy is byte-identical to its source
+ok 134 - this workspace's auth schema copy is byte-identical to its source
+  ---
+  duration_ms: 0.646004
+  type: 'test'
+  ...
+# Subtest: the copy check reads both files and catches an edit
+ok 135 - the copy check reads both files and catches an edit
+  ---
+  duration_ms: 1.960831
+  type: 'test'
+  ...
+# Subtest: parsePreviewArgs accepts the two actions
+ok 136 - parsePreviewArgs accepts the two actions
+  ---
+  duration_ms: 3.784099
+  type: 'test'
+  ...
+# Subtest: parsePreviewArgs rejects missing, unknown and extra arguments
+ok 137 - parsePreviewArgs rejects missing, unknown and extra arguments
+  ---
+  duration_ms: 0.688174
+  type: 'test'
+  ...
+# Subtest: parsePid reads a pidfile and rejects junk
+ok 138 - parsePid reads a pidfile and rejects junk
+  ---
+  duration_ms: 0.619692
+  type: 'test'
+  ...
+# Subtest: parsePgid reads the pgrp field past a comm containing spaces
+ok 139 - parsePgid reads the pgrp field past a comm containing spaces
+  ---
+  duration_ms: 0.529433
+  type: 'test'
+  ...
+# Subtest: parseListenerInodes picks LISTEN sockets on the wanted port only
+ok 140 - parseListenerInodes picks LISTEN sockets on the wanted port only
+  ---
+  duration_ms: 0.78609
+  type: 'test'
+  ...
+# Subtest: parseListenerInodes reads the tcp6 dump the same way
+ok 141 - parseListenerInodes reads the tcp6 dump the same way
+  ---
+  duration_ms: 0.430582
+  type: 'test'
+  ...
+# Subtest: looksLikePreviewProcess matches the npm wrapper and its vite child
+ok 142 - looksLikePreviewProcess matches the npm wrapper and its vite child
+  ---
+  duration_ms: 0.934247
+  type: 'test'
+  ...
+# Subtest: looksLikePreviewProcess spares the sibling scripts and re-used pids
+ok 143 - looksLikePreviewProcess spares the sibling scripts and re-used pids
+  ---
+  duration_ms: 0.420119
+  type: 'test'
+  ...
+# Subtest: previewOwners trusts port owners and dedupes the pidfile pid
+ok 144 - previewOwners trusts port owners and dedupes the pidfile pid
+  ---
+  duration_ms: 0.752482
+  type: 'test'
+  ...
+# Subtest: previewOwners adds a pidfile pid whose command line is still the preview
+ok 145 - previewOwners adds a pidfile pid whose command line is still the preview
+  ---
+  duration_ms: 0.896023
+  type: 'test'
+  ...
+# Subtest: previewOwners drops a stale pidfile pid re-used by another process
+ok 146 - previewOwners drops a stale pidfile pid re-used by another process
+  ---
+  duration_ms: 0.49377
+  type: 'test'
+  ...
+# Subtest: previewOwners drops a pidfile pid that no longer exists
+ok 147 - previewOwners drops a pidfile pid that no longer exists
+  ---
+  duration_ms: 0.398317
+  type: 'test'
+  ...
+# Subtest: previewOwners on a free port with no pidfile signals nothing
+ok 148 - previewOwners on a free port with no pidfile signals nothing
+  ---
+  duration_ms: 4.355555
+  type: 'test'
+  ...
+# Subtest: stopOutcome fails when a pid survives or the port is still held
+ok 149 - stopOutcome fails when a pid survives or the port is still held
+  ---
+  duration_ms: 0.410073
+  type: 'test'
+  ...
+# Subtest: stopOutcome reports a verified free port
+ok 150 - stopOutcome reports a verified free port
+  ---
+  duration_ms: 0.19572
+  type: 'test'
+  ...
+# Subtest: stopOutcome fails on a listener whose owner cannot be attributed
+ok 151 - stopOutcome fails on a listener whose owner cannot be attributed
+  ---
+  duration_ms: 0.122615
+  type: 'test'
+  ...
+# Subtest: terminatePids SIGTERMs live pids and skips dead ones
+ok 152 - terminatePids SIGTERMs live pids and skips dead ones
+  ---
+  duration_ms: 0.758269
+  type: 'test'
+  ...
+# Subtest: terminatePids escalates to SIGKILL when SIGTERM is ignored
+ok 153 - terminatePids escalates to SIGKILL when SIGTERM is ignored
+  ---
+  duration_ms: 0.646679
+  type: 'test'
+  ...
+# Subtest: terminatePids reports a pid that survives SIGKILL as stubborn
+ok 154 - terminatePids reports a pid that survives SIGKILL as stubborn
+  ---
+  duration_ms: 0.546366
+  type: 'test'
+  ...
+# Subtest: terminatePids on a free port signals nothing
+ok 155 - terminatePids on a free port signals nothing
+  ---
+  duration_ms: 0.20604
+  type: 'test'
+  ...
+# Subtest: Vercel build copies every PGlite runtime asset beside the bundled module
+ok 156 - Vercel build copies every PGlite runtime asset beside the bundled module
+  ---
+  duration_ms: 2.530272
+  type: 'test'
+  ...
+# Subtest: auth-off imports cannot create an unhandled PGlite bootstrap rejection
+ok 157 - auth-off imports cannot create an unhandled PGlite bootstrap rejection
+  ---
+  duration_ms: 5.610192
+  type: 'test'
+  ...
+# Subtest: expired live forum threads fall back to the immutable match archive
+ok 158 - expired live forum threads fall back to the immutable match archive
+  ---
+  duration_ms: 1.585298
+  type: 'test'
+  ...
+# Subtest: sitemaps escape URLs and news entries are restricted to the last 48 hours
+ok 159 - sitemaps escape URLs and news entries are restricted to the last 48 hours
+  ---
+  duration_ms: 1.015827
+  type: 'test'
+  ...
+# Subtest: startup leaves an already healthy dev server untouched
+ok 160 - startup leaves an already healthy dev server untouched
+  ---
+  duration_ms: 0.773332
+  type: 'test'
+  ...
+# (node:10206) ExperimentalWarning: The MockTimers API is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: preview: a successful sign-out clears the token, then redirects
+ok 161 - preview: a successful sign-out clears the token, then redirects
+  ---
+  duration_ms: 4.030872
+  type: 'test'
+  ...
+# Subtest: preview: a rejected sign-out still clears the token and redirects
+ok 162 - preview: a rejected sign-out still clears the token and redirects
+  ---
+  duration_ms: 0.77918
+  type: 'test'
+  ...
+# Subtest: preview: a sign-out that throws synchronously still clears and redirects
+ok 163 - preview: a sign-out that throws synchronously still clears and redirects
+  ---
+  duration_ms: 0.518176
+  type: 'test'
+  ...
+# Subtest: preview: a sign-out that never settles clears and redirects once the wait expires
+ok 164 - preview: a sign-out that never settles clears and redirects once the wait expires
+  ---
+  duration_ms: 14.780823
+  type: 'test'
+  ...
+# Subtest: preview: no bearer means nothing to invalidate, so no request is made
+ok 165 - preview: no bearer means nothing to invalidate, so no request is made
+  ---
+  duration_ms: 0.470486
+  type: 'test'
+  ...
+# Subtest: preview: a stored bearer is still invalidated server-side
+ok 166 - preview: a stored bearer is still invalidated server-side
+  ---
+  duration_ms: 0.297309
+  type: 'test'
+  ...
+# Subtest: deployed: a confirmed sign-out clears the token, then redirects
+ok 167 - deployed: a confirmed sign-out clears the token, then redirects
+  ---
+  duration_ms: 0.345901
+  type: 'test'
+  ...
+# Subtest: deployed: a sign-out that never settles throws and does NOT redirect
+ok 168 - deployed: a sign-out that never settles throws and does NOT redirect
+  ---
+  duration_ms: 20.524017
+  type: 'test'
+  ...
+# Subtest: deployed: a rejected sign-out throws and does NOT redirect
+ok 169 - deployed: a rejected sign-out throws and does NOT redirect
+  ---
+  duration_ms: 1.111285
+  type: 'test'
+  ...
+# Subtest: deployed: the timeout is distinguishable from a rejection
+ok 170 - deployed: the timeout is distinguishable from a rejection
+  ---
+  duration_ms: 20.817304
+  type: 'test'
+  ...
+# Subtest: settleWithin reports the outcome and never rejects
+ok 171 - settleWithin reports the outcome and never rejects
+  ---
+  duration_ms: 21.204087
+  type: 'test'
+  ...
+# Subtest: settleWithin waits its full window, then gives up rather than hanging
+ok 172 - settleWithin waits its full window, then gives up rather than hanging
+  ---
+  duration_ms: 5.702097
+  type: 'test'
+  ...
+# Subtest: pre-sign-in: the preview clear gives up at the preview bound
+ok 173 - pre-sign-in: the preview clear gives up at the preview bound
+  ---
+  duration_ms: 1.747904
+  type: 'test'
+  ...
+# Subtest: pre-sign-in: a deployed session gets the deployed window, not the preview one
+ok 174 - pre-sign-in: a deployed session gets the deployed window, not the preview one
+  ---
+  duration_ms: 1.227319
+  type: 'test'
+  ...
+# Subtest: pre-sign-in: a failed clear never blocks sign-in
+ok 175 - pre-sign-in: a failed clear never blocks sign-in
+  ---
+  duration_ms: 0.672031
+  type: 'test'
+  ...
+# Subtest: pre-sign-in: the preview skips the request when there is no bearer
+ok 176 - pre-sign-in: the preview skips the request when there is no bearer
+  ---
+  duration_ms: 0.334289
+  type: 'test'
+  ...
+# Subtest: every sign-out bound comes from one rule
+ok 177 - every sign-out bound comes from one rule
+  ---
+  duration_ms: 0.166296
+  type: 'test'
+  ...
+# Subtest: the defaults are bounded, and deployed waits longer than preview
+ok 178 - the defaults are bounded, and deployed waits longer than preview
+  ---
+  duration_ms: 0.657174
+  type: 'test'
+  ...
+# Subtest: raw HTML SSR SEO
+    # Subtest: robots.txt is reachable and does not block match/prono/championship
+    not ok 1 - robots.txt is reachable and does not block match/prono/championship
+      ---
+      duration_ms: 112.399611
+      type: 'test'
+      location: '/mnt/data/betgpt_roi_min/betgpt_liveproof_v4/scripts/ssr-seo.test.mjs:47:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        
+        404 !== 200
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 200
+      actual: 404
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///mnt/data/betgpt_roi_min/betgpt_liveproof_v4/scripts/ssr-seo.test.mjs:49:12)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Promise.all (index 0)
+        async Suite.run (node:internal/test_runner/test:1442:7)
+        async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+      ...
+    # Subtest: sitemap.xml lists the canonical match URL and not noindex aliases
+    not ok 2 - sitemap.xml lists the canonical match URL and not noindex aliases
+      ---
+      duration_ms: 9.733348
+      type: 'test'
+      location: '/mnt/data/betgpt_roi_min/betgpt_liveproof_v4/scripts/ssr-seo.test.mjs:58:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        
+        404 !== 200
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 200
+      actual: 404
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///mnt/data/betgpt_roi_min/betgpt_liveproof_v4/scripts/ssr-seo.test.mjs:60:12)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: match HTML contains title, H1, article JSON-LD, FAQ, a single breadcrumb, frozen dates
+    not ok 3 - match HTML contains title, H1, article JSON-LD, FAQ, a single breadcrumb, frozen dates
+      ---
+      duration_ms: 12.789587
+      type: 'test'
+      location: '/mnt/data/betgpt_roi_min/betgpt_liveproof_v4/scripts/ssr-seo.test.mjs:73:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        
+        404 !== 200
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 200
+      actual: 404
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///mnt/data/betgpt_roi_min/betgpt_liveproof_v4/scripts/ssr-seo.test.mjs:78:12)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: /prono/{slug} 301s to /match/{slug}
+    not ok 4 - /prono/{slug} 301s to /match/{slug}
+      ---
+      duration_ms: 8.086468
+      type: 'test'
+      location: '/mnt/data/betgpt_roi_min/betgpt_liveproof_v4/scripts/ssr-seo.test.mjs:111:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        
+        404 !== 301
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 301
+      actual: 404
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///mnt/data/betgpt_roi_min/betgpt_liveproof_v4/scripts/ssr-seo.test.mjs:113:12)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: championship and chat are noindex in raw HTML
+    not ok 5 - championship and chat are noindex in raw HTML
+      ---
+      duration_ms: 13.184199
+      type: 'test'
+      location: '/mnt/data/betgpt_roi_min/betgpt_liveproof_v4/scripts/ssr-seo.test.mjs:117:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        Expected values to be strictly equal:
+        
+        404 !== 200
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 200
+      actual: 404
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///mnt/data/betgpt_roi_min/betgpt_liveproof_v4/scripts/ssr-seo.test.mjs:120:12)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    # Subtest: SEO hub pages stay well under 400 KB
+    not ok 6 - SEO hub pages stay well under 400 KB
+      ---
+      duration_ms: 5.32436
+      type: 'test'
+      location: '/mnt/data/betgpt_roi_min/betgpt_liveproof_v4/scripts/ssr-seo.test.mjs:127:3'
+      failureType: 'testCodeFailure'
+      error: |-
+        /scores-en-direct
+        
+        404 !== 200
+        
+      code: 'ERR_ASSERTION'
+      name: 'AssertionError'
+      expected: 200
+      actual: 404
+      operator: 'strictEqual'
+      stack: |-
+        TestContext.<anonymous> (file:///mnt/data/betgpt_roi_min/betgpt_liveproof_v4/scripts/ssr-seo.test.mjs:130:14)
+        process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+        async Test.run (node:internal/test_runner/test:1054:7)
+        async Suite.processPendingSubtests (node:internal/test_runner/test:744:7)
+      ...
+    1..6
+not ok 179 - raw HTML SSR SEO
+  ---
+  duration_ms: 165.804634
+  type: 'suite'
+  location: '/mnt/data/betgpt_roi_min/betgpt_liveproof_v4/scripts/ssr-seo.test.mjs:46:1'
+  failureType: 'subtestsFailed'
+  error: '6 subtests failed'
+  code: 'ERR_TEST_FAILURE'
+  ...
+# Subtest: keeps VITE_-prefixed string entries
+ok 180 - keeps VITE_-prefixed string entries
+  ---
+  duration_ms: 3.680919
+  type: 'test'
+  ...
+# Subtest: drops non-VITE keys, non-string values and malformed documents
+ok 181 - drops non-VITE keys, non-string values and malformed documents
+  ---
+  duration_ms: 0.626625
+  type: 'test'
+  ...
+# Subtest: a missing app-env.json is a clean no-op
+ok 182 - a missing app-env.json is a clean no-op
+  ---
+  duration_ms: 1.177236
+  type: 'test'
+  ...
+# Subtest: reads the app env from a workspace
+ok 183 - reads the app env from a workspace
+  ---
+  duration_ms: 0.867518
+  type: 'test'
+  ...
+# Subtest: an explicit process-env override wins over the file
+ok 184 - an explicit process-env override wins over the file
+  ---
+  duration_ms: 0.395624
+  type: 'test'
+  ...
+# Subtest: the template ships auth off
+ok 185 - the template ships auth off
+  ---
+  duration_ms: 0.737619
+  type: 'test'
+  ...
+# Subtest: vite loadEnv resolves the wrapped value
+ok 186 - vite loadEnv resolves the wrapped value
+  ---
+  duration_ms: 0.73428
+  type: 'test'
+  ...
+# Subtest: the wrapped command runs with the app env applied
+ok 187 - the wrapped command runs with the app env applied
+  ---
+  duration_ms: 468.518237
+  type: 'test'
+  ...
+# Subtest: the wrapped command sees an explicit override, not the file value
+ok 188 - the wrapped command sees an explicit override, not the file value
+  ---
+  duration_ms: 365.901088
+  type: 'test'
+  ...
+# Subtest: the wrapper propagates the command's exit code
+ok 189 - the wrapper propagates the command's exit code
+  ---
+  duration_ms: 307.848819
+  type: 'test'
+  ...
+# Subtest: a signal-killed command is never reported as success
+ok 190 - a signal-killed command is never reported as success
+  ---
+  duration_ms: 296.231337
+  type: 'test'
+  ...
+# Subtest: the CLI still runs when invoked through a symlinked path
+ok 191 - the CLI still runs when invoked through a symlinked path
+  ---
+  duration_ms: 307.953144
+  type: 'test'
+  ...
+# Subtest: parseWriteAtomicArgs needs exactly a staged file and a target
+ok 192 - parseWriteAtomicArgs needs exactly a staged file and a target
+  ---
+  duration_ms: 5.585847
+  type: 'test'
+  ...
+# Subtest: stagingError refuses a temp inside public/ and a no-op move
+ok 193 - stagingError refuses a temp inside public/ and a no-op move
+  ---
+  duration_ms: 0.863421
+  type: 'test'
+  ...
+# Subtest: handOver replaces the target and clears the staged file
+ok 194 - handOver replaces the target and clears the staged file
+  ---
+  duration_ms: 2.303722
+  type: 'test'
+  ...
+# Subtest: handOver creates a missing target directory
+ok 195 - handOver creates a missing target directory
+  ---
+  duration_ms: 1.764404
+  type: 'test'
+  ...
+# Subtest: an interrupted pass leaves the target on its old bytes, temp-free
+ok 196 - an interrupted pass leaves the target on its old bytes, temp-free
+  ---
+  duration_ms: 2.74525
+  type: 'test'
+  ...
+# Subtest: a failed hand-over creates no directory for the target it never wrote
+ok 197 - a failed hand-over creates no directory for the target it never wrote
+  ---
+  duration_ms: 0.810522
+  type: 'test'
+  ...
+# Subtest: a staged file on another filesystem is refused, not copied
+ok 198 - a staged file on another filesystem is refused, not copied
+  ---
+  duration_ms: 1.222126
+  type: 'test'
+  ...
+# Subtest: cli: hands the file over, and refuses a temp staged in public/
+ok 199 - cli: hands the file over, and refuses a temp staged in public/
+  ---
+  duration_ms: 412.864999
+  type: 'test'
+  ...
+# Subtest: cli: relative paths follow the script's root, not the caller's cwd
+ok 200 - cli: relative paths follow the script's root, not the caller's cwd
+  ---
+  duration_ms: 176.702677
+  type: 'test'
+  ...
+# Subtest: every hand-over the og skill prints is one this script accepts
+ok 201 - every hand-over the og skill prints is one this script accepts
+  ---
+  duration_ms: 7.452436
+  type: 'test'
+  ...
+# Subtest: cli: a missing staged file fails without touching the target
+ok 202 - cli: a missing staged file fails without touching the target
+  ---
+  duration_ms: 172.772416
+  type: 'test'
+  ...
+1..202
+# tests 210
+# suites 2
+# pass 204
+# fail 6
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3419.357467

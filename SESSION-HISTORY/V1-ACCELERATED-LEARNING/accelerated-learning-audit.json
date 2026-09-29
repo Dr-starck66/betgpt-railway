@@ -1,0 +1,95 @@
+{
+  "target": {
+    "minOdds": 1.8,
+    "targetHitRate": 0.6,
+    "targetRoi": 0.08,
+    "minValidationBets": 30,
+    "minPromotionLift": 0.015
+  },
+  "eligible": 128,
+  "train": {
+    "n": 96,
+    "wins": 47,
+    "losses": 49,
+    "hitRate": 0.4895833333333333,
+    "roi": 0.05998031247563396,
+    "avgOdds": 2.2817055024219957
+  },
+  "validation": {
+    "n": 32,
+    "wins": 9,
+    "losses": 23,
+    "hitRate": 0.28125,
+    "roi": -0.3296874999999999,
+    "avgOdds": 2.75125
+  },
+  "errors": [
+    {
+      "key": "PL|1X2_A|2.00-2.49",
+      "n": 6,
+      "losses": 6,
+      "hitRate": 0,
+      "avgOdds": 2.1908151933797964
+    },
+    {
+      "key": "L1|1X2_H|2.00-2.49",
+      "n": 5,
+      "losses": 4,
+      "hitRate": 0.2,
+      "avgOdds": 2.072389146708789
+    },
+    {
+      "key": "PL|1X2_H|2.00-2.49",
+      "n": 5,
+      "losses": 4,
+      "hitRate": 0.2,
+      "avgOdds": 2.081230030309255
+    },
+    {
+      "key": "PL|1X2_H|1.80-1.99",
+      "n": 7,
+      "losses": 4,
+      "hitRate": 0.42857142857142855,
+      "avgOdds": 1.9241551177034795
+    },
+    {
+      "key": "L1|1X2_A|2.00-2.49",
+      "n": 7,
+      "losses": 4,
+      "hitRate": 0.42857142857142855,
+      "avgOdds": 2.188736449338255
+    },
+    {
+      "key": "LL|1X2_H|2.00-2.49",
+      "n": 6,
+      "losses": 3,
+      "hitRate": 0.5,
+      "avgOdds": 2.307326336301634
+    },
+    {
+      "key": "LL|1X2_A|2.00-2.49",
+      "n": 9,
+      "losses": 4,
+      "hitRate": 0.5555555555555556,
+      "avgOdds": 2.279658776640466
+    },
+    {
+      "key": "SA|1X2_A|1.80-1.99",
+      "n": 5,
+      "losses": 1,
+      "hitRate": 0.8,
+      "avgOdds": 1.9079230009415418
+    },
+    {
+      "key": "L1|1X2_A|1.80-1.99",
+      "n": 7,
+      "losses": 1,
+      "hitRate": 0.8571428571428571,
+      "avgOdds": 1.937986655629864
+    }
+  ],
+  "targetReached": false,
+  "promotionAllowed": false,
+  "reason": "Cible non prouvée: 28.1% à cote moyenne 2.75.",
+  "generatedAt": "2026-09-26T22:14:28.860Z"
+}

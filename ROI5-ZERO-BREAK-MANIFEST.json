@@ -1,0 +1,55 @@
+{
+  "version": "roi5-zero-break-v1",
+  "date": "2026-09-27",
+  "baseline": "BETGPT-ASTRA-OMEGA-MASTER-FINAL-XG-00-GATE.zip",
+  "surface": {
+    "src/routes": {
+      "baseline": 101,
+      "current": 101,
+      "missing": 0,
+      "added": 0
+    },
+    "public": {
+      "baseline": 230,
+      "current": 230,
+      "missing": 0,
+      "added": 0
+    },
+    "api": {
+      "baseline": 1,
+      "current": 1,
+      "missing": 0,
+      "added": 0
+    },
+    "server": {
+      "baseline": 23,
+      "current": 23,
+      "missing": 0,
+      "added": 0
+    }
+  },
+  "criticalSeoFilesByteIdentical": [
+    "server/routes/sitemap.xml.ts",
+    "server/routes/news-sitemap.xml.ts",
+    "server/routes/sitemap-images.xml.ts",
+    "server/routes/sitemap.html.ts",
+    "server/routes/robots.txt.ts",
+    "src/lib/sitemap-urls.ts",
+    "src/lib/sitemap-metadata.ts",
+    "src/lib/robots.ts",
+    "vercel.json",
+    "vite.config.ts"
+  ],
+  "roi5": {
+    "minDominanceMargin": 0.08,
+    "minSettledQualifiedHistory": 15,
+    "validationRoiBaseline": 0.2713986827706256,
+    "validationRoiGated": 0.32225206899068637,
+    "validationRoiLiftPoints": 5.085338622006075,
+    "validationBetsBaseline": 79,
+    "validationBetsGated": 57,
+    "validationMaxDrawdownBaseline": 6.318006017937353,
+    "validationMaxDrawdownGated": 3.2871767545117394,
+    "historicalOdds": "synthetic/reconstructed; not live bookmaker proof"
+  }
+}

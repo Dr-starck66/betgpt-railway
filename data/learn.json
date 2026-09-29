@@ -1,0 +1,35 @@
+{
+  "n": 10431,
+  "nWrong": 5648,
+  "hitRate": 0.45853705301505127,
+  "meanP": 0.41132838894498674,
+  "platt": {
+    "a": 1.2279866428867658,
+    "b": -0.5011973463864315
+  },
+  "shrinkGlobal": 0,
+  "shrinkHighP": 0,
+  "homeScale": 0.9,
+  "drawScale": 0.85,
+  "awayScale": 1,
+  "leagueShrink": {},
+  "notes": [
+    "Les pronos 1-N-2 tiennent : 46 % de justes sur 10431 matchs. On garde la main, on corrige les ligues qui dérapent.",
+    "Mises récentes : 33 % justes sur 12. Seuil EV +5,0 pts.",
+    "Les victoires à domicile étaient trop souvent fausses. On baisse un peu le 1.",
+    "On voyait trop de nuls. On les rabote."
+  ],
+  "extraMinEv": 0.05,
+  "maxOdds1x2": 3.4,
+  "banDrawBet": true,
+  "recentMiseN": 12,
+  "recentMiseHit": 0.3333333333333333,
+  "lessons": [
+    "Taux de justes sous 50 % : on resserre (cotes plus courtes, EV plus haut) pour les prochains tickets.",
+    "Nul joué et perdu : plus de mise sur le X en C1/Europa.",
+    "Perdu : Liechtenstein–Lithuania · BTTS_Y @ 3,50 (0–2).",
+    "Perdu : Norway–Denmark · OU_25_U @ 2,55 (3–2).",
+    "Perdu : Portugal–Wales · BTTS_Y @ 2,05 (1–0).",
+    "Perdu : Kosovo–Republic of Ireland · Victoire Republic of Ireland @ 3,15 (1–0)."
+  ]
+}

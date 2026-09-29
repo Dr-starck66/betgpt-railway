@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="t">
+  <title id="t">xG football, expected goals expliqué par BetGpt</title>
+  <rect width="1200" height="630" fill="#0b0e14"/>
+  <polyline points="80,480 220,400 360,430 500,300 640,320 780,180 920,220 1120,120" fill="none" stroke="#00e38c" stroke-width="6"/>
+  <circle cx="780" cy="180" r="14" fill="#00e38c"/>
+  <text x="80" y="90" fill="#f4f1ea" font-family="Georgia,serif" font-size="54" font-style="italic">xG football</text>
+  <text x="80" y="150" fill="#9aa3ad" font-family="Inter,sans-serif" font-size="26">Occasions ≠ buts. Le modèle s’en sert.</text>
+  <text x="80" y="560" fill="#00e38c" font-family="Inter,sans-serif" font-size="20" letter-spacing="3">BETGPT.LIVE · 18+</text>
+</svg>

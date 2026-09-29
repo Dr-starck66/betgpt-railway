@@ -1,4 +1,9 @@
-app/
-.betgpt-extract/
-betgpt-source.zip
-node_modules/
+node_modules
+.vercel
+attachments
+artifacts
+screenshots
+public/blog/raw
+public/blog/raw2
+*.zip
+*.log

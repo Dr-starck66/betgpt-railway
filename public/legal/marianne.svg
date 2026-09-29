@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 88" role="img" aria-label="Gouvernement de la République française">
+  <rect width="88" height="88" fill="#000091"/>
+  <!-- Marianne profile, simplified from the official block -->
+  <g fill="#fff">
+    <path d="M44 10c-7 1-14 8-16 16-1 5 0 9 3 13 2 3 2 5 0 8-3 4-3 9-1 13 2 4 6 7 12 8 8 2 16-1 20-7 3-5 3-11 0-16-2-3-2-6 0-9 3-5 3-12-1-17-4-5-10-7-17-9z"/>
+    <path d="M28 70c2-8 8-14 18-16 10-2 18 2 22 8 1 2-2 3-4 2-5-2-10-3-16-2-7 1-13 5-16 8-2 1-5 1-4 0z"/>
+    <path d="M52 14c6 2 10 6 11 12 0 3-1 5-3 4-3-1-5-5-6-9-1-3 0-6-2-7z"/>
+  </g>
+  <g fill="#000091" font-family="Arial, Helvetica, sans-serif">
+    <text x="100" y="28" font-size="16" font-weight="800" letter-spacing="0.8">GOUVERNEMENT</text>
+    <text x="100" y="48" font-size="11" font-weight="700">Liberté</text>
+    <text x="100" y="64" font-size="11" font-weight="700">Égalité</text>
+    <text x="100" y="80" font-size="11" font-weight="700">Fraternité</text>
+  </g>
+</svg>

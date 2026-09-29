@@ -1,0 +1,265 @@
+{
+  "version": "canonical-expansion-evaluation-v1",
+  "source": "ESPN history 2020-09 to 2026-09",
+  "engine": "same roi5:report / dominance+xG+selective hedge+continuous champion-challenger",
+  "baseline": {
+    "roi": 0.3567667905898516,
+    "n": 178,
+    "maxDrawdown": 5,
+    "validationRoi": 0.32225206899068637,
+    "validationN": 57,
+    "validationMaxDrawdown": 3.2871767545117394
+  },
+  "results": [
+    {
+      "combo": [
+        "ER"
+      ],
+      "roi": 0.25001453735874185,
+      "n": 383,
+      "dd": 9,
+      "valRoi": 0.46741770186262466,
+      "valN": 87,
+      "valDD": 4,
+      "deltaVsChampion": -0.10675225323110976,
+      "promote": false
+    },
+    {
+      "combo": [
+        "PT"
+      ],
+      "roi": 0.23268598388760575,
+      "n": 625,
+      "dd": 9.873954171642033,
+      "valRoi": 0.24524159946891394,
+      "valN": 174,
+      "valDD": 5.624055186069114,
+      "deltaVsChampion": -0.12408080670224586,
+      "promote": false
+    },
+    {
+      "combo": [
+        "SC"
+      ],
+      "roi": 0.21149696655578687,
+      "n": 313,
+      "dd": 8.50210040921312,
+      "valRoi": 0.14962283007746974,
+      "valN": 104,
+      "valDD": 5.892043761868225,
+      "deltaVsChampion": -0.14526982403406474,
+      "promote": false
+    },
+    {
+      "combo": [
+        "TR"
+      ],
+      "roi": 0.18014038913511063,
+      "n": 580,
+      "dd": 10.725861281588067,
+      "valRoi": 0.20105512018475577,
+      "valN": 115,
+      "valDD": 7.089492938064765,
+      "deltaVsChampion": -0.17662640145474098,
+      "promote": false
+    },
+    {
+      "combo": [
+        "ER",
+        "PT"
+      ],
+      "roi": 0.28223,
+      "n": 552,
+      "dd": 9.64,
+      "valRoi": 0.31306,
+      "valN": 169,
+      "valDD": 4.05,
+      "deltaVsChampion": -0.07453679058985163,
+      "promote": false
+    },
+    {
+      "combo": [
+        "ER",
+        "SC"
+      ],
+      "roi": 0.20204,
+      "n": 445,
+      "dd": 15.58,
+      "valRoi": 0.22858,
+      "valN": 46,
+      "valDD": 4.75,
+      "deltaVsChampion": -0.15472679058985161,
+      "promote": false
+    },
+    {
+      "combo": [
+        "ER",
+        "TR"
+      ],
+      "roi": 0.25816,
+      "n": 1028,
+      "dd": 13.33,
+      "valRoi": 0.25416,
+      "valN": 243,
+      "valDD": 9.11,
+      "deltaVsChampion": -0.09860679058985161,
+      "promote": false
+    },
+    {
+      "combo": [
+        "PT",
+        "SC"
+      ],
+      "roi": 0.25674,
+      "n": 773,
+      "dd": 12.88,
+      "valRoi": 0.38049,
+      "valN": 213,
+      "valDD": 5.04,
+      "deltaVsChampion": -0.10002679058985159,
+      "promote": false
+    },
+    {
+      "combo": [
+        "PT",
+        "TR"
+      ],
+      "roi": 0.18825,
+      "n": 665,
+      "dd": 12.78,
+      "valRoi": 0.20561,
+      "valN": 170,
+      "valDD": 11.43,
+      "deltaVsChampion": -0.1685167905898516,
+      "promote": false
+    },
+    {
+      "combo": [
+        "SC",
+        "TR"
+      ],
+      "roi": 0.1936,
+      "n": 1014,
+      "dd": 9.2,
+      "valRoi": 0.2947,
+      "valN": 204,
+      "valDD": 7.74,
+      "deltaVsChampion": -0.16316679058985162,
+      "promote": false
+    },
+    {
+      "combo": [
+        "ER",
+        "PT",
+        "SC"
+      ],
+      "roi": 0.29705,
+      "n": 953,
+      "dd": 11.75,
+      "valRoi": 0.24418,
+      "valN": 244,
+      "valDD": 11.66,
+      "deltaVsChampion": -0.05971679058985163,
+      "promote": false
+    },
+    {
+      "combo": [
+        "ER",
+        "PT",
+        "TR"
+      ],
+      "roi": 0.27595,
+      "n": 1286,
+      "dd": 8.97,
+      "valRoi": 0.26658,
+      "valN": 305,
+      "valDD": 8.97,
+      "deltaVsChampion": -0.08081679058985164,
+      "promote": false
+    },
+    {
+      "combo": [
+        "ER",
+        "SC",
+        "TR"
+      ],
+      "roi": 0.25373,
+      "n": 1066,
+      "dd": 10.64,
+      "valRoi": 0.27394,
+      "valN": 253,
+      "valDD": 8.0,
+      "deltaVsChampion": -0.1030367905898516,
+      "promote": false
+    },
+    {
+      "combo": [
+        "PT",
+        "SC",
+        "TR"
+      ],
+      "roi": 0.23268,
+      "n": 698,
+      "dd": 11.5,
+      "valRoi": 0.10828,
+      "valN": 172,
+      "valDD": 11.5,
+      "deltaVsChampion": -0.12408679058985161,
+      "promote": false
+    },
+    {
+      "combo": [
+        "ER",
+        "PT",
+        "SC",
+        "TR"
+      ],
+      "roi": 0.25135,
+      "n": 904,
+      "dd": 9.72,
+      "valRoi": 0.19818,
+      "valN": 233,
+      "valDD": 9.72,
+      "deltaVsChampion": -0.1054167905898516,
+      "promote": false
+    }
+  ],
+  "bestExpandedOverall": {
+    "combo": [
+      "ER",
+      "PT",
+      "SC"
+    ],
+    "roi": 0.29705,
+    "n": 953,
+    "dd": 11.75,
+    "valRoi": 0.24418,
+    "valN": 244,
+    "valDD": 11.66,
+    "deltaVsChampion": -0.05971679058985163,
+    "promote": false
+  },
+  "bestExpandedValidation": {
+    "combo": [
+      "ER"
+    ],
+    "roi": 0.25001453735874185,
+    "n": 383,
+    "dd": 9,
+    "valRoi": 0.46741770186262466,
+    "valN": 87,
+    "valDD": 4,
+    "deltaVsChampion": -0.10675225323110976,
+    "promote": false
+  },
+  "decision": {
+    "promoted": [],
+    "shadow": [
+      "ER",
+      "PT",
+      "SC",
+      "TR"
+    ],
+    "reason": "No tested single league or combination exceeds the canonical 35.676679% champion while satisfying the validation and drawdown promotion gates."
+  }
+}

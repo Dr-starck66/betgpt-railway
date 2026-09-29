@@ -1,0 +1,10 @@
+node_modules
+.vercel
+.git
+attachments
+artifacts
+screenshots
+public/blog/raw
+public/blog/raw2
+*.zip
+*.log

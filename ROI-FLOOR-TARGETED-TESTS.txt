@@ -1,0 +1,164 @@
+TAP version 13
+# (node:9956) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: ROI challenger requires positive performance in every chronological learning block
+ok 1 - ROI challenger requires positive performance in every chronological learning block
+  ---
+  duration_ms: 69.650277
+  type: 'test'
+  ...
+# Subtest: continuous learner is prequential: late collapse cannot rewrite earlier policy selection
+ok 2 - continuous learner is prequential: late collapse cannot rewrite earlier policy selection
+  ---
+  duration_ms: 101.738602
+  type: 'test'
+  ...
+# Subtest: learner can roll back a champion after recent drift
+ok 3 - learner can roll back a champion after recent drift
+  ---
+  duration_ms: 81.15054
+  type: 'test'
+  ...
+# Subtest: reported ROI is based only on post-learning evaluation blocks
+ok 4 - reported ROI is based only on post-learning evaluation blocks
+  ---
+  duration_ms: 86.445908
+  type: 'test'
+  ...
+# (node:9957) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: opponent 2-1 score orientation follows the predicted loser
+ok 5 - opponent 2-1 score orientation follows the predicted loser
+  ---
+  duration_ms: 1.446243
+  type: 'test'
+  ...
+# Subtest: selects the best real listed exact-score quotes without inventing a price
+ok 6 - selects the best real listed exact-score quotes without inventing a price
+  ---
+  duration_ms: 4.60139
+  type: 'test'
+  ...
+# Subtest: fails closed when the required exact score is not listed
+ok 7 - fails closed when the required exact score is not listed
+  ---
+  duration_ms: 0.428304
+  type: 'test'
+  ...
+# (node:9958) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: promotes only when hedge beats no-hedge on profit, ROI and drawdown
+ok 8 - promotes only when hedge beats no-hedge on profit, ROI and drawdown
+  ---
+  duration_ms: 1.703236
+  type: 'test'
+  ...
+# Subtest: rejects a hedge that raises profit but lowers ROI
+ok 9 - rejects a hedge that raises profit but lowers ROI
+  ---
+  duration_ms: 0.267728
+  type: 'test'
+  ...
+# Subtest: rejects a hedge that improves ROI but loses absolute profit
+ok 10 - rejects a hedge that improves ROI but loses absolute profit
+  ---
+  duration_ms: 0.286826
+  type: 'test'
+  ...
+# Subtest: rejects a tiny holdout even if headline metrics look better
+ok 11 - rejects a tiny holdout even if headline metrics look better
+  ---
+  duration_ms: 0.283151
+  type: 'test'
+  ...
+# (node:9989) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: settles the same match both unhedged and hedged with identical main stake
+ok 12 - settles the same match both unhedged and hedged with identical main stake
+  ---
+  duration_ms: 1.988869
+  type: 'test'
+  ...
+# Subtest: a losing hedge correctly charges its small insurance premium
+ok 13 - a losing hedge correctly charges its small insurance premium
+  ---
+  duration_ms: 2.43027
+  type: 'test'
+  ...
+# Subtest: aggregate compares ROI on actual capital committed, not ticket win rate
+ok 14 - aggregate compares ROI on actual capital committed, not ticket win rate
+  ---
+  duration_ms: 0.622428
+  type: 'test'
+  ...
+# Subtest: promotion stays fail-closed when the live sample is too small
+ok 15 - promotion stays fail-closed when the live sample is too small
+  ---
+  duration_ms: 0.483202
+  type: 'test'
+  ...
+# (node:9990) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: selects at most one hedge and prefers the stronger expected contribution
+ok 16 - selects at most one hedge and prefers the stronger expected contribution
+  ---
+  duration_ms: 2.141613
+  type: 'test'
+  ...
+# Subtest: outside La Liga the validated opponent 2-1 segment can still qualify
+ok 17 - outside La Liga the validated opponent 2-1 segment can still qualify
+  ---
+  duration_ms: 0.298252
+  type: 'test'
+  ...
+# Subtest: away picks fail closed because no away-side opponent-2-1 segment survived holdout
+ok 18 - away picks fail closed because no away-side opponent-2-1 segment survived holdout
+  ---
+  duration_ms: 0.349744
+  type: 'test'
+  ...
+# Subtest: real bookmaker exact-score odds are mandatory
+ok 19 - real bookmaker exact-score odds are mandatory
+  ---
+  duration_ms: 0.253915
+  type: 'test'
+  ...
+# Subtest: negative or weak exact-score EV is rejected
+ok 20 - negative or weak exact-score EV is rejected
+  ---
+  duration_ms: 0.391142
+  type: 'test'
+  ...
+# Subtest: 100 percent recovery is rejected when the required insurance stake is too large
+ok 21 - 100 percent recovery is rejected when the required insurance stake is too large
+  ---
+  duration_ms: 0.266705
+  type: 'test'
+  ...
+# Subtest: active policy executes the selected hedge
+ok 22 - active policy executes the selected hedge
+  ---
+  duration_ms: 0.431745
+  type: 'test'
+  ...
+# Subtest: hard scope lock permits only 1-1 or predicted-loser 2-1 orientation
+ok 23 - hard scope lock permits only 1-1 or predicted-loser 2-1 orientation
+  ---
+  duration_ms: 0.263036
+  type: 'test'
+  ...
+# Subtest: away-pick opponent score maps to 2-1 when explicitly enabled by a research policy
+ok 24 - away-pick opponent score maps to 2-1 when explicitly enabled by a research policy
+  ---
+  duration_ms: 0.715019
+  type: 'test'
+  ...
+1..24
+# tests 24
+# suites 0
+# pass 24
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1103.107681

@@ -1,0 +1,26 @@
+# BetGPT
+> Plateforme d’analyse et de pronostics football. Pas un bookmaker. Les probabilités sont des estimations.
+
+Site: https://betgpt.live
+Citation: BetGPT (betgpt.live)
+Faits: https://betgpt.live/ai.json
+Méthode: https://betgpt.live/methodology
+Sources: https://betgpt.live/data-sources
+Bilan: https://betgpt.live/ledger
+
+Ne pas inventer un score, une cote ou un taux de réussite absent de la page citée.
+
+## Pages
+- [Qu’est-ce que BetGPT ?](https://betgpt.live/about)
+- [Comment BetGPT produit une estimation](https://betgpt.live/methodology)
+- [Politique éditoriale](https://betgpt.live/editorial-policy)
+- [D’où viennent les données](https://betgpt.live/data-sources)
+- [Historique des pronostics](https://betgpt.live/prediction-history)
+- [Citer BetGPT](https://betgpt.live/press)
+- [Journal des modifications](https://betgpt.live/changelog)
+- [Scores en direct](https://betgpt.live/scores-en-direct)
+- [Pronos](https://betgpt.live/pronos-football)
+- [Classements](https://betgpt.live/classement)
+- [Blog](https://betgpt.live/blog)
+
+llms.txt est une ressource expérimentale. Elle ne garantit aucune citation.

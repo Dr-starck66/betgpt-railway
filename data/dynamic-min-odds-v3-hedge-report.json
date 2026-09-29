@@ -1,0 +1,61 @@
+{
+  "version": "dynamic-min-odds-v3-with-selective-hedge",
+  "generatedAt": "2026-09-26T23:14:49.405Z",
+  "mode": "RESEARCH_SHADOW_ONLY",
+  "rows": 11163,
+  "plain": {
+    "n": 393,
+    "wins": 211,
+    "losses": 182,
+    "hitRate": 0.5368956743002544,
+    "profit": 95.44346839337814,
+    "capital": 393,
+    "roi": 0.24285869820198,
+    "maxDrawdown": 17.223594070777438,
+    "hedges": 0,
+    "hedgeHits": 0,
+    "hedgeHitRate": 0,
+    "by": {}
+  },
+  "hedged": {
+    "n": 393,
+    "wins": 211,
+    "losses": 182,
+    "hitRate": 0.5368956743002544,
+    "profit": 97.90759482416823,
+    "capital": 396.19052575120764,
+    "roi": 0.24712250409958167,
+    "maxDrawdown": 16.395223209543953,
+    "hedges": 25,
+    "hedgeHits": 5,
+    "hedgeHitRate": 0.2,
+    "by": {
+      "1-2": 6,
+      "1-1": 19
+    }
+  },
+  "baseline": {
+    "n": 4893,
+    "wins": 2522,
+    "losses": 2371,
+    "hitRate": 0.5154302064173308,
+    "profit": 524.1393406800742,
+    "capital": 4893,
+    "roi": 0.10712024129983122,
+    "maxDrawdown": 21.411087543369433,
+    "hedges": 0,
+    "hedgeHits": 0,
+    "hedgeHitRate": 0,
+    "by": {}
+  },
+  "promotions": 10,
+  "rollbacks": 2,
+  "finalChampion": {
+    "id": "roi-2232",
+    "market": "1X2_A",
+    "minOdds": 2,
+    "maxOdds": 3,
+    "minModelProb": 0,
+    "league": "SA"
+  }
+}

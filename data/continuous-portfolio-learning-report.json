@@ -1,0 +1,951 @@
+{
+  "version": "portfolio-lab-v2-continuous-roi",
+  "generatedAt": "2026-09-26T23:15:04.693Z",
+  "mode": "RESEARCH_SHADOW_ONLY",
+  "objective": "maximize robust simulated ROI under prequential continuous learning",
+  "minOddsGrid": [
+    1.8,
+    1.85,
+    1.9,
+    1.95,
+    2,
+    2.05,
+    2.1,
+    2.15,
+    2.2,
+    2.25,
+    2.3
+  ],
+  "absoluteRoiPromotionTarget": 0.13,
+  "learning": {
+    "mode": "PREQUENTIAL_RESEARCH_SHADOW",
+    "config": {
+      "minOdds": 1.8,
+      "maxOdds": 3,
+      "historyWindow": 6000,
+      "warmup": 4500,
+      "retrainEvery": 350,
+      "blocks": 4,
+      "minBlockN": 35,
+      "minTotalN": 180,
+      "minRoiLift": 0.015,
+      "minAbsoluteRoi": 0.13,
+      "maxDrawdownMultiplier": 1.15
+    },
+    "evaluated": {
+      "n": 393,
+      "wins": 211,
+      "losses": 182,
+      "hitRate": 0.5368956743002544,
+      "profit": 95.44346839337814,
+      "capital": 393,
+      "roi": 0.24285869820198,
+      "maxDrawdown": 17.223594070777438,
+      "avgOdds": 2.336434103656465
+    },
+    "baseline": {
+      "n": 4893,
+      "wins": 2522,
+      "losses": 2371,
+      "hitRate": 0.5154302064173308,
+      "profit": 524.1393406800742,
+      "capital": 4893,
+      "roi": 0.10712024129983122,
+      "maxDrawdown": 21.411087543369433,
+      "avgOdds": 2.1714750483781966
+    },
+    "roiLift": 0.13573845690214878,
+    "profitLift": -428.69587228669604,
+    "drawdownDelta": -4.187493472591996,
+    "decisions": [
+      {
+        "atIndex": 4500,
+        "learnedFrom": 4500,
+        "evaluationN": 350,
+        "champion": null,
+        "challenger": {
+          "id": "roi-241",
+          "market": "ALL",
+          "minOdds": 1.8,
+          "maxOdds": 2.2,
+          "minModelProb": 0.44,
+          "league": "ALL"
+        },
+        "promoted": false,
+        "reason": "DRAWDOWN_TOO_HIGH",
+        "baselineRecent": {
+          "n": 496,
+          "wins": 265,
+          "losses": 231,
+          "hitRate": 0.5342741935483871,
+          "profit": 72.64751723175976,
+          "capital": 496,
+          "roi": 0.1464667686124189,
+          "maxDrawdown": 9.779402769943218,
+          "avgOdds": 2.178747242717028
+        },
+        "challengerRecent": {
+          "n": 217,
+          "wins": 131,
+          "losses": 86,
+          "hitRate": 0.6036866359447005,
+          "profit": 41.346568549390994,
+          "capital": 217,
+          "roi": 0.19053718225525804,
+          "maxDrawdown": 12.799211655233243,
+          "avgOdds": 1.996468700193385
+        }
+      },
+      {
+        "atIndex": 4850,
+        "learnedFrom": 4850,
+        "evaluationN": 350,
+        "champion": {
+          "id": "roi-2513",
+          "market": "1X2_A",
+          "minOdds": 2.05,
+          "maxOdds": 3,
+          "minModelProb": 0,
+          "league": "ALL"
+        },
+        "challenger": {
+          "id": "roi-2513",
+          "market": "1X2_A",
+          "minOdds": 2.05,
+          "maxOdds": 3,
+          "minModelProb": 0,
+          "league": "ALL"
+        },
+        "promoted": true,
+        "reason": "PROMOTE_ROI_STABLE",
+        "baselineRecent": {
+          "n": 500,
+          "wins": 265,
+          "losses": 235,
+          "hitRate": 0.53,
+          "profit": 69.61011490733354,
+          "capital": 500,
+          "roi": 0.13922022981466708,
+          "maxDrawdown": 10.941714816986845,
+          "avgOdds": 2.185391034521002
+        },
+        "challengerRecent": {
+          "n": 165,
+          "wins": 95,
+          "losses": 70,
+          "hitRate": 0.5757575757575758,
+          "profit": 71.08379809111369,
+          "capital": 165,
+          "roi": 0.43081089752190116,
+          "maxDrawdown": 7.497511764996133,
+          "avgOdds": 2.4975838534593464
+        }
+      },
+      {
+        "atIndex": 5200,
+        "learnedFrom": 5200,
+        "evaluationN": 350,
+        "champion": null,
+        "challenger": {
+          "id": "roi-2225",
+          "market": "1X2_A",
+          "minOdds": 2,
+          "maxOdds": 3,
+          "minModelProb": 0,
+          "league": "ALL"
+        },
+        "promoted": false,
+        "reason": "ROLLBACK_CHAMPION_DRIFT",
+        "baselineRecent": {
+          "n": 514,
+          "wins": 270,
+          "losses": 244,
+          "hitRate": 0.5252918287937743,
+          "profit": 65.65215521801115,
+          "capital": 514,
+          "roi": 0.1277279284397104,
+          "maxDrawdown": 10.941714816986856,
+          "avgOdds": 2.1751628154823215
+        },
+        "challengerRecent": {
+          "n": 186,
+          "wins": 95,
+          "losses": 91,
+          "hitRate": 0.510752688172043,
+          "profit": 48.375259699335295,
+          "capital": 186,
+          "roi": 0.26008204139427576,
+          "maxDrawdown": 13.233510575689714,
+          "avgOdds": 2.4685400023582056
+        }
+      },
+      {
+        "atIndex": 5550,
+        "learnedFrom": 5550,
+        "evaluationN": 350,
+        "champion": null,
+        "challenger": {
+          "id": "roi-2513",
+          "market": "1X2_A",
+          "minOdds": 2.05,
+          "maxOdds": 3,
+          "minModelProb": 0,
+          "league": "ALL"
+        },
+        "promoted": false,
+        "reason": "DRAWDOWN_TOO_HIGH",
+        "baselineRecent": {
+          "n": 504,
+          "wins": 273,
+          "losses": 231,
+          "hitRate": 0.5416666666666666,
+          "profit": 80.49838287548019,
+          "capital": 504,
+          "roi": 0.15971901364182578,
+          "maxDrawdown": 9.047446982275094,
+          "avgOdds": 2.1629359723352217
+        },
+        "challengerRecent": {
+          "n": 163,
+          "wins": 79,
+          "losses": 84,
+          "hitRate": 0.48466257668711654,
+          "profit": 31.738683930628753,
+          "capital": 163,
+          "roi": 0.1947158523351457,
+          "maxDrawdown": 14.616379389816514,
+          "avgOdds": 2.473789937832358
+        }
+      },
+      {
+        "atIndex": 5900,
+        "learnedFrom": 5900,
+        "evaluationN": 350,
+        "champion": {
+          "id": "roi-255",
+          "market": "1X2_H",
+          "minOdds": 1.8,
+          "maxOdds": 2.2,
+          "minModelProb": 0.44,
+          "league": "PL"
+        },
+        "challenger": {
+          "id": "roi-255",
+          "market": "1X2_H",
+          "minOdds": 1.8,
+          "maxOdds": 2.2,
+          "minModelProb": 0.44,
+          "league": "PL"
+        },
+        "promoted": true,
+        "reason": "PROMOTE_ROI_STABLE",
+        "baselineRecent": {
+          "n": 500,
+          "wins": 257,
+          "losses": 243,
+          "hitRate": 0.514,
+          "profit": 53.84954423238514,
+          "capital": 500,
+          "roi": 0.10769908846477029,
+          "maxDrawdown": 15.555875561128815,
+          "avgOdds": 2.1751664115235374
+        },
+        "challengerRecent": {
+          "n": 42,
+          "wins": 28,
+          "losses": 14,
+          "hitRate": 0.6666666666666666,
+          "profit": 14.622581345456945,
+          "capital": 42,
+          "roi": 0.34815669870135585,
+          "maxDrawdown": 4,
+          "avgOdds": 2.0067483889221487
+        }
+      },
+      {
+        "atIndex": 6250,
+        "learnedFrom": 6250,
+        "evaluationN": 350,
+        "champion": {
+          "id": "roi-1638",
+          "market": "ALL",
+          "minOdds": 1.95,
+          "maxOdds": 2.2,
+          "minModelProb": 0,
+          "league": "LL"
+        },
+        "challenger": {
+          "id": "roi-1638",
+          "market": "ALL",
+          "minOdds": 1.95,
+          "maxOdds": 2.2,
+          "minModelProb": 0,
+          "league": "LL"
+        },
+        "promoted": true,
+        "reason": "PROMOTE_ROI_STABLE",
+        "baselineRecent": {
+          "n": 512,
+          "wins": 269,
+          "losses": 243,
+          "hitRate": 0.525390625,
+          "profit": 64.00731068099107,
+          "capital": 512,
+          "roi": 0.12501427867381068,
+          "maxDrawdown": 15.555875561128822,
+          "avgOdds": 2.167432631539109
+        },
+        "challengerRecent": {
+          "n": 43,
+          "wins": 26,
+          "losses": 17,
+          "hitRate": 0.6046511627906976,
+          "profit": 11.272045015697714,
+          "capital": 43,
+          "roi": 0.26214058176041194,
+          "maxDrawdown": 6.821659591779495,
+          "avgOdds": 2.078797700321703
+        }
+      },
+      {
+        "atIndex": 6600,
+        "learnedFrom": 6600,
+        "evaluationN": 350,
+        "champion": {
+          "id": "roi-1638",
+          "market": "ALL",
+          "minOdds": 1.95,
+          "maxOdds": 2.2,
+          "minModelProb": 0,
+          "league": "LL"
+        },
+        "challenger": {
+          "id": "roi-3768",
+          "market": "1X2_A",
+          "minOdds": 2.3,
+          "maxOdds": 3,
+          "minModelProb": 0,
+          "league": "SA"
+        },
+        "promoted": false,
+        "reason": "CHALLENGER_SAMPLE_TOO_SMALL",
+        "baselineRecent": {
+          "n": 514,
+          "wins": 282,
+          "losses": 232,
+          "hitRate": 0.5486381322957199,
+          "profit": 85.15457350767949,
+          "capital": 514,
+          "roi": 0.1656703764740846,
+          "maxDrawdown": 12.690737692432432,
+          "avgOdds": 2.1673153983291855
+        },
+        "challengerRecent": {
+          "n": 18,
+          "wins": 11,
+          "losses": 7,
+          "hitRate": 0.6111111111111112,
+          "profit": 10.289124466728591,
+          "capital": 18,
+          "roi": 0.5716180259293662,
+          "maxDrawdown": 2,
+          "avgOdds": 2.536561890591976
+        }
+      },
+      {
+        "atIndex": 6950,
+        "learnedFrom": 6950,
+        "evaluationN": 350,
+        "champion": {
+          "id": "roi-1368",
+          "market": "1X2_A",
+          "minOdds": 1.9,
+          "maxOdds": 3,
+          "minModelProb": 0,
+          "league": "SA"
+        },
+        "challenger": {
+          "id": "roi-1368",
+          "market": "1X2_A",
+          "minOdds": 1.9,
+          "maxOdds": 3,
+          "minModelProb": 0,
+          "league": "SA"
+        },
+        "promoted": true,
+        "reason": "PROMOTE_ROI_STABLE",
+        "baselineRecent": {
+          "n": 528,
+          "wins": 276,
+          "losses": 252,
+          "hitRate": 0.5227272727272727,
+          "profit": 58.42152694321607,
+          "capital": 528,
+          "roi": 0.11064683133184862,
+          "maxDrawdown": 15.729392695735967,
+          "avgOdds": 2.162470269443642
+        },
+        "challengerRecent": {
+          "n": 42,
+          "wins": 25,
+          "losses": 17,
+          "hitRate": 0.5952380952380952,
+          "profit": 18.179618207587623,
+          "capital": 42,
+          "roi": 0.4328480525616101,
+          "maxDrawdown": 3,
+          "avgOdds": 2.4091320767753124
+        }
+      },
+      {
+        "atIndex": 7300,
+        "learnedFrom": 7300,
+        "evaluationN": 350,
+        "champion": {
+          "id": "roi-1368",
+          "market": "1X2_A",
+          "minOdds": 1.9,
+          "maxOdds": 3,
+          "minModelProb": 0,
+          "league": "SA"
+        },
+        "challenger": {
+          "id": "roi-3576",
+          "market": "1X2_A",
+          "minOdds": 2.25,
+          "maxOdds": 3,
+          "minModelProb": 0,
+          "league": "SA"
+        },
+        "promoted": false,
+        "reason": "CHALLENGER_SAMPLE_TOO_SMALL",
+        "baselineRecent": {
+          "n": 520,
+          "wins": 266,
+          "losses": 254,
+          "hitRate": 0.5115384615384615,
+          "profit": 51.49909153979033,
+          "capital": 520,
+          "roi": 0.09903671449959678,
+          "maxDrawdown": 15.729392695735974,
+          "avgOdds": 2.1639288390665636
+        },
+        "challengerRecent": {
+          "n": 32,
+          "wins": 20,
+          "losses": 12,
+          "hitRate": 0.625,
+          "profit": 17.177862730412105,
+          "capital": 32,
+          "roi": 0.5368082103253783,
+          "maxDrawdown": 3,
+          "avgOdds": 2.4975205198727846
+        }
+      },
+      {
+        "atIndex": 7650,
+        "learnedFrom": 7650,
+        "evaluationN": 350,
+        "champion": null,
+        "challenger": {
+          "id": "roi-3665",
+          "market": "1X2_A",
+          "minOdds": 2.3,
+          "maxOdds": 2.5,
+          "minModelProb": 0,
+          "league": "ALL"
+        },
+        "promoted": false,
+        "reason": "ROLLBACK_CHAMPION_DRIFT",
+        "baselineRecent": {
+          "n": 488,
+          "wins": 257,
+          "losses": 231,
+          "hitRate": 0.5266393442622951,
+          "profit": 64.85750520133394,
+          "capital": 488,
+          "roi": 0.1329047237732253,
+          "maxDrawdown": 13.558270971065383,
+          "avgOdds": 2.1705579812695115
+        },
+        "challengerRecent": {
+          "n": 33,
+          "wins": 21,
+          "losses": 12,
+          "hitRate": 0.6363636363636364,
+          "profit": 17.423249088933417,
+          "capital": 33,
+          "roi": 0.5279772451191944,
+          "maxDrawdown": 2.623337913936048,
+          "avgOdds": 2.394437535972243
+        }
+      },
+      {
+        "atIndex": 8000,
+        "learnedFrom": 8000,
+        "evaluationN": 350,
+        "champion": {
+          "id": "roi-2232",
+          "market": "1X2_A",
+          "minOdds": 2,
+          "maxOdds": 3,
+          "minModelProb": 0,
+          "league": "SA"
+        },
+        "challenger": {
+          "id": "roi-2232",
+          "market": "1X2_A",
+          "minOdds": 2,
+          "maxOdds": 3,
+          "minModelProb": 0,
+          "league": "SA"
+        },
+        "promoted": true,
+        "reason": "PROMOTE_ROI_STABLE",
+        "baselineRecent": {
+          "n": 492,
+          "wins": 261,
+          "losses": 231,
+          "hitRate": 0.5304878048780488,
+          "profit": 65.63681295773517,
+          "capital": 492,
+          "roi": 0.13340815641816092,
+          "maxDrawdown": 11.895764478051925,
+          "avgOdds": 2.166532148856786
+        },
+        "challengerRecent": {
+          "n": 41,
+          "wins": 20,
+          "losses": 21,
+          "hitRate": 0.4878048780487805,
+          "profit": 7.165959650566066,
+          "capital": 41,
+          "roi": 0.17477950367234307,
+          "maxDrawdown": 5.9848206755791535,
+          "avgOdds": 2.4664659759485175
+        }
+      },
+      {
+        "atIndex": 8350,
+        "learnedFrom": 8350,
+        "evaluationN": 350,
+        "champion": {
+          "id": "roi-2232",
+          "market": "1X2_A",
+          "minOdds": 2,
+          "maxOdds": 3,
+          "minModelProb": 0,
+          "league": "SA"
+        },
+        "challenger": {
+          "id": "roi-2520",
+          "market": "1X2_A",
+          "minOdds": 2.05,
+          "maxOdds": 3,
+          "minModelProb": 0,
+          "league": "SA"
+        },
+        "promoted": false,
+        "reason": "CHALLENGER_SAMPLE_TOO_SMALL",
+        "baselineRecent": {
+          "n": 509,
+          "wins": 269,
+          "losses": 240,
+          "hitRate": 0.5284872298624754,
+          "profit": 67.84183463335683,
+          "capital": 509,
+          "roi": 0.1332845474132747,
+          "maxDrawdown": 12.563941546370955,
+          "avgOdds": 2.1732262843939805
+        },
+        "challengerRecent": {
+          "n": 32,
+          "wins": 21,
+          "losses": 11,
+          "hitRate": 0.65625,
+          "profit": 18.882120214593517,
+          "capital": 32,
+          "roi": 0.5900662567060474,
+          "maxDrawdown": 2,
+          "avgOdds": 2.448865842322389
+        }
+      },
+      {
+        "atIndex": 8700,
+        "learnedFrom": 8700,
+        "evaluationN": 350,
+        "champion": {
+          "id": "roi-3281",
+          "market": "1X2_A",
+          "minOdds": 2.2,
+          "maxOdds": 2.5,
+          "minModelProb": 0,
+          "league": "ALL"
+        },
+        "challenger": {
+          "id": "roi-3281",
+          "market": "1X2_A",
+          "minOdds": 2.2,
+          "maxOdds": 2.5,
+          "minModelProb": 0,
+          "league": "ALL"
+        },
+        "promoted": true,
+        "reason": "PROMOTE_ROI_STABLE",
+        "baselineRecent": {
+          "n": 522,
+          "wins": 273,
+          "losses": 249,
+          "hitRate": 0.5229885057471264,
+          "profit": 65.48231297511454,
+          "capital": 522,
+          "roi": 0.12544504401362938,
+          "maxDrawdown": 21.411087543369483,
+          "avgOdds": 2.170025792539597
+        },
+        "challengerRecent": {
+          "n": 77,
+          "wins": 39,
+          "losses": 38,
+          "hitRate": 0.5064935064935064,
+          "profit": 14.642378446273511,
+          "capital": 77,
+          "roi": 0.19016075904251314,
+          "maxDrawdown": 7.778477842231316,
+          "avgOdds": 2.344102394407724
+        }
+      },
+      {
+        "atIndex": 9050,
+        "learnedFrom": 9050,
+        "evaluationN": 350,
+        "champion": {
+          "id": "roi-3665",
+          "market": "1X2_A",
+          "minOdds": 2.3,
+          "maxOdds": 2.5,
+          "minModelProb": 0,
+          "league": "ALL"
+        },
+        "challenger": {
+          "id": "roi-3665",
+          "market": "1X2_A",
+          "minOdds": 2.3,
+          "maxOdds": 2.5,
+          "minModelProb": 0,
+          "league": "ALL"
+        },
+        "promoted": true,
+        "reason": "PROMOTE_ROI_STABLE",
+        "baselineRecent": {
+          "n": 539,
+          "wins": 268,
+          "losses": 271,
+          "hitRate": 0.4972170686456401,
+          "profit": 39.739226242377995,
+          "capital": 539,
+          "roi": 0.07372769247194433,
+          "maxDrawdown": 11.716030758050685,
+          "avgOdds": 2.170035647989536
+        },
+        "challengerRecent": {
+          "n": 50,
+          "wins": 27,
+          "losses": 23,
+          "hitRate": 0.54,
+          "profit": 14.822742446778548,
+          "capital": 50,
+          "roi": 0.29645484893557095,
+          "maxDrawdown": 3.5451642759190656,
+          "avgOdds": 2.3981543723052976
+        }
+      },
+      {
+        "atIndex": 9400,
+        "learnedFrom": 9400,
+        "evaluationN": 350,
+        "champion": {
+          "id": "roi-3665",
+          "market": "1X2_A",
+          "minOdds": 2.3,
+          "maxOdds": 2.5,
+          "minModelProb": 0,
+          "league": "ALL"
+        },
+        "challenger": {
+          "id": "roi-1752",
+          "market": "1X2_A",
+          "minOdds": 1.95,
+          "maxOdds": 2.5,
+          "minModelProb": 0,
+          "league": "SA"
+        },
+        "promoted": false,
+        "reason": "CHALLENGER_SAMPLE_TOO_SMALL",
+        "baselineRecent": {
+          "n": 529,
+          "wins": 266,
+          "losses": 263,
+          "hitRate": 0.502835538752363,
+          "profit": 44.08564974916167,
+          "capital": 529,
+          "roi": 0.08333771219123189,
+          "maxDrawdown": 11.759308995306696,
+          "avgOdds": 2.172658897238725
+        },
+        "challengerRecent": {
+          "n": 27,
+          "wins": 18,
+          "losses": 9,
+          "hitRate": 0.6666666666666666,
+          "profit": 12.758339906062451,
+          "capital": 27,
+          "roi": 0.4725311076319426,
+          "maxDrawdown": 2,
+          "avgOdds": 2.22197205501
+        }
+      },
+      {
+        "atIndex": 9750,
+        "learnedFrom": 9750,
+        "evaluationN": 350,
+        "champion": {
+          "id": "roi-3665",
+          "market": "1X2_A",
+          "minOdds": 2.3,
+          "maxOdds": 2.5,
+          "minModelProb": 0,
+          "league": "ALL"
+        },
+        "challenger": {
+          "id": "roi-3096",
+          "market": "1X2_A",
+          "minOdds": 2.15,
+          "maxOdds": 3,
+          "minModelProb": 0,
+          "league": "SA"
+        },
+        "promoted": false,
+        "reason": "CHALLENGER_SAMPLE_TOO_SMALL",
+        "baselineRecent": {
+          "n": 519,
+          "wins": 265,
+          "losses": 254,
+          "hitRate": 0.5105973025048169,
+          "profit": 47.970444969990375,
+          "capital": 519,
+          "roi": 0.09242860302502963,
+          "maxDrawdown": 16.641651490214038,
+          "avgOdds": 2.1686878858021656
+        },
+        "challengerRecent": {
+          "n": 34,
+          "wins": 17,
+          "losses": 17,
+          "hitRate": 0.5,
+          "profit": 7.821625692835241,
+          "capital": 34,
+          "roi": 0.23004781449515413,
+          "maxDrawdown": 3.942208849412806,
+          "avgOdds": 2.4872664248142793
+        }
+      },
+      {
+        "atIndex": 10100,
+        "learnedFrom": 10100,
+        "evaluationN": 350,
+        "champion": {
+          "id": "roi-3665",
+          "market": "1X2_A",
+          "minOdds": 2.3,
+          "maxOdds": 2.5,
+          "minModelProb": 0,
+          "league": "ALL"
+        },
+        "challenger": {
+          "id": "roi-2136",
+          "market": "1X2_A",
+          "minOdds": 2,
+          "maxOdds": 2.5,
+          "minModelProb": 0,
+          "league": "SA"
+        },
+        "promoted": false,
+        "reason": "CHALLENGER_SAMPLE_TOO_SMALL",
+        "baselineRecent": {
+          "n": 520,
+          "wins": 266,
+          "losses": 254,
+          "hitRate": 0.5115384615384615,
+          "profit": 54.32874849024629,
+          "capital": 520,
+          "roi": 0.10447836248124287,
+          "maxDrawdown": 12.45371491060093,
+          "avgOdds": 2.1761377951614542
+        },
+        "challengerRecent": {
+          "n": 25,
+          "wins": 16,
+          "losses": 9,
+          "hitRate": 0.64,
+          "profit": 11.349513425835534,
+          "capital": 25,
+          "roi": 0.45398053703342134,
+          "maxDrawdown": 2,
+          "avgOdds": 2.2656668315681565
+        }
+      },
+      {
+        "atIndex": 10450,
+        "learnedFrom": 10450,
+        "evaluationN": 350,
+        "champion": {
+          "id": "roi-1848",
+          "market": "1X2_A",
+          "minOdds": 1.95,
+          "maxOdds": 3,
+          "minModelProb": 0,
+          "league": "SA"
+        },
+        "challenger": {
+          "id": "roi-1848",
+          "market": "1X2_A",
+          "minOdds": 1.95,
+          "maxOdds": 3,
+          "minModelProb": 0,
+          "league": "SA"
+        },
+        "promoted": true,
+        "reason": "PROMOTE_ROI_STABLE",
+        "baselineRecent": {
+          "n": 519,
+          "wins": 266,
+          "losses": 253,
+          "hitRate": 0.51252408477842,
+          "profit": 55.53969145410706,
+          "capital": 519,
+          "roi": 0.1070128929751581,
+          "maxDrawdown": 19.508027554553607,
+          "avgOdds": 2.1718317225601256
+        },
+        "challengerRecent": {
+          "n": 42,
+          "wins": 25,
+          "losses": 17,
+          "hitRate": 0.5952380952380952,
+          "profit": 15.999488187734816,
+          "capital": 42,
+          "roi": 0.380940194946067,
+          "maxDrawdown": 3.0174712595570323,
+          "avgOdds": 2.3712543424535677
+        }
+      },
+      {
+        "atIndex": 10800,
+        "learnedFrom": 10800,
+        "evaluationN": 350,
+        "champion": {
+          "id": "roi-257",
+          "market": "1X2_A",
+          "minOdds": 1.8,
+          "maxOdds": 2.2,
+          "minModelProb": 0.44,
+          "league": "ALL"
+        },
+        "challenger": {
+          "id": "roi-257",
+          "market": "1X2_A",
+          "minOdds": 1.8,
+          "maxOdds": 2.2,
+          "minModelProb": 0.44,
+          "league": "ALL"
+        },
+        "promoted": true,
+        "reason": "PROMOTE_ROI_STABLE",
+        "baselineRecent": {
+          "n": 510,
+          "wins": 246,
+          "losses": 264,
+          "hitRate": 0.4823529411764706,
+          "profit": 17.106943421866028,
+          "capital": 510,
+          "roi": 0.033543026317384365,
+          "maxDrawdown": 17.651520691547397,
+          "avgOdds": 2.1669064135817355
+        },
+        "challengerRecent": {
+          "n": 52,
+          "wins": 31,
+          "losses": 21,
+          "hitRate": 0.5961538461538461,
+          "profit": 10.035353830739668,
+          "capital": 52,
+          "roi": 0.19298757366807054,
+          "maxDrawdown": 5,
+          "avgOdds": 2.00562045731629
+        }
+      },
+      {
+        "atIndex": 11150,
+        "learnedFrom": 11150,
+        "evaluationN": 13,
+        "champion": {
+          "id": "roi-2232",
+          "market": "1X2_A",
+          "minOdds": 2,
+          "maxOdds": 3,
+          "minModelProb": 0,
+          "league": "SA"
+        },
+        "challenger": {
+          "id": "roi-2232",
+          "market": "1X2_A",
+          "minOdds": 2,
+          "maxOdds": 3,
+          "minModelProb": 0,
+          "league": "SA"
+        },
+        "promoted": true,
+        "reason": "PROMOTE_ROI_STABLE",
+        "baselineRecent": {
+          "n": 515,
+          "wins": 247,
+          "losses": 268,
+          "hitRate": 0.4796116504854369,
+          "profit": 19.900026205058808,
+          "capital": 515,
+          "roi": 0.03864082758263846,
+          "maxDrawdown": 14.027016884306745,
+          "avgOdds": 2.1832131759968885
+        },
+        "challengerRecent": {
+          "n": 45,
+          "wins": 27,
+          "losses": 18,
+          "hitRate": 0.6,
+          "profit": 19.511821526024896,
+          "capital": 45,
+          "roi": 0.43359603391166435,
+          "maxDrawdown": 6,
+          "avgOdds": 2.404378341920215
+        }
+      }
+    ],
+    "finalChampion": {
+      "id": "roi-2232",
+      "market": "1X2_A",
+      "minOdds": 2,
+      "maxOdds": 3,
+      "minModelProb": 0,
+      "league": "SA"
+    },
+    "promotions": 10,
+    "rollbacks": 2
+  },
+  "safeguards": [
+    "Future outcomes never participate in policy selection.",
+    "Every challenger must be ROI-positive in every chronological learning block.",
+    "Champion rollback is automatic after material recent degradation.",
+    "Normalized unit exposure is research-only and is not a real-money staking recommendation."
+  ]
+}

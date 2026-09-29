@@ -1,0 +1,485 @@
+
+> test:roi5-continuous
+> node --experimental-strip-types --test src/engine/roi5-continuous-learning.test.ts
+
+TAP version 13
+# (node:22069) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: falls back to validated default while honest settled sample is too small
+ok 1 - falls back to validated default while honest settled sample is too small
+  ---
+  duration_ms: 21.773411
+  type: 'test'
+  ...
+# Subtest: post-kickoff records and reconstructed books cannot train production policy
+ok 2 - post-kickoff records and reconstructed books cannot train production policy
+  ---
+  duration_ms: 1.010556
+  type: 'test'
+  ...
+# Subtest: stronger dominance can be promoted only after later chronological holdout confirms ROI
+ok 3 - stronger dominance can be promoted only after later chronological holdout confirms ROI
+  ---
+  duration_ms: 16.688313
+  type: 'test'
+  ...
+# Subtest: future settled rows cannot influence an earlier target kickoff
+ok 4 - future settled rows cannot influence an earlier target kickoff
+  ---
+  duration_ms: 0.626489
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 514.796188
+
+> test:roi5-gate
+> node --experimental-strip-types --test src/engine/roi5-dominance-gate.test.ts
+
+TAP version 13
+# (node:22098) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: dominance margin is selected side minus second-highest 1X2 probability
+ok 1 - dominance margin is selected side minus second-highest 1X2 probability
+  ---
+  duration_ms: 2.267426
+  type: 'test'
+  ...
+# Subtest: low dominance blocks even when the segment is mature
+ok 2 - low dominance blocks even when the segment is mature
+  ---
+  duration_ms: 1.244174
+  type: 'test'
+  ...
+# Subtest: 14 qualified historical observations fail closed
+ok 3 - 14 qualified historical observations fail closed
+  ---
+  duration_ms: 0.407346
+  type: 'test'
+  ...
+# Subtest: 15 qualified historical observations allow a strong side bet
+ok 4 - 15 qualified historical observations allow a strong side bet
+  ---
+  duration_ms: 0.357056
+  type: 'test'
+  ...
+# Subtest: future and unsettled rows cannot mature a segment
+ok 5 - future and unsettled rows cannot mature a segment
+  ---
+  duration_ms: 0.63587
+  type: 'test'
+  ...
+# Subtest: low-dominance historical rows do not count toward maturity
+ok 6 - low-dominance historical rows do not count toward maturity
+  ---
+  duration_ms: 0.355016
+  type: 'test'
+  ...
+# Subtest: duplicate match IDs count once
+ok 7 - duplicate match IDs count once
+  ---
+  duration_ms: 0.435436
+  type: 'test'
+  ...
+# Subtest: application zeroes stake and removes cover on a blocked BET
+ok 8 - application zeroes stake and removes cover on a blocked BET
+  ---
+  duration_ms: 2.940959
+  type: 'test'
+  ...
+# Subtest: non-1X2-side BET is not modified
+ok 9 - non-1X2-side BET is not modified
+  ---
+  duration_ms: 1.068318
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 541.521851
+
+> test:xg-gates
+> node --experimental-strip-types --test src/engine/low-scoring-no-bet-gate.test.ts src/engine/hedge-xg-eligibility.test.ts src/engine/xg-hedge-gate.test.ts src/engine/best-odds-engine.test.ts src/engine/no-bet-roi-exclusion.test.ts
+
+TAP version 13
+# (node:22127) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: freshness rejects stale bookmakers when timestamps are present
+ok 1 - freshness rejects stale bookmakers when timestamps are present
+  ---
+  duration_ms: 5.086273
+  type: 'test'
+  ...
+# Subtest: main and hedge may come from different bookmakers
+ok 2 - main and hedge may come from different bookmakers
+  ---
+  duration_ms: 11.609539
+  type: 'test'
+  ...
+# Subtest: active odds floor is strict
+ok 3 - active odds floor is strict
+  ---
+  duration_ms: 1.164698
+  type: 'test'
+  ...
+# Subtest: missing fresh timestamp fails closed in live mode
+ok 4 - missing fresh timestamp fails closed in live mode
+  ---
+  duration_ms: 0.810045
+  type: 'test'
+  ...
+# Subtest: ROI-first gate removes a hedge that dilutes portfolio ROI
+ok 5 - ROI-first gate removes a hedge that dilutes portfolio ROI
+  ---
+  duration_ms: 0.469972
+  type: 'test'
+  ...
+# Subtest: legacy research snapshots can be explicitly allowed
+ok 6 - legacy research snapshots can be explicitly allowed
+  ---
+  duration_ms: 0.327684
+  type: 'test'
+  ...
+# Subtest: xG scoring context can remove an implausible opponent 2-1 hedge without cancelling the main bet
+ok 7 - xG scoring context can remove an implausible opponent 2-1 hedge without cancelling the main bet
+  ---
+  duration_ms: 0.991401
+  type: 'test'
+  ...
+# Subtest: low xG plus elevated 0-0 risk hard-vetoes the main bet and commits zero capital
+ok 8 - low xG plus elevated 0-0 risk hard-vetoes the main bet and commits zero capital
+  ---
+  duration_ms: 0.44023
+  type: 'test'
+  ...
+# (node:22128) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: low-xG 0-0-risk profile rejects every score hedge
+ok 9 - low-xG 0-0-risk profile rejects every score hedge
+  ---
+  duration_ms: 2.096941
+  type: 'test'
+  ...
+# Subtest: 1-1 can remain plausible without making adverse 2-1 plausible
+ok 10 - 1-1 can remain plausible without making adverse 2-1 plausible
+  ---
+  duration_ms: 0.506055
+  type: 'test'
+  ...
+# Subtest: open profile allows both hedge families
+ok 11 - open profile allows both hedge families
+  ---
+  duration_ms: 0.390526
+  type: 'test'
+  ...
+# (node:22129) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: blocks a match when both expected-goal values are weak and 0-0 risk is elevated
+ok 12 - blocks a match when both expected-goal values are weak and 0-0 risk is elevated
+  ---
+  duration_ms: 1.756889
+  type: 'test'
+  ...
+# Subtest: does not block when one attack has a credible scoring expectation
+ok 13 - does not block when one attack has a credible scoring expectation
+  ---
+  duration_ms: 0.271883
+  type: 'test'
+  ...
+# Subtest: explicit model 0-0 probability can veto an otherwise borderline match
+ok 14 - explicit model 0-0 probability can veto an otherwise borderline match
+  ---
+  duration_ms: 0.29205
+  type: 'test'
+  ...
+# Subtest: a low total alone is not enough when both-team weakness condition is not met
+ok 15 - a low total alone is not enough when both-team weakness condition is not met
+  ---
+  duration_ms: 0.286799
+  type: 'test'
+  ...
+# Subtest: invalid scoring context fails closed
+ok 16 - invalid scoring context fails closed
+  ---
+  duration_ms: 0.266322
+  type: 'test'
+  ...
+# Subtest: hard-vetoes every market, zeroes stake, and removes premium status
+ok 17 - hard-vetoes every market, zeroes stake, and removes premium status
+  ---
+  duration_ms: 0.893426
+  type: 'test'
+  ...
+# (node:22160) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: NO_BET is never ROI-eligible
+ok 18 - NO_BET is never ROI-eligible
+  ---
+  duration_ms: 1.432146
+  type: 'test'
+  ...
+# Subtest: actual wager decisions remain ROI-eligible
+ok 19 - actual wager decisions remain ROI-eligible
+  ---
+  duration_ms: 0.262487
+  type: 'test'
+  ...
+# (node:22161) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: rejects opponent 2-1 when total expected goals are too low
+ok 20 - rejects opponent 2-1 when total expected goals are too low
+  ---
+  duration_ms: 3.420212
+  type: 'test'
+  ...
+# Subtest: rejects opponent 2-1 when predicted loser has too little scoring expectation
+ok 21 - rejects opponent 2-1 when predicted loser has too little scoring expectation
+  ---
+  duration_ms: 0.572322
+  type: 'test'
+  ...
+# Subtest: allows opponent 2-1 only when scoring context is plausible
+ok 22 - allows opponent 2-1 only when scoring context is plausible
+  ---
+  duration_ms: 1.004751
+  type: 'test'
+  ...
+# Subtest: 1-1 remains in scope and is not blocked by the 2-1 gate
+ok 23 - 1-1 remains in scope and is not blocked by the 2-1 gate
+  ---
+  duration_ms: 0.49537
+  type: 'test'
+  ...
+1..23
+# tests 23
+# suites 0
+# pass 23
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1358.825979
+
+> test:adaptive-learning
+> node --experimental-strip-types --test src/engine/adaptive-learning.test.ts
+
+TAP version 13
+# (node:22200) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: walk-forward cannot learn the current result before scoring it
+ok 1 - walk-forward cannot learn the current result before scoring it
+  ---
+  duration_ms: 26.022656
+  type: 'test'
+  ...
+# Subtest: future archive rows cannot leak into an earlier prediction
+ok 2 - future archive rows cannot leak into an earlier prediction
+  ---
+  duration_ms: 0.866493
+  type: 'test'
+  ...
+# Subtest: archive prior accelerates learning but never counts as honest proof
+ok 3 - archive prior accelerates learning but never counts as honest proof
+  ---
+  duration_ms: 26.128182
+  type: 'test'
+  ...
+# Subtest: odds floor remains hard even when a policy is shadow
+ok 4 - odds floor remains hard even when a policy is shadow
+  ---
+  duration_ms: 1.109076
+  type: 'test'
+  ...
+# Subtest: repeated losing segments can veto a new bet before positive policy promotion
+ok 5 - repeated losing segments can veto a new bet before positive policy promotion
+  ---
+  duration_ms: 1.000916
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 617.521806
+
+> test:portfolio-learning
+> node --experimental-strip-types --test src/engine/portfolio-lab.test.ts src/engine/continuous-portfolio-learning.test.ts
+
+TAP version 13
+# (node:22229) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: ROI challenger requires positive performance in every chronological learning block
+ok 1 - ROI challenger requires positive performance in every chronological learning block
+  ---
+  duration_ms: 92.961006
+  type: 'test'
+  ...
+# Subtest: continuous learner is prequential: late collapse cannot rewrite earlier policy selection
+ok 2 - continuous learner is prequential: late collapse cannot rewrite earlier policy selection
+  ---
+  duration_ms: 107.919196
+  type: 'test'
+  ...
+# Subtest: learner can roll back a champion after recent drift
+ok 3 - learner can roll back a champion after recent drift
+  ---
+  duration_ms: 63.618236
+  type: 'test'
+  ...
+# Subtest: reported ROI is based only on post-learning evaluation blocks
+ok 4 - reported ROI is based only on post-learning evaluation blocks
+  ---
+  duration_ms: 73.041575
+  type: 'test'
+  ...
+# (node:22230) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: portfolioMetrics computes flat ROI and drawdown
+ok 5 - portfolioMetrics computes flat ROI and drawdown
+  ---
+  duration_ms: 5.907486
+  type: 'test'
+  ...
+# Subtest: chronologicalSplit never randomizes the holdout
+ok 6 - chronologicalSplit never randomizes the holdout
+  ---
+  duration_ms: 19.291005
+  type: 'test'
+  ...
+# Subtest: ruleMatches enforces odds, market, league and model probability
+ok 7 - ruleMatches enforces odds, market, league and model probability
+  ---
+  duration_ms: 0.610645
+  type: 'test'
+  ...
+# Subtest: discovery keeps policies shadow-gated when holdout collapses
+ok 8 - discovery keeps policies shadow-gated when holdout collapses
+  ---
+  duration_ms: 62.214573
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 841.586025
+
+> test:best-odds
+> node --experimental-strip-types --test src/engine/best-odds-engine.test.ts
+
+TAP version 13
+# (node:22269) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: freshness rejects stale bookmakers when timestamps are present
+ok 1 - freshness rejects stale bookmakers when timestamps are present
+  ---
+  duration_ms: 3.18652
+  type: 'test'
+  ...
+# Subtest: main and hedge may come from different bookmakers
+ok 2 - main and hedge may come from different bookmakers
+  ---
+  duration_ms: 1.457782
+  type: 'test'
+  ...
+# Subtest: active odds floor is strict
+ok 3 - active odds floor is strict
+  ---
+  duration_ms: 2.73863
+  type: 'test'
+  ...
+# Subtest: missing fresh timestamp fails closed in live mode
+ok 4 - missing fresh timestamp fails closed in live mode
+  ---
+  duration_ms: 0.494373
+  type: 'test'
+  ...
+# Subtest: ROI-first gate removes a hedge that dilutes portfolio ROI
+ok 5 - ROI-first gate removes a hedge that dilutes portfolio ROI
+  ---
+  duration_ms: 0.337627
+  type: 'test'
+  ...
+# Subtest: legacy research snapshots can be explicitly allowed
+ok 6 - legacy research snapshots can be explicitly allowed
+  ---
+  duration_ms: 0.241275
+  type: 'test'
+  ...
+# Subtest: xG scoring context can remove an implausible opponent 2-1 hedge without cancelling the main bet
+ok 7 - xG scoring context can remove an implausible opponent 2-1 hedge without cancelling the main bet
+  ---
+  duration_ms: 0.634537
+  type: 'test'
+  ...
+# Subtest: low xG plus elevated 0-0 risk hard-vetoes the main bet and commits zero capital
+ok 8 - low xG plus elevated 0-0 risk hard-vetoes the main bet and commits zero capital
+  ---
+  duration_ms: 0.231563
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 529.764967
+TAP version 13
+# (node:22286) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: match intelligence panel
+    # Subtest: uses audited confidence components and calibrated probabilities
+    ok 1 - uses audited confidence components and calibrated probabilities
+      ---
+      duration_ms: 2.651997
+      type: 'test'
+      ...
+    # Subtest: does not turn a conditional scenario into a scenario probability
+    ok 2 - does not turn a conditional scenario into a scenario probability
+      ---
+      duration_ms: 0.624878
+      type: 'test'
+      ...
+    # Subtest: deduplicates unknowns and evidence
+    ok 3 - deduplicates unknowns and evidence
+      ---
+      duration_ms: 0.590011
+      type: 'test'
+      ...
+    1..3
+ok 1 - match intelligence panel
+  ---
+  duration_ms: 7.77441
+  type: 'suite'
+  ...
+1..1
+# tests 3
+# suites 1
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 744.520876

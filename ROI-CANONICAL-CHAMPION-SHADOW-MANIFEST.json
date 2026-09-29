@@ -1,0 +1,72 @@
+{
+  "version": "canonical-champion-shadow-v1",
+  "canonicalChampion": {
+    "roi": 0.3567667905898516,
+    "n": 178,
+    "maxDrawdown": 5,
+    "validationRoi": 0.32225206899068637,
+    "validationN": 57,
+    "validationMaxDrawdown": 3.2871767545117394
+  },
+  "expansionLeagues": {
+    "ER": "SHADOW",
+    "PT": "SHADOW",
+    "SC": "SHADOW",
+    "TR": "SHADOW"
+  },
+  "promotionRule": "canonical replay ROI >= champion + 0.5pp; validation ROI >= champion validation; sample not smaller; drawdown <= 1.15x champion",
+  "preservation": {
+    "routes": {
+      "old": 101,
+      "new": 101,
+      "missing": [],
+      "added": []
+    },
+    "public": {
+      "old": 230,
+      "new": 230,
+      "missing": [],
+      "added": []
+    },
+    "server": {
+      "old": 23,
+      "new": 23,
+      "missing": [],
+      "added": []
+    },
+    "criticalByteIdentical": {
+      "server/routes/sitemap.xml.ts": true,
+      "server/routes/news-sitemap.xml.ts": true,
+      "server/routes/sitemap-images.xml.ts": true,
+      "server/routes/sitemap.html.ts": true,
+      "server/routes/robots.txt.ts": true,
+      "src/lib/sitemap-urls.ts": true,
+      "src/lib/sitemap-metadata.ts": true,
+      "src/lib/robots.ts": true,
+      "vercel.json": true,
+      "vite.config.ts": true
+    }
+  },
+  "tests": {
+    "targetedPass": 74,
+    "targetedFail": 0,
+    "globalKnownFailureSuite": "raw HTML SSR SEO / 6 known 404 subtests",
+    "canonicalReportRoi": 0.3567667905898516
+  },
+  "canonicalExpansionEvaluation": {
+    "datasetMatches": 7242,
+    "testedVariants": 15,
+    "promoted": [],
+    "bestExpandedRoi": 0.29705,
+    "bestExpandedCombo": [
+      "ER",
+      "PT",
+      "SC"
+    ],
+    "championRetained": true,
+    "evidenceFiles": [
+      "ROI-CANONICAL-EXPANSION-EVALUATION.json",
+      "ROI-CANONICAL-EXPANSION-EVALUATION.md"
+    ]
+  }
+}

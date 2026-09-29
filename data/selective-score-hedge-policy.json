@@ -1,0 +1,102 @@
+{
+  "version": "selective-score-hedge-v3-scope-lock",
+  "status": "SHADOW",
+  "selectionMode": "ONE_SCORE_MAX_PER_MATCH_FAIL_CLOSED",
+  "requiresTimestampedBookmakerExactScoreOdds": true,
+  "minExactScoreEv": 0.05,
+  "maxHedgeStakeFraction": 0.2,
+  "retrospectiveEvidence": {
+    "sample": 8310,
+    "mainOddsRange": [
+      1.8,
+      2.5
+    ],
+    "systematic": {
+      "noHedge": {
+        "profit": 704.47446,
+        "roi": 0.084774,
+        "maxDrawdown": 78.81116
+      },
+      "score11Recovery50": {
+        "profit": 669.58581,
+        "roi": 0.074926,
+        "maxDrawdown": 80.08736
+      },
+      "score11Recovery100": {
+        "profit": 634.69715,
+        "roi": 0.066368,
+        "maxDrawdown": 84.31238
+      },
+      "opponent21Recovery50": {
+        "profit": 715.09615,
+        "roi": 0.083525,
+        "maxDrawdown": 78.23142
+      },
+      "opponent21Recovery100": {
+        "profit": 725.71785,
+        "roi": 0.082347,
+        "maxDrawdown": 77.89469
+      }
+    },
+    "selectiveCombined": {
+      "train": {
+        "portfolioRoiBefore": 0.079001,
+        "portfolioRoiAfter": 0.081686,
+        "profitDelta": 25.62012,
+        "drawdownDelta": -1.58169
+      },
+      "validation": {
+        "portfolioRoiBefore": 0.108674,
+        "portfolioRoiAfter": 0.116878,
+        "profitDelta": 18.40449,
+        "drawdownDelta": -2.17742
+      },
+      "holdout": {
+        "portfolioRoiBefore": 0.078195,
+        "portfolioRoiAfter": 0.085949,
+        "profitDelta": 17.01137,
+        "drawdownDelta": -1.64143
+      }
+    }
+  },
+  "validatedResearchSegments": {
+    "score11": {
+      "league": "LL",
+      "mainMarket": "1X2_H",
+      "mainOddsRange": [
+        1.8,
+        2.5
+      ],
+      "maxMainModelProb": 0.47,
+      "minScoreProb": 0.1,
+      "recoveryFraction": 1.0
+    },
+    "opponent21": {
+      "league": "ALL",
+      "mainMarket": "1X2_H",
+      "mainOddsRange": [
+        1.8,
+        2.2
+      ],
+      "maxMainModelProb": 0.47,
+      "minScoreProb": 0.04,
+      "recoveryFraction": 1.0,
+      "scoreWhenHomeWasPicked": "1-2"
+    }
+  },
+  "limitations": [
+    "Historical exact-score odds are synthetic rather than timestamped bookmaker quotes.",
+    "The policy is SHADOW and must fail closed without real listed odds.",
+    "Away-pick opponent-2-1 rules did not survive the final holdout and are not validated.",
+    "Retrospective performance does not guarantee future profitability."
+  ],
+  "allowedHedgeFamilies": [
+    "1-1",
+    "PREDICTED_LOSER_WINS_2-1"
+  ],
+  "forbiddenExactScores": "ALL_OTHERS",
+  "orientation": {
+    "whenMainPickIsHome": "1-2",
+    "whenMainPickIsAway": "2-1"
+  }
+}

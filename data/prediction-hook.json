@@ -1,0 +1,39 @@
+{
+  "url": "http://127.0.0.1:8787/prediction",
+  "sent": [
+    "espn-401915446:1X2_H:1.70",
+    "espn-401915423:1X2_A:1.58"
+  ],
+  "downUntil": 1790322194492,
+  "last": {
+    "at": "2026-09-25T07:28:14.492Z",
+    "url": "http://127.0.0.1:8787/prediction",
+    "status": null,
+    "ok": false,
+    "response": "fetch failed",
+    "jobId": null,
+    "payload": {
+      "event": "prediction.created",
+      "source": "betgpt",
+      "id": "ub-tanzanie|guineebissau-2026-09-25:OU_25_O:2.28",
+      "matchId": "ub-tanzanie|guineebissau-2026-09-25",
+      "home": "Tanzanie",
+      "away": "Guinée-Bissau",
+      "league": "NL",
+      "competition": "Matchs de qualification de la Coupe Africaine des Nations",
+      "kickoff": "2026-09-25T13:00:00Z",
+      "market": "OU_25_O",
+      "label": "Plus de 2,5 buts",
+      "odds": 2.28,
+      "book": "Unibet",
+      "prob": 0.517355122375312,
+      "edge": 0.0787586311472418,
+      "ev": 0.1795696790157113,
+      "premium": false,
+      "cover": null,
+      "matchUrl": "https://betgpt.live/match/tanzanie-guinee-bissau-2026-09-25",
+      "pageUrl": "https://betgpt.live/opportunities",
+      "text": "Tanzanie – Guinée-Bissau\nPlus de 2,5 buts · 2,28 chez Unibet\nhttps://betgpt.live/match/tanzanie-guinee-bissau-2026-09-25\n18+ · Jouer comporte des risques."
+    }
+  }
+}
