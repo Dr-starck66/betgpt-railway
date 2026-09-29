@@ -8,6 +8,7 @@ import {
   ROI_SHADOW_EXPANSION_LEAGUES,
   ROI_LEAGUE_EXPANSION,
   applyRoiExpansionShadowGateToMarkets,
+  type ExpansionApplicableMarket,
   canonicalPromotionPass,
 } from "./roi-league-expansion.ts";
 import { LEAGUE_FR, LEAGUE_SLUG } from "./stats.ts";
@@ -30,7 +31,7 @@ test("shadow league remains wired for live analysis and historical archive", () 
 });
 
 test("shadow gate blocks bankroll but leaves analysis object intact", () => {
-  const markets = [{ decision: "BET" as const, stakePct: 0.03, premium: true, cover: { score: "1-1" } }];
+  const markets: ExpansionApplicableMarket[] = [{ decision: "BET", stakePct: 0.03, premium: true, cover: { score: "1-1" } }];
   assert.equal(applyRoiExpansionShadowGateToMarkets(markets, "ER"), true);
   assert.equal(markets[0].decision, "NO_BET");
   assert.equal(markets[0].stakePct, 0);
