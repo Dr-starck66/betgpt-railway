@@ -80,12 +80,20 @@ const LEAGUES = [
 		id: "NL",
 		slug: "uefa.nations",
 		name: "Ligue des nations"
+	},
+	{
+		// International bucket: CAF AFCON qualifiers. Keeping NL as the internal
+		// LeagueId avoids breaking all league-indexed model tables while preserving
+		// the real competition label on each match.
+		id: "NL",
+		slug: "caf.nations_qual",
+		name: "Qualifications Coupe d'Afrique des Nations"
 	}
 ];
 const TTL_MS = 6e5;
 const SCORE_TTL_MS = 2e4;
 const STALE_MS = 432e5;
-const SCHEMA = 38;
+const SCHEMA = 39;
 const SNAP_FILE = join(process.cwd(), "data", "live-snapshot.json");
 const SNAP_FILE_ABS = "/workspace/data/live-snapshot.json";
 const SNAP_FILE_TMP = "/tmp/betgpt-data/live-snapshot.json";
