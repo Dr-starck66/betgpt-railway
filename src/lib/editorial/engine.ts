@@ -1,6 +1,6 @@
 import { hubByLeague, SITE_URL, teamPath } from "@/lib/programmatic";
 import { imageFor } from "@/lib/editorial/images";
-import { autoPublishableCluster, clusterSignals, type NewsCluster } from "@/lib/editorial/news-scout.server";
+import { autoPublishableCluster, clusterSignals, type NewsCluster } from "@/lib/editorial/news-cluster";
 import { discoverChecks, factHash, qualityGate, readinessScore, sourceQualityScore } from "@/lib/editorial/quality";
 import { DEFAULT_TIMES, dayLabel, formatParis, instantParisDate, optimizeTimes, parisDate, slotInstant } from "@/lib/editorial/time";
 import type {
