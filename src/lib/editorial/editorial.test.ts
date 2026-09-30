@@ -304,4 +304,54 @@ describe("editorial engine", () => {
     assert.ok(senegal, "le match à cote 1,30 doit avoir sa page, pas seulement la liste");
     assert.match(senegal.paragraphs.map((part) => part.body).join(" "), /sous 1,80/);
   });
+
+  it("rejects internally repetitive and templated editorial copy", () => {
+    const repeated = "Cette phrase de contrôle éditorial est volontairement répétée pour simuler un article industriel sans valeur ajoutée.";
+    const result = qualityGate(
+      {
+        articleType: "news",
+        title: "PSG : analyse avant le prochain match",
+        h1: "PSG : les points à contrôler avant le prochain match",
+        lead: "Cette analyse rassemble des éléments vérifiables avant la rencontre et sépare les faits connus des hypothèses encore incertaines.",
+        paragraphs: [
+          { h2: "Contexte", body: repeated + " " + repeated },
+          { h2: "Données", body: repeated + " Un autre élément suffisamment long complète ce paragraphe pour tester le filtre de qualité." },
+          { h2: "Marché", body: "Cette troisième partie contient un texte distinct et suffisamment long pour que le test cible bien la répétition et non une section trop mince." },
+        ],
+        sources: [{ id: "src", label: "L'Équipe", status: "HIGH_CONFIDENCE", note: "information sportive vérifiée" }],
+        image: { src: "/blog/discover/test.jpg", alt: "stade de football", width: 1200, height: 675, credit: "libre" },
+        links: [{ href: "/scores-en-direct", label: "Scores en direct" }],
+        teams: ["PSG"],
+        competition: "Ligue 1",
+      },
+      [],
+    );
+    assert.equal(result.pass, false);
+    assert.ok(result.reasons.includes("répétitions internes excessives"));
+  });
+
+  it("rejects stock SEO filler even when it appears only once", () => {
+    const result = qualityGate(
+      {
+        articleType: "news",
+        title: "PSG : données et contexte avant la rencontre",
+        h1: "PSG : données et contexte avant la prochaine rencontre",
+        lead: "Cette analyse distingue les données connues des hypothèses et conserve une formulation destinée à être vérifiée avant le coup d’envoi.",
+        paragraphs: [
+          { h2: "Premier point", body: "Cette vérification est particulièrement importante pour la requête PSG pronostic, car le lecteur doit pouvoir distinguer le fait du commentaire éditorial." },
+          { h2: "Deuxième point", body: "Le second paragraphe apporte un angle réellement différent sur le calendrier, la récupération et les informations disponibles avant le match." },
+          { h2: "Troisième point", body: "Le troisième paragraphe relie les données au scénario du match sans transformer une estimation en certitude ni masquer les éléments manquants." },
+        ],
+        sources: [{ id: "src", label: "RMC Sport", status: "HIGH_CONFIDENCE", note: "information sportive vérifiée" }],
+        image: { src: "/blog/discover/test-2.jpg", alt: "terrain de football", width: 1200, height: 675, credit: "libre" },
+        links: [{ href: "/scores-en-direct", label: "Scores en direct" }],
+        teams: ["PSG"],
+        competition: "Ligue 1",
+      },
+      [],
+    );
+    assert.equal(result.pass, false);
+    assert.ok(result.reasons.includes("remplissage éditorial générique détecté"));
+  });
+
 });
