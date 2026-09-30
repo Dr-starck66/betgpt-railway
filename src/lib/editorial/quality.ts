@@ -9,6 +9,8 @@ const HALLUCINATION =
 const TIPSTER = /mise conseillée|à jouer|pronostic sûr|gain garanti|certitude de victoire|pariez\b/i;
 const INTERNAL_JARGON = /desk BetGPT|score interne|créneau ouvert|créneau pas encore ouvert|pas un pronostic inventé|signal desk|déjà ingéré|pipeline/i;
 const SPANISH_PUBLIC_COPY = /\b(horario|alineaciones?|resultado|dónde ver|clasificación)\b/i;
+const GENERIC_EDITORIAL_FILLER =
+  /voici ce qui est confirmé par les sources disponibles|ce que cela peut changer|les prochains éléments à surveiller|la prochaine étape est une confirmation ou une précision|ce rendez-vous donne un contexte immédiat au sujet|les éléments ci-dessous restent limités à ce qui est effectivement annoncé/i;
 
 const STOP = new Set([
   "betgpt",
