@@ -7,6 +7,8 @@ import { ld } from "@/lib/ld";
 import appCss from "../styles.css?url";
 
 const APP_NAME = "BetGPT";
+const GA_MEASUREMENT_ID = String(import.meta.env.VITE_GA_MEASUREMENT_ID ?? "").trim();
+const GOOGLE_SITE_VERIFICATION = String(import.meta.env.VITE_GOOGLE_SITE_VERIFICATION ?? "").trim();
 
 export const Route = createRootRoute({
   pendingMs: 120_000,
@@ -29,6 +31,9 @@ export const Route = createRootRoute({
       { property: "og:locale", content: "fr_FR" },
       { property: "og:site_name", content: "BetGPT" },
       { property: "og:url", content: SITE_URL },
+      ...(GOOGLE_SITE_VERIFICATION
+        ? [{ name: "google-site-verification", content: GOOGLE_SITE_VERIFICATION }]
+        : []),
     ],
     links: [
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
@@ -46,6 +51,16 @@ export const Route = createRootRoute({
     <html lang="fr" className="antialiased" suppressHydrationWarning>
       <head>
         <HeadContent />
+        {GA_MEASUREMENT_ID ? (
+          <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`} />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_MEASUREMENT_ID}',{send_page_view:true});`,
+              }}
+            />
+          </>
+        ) : null}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ld(siteJsonLd()) }} />
       </head>
       <body>
