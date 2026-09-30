@@ -91,6 +91,43 @@ export function jaccard(a: string, b: string): number {
   return inter / (left.size + right.size - inter);
 }
 
+function sentenceKey(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\\u0300-\\u036f]/g, "")
+    .replace(/\\d+(?:[.,]\\d+)?/g, "#")
+    .replace(/[^a-z0-9#]+/g, " ")
+    .replace(/\\s+/g, " ")
+    .trim();
+}
+
+export function internalDuplication(text: string): { duplicateInstances: number; maxRepeats: number } {
+  const sentences = text
+    .split(/(?<=[.!?])\\s+|\\n+/)
+    .map(sentenceKey)
+    .filter((sentence) => sentence.length >= 55);
+  const counts = new Map<string, number>();
+  for (const sentence of sentences) counts.set(sentence, (counts.get(sentence) ?? 0) + 1);
+  let duplicateInstances = 0;
+  let maxRepeats = 0;
+  for (const count of counts.values()) {
+    if (count > 1) duplicateInstances += count - 1;
+    maxRepeats = Math.max(maxRepeats, count);
+  }
+  return { duplicateInstances, maxRepeats };
+}
+
+export function nearDuplicateParagraphs(paragraphs: { body: string }[]): number {
+  let collisions = 0;
+  for (let i = 0; i < paragraphs.length; i += 1) {
+    for (let j = i + 1; j < paragraphs.length; j += 1) {
+      if (jaccard(paragraphs[i]!.body, paragraphs[j]!.body) >= 0.82) collisions += 1;
+    }
+  }
+  return collisions;
+}
+
 export function factHash(parts: string[]): string {
   const raw = parts.join("|");
   let h = 5381;
@@ -137,6 +174,12 @@ export function qualityGate(
   if (TIPSTER.test(all)) reasons.push("consigne de mise");
   if (INTERNAL_JARGON.test(all)) reasons.push("jargon interne exposé au lecteur");
   if (SPANISH_PUBLIC_COPY.test(all)) reasons.push("vocabulaire public non fr-FR");
+  const repetition = internalDuplication(all);
+  if (repetition.duplicateInstances >= 2 || repetition.maxRepeats >= 3) {
+    reasons.push("répétitions internes excessives");
+  }
+  if (nearDuplicateParagraphs(article.paragraphs) >= 2) reasons.push("paragraphes trop similaires");
+  if (GENERIC_EDITORIAL_FILLER.test(all)) reasons.push("remplissage éditorial générique détecté");
   const entity = [...article.teams, article.competition].filter(Boolean).map((x) => x.toLowerCase());
   if (
     entity.length &&
