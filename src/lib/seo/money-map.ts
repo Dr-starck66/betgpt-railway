@@ -35,84 +35,123 @@ export const GUIDES: { slug: string; title: string; description: string; h1: str
   {
     slug: "comment-lire-un-pronostic",
     title: "Comment lire un pronostic BetGPT",
-    description: "Probabilité modèle, cote, écart et limites : ce qu’un pronostic BetGPT dit, et ce qu’il ne promet pas.",
-    h1: "Comment lire un pronostic football",
+    description: "Probabilité, cote, EV, horodatage et limites : une grille pour lire un pronostic sans confondre estimation et certitude.",
+    h1: "Comment lire un pronostic football sans surinterpréter le modèle",
     paragraphs: [
-      "Un pronostic BetGPT est une estimation, pas une instruction de mise. La probabilité modèle est la sortie du moteur Poisson / Dixon-Coles. La cote, lorsqu’elle est listée, vient d’un bookmaker observé. L’écart est la différence entre les deux. S’il n’y a pas de cote, l’écart n’est pas affiché.",
-      "Le score de confiance résume la qualité des données et l’accord des modèles. Un chiffre élevé ne veut pas dire que le résultat est certain. Après le coup d’envoi, la fiche ne doit plus réécrire le pronostic en silence : le bilan public ne compte que les lignes enregistrées avant le coup d’envoi.",
+      "Une fiche BetGPT rassemble plusieurs objets différents : une probabilité produite par le modèle, une cote lorsqu'un prix de marché a réellement été observé, un éventuel écart entre les deux et des métadonnées d'horodatage. Aucun de ces champs ne doit être lu isolément. Le point de départ est toujours la date du calcul et l'état des données au moment où la prévision a été enregistrée.",
+      "La probabilité modèle n'est pas une fréquence garantie. Une estimation à 62 % signifie que, si le modèle est correctement calibré, un grand ensemble d'événements comparables devrait se réaliser environ 62 % du temps. Sur un match unique, le résultat reste binaire : l'équipe gagne ou elle ne gagne pas. C'est précisément pourquoi nous conservons un historique plutôt que de juger le moteur sur une soirée.",
+      "La cote joue un rôle différent. Elle représente un prix disponible sur un marché à un instant donné. Une cote de 1,80 correspond à une probabilité implicite brute d'environ 55,6 %, avant retrait de la marge du bookmaker. Si BetGPT estime 60 %, l'écart existe mathématiquement, mais il peut disparaître si l'estimation du modèle est seulement quelques points trop optimiste.",
+      "L'espérance affichée, lorsqu'elle peut être calculée avec une cote observée, décrit ce que donnerait théoriquement une très longue série de décisions identiques si la probabilité du modèle était juste. Elle ne prédit pas le résultat du match. Une espérance positive peut accompagner une perte, et plusieurs gains consécutifs peuvent provenir d'une estimation médiocre mais chanceuse.",
+      "L'horodatage est donc aussi important que le pourcentage. Une prévision publiée après le coup d'envoi ne doit pas entrer dans le même bilan qu'une décision réellement enregistrée avant le match. BetGPT expose cette information dans le registre public afin qu'une fiche héritée ou tardive ne puisse pas être présentée comme une preuve de performance pré-match.",
+      "Enfin, regardez ce qui manque. Une cote dérivée, une source absente, une composition non confirmée ou un faible volume historique doivent réduire la confiance que vous accordez à la fiche. Une interface sérieuse doit savoir afficher « non vérifié » plutôt que remplir les blancs avec une valeur plausible.",
+      "Pour auditer une fiche, utilisez toujours le même ordre : timestamp, source de cote, probabilité, écart éventuel, statut du match, puis historique du modèle sur un échantillon suffisamment large. Cette séquence évite de commencer par le résultat final et de reconstruire ensuite une histoire qui le justifie."
     ],
     links: [
       { href: "/pronostics-sportifs", label: "Pronostics sportifs du jour" },
       { href: "/methodology", label: "Méthodologie" },
-      { href: "/ledger", label: "Bilan" },
+      { href: "/ledger", label: "Registre public" },
+      { href: "/prediction-history", label: "Lire l'historique" }
     ],
   },
   {
     slug: "probabilite-implicite",
     title: "Probabilité implicite d’une cote",
-    description: "Convertir une cote décimale en probabilité implicite, sans inventer la marge du bookmaker.",
-    h1: "Calculer une probabilité implicite",
+    description: "Passer d'une cote décimale à une probabilité implicite, comprendre la marge et éviter de confondre prix de marché et probabilité vraie.",
+    h1: "Calculer la probabilité implicite d’une cote — puis comprendre ses limites",
     paragraphs: [
-      "Pour une cote décimale D supérieure à 1, la probabilité implicite brute est 1/D. Elle inclut la marge du bookmaker. Sans la cote opposée, BetGPT ne fabrique pas une probabilité « no vig ».",
-      "Comparer 1/D à la probabilité du modèle donne un écart. Un écart positif ne garantit ni gain, ni que le modèle a raison.",
+      "Pour une cote décimale D supérieure à 1, la conversion brute est simple : probabilité implicite = 1 / D. Une cote de 2,00 donne 50 %, 1,50 donne environ 66,7 % et 4,00 donne 25 %. Cette opération ne dit pas que l'événement possède réellement cette probabilité ; elle traduit seulement le prix en une échelle plus intuitive.",
+      "Le mot « brute » est important parce qu'un bookmaker ajoute une marge. Sur un marché à deux issues, les probabilités implicites des deux prix peuvent par exemple totaliser 105 % au lieu de 100 %. Le dépassement est une façon de mesurer l'overround, mais retirer correctement la marge nécessite de disposer de l'ensemble pertinent des prix et de choisir une méthode de normalisation.",
+      "C'est pourquoi BetGPT ne fabrique pas une probabilité « sans marge » lorsqu'il ne possède qu'une seule cote. Soustraire arbitrairement quelques points donnerait un chiffre apparemment précis mais méthodologiquement fragile. Dans ce cas, la probabilité implicite brute reste la seule conversion honnête.",
+      "La comparaison avec un modèle se fait ensuite sur la même échelle. Si le marché implique 52 % et que le modèle produit 57 %, l'écart est de cinq points. Cet écart n'est intéressant que si le modèle est suffisamment calibré et si la cote observée est encore réellement disponible au moment de la décision.",
+      "Les mouvements de cote comptent aussi. Une analyse faite à 2,05 et consultée plus tard à 1,80 ne décrit plus le même prix. Une bonne fiche conserve donc le timestamp de la cote et évite de présenter une ancienne valeur comme si elle était encore accessible.",
+      "Pour comparer plusieurs bookmakers, n'utilisez pas simplement le plus gros nombre trouvé après le match. Il faut une cote observée au moment où le pronostic est enregistré. Sans cette discipline, le bilan peut être artificiellement amélioré en sélectionnant rétrospectivement les meilleurs prix.",
+      "La probabilité implicite est finalement un outil de traduction : elle rend les cotes comparables aux probabilités d'un modèle. Elle ne transforme ni le marché ni le modèle en vérité."
     ],
     links: [
       { href: "/outils/value-bet", label: "Calculateur d’écart" },
       { href: "/outils/convertisseur-cotes", label: "Convertisseur de cotes" },
+      { href: "/meilleures-cotes", label: "Comparer les prix disponibles" }
     ],
   },
   {
     slug: "value-bet",
-    title: "Value bet : définition et limites",
-    description: "Une value bet est un écart entre une probabilité estimée et une cote. Ce n’est pas un pari sûr.",
-    h1: "Qu’est-ce qu’une value bet",
+    title: "Value bet : définition, calcul et limites",
+    description: "Mesurer un écart entre probabilité estimée et cote observée sans transformer une espérance positive en promesse de gain.",
+    h1: "Value bet : ce que l’écart modèle-marché signifie vraiment",
     paragraphs: [
-      "On parle d’écart de valeur quand la probabilité estimée dépasse la probabilité implicite de la cote. L’espérance sur une mise unitaire est p×cote − 1. Elle peut être positive et le pari perdre quand même.",
-      "BetGPT n’affiche une value que si la cote est réellement listée et au moins égale au plancher de mise du site. Aucune cote n’est inventée pour remplir une page.",
+      "Une value bet n'est pas un pari qui « va gagner ». C'est une situation dans laquelle une probabilité estimée est supérieure à celle impliquée par le prix de marché, selon un modèle donné. Le concept est donc relatif : si l'estimation est mauvaise, la value calculée l'est aussi.",
+      "Avec une cote décimale de 1,95 et une probabilité estimée à 55 %, l'espérance théorique d'une unité est 0,55 × 1,95 − 1, soit 0,0725 : environ +7,25 %. Ce chiffre décrit une moyenne hypothétique sur une grande série si 55 % est une bonne estimation. Le pari individuel peut évidemment perdre.",
+      "La principale difficulté n'est pas la multiplication ; c'est la qualité de p. Une erreur de calibration de quelques points suffit à faire disparaître un petit avantage. À 1,95, une estimation réelle de 51 % au lieu de 55 % change complètement l'interprétation.",
+      "La seconde difficulté est le timestamp. Une cote de 1,95 peut descendre à 1,75 après une information importante. Un calcul effectué au premier prix ne doit pas être présenté comme encore valable au second. BetGPT associe donc les prix utilisés à un instantané lorsqu'ils sont réellement observés.",
+      "Une troisième erreur consiste à chercher une value sur tous les matchs. Un modèle sérieux peut conclure qu'aucun prix disponible ne compense suffisamment son incertitude. L'absence d'opportunité est une sortie normale du système, pas un vide à remplir.",
+      "Le closing-line value peut apporter un contrôle complémentaire : si les prix obtenus avant match sont régulièrement meilleurs que les prix de clôture, cela peut indiquer que le modèle ou le timing identifie de l'information avant le marché. Ce signal doit cependant être étudié sur un large échantillon et ne remplace pas le suivi du ROI.",
+      "Pour auditer une value, conservez quatre éléments : probabilité du modèle, cote réellement disponible, heure du relevé et règle utilisée pour déclarer l'écart suffisant. Sans ces quatre champs, le mot « value » devient surtout un argument marketing."
     ],
     links: [
       { href: "/outils/value-bet", label: "Calculateur value" },
-      { href: "/opportunities", label: "Opportunités du bureau" },
+      { href: "/opportunities", label: "Écarts observés" },
+      { href: "/ledger", label: "Registre public" }
     ],
   },
   {
     slug: "critere-de-kelly",
     title: "Critère de Kelly pour une cote",
-    description: "Formule de Kelly, demi-Kelly et quart-Kelly. La fraction peut être nulle ou négative.",
-    h1: "Critère de Kelly",
+    description: "Comprendre la formule de Kelly, l'effet d'une probabilité mal estimée et pourquoi les variantes fractionnées existent.",
+    h1: "Critère de Kelly : formule, exemple et fragilité face à l’erreur de modèle",
     paragraphs: [
-      "Avec une cote décimale D et une probabilité p, la fraction de Kelly est ( (D−1)×p − (1−p) ) / (D−1). Si le résultat est négatif, la formule dit de ne pas miser. Demi-Kelly et quart-Kelly divisent cette fraction.",
-      "Kelly suppose que p est juste et que les paris sont indépendants. Les deux sont faux en pratique. Ce n’est pas un conseil de bankroll.",
+      "Le critère de Kelly cherche à maximiser la croissance logarithmique d'un capital lorsque la probabilité de succès et le prix sont connus. Pour une cote décimale D, on pose b = D − 1, p la probabilité estimée et q = 1 − p. La fraction théorique est (b × p − q) / b.",
+      "Exemple : avec une cote de 2,10 et p = 52 %, b vaut 1,10 et q vaut 48 %. Le calcul donne environ 8,36 %. Demi-Kelly donnerait environ 4,18 % et quart-Kelly environ 2,09 %. Ces fractions ne sont pas des recommandations ; elles illustrent seulement la sensibilité de la formule.",
+      "Cette sensibilité est le problème central. Si la probabilité réelle n'est pas 52 % mais 49 %, la fraction change fortement et peut devenir négative. Kelly suppose donc une connaissance de p que l'on ne possède jamais exactement dans un modèle sportif.",
+      "Les paris ne sont pas toujours indépendants non plus. Plusieurs sélections sur la même équipe, la même compétition ou des marchés liés peuvent partager les mêmes risques. Appliquer Kelly séparément à chaque ligne peut alors sous-estimer l'exposition globale.",
+      "Les variantes demi-Kelly ou quart-Kelly réduisent la taille calculée afin d'atténuer l'effet des erreurs d'estimation et de la variance. Elles ne corrigent toutefois pas un modèle mal calibré. Réduire une mauvaise estimation ne la transforme pas en avantage.",
+      "Lorsque la fraction est nulle ou négative, la formule ne trouve aucun avantage théorique au prix fourni. Forcer une valeur positive pour remplir une interface contredirait le calcul ; BetGPT préfère afficher zéro ou l'absence de position théorique.",
+      "Le critère de Kelly est donc surtout utile pédagogiquement : il montre que la taille d'une exposition dépend conjointement du prix et de la confiance probabiliste. Il rappelle aussi qu'une petite erreur sur la probabilité peut avoir un effet disproportionné sur une décision."
     ],
     links: [
       { href: "/outils/kelly", label: "Calculateur Kelly" },
-      { href: "/calculateur-mise", label: "Mises du bureau, plafonnées" },
+      { href: "/calculateur-mise", label: "Outils de mise, avec plafonds" },
+      { href: "/jeu-responsable", label: "Jeu responsable" }
     ],
   },
   {
     slug: "lire-une-cote",
     title: "Lire une cote décimale, fractionnaire ou américaine",
-    description: "Trois écritures de la même cote, et la probabilité implicite brute qui en découle.",
-    h1: "Comment lire une cote",
+    description: "Comprendre trois écritures d'un même prix, les convertir et retrouver la probabilité implicite brute.",
+    h1: "Comment lire une cote sans la confondre avec une probabilité",
     paragraphs: [
-      "La cote décimale est le retour total pour 1 unité misée, mise comprise. La forme fractionnaire exprime le profit seul. La forme américaine est positive quand la cote est supérieure à 2, négative sinon.",
-      "Aucune de ces écritures n’est une probabilité. Il faut encore calculer 1/D, et se souvenir que le bookmaker prélève une marge.",
+      "Une cote est d'abord un prix. En format décimal, elle indique le retour total pour une unité engagée, mise comprise. À 2,50, une unité gagnante retourne 2,50 unités au total : 1,50 de profit plus l'unité initiale.",
+      "Le format fractionnaire exprime principalement le profit par rapport à la mise. Une cote 3/2 correspond à 1,5 unité de profit pour 1 unité engagée, soit 2,50 en décimal. Les deux écritures décrivent le même prix.",
+      "Le format américain utilise +X pour les prix supérieurs ou égaux à 2,00 en décimal et −X pour les favoris. +150 correspond à 2,50 décimal. Une cote −200 correspond à 1,50 décimal. Le signe ne décrit pas la qualité du pari ; il appartient seulement au système d'écriture.",
+      "Pour comparer un prix à une probabilité de modèle, convertissez d'abord en décimal puis calculez 1 / D. À 2,50, la probabilité implicite brute est 40 %. À 1,50, elle est environ 66,7 %.",
+      "Le qualificatif « brute » rappelle que la marge du bookmaker n'a pas encore été retirée. Sur un marché complet, la somme des probabilités implicites dépasse généralement 100 %. Il faut l'ensemble des issues pertinentes pour analyser cette marge proprement.",
+      "Une cote basse n'est donc pas synonyme de sécurité. Elle signifie que le marché attribue un prix plus faible à l'événement et, implicitement, une probabilité plus élevée. Un favori peut perdre ; l'enjeu analytique consiste à savoir si le prix est cohérent avec votre estimation.",
+      "Enfin, comparez des cotes prises au même moment. Une différence entre deux captures séparées de plusieurs heures peut provenir d'un mouvement de marché, pas d'un bookmaker structurellement plus généreux."
     ],
-    links: [{ href: "/outils/convertisseur-cotes", label: "Convertisseur" }],
+    links: [
+      { href: "/outils/convertisseur-cotes", label: "Convertisseur" },
+      { href: "/guides/probabilite-implicite", label: "Probabilité implicite" },
+      { href: "/comparer-cotes", label: "Comparer les cotes" }
+    ],
   },
   {
     slug: "erreurs-de-paris",
     title: "Erreurs fréquentes devant une cote",
-    description: "Confondre cote et probabilité, ignorer l’échantillon, et prendre un modèle pour une certitude.",
-    h1: "Erreurs qui faussent un pronostic",
+    description: "Les biais qui faussent l'évaluation d'un pronostic : petit échantillon, résultats sélectionnés, prix rétrospectifs et excès de confiance.",
+    h1: "Les erreurs qui font paraître un pronostic meilleur qu’il ne l’est",
     paragraphs: [
-      "La première erreur est de lire une cote de 1,40 comme « presque sûr ». La seconde est de juger un modèle sur trois matchs. La troisième est de ne regarder que les bons résultats.",
-      "BetGPT publie les lignes perdantes dans le bilan lorsqu’elles ont été enregistrées avant le coup d’envoi. Une page de pronostic sans score final ne doit pas être complétée après coup.",
+      "La première erreur est de confondre résultat et qualité de décision. Un pari peut gagner alors que le prix était mauvais, et un pari correctement évalué peut perdre. Si l'on juge uniquement le dernier score, on récompense le hasard autant que la méthode.",
+      "La deuxième erreur est le petit échantillon. Une série de cinq ou dix matchs peut produire un taux de réussite spectaculaire sans avantage durable. Plus l'écart revendiqué est faible, plus il faut d'observations pour distinguer un signal d'une fluctuation normale.",
+      "La troisième erreur est le biais de survivance. Les captures gagnantes restent visibles, les échecs disparaissent ou sont oubliés. Un registre utile conserve les deux. BetGPT ne compte dans son bilan de performance que les lignes enregistrées selon ses règles de timestamp, et les anciennes fiches tardives doivent rester identifiées comme telles.",
+      "La quatrième erreur consiste à utiliser après coup la meilleure cote disponible dans la journée. Une performance ne peut être auditée que si le prix est associé à un instant précis avant le match. Choisir rétrospectivement le meilleur nombre améliore artificiellement l'EV et le ROI.",
+      "La cinquième erreur est l'excès de confiance du modèle. Des probabilités de 70 % qui ne se réalisent qu'environ 58 % du temps indiquent un problème de calibration même si le taux global de bons vainqueurs semble correct. Les scores probabilistes et les courbes de calibration sont donc complémentaires du simple hit rate.",
+      "La sixième erreur est de modifier la règle après avoir vu le résultat. Un seuil de value, un filtre de cote ou une exclusion de compétition doivent être définis avant l'évaluation. Sinon le backtest apprend les réponses qu'il est censé prédire.",
+      "Enfin, évitez de confondre davantage de contenu avec davantage de preuve. Une analyse longue qui répète la même idée n'ajoute rien. Les éléments qui comptent sont ceux que l'on peut vérifier : source, timestamp, prix, probabilité, règle et historique complet."
     ],
     links: [
-      { href: "/ledger", label: "Bilan" },
+      { href: "/ledger", label: "Registre public" },
       { href: "/prediction-history", label: "Comment lire l’historique" },
-      { href: "/jeu-responsable", label: "Jeu responsable" },
+      { href: "/rapports/precision", label: "Rapport de précision" },
+      { href: "/jeu-responsable", label: "Jeu responsable" }
     ],
   },
 ];
