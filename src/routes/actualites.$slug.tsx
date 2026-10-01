@@ -6,6 +6,7 @@ import { formatParis } from "@/lib/editorial/time";
 import { isPublicArticle } from "@/lib/editorial/types";
 import { absImg } from "@/lib/image-seo";
 import { SITE_URL } from "@/lib/programmatic";
+import { manualEditorialArticleBySlug } from "@/lib/editorial/manual-articles";
 
 export const Route = createFileRoute("/actualites/$slug")({
   loader: async ({ params }) => {
@@ -21,7 +22,7 @@ export const Route = createFileRoute("/actualites/$slug")({
         indexable: articles.length >= SECTION_MIN,
       };
     }
-    const article = edition.articles.find((item) => item.slug === params.slug && isPublicArticle(item));
+    const article = edition.articles.find((item) => item.slug === params.slug && isPublicArticle(item)) ?? manualEditorialArticleBySlug(params.slug);
     if (!article) throw notFound();
     return { kind: "article" as const, article };
   },
