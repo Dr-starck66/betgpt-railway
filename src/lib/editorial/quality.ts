@@ -134,7 +134,10 @@ export function paragraphText(paragraph: EditorialParagraph): string {
 }
 
 function naturalSubdivisionCue(body: string): boolean {
-  return /\ble premier\b[\s\S]{0,900}\ble deuxième\b[\s\S]{0,900}\ble troisième\b/i.test(body);
+  const ordinalNouns = /\ble premier\b[\s\S]{0,900}\ble deuxième\b[\s\S]{0,900}\ble troisième\b/i;
+  const ordinalAdverbs = /\bpremièrement\b[\s\S]{0,900}\bdeuxièmement\b[\s\S]{0,900}\btroisièmement\b/i;
+  const numberedItems = /(?:^|[.!?]\s+)1[.)]\s+[\s\S]{0,900}(?:^|[.!?]\s+)2[.)]\s+[\s\S]{0,900}(?:^|[.!?]\s+)3[.)]\s+/im;
+  return ordinalNouns.test(body) || ordinalAdverbs.test(body) || numberedItems.test(body);
 }
 
 export function headingArchitectureReasons(paragraphs: EditorialParagraph[]): string[] {
