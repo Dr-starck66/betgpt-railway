@@ -25,7 +25,7 @@
       "sitemapSource": "src/lib/sitemap-urls.ts",
       "requiredFragments": [
         "/prediction/",
-        "for (const row of tickets)"
+        "stablePublicEvidenceTickets"
       ]
     },
     {
@@ -54,7 +54,9 @@
       "sitemapSource": "src/lib/sitemap-urls.ts",
       "requiredFragments": [
         "SERP_COMPETITIONS",
-        "resultsPath"
+        "resultsPath",
+        "loadResultsBoardData",
+        "resultLeafPaths"
       ]
     },
     {
