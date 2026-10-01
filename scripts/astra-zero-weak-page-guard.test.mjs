@@ -98,7 +98,7 @@ export const Route = createFileRoute("/thin/")({
   component: () => <article><h1>Thin</h1><a href="/next">Next</a></article>,
 });
 `;
-  const { run, report } = await runFixture({ "thin.tsx": source });
+  const { run, report } = await runFixture({ "thin.tsx": source }, { minVisibleTextBytes: 1000 });
   assert.notEqual(run.status, 0);
   assert.match(report.failures[0].failures.join(" "), /main-content/);
 });
