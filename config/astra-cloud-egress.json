@@ -2,8 +2,8 @@
   "name": "BetGPT remote production verification",
   "defaults": {
     "timeoutMs": 30000,
-    "retries": 6,
-    "retryDelayMs": 5000,
+    "retries": 4,
+    "retryDelayMs": 4000,
     "excerptChars": 1500
   },
   "targets": [
@@ -150,7 +150,39 @@
           ]
         }
       }
+    },
+    {
+      "id": "precision-sidewings",
+      "method": "GET",
+      "path": "/rapports/precision",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "Du chiffre au registre",
+            "Lire la précision correctement"
+          ]
+        }
+      }
+    },
+    {
+      "id": "pronostic-guide-sidewings",
+      "method": "GET",
+      "path": "/meilleur-site-pronostic",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "Vérifier avant de comparer",
+            "Passer des critères aux pages réelles"
+          ]
+        }
+      }
     }
   ],
-  "verificationRevision": "sidewing-batch-e9ec0ddca14b344a8b6f9709a84fec649f10ac33"
+  "verificationRevision": "astra-sidewing-zero-recommended"
 }
