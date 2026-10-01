@@ -65,6 +65,11 @@ export function ResultsBoard({
   sections: { id: string; title: string; rows: ResultRow[] }[];
   asOf?: string;
 }) {
+  const latest = sections
+    .flatMap((section) => section.rows)
+    .slice()
+    .sort((a, b) => b.kickoff.localeCompare(a.kickoff))[0];
+
   return (
     <div className="space-y-8">
       <header className="hero-panel p-6 sm:p-8">
@@ -72,7 +77,15 @@ export function ResultsBoard({
         <h1 className="mt-2 text-3xl font-bold tracking-tight text-paper sm:text-4xl">{h1}</h1>
         <p className="seo-answer mt-4 max-w-3xl text-base leading-relaxed text-mist sm:text-lg">{lead}</p>
         {asOf ? (
-          <p className="mt-3 text-sm text-muted">Données actualisées à {parisTime(asOf) || "l’instant"} (heure de Paris) · historique continu sur 7 jours.</p>
+          <div className="mt-3 space-y-1 text-sm text-muted">
+            <p>
+              Données vérifiées à {parisTime(asOf) || "l’instant"} (heure de Paris) · historique continu sur 7 jours.
+              {latest ? ` Dernier match terminé affiché : ${dayTitle(latest.day)}.` : ""}
+            </p>
+            <p>
+              Un jour à 0 match signifie qu’aucune rencontre terminée n’est disponible dans les compétitions suivies — pas que la page est figée.
+            </p>
+          </div>
         ) : null}
         <nav aria-label="Résultats par compétition" className="mt-5 flex flex-wrap gap-2 text-sm">
           <a href="/scores-en-direct" className="chip-pill hover:border-sage/30 hover:text-link">Scores en direct</a>
