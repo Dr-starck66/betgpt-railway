@@ -1,12 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { TeamLine } from "@/components/crest";
-import { pronoVsStake } from "@/lib/markets";
+import { MIN_BET_ODDS, oddsPlayable, pronoVsStake } from "@/lib/markets";
 import { matchPath } from "@/lib/seo";
 import { GUIDES, PRONO_LEAGUES, parisDay } from "@/lib/seo/money-map";
 import { collectionJsonLd, itemListJsonLd, SITE_URL } from "@/lib/programmatic";
 import { breadcrumbJsonLd } from "@/lib/cocon";
 import { ld } from "@/lib/ld";
 import { fmtOdds, fmtPct } from "@/lib/utils";
+import { LEAGUE_FLAG } from "@/lib/labels";
 import type { LeagueId, MatchInput, PredictionRecord } from "@/engine/types";
 
 export type SiloDesk = {
@@ -120,7 +121,7 @@ export function PronoSilo({
               {rows.map(({ match, prediction }) => {
                 const { prono, stake } = pronoVsStake(prediction.markets);
                 const watch = prediction.markets.find((m) => m.decision === "WATCH");
-                const listed = prono.listed && prono.bestOdds >= 1.05;
+                const listed = prono.listed && oddsPlayable(prono.bestOdds);
                 const issued = issue1x2(match, prono.market);
                 const stamped = Date.parse(prediction.timestamp);
                 const action =
@@ -142,7 +143,7 @@ export function PronoSilo({
                             label: "NE PAS PARIER",
                             tone: "border-rust bg-rust/10 text-rust",
                             reason: !listed
-                              ? "Pas de cote exploitable actuellement."
+                              ? `Cote hors seuil BetGPT (minimum ${MIN_BET_ODDS.toFixed(2).replace(".", ",")}) ou indisponible.`
                               : prono.edge <= 0
                                 ? "La cote ne donne pas d’avantage au modèle."
                                 : "Les critères de mise ne sont pas tous réunis.",
@@ -154,7 +155,7 @@ export function PronoSilo({
                         <TeamLine home={match.home} away={match.away} size={26} names="auto" competition={match.competition} />
                       </Link>
                       <div className="text-xs text-muted">
-                        Football · {match.competition} ·{" "}
+                        <span aria-hidden="true">{LEAGUE_FLAG[match.league] ?? "🌍"}</span>{" "}{match.competition} ·{" "}
                         {new Date(match.kickoff).toLocaleString("fr-FR", {
                           timeZone: "Europe/Paris",
                           day: "2-digit",
@@ -175,7 +176,7 @@ export function PronoSilo({
                     </td>
                     <td className="px-3 py-2 font-medium">{prono.label}</td>
                     <td className="px-3 py-2 tabular">{fmtPct(prono.modelProb)}</td>
-                    <td className="px-3 py-2 tabular">{listed ? fmtOdds(prono.bestOdds) : "non disponible"}</td>
+                    <td className="px-3 py-2 tabular">{listed ? fmtOdds(prono.bestOdds) : "—"}</td>
                     <td className="px-3 py-2 tabular">{listed ? fmtPct(prono.edge) : "—"}</td>
                     <td className="px-3 py-2">
                       <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-bold ${action.tone}`}>
@@ -252,7 +253,7 @@ export function PronoSilo({
       {kind === "pillar" ? (
         <section className="surface-card space-y-3 p-5 text-sm leading-relaxed text-mist sm:p-6">
           <h2 className="text-base font-semibold text-paper">Comment lire le tableau</h2>
-          <p><strong>Pronostic</strong> = issue 1N2 la plus probable. <strong>Probabilité</strong> = estimation BetGPT. <strong>Écart à la cote</strong> = différence entre l’estimation et le marché. La colonne <strong>À faire</strong> tranche clairement : PARIER, ATTENDRE ou NE PAS PARIER.</p>
+          <p><strong>Pronostic</strong> = issue 1N2 la plus probable. <strong>Probabilité</strong> = estimation BetGPT. Les cotes inférieures à <strong>1,80</strong> sont ignorées et non mises en avant. La colonne <strong>À faire</strong> tranche clairement : PARIER, ATTENDRE ou NE PAS PARIER.</p>
           <p>
             Après le match, la fiche garde le score et dit si le 1N2 affiché colle au résultat. Le règlement des mises est le{" "}
             <Link to="/ledger" className="underline">bilan</Link>, pas cette colonne. Export :{" "}
