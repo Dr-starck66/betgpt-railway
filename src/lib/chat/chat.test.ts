@@ -10,6 +10,7 @@ import { UNIBET_LEAGUE } from "../../engine/book-pages.ts";
 import { extractPunchline } from "./punch.ts";
 import { generateAbsurdInsult, shouldDropAbsurdInsult } from "./absurd-insults.ts";
 import { reactionForPunchline } from "./reaction.ts";
+import { personalityBrief } from "./personality.ts";
 import { renderDailyChatPick, selectDailyChatPick, selectDailyDataFallback } from "./daily-pick.ts";
 
 it("normalizes corrupt nested memories instead of crashing the prompt", () => {
@@ -496,4 +497,43 @@ it("daily chat pick falls back to a real bookmaker football URL when the quote h
 it("daily chat pick refuses stale desk data instead of manufacturing a current bet", () => {
   const pick = selectDailyChatPick([], [], "2026-10-01T14:00:00Z", true);
   assert.equal(pick, null);
+});
+
+
+it("personality director cools down recently used signature motifs", () => {
+  const history = [
+    { role: "user", content: "Mon combiné est incroyable" },
+    { role: "assistant", content: "Ton grille-pain cosmique a encore pris le volant." },
+    { role: "user", content: "Et celui-là ?" },
+  ];
+  const brief = personalityBrief(
+    { ...EMPTY_MEMORY, blackBook: { ...EMPTY_MEMORY.blackBook, combinésDePlus5Matchs: 2 } },
+    "ROAST",
+    history,
+    "Et celui-là ?",
+  );
+  assert.match(brief, /Motifs récemment utilisés à ÉVITER/i);
+  assert.match(brief, /grille-pain/i);
+  assert.match(brief, /musée des combinés à rallonge/i);
+});
+
+it("personality director disables roast for serious contexts", () => {
+  const brief = personalityBrief(
+    EMPTY_MEMORY,
+    "ROAST",
+    [{ role: "user", content: "J'ai eu un accident grave" }],
+    "J'ai eu un accident grave",
+  );
+  assert.match(brief, /Zéro roast/i);
+  assert.match(brief, /sobre/i);
+});
+
+it("personality director never invents a callback when memory and history are empty", () => {
+  const brief = personalityBrief(
+    EMPTY_MEMORY,
+    "ROAST",
+    [{ role: "user", content: "Analyse ce pari" }],
+    "Analyse ce pari",
+  );
+  assert.match(brief, /n’invente pas un souvenir/i);
 });
