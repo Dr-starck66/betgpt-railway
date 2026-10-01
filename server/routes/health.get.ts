@@ -1,6 +1,17 @@
-import { defineEventHandler } from "h3";
+import { defineEventHandler, setHeader } from "h3";
 
-export default defineEventHandler(() => ({
-  status: "ok",
-  service: "betgpt",
-}));
+export default defineEventHandler((event) => {
+  const revision =
+    process.env.RAILWAY_GIT_COMMIT_SHA ||
+    process.env.ASTRA_DEPLOY_REV ||
+    "unknown";
+
+  setHeader(event, "cache-control", "no-store");
+  setHeader(event, "x-astra-public-revision", revision);
+
+  return {
+    status: "ok",
+    service: "betgpt",
+    revision,
+  };
+});
