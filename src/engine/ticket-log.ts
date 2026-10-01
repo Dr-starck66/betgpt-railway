@@ -8,7 +8,7 @@ import { headlineMarket } from "@/lib/markets";
 import { readPersist, writePersist } from "@/lib/persist";
 import { ENGINE_VERSION } from "./data";
 import { appendEvent, isImmutable, stampLock, kickoffPassed, publishedBeforeKickoff } from "./verify";
-import seedTickets from "./seed-tickets.json";
+import seedTickets from "./seed-tickets.json" with { type: "json" };
 import type { Decision, HistoricalMatch, LeagueId, MarketKind, MatchInput, PredictionRecord } from "./types";
 
 export { marketHits, coverHitsScore, coverStakeOf, FILET_COVER_FRAC } from "./settle";
