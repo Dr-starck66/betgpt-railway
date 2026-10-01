@@ -516,6 +516,6 @@ export function generateHistory(): HistoricalMatch[] {
   return out;
 }
 
-export const ENGINE_VERSION = "betgpt-ensemble-1.0.0";
+export const ENGINE_VERSION = "betgpt-roi5-canonical-1.0.0";
 export const TACTICAL_VERSION = "coach-intel-1.0.0";
 export const FEATURE_VERSION = "tactical-features-1.0.0";
