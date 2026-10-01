@@ -15,7 +15,8 @@ function filesIn(dir) {
 }
 
 function count(re, text) {
-  return [...text.matchAll(re)].length;
+  const flags = re.flags.includes("g") ? re.flags : `${re.flags}g`;
+  return [...text.matchAll(new RegExp(re.source, flags))].length;
 }
 
 function classify(file) {
