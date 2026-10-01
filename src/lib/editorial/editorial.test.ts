@@ -478,4 +478,70 @@ describe("editorial engine", () => {
     assert.ok(result.reasons.includes("remplissage éditorial générique détecté"));
   });
 
+  it("rejects a flat H2 block when the copy explicitly contains three sub-ideas", () => {
+    const flat = qualityGate(
+      {
+        articleType: "news",
+        title: "Real Madrid : suivi médical et prochaines étapes",
+        h1: "Real Madrid : suivi médical et prochaines étapes pour Mbappé",
+        lead: "Cette analyse suit uniquement des éléments vérifiables et distingue les informations confirmées des étapes encore attendues dans le processus de récupération du joueur.",
+        paragraphs: [
+          {
+            h2: "Trois signaux à surveiller",
+            body:
+              "Le premier sera le retour à l'entraînement collectif avec le groupe. Le deuxième sera une convocation officielle pour une rencontre du Real Madrid. Le troisième sera un nouveau communiqué médical ou une mise à jour du club sur sa disponibilité.",
+          },
+          { h2: "Contexte", body: "Le contexte médical reste encadré par les communications disponibles et ne permet pas d'inventer une date de retour. ".repeat(3) },
+          { h2: "Calendrier", body: "Le calendrier sportif donne des repères mais ne remplace pas une validation médicale ni une convocation officielle. ".repeat(3) },
+          { h2: "Sources", body: "Les éléments retenus proviennent de communications officielles ou de sources sportives identifiées et recoupées. ".repeat(3) },
+          { h2: "Limites", body: "Les informations absentes sont conservées comme inconnues et ne sont pas transformées en certitudes éditoriales. ".repeat(3) },
+        ],
+        sources: [
+          { id: "official", label: "Real Madrid", status: "OFFICIAL", note: "communication officielle", url: "https://www.realmadrid.com/" },
+          { id: "press", label: "L'Équipe", status: "HIGH_CONFIDENCE", note: "source journalistique", url: "https://www.lequipe.fr/" },
+        ],
+        image: { src: "/blog/discover/test-headings.jpg", alt: "terrain de football", width: 1600, height: 900, credit: "libre" },
+        links: [{ href: "/actualites/la-liga", label: "Actualités La Liga" }],
+        teams: ["Real Madrid", "Kylian Mbappé"],
+        competition: "La Liga",
+      },
+      [],
+    );
+    assert.ok(flat.reasons.includes("hiérarchie H2/H3 trop plate malgré des sous-idées explicites"));
+
+    const structured = qualityGate(
+      {
+        articleType: "news",
+        title: "Real Madrid : suivi médical et prochaines étapes",
+        h1: "Real Madrid : suivi médical et prochaines étapes pour Mbappé",
+        lead: "Cette analyse suit uniquement des éléments vérifiables et distingue les informations confirmées des étapes encore attendues dans le processus de récupération du joueur.",
+        paragraphs: [
+          {
+            h2: "Trois signaux à surveiller",
+            body: "Trois étapes vérifiables permettent de suivre le dossier sans transformer une estimation en certitude.",
+            subsections: [
+              { h3: "Retour à l'entraînement collectif", body: "Une séance complète avec le groupe serait un premier repère concret." },
+              { h3: "Convocation officielle", body: "Une présence dans le groupe convoqué fournirait un deuxième repère sportif." },
+              { h3: "Nouveau point médical", body: "Une communication du club apporterait le troisième repère utile." },
+            ],
+          },
+          { h2: "Contexte", body: "Le contexte médical reste encadré par les communications disponibles et ne permet pas d'inventer une date de retour. ".repeat(3) },
+          { h2: "Calendrier", body: "Le calendrier sportif donne des repères mais ne remplace pas une validation médicale ni une convocation officielle. ".repeat(3) },
+          { h2: "Sources", body: "Les éléments retenus proviennent de communications officielles ou de sources sportives identifiées et recoupées. ".repeat(3) },
+          { h2: "Limites", body: "Les informations absentes sont conservées comme inconnues et ne sont pas transformées en certitudes éditoriales. ".repeat(3) },
+        ],
+        sources: [
+          { id: "official", label: "Real Madrid", status: "OFFICIAL", note: "communication officielle", url: "https://www.realmadrid.com/" },
+          { id: "press", label: "L'Équipe", status: "HIGH_CONFIDENCE", note: "source journalistique", url: "https://www.lequipe.fr/" },
+        ],
+        image: { src: "/blog/discover/test-headings.jpg", alt: "terrain de football", width: 1600, height: 900, credit: "libre" },
+        links: [{ href: "/actualites/la-liga", label: "Actualités La Liga" }],
+        teams: ["Real Madrid", "Kylian Mbappé"],
+        competition: "La Liga",
+      },
+      [],
+    );
+    assert.ok(!structured.reasons.includes("hiérarchie H2/H3 trop plate malgré des sous-idées explicites"));
+  });
+
 });

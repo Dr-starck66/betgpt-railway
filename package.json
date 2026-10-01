@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "node scripts/with-app-env.mjs vite dev --host 0.0.0.0 --port 8080",
     "build": "node scripts/with-app-env.mjs vite build && npm run db:migrate",
-    "prebuild": "node scripts/clean-build.mjs && node scripts/astra-flag-guard.mjs && node scripts/astra-model-max-guard.mjs && node scripts/astra-visual-entity-guard.mjs && node scripts/astra-zero-weak-page-guard.mjs --strict",
+    "prebuild": "node scripts/clean-build.mjs && node scripts/astra-flag-guard.mjs && node scripts/astra-model-max-guard.mjs && node scripts/astra-visual-entity-guard.mjs && node scripts/astra-zero-weak-page-guard.mjs --strict && node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-heading-architecture-guard.mjs --strict",
     "prebuild:dev": "node scripts/clean-build.mjs",
     "db:migrate": "node scripts/migrate.mjs",
     "build:dev": "node scripts/with-app-env.mjs vite build --mode development",
@@ -60,6 +60,7 @@
     "test:model-max": "node scripts/astra-model-max-guard.mjs && node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/ai/astra-model-max.test.ts",
     "test:visual-entities": "node scripts/astra-visual-entity-guard.mjs",
     "seo:zero-weak": "node scripts/astra-zero-weak-page-guard.mjs --strict",
+    "seo:headings": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-heading-architecture-guard.mjs --strict",
     "release:candidate": "node scripts/astra-never-fail-build-guard.mjs",
     "release:candidate:extended": "node scripts/astra-never-fail-build-guard.mjs --extended"
   },

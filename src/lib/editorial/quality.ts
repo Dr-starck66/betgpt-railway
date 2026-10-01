@@ -1,4 +1,4 @@
-import type { DiscoverCheck, EditorialArticle, EditorialSource } from "@/lib/editorial/types";
+import type { DiscoverCheck, EditorialArticle, EditorialParagraph, EditorialSource } from "@/lib/editorial/types";
 
 const CLICKBAIT =
   /incroyable|vous n['’]allez jamais|ne ratez pas|à ne pas manquer|urgent|scandale|dernier moment|dingue|immanquable|!!!/i;
@@ -120,11 +120,62 @@ export function internalDuplication(text: string): { duplicateInstances: number;
   return { duplicateInstances, maxRepeats };
 }
 
-export function nearDuplicateParagraphs(paragraphs: { body: string }[]): number {
+export function paragraphText(paragraph: EditorialParagraph): string {
+  return [
+    paragraph.body,
+    ...(paragraph.subsections ?? []).flatMap((subsection) => [
+      subsection.body,
+      ...(subsection.subsections ?? []).map((detail) => detail.body),
+    ]),
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
+
+function naturalSubdivisionCue(body: string): boolean {
+  return /\ble premier\b[\s\S]{0,900}\ble deuxième\b[\s\S]{0,900}\ble troisième\b/i.test(body);
+}
+
+export function headingArchitectureReasons(paragraphs: EditorialParagraph[]): string[] {
+  const reasons: string[] = [];
+  const seen = new Set<string>();
+
+  for (const paragraph of paragraphs) {
+    const h2 = paragraph.h2.trim();
+    if (!h2) reasons.push("H2 vide");
+    const h2Key = `h2:${h2.toLocaleLowerCase("fr")}`;
+    if (seen.has(h2Key)) reasons.push("H2 dupliqué");
+    seen.add(h2Key);
+
+    if (naturalSubdivisionCue(paragraph.body) && !(paragraph.subsections?.length)) {
+      reasons.push("hiérarchie H2/H3 trop plate malgré des sous-idées explicites");
+    }
+
+    for (const subsection of paragraph.subsections ?? []) {
+      const h3 = subsection.h3.trim();
+      if (!h3) reasons.push("H3 vide");
+      const h3Key = `h3:${h3.toLocaleLowerCase("fr")}`;
+      if (seen.has(h3Key)) reasons.push("H3 dupliqué");
+      seen.add(h3Key);
+
+      for (const detail of subsection.subsections ?? []) {
+        const h4 = detail.h4.trim();
+        if (!h4) reasons.push("H4 vide");
+        const h4Key = `h4:${h4.toLocaleLowerCase("fr")}`;
+        if (seen.has(h4Key)) reasons.push("H4 dupliqué");
+        seen.add(h4Key);
+      }
+    }
+  }
+
+  return [...new Set(reasons)];
+}
+
+export function nearDuplicateParagraphs(paragraphs: EditorialParagraph[]): number {
   let collisions = 0;
   for (let i = 0; i < paragraphs.length; i += 1) {
     for (let j = i + 1; j < paragraphs.length; j += 1) {
-      if (jaccard(paragraphs[i]!.body, paragraphs[j]!.body) >= 0.82) collisions += 1;
+      if (jaccard(paragraphText(paragraphs[i]!), paragraphText(paragraphs[j]!)) >= 0.82) collisions += 1;
     }
   }
   return collisions;
@@ -158,7 +209,7 @@ export function qualityGate(
   priorTexts: string[],
 ): { pass: boolean; reasons: string[]; duplicateScore: number } {
   const reasons: string[] = [];
-  const body = article.paragraphs.map((p) => p.body).join("\n");
+  const body = article.paragraphs.map(paragraphText).join("\n");
   const all = `${article.title}\n${article.h1}\n${article.lead}\n${body}`;
   if (article.articleType === "slate") reasons.push("article programme générique interdit en Discover auto");
   if (article.h1.trim().length < 20 || article.h1.length > 120) reasons.push("titre hors longueur");
@@ -166,6 +217,7 @@ export function qualityGate(
   if (article.articleType === "news" && article.lead.trim().length < 150) reasons.push("chapô d'actualité trop mince");
   if (article.paragraphs.length < 3) reasons.push("moins de trois parties");
   if (article.articleType === "news" && article.paragraphs.length < 5) reasons.push("actualité trop peu structurée pour Discover");
+  reasons.push(...headingArchitectureReasons(article.paragraphs));
   if (article.paragraphs.some((p) => p.body.trim().length < 140)) reasons.push("partie trop mince");
   if (article.articleType === "news" && body.trim().length < 2400) reasons.push("actualité trop courte pour apporter une vraie valeur éditoriale");
   if (!article.sources.length) reasons.push("aucune source");
@@ -230,7 +282,7 @@ export function qualityGate(
 }
 
 export function discoverChecks(article: EditorialArticle): Record<DiscoverCheck, boolean> {
-  const body = article.paragraphs.map((p) => p.body).join(" ");
+  const body = article.paragraphs.map(paragraphText).join(" ");
   return {
     INDEXABLE: article.quality.pass && (article.status === "PUBLISHED" || article.status === "UPDATED"),
     LARGE_IMAGE: article.image.width >= 1200,
