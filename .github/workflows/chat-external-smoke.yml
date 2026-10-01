@@ -7,6 +7,8 @@ on:
       - ".github/workflows/chat-external-smoke.yml"
       - "scripts/astra-cloud-bridge.mjs"
       - "config/astra-cloud-bridge.json"
+      - "src/lib/chat/**"
+      - "server/api/chat.post.ts"
 
 permissions:
   contents: read
