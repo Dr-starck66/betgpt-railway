@@ -2,30 +2,52 @@ import { getLiveSnapshot, hydrateLiveFromDisk } from "@/engine/live";
 import { stripMarkup } from "@/lib/plain";
 import { betgptPrompt } from "./prompt";
 import { normalizeMemory, parseMode, type ChatRequestBody, type PersonalityMode } from "./types";
-import { localMatchFacts } from "./local";
+import { classifyChatIntent, localMatchFacts } from "./local";
 import { allowKeyed } from "@/lib/store";
 import { historyFacts } from "./history-facts";
+import { hasUnsupportedGroundedClaim } from "./grounding";
 
 async function deskNow(question: string): Promise<string> {
   try {
     const snapshot = getLiveSnapshot() ?? hydrateLiveFromDisk();
-    return [historyFacts(question), localMatchFacts(question, snapshot?.matches ?? [], snapshot?.meta?.asOf)].filter(Boolean).join("\n\n");
+    return [historyFacts(question), localMatchFacts(question, snapshot?.matches ?? [], snapshot?.meta?.asOf)]
+      .filter(Boolean)
+      .join("\n\n");
   } catch {
     return "Calendrier indisponible pour l'instant.";
   }
 }
 
-function localReply(_last: string, desk: string, _mode: PersonalityMode): string {
-  return desk;
+function localReply(last: string, desk: string, mode: PersonalityMode): string {
+  const intent = classifyChatIntent(last);
+  if (intent === "CASUAL") {
+    return mode === "ROAST"
+      ? "Salut 😈 BetGPT est réveillé. Balance ton match, ton ticket ou ta théorie football — je sortirai le grille-pain quantique si le raisonnement le mérite."
+      : "Salut 👋 Je suis là. Donne-moi un match, un ticket ou demande-moi ce qui vaut vraiment le coup aujourd’hui.";
+  }
+  if (intent === "TODAY_PICKS") {
+    const opener =
+      mode === "ROAST"
+        ? "Je ne vais pas fabriquer un combiné en carton mouillé juste pour remplir la case. Voilà ce que le desk a réellement sous la main :"
+        : "Je ne vais pas inventer un pari. Voilà les matchs réellement disponibles dans le desk :";
+    return `${opener}\n\n${desk}`;
+  }
+  if (intent === "GENERAL_SCHEDULE" || intent === "NAMED_MATCH") return desk;
+  return mode === "ROAST"
+    ? "Le moteur conversationnel est momentanément en secours local. Je peux toujours vérifier un match ou démonter un ticket, mais je préfère éviter de broder comme un poulpe consultant."
+    : "Le moteur conversationnel est momentanément en secours local. Je peux toujours vérifier un match ou un ticket à partir des données disponibles, sans inventer.";
 }
 
-import { hasUnsupportedGroundedClaim } from "./grounding";
-
 function groundedFallback(desk: string): string {
-  if (desk.includes("Aucune équipe précisément reconnue dans ta question.")) {
-    return "Je n’ai pas de donnée vérifiée correspondant précisément à l’équipe ou au match demandé dans les données disponibles. Je préfère ne pas inventer un adversaire, une date, une cote ou un score.";
+  if (desk.includes("Cible nommée non trouvée")) {
+    return "Je n’ai pas retrouvé ce match ou cette équipe dans les données disponibles. Donne-moi le nom exact si tu veux, mais je ne vais pas inventer l’adversaire, la date ou la cote.";
   }
-  return desk;
+  return "Je n’ai pas assez de données vérifiées pour affirmer ce détail. Je peux te donner ce que le desk confirme, ou raisonner sans inventer le reste.";
+}
+
+function shouldGround(question: string): boolean {
+  const intent = classifyChatIntent(question);
+  return intent === "NAMED_MATCH" || intent === "TODAY_PICKS" || intent === "GENERAL_SCHEDULE";
 }
 
 async function callAstraRouter(
@@ -57,7 +79,7 @@ async function callAstraRouter(
         system: system.slice(0, 18000),
         user: `CONVERSATION RÉCENTE\n\n${transcript}\n\nRéponds au dernier message de l'utilisateur.`,
         requestedModel: "qwen-chat-local",
-        maxTokens: critic ? 240 : 280,
+        maxTokens: critic ? 320 : 320,
       }),
     });
     const json = (await upstream.json().catch(() => ({}))) as {
@@ -93,7 +115,7 @@ async function callXai(
       body: JSON.stringify({
         model: process.env.XAI_MODEL?.trim() || "grok-4.5",
         stream: false,
-        temperature: mode === "ROAST" ? 0.6 : 0.2,
+        temperature: mode === "ROAST" ? 0.72 : 0.35,
         max_tokens: 420,
         messages: [{ role: "system", content: system.slice(0, 12000) }, ...history],
       }),
@@ -132,6 +154,7 @@ export async function completeChat(
       content: m.content.slice(0, 4000),
     }));
   const last = history.at(-1)?.content ?? "";
+  const mustGround = shouldGround(last);
 
   const routerBase = process.env.ASTRA_ROUTER_BASE?.trim();
   const routerToken = process.env.ASTRA_ROUTER_TOKEN?.trim();
@@ -139,14 +162,16 @@ export async function completeChat(
     try {
       const out = await callAstraRouter(routerBase, routerToken, system, history, mode);
       if (out.ok) {
-        const source = `${system}\n\n${history.map((m) => m.content).join("\n")}`;
-        if (hasUnsupportedGroundedClaim(out.text, source)) {
-          return { ok: true, text: groundedFallback(desk) };
+        if (mustGround) {
+          const source = `${system}\n\n${history.map((m) => m.content).join("\n")}`;
+          if (hasUnsupportedGroundedClaim(out.text, source)) {
+            return { ok: true, text: groundedFallback(desk) };
+          }
         }
         return { ok: true, text: out.text };
       }
     } catch {
-      /* fall through to optional cloud provider, then factual local desk */
+      /* fall through to optional cloud provider, then conversational local fallback */
     }
   }
 
@@ -155,24 +180,21 @@ export async function completeChat(
     try {
       const out = await callXai(apiKey, system, history, mode);
       if (out.ok) {
-        const source = `${system}\n\n${history.map((m) => m.content).join("\n")}`;
-        if (hasUnsupportedGroundedClaim(out.text, source)) {
-          return { ok: true, text: groundedFallback(desk) };
+        if (mustGround) {
+          const source = `${system}\n\n${history.map((m) => m.content).join("\n")}`;
+          if (hasUnsupportedGroundedClaim(out.text, source)) {
+            return { ok: true, text: groundedFallback(desk) };
+          }
         }
         return { ok: true, text: out.text };
       }
     } catch {
-      /* fall through to factual local desk */
+      /* fall through to conversational local fallback */
     }
   }
 
-  const reason = routerBase && routerToken
-    ? "le routeur ASTRA n’a pas répondu"
-    : apiKey
-      ? "le service IA n’a pas répondu"
-      : "service IA non configuré";
   return {
     ok: true,
-    text: `Mode de secours local — ${reason}.\n\n${localReply(last, desk, mode)}`,
+    text: localReply(last, desk, mode),
   };
 }
