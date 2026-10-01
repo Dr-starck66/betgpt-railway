@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { newsArticleLd, breadcrumbLd } from "@/lib/editorial/schema";
 import { formatParis } from "@/lib/editorial/time";
-import type { EditorialArticle } from "@/lib/editorial/types";
+import type { EditorialArticle, EditorialSource } from "@/lib/editorial/types";
 import { ld } from "@/lib/ld";
 
 export function NewsArticleView({ article }: { article: EditorialArticle }) {
@@ -80,7 +80,7 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
           {article.paragraphs.map((part) => {
             const passageSources = (part.sourceIds ?? [])
               .map((sourceId) => article.sources.find((source) => source.id === sourceId))
-              .filter((source): source is NonNullable<typeof source> => Boolean(source?.url));
+              .filter((source): source is EditorialSource & { url: string } => Boolean(source?.url));
 
             return (
               <section key={part.h2} className="surface-card space-y-4 p-5 sm:p-7">
