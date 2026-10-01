@@ -37,7 +37,9 @@ jobs:
           assert text.strip(), "empty chat response"
           assert not any(x in text.lower().replace("’","'") for x in bad), text
           assert not any(x in text for x in internal), text
-          for required in ("Niveau :", "Pari à prendre :", "Cote disponible :"):
+          for required in ("Niveau :", "Pari à prendre :", "Meilleure cote trouvée :"):
               assert required in text, f"missing {required}: {text}"
+          if "Meilleure cote trouvée : indisponible" not in text:
+              assert "Lien pour parier :" in text, f"missing betting link line: {text}"
           print("CHAT_GATE_PASS")
           PY
