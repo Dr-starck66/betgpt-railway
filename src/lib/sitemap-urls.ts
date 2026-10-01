@@ -14,6 +14,8 @@ import { moneySitemapPaths } from "@/lib/seo/money-map";
 import { fixtureIndexable, sitemapAllowed } from "@/lib/geo/quality";
 import { skipEuropeFrenchProno } from "@/engine/french-clubs";
 import { SERP_COMPETITIONS } from "@/lib/serp/leagues";
+import { loadResultsBoardData } from "@/lib/serp/results.functions";
+import { bucketResults } from "@/lib/serp/results";
 import { parisDay, parisOffsetDay } from "@/lib/seo/money-map";
 import type { MatchInput } from "@/engine/types";
 import { buildEdition } from "@/lib/editorial/engine";
@@ -68,11 +70,35 @@ export async function loadSitemapUrls(): Promise<SitemapUrl[]> {
       scoreHome: h.goalsHome,
       scoreAway: h.goalsAway,
     }));
-  const urls = buildSitemapUrls({
+  let urls = buildSitemapUrls({
     matches: [...liveMatches, ...extra],
     asOf: sitemapDate(live?.fetchedAt),
     standingsAsOf: sitemapDate(live?.fetchedAt),
   });
+
+  // Result leaf pages must use the exact same evidence as their public loaders.
+  // If that evidence is unavailable or empty, fail closed by omitting the leaf
+  // from the sitemap rather than publishing a sitemap URL that renders noindex.
+  const resultLeafPaths = new Set<string>();
+  try {
+    const resultBoard = await loadResultsBoardData();
+    for (const comp of SERP_COMPETITIONS) {
+      if (resultBoard.rows.some((row) => row.league === comp.league)) {
+        resultLeafPaths.add(comp.resultsPath);
+      }
+    }
+    const buckets = bucketResults(resultBoard.rows);
+    if (buckets.today.length) resultLeafPaths.add("/resultats-football/aujourdhui");
+    if (buckets.yesterday.length) resultLeafPaths.add("/resultats-football/hier");
+  } catch {
+    // Fail closed: only the result hub remains in the sitemap.
+  }
+  urls = urls.filter(
+    (url) =>
+      url.path === "/resultats-football" ||
+      !url.path.startsWith("/resultats-football/") ||
+      resultLeafPaths.has(url.path),
+  );
   const edition = buildEdition({ now: new Date(), matches: liveMatches as MatchInput[], frozen: await readLedgerDurable() });
   for (const row of tickets) {
     if (row.kind !== "prono" || !row.id || !row.home || !row.away || !row.recordedAt) continue;
