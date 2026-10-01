@@ -4,6 +4,7 @@ import path from "node:path";
 
 const root = process.cwd();
 const configPath = process.env.ASTRA_ZERO_COST_CONFIG || "config/astra-zero-cost.json";
+const scriptPath = "scripts/astra-zero-cost-guard.mjs";
 
 function fail(message) {
   console.error(`ASTRA_ZERO_COST_GUARD_FAIL: ${message}`);
@@ -28,6 +29,19 @@ if (cfg.principles?.allowPayPerCallCriticalDependencyByDefault !== false) {
 }
 if (cfg.failurePolicy !== "NEVER_REQUIRE_PAYMENT_WITHOUT_EXPLICIT_USER_OVERRIDE") {
   fail("failurePolicy must prevent payment without explicit user override");
+}
+
+const strategic = cfg.strategicPaidExceptionPolicy || {};
+if (
+  strategic.mode !== "ONLY_IF_MASSIVE_UNLOCK" ||
+  strategic.requireExplicitUserApproval !== true ||
+  strategic.requireFreePathsExhausted !== true ||
+  strategic.requireMeasuredBenefit !== true ||
+  strategic.requireMaxBudgetEur !== true ||
+  strategic.autoPurchase !== false ||
+  strategic.autoTopUp !== false
+) {
+  fail("strategic paid exceptions must be explicit, bounded, measured, and never automatic");
 }
 
 const overrides = new Map();
