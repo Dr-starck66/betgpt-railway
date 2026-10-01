@@ -312,9 +312,9 @@ export function publicBoard(d: DeskPayload, league?: LeagueId) {
   if (d.elPhaseBest?.prediction.matchId) ids.add(d.elPhaseBest.prediction.matchId);
   return {
     summary: d.summary,
-    dailyBest: d.dailyBest,
-    clPhaseBest: !league || league === "CL" ? d.clPhaseBest : null,
-    elPhaseBest: !league || league === "EL" ? d.elPhaseBest : null,
+    dailyBest: publicBest(d.dailyBest),
+    clPhaseBest: !league || league === "CL" ? publicBest(d.clPhaseBest) : null,
+    elPhaseBest: !league || league === "EL" ? publicBest(d.elPhaseBest) : null,
     matches,
     predictions: d.predictions.filter((p) => ids.has(p.matchId)).map(cardPrediction),
     reliability: d.reliability,
@@ -325,8 +325,8 @@ export function publicBoard(d: DeskPayload, league?: LeagueId) {
     liveWindow: d.liveWindow,
     liveStale: d.liveStale,
     review: publicReview(d),
-    engineVersion: d.engineVersion,
-    tacticalVersion: d.tacticalVersion,
+    engineVersion: "BetGPT",
+    tacticalVersion: "BetGPT",
     rho: d.rho,
     championship: {
       models: [],
@@ -712,6 +712,9 @@ function cardMatch(m: MatchInput): MatchInput {
 function cardPrediction<T extends { markets: { group: string; decision: string }[] }>(p: T): T {
   return {
     ...p,
+    // Public payloads never expose internal engine/version identifiers.
+    engineVersion: "BetGPT",
+    tacticalVersion: "BetGPT",
     markets: p.markets.filter((m) => m.group === "1X2" || m.decision === "BET") as T["markets"],
     models: [],
     ensemble: { lambdaHome: 0, lambdaAway: 0, home: 0, draw: 0, away: 0, over15: 0, over25: 0, over35: 0, under25: 0, bttsYes: 0, bttsNo: 0, matrix: [], weights: {}, disagreement: 0 },
@@ -728,6 +731,18 @@ function cardPrediction<T extends { markets: { group: string; decision: string }
     live: undefined,
     notes: [],
     bookLinks: [],
+  } as T;
+}
+
+function publicBest<T extends { prediction: object }>(best: T | null | undefined): T | null {
+  if (!best) return null;
+  return {
+    ...best,
+    prediction: {
+      ...best.prediction,
+      engineVersion: "BetGPT",
+      tacticalVersion: "BetGPT",
+    },
   } as T;
 }
 
