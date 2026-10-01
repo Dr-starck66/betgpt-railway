@@ -1,5 +1,5 @@
 {
-  "schema": "astra-indexability-release-gate/v1",
+  "schema": "astra-indexability-release-gate/v2",
   "zeroWeakReport": "artifacts/seo/zero-weak-pages.json",
   "sitemapSource": "src/lib/sitemap-urls.ts",
   "reportPath": "artifacts/seo/indexability-release-gate.json",
@@ -67,6 +67,14 @@
       "sitemapSource": "src/lib/sitemap-urls.ts",
       "requiredFragments": [
         "/score-hunter/"
+      ]
+    },
+    {
+      "routePrefix": "/prediction",
+      "sitemapSource": "src/lib/sitemap-urls.ts",
+      "requiredFragments": [
+        "/prediction/",
+        "loadTickets"
       ]
     }
   ]
