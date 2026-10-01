@@ -158,3 +158,16 @@ const NATIONAL_FLAG: Record<string, string> = {
 export function nationalTeamFlag(name: string): string | null {
   return NATIONAL_FLAG[normCountry(name)] ?? null;
 }
+
+export function nationalTeamCountryCode(name: string): string | null {
+  const flag = nationalTeamFlag(name);
+  if (!flag) return null;
+  const regional = [...flag];
+  if (regional.length !== 2) return null;
+  const letters = regional.map((char) => {
+    const point = char.codePointAt(0);
+    if (point === undefined || point < 0x1f1e6 || point > 0x1f1ff) return "";
+    return String.fromCharCode(point - 0x1f1e6 + 65);
+  }).join("");
+  return /^[A-Z]{2}$/.test(letters) ? letters : null;
+}
