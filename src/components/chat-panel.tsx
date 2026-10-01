@@ -113,8 +113,13 @@ function PunchReactionCard({ reaction }: { reaction: PunchReaction }) {
       <img
         src={gif.url}
         alt={gif.alt}
-        loading="lazy"
+        loading="eager"
+        decoding="async"
         referrerPolicy="no-referrer"
+        onError={(event) => {
+          const fallback = "/reactions/astra-fallback.gif?v=4";
+          if (!event.currentTarget.src.endsWith(fallback)) event.currentTarget.src = fallback;
+        }}
         className="max-h-64 w-full max-w-[22rem] rounded-xl border border-line object-contain"
       />
       <figcaption className="mt-2 flex items-center justify-between gap-2">
