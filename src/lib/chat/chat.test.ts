@@ -9,7 +9,7 @@ import type { MatchInput } from "../../engine/types.ts";
 import { extractPunchline } from "./punch.ts";
 import { generateAbsurdInsult, shouldDropAbsurdInsult } from "./absurd-insults.ts";
 import { reactionForPunchline } from "./reaction.ts";
-import { selectDailyChatPick } from "./daily-pick.ts";
+import { selectDailyChatPick, selectDailyDataFallback } from "./daily-pick.ts";
 
 it("normalizes corrupt nested memories instead of crashing the prompt", () => {
   assert.deepEqual(normalizeMemory({ blackBook: null, preferences: 42 }), EMPTY_MEMORY);
@@ -383,6 +383,30 @@ it("daily chat pick falls back to the strongest model 1X2 when bookmaker odds ar
   assert.equal(pick?.label, "1 — Domicile");
   assert.equal(pick?.odds, null);
   assert.equal(pick?.fairOdds, 1.75);
+});
+
+
+it("daily data fallback always returns one standard pick when today's fixtures exist", () => {
+  const match = {
+    id: "m4",
+    home: { name: "Denmark", short: "DEN" },
+    away: { name: "Portugal", short: "POR" },
+    competition: "Ligue des nations",
+    kickoff: "2026-10-01T18:45:00Z",
+    status: "scheduled",
+    formHome: "WL",
+    formAway: "WW",
+  } as MatchInput;
+
+  const pick = selectDailyDataFallback(
+    [match],
+    "2026-10-01T17:30:00Z",
+    false,
+  );
+  assert.equal(pick?.grade, "STANDARD_DATA");
+  assert.equal(pick?.label, "2 — Extérieur");
+  assert.equal(pick?.odds, null);
+  assert.match(pick?.rationale ?? "", /Portugal/i);
 });
 
 it("daily chat pick refuses stale desk data instead of manufacturing a current bet", () => {
