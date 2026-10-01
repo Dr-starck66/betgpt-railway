@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "mode": "ZERO_EXTRA_SPEND_UNTIL_EXPLICIT_OVERRIDE",
+  "defaultBudgetEur": 0,
+  "principles": {
+    "allowExistingPaidSubscriptions": true,
+    "allowFreeTier": true,
+    "allowOpenSource": true,
+    "allowSelfHosted": true,
+    "allowPublicWeb": true,
+    "allowNewPaidSubscriptionByDefault": false,
+    "allowCreditTopUpByDefault": false,
+    "allowPayPerCallCriticalDependencyByDefault": false
+  },
+  "alreadyIncludedProviders": [
+    "github",
+    "railway"
+  ],
+  "forbiddenPackagesWithoutOverride": [
+    "firecrawl",
+    "@mendable/firecrawl-js",
+    "apify",
+    "serpapi",
+    "brightdata",
+    "scrapingbee",
+    "zenrows",
+    "diffbot"
+  ],
+  "forbiddenEnvPrefixesWithoutOverride": [
+    "FIRECRAWL_",
+    "APIFY_",
+    "SERPAPI_",
+    "BRIGHTDATA_",
+    "SCRAPINGBEE_",
+    "ZENROWS_",
+    "DIFFBOT_"
+  ],
+  "forbiddenSourceMarkersWithoutOverride": [
+    "buy credits",
+    "buy more credits",
+    "top up credits",
+    "top-up credits",
+    "purchase credits",
+    "credit pack"
+  ],
+  "explicitPaidOverrides": [],
+  "fallbackOrder": [
+    "already_included",
+    "public_web",
+    "free_tier",
+    "open_source",
+    "self_hosted",
+    "degrade_gracefully"
+  ],
+  "failurePolicy": "NEVER_REQUIRE_PAYMENT_WITHOUT_EXPLICIT_USER_OVERRIDE"
+}
