@@ -632,7 +632,7 @@ function composeNews(
     : [
         {
           h3: `${leadSignal.sourceName} : l'élément principal publié`,
-          body: leadDetail || mainClaim,
+          body: cleanDetail(leadSignal) || mainClaim,
         },
       ];
 
