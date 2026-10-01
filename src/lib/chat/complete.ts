@@ -19,6 +19,56 @@ function localReply(_last: string, desk: string, _mode: PersonalityMode): string
   return desk;
 }
 
+const GROUNDING_WORD_EXCEPTIONS = new Set([
+  "BetGPT", "ROI", "BTTS", "EV", "CLV", "BET", "WATCH", "NO_BET",
+  "Je", "Tu", "Il", "Elle", "Nous", "Vous", "Ils", "Elles",
+  "Le", "La", "Les", "Un", "Une", "Des", "Du", "De", "Pour", "Si",
+  "Aucun", "Aucune", "Cette", "Ce", "Ces", "Mon", "Ton", "Votre",
+]);
+
+function normalizeGroundingText(text: string): string {
+  return text
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[’]/g, "'")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+export function hasUnsupportedGroundedClaim(answer: string, source: string): boolean {
+  const normalizedSource = normalizeGroundingText(source);
+  const sensitivePatterns = [
+    /\b\d{1,2}\s*[hH:]\s*\d{2}\b/g,
+    /\b\d{1,2}[/.]\d{1,2}(?:[/.]\d{2,4})?\b/g,
+    /\b\d{1,2}\s*[-–]\s*\d{1,2}\b/g,
+    /\b\d+(?:[.,]\d+)?\s*%\b/g,
+    /\b\d+[.,]\d{1,3}\b/g,
+  ];
+  for (const pattern of sensitivePatterns) {
+    for (const match of answer.matchAll(pattern)) {
+      const fact = normalizeGroundingText(match[0]).replace(/\s+/g, "");
+      const haystack = normalizedSource.replace(/\s+/g, "");
+      if (fact && !haystack.includes(fact)) return true;
+    }
+  }
+
+  const properWords = answer.match(/\b[\p{Lu}][\p{L}'’.\-]{2,}\b/gu) ?? [];
+  for (const word of properWords) {
+    if (GROUNDING_WORD_EXCEPTIONS.has(word)) continue;
+    const key = normalizeGroundingText(word);
+    if (key && !normalizedSource.includes(key)) return true;
+  }
+  return false;
+}
+
+function groundedFallback(desk: string): string {
+  if (desk.includes("Aucune équipe précisément reconnue dans ta question.")) {
+    return "Je n’ai pas de donnée vérifiée correspondant précisément à l’équipe ou au match demandé dans les données disponibles. Je préfère ne pas inventer un adversaire, une date, une cote ou un score.";
+  }
+  return desk;
+}
+
 async function callAstraRouter(
   base: string,
   token: string,
@@ -129,7 +179,13 @@ export async function completeChat(
   if (routerBase && routerToken) {
     try {
       const out = await callAstraRouter(routerBase, routerToken, system, history, mode);
-      if (out.ok) return { ok: true, text: out.text };
+      if (out.ok) {
+        const source = `${system}\n\n${history.map((m) => m.content).join("\n")}`;
+        if (hasUnsupportedGroundedClaim(out.text, source)) {
+          return { ok: true, text: groundedFallback(desk) };
+        }
+        return { ok: true, text: out.text };
+      }
     } catch {
       /* fall through to optional cloud provider, then factual local desk */
     }
@@ -139,7 +195,13 @@ export async function completeChat(
   if (apiKey) {
     try {
       const out = await callXai(apiKey, system, history, mode);
-      if (out.ok) return { ok: true, text: out.text };
+      if (out.ok) {
+        const source = `${system}\n\n${history.map((m) => m.content).join("\n")}`;
+        if (hasUnsupportedGroundedClaim(out.text, source)) {
+          return { ok: true, text: groundedFallback(desk) };
+        }
+        return { ok: true, text: out.text };
+      }
     } catch {
       /* fall through to factual local desk */
     }
