@@ -80,7 +80,7 @@ function getPath(value, dotted) {
 
 async function cloudDns(hostname) {
   const started = performance.now();
-  const result = { hostname, a: [], aaaa: [], pass: false, latencyMs: 0, errors: [] };
+  const result = { hostname, a: [], aaaa: [], cname: [], ns: [], pass: false, latencyMs: 0, errors: [] };
   try {
     result.a = await dns.resolve4(hostname);
   } catch (error) {
@@ -91,6 +91,18 @@ async function cloudDns(hostname) {
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     if (!/ENODATA|ENOTFOUND/i.test(message)) result.errors.push(`AAAA: ${message}`);
+  }
+  try {
+    result.cname = await dns.resolveCname(hostname);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    if (!/ENODATA|ENOTFOUND|ENOTIMP/i.test(message)) result.errors.push(`CNAME: ${message}`);
+  }
+  try {
+    result.ns = await dns.resolveNs(hostname);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    if (!/ENODATA|ENOTFOUND|ENOTIMP/i.test(message)) result.errors.push(`NS: ${message}`);
   }
   result.latencyMs = Math.round(performance.now() - started);
   result.pass = result.a.length > 0 || result.aaaa.length > 0;
@@ -245,10 +257,10 @@ const summary = [
   "",
   ...results.flatMap((target) => [
     `## ${target.pass ? "✅" : "❌"} ${target.id} — ${target.provider}`,
-    `- DNS cloud: ${target.dns.pass ? "PASS" : "FAIL"} · A=${target.dns.a.join(",") || "—"} · AAAA=${target.dns.aaaa.join(",") || "—"} · ${target.dns.latencyMs}ms`,
+    `- DNS cloud: ${target.dns.pass ? "PASS" : "FAIL"} · A=${target.dns.a.join(",") || "—"} · AAAA=${target.dns.aaaa.join(",") || "—"} · CNAME=${target.dns.cname.join(",") || "—"} · NS=${target.dns.ns.join(",") || "—"} · ${target.dns.latencyMs}ms`,
     ...target.probes.map(
       (probe) =>
-        `- ${probe.pass ? "PASS" : "FAIL"} · ${probe.method} ${new URL(probe.url).pathname} · HTTP ${probe.status || "ERR"} · ${probe.latencyMs}ms${probe.failures.length ? ` · ${probe.failures.join("; ")}` : ""}`,
+        `- ${probe.pass ? "PASS" : "FAIL"} · ${probe.method} ${new URL(probe.url).pathname} · HTTP ${probe.status || "ERR"} · ${probe.latencyMs}ms · server=${probe.headers.server || "—"} · via=${probe.headers.via || "—"} · railway=${probe.headers.railwayRequestId || "—"} · vercel=${probe.headers.vercelId || "—"} · netlify=${probe.headers.netlifyRequestId || "—"}${probe.failures.length ? ` · ${probe.failures.join("; ")}` : ""}`,
     ),
     "",
   ]),
