@@ -22,6 +22,7 @@
     "npm run test:module-resolution",
     "npm run test:results-watchdog",
     "npm run test:flags",
+    "npm run test:model-max",
     "npm run news",
     "npm run social:audit",
     "npm run build"
