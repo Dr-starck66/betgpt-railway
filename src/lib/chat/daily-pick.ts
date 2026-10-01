@@ -8,15 +8,16 @@ export type ChatDailyPick = {
   kickoff: string;
   label: string;
   odds: number | null;
-  fairOdds: number;
+  fairOdds: number | null;
   book?: string;
   modelProb: number;
   ev: number;
   opportunityScore: number;
   decision: MarketQuote["decision"];
   premium: boolean;
-  grade: "PREMIUM" | "STANDARD" | "STANDARD_FALLBACK" | "STANDARD_MODEL";
+  grade: "PREMIUM" | "STANDARD" | "STANDARD_FALLBACK" | "STANDARD_MODEL" | "STANDARD_DATA";
   limitation?: string;
+  rationale?: string;
 };
 
 function parisDayKey(value: string | number | Date): string {
@@ -186,6 +187,75 @@ export function selectDailyChatPick(
   };
 }
 
+
+function formPoints(form?: string): number {
+  const chars = String(form ?? "").toUpperCase().replace(/[^WDL]/g, "").slice(-5);
+  if (!chars) return 0;
+  return [...chars].reduce((sum, c) => sum + (c === "W" ? 3 : c === "D" ? 1 : 0), 0);
+}
+
+export function selectDailyDataFallback(
+  matches: MatchInput[],
+  asOf?: string,
+  stale = false,
+): ChatDailyPick | null {
+  if (stale) return null;
+
+  const reference = asOf && Number.isFinite(Date.parse(asOf)) ? new Date(asOf) : new Date();
+  const referenceMs = reference.getTime();
+  const todayKey = parisDayKey(reference);
+  const upcoming = matches
+    .filter((m) => m.status === "scheduled" && Number.isFinite(Date.parse(m.kickoff)) && Date.parse(m.kickoff) >= referenceMs)
+    .sort((a, b) => a.kickoff.localeCompare(b.kickoff));
+  const today = upcoming.filter((m) => parisDayKey(m.kickoff) === todayKey);
+  const scope = (today.length ? today : upcoming).slice(0, 20);
+  if (!scope.length) return null;
+
+  const ranked = scope
+    .map((match) => {
+      const h = formPoints(match.formHome);
+      const a = formPoints(match.formAway);
+      const hasForm = Boolean(match.formHome || match.formAway);
+      const diff = h - a;
+      const side = diff >= 0 ? "home" : "away";
+      const strength = Math.abs(diff) + (hasForm ? Math.max(h, a) * 0.15 : 0);
+      return { match, h, a, diff, side, strength, hasForm };
+    })
+    .sort((x, y) => y.strength - x.strength || x.match.kickoff.localeCompare(y.match.kickoff));
+
+  const best = ranked[0];
+  if (!best) return null;
+
+  const homePick = best.side === "home";
+  const chosen = homePick ? best.match.home.name : best.match.away.name;
+  const opponent = homePick ? best.match.away.name : best.match.home.name;
+  const confidence = best.hasForm
+    ? Math.max(0.5, Math.min(0.62, 0.5 + Math.abs(best.diff) * 0.012))
+    : 0.5;
+
+  return {
+    matchId: best.match.id,
+    home: best.match.home.name,
+    away: best.match.away.name,
+    competition: best.match.competition,
+    kickoff: best.match.kickoff,
+    label: homePick ? "1 — Domicile" : "2 — Extérieur",
+    odds: null,
+    fairOdds: null,
+    modelProb: confidence,
+    ev: 0,
+    opportunityScore: 0,
+    decision: "WATCH",
+    premium: false,
+    grade: "STANDARD_DATA",
+    rationale: best.hasForm
+      ? `Forme récente disponible : ${chosen} ${homePick ? best.match.formHome ?? "n/a" : best.match.formAway ?? "n/a"} contre ${opponent} ${homePick ? best.match.formAway ?? "n/a" : best.match.formHome ?? "n/a"}.`
+      : "Aucun signal de forme suffisamment riche : choix de secours basé sur l'affiche disponible, sans prétendre à une value.",
+    limitation:
+      "Choix de secours conversationnel uniquement : pas de cote bookmaker exploitable et pas de validation Premium. À vérifier avant toute mise réelle.",
+  };
+}
+
 export function renderDailyChatPick(pick: ChatDailyPick): string {
   const level =
     pick.grade === "PREMIUM"
@@ -194,16 +264,13 @@ export function renderDailyChatPick(pick: ChatDailyPick): string {
         ? "STANDARD"
         : pick.grade === "STANDARD_FALLBACK"
           ? "STANDARD — fallback modèle, non premium"
-          : "STANDARD MODÈLE — non premium, cote live indisponible";
+          : pick.grade === "STANDARD_MODEL"\n            ? "STANDARD MODÈLE — non premium, cote live indisponible"\n            : "STANDARD DATA — non premium, choix de secours";
   const prob = `${Math.round(pick.modelProb * 100)} %`;
   const oddsLine =
     pick.odds != null
       ? `Cote disponible : ${pick.odds.toFixed(2)} chez ${pick.book || "bookmaker"}`
-      : `Cote disponible : indisponible · cote juste modèle : ${pick.fairOdds.toFixed(2)}`;
-  const evLine =
-    pick.odds != null
-      ? `EV modèle : ${pick.ev >= 0 ? "+" : ""}${(pick.ev * 100).toFixed(1)} %`
-      : "EV modèle : non validable sans cote bookmaker disponible.";
+      : pick.fairOdds != null\n        ? `Cote disponible : indisponible · cote juste modèle : ${pick.fairOdds.toFixed(2)}`\n        : "Cote disponible : indisponible · aucune cote juste calculée";
+  const evLine =\n    pick.odds != null\n      ? `EV modèle : ${pick.ev >= 0 ? "+" : ""}${(pick.ev * 100).toFixed(1)} %`\n      : pick.grade === "STANDARD_DATA"\n        ? "EV modèle : non calculée pour ce fallback data."\n        : "EV modèle : non validable sans cote bookmaker disponible.";
 
   return [
     "SÉLECTION AUTOMATIQUE BETGPT — À UTILISER DANS LA RÉPONSE",
@@ -211,9 +278,7 @@ export function renderDailyChatPick(pick: ChatDailyPick): string {
     `Match : ${pick.home} – ${pick.away} · ${pick.competition}`,
     `Pari à prendre : ${pick.label}`,
     oddsLine,
-    `Probabilité modèle : ${prob}`,
-    evLine,
-    pick.limitation ? `Limite principale : ${pick.limitation}` : "",
+    pick.grade === "STANDARD_DATA" ? `Indice data : ${prob}` : `Probabilité modèle : ${prob}`,\n    evLine,\n    pick.rationale ? `Pourquoi : ${pick.rationale}` : "",\n    pick.limitation ? `Limite principale : ${pick.limitation}` : "",
     "Instruction : réponds directement avec cette sélection. Ne demande jamais à l'utilisateur de fournir les affiches si ce bloc existe.",
   ]
     .filter(Boolean)
