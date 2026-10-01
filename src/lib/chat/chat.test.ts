@@ -246,6 +246,7 @@ it("reaction engine matches animal absurdity instead of a random visual", () => 
   );
   assert.ok(reaction.emojis.includes("🐦"));
   assert.match(reaction.gifQuery, /pigeon/i);
+  assert.match(reaction.gifFallback, /astra-animal\\.gif/);
 });
 
 
