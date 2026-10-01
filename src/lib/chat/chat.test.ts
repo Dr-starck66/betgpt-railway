@@ -123,3 +123,17 @@ it("still lists upcoming matches for an explicit general schedule request", () =
   const text = localMatchFacts("Quel est le programme des prochaines rencontres ?", matches, "2026-10-01T14:00:00Z");
   assert.match(text, /Estonie – Luxembourg/);
 });
+
+
+it("does not confuse French pronouns with team short codes", () => {
+  const matches = [{
+    home: { name: "Monza", short: "MON" },
+    away: { name: "Cagliari", short: "CAG" },
+    competition: "Serie A",
+    kickoff: "2099-10-19T18:30:00Z",
+    status: "scheduled",
+  }] as MatchInput[];
+  const text = localMatchFacts("Analyse mon pari sans données de match.", matches, "2026-10-01T14:00:00Z");
+  assert.match(text, /Aucune équipe précisément reconnue/);
+  assert.doesNotMatch(text, /Monza|Cagliari/);
+});
