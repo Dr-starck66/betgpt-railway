@@ -80,6 +80,7 @@
             "astra-results-watchdog/v1",
             "\"status\":\"PASS\"",
             "\"FotMob\"",
+            "\"ESPN\"",
             "\"BetGPT archive\"",
             "\"BetGPT desk\""
           ]
@@ -87,5 +88,5 @@
       }
     }
   ],
-  "verificationRevision": "betgpt-1630940c4542d816fc73ef72f129c6c1166e74c2-railway-e04e535f"
+  "verificationRevision": "ASTRA-CLOUD-EGRESS-V4-RESULTS-WATCHDOG-MULTISOURCE-2026-10-01"
 }
