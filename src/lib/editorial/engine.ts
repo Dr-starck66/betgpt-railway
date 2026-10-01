@@ -296,8 +296,8 @@ function hashOf(match: EditorialMatch | null, model?: EditorialModel): string {
   ]);
 }
 
-function paragraph(h2: string, body: string): { h2: string; body: string } {
-  return { h2, body };
+function paragraph(h2: string, body: string, sourceIds: string[] = []): { h2: string; body: string; sourceIds?: string[] } {
+  return sourceIds.length ? { h2, body, sourceIds: [...new Set(sourceIds)] } : { h2, body };
 }
 
 function composeMatch(
@@ -353,6 +353,7 @@ function composeMatch(
           ? "Horaire, forme et contexte compétitif"
           : "Les dernières données confirmées avant le coup d'envoi",
     `${match.home.name} – ${match.away.name} figure au calendrier de ${match.competition}${match.venue ? `, au ${match.venue}` : ""}. Le coup d'envoi est indiqué ${kickLabel}.${score ? ` Le score actuellement enregistré est ${score}${match.clock ? ` (${match.clock})` : ""}.` : ""} ${formBits ? `Les séries de forme disponibles sont : ${formBits}.` : "Les données de forme ne sont pas suffisamment complètes pour être présentées comme un fait."}`,
+    [`cal-${match.id}`],
   );
   const context = paragraph(
     slot === "morning"
@@ -361,6 +362,7 @@ function composeMatch(
         ? "Ce que disent les chiffres et les absences signalées"
         : "Cotes, absences et signaux à vérifier avant le match",
     `${odds ? odds.text.replace(/Le desk observe/g, "Les cotes 1N2 disponibles indiquent").replace(/sur le desk BetGPT/g, "dans les données disponibles") : "Aucune cote 1N2 suffisamment fiable n'est disponible pour cette affiche."} ${absences.text.replace(/BetGPT ne dispose pas, dans ce signal,/g, "Les données disponibles ne contiennent").replace(/Signal d'absence présent dans le desk, au-dessus du seuil de confiance interne :/g, "Des absences sont signalées avec un niveau de confiance suffisant :").replace(/Tant que le club ne figure pas comme source primaire, BetGPT ne parle pas de forfait officiel\./g, "Elles ne sont pas présentées comme officielles sans confirmation primaire.")} ${modelBit ? modelBit.text : "Aucune probabilité chiffrée n'est ajoutée lorsqu'un modèle exploitable n'est pas disponible."}`,
+    [`cal-${match.id}`, absences.source.id, ...(odds ? [odds.source.id] : []), ...(modelBit ? [modelBit.source.id] : [])],
   );
   const unknown = paragraph(
     slot === "morning"
@@ -369,6 +371,7 @@ function composeMatch(
         ? "Les confirmations qui peuvent encore changer la lecture du match"
         : "Ce qui peut encore évoluer juste avant le coup d'envoi",
     `Les compositions, forfaits, changements d'horaire et autres informations de dernière minute ne sont publiés que lorsqu'ils sont présents dans une source suffisamment fiable. La fiche du match reste la référence BetGPT pour le score, les statistiques et les éventuelles mises à jour factuelles.`,
+    [`cal-${match.id}`, absences.source.id],
   );
   const sources = [...coreSources(match, match.competition), absences.source];
   if (odds) sources.push(odds.source);
@@ -556,9 +559,10 @@ function composeNews(
       return tier(b) - tier(a) || b.publishedAt.localeCompare(a.publishedAt);
     });
   const leadSignal = ranked[0]!;
+  const citedSignals = ranked.slice(0, 6);
   const h1 = cleanNewsTitle(cluster.title, leadSignal.sourceName);
   const corroborated = cluster.distinctSources >= 2;
-  const sources: EditorialSource[] = ranked.slice(0, 6).map((signal) => ({
+  const sources: EditorialSource[] = citedSignals.map((signal) => ({
     id: signal.id,
     label: signal.sourceName,
     status: newsSourceStatus(signal, corroborated),
@@ -566,6 +570,8 @@ function composeNews(
     url: signal.url,
   }));
   const contextMatch = matchingContextMatch(cluster, matches);
+  if (contextMatch) sources.push(coreSources(contextMatch, contextMatch.competition)[0]!);
+  const contextSourceId = contextMatch ? `cal-${contextMatch.id}` : null;
   const entities = cluster.entities.length ? cluster.entities : contextMatch ? [contextMatch.home.name, contextMatch.away.name] : [];
   const mainClaim = cleanNewsTitle(leadSignal.title, leadSignal.sourceName);
   const subject = entities.length ? entities.join(", ") : "le sujet";
@@ -580,14 +586,14 @@ function composeNews(
     return raw.length > 720 ? `${raw.slice(0, 717).trimEnd()}…` : raw;
   };
 
-  const usefulSignals = ranked
+  const usefulSignals = citedSignals
     .filter((signal) => cleanDetail(signal).length >= 70)
     .slice(0, 5);
   const detailLines = usefulSignals.map(
     (signal) =>
       `${signal.sourceName}, ${formatParis(signal.publishedAt)} : ${cleanDetail(signal)}`,
   );
-  const chronology = ranked
+  const chronology = citedSignals
     .slice()
     .sort((a, b) => a.publishedAt.localeCompare(b.publishedAt))
     .slice(0, 6)
@@ -597,9 +603,9 @@ function composeNews(
     )
     .join(" ");
 
-  const officialSignals = ranked.filter((signal) => signal.sourceTier === "OFFICIAL");
-  const tier1Signals = ranked.filter((signal) => signal.sourceTier === "TIER1");
-  const otherSignals = ranked.filter((signal) => signal.sourceTier === "OTHER");
+  const officialSignals = citedSignals.filter((signal) => signal.sourceTier === "OFFICIAL");
+  const tier1Signals = citedSignals.filter((signal) => signal.sourceTier === "TIER1");
+  const otherSignals = citedSignals.filter((signal) => signal.sourceTier === "OTHER");
 
   const contextLine = contextMatch
     ? `Le calendrier BetGPT rattache ce sujet à ${contextMatch.home.name} – ${contextMatch.away.name}, en ${contextMatch.competition}, avec un coup d'envoi ${formatParis(contextMatch.kickoff)}. Ce match fournit un repère sportif concret pour mesurer les conséquences de l'information sans inventer de date de retour, de composition ou de disponibilité.`
@@ -616,26 +622,32 @@ function composeNews(
     paragraph(
       "Le fait nouveau qui fait basculer le dossier",
       `${leadSignal.sourceName} rapporte ${mainClaim}. ${material ? "Ce nouvel élément modifie l'état du dossier par rapport aux informations qui circulaient auparavant." : "L'information devient pertinente parce qu'elle précise un dossier déjà suivi, sans transformer une hypothèse en certitude."} ${corroborated ? `Au total, ${cluster.distinctSources} rédactions ou sources distinctes alimentent ce cluster d'actualité.` : "À ce stade, une seule source forte porte encore l'essentiel du fait nouveau."} Les détails complémentaires sont attribués séparément dans la section suivante afin d'éviter de transformer une reprise en confirmation indépendante.`.replace(/\s+/g, " ").trim(),
+      [leadSignal.id],
     ),
     paragraph(
       "Ce que disent précisément les différentes sources",
       `${sourceReading} Cette présentation reste volontairement attribuée source par source : lorsque deux médias racontent le même épisode avec des détails différents, BetGPT ne fusionne pas automatiquement ces détails en un fait unique. Une information n'est élevée au rang de fait établi que si son niveau de source le justifie ou si plusieurs références indépendantes convergent réellement.`,
+      usefulSignals.length ? usefulSignals.map((signal) => signal.id) : [leadSignal.id],
     ),
     paragraph(
       "La chronologie des publications",
       `${chronology || `${leadSignal.sourceName} publie le premier signal exploitable ${formatParis(leadSignal.publishedAt)}.`} Cette chronologie permet de distinguer le fait initial, les reprises et les éventuelles confirmations plus tardives. Elle évite surtout de présenter comme simultanées des informations qui ont pu évoluer au fil de la journée.`,
+      citedSignals.map((signal) => signal.id),
     ),
     paragraph(
       contextMatch ? "Le repère sportif concret autour de cette information" : "Pourquoi BetGPT ne force pas un contexte de match",
       `${contextLine} ${entities.length ? `Les entités explicitement détectées dans les sources sont : ${entities.join(", ")}.` : "Aucune entité sportive supplémentaire n'est ajoutée à partir de mémoire ou de suppositions."}`,
+      contextSourceId ? [contextSourceId] : [leadSignal.id],
     ),
     paragraph(
       "Ce qui est établi, corroboré ou encore fragile",
       `Le cluster contient ${officialSignals.length} source${officialSignals.length > 1 ? "s" : ""} officielle${officialSignals.length > 1 ? "s" : ""}, ${tier1Signals.length} source${tier1Signals.length > 1 ? "s" : ""} de premier niveau journalistique et ${otherSignals.length} autre${otherSignals.length > 1 ? "s" : ""} source${otherSignals.length > 1 ? "s" : ""}. ${officialSignals.length ? "Les éléments issus d'une source officielle sont distingués des reprises de presse." : "Aucune déclaration officielle n'est ajoutée artificiellement si elle n'existe pas dans le flux."} ${corroborated ? "Les points communs entre plusieurs sources sont présentés comme corroborés ; les détails isolés restent attribués." : "Les détails non corroborés restent explicitement attachés à leur source d'origine."}`,
+      citedSignals.map((signal) => signal.id),
     ),
     paragraph(
       "Le prochain élément qui permettra de mettre l'article à jour",
       `${newsConsequenceLine(`${leadSignal.title} ${leadSignal.description ?? ""}`, subject)} BetGPT ne republie pas une nouvelle dépêche pour répéter le même état de fait : une mise à jour exige un changement matériel, une confirmation nouvelle ou une donnée sportive directement vérifiable.`,
+      citedSignals.slice(0, 2).map((signal) => signal.id),
     ),
   ];
 
