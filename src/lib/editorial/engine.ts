@@ -558,7 +558,7 @@ function composeNews(
   const leadSignal = ranked[0]!;
   const h1 = cleanNewsTitle(cluster.title, leadSignal.sourceName);
   const corroborated = cluster.distinctSources >= 2;
-  const sources: EditorialSource[] = ranked.slice(0, 5).map((signal) => ({
+  const sources: EditorialSource[] = ranked.slice(0, 6).map((signal) => ({
     id: signal.id,
     label: signal.sourceName,
     status: newsSourceStatus(signal, corroborated),
@@ -568,33 +568,77 @@ function composeNews(
   const contextMatch = matchingContextMatch(cluster, matches);
   const entities = cluster.entities.length ? cluster.entities : contextMatch ? [contextMatch.home.name, contextMatch.away.name] : [];
   const mainClaim = cleanNewsTitle(leadSignal.title, leadSignal.sourceName);
-  const supportSignals = ranked.slice(1, 3);
-  const supportNames = [...new Set(supportSignals.map((signal) => signal.sourceName))];
-  const supportLine = supportSignals.length
-    ? `${supportNames.join(" et ")} ont publié des informations portant sur le même fait. Les détails retenus ici restent ceux que les références concordantes permettent d'établir.`
-    : `À ce stade, ${leadSignal.sourceName} reste la référence journalistique principale pour ce fait précis.`;
-  const contextLine = contextMatch
-    ? `Le prochain repère sportif est ${contextMatch.home.name} – ${contextMatch.away.name}, programmé en ${contextMatch.competition} avec un coup d'envoi ${formatParis(contextMatch.kickoff)}. Ce rendez-vous permet de mesurer rapidement les conséquences concrètes de l'information.`
-    : `Aucune rencontre précise du calendrier n'est nécessaire pour comprendre ce développement : les prochaines déclarations et décisions officielles permettront d'en préciser la portée.`;
   const subject = entities.length ? entities.join(", ") : "le sujet";
   const material = cluster.signals.some((signal) =>
     isMaterialDevelopment(`${signal.title} ${signal.description ?? ""}`),
   );
-  const lead = `${mainClaim}. ${leadSignal.sourceName} a publié l'information ${formatParis(leadSignal.publishedAt)}. ${corroborated ? `Le même fait est repris par ${cluster.distinctSources} sources distinctes.` : "La formulation reste attribuée à cette source tant qu'une confirmation indépendante n'est pas disponible."}`;
+
+  const cleanDetail = (signal: EditorialNewsSignal): string => {
+    const raw = (signal.description || cleanNewsTitle(signal.title, signal.sourceName))
+      .replace(/\s+/g, " ")
+      .trim();
+    return raw.length > 720 ? `${raw.slice(0, 717).trimEnd()}…` : raw;
+  };
+
+  const usefulSignals = ranked
+    .filter((signal) => cleanDetail(signal).length >= 70)
+    .slice(0, 5);
+  const detailLines = usefulSignals.map(
+    (signal) =>
+      `${signal.sourceName}, ${formatParis(signal.publishedAt)} : ${cleanDetail(signal)}`,
+  );
+  const chronology = ranked
+    .slice()
+    .sort((a, b) => a.publishedAt.localeCompare(b.publishedAt))
+    .slice(0, 6)
+    .map(
+      (signal) =>
+        `${formatParis(signal.publishedAt)} — ${signal.sourceName} publie « ${cleanNewsTitle(signal.title, signal.sourceName)} ».`,
+    )
+    .join(" ");
+
+  const officialSignals = ranked.filter((signal) => signal.sourceTier === "OFFICIAL");
+  const tier1Signals = ranked.filter((signal) => signal.sourceTier === "TIER1");
+  const otherSignals = ranked.filter((signal) => signal.sourceTier === "OTHER");
+
+  const contextLine = contextMatch
+    ? `Le calendrier BetGPT rattache ce sujet à ${contextMatch.home.name} – ${contextMatch.away.name}, en ${contextMatch.competition}, avec un coup d'envoi ${formatParis(contextMatch.kickoff)}. Ce match fournit un repère sportif concret pour mesurer les conséquences de l'information sans inventer de date de retour, de composition ou de disponibilité.`
+    : `Aucune rencontre précise du calendrier BetGPT n'est suffisamment reliée à ce sujet pour servir de prétexte à une projection sportive. L'article reste donc centré sur les faits publiés par les sources, sans fabriquer de prochain match ni de calendrier de retour.`;
+
+  const sourceReading = detailLines.length
+    ? detailLines.join(" ")
+    : `${leadSignal.sourceName} fournit pour l'instant l'élément factuel principal : ${mainClaim}. Les autres signaux disponibles ne contiennent pas assez de détails distincts pour ajouter un récit supplémentaire sans répétition.`;
+
+  const leadDetail = cleanDetail(leadSignal);
+  const lead = `${mainClaim}. ${leadSignal.sourceName} a publié cette information ${formatParis(leadSignal.publishedAt)}. ${corroborated ? `Le dossier est repris par ${cluster.distinctSources} sources distinctes.` : "La formulation reste attribuée à cette source tant qu'une corroboration indépendante n'est pas disponible."} ${leadDetail && leadDetail !== mainClaim ? leadDetail : ""}`.replace(/\s+/g, " ").trim();
+
   const paragraphs = [
     paragraph(
-      "Ce que l'on sait",
-      `${leadSignal.sourceName} rapporte : ${mainClaim}. ${supportLine} ${cluster.official ? "Une référence officielle figure également parmi les sources consultées." : "Aucune confirmation officielle n'est présentée comme acquise à ce stade."}`,
+      "Le fait nouveau qui fait basculer le dossier",
+      `${leadSignal.sourceName} rapporte ${mainClaim}. ${leadDetail && leadDetail !== mainClaim ? leadDetail : ""} ${material ? "Ce nouvel élément modifie l'état du dossier par rapport aux informations qui circulaient auparavant." : "L'information devient pertinente parce qu'elle précise un dossier déjà suivi, sans transformer une hypothèse en certitude."} ${corroborated ? `Au total, ${cluster.distinctSources} rédactions ou sources distinctes alimentent ce cluster d'actualité.` : "À ce stade, une seule source forte porte encore l'essentiel du fait nouveau."}`.replace(/\s+/g, " ").trim(),
     ),
     paragraph(
-      "Pourquoi cette information compte maintenant",
-      `${contextLine} ${material ? "Il s'agit d'un élément nouveau susceptible de modifier immédiatement la situation sportive ou institutionnelle." : "L'intérêt de cette information dépend désormais de ses conséquences concrètes et des confirmations qui suivront."}`,
+      "Ce que disent précisément les différentes sources",
+      `${sourceReading} Cette présentation reste volontairement attribuée source par source : lorsque deux médias racontent le même épisode avec des détails différents, BetGPT ne fusionne pas automatiquement ces détails en un fait unique. Une information n'est élevée au rang de fait établi que si son niveau de source le justifie ou si plusieurs références indépendantes convergent réellement.`,
     ),
     paragraph(
-      "Ce qu'il faut surveiller ensuite",
-      newsConsequenceLine(`${leadSignal.title} ${leadSignal.description ?? ""}`, subject),
+      "La chronologie des publications",
+      `${chronology || `${leadSignal.sourceName} publie le premier signal exploitable ${formatParis(leadSignal.publishedAt)}.`} Cette chronologie permet de distinguer le fait initial, les reprises et les éventuelles confirmations plus tardives. Elle évite surtout de présenter comme simultanées des informations qui ont pu évoluer au fil de la journée.`,
+    ),
+    paragraph(
+      contextMatch ? "Le repère sportif concret autour de cette information" : "Pourquoi BetGPT ne force pas un contexte de match",
+      `${contextLine} ${entities.length ? `Les entités explicitement détectées dans les sources sont : ${entities.join(", ")}.` : "Aucune entité sportive supplémentaire n'est ajoutée à partir de mémoire ou de suppositions."}`,
+    ),
+    paragraph(
+      "Ce qui est établi, corroboré ou encore fragile",
+      `Le cluster contient ${officialSignals.length} source${officialSignals.length > 1 ? "s" : ""} officielle${officialSignals.length > 1 ? "s" : ""}, ${tier1Signals.length} source${tier1Signals.length > 1 ? "s" : ""} de premier niveau journalistique et ${otherSignals.length} autre${otherSignals.length > 1 ? "s" : ""} source${otherSignals.length > 1 ? "s" : ""}. ${officialSignals.length ? "Les éléments issus d'une source officielle sont distingués des reprises de presse." : "Aucune déclaration officielle n'est ajoutée artificiellement si elle n'existe pas dans le flux."} ${corroborated ? "Les points communs entre plusieurs sources sont présentés comme corroborés ; les détails isolés restent attribués." : "Les détails non corroborés restent explicitement attachés à leur source d'origine."}`,
+    ),
+    paragraph(
+      "Le prochain élément qui permettra de mettre l'article à jour",
+      `${newsConsequenceLine(`${leadSignal.title} ${leadSignal.description ?? ""}`, subject)} BetGPT ne republie pas une nouvelle dépêche pour répéter le même état de fait : une mise à jour exige un changement matériel, une confirmation nouvelle ou une donnée sportive directement vérifiable.`,
     ),
   ];
+
   const links = contextMatch ? deskLinks(contextMatch, contextMatch.competition) : deskLinks(null, "Football");
   const publishedAt = open ? when : null;
   return {
