@@ -1,15 +1,29 @@
-import { existsSync } from "node:fs";
+import { existsSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 const SRC = join(dirname(fileURLToPath(import.meta.url)), "..", "src");
 
-function withExt(base) {
-  if (existsSync(base) && !base.endsWith("/")) return base;
-  for (const ext of [".ts", ".tsx", ".js", ".mjs"]) {
-    if (existsSync(base + ext)) return base + ext;
+function isFile(file) {
+  try {
+    return existsSync(file) && statSync(file).isFile();
+  } catch {
+    return false;
   }
-  if (existsSync(join(base, "index.ts"))) return join(base, "index.ts");
+}
+
+function withExt(base) {
+  // Prefer concrete files before directories. This prevents Node ESM from
+  // resolving "@/lib/seo" to the sibling directory "seo/" when "seo.ts"
+  // is the intended module.
+  if (isFile(base)) return base;
+  for (const ext of [".ts", ".tsx", ".js", ".mjs"]) {
+    if (isFile(base + ext)) return base + ext;
+  }
+  for (const indexFile of ["index.ts", "index.tsx", "index.js", "index.mjs"]) {
+    const candidate = join(base, indexFile);
+    if (isFile(candidate)) return candidate;
+  }
   return base;
 }
 
