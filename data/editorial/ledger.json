@@ -401,6 +401,10 @@
     },
     "related": [
       {
+        "href": "/actualites/france-italie-ligue-des-nations-2026-10-02",
+        "title": "France–Italie : horaire, forme, enjeu du groupe et ce qu’il faut savoir avant le choc"
+      },
+      {
         "href": "/actualites/azerbaijan-liechtenstein-postmatch-2026-10-01",
         "title": "Azerbaijan – Liechtenstein : 0–0, résultat et faits du match"
       }
@@ -544,6 +548,10 @@
       "credit": "Illustration libre de droits (Unsplash ou Pexels), recadrée par BetGPT en 1200×675. Ce n'est pas une photo du match cité."
     },
     "related": [
+      {
+        "href": "/actualites/france-italie-ligue-des-nations-2026-10-02",
+        "title": "France–Italie : horaire, forme, enjeu du groupe et ce qu’il faut savoir avant le choc"
+      },
       {
         "href": "/actualites/equipe-de-france-dembele-est-il-le-leader-d-attaque-2026-10-01",
         "title": "Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ?"
@@ -783,5 +791,220 @@
     "sourceChanges": [],
     "factHash": "manual-negreira-uefa-real-barca-2026-10-01-v2",
     "keywords": "affaire Negreira, UEFA, Real Madrid, FC Barcelone, Barça, enquête UEFA, La Liga"
+  },
+  {
+    "id": "manual-2026-10-02-france-italie-nations-league",
+    "slug": "france-italie-ligue-des-nations-2026-10-02",
+    "slot": "evening",
+    "articleType": "news",
+    "status": "PUBLISHED",
+    "title": "France–Italie : horaire, forme, enjeu du groupe et ce qu’il faut savoir avant le choc | BetGPT",
+    "h1": "France–Italie : horaire, forme, enjeu du groupe et ce qu’il faut savoir avant le choc",
+    "lead": "Les Bleus reçoivent l’Italie ce vendredi 2 octobre au Stade de France dans un rendez-vous déjà important de Ligue des nations. La France arrive avec deux victoires en deux matches, l’Italie vient de réagir avec un large succès 4-1 en Turquie, et les deux sélections abordent cette troisième journée avec des dynamiques très différentes. Voici les faits établis, les horaires officiels et les points de contexte à connaître avant le coup d’envoi.",
+    "paragraphs": [
+      {
+        "h2": "France–Italie : le coup d’envoi est fixé à 20 h 45 au Stade de France",
+        "body": "La billetterie officielle de la Fédération Française de Football fixe France–Italie au vendredi 2 octobre 2026 à 20 h 45 au Stade de France, à Saint-Denis. La rencontre compte pour la troisième journée de la phase de ligue de l’UEFA Nations League. L’UEFA confirme également l’affiche dans le groupe A1 et place France–Italie au programme de cette journée, aux côtés de Belgique–Türkiye. Pour le lecteur français, l’horaire local publié par la FFF constitue la référence pratique la plus claire pour suivre le match.",
+        "sourceIds": [
+          "fff-france-italie-2026-10-02",
+          "uefa-nations-fixtures-2026-10-01"
+        ]
+      },
+      {
+        "h2": "La France arrive avec six points et deux victoires sans encaisser",
+        "body": "Le début de campagne français est simple à lire : victoire 1-0 en Türkiye le 25 septembre, puis nouveau succès 1-0 en Belgique le 28 septembre. L’UEFA rappelle que la deuxième victoire s’est dessinée très tard, grâce à Michael Olise, alors que la Belgique était encore en mesure de prendre un résultat à Bruxelles. Ces deux matches ne racontent donc pas une domination totale, mais ils donnent à la France un bilan comptable parfait après deux journées : deux victoires, deux buts marqués et aucun encaissé.",
+        "sourceIds": [
+          "uefa-nations-fixtures-2026-10-01",
+          "uefa-j2-france-italie-2026-09-28"
+        ],
+        "subsections": [
+          {
+            "h3": "Ce que les deux premiers matches disent vraiment des Bleus",
+            "body": "Le principal signal positif est la capacité à gagner deux rencontres serrées. En revanche, le volume offensif reste mesuré : la France n’a marqué qu’un but dans chacun de ses deux premiers matches. Avant l’Italie, il serait donc excessif de réduire la dynamique française à une simple série de victoires ; l’enjeu sera aussi de voir si les Bleus peuvent créer davantage tout en conservant la solidité défensive observée jusque-là.",
+            "sourceIds": [
+              "uefa-nations-fixtures-2026-10-01",
+              "uefa-j2-france-italie-2026-09-28"
+            ]
+          }
+        ]
+      },
+      {
+        "h2": "L’Italie a déjà connu les deux extrêmes : défaite 0-2 puis victoire 4-1",
+        "body": "Le parcours italien est beaucoup plus contrasté. L’Italie a perdu 0-2 à domicile contre la Belgique pour son entrée dans la compétition, avant de répondre trois jours plus tard par une victoire 4-1 en Türkiye. L’UEFA décrit cette deuxième sortie comme une réaction très convaincante et souligne l’impact offensif italien. Cette alternance rend le déplacement à Saint-Denis particulièrement intéressant : l’Italie n’arrive ni en crise claire, ni avec une dynamique linéaire, mais avec une réponse immédiate après son premier revers.",
+        "sourceIds": [
+          "uefa-nations-fixtures-2026-10-01",
+          "uefa-j2-france-italie-2026-09-28"
+        ],
+        "subsections": [
+          {
+            "h3": "Pourquoi le 4-1 en Türkiye change la lecture du match",
+            "body": "Sans ce succès, France–Italie aurait ressemblé à une confrontation entre une équipe française lancée et une sélection italienne sous pression. Le 4-1 change ce récit : l’Italie a montré qu’elle pouvait produire quatre buts à l’extérieur et corriger rapidement un mauvais départ. Cela ne garantit rien à Saint-Denis, mais cela empêche de traiter cette affiche comme un match à sens unique.",
+            "sourceIds": [
+              "uefa-j2-france-italie-2026-09-28"
+            ]
+          }
+        ]
+      },
+      {
+        "h2": "Le groupe A1 peut déjà basculer après cette troisième journée",
+        "body": "La France a commencé par deux succès, tandis que l’Italie compte une victoire et une défaite. Dans le même groupe, la Belgique et la Türkiye restent également engagées dans une course où chaque confrontation directe peut modifier rapidement la hiérarchie. France–Italie ne décidera pas à elle seule du classement final, mais elle peut créer un premier écart significatif : une troisième victoire française prolongerait un départ parfait, alors qu’un succès italien rapprocherait immédiatement les deux équipes. Ce contexte rend le résultat important sans qu’il soit nécessaire d’inventer un scénario décisif prématuré.",
+        "sourceIds": [
+          "uefa-nations-fixtures-2026-10-01"
+        ]
+      },
+      {
+        "h2": "Akliouche a rejoint les Bleus après le forfait de Zaïre-Emery",
+        "body": "Le groupe français a aussi évolué pendant cette séquence internationale. Le Paris Saint-Germain a confirmé le 22 septembre que Maghnes Akliouche avait été appelé par Zinédine Zidane pour remplacer Warren Zaïre-Emery, forfait. Akliouche a rejoint Désiré Doué et Ousmane Dembélé parmi les joueurs du PSG convoqués avec la sélection. Cette modification ne permet pas à elle seule de prévoir le onze de départ contre l’Italie, mais elle fait partie des informations concrètes qui ont modifié les options françaises avant la série de quatre rencontres de Nations League.",
+        "sourceIds": [
+          "psg-akliouche-france-2026-09-22"
+        ]
+      },
+      {
+        "h2": "France–Italie reste aussi un duel historique très déséquilibré sur la durée",
+        "body": "La page match de l’UEFA affiche un historique de confrontations largement favorable à l’Italie : 20 victoires italiennes, 12 françaises et 9 matches nuls, pour 86 buts italiens contre 60 français. Ces chiffres racontent l’histoire longue de l’affiche, pas la force actuelle des deux équipes. Ils sont donc intéressants comme contexte, mais ils ne doivent pas être utilisés comme un raccourci prédictif pour le match du 2 octobre 2026, dont les effectifs, les sélectionneurs et la dynamique sportive appartiennent à une époque totalement différente.",
+        "sourceIds": [
+          "uefa-france-italie-match-2026-10-02"
+        ]
+      },
+      {
+        "h2": "Les trois points à regarder au coup d’envoi",
+        "body": "Avant le match, trois questions sont plus utiles que les récits simplistes. La France peut-elle augmenter son volume offensif tout en gardant la structure qui lui a permis de ne pas encaisser ? L’Italie peut-elle reproduire à Saint-Denis l’efficacité montrée en Türkiye ? Et la gestion du milieu de terrain permettra-t-elle à l’une des deux équipes d’imposer son rythme sans s’exposer en transition ? BetGPT actualisera cette lecture uniquement à partir d’informations vérifiées et séparera les faits d’avant-match des éventuelles interprétations tactiques.",
+        "sourceIds": [
+          "uefa-nations-fixtures-2026-10-01",
+          "uefa-j2-france-italie-2026-09-28",
+          "uefa-france-italie-match-2026-10-02"
+        ],
+        "subsections": [
+          {
+            "h3": "Ce qui peut encore changer avant 20 h 45",
+            "body": "Les compositions officielles, les éventuels forfaits de dernière minute et les décisions tactiques annoncées dans les heures précédant le match peuvent modifier la lecture de l’affiche. Tant que ces informations ne sont pas publiées par les sélections ou les organisateurs, elles ne doivent pas être présentées comme acquises. La version de cet article sera mise à jour uniquement lorsqu’un élément nouveau et vérifiable le justifiera.",
+            "sourceIds": [
+              "fff-france-italie-2026-10-02",
+              "uefa-france-italie-match-2026-10-02"
+            ]
+          }
+        ]
+      }
+    ],
+    "createdAt": "2026-10-01T22:15:00.000Z",
+    "publishedAt": "2026-10-01T22:15:00.000Z",
+    "modifiedAt": null,
+    "parisDate": "2026-10-02",
+    "scheduledTime": "00:15",
+    "category": "Actualité football",
+    "section": "ligue-des-nations",
+    "league": "NL",
+    "teams": [
+      "France",
+      "Italy"
+    ],
+    "matchId": null,
+    "competition": "UEFA Nations League",
+    "sources": [
+      {
+        "id": "fff-france-italie-2026-10-02",
+        "label": "FFF — billetterie officielle France–Italie",
+        "status": "OFFICIAL",
+        "note": "La FFF confirme France–Italie le vendredi 2 octobre 2026 à 20 h 45 au Stade de France.",
+        "url": "https://billetterie.fff.fr/fr"
+      },
+      {
+        "id": "uefa-nations-fixtures-2026-10-01",
+        "label": "UEFA — calendrier et résultats Nations League 2026/27",
+        "status": "OFFICIAL",
+        "note": "L’UEFA confirme les résultats des deux premières journées et l’affiche France–Italie lors de la troisième journée du groupe A1.",
+        "url": "https://www.uefa.com/uefanationsleague/news/02a2-1fea18abbcbc-456e846509e7-1000--2026-27-uefa-nations-league-all-the-league-phase-fixtures-a/"
+      },
+      {
+        "id": "uefa-j2-france-italie-2026-09-28",
+        "label": "UEFA — résumé de la 2e journée",
+        "status": "OFFICIAL",
+        "note": "L’UEFA rapporte la victoire tardive de la France en Belgique et le succès 4-1 de l’Italie en Türkiye.",
+        "url": "https://fr.uefa.com/uefanationsleague/news/02a9-21b1bfd13e9f-4df5fe1eb3b3-1000--ligue-des-nations-j2-l-italie-impressionne-la-france-arra/"
+      },
+      {
+        "id": "uefa-france-italie-match-2026-10-02",
+        "label": "UEFA — fiche France–Italie",
+        "status": "OFFICIAL",
+        "note": "La fiche UEFA fournit le contexte de l’affiche et l’historique des confrontations.",
+        "url": "https://www.uefa.com/uefanationsleague/match/2047960--france-vs-italy/"
+      },
+      {
+        "id": "psg-akliouche-france-2026-09-22",
+        "label": "Paris Saint-Germain — Akliouche appelé avec les Bleus",
+        "status": "OFFICIAL",
+        "note": "Le PSG confirme l’appel de Maghnes Akliouche pour remplacer Warren Zaïre-Emery, forfait.",
+        "url": "https://www.psg.fr/content/maghnes-akliouche-remplace-warren-zaire-emery-avec-les-bleus-paris-saint-germain-2026-2027"
+      }
+    ],
+    "newsworthiness": 96,
+    "discoverOpportunity": {
+      "freshness": 20,
+      "frenchInterest": 20,
+      "entityStrength": 15,
+      "novelty": 13,
+      "visual": 9,
+      "sourceQuality": 10,
+      "editorialAngle": 9,
+      "total": 96,
+      "decision": "PUBLISH",
+      "reasons": []
+    },
+    "discoverChecks": {
+      "INDEXABLE": true,
+      "LARGE_IMAGE": true,
+      "IMAGE_GE_1200": true,
+      "MAX_IMAGE_PREVIEW_LARGE": true,
+      "HELPFUL_CONTENT": true,
+      "NON_CLICKBAIT_TITLE": true,
+      "ORIGINAL_VALUE": true,
+      "MOBILE_TEMPLATE": true
+    },
+    "discoverReadiness": 100,
+    "topStories": "TOP_STORIES_ELIGIBILITY_READY",
+    "image": {
+      "src": "/blog/discover/inline-crowd.jpg",
+      "alt": "Tribunes pleines dans un stade de football avant une grande affiche internationale",
+      "width": 1200,
+      "height": 675,
+      "credit": "Photo d’illustration libre de droits intégrée à la bibliothèque BetGPT et recadrée au format Discover 1200×675. Elle n’illustre pas une action précise de France–Italie."
+    },
+    "links": [
+      {
+        "href": "/actualites",
+        "label": "Actualités football"
+      },
+      {
+        "href": "/scores-en-direct",
+        "label": "Scores en direct"
+      },
+      {
+        "href": "/resultats-football",
+        "label": "Résultats football"
+      },
+      {
+        "href": "/auteurs/betgpt-editorial",
+        "label": "BetGPT Editorial"
+      }
+    ],
+    "related": [
+      {
+        "href": "/actualites/equipe-de-france-dembele-est-il-le-leader-d-attaque-2026-10-01",
+        "title": "Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ?"
+      },
+      {
+        "href": "/actualites/azerbaijan-liechtenstein-postmatch-2026-10-01",
+        "title": "Azerbaijan – Liechtenstein : 0–0, résultat et faits du match"
+      }
+    ],
+    "quality": {
+      "pass": true,
+      "reasons": []
+    },
+    "duplicateScore": 0,
+    "corrections": [],
+    "sourceChanges": [],
+    "factHash": "manual-france-italie-nations-league-2026-10-02-v1",
+    "keywords": "France Italie, Ligue des nations, UEFA Nations League, Bleus, équipe de France, Stade de France, Italie football"
   }
 ]
