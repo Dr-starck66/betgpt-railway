@@ -576,4 +576,46 @@ describe("editorial engine", () => {
     assert.ok(!structured.reasons.includes("hiérarchie H2/H3 trop plate malgré des sous-idées explicites"));
   });
 
+
+  it("never evicts an already-published URL when daily inventory exceeds three or the day changes", () => {
+    const base = buildEdition({ now: NOW, matches: board() });
+    assert.equal(base.articles.length, 3);
+
+    const original = base.articles[0]!;
+    const extra = {
+      ...original,
+      id: "historical-extra",
+      slug: "historical-extra-published-url",
+      slot: "noon" as const,
+    };
+
+    const sameDay = buildEdition({
+      now: NOW,
+      matches: board(),
+      frozen: [...base.articles, extra],
+    });
+    assert.ok(
+      sameDay.articles.some((article) => article.slug === "historical-extra-published-url"),
+      "a fourth already-published URL must never be pruned by the three-slot policy",
+    );
+
+    const nextDay = buildEdition({
+      now: new Date("2026-09-26T17:00:00.000Z"),
+      matches: [],
+      frozen: sameDay.articles,
+    });
+    for (const article of sameDay.articles) {
+      assert.ok(
+        nextDay.articles.some((candidate) => candidate.slug === article.slug),
+        `published URL disappeared across day boundary: ${article.slug}`,
+      );
+    }
+    assert.ok(
+      nextDay.slots.every(
+        (slot) => !slot.article || slot.article.parisDate === nextDay.parisDate,
+      ),
+      "historical articles must not occupy today's publication slots",
+    );
+  });
+
 });
