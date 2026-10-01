@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { TeamLine } from "@/components/crest";
 import { pronoVsStake } from "@/lib/markets";
 import { matchPath } from "@/lib/seo";
 import { GUIDES, PRONO_LEAGUES, parisDay } from "@/lib/seo/money-map";
@@ -95,7 +96,6 @@ export function PronoSilo({
         </div>
         <p className="mt-4 text-xs text-muted">
           Données actualisées {desk.liveAsOf ? new Date(desk.liveAsOf).toLocaleString("fr-FR", { timeZone: "Europe/Paris" }) : "—"}.
-          {desk.engineVersion ? ` Moteur ${desk.engineVersion}.` : ""}
         </p>
       </header>
       {rows.length === 0 ? (
@@ -105,31 +105,53 @@ export function PronoSilo({
       ) : (
         <div className="surface-card overflow-hidden">
           <div className="overflow-x-auto">
-          <table className="w-full min-w-[720px] text-left text-sm">
+          <table className="w-full min-w-[760px] text-left text-sm">
             <thead className="bg-raised text-[11px] uppercase tracking-wider text-muted">
               <tr>
                 <th className="px-3 py-2">Match</th>
                 <th className="px-3 py-2">Pronostic</th>
-                <th className="px-3 py-2">Modèle</th>
+                <th className="px-3 py-2">Probabilité</th>
                 <th className="px-3 py-2">Cote</th>
-                <th className="px-3 py-2">Implicite</th>
-                <th className="px-3 py-2">Écart</th>
-                <th className="px-3 py-2">Incertitude</th>
-                <th className="px-3 py-2">Moteur</th>
+                <th className="px-3 py-2">Écart à la cote</th>
+                <th className="px-3 py-2">À faire</th>
               </tr>
             </thead>
             <tbody>
               {rows.map(({ match, prediction }) => {
-                const { prono } = pronoVsStake(prediction.markets);
+                const { prono, stake } = pronoVsStake(prediction.markets);
+                const watch = prediction.markets.find((m) => m.decision === "WATCH");
                 const listed = prono.listed && prono.bestOdds >= 1.05;
-                const uncertainty = prediction.live?.uncertainty?.find((item) => item.trim()) || "non publiée";
                 const issued = issue1x2(match, prono.market);
                 const stamped = Date.parse(prediction.timestamp);
+                const action =
+                  match.status === "finished"
+                    ? { label: "TERMINÉ", tone: "border-line bg-raised text-muted", reason: "Match terminé." }
+                    : stake
+                      ? {
+                          label: "PARIER",
+                          tone: "border-sage bg-sage/15 text-sage",
+                          reason: `${stake.label}${stake.listed ? ` · cote ${fmtOdds(stake.bestOdds)}` : ""}`,
+                        }
+                      : watch
+                        ? {
+                            label: "ATTENDRE",
+                            tone: "border-clay bg-clay/15 text-clay",
+                            reason: "Signal à surveiller, seuil de mise non atteint.",
+                          }
+                        : {
+                            label: "NE PAS PARIER",
+                            tone: "border-rust bg-rust/10 text-rust",
+                            reason: !listed
+                              ? "Pas de cote exploitable actuellement."
+                              : prono.edge <= 0
+                                ? "La cote ne donne pas d’avantage au modèle."
+                                : "Les critères de mise ne sont pas tous réunis.",
+                          };
                 return (
                   <tr key={match.id} className="border-t border-line align-top">
                     <td className="px-3 py-2">
                       <Link to={matchPath(match)} className="font-medium text-paper hover:text-sage">
-                        {match.home.short} – {match.away.short}
+                        <TeamLine home={match.home} away={match.away} size={26} names="auto" competition={match.competition} />
                       </Link>
                       <div className="text-xs text-muted">
                         Football · {match.competition} ·{" "}
@@ -151,13 +173,16 @@ export function PronoSilo({
                         {issued ? ` · ${issued}` : ""}
                       </div>
                     </td>
-                    <td className="px-3 py-2">{prono.label}</td>
+                    <td className="px-3 py-2 font-medium">{prono.label}</td>
                     <td className="px-3 py-2 tabular">{fmtPct(prono.modelProb)}</td>
-                    <td className="px-3 py-2 tabular">{listed ? fmtOdds(prono.bestOdds) : "non listée"}</td>
-                    <td className="px-3 py-2 tabular">{listed ? fmtPct(prono.implied) : "—"}</td>
+                    <td className="px-3 py-2 tabular">{listed ? fmtOdds(prono.bestOdds) : "non disponible"}</td>
                     <td className="px-3 py-2 tabular">{listed ? fmtPct(prono.edge) : "—"}</td>
-                    <td className="px-3 py-2 text-xs">{uncertainty}</td>
-                    <td className="px-3 py-2 text-xs">{prediction.engineVersion || "—"}</td>
+                    <td className="px-3 py-2">
+                      <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-bold ${action.tone}`}>
+                        {action.label}
+                      </span>
+                      <div className="mt-1 max-w-[220px] text-xs leading-snug text-muted">{action.reason}</div>
+                    </td>
                   </tr>
                 );
               })}
@@ -226,8 +251,8 @@ export function PronoSilo({
       </section>
       {kind === "pillar" ? (
         <section className="surface-card space-y-3 p-5 text-sm leading-relaxed text-mist sm:p-6">
-          <h2 className="text-base font-semibold text-paper">Ce que la ligne permet de vérifier</h2>
-          <p>Donnée : probabilité du modèle, pas une intuition signée. Marché : probabilité implicite 1/cote, seulement si la cote est listée. Écart : modèle moins implicite. Le score de confiance interne n’est pas affiché tant qu’il n’est pas une mesure publiable.</p>
+          <h2 className="text-base font-semibold text-paper">Comment lire le tableau</h2>
+          <p><strong>Pronostic</strong> = issue 1N2 la plus probable. <strong>Probabilité</strong> = estimation BetGPT. <strong>Écart à la cote</strong> = différence entre l’estimation et le marché. La colonne <strong>À faire</strong> tranche clairement : PARIER, ATTENDRE ou NE PAS PARIER.</p>
           <p>
             Après le match, la fiche garde le score et dit si le 1N2 affiché colle au résultat. Le règlement des mises est le{" "}
             <Link to="/ledger" className="underline">bilan</Link>, pas cette colonne. Export :{" "}
