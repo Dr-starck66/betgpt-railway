@@ -31,7 +31,7 @@ export const Route = createFileRoute("/prediction/$predictionId")({
         },
         { name: "robots", content: "index, follow" },
       ],
-      links: [{ rel: "canonical", href: `${SITE_URL}/prediction/${params.predictionId}` }],
+      links: [{ rel: "canonical", href: `${SITE_URL}/prediction/${encodeURIComponent(params.predictionId)}` }],
       scripts: row
         ? [
             {
@@ -60,7 +60,7 @@ function predictionEvidenceLd(
   predictionId: string,
   title: string,
 ): object {
-  const url = `${SITE_URL}/prediction/${predictionId}`;
+  const url = `${SITE_URL}/prediction/${encodeURIComponent(predictionId)}`;
   const eventId = `${SITE_URL}/match/${encodeURIComponent(row.matchId)}#event`;
   const description = `Pronostic horodaté ${row.label} pour ${row.home} – ${row.away}. Registre public BetGPT conservé avant et après le résultat.`;
   return {
