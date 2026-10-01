@@ -271,27 +271,49 @@
     "paragraphs": [
       {
         "h2": "Le fait nouveau qui fait basculer le dossier",
-        "body": "RMC Sport rapporte Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ?. L'information devient pertinente parce qu'elle précise un dossier déjà suivi, sans transformer une hypothèse en certitude. Au total, 2 rédactions ou sources distinctes alimentent ce cluster d'actualité. Les détails complémentaires sont attribués séparément dans la section suivante afin d'éviter de transformer une reprise en confirmation indépendante."
+        "body": "RMC Sport rapporte Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ?. L'information devient pertinente parce qu'elle précise un dossier déjà suivi, sans transformer une hypothèse en certitude. Au total, 2 rédactions ou sources distinctes alimentent ce cluster d'actualité. Les détails complémentaires sont attribués séparément dans la section suivante afin d'éviter de transformer une reprise en confirmation indépendante.",
+        "sourceIds": [
+          "news-2c68563d"
+        ]
       },
       {
         "h2": "Ce que disent précisément les différentes sources",
-        "body": "RMC Sport, jeudi 1 octobre 2026 à 21:09 : Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ? &nbsp;&nbsp; RMC Sport Ouest-France, jeudi 1 octobre 2026 à 20:42 : France - Italie. Les compositions probables avec les retours de Dembélé et Olise en attaque ? &nbsp;&nbsp; Ouest-France Cette présentation reste volontairement attribuée source par source : lorsque deux médias racontent le même épisode avec des détails différents, BetGPT ne fusionne pas automatiquement ces détails en un fait unique. Une information n'est élevée au rang de fait établi que si son niveau de source le justifie ou si plusieurs références indépendantes convergent réellement."
+        "body": "RMC Sport, jeudi 1 octobre 2026 à 21:09 : Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ? &nbsp;&nbsp; RMC Sport Ouest-France, jeudi 1 octobre 2026 à 20:42 : France - Italie. Les compositions probables avec les retours de Dembélé et Olise en attaque ? &nbsp;&nbsp; Ouest-France Cette présentation reste volontairement attribuée source par source : lorsque deux médias racontent le même épisode avec des détails différents, BetGPT ne fusionne pas automatiquement ces détails en un fait unique. Une information n'est élevée au rang de fait établi que si son niveau de source le justifie ou si plusieurs références indépendantes convergent réellement.",
+        "sourceIds": [
+          "news-2c68563d",
+          "news-b113527b"
+        ]
       },
       {
         "h2": "La chronologie des publications",
-        "body": "jeudi 1 octobre 2026 à 20:42 — Ouest-France publie « France - Italie. Les compositions probables avec les retours de Dembélé et Olise en attaque ? ». jeudi 1 octobre 2026 à 21:09 — RMC Sport publie « Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ? ». Cette chronologie permet de distinguer le fait initial, les reprises et les éventuelles confirmations plus tardives. Elle évite surtout de présenter comme simultanées des informations qui ont pu évoluer au fil de la journée."
+        "body": "jeudi 1 octobre 2026 à 20:42 — Ouest-France publie « France - Italie. Les compositions probables avec les retours de Dembélé et Olise en attaque ? ». jeudi 1 octobre 2026 à 21:09 — RMC Sport publie « Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ? ». Cette chronologie permet de distinguer le fait initial, les reprises et les éventuelles confirmations plus tardives. Elle évite surtout de présenter comme simultanées des informations qui ont pu évoluer au fil de la journée.",
+        "sourceIds": [
+          "news-2c68563d",
+          "news-b113527b"
+        ]
       },
       {
         "h2": "Le repère sportif concret autour de cette information",
-        "body": "Le calendrier BetGPT rattache ce sujet à France – Italie, en Ligue des nations de l'UEFA, avec un coup d'envoi vendredi 2 octobre 2026 à 20:45. Ce match fournit un repère sportif concret pour mesurer les conséquences de l'information sans inventer de date de retour, de composition ou de disponibilité. Les entités explicitement détectées dans les sources sont : France."
+        "body": "Le calendrier BetGPT rattache ce sujet à France – Italie, en Ligue des nations de l'UEFA, avec un coup d'envoi vendredi 2 octobre 2026 à 20:45. Ce match fournit un repère sportif concret pour mesurer les conséquences de l'information sans inventer de date de retour, de composition ou de disponibilité. Les entités explicitement détectées dans les sources sont : France.",
+        "sourceIds": [
+          "fff-france-italie-2026-10-02"
+        ]
       },
       {
         "h2": "Ce qui est établi, corroboré ou encore fragile",
-        "body": "Le cluster contient 0 source officielle, 2 sources de premier niveau journalistique et 0 autre source. Aucune déclaration officielle n'est ajoutée artificiellement si elle n'existe pas dans le flux. Les points communs entre plusieurs sources sont présentés comme corroborés ; les détails isolés restent attribués."
+        "body": "Le cluster contient 0 source officielle, 2 sources de premier niveau journalistique et 0 autre source. Aucune déclaration officielle n'est ajoutée artificiellement si elle n'existe pas dans le flux. Les points communs entre plusieurs sources sont présentés comme corroborés ; les détails isolés restent attribués.",
+        "sourceIds": [
+          "news-2c68563d",
+          "news-b113527b"
+        ]
       },
       {
         "h2": "Le prochain élément qui permettra de mettre l'article à jour",
-        "body": "Pour France, la suite utile dépend d'un fait supplémentaire attribuable : déclaration, décision, résultat, liste officielle ou nouvelle donnée de match. Sans élément nouveau, aucune dépêche supplémentaire n'est créée. BetGPT ne republie pas une nouvelle dépêche pour répéter le même état de fait : une mise à jour exige un changement matériel, une confirmation nouvelle ou une donnée sportive directement vérifiable."
+        "body": "Pour France, la suite utile dépend d'un fait supplémentaire attribuable : déclaration, décision, résultat, liste officielle ou nouvelle donnée de match. Sans élément nouveau, aucune dépêche supplémentaire n'est créée. BetGPT ne republie pas une nouvelle dépêche pour répéter le même état de fait : une mise à jour exige un changement matériel, une confirmation nouvelle ou une donnée sportive directement vérifiable.",
+        "sourceIds": [
+          "news-2c68563d",
+          "news-b113527b"
+        ]
       }
     ],
     "createdAt": "2026-10-01T20:06:39.555Z",
@@ -321,6 +343,13 @@
         "status": "CORROBORATED",
         "note": "France - Italie. Les compositions probables avec les retours de Dembélé et Olise en attaque ? · publié jeudi 1 octobre 2026 à 20:42.",
         "url": "https://news.google.com/rss/articles/CBMikwJBVV95cUxQZVA1dm9VNXFMSGxFZmF1amZWLUZiXzdmYWlwbldaazNWdTRRRE1jazR6dzJNTnB0RTBBSXEzVVg5c0JxT2llU2U2OTM3LUNqOWd1UC0tTjVmaGhUcGlDdDVmMTh0VVlXVno3OUNxemtNd0lJUzU1RXdzd0hQR2dreU1CQW5GcWxIZUtEWDA0MmVRbFYtLWlfRkRzbGlXSXBYNGxYOWxDMHlac0h6aWxKeTVwdWpaN2FQdkJ6VUNBZFRUQkpaUHZNTUdoTnhWcmxSSWQ3RTlMZUk3OWlrdHdfQkZ3SDlpR2RJZUVRcjRtZUZnWlFsckZPNHYxN1FHdTRPSzdkR1ozSmpsVkF5U09IYWZsQQ?oc=5"
+      },
+      {
+        "id": "fff-france-italie-2026-10-02",
+        "label": "Fédération Française de Football",
+        "status": "OFFICIAL",
+        "note": "La FFF confirme France – Italie en Ligue des nations, au Stade de France, le vendredi 2 octobre 2026.",
+        "url": "https://www.fff.fr/selection/matchs/3776-france-italie.html"
       }
     ],
     "newsworthiness": 92,
@@ -355,7 +384,12 @@
       }
     ],
     "corrections": [],
-    "sourceChanges": [],
+    "sourceChanges": [
+      {
+        "at": "2026-10-01T21:38:00.000Z",
+        "note": "Backfill ASTRA Editorial Authority Guard : ajout des sources contextuelles par section et d'une source officielle FFF pour le repère France–Italie."
+      }
+    ],
     "factHash": "490252ff",
     "keywords": "France, Ligue des nations de l'UEFA, actualité football",
     "image": {
@@ -413,15 +447,25 @@
     "paragraphs": [
       {
         "h2": "Le résultat et le contexte",
-        "body": "Azerbaijan – Liechtenstein figure au calendrier de Ligue des nations, au Tofiq Bahramov Republican Stadium. Le coup d'envoi est indiqué jeudi 1 octobre 2026 à 18:00. Le score actuellement enregistré est 0–0. Les séries de forme disponibles sont : Azerbaijan D · Liechtenstein L."
+        "body": "Azerbaijan – Liechtenstein figure au calendrier de Ligue des nations, au Tofiq Bahramov Republican Stadium. Le coup d'envoi est indiqué jeudi 1 octobre 2026 à 18:00. Le score actuellement enregistré est 0–0. Les séries de forme disponibles sont : Azerbaijan D · Liechtenstein L.",
+        "sourceIds": [
+          "cal-espn-401861093"
+        ]
       },
       {
         "h2": "Cotes, absences et signaux à vérifier avant le match",
-        "body": "Aucune cote 1N2 suffisamment fiable n'est disponible pour cette affiche. Les données disponibles ne contiennent d'une composition officielle ni d'un forfait confirmé par le club. L'absence d'un joueur n'est donc pas affirmée. Aucune probabilité chiffrée n'est ajoutée lorsqu'un modèle exploitable n'est pas disponible."
+        "body": "Aucune cote 1N2 suffisamment fiable n'est disponible pour cette affiche. Les données disponibles ne contiennent d'une composition officielle ni d'un forfait confirmé par le club. L'absence d'un joueur n'est donc pas affirmée. Aucune probabilité chiffrée n'est ajoutée lorsqu'un modèle exploitable n'est pas disponible.",
+        "sourceIds": [
+          "cal-espn-401861093",
+          "xi-espn-401861093"
+        ]
       },
       {
         "h2": "Ce qui peut encore évoluer juste avant le coup d'envoi",
-        "body": "Les compositions, forfaits, changements d'horaire et autres informations de dernière minute ne sont publiés que lorsqu'ils sont présents dans une source suffisamment fiable. La fiche du match reste la référence BetGPT pour le score, les statistiques et les éventuelles mises à jour factuelles."
+        "body": "Les compositions, forfaits, changements d'horaire et autres informations de dernière minute ne sont publiés que lorsqu'ils sont présents dans une source suffisamment fiable. La fiche du match reste la référence BetGPT pour le score, les statistiques et les éventuelles mises à jour factuelles.",
+        "sourceIds": [
+          "cal-espn-401861093"
+        ]
       }
     ],
     "createdAt": "2026-10-01T20:06:39.555Z",
@@ -484,7 +528,12 @@
       }
     ],
     "corrections": [],
-    "sourceChanges": [],
+    "sourceChanges": [
+      {
+        "at": "2026-10-01T21:38:00.000Z",
+        "note": "Backfill ASTRA Editorial Authority Guard : rattachement explicite de chaque section aux preuves calendrier/compositions déjà présentes."
+      }
+    ],
     "factHash": "2feb0f45",
     "keywords": "Azerbaijan, Liechtenstein, Ligue des nations",
     "image": {
