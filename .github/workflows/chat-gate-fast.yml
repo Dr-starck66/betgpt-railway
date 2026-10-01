@@ -18,9 +18,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          payload='{"messages":[{"role":"user","content":"Qu'''est-ce que tu mises aujourd'''hui, et pourquoi ?"}],"requestedMode":"NORMAL"}'
+          payload_file="$(mktemp)"
+          cat > "$payload_file" <<'JSON'
+          {"messages":[{"role":"user","content":"Qu'est-ce que tu mises aujourd'hui, et pourquoi ?"}],"requestedMode":"NORMAL"}
+          JSON
           body="$(mktemp)"
-          status="$(curl -sS --connect-timeout 8 --max-time 20             -o "$body" -w "%{http_code}"             -H 'content-type: application/json'             -H 'user-agent: BetGPT-Chat-Gate/1.0'             --data-binary "$payload"             https://betgpt.live/api/chat)"
+          status="$(curl -sS --connect-timeout 8 --max-time 20             -o "$body" -w "%{http_code}"             -H 'content-type: application/json'             -H 'user-agent: BetGPT-Chat-Gate/1.0'             --data-binary @"$payload_file"             https://betgpt.live/api/chat)"
           echo "HTTP=$status"
           cat "$body"
           echo
