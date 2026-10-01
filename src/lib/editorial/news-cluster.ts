@@ -60,11 +60,18 @@ export function clusterSignals(signals: EditorialNewsSignal[]): NewsCluster[] {
         incomingMaterial &&
         !clusterMaterial &&
         deltaHours >= 0.35;
+      const sameMaterialDevelopment =
+        entityOverlap &&
+        incomingMaterial &&
+        clusterMaterial &&
+        deltaHours <= 12 &&
+        score >= 0.16;
       const sameStory =
         !materialStateChange &&
         (score >= 0.34 ||
           (entityOverlap && score >= 0.24) ||
-          (entityOverlap && familyOverlap && deltaHours <= 12));
+          (entityOverlap && familyOverlap && deltaHours <= 12) ||
+          sameMaterialDevelopment);
       if (sameStory && (score > bestScore || (best == null && familyOverlap))) {
         best = cluster;
         bestScore = Math.max(score, familyOverlap ? 0.25 : score);
