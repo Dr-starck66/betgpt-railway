@@ -111,9 +111,12 @@ export function nationalBreakoutScorecard(input: GrowthInput) {
     });
   }
 
-  const normalizedRates = [activationRate, retentionRate, viralityRate, monetizationRate].filter(
-    (value): value is number => value != null,
-  );
+  const normalizedRates = [
+    activationRate == null ? null : Math.min(1, activationRate / 0.5),
+    retentionRate == null ? null : Math.min(1, retentionRate / 0.3),
+    viralityRate == null ? null : Math.min(1, viralityRate / 0.15),
+    monetizationRate == null ? null : Math.min(1, monetizationRate / 0.1),
+  ].filter((value): value is number => value != null);
   const rateScore = normalizedRates.length
     ? normalizedRates.reduce((sum, value) => sum + value, 0) / normalizedRates.length
     : 0;
