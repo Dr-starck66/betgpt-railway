@@ -39,12 +39,21 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
           </div>
 
           <aside className="glass-panel p-5">
-            <p className="text-sm font-semibold text-paper">À retenir</p>
-            <ul className="mt-4 space-y-3 text-sm leading-relaxed text-mist">
-              <li>• Sujet sélectionné pour son intérêt football et sa pertinence en France.</li>
-              <li>• Informations relues à partir de sources identifiées dans l’article.</li>
-              <li>• Mises à jour uniquement lorsque le contenu visible change réellement.</li>
-            </ul>
+            <p className="text-sm font-semibold text-paper">Repères</p>
+            <dl className="mt-4 space-y-3 text-sm leading-relaxed text-mist">
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-muted">Compétition</dt>
+                <dd className="mt-1 text-paper">{article.competition}</dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-muted">Sources affichées</dt>
+                <dd className="mt-1 text-paper">{article.sources.length}</dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wide text-muted">Publication</dt>
+                <dd className="mt-1 text-paper">{published}</dd>
+              </div>
+            </dl>
           </aside>
         </div>
       </div>
