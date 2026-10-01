@@ -36,6 +36,28 @@ const resultsMem = globalThis as typeof globalThis & {
   __betgptFotmobRefresh?: Promise<ResultRow[]> | null;
 };
 
+function startResultArchiveRefresh() {
+  if (!resultsMem.__betgptResultsRefresh) {
+    resultsMem.__betgptResultsRefresh = ensureArchiveHistory({ force: true })
+      .then((rows) => {
+        resultsMem.__betgptResultsArchive = rows;
+        resultsMem.__betgptResultsArchiveAt = Date.now();
+        return rows;
+      })
+      .catch(() => {
+        const fallback = loadArchiveHistory();
+        resultsMem.__betgptResultsArchive = fallback;
+        // Negative-cache provider failures too: do not hammer ESPN on every page view.
+        resultsMem.__betgptResultsArchiveAt = Date.now();
+        return fallback;
+      })
+      .finally(() => {
+        resultsMem.__betgptResultsRefresh = null;
+      });
+  }
+  return resultsMem.__betgptResultsRefresh;
+}
+
 async function freshResultArchive() {
   const now = Date.now();
   if (
@@ -44,22 +66,26 @@ async function freshResultArchive() {
   ) {
     return resultsMem.__betgptResultsArchive;
   }
-  if (!resultsMem.__betgptResultsRefresh) {
-    resultsMem.__betgptResultsRefresh = ensureArchiveHistory({ force: true })
-      .then((rows) => {
-        resultsMem.__betgptResultsArchive = rows;
-        resultsMem.__betgptResultsArchiveAt = Date.now();
-        return rows;
-      })
-      .finally(() => {
-        resultsMem.__betgptResultsRefresh = null;
-      });
+
+  // Results pages must never wait for a full multi-league history refresh when a
+  // usable on-disk archive already exists. Serve it immediately and refresh in
+  // the background; the next request receives the refreshed snapshot.
+  const disk = resultsMem.__betgptResultsArchive ?? loadArchiveHistory();
+  if (disk.length) {
+    resultsMem.__betgptResultsArchive = disk;
+    void startResultArchiveRefresh();
+    return disk;
   }
-  try {
-    return await resultsMem.__betgptResultsRefresh;
-  } catch {
-    return loadArchiveHistory();
-  }
+
+  // First boot without an archive: give the provider a short budget, then fail
+  // closed to an empty archive instead of turning a page request into a timeout.
+  const refresh = startResultArchiveRefresh();
+  return Promise.race([
+    refresh,
+    new Promise<Awaited<ReturnType<typeof ensureArchiveHistory>>>((resolve) => {
+      setTimeout(() => resolve(loadArchiveHistory()), 2500);
+    }),
+  ]);
 }
 
 function fotMobLeagueId(nameRaw: string, countryRaw: string): LeagueId | null {
@@ -163,10 +189,10 @@ async function freshFotMobResults(now = Date.now()): Promise<ResultRow[]> {
     )
       .then((parts) => {
         const rows = parts.flat().sort((a, b) => b.kickoff.localeCompare(a.kickoff));
-        if (rows.length) {
-          resultsMem.__betgptFotmobRows = rows;
-          resultsMem.__betgptFotmobAt = Date.now();
-        }
+        // Cache empty/error-equivalent responses too. Otherwise a blocked
+        // provider causes ten outbound requests on every page view.
+        resultsMem.__betgptFotmobRows = rows;
+        resultsMem.__betgptFotmobAt = Date.now();
         return rows;
       })
       .finally(() => {
