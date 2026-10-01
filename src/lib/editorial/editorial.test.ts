@@ -301,6 +301,51 @@ describe("editorial engine", () => {
     assert.equal(autoPublishableCluster(resolution), true);
   });
 
+  it("keeps unrelated Cristiano Ronaldo stories in separate clusters", () => {
+    const signals: EditorialNewsSignal[] = [
+      {
+        id: "ronaldo-rupture",
+        title: "Les dessous de la rupture entre Cristiano Ronaldo et le Portugal | Foot - Portugal - L'Équipe",
+        url: "https://news.google.com/articles/ronaldo-rupture",
+        sourceName: "L'Équipe",
+        sourceUrl: "https://www.lequipe.fr",
+        publishedAt: "2026-10-01T14:27:00.000Z",
+        description: "Un récit consacré aux tensions et à la rupture entre Cristiano Ronaldo et la sélection portugaise.",
+        sourceTier: "TIER1",
+        entities: ["Cristiano Ronaldo", "Portugal"],
+        language: "fr",
+      },
+      {
+        id: "ronaldo-retirement",
+        title: "Portugal : Cristiano Ronaldo va prendre sa retraite internationale ! - Foot Mercato",
+        url: "https://news.google.com/articles/ronaldo-retirement",
+        sourceName: "Foot Mercato",
+        sourceUrl: "https://www.footmercato.net",
+        publishedAt: "2026-10-01T14:15:00.000Z",
+        description: "Une information distincte porte sur la retraite internationale du joueur.",
+        sourceTier: "TIER1",
+        entities: ["Cristiano Ronaldo", "Portugal"],
+        language: "fr",
+      },
+      {
+        id: "ronaldo-profile",
+        title: "Foot : cinq grands moments de Cristiano Ronaldo avec le Portugal - lenouvelliste.com",
+        url: "https://news.google.com/articles/ronaldo-profile",
+        sourceName: "lenouvelliste.com",
+        sourceUrl: "https://www.lenouvelliste.com",
+        publishedAt: "2026-10-01T14:16:00.000Z",
+        description: "Une rétrospective revient sur cinq grands moments de sa carrière avec le Portugal.",
+        sourceTier: "OTHER",
+        entities: ["Cristiano Ronaldo", "Portugal"],
+        language: "fr",
+      },
+    ];
+    const clusters = clusterSignals(signals);
+    assert.equal(clusters.length, 3);
+    assert.ok(clusters.every((cluster) => cluster.signals.length === 1));
+    assert.ok(clusters.every((cluster) => !autoPublishableCluster(cluster)));
+  });
+
   it("does not auto-publish a single non-official media signal", () => {
     const signals: EditorialNewsSignal[] = [
       {
