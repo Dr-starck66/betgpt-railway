@@ -121,9 +121,9 @@ function LedgerPage() {
         <section className="section-card p-5 sm:p-6">
           <h2 className="font-display text-xl">Résultats réels du champion canonique</h2>
           <p className="mt-1 text-sm text-mist">
-            Le calcul conserve les gagnants et les perdants enregistrés avant le coup d'envoi,
-            selon l'horodatage stocké. Ces dates internes ne constituent pas une certification
-            indépendante de publication. {ev.sampleLabel}.
+            Le calcul ne retient ici que les BET 1-N-2 domicile/extérieur produits par la version
+            canonique ROI5 et enregistrés avant le coup d’envoi. WATCH, NO_BET et anciennes
+            versions restent hors du ROI du champion. {ev.sampleLabel}.
           </p>
           <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
             <Kpi label="Publiés" value={String(ev.published)} />
@@ -166,8 +166,8 @@ function LedgerPage() {
             <Kpi label="Série + / −" value={`${ev.longestWin} / ${ev.longestLose}`} />
           </div>
           <p className="mt-3 text-xs text-muted">
-            ROI = (unités rentrées − unités mises) / unités mises, 1 unité par prono éligible,
-            y compris les sélections à surveiller. Ce calcul ne mesure pas des mises réellement exécutées.
+            ROI = (unités rentrées − unités mises) / unités mises, 1 unité par BET canonique éligible.
+            WATCH et NO_BET ne comptent jamais comme mises. Ce calcul ne mesure pas des mises réellement exécutées.
             Le filet (score exact, 50 % de la mise) est une simulation séparée, pas le registre.
             {ev.unavailable.length ? ` Indisponible : ${ev.unavailable.join(", ")}.` : ""}
           </p>
@@ -247,8 +247,8 @@ function LedgerPage() {
       <section className="section-card border-sage/40 p-5 sm:p-6">
         <h2 className="font-display text-xl">Bilan réel du champion · 100 € par BET</h2>
         <p className="mt-1 text-sm text-mist">
-          100 € sur le prono 1-N-2. Filet = score exact à 50 % de la mise, uniquement si ce score
-          tombe. Ça ne remplace pas le prono.
+          100 € simulés uniquement sur les BET du champion canonique. Le filet reste une couverture
+          séparée et ne transforme jamais un WATCH ou un NO_BET en mise.
         </p>
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
           <Kpi label="Matchs" value={String(r.sim.n)} />
@@ -278,9 +278,8 @@ function LedgerPage() {
         <section className="section-card border-sage/40 p-5 sm:p-6">
           <h2 className="font-display text-xl">Replay chronologique du champion canonique</h2>
           <p className="mt-1 text-sm text-mist">
-            {data.archive.n} sélections ({data.archive.years}) recalculées avec la méthode actuelle.
-            Elles n'ont pas été publiées avant ces matchs. Cette simulation ne démontre pas
-            la rentabilité future et peut comporter des biais de sélection ou d'ajustement.
+            {data.archive.n} sélections du replay canonique ({data.archive.years}). Ce benchmark
+            chronologique est distinct des résultats réels publiés et ne garantit aucun rendement futur.
           </p>
           <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
             <Kpi label="Pronos justes" value={`${Math.round(data.archive.acc * 100)} %`} />
@@ -322,7 +321,7 @@ function LedgerPage() {
           ) : null}
         </section>
       ) : (
-        <p className="text-sm text-mist">Chargement des 5 saisons…</p>
+        <p className="text-sm text-mist">Replay canonique indisponible.</p>
       )}
 
       <section className="section-card p-5 sm:p-6">
