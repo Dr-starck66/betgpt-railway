@@ -2,34 +2,49 @@ name: editorial-publish
 
 on:
   schedule:
-    # Covers 08:05, 13:05 and 19:05 Europe/Paris in both CET and CEST.
-    # The engine only persists slots whose local opening time has passed.
-    - cron: "5 6,7,11,12,17,18 * * *"
+    # Opportunity radar: every 30 minutes across the French football news day.
+    # It never forces content: the engine remains fail-closed and keeps a 3/day maximum.
+    - cron: "17,47 5-22 * * *"
+  pull_request:
+    paths:
+      - "src/lib/editorial/**"
+      - "src/routes/admin_.editorial.tsx"
+      - "api/editorial-run.ts"
+      - ".github/workflows/editorial.yml"
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: betgpt-editorial-publish
+  group: betgpt-editorial-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  publish:
+  editorial:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: main
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Generate qualified editorial slots
+
+      - name: Editorial regression tests
+        run: npm run news
+
+      - name: TypeScript verification
+        if: github.event_name == 'pull_request'
+        run: npm run typecheck
+
+      - name: Generate qualified editorial opportunities
+        if: github.event_name != 'pull_request'
         run: npm run editorial:publish
+
       - name: Persist published ledger
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         shell: bash
         run: |
           git add data/editorial/ledger.json
