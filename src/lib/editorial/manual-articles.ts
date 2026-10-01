@@ -214,7 +214,7 @@ const ARTICLES: EditorialArticle[] = [
     ],
     factHash: "manual-mbappe-paris-2026-10-01-v4",
     keywords: "Kylian Mbappé, Real Madrid, Paris, blessure Mbappé, récupération Mbappé, La Liga",
-  },,
+  },
   {
     id: "manual-2026-10-01-negreira-uefa-real-barca",
     slug: "affaire-negreira-uefa-documents-real-madrid-barca-repond-2026-10-01",
