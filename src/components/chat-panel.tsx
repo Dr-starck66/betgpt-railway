@@ -1,6 +1,6 @@
 "use client";
 
-import { Send, Volume2 } from "lucide-react";
+import { Check, Copy, Send, Share2, Volume2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { SeoImg } from "@/components/seo-img";
 import { BRAND_LOGO } from "@/lib/image-seo";
@@ -17,6 +17,7 @@ import { track } from "@/lib/analytics";
 import { postChat } from "@/lib/chat/transport";
 import { playPunchline } from "@/lib/chat/voice";
 import { reactionForPunchline, type PunchReaction } from "@/lib/chat/reaction";
+import { buildShareMoment } from "@/lib/chat/share";
 
 const WELCOME: ChatMessage = {
   id: "welcome",
@@ -213,6 +214,54 @@ function PunchReactionCard({ reaction, punchline }: { reaction: PunchReaction; p
   );
 }
 
+function ShareMomentButton({
+  prompt,
+  punchline,
+}: {
+  prompt: string;
+  punchline: string;
+}) {
+  const [copied, setCopied] = useState(false);
+
+  const share = async () => {
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://betgpt.live";
+    const moment = buildShareMoment(origin, prompt, punchline);
+    try {
+      if (navigator.share) {
+        await navigator.share(moment);
+        track("chat_share");
+        return;
+      }
+      await navigator.clipboard.writeText(`${moment.text}\n${moment.url}`);
+      setCopied(true);
+      track("chat_share_copy");
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      try {
+        await navigator.clipboard.writeText(`${moment.text}\n${moment.url}`);
+        setCopied(true);
+        track("chat_share_copy");
+        window.setTimeout(() => setCopied(false), 1800);
+      } catch {
+        /* Sharing is optional; never break the conversation. */
+      }
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={() => void share()}
+      className="mt-2 inline-flex min-h-9 items-center gap-1.5 rounded-full border border-sage/35 bg-sage/10 px-3 text-xs font-black text-paper hover:border-sage hover:bg-sage/20"
+      aria-label="Partager ce moment BetGPT"
+      title="Partager ce moment"
+    >
+      {copied ? <Check size={14} /> : navigator.share ? <Share2 size={14} /> : <Copy size={14} />}
+      {copied ? "Lien copié" : "Partager ce carnage"}
+    </button>
+  );
+}
+
 function loadMemory(): UserMemory {
   try {
     const raw = localStorage.getItem(MEMORY_KEY) ?? localStorage.getItem(LEGACY_MEMORY_KEY);
@@ -265,11 +314,17 @@ function touchMemory(prev: UserMemory, content: string, mode: PersonalityMode): 
   return next;
 }
 
-export function ChatPanel({ seed }: { seed?: string }) {
+export function ChatPanel({
+  seed,
+  initialMode = "NORMAL",
+}: {
+  seed?: string;
+  initialMode?: PersonalityMode;
+}) {
   const [messages, setMessages] = useState<ChatMessage[]>([WELCOME]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [mode, setMode] = useState<PersonalityMode>("NORMAL");
+  const [mode, setMode] = useState<PersonalityMode>(parseMode(initialMode));
   const [placeholder] = useState("Un match, un pari, un feeling…");
   const [memory, setMemory] = useState<UserMemory>(EMPTY_MEMORY);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -417,16 +472,22 @@ export function ChatPanel({ seed }: { seed?: string }) {
                   <PunchReactionCard reaction={msg.reaction} punchline={msg.punchline?.text} />
                 ) : null}
                 {!mine && msg.punchline && !streaming ? (
-                  <button
-                    type="button"
-                    onClick={() => void playPunchline(msg.punchline!)}
-                    className="mt-2 flex min-h-9 items-center gap-1.5 rounded-full border border-line bg-white px-3 text-xs font-semibold text-paper hover:border-sage/50"
-                    aria-label="Rejouer la punchline"
-                    title="Rejouer la punchline"
-                  >
-                    <Volume2 size={14} />
-                    Rejouer le cri
-                  </button>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => void playPunchline(msg.punchline!)}
+                      className="mt-2 flex min-h-9 items-center gap-1.5 rounded-full border border-line bg-white px-3 text-xs font-semibold text-paper hover:border-sage/50"
+                      aria-label="Rejouer la punchline"
+                      title="Rejouer la punchline"
+                    >
+                      <Volume2 size={14} />
+                      Rejouer le cri
+                    </button>
+                    <ShareMomentButton
+                      prompt={messages.slice(0, i).reverse().find((x) => x.role === "user")?.content ?? "Démonte mon pari"}
+                      punchline={msg.punchline.text}
+                    />
+                  </div>
                 ) : null}
                 {streaming && (
                   <span className="ml-1 inline-block h-3 w-1.5 animate-pulse bg-sage align-middle" />
