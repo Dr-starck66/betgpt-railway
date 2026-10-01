@@ -60,12 +60,13 @@ export function clusterSignals(signals: EditorialNewsSignal[]): NewsCluster[] {
         incomingMaterial &&
         !clusterMaterial &&
         deltaHours >= 0.35;
+      const sharedEntityCount = signal.entities.filter((entity) => cluster.entities.includes(entity)).length;
       const sameMaterialDevelopment =
         entityOverlap &&
         incomingMaterial &&
         clusterMaterial &&
         deltaHours <= 12 &&
-        score >= 0.16;
+        sharedEntityCount >= Math.min(2, Math.max(1, Math.min(signal.entities.length, cluster.entities.length)));
       const sameStory =
         !materialStateChange &&
         (score >= 0.34 ||
