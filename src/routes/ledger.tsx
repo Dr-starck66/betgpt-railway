@@ -9,6 +9,7 @@ import { CupNight } from "@/components/cup-night";
 import { VerdictBadge } from "@/components/ui/badge";
 import { fmtEur, fmtOdds, fmtSignedPct } from "@/lib/utils";
 import { SITE_URL } from "@/lib/seo";
+import { AstraSidewings } from "@/components/astra-sidewings";
 
 export const Route = createFileRoute("/ledger")({
   loader: () => getLedgerDesk(),
@@ -57,7 +58,37 @@ function LedgerPage() {
   }, [r.rows, tab]);
 
   return (
-    <div className="space-y-8">
+    <AstraSidewings
+      ariaLabel="Navigation contextuelle du bilan BetGPT"
+      left={{
+        eyebrow: "Comprendre le bilan",
+        title: "Du pronostic à la preuve",
+        intro: "Remonte le silo BetGPT sans quitter le contexte du bilan public.",
+        links: [
+          { href: "/pronostics-football", label: "Pronostics football", description: "Les analyses et sélections actuellement publiées." },
+          { href: "/prediction-history", label: "Historique des prédictions", description: "Comment BetGPT conserve et relit ses décisions." },
+          { href: "/rapports/precision", label: "Rapport de précision", description: "Calibration, erreurs et qualité probabiliste." },
+          { href: "/methodology", label: "Méthodologie", description: "Règles du modèle, limites et contrôles." },
+        ],
+      }}
+      right={{
+        eyebrow: "Vérifier",
+        title: "Lire les chiffres correctement",
+        intro: "Le bilan distingue données publiées, replay historique et hypothèses de simulation.",
+        stats: [
+          { label: "Mise repère", value: "100 €", detail: "Conversion UX commune pour comparer gains et pertes." },
+          { label: "Historique testé", value: String(canonical.summary.n), detail: "Paris du replay historique affiché sur cette page." },
+          { label: "Pronostics publiés", value: String(ev?.published ?? 0), detail: "Décisions enregistrées dans le registre public." },
+        ],
+        links: [
+          { href: "/data-sources", label: "Sources des données", description: "Origine et limites des données utilisées." },
+          { href: "/jeu-responsable", label: "Jeu responsable", description: "Interpréter une performance sans la transformer en promesse." },
+          { href: "/comparer-cotes", label: "Comparer les cotes", description: "Comparer les prix disponibles séparément du bilan." },
+          { href: "/opportunities", label: "Opportunités du jour", description: "Voir les écarts actuellement détectés." },
+        ],
+      }}
+    >
+      <div className="space-y-8">
       <section className="hero-panel p-6 sm:p-8">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start">
           <div>
@@ -629,7 +660,8 @@ function LedgerPage() {
           </table>
         </div>
       )}
-    </div>
+      </div>
+    </AstraSidewings>
   );
 }
 
