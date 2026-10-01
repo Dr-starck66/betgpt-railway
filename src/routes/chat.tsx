@@ -8,6 +8,7 @@ export const Route = createFileRoute("/chat")({
   pendingComponent: ChatPending,
   validateSearch: (search: Record<string, unknown>) => ({
     q: typeof search.q === "string" ? search.q : undefined,
+    roast: search.roast === "1" || search.roast === 1 || search.roast === true,
   }),
   head: () => ({
     meta: [
@@ -34,7 +35,7 @@ function ChatPending() {
 }
 
 function ChatPage() {
-  const { q } = Route.useSearch();
+  const { q, roast } = Route.useSearch();
   return (
     <div className="space-y-6">
       <section className="hero-panel p-6 sm:p-8">
@@ -62,7 +63,7 @@ function ChatPage() {
         </div>
       </section>
       <section className="section-card overflow-hidden p-2 sm:p-3">
-        <ChatPanel seed={q} />
+        <ChatPanel seed={q} initialMode={roast ? "ROAST" : "NORMAL"} />
       </section>
     </div>
   );
