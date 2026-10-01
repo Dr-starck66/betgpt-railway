@@ -48,6 +48,14 @@ const ACTIONS: { label: string; text: string; mode?: PersonalityMode }[] = [
 const MEMORY_KEY = "betgpt-chat-memory";
 const LEGACY_MEMORY_KEY = "calibre-betgpt-memory";
 
+const REACTION_GIF: Record<string, string> = {
+  ANIMAL_CHAOS: "/reactions/astra-amused.gif",
+  COSMIC_CHAOS: "/reactions/astra-disbelief.gif",
+  NUCLEAR_CHAOS: "/reactions/astra-savage.gif",
+  BETTING_DISASTER: "/reactions/astra-facepalm.gif",
+  ABSURD_SHOCK: "/reactions/astra-disbelief.gif",
+};
+
 function loadMemory(): UserMemory {
   try {
     const raw = localStorage.getItem(MEMORY_KEY) ?? localStorage.getItem(LEGACY_MEMORY_KEY);
@@ -229,6 +237,25 @@ export function ChatPanel({ seed }: { seed?: string }) {
                   <p className="mb-1 text-[10px] uppercase tracking-[0.18em] text-muted">BetGPT</p>
                 )}
                 {msg.content || (streaming ? "…" : "")}
+                {!mine && msg.punchline?.reaction && !streaming ? (
+                  <div
+                    className="mt-3 overflow-hidden rounded-2xl border border-line bg-white/80 p-2"
+                    aria-label="Réaction visuelle BetGPT"
+                  >
+                    <div className="mb-2 text-2xl leading-none" aria-hidden="true">
+                      {msg.punchline.reaction.emojis.join(" ")}
+                    </div>
+                    {msg.punchline.score >= 92 ? (
+                      <img
+                        src={REACTION_GIF[msg.punchline.reaction.mood]}
+                        alt={`Réaction BetGPT : ${msg.punchline.reaction.mood.toLowerCase().replaceAll("_", " ")}`}
+                        loading="lazy"
+                        decoding="async"
+                        className="block aspect-video w-full max-w-[320px] rounded-xl border border-line object-cover"
+                      />
+                    ) : null}
+                  </div>
+                ) : null}
                 {!mine && msg.punchline && !streaming ? (
                   <button
                     type="button"
