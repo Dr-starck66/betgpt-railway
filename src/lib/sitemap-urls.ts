@@ -1,7 +1,7 @@
 import { CITE_LEAGUES } from "@/engine/cite-public";
 import { ensureLive } from "@/engine/live";
 import { archiveSlug, loadArchiveHistory } from "@/engine/archive";
-import { loadTickets } from "@/engine/ticket-log";
+import { loadTickets, stablePublicEvidenceTickets } from "@/engine/ticket-log";
 import { HUNTER_SCENARIOS } from "@/engine/hunter";
 import { LEAGUE_FR, LEAGUE_SLUG } from "@/engine/stats";
 import { BLOG } from "@/lib/blog";
@@ -100,8 +100,8 @@ export async function loadSitemapUrls(): Promise<SitemapUrl[]> {
       resultLeafPaths.has(url.path),
   );
   const edition = buildEdition({ now: new Date(), matches: liveMatches as MatchInput[], frozen: await readLedgerDurable() });
-  for (const row of tickets) {
-    if (row.kind !== "prono" || !row.id || !row.home || !row.away || !row.recordedAt) continue;
+  for (const row of stablePublicEvidenceTickets(tickets)) {
+    if (!row.id || !row.home || !row.away || !row.recordedAt) continue;
     const encoded = encodeURIComponent(row.id);
     const path = `/prediction/${encoded}`;
     if (!sitemapAllowed(path) || urls.some((url) => url.path === path)) continue;
