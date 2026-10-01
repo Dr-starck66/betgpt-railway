@@ -6,7 +6,8 @@ import { classifyChatIntent, localMatchFacts } from "./local";
 import { allowKeyed } from "@/lib/store";
 import { historyFacts } from "./history-facts";
 import { hasUnsupportedGroundedClaim } from "./grounding";
-import { extractPunchline, type PunchlineMeta } from "./punch";\nimport { absurdInsultCreativeBrief, generateAbsurdInsult, shouldDropAbsurdInsult } from "./absurd-insults";
+import { extractPunchline, type PunchlineMeta } from "./punch";
+import { absurdInsultCreativeBrief, generateAbsurdInsult, shouldDropAbsurdInsult } from "./absurd-insults";
 
 async function deskNow(question: string): Promise<string> {
   try {
