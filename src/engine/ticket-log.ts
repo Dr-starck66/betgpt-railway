@@ -150,6 +150,20 @@ export function loadTickets(): TicketRow[] {
   return MEM;
 }
 
+const STABLE_PUBLIC_EVIDENCE_IDS = new Set(parseRows(seedTickets).map((row) => row.id));
+
+/**
+ * Sitemap-safe evidence rows only.
+ *
+ * Runtime-generated tickets can be useful while a process is alive, but they
+ * must never be advertised as durable public URLs unless their identifier is
+ * part of the immutable seed corpus. This prevents a redeploy from turning a
+ * previously emitted sitemap URL into a 404.
+ */
+export function stablePublicEvidenceTickets(rows: TicketRow[] = loadTickets()): TicketRow[] {
+  return rows.filter((row) => row.kind === "prono" && STABLE_PUBLIC_EVIDENCE_IDS.has(row.id));
+}
+
 let ticketsHydrated = false;
 
 /** Merge durable Postgres kv into the in-process ledger (Vercel / Neon). */
