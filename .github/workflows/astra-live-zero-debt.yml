@@ -12,7 +12,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          EXPECTED="8e9e2a4ee7101c0bbd98425fde3dd6c6bb5d8312"
+          EXPECTED="94b8e0be3968e65ac8d0dbc16de2d36c2a1c0e60"
           fetch() {
             local url="$1" out="$2"
             curl --compressed --silent --show-error --location --connect-timeout 5 --max-time 20 --retry 2 --retry-delay 2 -o "$out" -w "%{http_code}" "$url"
