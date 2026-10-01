@@ -32,7 +32,7 @@ function Page() {
   return (
     <PronoSilo
       h1="Pronostics sportifs"
-      lead="BetGPT couvre le football. Chaque ligne ci-dessous vient du bureau en cours : équipes, horaire, pronostic 1N2 le plus probable, probabilité du modèle, et la cote seulement si un bookmaker l’a listée. L’écart est modèle moins probabilité implicite."
+      lead="BetGPT couvre le football avec le champion canonique ROI5. Chaque ligne affiche les équipes, l’horaire, le pronostic 1N2, la probabilité du modèle et un verdict clair : PARIER, ATTENDRE ou NE PAS PARIER. Aucune cote inférieure à 1,80 n’est retenue ni mise en avant."
       path="/pronostics-sportifs"
       kind="pillar"
       desk={desk}
