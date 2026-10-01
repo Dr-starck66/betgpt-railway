@@ -64,13 +64,15 @@ function LedgerPage() {
             <p className="eyebrow">Transparence & performance</p>
             <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-5xl">Bilan BetGPT</h1>
             <p className="mt-4 max-w-3xl text-base leading-relaxed text-mist sm:text-lg">
-              Pronos 1-N-2 ou marché réellement misé. Le pari complémentaire sur le score exact reste affiché séparément. Les pertes
-              restent visibles : aucun historique n’est nettoyé après coup. {asOf ? `Scores à ${asOf}.` : ""}
+              Le tableau de bord qui montre tout, sans jargon inutile : ce qui a gagné, ce qui a perdu et combien cela représente
+              en euros avec une mise de référence de 100 €. Les pertes restent visibles : aucun historique n’est nettoyé après coup.
+              {asOf ? ` Scores à ${asOf}.` : ""}
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
+              <span className="chip-pill">💶 Mise repère : 100 €</span>
+              <span className="chip-pill">🟢 Gagnant = vert</span>
+              <span className="chip-pill">🔴 Perdu = rouge</span>
               <span className="chip-pill">Historique public</span>
-              <span className="chip-pill">Pertes conservées</span>
-              <span className="chip-pill">Méthode expliquée</span>
             </div>
           </div>
           <aside className="surface-card p-5">
@@ -132,11 +134,26 @@ function LedgerPage() {
         </div>
 
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-5">
-          <Kpi label="Victoires" value={String(canonical.summary.wins)} />
-          <Kpi label="Défaites" value={String(canonical.summary.losses)} />
-          <Kpi label="Taux de réussite" value={`${Math.round(canonical.summary.hitRate * 100)} %`} />
-          <Kpi label="Protections réussies" value={`${canonical.summary.hedgeHits}/${canonical.summary.hedges}`} />
-          <Kpi label="Bilan simulé" value={`${canonical.summary.profit >= 0 ? "+" : ""}${canonical.summary.profit.toFixed(2)} unités`} />
+          <Kpi label="🟢 Gagnants" value={String(canonical.summary.wins)} />
+          <Kpi label="🔴 Perdants" value={String(canonical.summary.losses)} />
+          <Kpi label="🎯 Taux de réussite" value={`${Math.round(canonical.summary.hitRate * 100)} %`} />
+          <Kpi label="🛡️ Protections réussies" value={`${canonical.summary.hedgeHits}/${canonical.summary.hedges}`} />
+          <Kpi label="💶 Bilan · 100 € / pari" value={fmtEur(canonical.summary.profit * 100, true)} />
+        </div>
+
+        <div className="mt-4 rounded-2xl border border-line bg-white/70 p-4 text-sm shadow-sm">
+          <p className="font-semibold text-paper">
+            Lecture express : <span className="text-sage">{canonical.summary.wins} gagnants</span>
+            {" · "}
+            <span className="text-rust">{canonical.summary.losses} perdants</span>
+            {" · "}
+            <span className={canonical.summary.profit >= 0 ? "text-sage" : "text-rust"}>
+              {fmtEur(canonical.summary.profit * 100, true)} de résultat simulé
+            </span>
+          </p>
+          <p className="mt-1 text-xs text-muted">
+            Base de lecture : 100 € sur chaque pari principal du replay historique.
+          </p>
         </div>
 
         <div className="mt-4 overflow-x-auto">
@@ -151,14 +168,17 @@ function LedgerPage() {
                 <th className="py-2 pr-3 font-medium">Score</th>
                 <th className="py-2 pr-3 font-medium">Verdict</th>
                 <th className="py-2 pr-3 font-medium">Protection score exact</th>
-                <th className="py-2 pr-3 font-medium">Gain / perte</th>
-                <th className="py-2 pr-3 font-medium">Total</th>
+                <th className="py-2 pr-3 font-medium">Gain / perte · 100 €</th>
+                <th className="py-2 pr-3 font-medium">Cumul · 100 €</th>
                 <th className="py-2 pr-3 font-medium">Phase du test</th>
               </tr>
             </thead>
             <tbody>
               {canonicalRows.map((row) => (
-                <tr key={row.id} className="border-b border-line/50 align-top">
+                <tr
+                  key={row.id}
+                  className={`border-b border-line/50 align-top transition-colors ${row.result === "win" ? "bg-sage/5 hover:bg-sage/10" : "bg-rust/5 hover:bg-rust/10"}`}
+                >
                   <td className="py-3 pr-3 tabular text-muted">{row.sequence}</td>
                   <td className="py-3 pr-3 whitespace-nowrap text-mist">
                     {format(new Date(row.kickoff), "dd/MM/yyyy")}
@@ -189,18 +209,30 @@ function LedgerPage() {
                   <td className="py-3 pr-3 tabular">{row.odds.toFixed(2)}</td>
                   <td className="py-3 pr-3 tabular font-medium text-paper">{row.score}</td>
                   <td className="py-3 pr-3">
-                    <span className="chip-pill">{row.result === "win" ? "Gagné" : "Perdu"}</span>
+                    <span
+                      className={
+                        row.result === "win"
+                          ? "inline-flex rounded-full border border-sage/40 bg-sage/10 px-3 py-1 text-xs font-extrabold uppercase tracking-wide text-sage"
+                          : "inline-flex rounded-full border border-rust/40 bg-rust/10 px-3 py-1 text-xs font-extrabold uppercase tracking-wide text-rust"
+                      }
+                    >
+                      {row.result === "win" ? "GAGNANT" : "PERDU"}
+                    </span>
                   </td>
                   <td className="py-3 pr-3 text-xs text-mist">
                     {row.hedge
-                      ? `${row.hedge.score} à ${row.hedge.odds.toFixed(2)} · ${row.hedge.stake.toFixed(2)} u · ${row.hedge.hit ? "réussi" : "raté"}`
+                      ? `${row.hedge.score} à ${row.hedge.odds.toFixed(2)} · ${fmtEur(row.hedge.stake * 100)} · ${row.hedge.hit ? "réussi" : "raté"}`
                       : "—"}
                   </td>
-                  <td className="py-3 pr-3 tabular">
-                    {row.pnl >= 0 ? "+" : ""}{row.pnl.toFixed(2)} u
+                  <td className="py-3 pr-3 tabular font-bold">
+                    <span className={row.pnl >= 0 ? "text-sage" : "text-rust"}>
+                      {fmtEur(row.pnl * 100, true)}
+                    </span>
                   </td>
-                  <td className="py-3 pr-3 tabular">
-                    {row.cumulativePnl >= 0 ? "+" : ""}{row.cumulativePnl.toFixed(2)} u
+                  <td className="py-3 pr-3 tabular font-semibold">
+                    <span className={row.cumulativePnl >= 0 ? "text-sage" : "text-rust"}>
+                      {fmtEur(row.cumulativePnl * 100, true)}
+                    </span>
                   </td>
                   <td className="py-3 pr-3 text-xs text-mist">{row.validation20 ? "Test final" : "Mise au point"}</td>
                 </tr>
@@ -216,9 +248,9 @@ function LedgerPage() {
           </p>
           <p>Les scores finaux viennent de l’archive historique des matchs.</p>
           <p>
-            Les gains et pertes sont affichés en unités : 1 unité correspond à la mise principale du test.
-            Un petit pari complémentaire sur un score exact peut s’ajouter quand la méthode le prévoit. Les matchs les plus
-            récents sont affichés en premier.
+            Tous les gains et pertes de ce tableau sont convertis en euros sur une base simple : 100 € sur le pari principal.
+            Exemple : +0,89 unité = +89 € ; -1 unité = -100 €. Un petit pari complémentaire sur un score exact peut s’ajouter
+            quand la méthode le prévoit. Les matchs les plus récents sont affichés en premier.
           </p>
         </div>
       </section>
