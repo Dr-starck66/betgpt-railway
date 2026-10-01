@@ -22,7 +22,24 @@ export function newsArticleLd(article: EditorialArticle): Record<string, unknown
     articleSection: article.category,
     keywords: article.keywords,
     isAccessibleForFree: true,
-    mainEntityOfPage: url,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${url}#webpage`,
+      url,
+      primaryImageOfPage: imageObjectLd(
+        {
+          src: article.image.src,
+          alt: article.image.alt,
+          title: article.h1,
+          description: article.lead,
+          filename: article.image.src.split("/").pop() ?? "image-article-football.jpg",
+          caption: article.image.credit,
+          width: article.image.width,
+          height: article.image.height,
+        },
+        url,
+      ),
+    },
     image: {
       "@type": "ImageObject",
       url: image,
