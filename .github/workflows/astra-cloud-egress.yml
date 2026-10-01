@@ -8,6 +8,7 @@ on:
     paths:
       - "scripts/astra-cloud-egress.mjs"
       - "scripts/astra-public-autosync.mjs"
+      - "scripts/astra-wait-public-revision.mjs"
       - "config/astra-cloud-egress.json"
       - ".github/workflows/astra-cloud-egress.yml"
 
@@ -31,6 +32,9 @@ jobs:
 
       - name: Validate public autosync syntax
         run: node --check scripts/astra-public-autosync.mjs
+
+      - name: Wait for public autosync revision
+        run: node scripts/astra-wait-public-revision.mjs "$GITHUB_SHA"
 
       - name: Verify from independent cloud network
         id: egress
