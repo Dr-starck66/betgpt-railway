@@ -4,6 +4,7 @@ import { getPublicDesk } from "@/lib/desk.functions";
 import { BRAND_OG, imageHeadTags } from "@/lib/image-seo";
 import { dayKey, dayLabel, editionAnswer, editionTitle } from "@/lib/news";
 import { SITE_URL } from "@/lib/programmatic";
+import { AstraSidewings } from "@/components/astra-sidewings";
 
 export const Route = createFileRoute("/actu/$day")({
   loader: async ({ params }) => {
@@ -43,7 +44,32 @@ export const Route = createFileRoute("/actu/$day")({
 function EditionPage() {
   const { matches, day, data } = Route.useLoaderData();
   return (
-    <div className="space-y-4">
+    <AstraSidewings
+      ariaLabel={`Navigation contextuelle de l’édition ${day}`}
+      left={{
+        eyebrow: "Édition",
+        title: day === dayKey() ? "Autour de l’actu du jour" : `Autour du ${dayLabel(day)}`,
+        intro: `${matches.length} match${matches.length > 1 ? "s" : ""} relié${matches.length > 1 ? "s" : ""} à cette édition.`,
+        links: [
+          { href: "/actu", label: "Toutes les actus", description: "Revenir au flux éditorial BetGPT." },
+          { href: "/pronostics-football/aujourdhui", label: "Pronostics du jour", description: "Voir les analyses disponibles aujourd’hui." },
+          { href: "/resultats-football/aujourdhui", label: "Résultats du jour", description: "Consulter les scores et résultats récents." },
+          { href: "/scores-en-direct", label: "Scores en direct", description: "Suivre les rencontres actuellement en jeu." },
+        ],
+      }}
+      right={{
+        eyebrow: "Contexte",
+        title: "Vérifier et approfondir",
+        intro: "Les actualités et analyses restent reliées à leurs sources, à la méthodologie et au registre public.",
+        links: [
+          { href: "/data-sources", label: "Sources des données", description: "Voir d’où viennent les données utilisées." },
+          { href: "/methodology", label: "Méthodologie", description: "Comprendre la construction des analyses." },
+          { href: "/ledger", label: "Bilan vérifié", description: "Contrôler l’historique public des prédictions." },
+          { href: "/comparer-cotes", label: "Comparer les cotes", description: "Relier l’actualité du match aux prix disponibles." },
+        ],
+      }}
+    >
+      <div className="space-y-4">
       <ActuFeed
         matches={matches}
         predictions={data.predictions}
@@ -56,6 +82,7 @@ function EditionPage() {
           Toutes les actus
         </Link>
       </p>
-    </div>
+      </div>
+    </AstraSidewings>
   );
 }
