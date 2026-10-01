@@ -12,6 +12,7 @@ import {
 import { matchFromHistory } from "@/engine/history-match";
 import { loadAdmin, saveAdmin, hydrateAdmin, type AdminSettings } from "@/engine/admin";
 import { logClick, recentClicks, safeAffiliateUrl } from "@/engine/clicks";
+import { affiliateConversionSnapshot } from "@/engine/affiliate-conversion";
 import { latestDigest } from "@/engine/email";
 import { completeChat } from "@/lib/chat/complete";
 import type { ChatRequestBody } from "@/lib/chat/types";
@@ -33,7 +34,7 @@ import {
   setupAdmin,
   verifyAdminToken,
 } from "@/engine/guard";
-import { analyticsSummary } from "@/lib/store";
+import { affiliateClickSummary, analyticsSummary } from "@/lib/store";
 import { compactTickets } from "@/engine/ledger-pick";
 import { loadTickets, getTicket, hydrateTickets, canonicalChampionRows } from "@/engine/ticket-log";
 import { versionsFor, bustVersions, hydrateVersions } from "@/engine/prediction-versions";
@@ -1006,6 +1007,8 @@ export const unlockAdmin = createServerFn({ method: "POST" })
       digest: latestDigest(),
       legalReady: legalReady(),
       analytics: await analyticsSummary(),
+      affiliate: affiliateConversionSnapshot(),
+      affiliateStats: await affiliateClickSummary(),
       ledger: ledgerHealth(loadTickets()),
     };
   });
@@ -1030,7 +1033,12 @@ export const saveAdminSettings = createServerFn({ method: "POST" })
     if (!verifyAdminToken(token)) return { ok: false as const, error: "Session admin expirée." };
     const next = saveAdmin(rest);
     bustEngine();
-    return { ok: true as const, admin: next };
+    return {
+      ok: true as const,
+      admin: next,
+      affiliate: affiliateConversionSnapshot(),
+      affiliateStats: await affiliateClickSummary(),
+    };
   });
 
 export const askBetgpt = createServerFn({ method: "POST" })
