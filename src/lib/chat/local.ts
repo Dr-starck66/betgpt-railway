@@ -18,15 +18,7 @@ export function localMatchFacts(question: string, matches: MatchInput[], asOf?: 
     if (fullNameMatch) return true;
     return [m.home.short, m.away.short].some((short) => {
       const key = norm(short);
-      if (key.length < 3 || blockedShorts.has(key)) return false;
-      const escaped = String(short).replace(/[.*+?^$()|[\]\\]/g, "\\  const query = ` ${norm(question)} `;
-  const selected = matches.filter((m) =>
-    [m.home.name, m.away.name, m.home.short, m.away.short].some((name) => {
-      const key = norm(name);
-      return key.length >= 3 && query.includes(` ${key} `);
-    }),
-  );");
-      return new RegExp(`\\b${escaped}\\b`, "i").test(question);
+      return key.length >= 3 && !blockedShorts.has(key) && query.includes(` ${key} `);
     });
   });
   const upcoming = matches
