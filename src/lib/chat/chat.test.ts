@@ -337,6 +337,53 @@ it("daily chat pick can expose a real listed model fallback when no premium BET 
   assert.match(pick?.limitation ?? "", /premium/i);
 });
 
+
+it("daily chat pick falls back to the strongest model 1X2 when bookmaker odds are unavailable", () => {
+  const match = {
+    id: "m3",
+    home: { name: "Gamma", short: "GAM" },
+    away: { name: "Delta", short: "DEL" },
+    competition: "Test League",
+    kickoff: "2026-10-01T21:00:00Z",
+    status: "scheduled",
+  } as MatchInput;
+  const prediction = {
+    matchId: "m3",
+    markets: [
+      {
+        market: "1X2_H",
+        label: "1 — Domicile",
+        group: "1X2",
+        selection: "1",
+        modelProb: 0.57,
+        fairOdds: 1.75,
+        bestOdds: 0,
+        bestBook: "non listé",
+        implied: 0,
+        edge: 0,
+        ev: 0,
+        stakePct: 0,
+        listed: false,
+        premium: false,
+        opportunityScore: 0.67,
+        decision: "WATCH",
+        rejectionReason: "Cette cote n'est pas affichée chez le book.",
+      },
+    ],
+  } as unknown as import("../../engine/types.ts").PredictionRecord;
+
+  const pick = selectDailyChatPick(
+    [match],
+    [prediction],
+    "2026-10-01T14:00:00Z",
+    false,
+  );
+  assert.equal(pick?.grade, "STANDARD_MODEL");
+  assert.equal(pick?.label, "1 — Domicile");
+  assert.equal(pick?.odds, null);
+  assert.equal(pick?.fairOdds, 1.75);
+});
+
 it("daily chat pick refuses stale desk data instead of manufacturing a current bet", () => {
   const pick = selectDailyChatPick([], [], "2026-10-01T14:00:00Z", true);
   assert.equal(pick, null);
