@@ -1,4 +1,5 @@
 import { contextualAuthorityGate } from "../src/lib/editorial/authority-citations.ts";
+import { discoverLaunchpadStaticAudit, recentDiscoverCandidates } from "../src/lib/editorial/discover-launchpad.ts";
 import { editionFromDesk } from "../src/lib/editorial/run.server.ts";
 import { isPublicArticle } from "../src/lib/editorial/types.ts";
 import { writeLedger } from "../src/lib/editorial/ledger-store.ts";
@@ -18,6 +19,23 @@ if (authorityFailures.length) {
   process.exit(2);
 }
 
+const discoverCandidates = recentDiscoverCandidates(published, now, 48);
+const discoverAudits = discoverCandidates.map((article) => discoverLaunchpadStaticAudit(article, now));
+const discoverFailures = discoverAudits.filter((audit) => !audit.hardPass);
+
+if (discoverFailures.length) {
+  for (const audit of discoverFailures) {
+    console.error(
+      `ASTRA_DISCOVER_LAUNCHPAD_FAIL ${audit.slug}: ${audit.failures.join(" | ")}`,
+    );
+  }
+  process.exit(2);
+}
+
+console.log(
+  `ASTRA_DISCOVER_LAUNCHPAD_STATIC_PASS candidates=${discoverAudits.length} pass=${discoverAudits.filter((audit) => audit.verdict === "PASS").length} review=${discoverAudits.filter((audit) => audit.verdict === "REVIEW").length}`,
+);
+
 const persisted = writeLedger(published);
 const social = await syncPublishedArticlesToSocial(published, now);
 
@@ -36,6 +54,17 @@ console.log(
         status: article.status,
         publishedAt: article.publishedAt,
       })),
+      discoverLaunchpad: {
+        candidateWindowHours: 48,
+        candidateCount: discoverAudits.length,
+        pass: discoverFailures.length === 0,
+        articles: discoverAudits.map((audit) => ({
+          slug: audit.slug,
+          verdict: audit.verdict,
+          score: audit.score,
+          warnings: audit.warnings,
+        })),
+      },
       social: {
         provider: social.provider,
         created: social.created.map((row) => ({
