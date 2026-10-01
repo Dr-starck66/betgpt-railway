@@ -115,7 +115,7 @@ export function discoverLaunchpadStaticAudit(
   ];
   const score = Math.round((weighted.filter(Boolean).length / weighted.length) * 100);
   const hardPass = failures.length === 0;
-  const verdict: DiscoverLaunchpadVerdict = !hardPass ? "FAIL" : score >= 90 ? "PASS" : "REVIEW";
+  const verdict: DiscoverLaunchpadVerdict = !hardPass ? "FAIL" : !checks.TIMELY_24H ? "REVIEW" : score >= 90 ? "PASS" : "REVIEW";
 
   return {
     articleId: article.id,
