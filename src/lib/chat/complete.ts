@@ -27,7 +27,7 @@ async function callAstraRouter(
   mode: PersonalityMode,
 ): Promise<{ ok: true; text: string } | { ok: false; status: number }> {
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 26000);
+  const timer = setTimeout(() => controller.abort(), 30000);
   try {
     const last = history.at(-1)?.content ?? "";
     const critic =
@@ -47,8 +47,8 @@ async function callAstraRouter(
       body: JSON.stringify({
         system: system.slice(0, 18000),
         user: `CONVERSATION RÉCENTE\n\n${transcript}\n\nRéponds au dernier message de l'utilisateur.`,
-        requestedModel: critic ? "gemma-critic-local" : "qwen-coder-local",
-        maxTokens: mode === "ROAST" ? 700 : 850,
+        requestedModel: "qwen-chat-local",
+        maxTokens: critic ? 240 : 280,
       }),
     });
     const json = (await upstream.json().catch(() => ({}))) as {
