@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { orderedContextualSourceIds } from "@/lib/editorial/authority-citations";
 import { newsArticleLd, breadcrumbLd } from "@/lib/editorial/schema";
 import { formatParis } from "@/lib/editorial/time";
 import type { EditorialArticle } from "@/lib/editorial/types";
@@ -78,7 +79,7 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
           </div>
 
           {article.paragraphs.map((part) => {
-            const passageSources = (part.sourceIds ?? [])
+            const passageSources = orderedContextualSourceIds(part.sourceIds, article.sources)
               .map((sourceId) => article.sources.find((source) => source.id === sourceId))
               .filter(
                 (source): source is EditorialArticle["sources"][number] & { url: string } =>
