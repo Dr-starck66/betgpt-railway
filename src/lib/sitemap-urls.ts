@@ -164,7 +164,6 @@ export function buildSitemapUrls(input: {
     { loc: `${SITE_URL}/confidentialite`, path: "/confidentialite", title: "Confidentialité", group: "Légal", lastmod: now, changefreq: "yearly", priority: "0.2" },
     { loc: `${SITE_URL}/cookies`, path: "/cookies", title: "Cookies", group: "Légal", lastmod: now, changefreq: "yearly", priority: "0.2" },
     { loc: `${SITE_URL}/jeu-responsable`, path: "/jeu-responsable", title: "Jeu responsable", group: "Légal", lastmod: now, changefreq: "yearly", priority: "0.3" },
-    { loc: `${SITE_URL}/contact`, path: "/contact", title: "Contact", group: "Légal", lastmod: now, changefreq: "yearly", priority: "0.3" },
     { loc: `${SITE_URL}/politique-publicite`, path: "/politique-publicite", title: "Politique publicitaire", group: "Légal", lastmod: now, changefreq: "yearly", priority: "0.2" },
     { loc: `${SITE_URL}/score-hunter`, path: "/score-hunter", title: "Score Hunter", group: "Hunter", lastmod: now, changefreq: "hourly", priority: "0.95" },
     { loc: `${SITE_URL}/statistics`, path: "/statistics", title: "Statistiques football", group: "Stats", lastmod: now, changefreq: "daily", priority: "0.85" },
