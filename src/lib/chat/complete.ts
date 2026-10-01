@@ -54,7 +54,9 @@ function localReply(last: string, desk: string, mode: PersonalityMode): string {
         mode === "ROAST"
           ? "Le desk a déjà bossé, donc je ne vais pas te demander les affiches comme un grille-pain sans Wi-Fi. Voilà le pari qui ressort :"
           : "Le desk connaît déjà les matchs disponibles. Voilà le pari qui ressort aujourd’hui :";
-      return `${opener}\n\n${desk}`;
+      const marker = desk.indexOf("SÉLECTION AUTOMATIQUE BETGPT");
+      const selection = marker >= 0 ? desk.slice(marker) : desk;
+      return `${opener}\n\n${selection}`;
     }
     if (desk.includes("Aucun match exploitable trouvé dans le cache.")) {
       return mode === "ROAST"
@@ -279,6 +281,12 @@ export async function completeChat(
     }));
   const last = history.at(-1)?.content ?? "";
   const mustGround = shouldGround(last);
+
+  // Daily-pick questions are deterministic when the desk has a real selection:
+  // never let a language model replace it with "donne-moi les affiches".
+  if (classifyChatIntent(last) === "TODAY_PICKS" && desk.includes("SÉLECTION AUTOMATIQUE BETGPT")) {
+    return success(localReply(last, desk, mode), mode, last, recentRoasts);
+  }
 
   const localChatBase = process.env.ASTRA_LOCAL_CHAT_BASE?.trim();
   if (localChatBase) {
