@@ -257,7 +257,7 @@ function Home() {
         <Link to="/ledger" className="block">
           <QuickInfo icon={ShieldCheck} title="Bilan ROI public" text="Historique vérifié, résultats, mises et performance réelle du modèle." />
         </Link>
-        <Link to="/chat" search={{}} preload={false} className="block">
+        <Link to="/chat" search={{ q: undefined }} preload={false} className="block">
           <QuickInfo icon={Sparkles} title="Chat BetGPT" text="Interroger le moteur sur un match, une cote ou un scénario de score." />
         </Link>
         <Link to="/methodology" className="block">
