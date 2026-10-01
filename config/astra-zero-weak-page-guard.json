@@ -1,7 +1,14 @@
 {
   "version": "ASTRA-ZERO-WEAK-PAGE-GUARD-1",
-  "routeDirs": ["src/routes"],
-  "extensions": [".tsx", ".ts", ".jsx", ".js"],
+  "routeDirs": [
+    "src/routes"
+  ],
+  "extensions": [
+    ".tsx",
+    ".ts",
+    ".jsx",
+    ".js"
+  ],
   "ignoreFiles": [
     "src/routes/__root.tsx",
     "src/routes/actu.tsx",
@@ -41,11 +48,23 @@
     "<MatchArticle",
     "<NewsArticle",
     "<BlogBody",
-    "<ScoreTable"
+    "<ScoreTable",
+    "<LegalLayout",
+    "<ActuFeed",
+    "<ZeroRadarView",
+    "<PronoSilo"
   ],
   "minIndexableSourceBytes": 1200,
   "minInternalLinks": 2,
   "minScore": 78,
   "sitemapSource": "src/lib/sitemap-urls.ts",
-  "reportPath": "artifacts/seo/zero-weak-pages.json"
+  "reportPath": "artifacts/seo/zero-weak-pages.json",
+  "roleMinimums": {
+    "legal": 68,
+    "trust": 78,
+    "commercial": 78,
+    "editorial": 78,
+    "entity": 78,
+    "landing": 78
+  }
 }
