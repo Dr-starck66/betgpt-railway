@@ -1,0 +1,49 @@
+name: ASTRA Zero Weak Page Guard Ω
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/routes/**"
+      - "src/components/**"
+      - "src/lib/seo/**"
+      - "src/lib/geo/**"
+      - "src/lib/sitemap-urls.ts"
+      - "scripts/astra-zero-weak-page-guard.mjs"
+      - "config/astra-zero-weak-page-guard.json"
+      - "package.json"
+      - ".github/workflows/astra-zero-weak-page.yml"
+  pull_request:
+    paths:
+      - "src/routes/**"
+      - "src/components/**"
+      - "src/lib/seo/**"
+      - "src/lib/geo/**"
+      - "src/lib/sitemap-urls.ts"
+      - "scripts/astra-zero-weak-page-guard.mjs"
+      - "config/astra-zero-weak-page-guard.json"
+      - "package.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  zero-weak-pages:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Audit every public route
+        run: node scripts/astra-zero-weak-page-guard.mjs --strict
+      - name: Upload SEO evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: astra-zero-weak-pages
+          path: artifacts/seo/zero-weak-pages.json
+          if-no-files-found: error
+          retention-days: 30
