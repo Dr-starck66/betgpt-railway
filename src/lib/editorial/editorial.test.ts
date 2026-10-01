@@ -478,6 +478,38 @@ describe("editorial engine", () => {
     assert.ok(result.reasons.includes("remplissage éditorial générique détecté"));
   });
 
+  it("rejects Premièrement Deuxièmement Troisièmement as an unstructured flat block", () => {
+    const result = qualityGate(
+      {
+        articleType: "news",
+        title: "UEFA : trois faits établis dans le dossier",
+        h1: "UEFA : trois faits établis dans le dossier du jour",
+        lead: "Cette analyse distingue les faits confirmés des interprétations et conserve chaque niveau de certitude dans une structure éditoriale explicite.",
+        paragraphs: [
+          {
+            h2: "Ce qui est établi",
+            body:
+              "Premièrement, l’instance a reçu les documents transmis. Deuxièmement, les inspecteurs doivent encore les examiner. Troisièmement, aucune décision sur le fond n’est annoncée à ce stade.",
+          },
+          { h2: "Contexte", body: "Le contexte de la procédure est rappelé à partir des communications disponibles afin de ne pas transformer une étape procédurale en conclusion définitive. ".repeat(2) },
+          { h2: "Positions", body: "Les positions des parties sont attribuées séparément et ne sont jamais présentées comme la position finale de l’instance compétente. ".repeat(2) },
+          { h2: "Sources", body: "Les sources primaires et les confirmations journalistiques sont distinguées pour conserver un niveau de preuve lisible et vérifiable. ".repeat(2) },
+          { h2: "Suite", body: "La prochaine mise à jour dépendra d’un nouvel élément officiel ou d’une décision procédurale identifiable et publiquement vérifiable. ".repeat(2) },
+        ],
+        sources: [
+          { id: "official", label: "UEFA", status: "OFFICIAL", note: "communication officielle", url: "https://www.uefa.com/" },
+          { id: "press", label: "EFE", status: "HIGH_CONFIDENCE", note: "agence de presse", url: "https://efe.com/" },
+        ],
+        image: { src: "/blog/discover/test-headings-adverbs.jpg", alt: "stade", width: 1600, height: 900, credit: "libre" },
+        links: [{ href: "/la-liga", label: "La Liga" }],
+        teams: ["Real Madrid", "FC Barcelona"],
+        competition: "La Liga",
+      },
+      [],
+    );
+    assert.ok(result.reasons.includes("hiérarchie H2/H3 trop plate malgré des sous-idées explicites"));
+  });
+
   it("rejects a flat H2 block when the copy explicitly contains three sub-ideas", () => {
     const flat = qualityGate(
       {
