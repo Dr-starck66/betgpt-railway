@@ -190,6 +190,7 @@ export function siteJsonLd(): object {
         "@id": `${SITE_URL}/#website`,
         url: SITE_URL,
         name: "BetGPT",
+        alternateName: "betgpt.live",
         publisher: { "@id": orgId },
         inLanguage: "fr-FR",
       },
