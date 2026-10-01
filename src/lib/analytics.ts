@@ -6,6 +6,8 @@ export const ANALYTICS_EVENTS = {
   why_this_score: "why_this_score",
   match_analyzed: "match_analyzed",
   chat_ask: "chat_ask",
+  chat_share: "chat_share",
+  chat_share_copy: "chat_share_copy",
   favorite_add: "favorite_add",
   favorite_remove: "favorite_remove",
   return_visit: "return_visit",
