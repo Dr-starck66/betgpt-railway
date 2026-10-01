@@ -904,6 +904,19 @@ function materialize(
   return finalize(draft, candidate.score, prior, usedImages);
 }
 
+function isCorruptedFrozenNews(article: EditorialArticle): boolean {
+  if (article.articleType !== "news") return false;
+  const text = `${article.h1} ${article.lead}`.toLowerCase();
+  // Signature of the historical bug where a news article was rebuilt through
+  // composeMatch() while keeping the original news slug.
+  return (
+    /forme, horaire et données disponibles/.test(text) ||
+    /les clés du match et l'heure du coup d'envoi/.test(text) ||
+    /dernières informations avant le match/.test(text) ||
+    (/affronte/.test(text) && /coup d'envoi/.test(text) && /voici les informations vérifiées disponibles/.test(text))
+  );
+}
+
 export function buildEdition(input: EditionInput): EditorialEdition {
   const now = input.now ?? new Date();
   const day = parisDate(now);
@@ -913,7 +926,9 @@ export function buildEdition(input: EditionInput): EditorialEdition {
   const models = new Map((input.models ?? []).map((model) => [model.matchId, model]));
   const pool = input.matches.filter((match) => inWindow(match, now.getTime(), day));
   const candidates = buildCandidates(pool, input.signals ?? [], now.getTime(), day, models);
-  const frozenToday = (input.frozen ?? []).filter((article) => article.parisDate === day && isPublicArticle(article));
+  const frozenToday = (input.frozen ?? [])
+    .filter((article) => article.parisDate === day && isPublicArticle(article))
+    .filter((article) => !isCorruptedFrozenNews(article));
   const locked = new Set(frozenToday.map((article) => article.slot));
   const usedMatches = new Set(frozenToday.map((article) => article.matchId).filter((id): id is string => Boolean(id)));
   const usedCandidateIds = new Set<string>();
