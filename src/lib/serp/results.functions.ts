@@ -302,7 +302,7 @@ async function freshFotMobResults(now = Date.now()): Promise<ResultRow[]> {
   return resultsMem.__betgptFotmobRefresh;
 }
 
-export const getResultsBoard = createServerFn({ method: "GET" }).handler(async (): Promise<{ asOf: string; rows: ResultRow[] }> => {
+export async function loadResultsBoardData(): Promise<{ asOf: string; rows: ResultRow[] }> {
   const [desk, archive, fotmob] = await Promise.all([getDesk(), freshResultArchive(), freshFotMobResults()]);
   const fromDesk = (desk.matches ?? []).map(rowFromMatch).filter((r): r is ResultRow => !!r);
   const cutoff = Date.now() - 21 * 864e5;
@@ -313,4 +313,6 @@ export const getResultsBoard = createServerFn({ method: "GET" }).handler(async (
   const mergedExternal = mergeResults(fotmob, fromArchive);
   const rows = recentResults(mergeResults(fromDesk, mergedExternal));
   return { asOf: fotmob.length ? new Date().toISOString() : desk.liveAsOf, rows };
-});
+}
+
+export const getResultsBoard = createServerFn({ method: "GET" }).handler(loadResultsBoardData);
