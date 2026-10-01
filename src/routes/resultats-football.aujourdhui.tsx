@@ -23,7 +23,7 @@ export const Route = createFileRoute("/resultats-football/aujourdhui")({
     const description = pageDescription(n);
     return {
       meta: [
-        { title: `${TITLE} | BetGPT` },
+        { title: "Résultats football aujourd’hui : scores finaux du jour | BetGPT" },
         { name: "description", content: description },
         { name: "robots", content: n ? "index, follow, max-snippet:-1, max-image-preview:large" : "noindex, follow" },
         { property: "og:title", content: `${TITLE} | BetGPT` },
