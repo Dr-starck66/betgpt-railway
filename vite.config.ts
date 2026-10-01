@@ -111,9 +111,12 @@ function pgliteVercelAssetsPlugin(): Plugin {
         "__server.func",
         "_libs",
       );
-      mkdirSync(targetDir, { recursive: true });
-      for (const name of assetNames) {
-        copyFileSync(join(sourceDir, name), join(targetDir, name));
+      const nodeServerTargetDir = join(root, ".output", "server", "_libs");
+      for (const dir of [targetDir, nodeServerTargetDir]) {
+        mkdirSync(dir, { recursive: true });
+        for (const name of assetNames) {
+          copyFileSync(join(sourceDir, name), join(dir, name));
+        }
       }
       // Runtime fs reads are not traced from dynamic process.cwd() paths.
       // Ship football inputs explicitly; never bundle admin gates or email data.
@@ -123,7 +126,7 @@ function pgliteVercelAssetsPlugin(): Plugin {
         const source = join(root, "data", name);
         if (existsSync(source)) copyFileSync(source, join(dataDir, name));
       }
-      console.log(`[app-builder] copied PGlite runtime assets to ${targetDir}`);
+      console.log(`[app-builder] copied PGlite runtime assets to ${targetDir} and ${nodeServerTargetDir}`);
     },
   };
 }
