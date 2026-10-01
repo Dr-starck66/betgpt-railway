@@ -261,8 +261,28 @@ const ARTICLES: EditorialArticle[] = [
       {
         h2: "Ce qui est établi, et ce qui reste encore à démontrer",
         body:
-          "Trois faits peuvent être séparés des interprétations des deux clubs. Premièrement, l’UEFA a reçu des documents transmis par le Real Madrid. Deuxièmement, ses inspecteurs doivent les évaluer dans une enquête déjà qualifiée d’en cours. Troisièmement, aucune décision sur le fond de ces documents n’est annoncée dans le texte rendu public. En revanche, la portée exacte des pièces, leur poids dans l’enquête et les conséquences disciplinaires éventuelles ne peuvent pas être déduits des communiqués publiés ce jeudi. BetGPT ne présente donc ni la position du Real Madrid ni celle du FC Barcelone comme le verdict de l’UEFA.",
+          "Trois faits peuvent être séparés des interprétations des deux clubs. Ils n’ont pas tous la même portée et doivent rester distingués des conséquences encore hypothétiques.",
         sourceIds: ["realmadrid-negreira-2026-10-01","barca-negreira-2026-10-01","efe-negreira-2026-10-01"],
+        subsections: [
+          {
+            h3: "1. L’UEFA a bien reçu des documents transmis par le Real Madrid",
+            body:
+              "La réception d’une documentation substantielle est confirmée dans le texte de l’UEFA reproduit par le FC Barcelone et rapporté par EFE. Ce point est établi indépendamment de l’appréciation que chaque club porte sur le dossier.",
+            sourceIds: ["barca-negreira-2026-10-01","efe-negreira-2026-10-01"],
+          },
+          {
+            h3: "2. Les inspecteurs de l’UEFA doivent encore examiner ces éléments",
+            body:
+              "Les documents doivent être évalués par les inspecteurs éthiques et disciplinaires dans le cadre de l’enquête déjà en cours. Leur réception ne préjuge donc ni de leur valeur probante ni de la conclusion de l’examen.",
+            sourceIds: ["barca-negreira-2026-10-01","efe-negreira-2026-10-01"],
+          },
+          {
+            h3: "3. Aucune décision sur le fond n’est annoncée à ce stade",
+            body:
+              "Aucune sanction ni décision disciplinaire nouvelle n’est annoncée dans les textes publiés ce jeudi. La portée exacte des pièces, leur poids dans l’enquête et leurs conséquences éventuelles restent donc à établir. BetGPT ne présente ni la position du Real Madrid ni celle du FC Barcelone comme le verdict de l’UEFA.",
+            sourceIds: ["realmadrid-negreira-2026-10-01","barca-negreira-2026-10-01","efe-negreira-2026-10-01"],
+          },
+        ],
       },
       {
         h2: "Pourquoi cette séquence est particulièrement sensible avant les prochains grands rendez-vous",
@@ -279,7 +299,7 @@ const ARTICLES: EditorialArticle[] = [
     ],
     createdAt: "2026-10-01T21:34:04.000Z",
     publishedAt: "2026-10-01T21:34:04.000Z",
-    modifiedAt: null,
+    modifiedAt: "2026-10-01T21:40:00.000Z",
     parisDate: "2026-10-01",
     scheduledTime: "23:34",
     category: "Actualité football",
@@ -360,7 +380,7 @@ const ARTICLES: EditorialArticle[] = [
     duplicateScore: 0,
     corrections: [],
     sourceChanges: [],
-    factHash: "manual-negreira-uefa-real-barca-2026-10-01-v1",
+    factHash: "manual-negreira-uefa-real-barca-2026-10-01-v2",
     keywords: "affaire Negreira, UEFA, Real Madrid, FC Barcelone, Barça, enquête UEFA, La Liga",
   },
 ];
