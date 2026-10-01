@@ -1,0 +1,26 @@
+name: ASTRA Editorial Zero Debt
+on:
+  push:
+    branches:
+      - astra/editorial-zero-debt-20261001
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Full corpus authority audit
+        run: npm run editorial:corpus-audit
+      - name: Editorial engine regression suite
+        run: npm run news
+      - name: Mandatory prebuild guards
+        run: npm run prebuild
+      - name: Production bundle
+        run: node scripts/with-app-env.mjs vite build
+      - name: Evidence
+        run: echo "ASTRA_EDITORIAL_ZERO_DEBT_PASS"
