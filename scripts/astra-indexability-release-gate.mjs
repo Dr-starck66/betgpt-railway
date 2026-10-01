@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import fs from "node:fs";
 import path from "node:path";
-import { buildSitemapUrls } from "../src/lib/sitemap-urls.ts";
+import { createServer } from "vite";
 
 const root = process.cwd();
 const cfg = JSON.parse(fs.readFileSync(path.join(root, "config/astra-indexability-release-gate.json"), "utf8"));
@@ -95,11 +95,24 @@ const routes = (zero.results || []).filter((r) => r.indexable);
 const failures = [];
 const results = [];
 
-const generated = buildSitemapUrls({
-  matches: syntheticMatches(),
-  asOf: new Date().toISOString(),
-  standingsAsOf: new Date().toISOString(),
+const vite = await createServer({
+  configFile: false,
+  root,
+  appType: "custom",
+  server: { middlewareMode: true },
+  resolve: { alias: { "@": path.join(root, "src") } },
 });
+let generated;
+try {
+  const sitemapModule = await vite.ssrLoadModule("/src/lib/sitemap-urls.ts");
+  generated = sitemapModule.buildSitemapUrls({
+    matches: syntheticMatches(),
+    asOf: new Date().toISOString(),
+    standingsAsOf: new Date().toISOString(),
+  });
+} finally {
+  await vite.close();
+}
 const generatedPaths = [...new Set(generated.map((row) => norm(row.path)))];
 
 for (const item of routes) {
