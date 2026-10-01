@@ -116,7 +116,7 @@ async function callLocalChat(
         model: "qwen-chat-local",
         stream: false,
         temperature: mode === "ROAST" ? 0.72 : 0.38,
-        max_tokens: 360,
+        max_tokens: 220,
         messages: [{ role: "system", content: system.slice(0, 12000) }, ...history],
       }),
     });
