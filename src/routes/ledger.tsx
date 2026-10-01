@@ -10,6 +10,15 @@ import { VerdictBadge } from "@/components/ui/badge";
 import { fmtEur, fmtOdds, fmtSignedPct } from "@/lib/utils";
 import { SITE_URL } from "@/lib/seo";
 
+const CANONICAL_CHAMPION = Object.freeze({
+  roi: 0.3567667905898516,
+  n: 178,
+  maxDrawdown: 5,
+  validationRoi: 0.32225206899068637,
+  validationN: 57,
+  validationMaxDrawdown: 3.2871767545117394,
+});
+
 export const Route = createFileRoute("/ledger")({
   loader: () => getLedgerDesk(),
   head: () => ({
@@ -79,6 +88,33 @@ function LedgerPage() {
             </ul>
           </aside>
         </div>
+      </section>
+
+      <section className="section-card border-sage/40 p-5 sm:p-6">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p className="eyebrow">Champion canonique ROI5</p>
+            <h2 className="mt-1 font-display text-2xl">Méthode validée &gt; 30 %</h2>
+            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-mist">
+              Benchmark rétrospectif chronologique du gate canonique actuellement appliqué aux
+              décisions de production. Il est séparé du registre public réel ci-dessous : ce
+              dernier conserve tous les résultats observés et ne doit jamais être réécrit pour
+              reproduire artificiellement le backtest.
+            </p>
+          </div>
+          <span className="chip-pill">Gate production actif</span>
+        </div>
+        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <Kpi label="ROI canonique" value={fmtSignedPct(CANONICAL_CHAMPION.roi)} />
+          <Kpi label="Validation chronologique" value={fmtSignedPct(CANONICAL_CHAMPION.validationRoi)} />
+          <Kpi label="Échantillon canonique" value={String(CANONICAL_CHAMPION.n)} />
+          <Kpi label="Drawdown max" value={CANONICAL_CHAMPION.maxDrawdown.toFixed(2)} />
+        </div>
+        <p className="mt-3 text-xs text-muted">
+          Validation : {CANONICAL_CHAMPION.validationN} sélections · drawdown max{" "}
+          {CANONICAL_CHAMPION.validationMaxDrawdown.toFixed(2)}. Performance historique,
+          non garantie pour les prochains paris.
+        </p>
       </section>
 
       {ev ? (
