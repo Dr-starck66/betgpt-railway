@@ -71,7 +71,8 @@
     "test:stream-resilience": "node --test scripts/astra-stream-resilience.test.mjs",
     "guard:stream-resilience": "node scripts/astra-stream-resilience-guard.mjs",
     "seo:self-heal": "node scripts/astra-seo-self-heal.mjs --apply",
-    "seo:self-heal:diagnose": "node scripts/astra-seo-self-heal.mjs"
+    "seo:self-heal:diagnose": "node scripts/astra-seo-self-heal.mjs",
+    "test:self-heal": "node --test scripts/astra-seo-self-heal.test.mjs"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.4",
