@@ -264,13 +264,22 @@ export function renderDailyChatPick(pick: ChatDailyPick): string {
         ? "STANDARD"
         : pick.grade === "STANDARD_FALLBACK"
           ? "STANDARD — fallback modèle, non premium"
-          : pick.grade === "STANDARD_MODEL"\n            ? "STANDARD MODÈLE — non premium, cote live indisponible"\n            : "STANDARD DATA — non premium, choix de secours";
+          : pick.grade === "STANDARD_MODEL"
+            ? "STANDARD MODÈLE — non premium, cote live indisponible"
+            : "STANDARD DATA — non premium, choix de secours";
   const prob = `${Math.round(pick.modelProb * 100)} %`;
   const oddsLine =
     pick.odds != null
       ? `Cote disponible : ${pick.odds.toFixed(2)} chez ${pick.book || "bookmaker"}`
-      : pick.fairOdds != null\n        ? `Cote disponible : indisponible · cote juste modèle : ${pick.fairOdds.toFixed(2)}`\n        : "Cote disponible : indisponible · aucune cote juste calculée";
-  const evLine =\n    pick.odds != null\n      ? `EV modèle : ${pick.ev >= 0 ? "+" : ""}${(pick.ev * 100).toFixed(1)} %`\n      : pick.grade === "STANDARD_DATA"\n        ? "EV modèle : non calculée pour ce fallback data."\n        : "EV modèle : non validable sans cote bookmaker disponible.";
+      : pick.fairOdds != null
+        ? `Cote disponible : indisponible · cote juste modèle : ${pick.fairOdds.toFixed(2)}`
+        : "Cote disponible : indisponible · aucune cote juste calculée";
+  const evLine =
+    pick.odds != null
+      ? `EV modèle : ${pick.ev >= 0 ? "+" : ""}${(pick.ev * 100).toFixed(1)} %`
+      : pick.grade === "STANDARD_DATA"
+        ? "EV modèle : non calculée pour ce fallback data."
+        : "EV modèle : non validable sans cote bookmaker disponible.";
 
   return [
     "SÉLECTION AUTOMATIQUE BETGPT — À UTILISER DANS LA RÉPONSE",
@@ -278,7 +287,10 @@ export function renderDailyChatPick(pick: ChatDailyPick): string {
     `Match : ${pick.home} – ${pick.away} · ${pick.competition}`,
     `Pari à prendre : ${pick.label}`,
     oddsLine,
-    pick.grade === "STANDARD_DATA" ? `Indice data : ${prob}` : `Probabilité modèle : ${prob}`,\n    evLine,\n    pick.rationale ? `Pourquoi : ${pick.rationale}` : "",\n    pick.limitation ? `Limite principale : ${pick.limitation}` : "",
+    pick.grade === "STANDARD_DATA" ? `Indice data : ${prob}` : `Probabilité modèle : ${prob}`,
+    evLine,
+    pick.rationale ? `Pourquoi : ${pick.rationale}` : "",
+    pick.limitation ? `Limite principale : ${pick.limitation}` : "",
     "Instruction : réponds directement avec cette sélection. Ne demande jamais à l'utilisateur de fournir les affiches si ce bloc existe.",
   ]
     .filter(Boolean)
