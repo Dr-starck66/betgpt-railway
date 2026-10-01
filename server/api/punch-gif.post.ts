@@ -25,6 +25,20 @@ function scoreResult(result: TenorResult, query: string): number {
   return score;
 }
 
+function localFallback(query: string) {
+  const q = query.toLowerCase();
+  if (/pigeon|hamster|llama|alpaga|octopus|duck|goat|hedgehog|snail|penguin|chihuahua/.test(q)) {
+    return { url: "/reactions/astra-animal.gif?v=4", alt: "Réaction GIF BetGPT — chaos animal", provider: "local" };
+  }
+  if (/bet|pari|ticket|bookmaker|shopping|spree|card|money/.test(q)) {
+    return { url: "/reactions/astra-betting.gif?v=4", alt: "Réaction GIF BetGPT — ticket carbonisé", provider: "local" };
+  }
+  if (/space|cosmic|explosion|shocked|disbelief|confused/.test(q)) {
+    return { url: "/reactions/astra-shock.gif?v=4", alt: "Réaction GIF BetGPT — choc absolu", provider: "local" };
+  }
+  return { url: "/reactions/astra-fallback.gif?v=4", alt: "Réaction GIF BetGPT", provider: "local" };
+}
+
 export default defineEventHandler(async (event) => {
   const body = (await readBody(event).catch(() => null)) as { query?: unknown } | null;
   const query = typeof body?.query === "string" ? body.query.replace(/\s+/g, " ").trim() : "";
@@ -34,7 +48,9 @@ export default defineEventHandler(async (event) => {
 
   const apiKey = process.env.TENOR_API_KEY?.trim();
   if (!apiKey || process.env.BETGPT_GIF_ENABLED === "0") {
-    return Response.json({ error: "GIF premium non configuré." }, { status: 503 });
+    return Response.json(localFallback(query), {
+      headers: { "cache-control": "public, max-age=3600" },
+    });
   }
 
   if (!(await allowKeyed("chat:punch-gif", 30, 60_000))) {
@@ -55,7 +71,9 @@ export default defineEventHandler(async (event) => {
   try {
     const upstream = await fetch(url, { signal: controller.signal });
     if (!upstream.ok) {
-      return Response.json({ error: "GIF indisponible." }, { status: 503 });
+      return Response.json(localFallback(query), {
+        headers: { "cache-control": "public, max-age=3600" },
+      });
     }
 
     const json = (await upstream.json().catch(() => ({}))) as { results?: TenorResult[] };
@@ -65,7 +83,11 @@ export default defineEventHandler(async (event) => {
       .sort((a, b) => b.score - a.score);
 
     const best = ranked[0];
-    if (!best) return Response.json({ error: "Aucun GIF pertinent." }, { status: 404 });
+    if (!best) {
+      return Response.json(localFallback(query), {
+        headers: { "cache-control": "public, max-age=3600" },
+      });
+    }
 
     const mediaUrl =
       best.result.media_formats?.gif?.url ??
@@ -81,7 +103,9 @@ export default defineEventHandler(async (event) => {
       { headers: { "cache-control": "private, max-age=3600" } },
     );
   } catch {
-    return Response.json({ error: "GIF indisponible." }, { status: 503 });
+    return Response.json(localFallback(query), {
+      headers: { "cache-control": "public, max-age=3600" },
+    });
   } finally {
     clearTimeout(timer);
   }
