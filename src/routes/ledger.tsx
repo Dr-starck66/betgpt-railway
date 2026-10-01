@@ -42,6 +42,9 @@ function LedgerPage() {
   const data = Route.useLoaderData();
   const r = data.review;
   const [tab, setTab] = useState<"done" | "soon" | "mise">("done");
+  const [showAllCanonical, setShowAllCanonical] = useState(false);
+  const canonical = data.canonicalReplay;
+  const canonicalRows = (showAllCanonical ? canonical.rows : canonical.rows.slice(-25)).slice().reverse();
   const ranked = [...data.championship.models, data.championship.ensemble, data.championship.tactical].sort(
     (a, b) => a.brier - b.brier,
   );
@@ -105,16 +108,109 @@ function LedgerPage() {
           <span className="chip-pill">Gate production actif</span>
         </div>
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Kpi label="ROI canonique" value={fmtSignedPct(CANONICAL_CHAMPION.roi)} />
-          <Kpi label="Validation chronologique" value={fmtSignedPct(CANONICAL_CHAMPION.validationRoi)} />
-          <Kpi label="Échantillon canonique" value={String(CANONICAL_CHAMPION.n)} />
-          <Kpi label="Drawdown max" value={CANONICAL_CHAMPION.maxDrawdown.toFixed(2)} />
+          <Kpi label="ROI canonique" value={fmtSignedPct(canonical.summary.roi)} />
+          <Kpi label="Validation chronologique" value={fmtSignedPct(canonical.summary.validationRoi)} />
+          <Kpi label="Échantillon canonique" value={String(canonical.summary.n)} />
+          <Kpi label="Drawdown max" value={canonical.summary.maxDrawdown.toFixed(2)} />
         </div>
         <p className="mt-3 text-xs text-muted">
-          Validation : {CANONICAL_CHAMPION.validationN} sélections · drawdown max{" "}
-          {CANONICAL_CHAMPION.validationMaxDrawdown.toFixed(2)}. Performance historique,
+          Validation : {canonical.summary.validationN} sélections · drawdown max{" "}
+          {canonical.summary.validationMaxDrawdown.toFixed(2)}. Performance historique,
           non garantie pour les prochains paris.
         </p>
+      </section>
+
+      <section className="section-card p-5 sm:p-6">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p className="eyebrow">Preuve match par match</p>
+            <h2 className="mt-1 font-display text-2xl">Les {canonical.summary.n} sélections derrière le bilan</h2>
+            <p className="mt-2 max-w-4xl text-sm leading-relaxed text-mist">
+              Chaque ligne correspond à une sélection réellement incluse dans le replay chronologique du
+              champion ROI5. Le score final vient de l’archive historique. La cote affichée est la cote
+              synthétique/reconstruite utilisée par le replay, et non une cote bookmaker horodatée.
+            </p>
+          </div>
+          <button
+            type="button"
+            className="chip-pill cursor-pointer"
+            onClick={() => setShowAllCanonical((v) => !v)}
+          >
+            {showAllCanonical ? "Afficher les 25 plus récents" : `Afficher les ${canonical.summary.n}`}
+          </button>
+        </div>
+
+        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-5">
+          <Kpi label="Victoires" value={String(canonical.summary.wins)} />
+          <Kpi label="Défaites" value={String(canonical.summary.losses)} />
+          <Kpi label="Hits" value={`${Math.round(canonical.summary.hitRate * 100)} %`} />
+          <Kpi label="Couvertures" value={`${canonical.summary.hedgeHits}/${canonical.summary.hedges}`} />
+          <Kpi label="Profit" value={`${canonical.summary.profit >= 0 ? "+" : ""}${canonical.summary.profit.toFixed(2)} u`} />
+        </div>
+
+        <div className="mt-4 overflow-x-auto">
+          <table className="w-full min-w-[1120px] text-sm">
+            <thead className="text-left text-[11px] font-semibold uppercase tracking-wider text-muted">
+              <tr className="border-b border-line">
+                <th className="py-2 pr-3 font-medium">#</th>
+                <th className="py-2 pr-3 font-medium">Date</th>
+                <th className="py-2 pr-3 font-medium">Match</th>
+                <th className="py-2 pr-3 font-medium">Pari</th>
+                <th className="py-2 pr-3 font-medium">Cote*</th>
+                <th className="py-2 pr-3 font-medium">Score</th>
+                <th className="py-2 pr-3 font-medium">Résultat</th>
+                <th className="py-2 pr-3 font-medium">Couverture</th>
+                <th className="py-2 pr-3 font-medium">P&L</th>
+                <th className="py-2 pr-3 font-medium">Cumul</th>
+                <th className="py-2 pr-3 font-medium">Validation</th>
+              </tr>
+            </thead>
+            <tbody>
+              {canonicalRows.map((row) => (
+                <tr key={row.id} className="border-b border-line/50 align-top">
+                  <td className="py-3 pr-3 tabular text-muted">{row.sequence}</td>
+                  <td className="py-3 pr-3 whitespace-nowrap text-mist">
+                    {format(new Date(row.kickoff), "dd/MM/yyyy")}
+                  </td>
+                  <td className="py-3 pr-3">
+                    <div className="font-medium text-paper">{row.home} – {row.away}</div>
+                    <div className="mt-1 text-xs text-muted">{LEAGUE_LABEL[row.league] ?? row.league}</div>
+                  </td>
+                  <td className="py-3 pr-3 text-paper">
+                    {row.market === "1X2_H" ? "1" : "2"} · {row.selection}
+                  </td>
+                  <td className="py-3 pr-3 tabular">{row.odds.toFixed(2)}</td>
+                  <td className="py-3 pr-3 tabular font-medium text-paper">{row.score}</td>
+                  <td className="py-3 pr-3">
+                    <span className="chip-pill">{row.result === "win" ? "WIN" : "LOSS"}</span>
+                  </td>
+                  <td className="py-3 pr-3 text-xs text-mist">
+                    {row.hedge
+                      ? `${row.hedge.score} @ ${row.hedge.odds.toFixed(2)} · ${row.hedge.stake.toFixed(2)} u · ${row.hedge.hit ? "HIT" : "MISS"}`
+                      : "—"}
+                  </td>
+                  <td className="py-3 pr-3 tabular">
+                    {row.pnl >= 0 ? "+" : ""}{row.pnl.toFixed(2)} u
+                  </td>
+                  <td className="py-3 pr-3 tabular">
+                    {row.cumulativePnl >= 0 ? "+" : ""}{row.cumulativePnl.toFixed(2)} u
+                  </td>
+                  <td className="py-3 pr-3 text-xs text-mist">{row.validation20 ? "20 % final" : "Développement"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="mt-4 space-y-1 text-xs leading-relaxed text-muted">
+          <p>* {canonical.oddsDisclosure}</p>
+          <p>{canonical.scoreDisclosure}</p>
+          <p>
+            P&L en unités normalisées : 1 u sur le pari principal, plus la petite couverture exacte
+            lorsqu’elle est sélectionnée par la règle canonique. Les lignes sont affichées des plus récentes
+            aux plus anciennes ; le cumul reste calculé dans l’ordre chronologique du replay.
+          </p>
+        </div>
       </section>
 
       {ev ? (
