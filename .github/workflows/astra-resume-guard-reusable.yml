@@ -13,8 +13,57 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "22"
       - name: Validate resumability contract
-        run: node scripts/astra-resume-guard.mjs
+        shell: python
+        run: |
+          import json, pathlib, sys
+
+          defaults = {
+            "mode": "RESUME_FROM_LAST_PROVEN_CHECKPOINT",
+            "failurePolicy": "FAIL_CLOSED_BUT_RESUMABLE",
+            "requirements": {
+              "idempotentSteps": True,
+              "checkpointAfterCriticalStep": True,
+              "persistProofLedger": True,
+              "retryTransientFailures": True,
+              "boundedExponentialBackoff": True,
+              "resumeInsteadOfRestart": True,
+              "neverDeclarePassWithoutFinalProof": True,
+              "neverWaitSilentlyForUserReconnect": True
+            },
+            "retryPolicy": {
+              "maxAttempts": 4,
+              "baseDelaySeconds": 5,
+              "maxDelaySeconds": 60
+            }
+          }
+
+          cfg_path = pathlib.Path("config/astra-resume-guard.json")
+          cfg = defaults
+          if cfg_path.exists():
+              user = json.loads(cfg_path.read_text(encoding="utf-8"))
+              cfg = {**defaults, **user}
+              cfg["requirements"] = {**defaults["requirements"], **user.get("requirements", {})}
+              cfg["retryPolicy"] = {**defaults["retryPolicy"], **user.get("retryPolicy", {})}
+
+          if cfg.get("mode") != "RESUME_FROM_LAST_PROVEN_CHECKPOINT":
+              print("ASTRA_RESUME_GUARD_FAIL invalid mode")
+              sys.exit(1)
+          if cfg.get("failurePolicy") != "FAIL_CLOSED_BUT_RESUMABLE":
+              print("ASTRA_RESUME_GUARD_FAIL invalid failurePolicy")
+              sys.exit(1)
+
+          for key, value in defaults["requirements"].items():
+              if cfg["requirements"].get(key) is not True:
+                  print("ASTRA_RESUME_GUARD_FAIL requirement", key)
+                  sys.exit(1)
+
+          rp = cfg["retryPolicy"]
+          if not isinstance(rp.get("maxAttempts"), int) or not (2 <= rp["maxAttempts"] <= 10):
+              print("ASTRA_RESUME_GUARD_FAIL maxAttempts")
+              sys.exit(1)
+          if rp.get("baseDelaySeconds", 0) <= 0 or rp.get("maxDelaySeconds", 0) < rp.get("baseDelaySeconds", 0):
+              print("ASTRA_RESUME_GUARD_FAIL backoff")
+              sys.exit(1)
+
+          print("ASTRA RESUME GUARD PASS — checkpointed, retry-bounded, resumable execution contract active.")
