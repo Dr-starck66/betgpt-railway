@@ -53,8 +53,82 @@ const REACTION_LABEL: Record<string, string> = {
   COSMIC_CHAOS: "orbite perdue",
   NUCLEAR_CHAOS: "réacteur en PLS",
   BETTING_DISASTER: "ticket carbonisé",
+  SHOPPING_DISASTER: "CB en apesanteur",
+  DIY_DISASTER: "caddie sans frein",
   ABSURD_SHOCK: "cerveau débranché",
 };
+
+type GifReaction = { url: string; alt: string };
+
+function PunchReactionCard({
+  punchline,
+}: {
+  punchline: NonNullable<ChatMessage["punchline"]>;
+}) {
+  const [gif, setGif] = useState<GifReaction | null>(null);
+
+  useEffect(() => {
+    if (punchline.score < 92) return;
+    const query = punchline.reaction?.gifQuery?.trim();
+    if (!query) return;
+
+    const controller = new AbortController();
+    let active = true;
+
+    void fetch("/api/punch-gif", {
+      method: "POST",
+      signal: controller.signal,
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ query }),
+    })
+      .then(async (response) => {
+        if (!response.ok) return null;
+        return (await response.json()) as GifReaction;
+      })
+      .then((value) => {
+        if (active && value?.url) setGif(value);
+      })
+      .catch(() => {
+        // Deliberately no generic GIF fallback: irrelevant visuals kill the joke.
+      });
+
+    return () => {
+      active = false;
+      controller.abort();
+    };
+  }, [punchline.score, punchline.text, punchline.reaction?.gifQuery]);
+
+  const emojis = punchline.reaction?.emojis ?? [];
+  if (!emojis.length && !gif) return null;
+
+  return (
+    <div
+      className="mt-3 overflow-hidden rounded-2xl border border-line bg-white/80 p-2"
+      aria-label="Réaction visuelle BetGPT"
+    >
+      {emojis.length ? (
+        <div className="mb-2 text-2xl leading-none" aria-hidden="true">
+          {emojis.join(" ")}
+        </div>
+      ) : null}
+      {gif ? (
+        <img
+          src={gif.url}
+          alt={gif.alt}
+          loading="lazy"
+          referrerPolicy="no-referrer"
+          className="max-h-56 w-auto max-w-full rounded-xl border border-line object-contain"
+        />
+      ) : null}
+      {!gif && punchline.score >= 92 ? (
+        <p className="text-[10px] font-black uppercase tracking-[0.18em] text-muted">
+          {REACTION_LABEL[punchline.reaction?.mood ?? ""] ?? "chaos"}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
 
 function loadMemory(): UserMemory {
   try {
@@ -238,28 +312,7 @@ export function ChatPanel({ seed }: { seed?: string }) {
                 )}
                 {msg.content || (streaming ? "…" : "")}
                 {!mine && msg.punchline?.reaction && !streaming ? (
-                  <div
-                    className="mt-3 overflow-hidden rounded-2xl border border-line bg-white/80 p-2"
-                    aria-label="Réaction visuelle BetGPT"
-                  >
-                    <div className="mb-2 text-2xl leading-none" aria-hidden="true">
-                      {msg.punchline.reaction.emojis.join(" ")}
-                    </div>
-                    {msg.punchline.score >= 92 ? (
-                      <div
-                        className="flex min-h-24 w-full max-w-[320px] items-center justify-center overflow-hidden rounded-xl border border-line bg-slate-950 px-4 text-center"
-                        role="img"
-                        aria-label={`Réaction BetGPT : ${REACTION_LABEL[msg.punchline.reaction.mood] ?? "chaos"}`}
-                      >
-                        <span className="animate-bounce text-4xl" aria-hidden="true">
-                          {msg.punchline.reaction.emojis.join(" ")}
-                        </span>
-                        <span className="ml-3 text-xs font-black uppercase tracking-[0.18em] text-white">
-                          {REACTION_LABEL[msg.punchline.reaction.mood] ?? "chaos"}
-                        </span>
-                      </div>
-                    ) : null}
-                  </div>
+                  <PunchReactionCard punchline={msg.punchline} />
                 ) : null}
                 {!mine && msg.punchline && !streaming ? (
                   <button
