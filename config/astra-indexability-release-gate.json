@@ -1,0 +1,73 @@
+{
+  "schema": "astra-indexability-release-gate/v1",
+  "zeroWeakReport": "artifacts/seo/zero-weak-pages.json",
+  "sitemapSource": "src/lib/sitemap-urls.ts",
+  "reportPath": "artifacts/seo/indexability-release-gate.json",
+  "failOnDuplicateLiteralPaths": true,
+  "ignoreRoutes": [],
+  "dynamicCoverage": [
+    {
+      "routePrefix": "/match",
+      "sitemapSource": "src/lib/sitemap-urls.ts",
+      "requiredFragments": [
+        "/match/"
+      ]
+    },
+    {
+      "routePrefix": "/forum",
+      "sitemapSource": "src/lib/sitemap-urls.ts",
+      "requiredFragments": [
+        "/forum/"
+      ]
+    },
+    {
+      "routePrefix": "/cotes",
+      "sitemapSource": "src/lib/sitemap-urls.ts",
+      "requiredFragments": [
+        "/cotes/"
+      ]
+    },
+    {
+      "routePrefix": "/blog",
+      "sitemapSource": "src/lib/sitemap-urls.ts",
+      "requiredFragments": [
+        "/blog/"
+      ]
+    },
+    {
+      "routePrefix": "/actualites",
+      "sitemapSource": "src/lib/sitemap-urls.ts",
+      "requiredFragments": [
+        "classicNewsPaths"
+      ]
+    },
+    {
+      "routePrefix": "/classement",
+      "sitemapSource": "src/lib/sitemap-urls.ts",
+      "requiredFragments": [
+        "/classement/"
+      ]
+    },
+    {
+      "routePrefix": "/calendrier",
+      "sitemapSource": "src/lib/sitemap-urls.ts",
+      "requiredFragments": [
+        "/calendrier/"
+      ]
+    },
+    {
+      "routePrefix": "/statistics",
+      "sitemapSource": "src/lib/sitemap-urls.ts",
+      "requiredFragments": [
+        "/statistics/"
+      ]
+    },
+    {
+      "routePrefix": "/score-hunter",
+      "sitemapSource": "src/lib/sitemap-urls.ts",
+      "requiredFragments": [
+        "/score-hunter/"
+      ]
+    }
+  ]
+}
