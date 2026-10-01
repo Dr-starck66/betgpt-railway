@@ -73,7 +73,7 @@ const report = {
 
 const out = path.join(root, cfg.reportPath || "artifacts/seo/indexability-release-gate.json");
 fs.mkdirSync(path.dirname(out), { recursive: true });
-fs.writeFileSync(out, JSON.stringify(report, null, 2) + "\\n", "utf8");
+fs.writeFileSync(out, JSON.stringify(report, null, 2) + "\n", "utf8");
 
 if (failures.length) {
   for (const failure of failures) console.error("FAIL", JSON.stringify(failure));
