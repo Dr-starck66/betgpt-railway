@@ -2,8 +2,8 @@
   "name": "BetGPT remote production verification",
   "defaults": {
     "timeoutMs": 30000,
-    "retries": 3,
-    "retryDelayMs": 2500,
+    "retries": 6,
+    "retryDelayMs": 5000,
     "excerptChars": 1500
   },
   "targets": [
@@ -86,7 +86,71 @@
           ]
         }
       }
+    },
+    {
+      "id": "calendar-sidewings",
+      "method": "GET",
+      "path": "/calendrier/ligue-1",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "Explorer Ligue 1",
+            "Du calendrier au match"
+          ]
+        }
+      }
+    },
+    {
+      "id": "stats-high-sidewings",
+      "method": "GET",
+      "path": "/statistics/leagues/highest-0-0",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "Explorer les statistiques",
+            "Interpréter le signal"
+          ]
+        }
+      }
+    },
+    {
+      "id": "stats-low-sidewings",
+      "method": "GET",
+      "path": "/statistics/leagues/lowest-0-0",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "Explorer les statistiques",
+            "Interpréter le signal"
+          ]
+        }
+      }
+    },
+    {
+      "id": "daily-news-sidewings",
+      "method": "GET",
+      "path": "/actu/2026-10-01",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "Autour de l’actu du jour",
+            "Vérifier et approfondir"
+          ]
+        }
+      }
     }
   ],
-  "verificationRevision": "PUBLIC-CUTOVER-C11F2B589-2026-10-01"
+  "verificationRevision": "sidewing-batch-e9ec0ddca14b344a8b6f9709a84fec649f10ac33"
 }
