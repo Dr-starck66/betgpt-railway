@@ -106,3 +106,27 @@ test("caps direct SEO value for noindex pages while preserving UX analysis", () 
   assert.ok(result.seoOpportunity <= 20);
   assert.notEqual(result.verdict, "PRIORITY");
 });
+
+
+test("marks an existing Sidewing page for optimization instead of duplicate installation", () => {
+  const result = auditSidewingOpportunity({
+    pageKind: "match",
+    searchIntent: "transactional",
+    viewportWidth: 1440,
+    primaryContentWidth: 1120,
+    contentWordCount: 1200,
+    headingCount: 5,
+    contextualInternalLinks: 2,
+    uniqueInternalTargets: 2,
+    relatedModules: 0,
+    entityCount: 4,
+    pageDepth: 3,
+    hasBreadcrumbs: false,
+    hasStructuredData: true,
+    hasMobileLinkParity: true,
+    indexable: true,
+    selfCanonical: true,
+    hasSidewings: true,
+  });
+  assert.equal(result.verdict, "OPTIMIZE");
+});
