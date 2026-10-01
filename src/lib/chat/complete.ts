@@ -9,7 +9,7 @@ import { historyFacts } from "./history-facts";
 import { hasUnsupportedGroundedClaim } from "./grounding";
 import { extractPunchline, type PunchlineMeta } from "./punch";
 import { absurdInsultCreativeBrief, generateAbsurdInsult, shouldDropAbsurdInsult } from "./absurd-insults";
-import { renderDailyChatPick, selectDailyChatPick } from "./daily-pick";
+import { renderDailyChatPick, selectDailyChatPick, selectDailyDataFallback } from "./daily-pick";
 
 async function deskNow(question: string): Promise<string> {
   try {
@@ -55,6 +55,28 @@ async function deskNow(question: string): Promise<string> {
         pick = selectDailyChatPick(
           snapshot.matches,
           livePredictions,
+          snapshot.meta?.asOf,
+          snapshotStale,
+        );
+
+        if (!pick) {
+          pick = selectDailyDataFallback(
+            snapshot.matches,
+            snapshot.meta?.asOf,
+            snapshotStale,
+          );
+        }
+      }
+
+      if (!pick && snapshot?.matches?.length) {
+        const asOfMs = Date.parse(snapshot.meta?.asOf ?? "");
+        const snapshotStale =
+          Boolean(snapshot.meta?.stale) ||
+          !Number.isFinite(asOfMs) ||
+          Date.now() - asOfMs > 30 * 60_000 ||
+          asOfMs > Date.now() + 60_000;
+        pick = selectDailyDataFallback(
+          snapshot.matches,
           snapshot.meta?.asOf,
           snapshotStale,
         );
