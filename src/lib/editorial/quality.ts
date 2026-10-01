@@ -170,12 +170,11 @@ export function qualityGate(
   if (article.articleType === "news" && body.trim().length < 2400) reasons.push("actualité trop courte pour apporter une vraie valeur éditoriale");
   if (!article.sources.length) reasons.push("aucune source");
   if (sourceQualityScore(article.sources) < 4) reasons.push("sources trop faibles");
-  if (article.articleType === "news") {
-    const strongSources = article.sources.filter((source) => source.url && sourceStrength(source) >= 6).length;
-    const hasOfficial = article.sources.some((source) => source.url && source.status === "OFFICIAL");
-    if (!hasOfficial && strongSources < 2) {
-      reasons.push("actualité insuffisamment corroborée par des sources fortes");
-    }
+  if (
+    article.articleType === "news" &&
+    article.sources.filter((source) => source.url && sourceStrength(source) >= 6).length < 2
+  ) {
+    reasons.push("actualité insuffisamment corroborée par des sources fortes");
   }
   if (article.sources.some((s) => s.status === "UNKNOWN" && /confirmé|officiellement/i.test(s.note))) {
     reasons.push("fait inconnu écrit comme confirmé");
