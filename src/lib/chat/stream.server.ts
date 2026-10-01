@@ -27,5 +27,5 @@ export async function handleChatRequest(request: Request): Promise<Response> {
         : 502;
     return Response.json({ error: out.error }, { status });
   }
-  return Response.json({ text: out.text }, { headers: { "cache-control": "no-store" } });
+  return Response.json({ text: out.text, punchline: out.punchline }, { headers: { "cache-control": "no-store" } });
 }
