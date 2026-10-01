@@ -14,7 +14,7 @@ function SourceCitations({
 }) {
   const passageSources = orderedContextualSourceIds(sourceIds, sources)
     .map((sourceId) => sources.find((source) => source.id === sourceId))
-    .filter((source): source is EditorialSource & { url: string } => Boolean(source?.url));
+    .filter((source): source is EditorialSource => Boolean(source));
 
   if (!passageSources.length) return null;
 
@@ -24,9 +24,13 @@ function SourceCitations({
       {passageSources.map((source, index) => (
         <span key={source.id}>
           {index ? " · " : ""}
-          <a href={source.url} className="font-semibold text-link hover:underline">
-            {source.label}
-          </a>
+          {source.url ? (
+            <a href={source.url} className="font-semibold text-link hover:underline">
+              {source.label}
+            </a>
+          ) : (
+            <span className="font-semibold text-paper">{source.label}</span>
+          )}
         </span>
       ))}
     </p>
