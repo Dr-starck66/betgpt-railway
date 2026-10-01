@@ -388,7 +388,7 @@ describe("editorial engine", () => {
     assert.equal(news, undefined);
   });
 
-  it("publishes a rich primary-source news item without forcing a second outlet", () => {
+  it("does not auto-publish even a rich primary-source item without corroboration", () => {
     const signals: EditorialNewsSignal[] = [
       {
         id: "official-rich",
@@ -406,10 +406,7 @@ describe("editorial engine", () => {
     ];
     const edition = buildEdition({ now: NOW, matches: [], signals });
     const news = edition.articles.find((article) => article.articleType === "news");
-    assert.ok(news);
-    assert.ok(news.sources.some((source) => source.status === "OFFICIAL"));
-    assert.ok(news.paragraphs.length >= 5);
-    assert.ok(news.paragraphs.map((part) => part.body).join(" ").length >= 2400);
+    assert.equal(news, undefined);
   });
 
   it("parses Google News RSS and classifies source tiers", () => {
