@@ -7,6 +7,8 @@ import { ALL_LEAGUES, LEAGUE_LABEL } from "@/lib/labels";
 import { Button } from "@/components/ui/button";
 import type { AdminSettings } from "@/engine/admin";
 import type { AffiliateClick } from "@/engine/clicks";
+import type { AffiliateBookReadiness } from "@/engine/affiliate-conversion";
+import type { AffiliateClickSummaryRow } from "@/lib/store";
 import { AFF_BOOKS } from "@/engine/aff-tag";
 import type { Digest } from "@/engine/email";
 import { ShareKit } from "@/components/share-kit";
@@ -49,6 +51,8 @@ function AdminPage() {
   const [saved, setSaved] = useState("");
   const [obs, setObs] = useState<Awaited<ReturnType<typeof getHunterObs>> | null>(null);
   const [metrics, setMetrics] = useState<{ e: string; n: number }[]>([]);
+  const [affiliateState, setAffiliateState] = useState<{ status: string; monetizedCount: number; totalBooks: number; books: AffiliateBookReadiness[] } | null>(null);
+  const [affiliateStats, setAffiliateStats] = useState<AffiliateClickSummaryRow[]>([]);
   const [ledger, setLedger] = useState<{
     total: number;
     settled: number;
@@ -111,6 +115,8 @@ function AdminPage() {
     apply(u.admin, u.clicks, u.digest);
     setLegalOk(Boolean(u.legalReady));
     setMetrics(u.analytics ?? []);
+    setAffiliateState(u.affiliate ?? null);
+    setAffiliateStats(u.affiliateStats ?? []);
     setLedger(u.ledger ?? null);
     void getHunterObs().then(setObs).catch(() => undefined);
   }
@@ -144,7 +150,9 @@ function AdminPage() {
       return;
     }
     setAdmin(r.admin);
-    setSaved("Enregistré.");
+    setAffiliateState(r.affiliate ?? null);
+    setAffiliateStats(r.affiliateStats ?? []);
+    setSaved(r.affiliate?.status === "MONETIZED" ? "Enregistré · affiliation active." : "Enregistré · tracking prêt.");
   }
 
   if (adminOff) {
@@ -348,6 +356,51 @@ function AdminPage() {
             {digest.date} · {digest.subject}
           </p>
         ) : null}
+      </section>
+      <section className="rounded-xl border border-line bg-surface p-5 space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 className="font-display text-xl">Affiliation · Control Center</h2>
+            <p className="mt-1 text-sm text-mist">
+              Tracking réel des clics. Les revenus restent UNVERIFIED tant qu'aucun postback ou API partenaire n'est connecté.
+            </p>
+          </div>
+          <span className={
+            affiliateState?.status === "MONETIZED"
+              ? "rounded-full bg-sage/15 px-3 py-1 text-xs font-semibold text-sage"
+              : "rounded-full border border-line px-3 py-1 text-xs font-semibold text-mist"
+          }>
+            {affiliateState?.status ?? "UNVERIFIED"}
+          </span>
+        </div>
+        <p className="text-sm text-mist">
+          {affiliateState
+            ? `${affiliateState.monetizedCount}/${affiliateState.totalBooks} bookmakers monétisés · les autres restent TRACKING_READY`
+            : "État d'affiliation indisponible."}
+        </p>
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {AFF_BOOKS.map((book) => {
+            const state = affiliateState?.books.find((row) => row.key === book.key);
+            const stats = affiliateStats.find((row) => row.book.toLowerCase().replace(/\s+/g, "").includes(book.key));
+            const mode = state?.mode ?? "UNVERIFIED";
+            return (
+              <div key={book.key} className="rounded-lg border border-line bg-background/30 p-4">
+                <div className="flex items-center justify-between gap-2">
+                  <strong className="text-sm text-paper">{book.label}</strong>
+                  <span className={mode === "MONETIZED" ? "text-xs font-semibold text-sage" : "text-xs text-mist"}>
+                    {mode}
+                  </span>
+                </div>
+                <p className="mt-2 text-xs text-mist">
+                  Source : {state?.source ?? "unknown"} · 24 h : {stats?.clicks24h ?? 0} clics · 7 j : {stats?.clicks7d ?? 0} clics
+                </p>
+                <p className="mt-1 text-xs text-muted">
+                  Dernier clic : {stats?.lastClick ? format(new Date(stats.lastClick), "d MMM HH:mm", { locale: fr }) : "—"}
+                </p>
+              </div>
+            );
+          })}
+        </div>
       </section>
       <section className="rounded-xl border border-line bg-surface p-5 space-y-4">
         <h2 className="font-display text-xl">IDs affiliés (caisse)</h2>
