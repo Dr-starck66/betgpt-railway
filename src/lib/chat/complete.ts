@@ -334,6 +334,16 @@ export async function completeChat(
   const system = betgptPrompt(memory, mode, desk, insultBrief, personality);
   const mustGround = shouldGround(last);
 
+  const absurdScoreClaim =
+    /\b(?:20\s*[-–àa]\s*0|vingt(?:s)?\s*(?:[-–àa]|[àa])\s*z[eé]ro(?:s)?|10\s*[-–àa]\s*0|dix\s*(?:[-–àa]|[àa])\s*z[eé]ro(?:s)?)\b/i.test(last);
+  if (absurdScoreClaim) {
+    const base =
+      mode === "ROAST"
+        ? "20-0 ? Là, ton scénario a quitté le football pour demander l’asile dans un jeu vidéo. Je peux challenger l’idée, mais je ne vais pas inventer un massacre pareil : sans données solides qui pointent vers un écart gigantesque, c’est du délire pur."
+        : "20-0 est un scénario extraordinairement extrême. Sans données solides qui justifient un écart hors norme, je ne vais pas le présenter comme plausible. Je peux en revanche analyser le prochain match réel de la France avec les données disponibles.";
+    return success(base, mode, last, recentRoasts);
+  }
+
   // Reckless-certainty claims must never fall through to a bland generic model answer.
   // They are handled deterministically so ROAST mode always produces the visual/punchline layer.
   const recklessBet =
