@@ -22,7 +22,10 @@ export default defineEventHandler(async (event) => {
     const historySections = Number(html.match(/data-results-history-days="(\d+)"/i)?.[1] ?? 0);
     const rowCount = count(html, ">Terminé<");
     const crestCount = count(html, 'data-filename="ecusson-');
-    const flagCount = count(html, 'aria-label="Drapeau ');
+    const flagCount = Math.max(
+      count(html, 'alt="Drapeau '),
+      count(html, 'aria-label="Drapeau '),
+    );
     const report = auditResultsSnapshot({
       httpOk: response.ok,
       asOf,
