@@ -1,0 +1,34 @@
+name: ASTRA Live Authority 475d
+on:
+  push:
+    branches:
+      - astra/live-verify-authority-475d
+
+jobs:
+  verify-live:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify exact production revision and authority citations
+        shell: bash
+        run: |
+          set -euo pipefail
+          EXPECTED="475d140c213c113997563258d6799c1652627a6e"
+          REV="https://betgpt.live/astra-revision.json"
+          PAGE="https://betgpt.live/actualites/real-madrid-mbappe-recuperation-paris-2026-10-01"
+
+          rev_body="$(curl --fail --silent --show-error --location --retry 4 --retry-delay 2 "$REV")"
+          page_body="$(curl --fail --silent --show-error --location --retry 4 --retry-delay 2 "$PAGE")"
+
+          echo "REVISION_RESPONSE=$rev_body"
+          printf '%s' "$rev_body" | grep -F "$EXPECTED"
+          printf '%s' "$page_body" | grep -F "Sources de ce passage"
+          printf '%s' "$page_body" | grep -F "Real Madrid — communiqué médical"
+          printf '%s' "$page_body" | grep -F "parte-medico-de-mbappe-26-09-2026"
+          printf '%s' "$page_body" | grep -F "<h3"
+
+          if printf '%s' "$page_body" | grep -E 'href="[^"]*parte-medico-de-mbappe-26-09-2026[^"]*"[^>]*rel="[^"]*nofollow' >/dev/null; then
+            echo "FAIL: official editorial source link is nofollow"
+            exit 1
+          fi
+
+          echo "ASTRA_LIVE_AUTHORITY_475D_PASS sourceSha=$EXPECTED contextual_sources=present h3=present official_medical_link=present editorial_nofollow=absent"
