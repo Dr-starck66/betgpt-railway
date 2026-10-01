@@ -54,6 +54,52 @@ export function nationalBreakoutScorecard(input: GrowthInput) {
   const trafficGrowth = delta(sessions, previousSessions);
   const affiliateGrowth = delta(input.affiliateClicks, input.previousAffiliateClicks);
 
+  const noBehavioralSignal =
+    sessions === 0 &&
+    previousSessions === 0 &&
+    activations === 0 &&
+    shares === 0 &&
+    returns === 0 &&
+    input.affiliateClicks === 0 &&
+    input.previousAffiliateClicks === 0;
+
+  if (noBehavioralSignal) {
+    return {
+      schema: "astra-national-breakout/v1",
+      score: null,
+      status: "UNVERIFIED" as const,
+      windowHours: input.windowHours,
+      metrics: {
+        sessions,
+        previousSessions,
+        activations,
+        shares,
+        returns,
+        affiliateClicks: input.affiliateClicks,
+        previousAffiliateClicks: input.previousAffiliateClicks,
+        activationRate,
+        retentionRate,
+        viralityRate,
+        monetizationRate,
+        trafficGrowth,
+        affiliateGrowth,
+        discoverReady: input.discoverReady,
+        discoverCandidates: input.discoverCandidates,
+      },
+      topRoutes: input.topRoutes.slice(0, 10),
+      actions: [
+        {
+          id: "measurement-warmup",
+          priority: 100,
+          loop: "acquisition" as const,
+          title: "Accumuler un signal comportemental mesuré",
+          reason:
+            "Aucune visite, activation, rétention, partage ou conversion n’est encore observée dans les fenêtres comparées. Aucun diagnostic de performance n’est émis avant données réelles.",
+        },
+      ],
+    };
+  }
+
   const actions: GrowthAction[] = [];
 
   if (trafficGrowth == null || trafficGrowth < 0.15) {
