@@ -10,6 +10,8 @@ export type ChatDailyPick = {
   odds: number | null;
   fairOdds: number | null;
   book?: string;
+  bookUrl?: string;
+  affiliate?: boolean;
   modelProb: number;
   ev: number;
   opportunityScore: number;
@@ -62,6 +64,39 @@ function modelFallbackScore(q: MarketQuote): number {
     (Number.isFinite(q.modelProb) ? q.modelProb : 0) * 1000 +
     (Number.isFinite(q.opportunityScore) ? q.opportunityScore : 0) * 10
   );
+}
+
+function affiliateUrlFor(book?: string): string | undefined {
+  const cleanBook = String(book ?? "").trim();
+  if (!cleanBook) return undefined;
+
+  const envKey = `BETGPT_AFFILIATE_${cleanBook
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toUpperCase()
+    .replace(/[^A-Z0-9]+/g, "_")
+    .replace(/^_+|_+$/g, "")}_URL`;
+  const direct = process.env[envKey]?.trim();
+  if (direct) return direct;
+
+  const raw = process.env.BETGPT_AFFILIATE_LINKS_JSON?.trim();
+  if (!raw) return undefined;
+  try {
+    const map = JSON.parse(raw) as Record<string, unknown>;
+    const exact = Object.entries(map).find(
+      ([key, value]) => key.trim().toLowerCase() === cleanBook.toLowerCase() && typeof value === "string",
+    )?.[1];
+    return typeof exact === "string" && exact.trim() ? exact.trim() : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function betLinkFor(book?: string, quoteUrl?: string): { url?: string; affiliate: boolean } {
+  const affiliateUrl = affiliateUrlFor(book);
+  if (affiliateUrl) return { url: affiliateUrl, affiliate: true };
+  const cleanQuoteUrl = String(quoteUrl ?? "").trim();
+  return { url: cleanQuoteUrl || undefined, affiliate: false };
 }
 
 export function selectDailyChatPick(
@@ -120,6 +155,8 @@ export function selectDailyChatPick(
           : "STANDARD"
         : "STANDARD_FALLBACK";
 
+    const betLink = betLinkFor(quote.bestBook, quote.bestBookUrl);
+
     return {
       matchId: match.id,
       home: match.home.name,
@@ -130,6 +167,8 @@ export function selectDailyChatPick(
       odds: quote.bestOdds,
       fairOdds: quote.fairOdds,
       book: quote.bestBook,
+      bookUrl: betLink.url,
+      affiliate: betLink.affiliate,
       modelProb: quote.modelProb,
       ev: quote.ev,
       opportunityScore: quote.opportunityScore,
@@ -166,6 +205,7 @@ export function selectDailyChatPick(
   if (!modelBest) return null;
 
   const { match, quote } = modelBest;
+  const betLink = betLinkFor(quote.bestBook, quote.bestBookUrl);
   return {
     matchId: match.id,
     home: match.home.name,
@@ -176,6 +216,8 @@ export function selectDailyChatPick(
     odds: quote.listed && Number.isFinite(quote.bestOdds) ? quote.bestOdds : null,
     fairOdds: quote.fairOdds,
     book: quote.listed ? quote.bestBook : undefined,
+    bookUrl: quote.listed ? betLink.url : undefined,
+    affiliate: quote.listed ? betLink.affiliate : false,
     modelProb: quote.modelProb,
     ev: Number.isFinite(quote.ev) ? quote.ev : 0,
     opportunityScore: quote.opportunityScore,
@@ -270,10 +312,16 @@ export function renderDailyChatPick(pick: ChatDailyPick): string {
   const prob = `${Math.round(pick.modelProb * 100)} %`;
   const oddsLine =
     pick.odds != null
-      ? `Cote disponible : ${pick.odds.toFixed(2)} chez ${pick.book || "bookmaker"}`
+      ? `Meilleure cote trouvée : ${pick.odds.toFixed(2)} chez ${pick.book || "bookmaker"}`
       : pick.fairOdds != null
-        ? `Cote disponible : indisponible · cote juste modèle : ${pick.fairOdds.toFixed(2)}`
-        : "Cote disponible : indisponible · aucune cote juste calculée";
+        ? `Meilleure cote trouvée : indisponible · cote juste modèle : ${pick.fairOdds.toFixed(2)}`
+        : "Meilleure cote trouvée : indisponible · aucune cote juste calculée";
+  const betLinkLine =
+    pick.odds != null
+      ? pick.bookUrl
+        ? `Lien pour parier : ${pick.bookUrl}${pick.affiliate ? " · lien affilié BetGPT" : ""}`
+        : "Lien pour parier : indisponible pour cette cote."
+      : "";
   const evLine =
     pick.odds != null
       ? `EV modèle : ${pick.ev >= 0 ? "+" : ""}${(pick.ev * 100).toFixed(1)} %`
@@ -287,6 +335,7 @@ export function renderDailyChatPick(pick: ChatDailyPick): string {
     `Match : ${pick.home} – ${pick.away} · ${pick.competition}`,
     `Pari à prendre : ${pick.label}`,
     oddsLine,
+    betLinkLine,
     pick.grade === "STANDARD_DATA" ? `Indice data : ${prob}` : `Probabilité modèle : ${prob}`,
     evLine,
     pick.rationale ? `Pourquoi : ${pick.rationale}` : "",
