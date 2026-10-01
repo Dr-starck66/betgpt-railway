@@ -1,4 +1,5 @@
 import type { PersonalityMode } from "./types";
+import { reactionForPunchline, type PunchReaction } from "./reaction";
 
 export type PunchVoiceStyle = "SHOUT" | "LAUGH_SHOUT" | "ANGRY_SHOUT";
 
@@ -6,6 +7,7 @@ export type PunchlineMeta = {
   text: string;
   score: number;
   style: PunchVoiceStyle;
+  reaction: PunchReaction;
 };
 
 const TAGGED =
@@ -67,13 +69,14 @@ function inferStyle(text: string): PunchVoiceStyle {
 export function extractPunchline(
   rawText: string,
   mode: PersonalityMode,
+  context = "",
 ): { text: string; punchline?: PunchlineMeta } {
   const tagged = rawText.match(TAGGED);
   if (tagged) {
     const text = cleanPunch(tagged[2] ?? "");
     const style = (tagged[1] as PunchVoiceStyle | undefined) ?? inferStyle(text);
     const clean = rawText.replace(TAGGED, text).replace(/\[\[\/?PUNCH[^\]]*\]\]/gi, "").trim();
-    if (text.length >= 8) return { text: clean, punchline: { text, score: 100, style } };
+    if (text.length >= 8) return { text: clean, punchline: { text, score: 100, style, reaction: reactionForPunchline(text, context) } };
     return { text: clean };
   }
 
@@ -90,6 +93,6 @@ export function extractPunchline(
   if (!best || best.score < 86) return { text: clean };
   return {
     text: clean,
-    punchline: { text: best.text, score: best.score, style: inferStyle(best.text) },
+    punchline: { text: best.text, score: best.score, style: inferStyle(best.text), reaction: reactionForPunchline(best.text, context) },
   };
 }
