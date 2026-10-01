@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "node scripts/with-app-env.mjs vite dev --host 0.0.0.0 --port 8080",
     "build": "node scripts/with-app-env.mjs vite build && npm run db:migrate",
-    "prebuild": "node scripts/clean-build.mjs",
+    "prebuild": "node scripts/clean-build.mjs && node scripts/astra-flag-guard.mjs",
     "prebuild:dev": "node scripts/clean-build.mjs",
     "db:migrate": "node scripts/migrate.mjs",
     "build:dev": "node scripts/with-app-env.mjs vite build --mode development",
@@ -50,7 +50,8 @@
     "sidewings:audit": "node --experimental-strip-types scripts/astra-sidewing-audit.mjs",
     "test:results-watchdog": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/serp/results-watchdog.test.ts",
     "cloud:verify": "node scripts/astra-cloud-egress.mjs config/astra-cloud-egress.json",
-    "cloud:verify:config": "node scripts/astra-cloud-egress.mjs config/astra-cloud-egress.json --validate-config"
+    "cloud:verify:config": "node scripts/astra-cloud-egress.mjs config/astra-cloud-egress.json --validate-config",
+    "test:flags": "node scripts/astra-flag-guard.mjs"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.4",
