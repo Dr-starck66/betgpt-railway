@@ -65,7 +65,17 @@
           ]
         }
       }
+    },
+    {
+      "id": "gif-asset",
+      "method": "GET",
+      "path": "/reactions/astra-shock.gif?v=4",
+      "expect": {
+        "statuses": [
+          200
+        ]
+      }
     }
   ],
-  "verificationRevision": "2026-10-01T20:00:00+02:00"
+  "verificationRevision": "2026-10-01T20:41:00+02:00"
 }
