@@ -561,6 +561,7 @@ it("viral share engine creates a reusable roast challenge URL", () => {
   const parsed = new URL(url);
   assert.equal(parsed.origin + parsed.pathname, "https://betgpt.live/chat");
   assert.equal(parsed.searchParams.get("roast"), "1");
+  assert.equal(parsed.searchParams.get("share_source"), "share");
   assert.match(parsed.searchParams.get("q") ?? "", /France va perdre vingt à zéro/i);
 });
 
@@ -572,6 +573,10 @@ it("viral share engine creates social-native X and Facebook URLs", () => {
   );
   assert.match(moment.text, /BetGPT vient de me sortir/i);
   assert.match(moment.url, /\/chat\?/);
-  assert.match(buildXShareUrl(moment), /^https:\/\/x\.com\/intent\/post\?/);
-  assert.match(buildFacebookShareUrl(moment), /^https:\/\/www\.facebook\.com\/sharer\/sharer\.php\?/);
+  const x = buildXShareUrl(moment);
+  const fb = buildFacebookShareUrl(moment);
+  assert.match(x, /^https:\/\/x\.com\/intent\/post\?/);
+  assert.match(decodeURIComponent(x), /share_source=x/);
+  assert.match(fb, /^https:\/\/www\.facebook\.com\/sharer\/sharer\.php\?/);
+  assert.match(decodeURIComponent(fb), /share_source=facebook/);
 });
