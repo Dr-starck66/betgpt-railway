@@ -1,4 +1,4 @@
-import { classifySearchReferrer } from "@/lib/search/search-truth";
+import { classifySearchReferrer, SEARCH_ENGINES, type SearchTruthSource } from "@/lib/search/search-truth";
 
 export const ANALYTICS_EVENTS = {
   landing: "landing",
@@ -24,11 +24,11 @@ const KEY = "betgpt-analytics";
 const VISIT = "betgpt-visit";
 const SEARCH_SOURCE = "betgpt-search-source";
 
-function currentSearchSource(): ReturnType<typeof classifySearchReferrer> {
+function currentSearchSource(): SearchTruthSource | null {
   if (typeof window === "undefined") return null;
   try {
     const existing = sessionStorage.getItem(SEARCH_SOURCE);
-    if (existing) return classifySearchReferrer(`https://${existing}`) ?? (existing as ReturnType<typeof classifySearchReferrer>);
+    if (existing && Object.prototype.hasOwnProperty.call(SEARCH_ENGINES, existing)) return existing as SearchTruthSource;
     const source = classifySearchReferrer(document.referrer || "");
     if (source) sessionStorage.setItem(SEARCH_SOURCE, source);
     return source;
