@@ -9,6 +9,7 @@ import type { MatchInput } from "../../engine/types.ts";
 import { extractPunchline } from "./punch.ts";
 import { generateAbsurdInsult, shouldDropAbsurdInsult } from "./absurd-insults.ts";
 import { reactionForPunchline } from "./reaction.ts";
+import { selectDailyChatPick } from "./daily-pick.ts";
 
 it("normalizes corrupt nested memories instead of crashing the prompt", () => {
   assert.deepEqual(normalizeMemory({ blackBook: null, preferences: 42 }), EMPTY_MEMORY);
@@ -243,4 +244,98 @@ it("reaction engine matches animal absurdity instead of a random visual", () => 
   );
   assert.ok(reaction.emojis.includes("🐦"));
   assert.match(reaction.gifQuery, /pigeon/i);
+});
+
+
+it("daily chat pick returns a non-premium BET instead of asking for fixtures", () => {
+  const match = {
+    id: "m1",
+    home: { name: "France", short: "FRA" },
+    away: { name: "Italie", short: "ITA" },
+    competition: "Ligue des nations",
+    kickoff: "2026-10-01T18:45:00Z",
+    status: "scheduled",
+  } as MatchInput;
+  const prediction = {
+    matchId: "m1",
+    markets: [
+      {
+        market: "1X2_H",
+        label: "1 — Domicile",
+        group: "1X2",
+        selection: "1",
+        modelProb: 0.51,
+        fairOdds: 1.96,
+        bestOdds: 2.02,
+        bestBook: "Unibet",
+        implied: 0.495,
+        edge: 0.015,
+        ev: 0.03,
+        stakePct: 0.5,
+        listed: true,
+        premium: false,
+        opportunityScore: 0.72,
+        decision: "BET",
+      },
+    ],
+  } as unknown as import("../../engine/types.ts").PredictionRecord;
+
+  const pick = selectDailyChatPick(
+    [match],
+    [prediction],
+    "2026-10-01T14:00:00Z",
+    false,
+  );
+  assert.equal(pick?.grade, "STANDARD");
+  assert.equal(pick?.label, "1 — Domicile");
+  assert.equal(pick?.odds, 2.02);
+});
+
+it("daily chat pick can expose a real listed model fallback when no premium BET exists", () => {
+  const match = {
+    id: "m2",
+    home: { name: "Alpha", short: "ALP" },
+    away: { name: "Beta", short: "BET" },
+    competition: "Test League",
+    kickoff: "2026-10-01T20:00:00Z",
+    status: "scheduled",
+  } as MatchInput;
+  const prediction = {
+    matchId: "m2",
+    markets: [
+      {
+        market: "1X2_H",
+        label: "1 — Domicile",
+        group: "1X2",
+        selection: "1",
+        modelProb: 0.44,
+        fairOdds: 2.27,
+        bestOdds: 2.18,
+        bestBook: "Betclic",
+        implied: 0.459,
+        edge: -0.019,
+        ev: -0.015,
+        stakePct: 0,
+        listed: true,
+        premium: false,
+        opportunityScore: 0.61,
+        decision: "WATCH",
+        rejectionReason: "Value premium insuffisante.",
+      },
+    ],
+  } as unknown as import("../../engine/types.ts").PredictionRecord;
+
+  const pick = selectDailyChatPick(
+    [match],
+    [prediction],
+    "2026-10-01T14:00:00Z",
+    false,
+  );
+  assert.equal(pick?.grade, "STANDARD_FALLBACK");
+  assert.match(pick?.limitation ?? "", /premium/i);
+});
+
+it("daily chat pick refuses stale desk data instead of manufacturing a current bet", () => {
+  const pick = selectDailyChatPick([], [], "2026-10-01T14:00:00Z", true);
+  assert.equal(pick, null);
 });
