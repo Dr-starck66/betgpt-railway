@@ -1,0 +1,39 @@
+{
+  "schema": "astra-single-source-release-gate/v1",
+  "siteId": "betgpt.live",
+  "canonicalOrigin": "https://betgpt-production-7353.up.railway.app",
+  "publicOrigins": [
+    {
+      "id": "betgpt-live",
+      "url": "https://betgpt.live",
+      "expectedProxyHeader": "betgpt-main"
+    },
+    {
+      "id": "www-betgpt-live",
+      "url": "https://www.betgpt.live",
+      "expectedProxyHeader": "betgpt-main"
+    }
+  ],
+  "healthPath": "/api/health",
+  "revisionPath": "/api/astra-revision",
+  "timeoutMs": 25000,
+  "requireGitHubShaParity": false,
+  "preflightCommands": [
+    "npm run test:module-resolution",
+    "npm run test:results-watchdog",
+    "npm run test:flags",
+    "npm run news",
+    "npm run social:audit",
+    "npm run build"
+  ],
+  "pipelines": {
+    "editorial": {
+      "commands": [
+        "npm run test:module-resolution",
+        "npm run news",
+        "npm run social:audit",
+        "npm run editorial:publish"
+      ]
+    }
+  }
+}
