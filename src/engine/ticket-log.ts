@@ -2,7 +2,7 @@ import { clamp } from "./math";
 import { prettyPickLabel } from "./pick";
 import { marketHits, coverHitsScore, coverStakeOf } from "./settle";
 import { skipEuropeFrenchProno } from "./french-clubs";
-import { compactTickets, fixtureKey, isMethodPick, uniqueByFixture } from "./ledger-pick";
+import { compactTickets, fixtureKey, isCanonicalRoi5Selection, isMethodPick, uniqueByFixture } from "./ledger-pick";
 import { isRoiEligibleDecision } from "./roi-eligibility";
 import { headlineMarket } from "@/lib/markets";
 import { readPersist, writePersist } from "@/lib/persist";
@@ -61,8 +61,7 @@ export function canonicalChampionRows(rows: TicketRow[]): TicketRow[] {
     (row) =>
       row.engineVersion === ENGINE_VERSION &&
       row.kind === "prono" &&
-      row.decision === "BET" &&
-      (row.market === "1X2_H" || row.market === "1X2_A"),
+      isCanonicalRoi5Selection(row),
   );
 }
 
@@ -593,7 +592,7 @@ export function isBestOpportunity(row: TicketRow): boolean {
 }
 
 export function bilanRows(rows: TicketRow[]): TicketRow[] {
-  return rows.filter(isBestOpportunity);
+  return rows.filter((row) => isCanonicalRoi5Selection(row) && isBestOpportunity(row));
 }
 
 export function selfLearn(rows: TicketRow[]): { n: number; precision: number; extraMinEv: number } {
@@ -798,10 +797,9 @@ export function simulateMises(rows: TicketRow[], stake = 100): BankSim {
       (r) =>
         r.kind === "mise" &&
         isRoiEligibleDecision(r.decision) &&
+        isCanonicalRoi5Selection(r) &&
         r.book !== "clôture" &&
-        (r.result === "win" || r.result === "lose") &&
-        r.odds >= 1.12 &&
-        r.odds <= 4.2,
+        (r.result === "win" || r.result === "lose"),
     ),
   );
   let mainStaked = 0;
@@ -870,7 +868,7 @@ export function reviewOf(rows: TicketRow[]): {
     const v = rowVerdict(r);
     return v === "juste" || v === "couvert";
   });
-  const mises = uniqueByFixture(live.filter((r) => r.kind === "mise" && r.odds >= 1.12 && r.odds <= 4.2));
+  const mises = uniqueByFixture(live.filter((r) => r.kind === "mise" && isCanonicalRoi5Selection(r)));
   const miseSettled = mises.filter((r) => r.result === "win" || r.result === "lose");
   const clvs = unique.map((r) => r.clv).filter((x): x is number => typeof x === "number");
   const table = [
