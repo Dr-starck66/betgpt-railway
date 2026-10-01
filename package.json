@@ -59,7 +59,9 @@
     "release:pipeline:editorial": "node scripts/astra-release-gate.mjs pipeline editorial",
     "test:model-max": "node scripts/astra-model-max-guard.mjs && node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/ai/astra-model-max.test.ts",
     "test:visual-entities": "node scripts/astra-visual-entity-guard.mjs",
-    "seo:zero-weak": "node scripts/astra-zero-weak-page-guard.mjs --strict"
+    "seo:zero-weak": "node scripts/astra-zero-weak-page-guard.mjs --strict",
+    "release:candidate": "node scripts/astra-never-fail-build-guard.mjs",
+    "release:candidate:extended": "ASTRA_NEVER_FAIL_EXTENDED=1 node scripts/astra-never-fail-build-guard.mjs"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.4",
