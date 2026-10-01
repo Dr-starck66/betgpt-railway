@@ -6,6 +6,7 @@ import { citeBySlug } from "@/engine/cite-public";
 import { getPublicDesk } from "@/lib/desk.functions";
 import { SITE_URL } from "@/lib/programmatic";
 import { ld } from "@/lib/ld";
+import { AstraSidewings } from "@/components/astra-sidewings";
 
 export const Route = createFileRoute("/calendrier/$slug")({
   loader: async ({ params }) => {
@@ -41,7 +42,32 @@ function CalPage() {
     ? `Calendrier ${meta.title} : prochain match ${next.home.name} – ${next.away.name} le ${format(new Date(next.kickoff), "EEEE d MMMM 'à' HH:mm", { locale: fr })}. ${matches.length} matchs listés.`
     : `Calendrier ${meta.title} : aucune rencontre sur cette fenêtre.`;
   return (
-    <article className="space-y-6">
+    <AstraSidewings
+      ariaLabel={`Navigation contextuelle du calendrier ${meta.title}`}
+      left={{
+        eyebrow: "Compétition",
+        title: `Explorer ${meta.title}`,
+        intro: "Relie le calendrier aux pages qui répondent aux intentions voisines sans quitter la compétition.",
+        links: [
+          { href: `/classement/${meta.slug}`, label: `Classement ${meta.title}`, description: "Position des équipes et hiérarchie de la compétition." },
+          { href: `/pronostics-football/${meta.slug}`, label: `Pronostics ${meta.title}`, description: "Analyses disponibles pour les matchs de cette compétition." },
+          { href: `/resultats-football/${meta.slug}`, label: `Résultats ${meta.title}`, description: "Scores et résultats déjà enregistrés." },
+          { href: "/calendrier", label: "Tous les calendriers", description: "Revenir au hub calendrier BetGPT." },
+        ],
+      }}
+      right={{
+        eyebrow: "Prochaine étape",
+        title: "Du calendrier au match",
+        intro: next ? `Le prochain match listé est ${next.home.name} – ${next.away.name}.` : "Aucun prochain match n’est listé sur cette fenêtre.",
+        links: [
+          ...(next ? [{ href: `/match/${encodeURIComponent(next.slug ?? next.id)}`, label: `${next.home.name} – ${next.away.name}`, description: "Fiche match, analyse, score et marchés disponibles." }] : []),
+          { href: "/scores-en-direct", label: "Scores en direct", description: "Suivre les matchs actuellement en jeu." },
+          { href: "/methodology", label: "Méthodologie BetGPT", description: "Comprendre comment les analyses et probabilités sont construites." },
+          { href: "/data-sources", label: "Sources des données", description: "Voir l’origine et les limites des données." },
+        ],
+      }}
+    >
+      <article className="space-y-6">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -81,6 +107,7 @@ function CalPage() {
           ))}
         </tbody>
       </table>
-    </article>
+      </article>
+    </AstraSidewings>
   );
 }
