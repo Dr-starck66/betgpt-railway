@@ -13,24 +13,55 @@ function parseStyle(raw: unknown): VoiceStyle {
   return raw === "LAUGH_SHOUT" || raw === "ANGRY_SHOUT" ? raw : "SHOUT";
 }
 
+function envInt(name: string, fallback: number, min: number, max: number): number {
+  const raw = Number(process.env[name]);
+  if (!Number.isFinite(raw)) return fallback;
+  return Math.max(min, Math.min(max, Math.floor(raw)));
+}
+
+function dateKey(now = new Date()): { day: string; month: string } {
+  const iso = now.toISOString();
+  return { day: iso.slice(0, 10), month: iso.slice(0, 7) };
+}
+
 export default defineEventHandler(async (event) => {
   const body = (await readBody(event).catch(() => null)) as
     | { text?: unknown; style?: unknown; score?: unknown }
     | null;
-  const text = typeof body?.text === "string" ? body.text.replace(/\s+/g, " ").trim() : "";
-  if (text.length < 8 || text.length > 220) {
-    return Response.json({ error: "Punchline invalide." }, { status: 400 });
-  }
 
-  // Hard cost gate: one short clip only, globally rate-limited.
-  if (!(await allowKeyed("chat:punch-tts", 24, 60_000))) {
-    return Response.json({ error: "Budget voix temporairement atteint." }, { status: 429 });
+  const text = typeof body?.text === "string" ? body.text.replace(/\s+/g, " ").trim() : "";
+  const words = text.split(/\s+/).filter(Boolean).length;
+  const score = typeof body?.score === "number" && Number.isFinite(body.score) ? body.score : 0;
+  const minScore = envInt("BETGPT_TTS_MIN_SCORE", 86, 70, 100);
+  const maxChars = envInt("BETGPT_TTS_MAX_CHARS", 180, 60, 220);
+  const maxWords = envInt("BETGPT_TTS_MAX_WORDS", 26, 8, 40);
+
+  // Premium voice is only for one exceptional, very short punchline.
+  if (text.length < 8 || text.length > maxChars || words > maxWords || score < minScore) {
+    return Response.json({ error: "Punchline non éligible à la voix premium." }, { status: 400 });
   }
 
   const apiKey = process.env.ELEVENLABS_API_KEY?.trim();
   const voiceId = process.env.ELEVENLABS_VOICE_ID?.trim();
   if (!apiKey || !voiceId || process.env.BETGPT_TTS_ENABLED === "0") {
     return Response.json({ error: "Voix premium non configurée." }, { status: 503 });
+  }
+
+  const { day, month } = dateKey();
+  const perMinute = envInt("BETGPT_TTS_PER_MINUTE", 12, 1, 120);
+  const dailyClips = envInt("BETGPT_TTS_DAILY_CLIPS", 120, 1, 10000);
+  const monthlyClips = envInt("BETGPT_TTS_MONTHLY_CLIPS", 1500, 1, 100000);
+
+  // Conservative hard budget gate. Failed upstream calls still consume a slot,
+  // which guarantees spend cannot exceed the configured ceiling.
+  if (!(await allowKeyed(`chat:punch-tts:month:${month}`, monthlyClips, 35 * 24 * 60 * 60_000))) {
+    return Response.json({ error: "Budget voix mensuel atteint." }, { status: 429 });
+  }
+  if (!(await allowKeyed(`chat:punch-tts:day:${day}`, dailyClips, 26 * 60 * 60_000))) {
+    return Response.json({ error: "Budget voix quotidien atteint." }, { status: 429 });
+  }
+  if (!(await allowKeyed("chat:punch-tts:minute", perMinute, 60_000))) {
+    return Response.json({ error: "Budget voix temporairement atteint." }, { status: 429 });
   }
 
   const style = parseStyle(body?.style);
