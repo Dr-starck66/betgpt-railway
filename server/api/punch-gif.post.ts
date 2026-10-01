@@ -27,16 +27,16 @@ function scoreResult(result: TenorResult, query: string): number {
 
 function localFallback(query: string) {
   const q = query.toLowerCase();
-  if (/pigeon|hamster|llama|alpaga|octopus|duck|goat|hedgehog|snail|penguin|chihuahua/.test(q)) {
-    return { url: "/reactions/astra-animal.gif?v=4", alt: "Réaction GIF BetGPT — chaos animal", provider: "local" };
-  }
-  if (/bet|pari|ticket|bookmaker|shopping|spree|card|money/.test(q)) {
-    return { url: "/reactions/astra-betting.gif?v=4", alt: "Réaction GIF BetGPT — ticket carbonisé", provider: "local" };
-  }
-  if (/space|cosmic|explosion|shocked|disbelief|confused/.test(q)) {
-    return { url: "/reactions/astra-shock.gif?v=4", alt: "Réaction GIF BetGPT — choc absolu", provider: "local" };
-  }
-  return { url: "/reactions/astra-fallback.gif?v=4", alt: "Réaction GIF BetGPT", provider: "local" };
+  let scene = "shock";
+  if (/pigeon|hamster|llama|alpaga|octopus|duck|goat|hedgehog|snail|penguin|chihuahua/.test(q)) scene = "animal";
+  else if (/bet|pari|ticket|bookmaker|shopping|spree|card|money/.test(q)) scene = "betting";
+  else if (/space|cosmic|explosion|nuclear|shocked|disbelief|confused/.test(q)) scene = "cosmic";
+  return {
+    url: "",
+    alt: "Réaction animée BetGPT",
+    provider: "native",
+    scene,
+  };
 }
 
 export default defineEventHandler(async (event) => {
