@@ -91,7 +91,7 @@ jobs:
         run: |
           git config user.name "ASTRA SEO Self-Heal"
           git config user.email "actions@users.noreply.github.com"
-          git add src/lib/sitemap-urls.ts src/lib/seo/astra-self-heal-sitemap.ts artifacts/seo/self-heal.json
+          git add src/lib/sitemap-urls.ts src/lib/seo/astra-self-heal-sitemap.ts
           git commit -m "seo(self-heal): repair verified indexability regression from $TARGET_SHA"
           git push origin HEAD:main
 
