@@ -7,6 +7,72 @@
   "ignoreRoutes": [],
   "dynamicCoverage": [
     {
+      "routePattern": "^/actu/:day$",
+      "sitemapSource": "src/lib/sitemap-urls.ts",
+      "requiredFragments": [
+        "/actu/${today}"
+      ]
+    },
+    {
+      "routePattern": "^/equipe/:team$",
+      "sitemapSource": "src/lib/sitemap-urls.ts",
+      "requiredFragments": [
+        "teamPath(name)"
+      ]
+    },
+    {
+      "routePattern": "^/prediction/:predictionId$",
+      "sitemapSource": "src/lib/sitemap-urls.ts",
+      "requiredFragments": [
+        "/prediction/",
+        "for (const row of tickets)"
+      ]
+    },
+    {
+      "routePattern": "^/(guides(?:/:slug)?|outils(?:/:slug)?|meilleur-site-pronostic|pronostics-football(?:/:league)?)$",
+      "sitemapSource": "src/lib/sitemap-urls.ts",
+      "requiredFragments": [
+        "moneySitemapPaths"
+      ]
+    },
+    {
+      "routePattern": "^/pronostics-football/aujourdhui$",
+      "sitemapSource": "src/lib/sitemap-urls.ts",
+      "requiredFragments": [
+        "/pronostics-football/aujourdhui"
+      ]
+    },
+    {
+      "routePattern": "^/pronostics-football/demain$",
+      "sitemapSource": "src/lib/sitemap-urls.ts",
+      "requiredFragments": [
+        "/pronostics-football/demain"
+      ]
+    },
+    {
+      "routePattern": "^/resultats-football/:league$",
+      "sitemapSource": "src/lib/sitemap-urls.ts",
+      "requiredFragments": [
+        "SERP_COMPETITIONS",
+        "resultsPath"
+      ]
+    },
+    {
+      "routePattern": "^/scores-en-direct/:league$",
+      "sitemapSource": "src/lib/sitemap-urls.ts",
+      "requiredFragments": [
+        "SERP_COMPETITIONS",
+        "scoresPath"
+      ]
+    },
+    {
+      "routePattern": "^/(ligue-1|premier-league|la-liga|bundesliga|serie-a|ligue-des-champions|ligue-europa)$",
+      "sitemapSource": "src/lib/sitemap-urls.ts",
+      "requiredFragments": [
+        "LEAGUE_HUBS"
+      ]
+    },
+    {
       "routePrefix": "/match",
       "sitemapSource": "src/lib/sitemap-urls.ts",
       "requiredFragments": [
@@ -69,5 +135,8 @@
         "/score-hunter/"
       ]
     }
-  ]
+  ],
+  "routeAliases": {
+    "/auteurs_/betgpt-editorial": "/auteurs/betgpt-editorial"
+  }
 }
