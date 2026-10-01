@@ -17,7 +17,7 @@
     "preview:restart": "node scripts/preview.mjs restart",
     "preview:stop": "node scripts/preview.mjs stop",
     "typecheck": "tsc --noEmit",
-    "test:repairs": "node --test scripts/canonical-og.test.mjs scripts/grok-pwa-plugin.test.mjs && node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/chat/chat.test.ts src/engine/bet-safety.test.ts src/engine/article.test.ts",
+    "test:repairs": "node --test scripts/canonical-og.test.mjs scripts/grok-pwa-plugin.test.mjs && node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/chat/chat.test.ts src/engine/bet-safety.test.ts src/engine/ticket-log.test.ts src/engine/article.test.ts",
     "verify:dev": "node scripts/verify-local.mjs --all",
     "verify:production": "node scripts/verify-local.mjs --production",
     "check:auth": "node scripts/check-auth-invariant.mjs",
