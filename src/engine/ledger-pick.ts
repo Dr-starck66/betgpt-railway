@@ -1,5 +1,6 @@
 import { isFrenchClub } from "./french-clubs.ts";
 import { publishedBeforeKickoff } from "./verify-core.ts";
+import { oddsPlayable } from "../lib/markets.ts";
 
 export type LedgerPickRow = {
   id: string;
@@ -92,13 +93,26 @@ export function uniqueByFixture<T extends LedgerPickRow>(rows: T[]): T[] {
   return [...best.values()];
 }
 
-/** Prono public : un match, cote listée, pas de loterie, pas de nul C1/Europa. */
+/**
+ * Canonical ROI5 accounting invariant.
+ * Only 1X2 home/away BET selections inside the historical 1.80-3.00 window
+ * belong to the canonical live portfolio. Secondary markets stay analytical only.
+ */
+export function isCanonicalRoi5Selection(
+  row: Pick<LedgerPickRow, "market" | "odds" | "decision">,
+): boolean {
+  return (
+    row.decision === "BET" &&
+    (row.market === "1X2_H" || row.market === "1X2_A") &&
+    oddsPlayable(row.odds)
+  );
+}
+
+/** Public canonical pick: one match, listed price, same family/window as the ROI5 replay. */
 export function isMethodPick(row: LedgerPickRow): boolean {
   if (row.kind === "mise") return false;
-  if (row.decision === "NO_BET") return false;
+  if (!isCanonicalRoi5Selection(row)) return false;
   if (row.book === "clôture" || row.book === "non listé") return false;
-  if (!(row.odds >= 1.12 && row.odds <= 4.2)) return false;
-  if (row.market === "1X2_D" && (row.league === "CL" || row.league === "EL")) return false;
   if (
     (row.league === "CL" || row.league === "EL") &&
     (isFrenchClub({ name: row.home }) || isFrenchClub({ name: row.away }))
