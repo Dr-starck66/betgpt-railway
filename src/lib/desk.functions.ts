@@ -42,6 +42,7 @@ import { slugify } from "@/lib/programmatic";
 import { buildEdition, newsCards } from "@/lib/editorial/engine";
 import { readLedgerDurable } from "@/lib/editorial/ledger-store";
 import { calculateLedgerStats, ledgerHealth } from "@/engine/ledger-stats";
+import { canonicalRoi5Evidence } from "@/engine/canonical-roi5-evidence";
 import {
   eventsFor,
   hashIntegrity,
@@ -432,9 +433,11 @@ export const getChampionshipDesk = createServerFn({ method: "GET" }).handler(asy
 /** Bilan public : pas de desk complet (1 Mo+). */
 export const getLedgerDesk = createServerFn({ method: "GET" }).handler(async () => {
   const d = (await getDesk()) ?? emptyDesk();
+  const canonicalReplay = canonicalRoi5Evidence();
   return {
     review: d.review,
     evidence: d.evidence,
+    canonicalReplay,
     championship: {
       models: d.championship.models,
       coaches: [] as typeof d.championship.coaches,
@@ -446,20 +449,24 @@ export const getLedgerDesk = createServerFn({ method: "GET" }).handler(async () 
     },
     archive: {
       years: "replay chronologique canonique",
-      n: 178,
-      acc: 109 / 178,
-      coverHit: 3 / 13,
+      n: canonicalReplay.summary.n,
+      acc: canonicalReplay.summary.hitRate,
+      coverHit: canonicalReplay.summary.hedges
+        ? canonicalReplay.summary.hedgeHits / canonicalReplay.summary.hedges
+        : 0,
       cover11Hit: 0,
       coverWhenLose: 0,
       cover11WhenLose: 0,
-      staked: 17994.75966266308,
-      profit: 6419.932652284028,
-      roi: 0.3567667905898516,
+      staked: canonicalReplay.summary.capital * 100,
+      profit: canonicalReplay.summary.profit * 100,
+      roi: canonicalReplay.summary.roi,
       byLeague: [],
       notes: [
         "Champion canonique ROI5 : gate de dominance 1X2 verrouillé en production.",
-        "Replay chronologique : 178 sélections, ROI +35,68 %, drawdown max 5 unités.",
-        "Validation chronologique séparée : 57 sélections, ROI +32,23 %, drawdown max 3,29 unités.",
+        `Replay chronologique : ${canonicalReplay.summary.n} sélections, ROI ${(canonicalReplay.summary.roi * 100).toFixed(2)} %, drawdown max ${canonicalReplay.summary.maxDrawdown.toFixed(2)} unités.`,
+        `Validation chronologique séparée : ${canonicalReplay.summary.validationN} sélections, ROI ${(canonicalReplay.summary.validationRoi * 100).toFixed(2)} %, drawdown max ${canonicalReplay.summary.validationMaxDrawdown.toFixed(2)} unités.`,
+        canonicalReplay.oddsDisclosure,
+        canonicalReplay.scoreDisclosure,
         "Performance historique : aucun rendement futur n’est garanti.",
       ],
     } as typeof d.archive,
