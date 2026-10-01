@@ -248,6 +248,8 @@ function ShareMomentButton({
     }
   };
 
+  const nativeShareAvailable = typeof navigator !== "undefined" && typeof navigator.share === "function";
+
   return (
     <button
       type="button"
@@ -256,7 +258,7 @@ function ShareMomentButton({
       aria-label="Partager ce moment BetGPT"
       title="Partager ce moment"
     >
-      {copied ? <Check size={14} /> : navigator.share ? <Share2 size={14} /> : <Copy size={14} />}
+      {copied ? <Check size={14} /> : nativeShareAvailable ? <Share2 size={14} /> : <Copy size={14} />}
       {copied ? "Lien copié" : "Partager ce carnage"}
     </button>
   );
