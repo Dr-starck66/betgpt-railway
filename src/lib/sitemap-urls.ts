@@ -140,6 +140,15 @@ export function buildSitemapUrls(input: {
   const out: SitemapUrl[] = [
     { loc: SITE_URL, path: "/", title: "Bureau BetGPT", group: "Hubs", lastmod: now, changefreq: "always", priority: "1.0", images: [brandOg(), brandLogo()] },
     { loc: `${SITE_URL}/actu`, path: "/actu", title: "Actu football", group: "Hubs", lastmod: now, changefreq: "always", priority: "1.0" },
+    { loc: `${SITE_URL}/about`, path: "/about", title: "À propos de BetGPT", group: "Confiance", lastmod: "", changefreq: "monthly", priority: "0.5" },
+    { loc: `${SITE_URL}/changelog`, path: "/changelog", title: "Changelog BetGPT", group: "Confiance", lastmod: "", changefreq: "weekly", priority: "0.4" },
+    { loc: `${SITE_URL}/comparer-cotes`, path: "/comparer-cotes", title: "Comparer les cotes football", group: "Conversion", lastmod: now, changefreq: "hourly", priority: "0.85" },
+    { loc: `${SITE_URL}/data-sources`, path: "/data-sources", title: "Sources des données BetGPT", group: "Confiance", lastmod: "", changefreq: "monthly", priority: "0.6" },
+    { loc: `${SITE_URL}/editorial-policy`, path: "/editorial-policy", title: "Politique éditoriale BetGPT", group: "Confiance", lastmod: "", changefreq: "monthly", priority: "0.5" },
+    { loc: `${SITE_URL}/methodology`, path: "/methodology", title: "Méthodologie BetGPT", group: "Preuves", lastmod: "", changefreq: "monthly", priority: "0.7" },
+    { loc: `${SITE_URL}/prediction-history`, path: "/prediction-history", title: "Historique des prédictions", group: "Preuves", lastmod: now, changefreq: "daily", priority: "0.7" },
+    { loc: `${SITE_URL}/press`, path: "/press", title: "Presse BetGPT", group: "Confiance", lastmod: "", changefreq: "monthly", priority: "0.4" },
+    { loc: `${SITE_URL}/score-data-methodology`, path: "/score-data-methodology", title: "Méthodologie des scores et résultats", group: "Preuves", lastmod: "", changefreq: "monthly", priority: "0.6" },
     { loc: `${SITE_URL}/forum`, path: "/forum", title: "Forum agents", group: "Hubs", lastmod: now, changefreq: "hourly", priority: "0.8" },
     { loc: `${SITE_URL}/blog`, path: "/blog", title: "Blog football", group: "Hubs", lastmod: now, changefreq: "daily", priority: "0.85" },
     { loc: `${SITE_URL}/actu/${today}`, path: `/actu/${today}`, title: `Édition du ${today}`, group: "Hubs", lastmod: now, changefreq: "always", priority: "0.95" },
@@ -169,7 +178,6 @@ export function buildSitemapUrls(input: {
     { loc: `${SITE_URL}/statistics/most-common-scores`, path: "/statistics/most-common-scores", title: "Scores les plus fréquents", group: "Stats", lastmod: now, changefreq: "daily", priority: "0.85" },
     { loc: `${SITE_URL}/statistics/leagues/lowest-0-0`, path: "/statistics/leagues/lowest-0-0", title: "Ligues les moins 0-0", group: "Stats", lastmod: now, changefreq: "weekly", priority: "0.8" },
     { loc: `${SITE_URL}/statistics/leagues/highest-0-0`, path: "/statistics/leagues/highest-0-0", title: "Ligues les plus 0-0", group: "Stats", lastmod: now, changefreq: "weekly", priority: "0.8" },
-    { loc: `${SITE_URL}/redaction`, path: "/redaction", title: "Rédaction", group: "Site", lastmod: now, changefreq: "monthly", priority: "0.3" },
     { loc: `${SITE_URL}/sitemap`, path: "/sitemap", title: "Plan du site", group: "Site", lastmod: now, changefreq: "hourly", priority: "0.4" },
   ];
   for (const page of moneySitemapPaths(input.matches)) {
@@ -333,6 +341,28 @@ export function buildSitemapUrls(input: {
     }
   }
   const days = new Set(input.matches.map((m) => (m.kickoff ? parisDay(m.kickoff) : "")).filter(Boolean));
+  if (days.has(parisOffsetDay(0))) {
+    out.push({
+      loc: `${SITE_URL}/pronostics-football/aujourdhui`,
+      path: "/pronostics-football/aujourdhui",
+      title: "Pronostics football aujourd’hui",
+      group: "Pronostics",
+      lastmod: now,
+      changefreq: "hourly",
+      priority: "0.9",
+    });
+  }
+  if (days.has(parisOffsetDay(1))) {
+    out.push({
+      loc: `${SITE_URL}/pronostics-football/demain`,
+      path: "/pronostics-football/demain",
+      title: "Pronostics football demain",
+      group: "Pronostics",
+      lastmod: now,
+      changefreq: "hourly",
+      priority: "0.85",
+    });
+  }
   if (days.has(parisOffsetDay(0))) {
     out.push({
       loc: `${SITE_URL}/resultats-football/aujourdhui`,
