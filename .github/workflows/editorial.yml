@@ -45,13 +45,13 @@ jobs:
       - name: ASTRA SOCIAL regression tests
         run: npm run social:audit
 
-      - name: TypeScript verification
-        if: github.event_name == 'pull_request'
-        run: npm run typecheck
-
       - name: Production build gate
         if: github.event_name == 'pull_request'
         run: npm run build
+
+      - name: TypeScript verification
+        if: github.event_name == 'pull_request'
+        run: npm run typecheck
 
       - name: Generate qualified editorial opportunities
         if: github.event_name != 'pull_request'
