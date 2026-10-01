@@ -6,7 +6,7 @@ import path from "node:path";
 const root = process.cwd();
 const configPath = process.env.ASTRA_NEVER_FAIL_CONFIG || "config/astra-never-fail-build-guard.json";
 const cfg = JSON.parse(readFileSync(path.join(root, configPath), "utf8"));
-const extended = process.env.ASTRA_NEVER_FAIL_EXTENDED === "1";
+const extended = process.env.ASTRA_NEVER_FAIL_EXTENDED === "1" || process.argv.includes("--extended");
 const checks = [
   ...(Array.isArray(cfg.requiredChecks) ? cfg.requiredChecks : []),
   ...(extended && Array.isArray(cfg.extendedChecks) ? cfg.extendedChecks : []),
