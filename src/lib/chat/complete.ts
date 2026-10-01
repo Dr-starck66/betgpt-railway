@@ -1,5 +1,6 @@
 import { ensureLive, getLiveSnapshot, hydrateLiveFromDisk } from "@/engine/live";
 import { predictMatch, runEngine } from "@/engine/pipeline";
+import type { MatchInput } from "@/engine/types";
 import { stripMarkup } from "@/lib/plain";
 import { betgptPrompt } from "./prompt";
 import { normalizeMemory, parseMode, type ChatRequestBody, type PersonalityMode } from "./types";
@@ -38,7 +39,7 @@ async function deskNow(question: string): Promise<string> {
           Date.now() - asOfMs > 30 * 60_000 ||
           asOfMs > Date.now() + 60_000;
 
-        const livePredictions = snapshot.matches.slice(0, 24).flatMap((match) => {
+        const livePredictions = snapshot.matches.slice(0, 24).flatMap((match: MatchInput) => {
           try {
             return [predictMatch(match)];
           } catch {
