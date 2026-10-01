@@ -2,7 +2,7 @@ name: ASTRA Never-Fail Candidate Gate
 
 on:
   push:
-    branches: [main, astra-self-heal-chaos]
+    branches: [main]
   workflow_dispatch:
 
 concurrency:
