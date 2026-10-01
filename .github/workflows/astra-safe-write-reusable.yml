@@ -1,0 +1,197 @@
+name: ASTRA REPO-RACE GUARD Ω — Reusable Safe Write
+
+on:
+  workflow_call:
+    inputs:
+      path:
+        required: true
+        type: string
+      mode:
+        required: true
+        type: string
+      content_b64:
+        required: false
+        type: string
+        default: ""
+      needle_b64:
+        required: false
+        type: string
+        default: ""
+      replacement_b64:
+        required: false
+        type: string
+        default: ""
+      commit_message:
+        required: false
+        type: string
+        default: "chore(astra): safe reconciled write"
+  workflow_dispatch:
+    inputs:
+      path:
+        description: "Repository-relative file path"
+        required: true
+        type: string
+      mode:
+        description: "write_if_absent | replace_exact | ensure_block | replace_file"
+        required: true
+        type: choice
+        options:
+          - write_if_absent
+          - replace_exact
+          - ensure_block
+          - replace_file
+      content_b64:
+        description: "Base64 content for write_if_absent / ensure_block / replace_file"
+        required: false
+        type: string
+      needle_b64:
+        description: "Base64 exact needle for replace_exact"
+        required: false
+        type: string
+      replacement_b64:
+        description: "Base64 replacement for replace_exact"
+        required: false
+        type: string
+      commit_message:
+        description: "Commit message"
+        required: false
+        default: "chore(astra): safe reconciled write"
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: astra-safe-write-${{ github.repository }}-${{ inputs.path }}
+  cancel-in-progress: false
+
+jobs:
+  safe-write:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Configure writer identity
+        run: |
+          git config user.name "ASTRA Repo-Race Guard"
+          git config user.email "astra-repo-race-guard@users.noreply.github.com"
+
+      - name: Reconcile and write on latest repository state
+        env:
+          TARGET_PATH: ${{ inputs.path }}
+          MODE: ${{ inputs.mode }}
+          CONTENT_B64: ${{ inputs.content_b64 }}
+          NEEDLE_B64: ${{ inputs.needle_b64 }}
+          REPLACEMENT_B64: ${{ inputs.replacement_b64 }}
+          COMMIT_MESSAGE: ${{ inputs.commit_message }}
+          BRANCH: ${{ github.ref_name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          apply_mutation() {
+            python - <<'PY'
+          import base64, os, pathlib, sys
+
+          path = pathlib.Path(os.environ["TARGET_PATH"])
+          mode = os.environ["MODE"]
+
+          def dec(name):
+              raw = os.environ.get(name, "")
+              return base64.b64decode(raw).decode("utf-8") if raw else ""
+
+          content = dec("CONTENT_B64")
+          needle = dec("NEEDLE_B64")
+          replacement = dec("REPLACEMENT_B64")
+
+          current = path.read_text(encoding="utf-8") if path.exists() else ""
+
+          if mode == "write_if_absent":
+              if path.exists():
+                  print("ASTRA_SAFE_WRITE_NOOP file already exists")
+                  sys.exit(0)
+              path.parent.mkdir(parents=True, exist_ok=True)
+              path.write_text(content, encoding="utf-8")
+          elif mode == "replace_exact":
+              if not path.exists():
+                  print("ASTRA_SAFE_WRITE_TERMINAL missing target file")
+                  sys.exit(42)
+              count = current.count(needle)
+              if count == 0:
+                  if replacement and replacement in current:
+                      print("ASTRA_SAFE_WRITE_NOOP replacement already present")
+                      sys.exit(0)
+                  print("ASTRA_SAFE_WRITE_TERMINAL exact target no longer present")
+                  sys.exit(42)
+              if count != 1:
+                  print(f"ASTRA_SAFE_WRITE_TERMINAL expected one exact target, found {count}")
+                  sys.exit(42)
+              path.write_text(current.replace(needle, replacement, 1), encoding="utf-8")
+          elif mode == "ensure_block":
+              if content in current:
+                  print("ASTRA_SAFE_WRITE_NOOP block already present")
+                  sys.exit(0)
+              path.parent.mkdir(parents=True, exist_ok=True)
+              sep = "" if current == "" or current.endswith("\n") else "\n"
+              path.write_text(current + sep + content, encoding="utf-8")
+          elif mode == "replace_file":
+              path.parent.mkdir(parents=True, exist_ok=True)
+              if current == content:
+                  print("ASTRA_SAFE_WRITE_NOOP content already exact")
+                  sys.exit(0)
+              path.write_text(content, encoding="utf-8")
+          else:
+              print(f"ASTRA_SAFE_WRITE_TERMINAL unsupported mode {mode}")
+              sys.exit(42)
+          PY
+          }
+
+          for attempt in 1 2 3 4 5; do
+            echo "ASTRA_SAFE_WRITE attempt=$attempt"
+            git fetch origin "$BRANCH"
+            git reset --hard "origin/$BRANCH"
+
+            set +e
+            apply_mutation
+            rc=$?
+            set -e
+
+            if [ "$rc" -eq 42 ]; then
+              echo "ASTRA_SAFE_WRITE_TERMINAL_RECONCILIATION_REQUIRED"
+              exit 42
+            elif [ "$rc" -ne 0 ]; then
+              exit "$rc"
+            fi
+
+            if git diff --quiet -- "$TARGET_PATH"; then
+              echo "ASTRA_SAFE_WRITE_PASS noop=true branch=$BRANCH path=$TARGET_PATH"
+              exit 0
+            fi
+
+            git add -- "$TARGET_PATH"
+            git commit -m "$COMMIT_MESSAGE"
+
+            if git push origin "HEAD:$BRANCH"; then
+              git fetch origin "$BRANCH"
+              local_sha="$(git rev-parse HEAD)"
+              remote_sha="$(git rev-parse "origin/$BRANCH")"
+              if [ "$local_sha" != "$remote_sha" ]; then
+                echo "ASTRA_SAFE_WRITE_RETRY post-push branch advanced local=$local_sha remote=$remote_sha"
+              else
+                echo "ASTRA_SAFE_WRITE_PASS commit=$local_sha branch=$BRANCH path=$TARGET_PATH"
+                exit 0
+              fi
+            else
+              echo "ASTRA_SAFE_WRITE_RETRY non-fast-forward-or-transient-conflict attempt=$attempt"
+            fi
+
+            sleep $((attempt * 2))
+          done
+
+          echo "ASTRA_SAFE_WRITE_FAIL retry budget exhausted"
+          exit 1
