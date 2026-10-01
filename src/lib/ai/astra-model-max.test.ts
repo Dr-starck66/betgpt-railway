@@ -5,7 +5,7 @@ import {
   buildAstraModelMaxPlan,
   modelScore,
   type AstraModelDescriptor,
-} from "./astra-model-max";
+} from "./astra-model-max.ts";
 
 const model = (
   id: string,
