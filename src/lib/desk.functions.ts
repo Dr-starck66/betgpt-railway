@@ -682,7 +682,7 @@ function cardMatch(m: MatchInput): MatchInput {
     importance: { value: 0, source: "", timestamp: m.kickoff, confidence: 0, freshnessHours: 0 },
     notes: [],
     incidents: m.incidents ?? [],
-    current: (m.current ?? []).slice(0, 3).map((b) => ({
+    current: (m.current ?? []).slice(0, 8).map((b) => ({
       book: b.book,
       home: b.home,
       draw: b.draw,
@@ -694,7 +694,14 @@ function cardMatch(m: MatchInput): MatchInput {
       bttsYes: 0,
       bttsNo: 0,
       url: b.url,
+      homeUrl: b.homeUrl,
+      drawUrl: b.drawUrl,
+      awayUrl: b.awayUrl,
+      observedAt: b.observedAt,
     })),
+    ticketLinks: (m.ticketLinks ?? [])
+      .filter((l) => /^https:\/\//i.test(l.url))
+      .slice(0, 8),
     opening: {
       book: "",
       home: 0,
