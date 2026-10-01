@@ -1,3 +1,39 @@
+# ASTRA DISCOVER ENGINE Ω V2 — reverse-engineering Foot Mercato (2026-10-01)
+
+## Principe
+Le moteur n'essaie plus de remplir mécaniquement trois créneaux. Trois reste un plafond automatique quotidien de sécurité, mais la sélection est pilotée par l'opportunité éditoriale et peut rester inférieure à trois.
+
+## Changements V2
+- Radar actualité accéléré : cache 5 min, signaux limités à 24 h, couverture renforcée des grandes entités football.
+- Scan d'opportunités GitHub Actions toutes les 30 minutes entre 05:17 et 22:47 UTC.
+- Publication fail-closed conservée : un scan peut ne rien publier.
+- Détection de **material development** : confirmation, autorisation, démenti, refus, verdict, décision/officiel, etc.
+- Une évolution matérielle suffisamment tardive n'est plus fusionnée automatiquement avec la rumeur/polémique précédente.
+- Bonus de priorité pour les développements matériels fortement sourcés.
+- Une breaking news score >= 88, officielle ou matérielle, peut ouvrir immédiatement le prochain créneau libre sans attendre 08:00 / 13:00 / 19:00.
+- Les breaking news fortes peuvent remplacer un candidat plus faible avant publication.
+- Réécriture du corps des news : suppression des formulations génériques qui entraient en contradiction avec le filtre anti-remplissage.
+- RSS : suppression de la promesse artificielle « trois articles par jour » ; formulation en plafond de trois sans quota de remplissage.
+- Admin : affichage explicite de la politique `OPPORTUNITY_DRIVEN_MAX_3`.
+- CI : `npm run news` + typecheck sur pull request avant intégration.
+
+## Cas de régression ajouté
+Le scénario « polémique sur le déplacement de Kylian Mbappé » puis « le Real Madrid l'avait autorisé » doit former deux développements distincts. Deux sources fortes peuvent ensuite corroborer la résolution sans la refusionner avec l'étape précédente.
+
+## Éléments techniques déjà conformes et conservés
+- `max-image-preview:large`.
+- Images 1200×675.
+- `og:image`, `article:published_time`, `article:modified_time`, canonical.
+- Sitemap Google News limité aux articles des deux derniers jours avec titre, date, mots-clés et image.
+- Auteur éditorial identifié.
+- Maillage interne match/compétition + articles liés.
+
+## État
+Branche d'implémentation : `astra-discover-footmercato-v2`.
+CI PASS le 2026-10-01 : `npm run news` PASS et `npm run typecheck` PASS sur GitHub Actions. Le déploiement public reste à vérifier séparément après fusion.
+
+---
+
 # BetGPT — Discover Opportunity Engine (France)
 
 ## Objectif

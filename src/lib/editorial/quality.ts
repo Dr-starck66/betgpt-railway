@@ -10,7 +10,7 @@ const TIPSTER = /mise conseillée|à jouer|pronostic sûr|gain garanti|certitude
 const INTERNAL_JARGON = /desk BetGPT|score interne|créneau ouvert|créneau pas encore ouvert|pas un pronostic inventé|signal desk|déjà ingéré|pipeline/i;
 const SPANISH_PUBLIC_COPY = /\b(horario|alineaciones?|resultado|dónde ver|clasificación)\b/i;
 const GENERIC_EDITORIAL_FILLER =
-  /voici ce qui est confirmé par les sources disponibles|ce que cela peut changer|les prochains éléments à surveiller|la prochaine étape est une confirmation ou une précision|ce rendez-vous donne un contexte immédiat au sujet|les éléments ci-dessous restent limités à ce qui est effectivement annoncé/i;
+  /voici ce qui est confirmé par les sources disponibles|ce que cela peut changer|les prochains éléments à surveiller|la prochaine étape est une confirmation ou une précision|ce rendez-vous donne un contexte immédiat au sujet|les éléments ci-dessous restent limités à ce qui est effectivement annoncé|\brequête\b[^.]{0,80}\b(?:pronostic|seo|mot[- ]?clé)\b/i;
 
 const STOP = new Set([
   "betgpt",
@@ -97,16 +97,16 @@ function sentenceKey(value: string): string {
   return value
     .toLowerCase()
     .normalize("NFD")
-    .replace(/[\\u0300-\\u036f]/g, "")
-    .replace(/\\d+(?:[.,]\\d+)?/g, "#")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\d+(?:[.,]\d+)?/g, "#")
     .replace(/[^a-z0-9#]+/g, " ")
-    .replace(/\\s+/g, " ")
+    .replace(/\s+/g, " ")
     .trim();
 }
 
 export function internalDuplication(text: string): { duplicateInstances: number; maxRepeats: number } {
   const sentences = text
-    .split(/(?<=[.!?])\\s+|\\n+/)
+    .split(/(?<=[.!?])\s+|\n+/)
     .map(sentenceKey)
     .filter((sentence) => sentence.length >= 55);
   const counts = new Map<string, number>();

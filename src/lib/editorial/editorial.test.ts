@@ -69,7 +69,7 @@ describe("editorial engine", () => {
     const published = open.articles.filter((article) => article.status === "PUBLISHED");
     assert.equal(published.length, 3);
     assert.equal(open.targetPerDay, 3);
-    assert.equal(open.publicationPolicy, "THREE_QUALIFIED_ARTICLES");
+    assert.equal(open.publicationPolicy, "OPPORTUNITY_DRIVEN_MAX_3");
     assert.equal(new Set(published.map((article) => article.id)).size, published.length);
     for (const article of published) {
       assert.equal(article.quality.pass, true);
@@ -240,6 +240,65 @@ describe("editorial engine", () => {
     assert.equal(news.length, 1);
     assert.ok(news[0]!.sources.filter((source) => source.status === "CORROBORATED").length >= 2);
     assert.ok(news[0]!.discoverOpportunity.total >= 70);
+  });
+
+  it("keeps a material resolution separate from the earlier controversy", () => {
+    const signals: EditorialNewsSignal[] = [
+      {
+        id: "story-1",
+        title: "Real Madrid : polémique autour du déplacement de Kylian Mbappé",
+        url: "https://news.google.com/articles/story-1",
+        sourceName: "L'Équipe",
+        sourceUrl: "https://www.lequipe.fr",
+        publishedAt: "2026-09-25T08:45:00.000Z",
+        description: "Le déplacement de Kylian Mbappé fait débat à Madrid.",
+        sourceTier: "TIER1",
+        entities: ["Real Madrid", "Kylian Mbappé"],
+        language: "fr",
+      },
+      {
+        id: "story-2",
+        title: "Kylian Mbappé : son déplacement à Paris fait débat au Real Madrid",
+        url: "https://news.google.com/articles/story-2",
+        sourceName: "RMC Sport",
+        sourceUrl: "https://rmcsport.bfmtv.com",
+        publishedAt: "2026-09-25T09:00:00.000Z",
+        description: "Le même déplacement provoque des questions autour du Real Madrid.",
+        sourceTier: "TIER1",
+        entities: ["Real Madrid", "Kylian Mbappé"],
+        language: "fr",
+      },
+      {
+        id: "resolution-1",
+        title: "Le Real Madrid a autorisé Kylian Mbappé à se rendre à Paris",
+        url: "https://news.google.com/articles/resolution-1",
+        sourceName: "Foot Mercato",
+        sourceUrl: "https://www.footmercato.net",
+        publishedAt: "2026-09-25T13:49:00.000Z",
+        description: "Le club avait donné son autorisation au joueur pour ce déplacement.",
+        sourceTier: "TIER1",
+        entities: ["Real Madrid", "Kylian Mbappé"],
+        language: "fr",
+      },
+      {
+        id: "resolution-2",
+        title: "Mbappé : le Real Madrid avait donné son autorisation pour Paris",
+        url: "https://news.google.com/articles/resolution-2",
+        sourceName: "L'Équipe",
+        sourceUrl: "https://www.lequipe.fr",
+        publishedAt: "2026-09-25T13:55:00.000Z",
+        description: "Une seconde source rapporte que le déplacement avait été autorisé.",
+        sourceTier: "TIER1",
+        entities: ["Real Madrid", "Kylian Mbappé"],
+        language: "fr",
+      },
+    ];
+    const clusters = clusterSignals(signals);
+    assert.equal(clusters.length, 2);
+    const resolution = clusters.find((cluster) => cluster.signals.some((signal) => signal.id === "resolution-1"));
+    assert.ok(resolution);
+    assert.equal(resolution.signals.length, 2);
+    assert.equal(autoPublishableCluster(resolution), true);
   });
 
   it("does not auto-publish a single non-official media signal", () => {

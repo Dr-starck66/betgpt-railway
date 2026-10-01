@@ -156,7 +156,7 @@ export type EditorialEdition = {
   timeChanges: TimeChange[];
   maxPerDay: 3;
   targetPerDay: 3;
-  publicationPolicy: "THREE_QUALIFIED_ARTICLES";
+  publicationPolicy: "THREE_QUALIFIED_ARTICLES" | "OPPORTUNITY_DRIVEN_MAX_3";
   plannedCount: number;
   targetStatus: "MET" | "DEGRADED";
 };

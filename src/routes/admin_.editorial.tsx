@@ -22,7 +22,7 @@ function EditorialAdmin() {
       <h1 className="font-display text-2xl tracking-tight">Éditorial</h1>
       <p className="text-sm text-mist">
         {edition.parisDate} · Europe/Paris · prochaine exécution {formatParis(edition.nextRun)} · planification{" "}
-        {formatParis(edition.nextPlanningAt)} · objectif {edition.plannedCount}/3 · {edition.targetStatus} · journal {data.ledgerPersisted ? "persisté" : "mémoire seulement (stockage durable indisponible)"}
+        {formatParis(edition.nextPlanningAt)} · retenus {edition.plannedCount}/3 max · {edition.publicationPolicy} · journal {data.ledgerPersisted ? "persisté" : "mémoire seulement (stockage durable indisponible)"}
       </p>
       <section>
         <h2 className="text-lg font-semibold">Créneaux</h2>

@@ -99,7 +99,7 @@ export function actualitesRss(articles: EditorialArticle[]): string {
 <channel>
   <title>BetGPT — actualités football</title>
   <link>${SITE_URL}/actualites</link>
-  <description>Trois articles football ciblés par jour, sélectionnés par BetGPT Editorial selon un filtre de fraîcheur, intérêt, sources et qualité, avec remplacement automatique des sujets faibles.</description>
+  <description>Actualités football publiées uniquement lorsqu'un développement frais, suffisamment sourcé et distinct franchit les contrôles éditoriaux BetGPT. Plafond de trois publications automatiques par jour, sans quota de remplissage.</description>
   <language>fr</language>
   <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
 ${items.join("\n")}
