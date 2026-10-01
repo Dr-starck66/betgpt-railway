@@ -10,15 +10,6 @@ import { VerdictBadge } from "@/components/ui/badge";
 import { fmtEur, fmtOdds, fmtSignedPct } from "@/lib/utils";
 import { SITE_URL } from "@/lib/seo";
 
-const CANONICAL_CHAMPION = Object.freeze({
-  roi: 0.3567667905898516,
-  n: 178,
-  maxDrawdown: 5,
-  validationRoi: 0.32225206899068637,
-  validationN: 57,
-  validationMaxDrawdown: 3.2871767545117394,
-});
-
 export const Route = createFileRoute("/ledger")({
   loader: () => getLedgerDesk(),
   head: () => ({
