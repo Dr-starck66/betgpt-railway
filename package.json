@@ -65,7 +65,8 @@
     "release:candidate:extended": "node scripts/astra-never-fail-build-guard.mjs --extended",
     "test:editorial-authority": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/editorial/authority-citations.test.ts src/lib/editorial/discover-launchpad.test.ts",
     "seo:indexability-release": "node scripts/astra-indexability-release-gate.mjs",
-    "editorial:corpus-audit": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-editorial-corpus-audit.ts"
+    "editorial:corpus-audit": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-editorial-corpus-audit.ts",
+    "test:growth": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/growth/national-breakout.test.ts"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.4",
