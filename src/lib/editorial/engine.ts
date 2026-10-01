@@ -362,6 +362,7 @@ function composeMatch(
         ? "Ce que disent les chiffres et les absences signalées"
         : "Cotes, absences et signaux à vérifier avant le match",
     `${odds ? odds.text.replace(/Le desk observe/g, "Les cotes 1N2 disponibles indiquent").replace(/sur le desk BetGPT/g, "dans les données disponibles") : "Aucune cote 1N2 suffisamment fiable n'est disponible pour cette affiche."} ${absences.text.replace(/BetGPT ne dispose pas, dans ce signal,/g, "Les données disponibles ne contiennent").replace(/Signal d'absence présent dans le desk, au-dessus du seuil de confiance interne :/g, "Des absences sont signalées avec un niveau de confiance suffisant :").replace(/Tant que le club ne figure pas comme source primaire, BetGPT ne parle pas de forfait officiel\./g, "Elles ne sont pas présentées comme officielles sans confirmation primaire.")} ${modelBit ? modelBit.text : "Aucune probabilité chiffrée n'est ajoutée lorsqu'un modèle exploitable n'est pas disponible."}`,
+    [`cal-${match.id}`, absences.source.id, ...(odds ? [odds.source.id] : []), ...(modelBit ? [modelBit.source.id] : [])],
   );
   const unknown = paragraph(
     slot === "morning"
@@ -370,6 +371,7 @@ function composeMatch(
         ? "Les confirmations qui peuvent encore changer la lecture du match"
         : "Ce qui peut encore évoluer juste avant le coup d'envoi",
     `Les compositions, forfaits, changements d'horaire et autres informations de dernière minute ne sont publiés que lorsqu'ils sont présents dans une source suffisamment fiable. La fiche du match reste la référence BetGPT pour le score, les statistiques et les éventuelles mises à jour factuelles.`,
+    [`cal-${match.id}`, absences.source.id],
   );
   const sources = [...coreSources(match, match.competition), absences.source];
   if (odds) sources.push(odds.source);
