@@ -279,6 +279,24 @@
       }
     },
     {
+      "id": "discover-negreira-article",
+      "method": "GET",
+      "path": "/actualites/affaire-negreira-uefa-documents-real-madrid-barca-repond-2026-10-01",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "Affaire Negreira",
+            "l’UEFA reçoit les documents du Real Madrid",
+            "FC Barcelone",
+            "Sources"
+          ]
+        }
+      }
+    },
+    {
       "id": "robots",
       "method": "GET",
       "path": "/robots.txt",
@@ -309,5 +327,5 @@
       }
     }
   ],
-  "verificationRevision": "ASTRA-BETGPT-SENTINEL-V2-RENDERED-FLAGS-REAL-LINKS-2026-10-01"
+  "verificationRevision": "ASTRA-BETGPT-DISCOVER-ATTACK-NEGREIRA-2026-10-01"
 }
