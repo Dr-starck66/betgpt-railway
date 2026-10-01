@@ -1,0 +1,115 @@
+name: BetGPT External Chat Smoke
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/chat-external-smoke.yml"
+      - ".github/smoke-trigger.txt"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: betgpt-external-chat-smoke
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: POST real conversation from external runner
+        shell: bash
+        run: |
+          set -u
+          mkdir -p smoke
+          cat > smoke/payload.json <<'JSON'
+          {"messages":[{"role":"user","content":"Qu'est-ce que tu mises aujourd'hui, et pourquoi ?"}],"requestedMode":"NORMAL"}
+          JSON
+
+          probe() {
+            local base="$1"
+            local label="$2"
+            local status="000"
+            local file="smoke/${label}.json"
+            local attempt
+
+            for attempt in $(seq 1 12); do
+              status="$(curl -sS -L                 --connect-timeout 20                 --max-time 120                 -o "$file"                 -w "%{http_code}"                 -H "content-type: application/json"                 -H "user-agent: BetGPT-External-Smoke/1.0"                 --data-binary @smoke/payload.json                 "$base/api/chat" || true)"
+
+              echo "[${label}] attempt=${attempt} http=${status}"
+              if [ "$status" = "200" ]; then
+                break
+              fi
+              sleep 10
+            done
+
+            printf '%s' "$status" > "smoke/${label}.status"
+
+            python3 - "$label" "$base" "$file" "$status" <<'PY'
+          import json
+          import pathlib
+          import sys
+
+          label, base, file, status = sys.argv[1:]
+          raw = pathlib.Path(file).read_text(encoding="utf-8", errors="replace") if pathlib.Path(file).exists() else ""
+
+          print(f"[{label}] target={base}/api/chat")
+          print(f"[{label}] http={status}")
+          print(f"[{label}] raw={raw[:8000]}")
+
+          if status != "200":
+              raise SystemExit(f"{label}: HTTP {status}, expected 200")
+
+          try:
+              data = json.loads(raw)
+          except json.JSONDecodeError as exc:
+              raise SystemExit(f"{label}: invalid JSON response: {exc}")
+
+          text = str(data.get("text", "")).strip()
+          if not text:
+              raise SystemExit(f"{label}: response JSON has no non-empty text")
+
+          normalized = text.lower().replace("’", "'")
+          forbidden = (
+              "donne-moi les affiches",
+              "donnez-moi les affiches",
+              "donne moi les affiches",
+              "donnez moi les affiches",
+          )
+          if any(fragment in normalized for fragment in forbidden):
+              raise SystemExit(f"{label}: regression detected: chat asks user to provide fixtures")
+
+          required = (
+              "SÉLECTION AUTOMATIQUE BETGPT",
+              "Pari à prendre :",
+          )
+          if not all(fragment in text for fragment in required):
+              raise SystemExit(
+                  f"{label}: no concrete deterministic daily pick found in response"
+              )
+
+          if "Niveau :" not in text or "Cote disponible :" not in text:
+              raise SystemExit(f"{label}: pick is missing level or real odds")
+
+          print(f"[{label}] PASS: concrete pick returned without asking for fixtures")
+          PY
+          }
+
+          failures=0
+
+          if ! probe "https://betgpt-production-7353.up.railway.app" "railway-origin"; then
+            failures=$((failures + 1))
+          fi
+
+          if ! probe "https://betgpt.live" "public-domain"; then
+            failures=$((failures + 1))
+          fi
+
+          if [ "$failures" -ne 0 ]; then
+            echo "EXTERNAL_SMOKE_FAIL failures=$failures"
+            exit 1
+          fi
+
+          echo "EXTERNAL_SMOKE_PASS"
