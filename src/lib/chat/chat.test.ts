@@ -181,6 +181,9 @@ it("extracts one explicitly tagged punchline without exposing technical tags", (
   );
   assert.equal(out.punchline?.style, "ANGRY_SHOUT");
   assert.equal(out.punchline?.score, 100);
+  assert.equal(out.punchline?.reaction?.mood, "COSMIC_CHAOS");
+  assert.deepEqual(out.punchline?.reaction?.emojis, ["🪐", "🚀", "🤯"]);
+  assert.match(out.punchline?.reaction?.gifQuery ?? "", /space/);
   assert.match(out.text, /GRILLE-PAIN COSMIQUE/);
   assert.doesNotMatch(out.text, /\[\[PUNCH/);
 });
@@ -188,4 +191,16 @@ it("extracts one explicitly tagged punchline without exposing technical tags", (
 it("does not force premium voice for an ordinary sentence", () => {
   const out = extractPunchline("Je regarderais surtout la cote et les compositions.", "ROAST");
   assert.equal(out.punchline, undefined);
+});
+
+
+it("maps absurd animal punchlines to a contextual visual reaction", () => {
+  const out = extractPunchline(
+    "[[PUNCH:LAUGH_SHOUT]]ESPÈCE DE PIGEON SOUS KÉTAMINE COSMIQUE !![[/PUNCH]]",
+    "ROAST",
+    "pari complètement lunaire",
+  );
+  assert.equal(out.punchline?.reaction?.mood, "ANIMAL_CHAOS");
+  assert.equal(out.punchline?.reaction?.emojis.includes("🐦"), true);
+  assert.match(out.punchline?.reaction?.gifQuery ?? "", /pigeon/);
 });
