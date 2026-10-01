@@ -28,7 +28,7 @@ const STATES = [
 const ADJECTIVES = [
   "cosmique", "quantique", "nucléaire", "interstellaire", "administratif",
   "radioactif", "galactique", "démoniaque", "hydraulique", "électromagnétique",
-  "municipal", "transdimensionnel", "carburé au chaos", "certifié ISO n'importe quoi",
+  "municipal", "transdimensionnel", "carburé au chaos", "certifié ISO n’importe quoi",
 ];
 
 const ACTIONS = [
@@ -40,7 +40,7 @@ const ACTIONS = [
   "cherche la value dans le bac à légumes",
   "défend en tongs sur une patinoire",
   "prépare ses combinés au lance-flammes",
-  "regarde les cotes avec des jumelles à l'envers",
+  "regarde les cotes avec des jumelles à l’envers",
   "fait du pressing dans un lave-vaisselle",
 ];
 
@@ -51,7 +51,7 @@ const FINANCIAL_DISASTERS = [
   "autant donner ton RIB à un poulpe en costume qui dit « fais-moi confiance »",
   "autant poser ta carte bancaire sur la table et crier « servez-vous, les artistes ! »",
   "autant remplacer ton conseiller bancaire par une roue de casino sous caféine",
-  "autant mettre ton salaire dans une enveloppe et l'envoyer à « Monsieur Hasard, planète Mars »",
+  "autant mettre ton salaire dans une enveloppe et l’envoyer à « Monsieur Hasard, planète Mars »",
   "autant laisser un pigeon trader ton livret A depuis un cybercafé",
   "autant donner ton code PIN à un lama dans une bijouterie et partir déjeuner",
   "autant convertir ton budget du mois en tickets à gratter et les lancer depuis un hélicoptère",
@@ -73,13 +73,7 @@ const CONTEXT_HOOKS: Array<[RegExp, string[]]> = [
   [/\b(btts|over|under|handicap)\b/i, ["ton marché", "ton angle", "ton pari"]],
 ];
 
-const BLOCKED = [
-  /n[eè]gr/i,
-  /youp/i,
-  /bougnoul/i,
-  /p[eé]d[eé]/i,
-  /tapette/i,
-];
+const BLOCKED = [/n[eè]gr/i, /youp/i, /bougnoul/i, /p[eé]d[eé]/i, /tapette/i];
 
 function hash32(input: string): number {
   let h = 2166136261 >>> 0;
@@ -132,24 +126,18 @@ function overlap(a: string, b: string): number {
 
 function scoreCandidate(text: string, context: string, recent: string[]): number {
   if (BLOCKED.some((re) => re.test(text))) return 0;
-
   const words = text.split(/\s+/).length;
   let score = 48;
-
   if (words >= 7 && words <= 18) score += 16;
   else if (words <= 28) score += 8;
-
   if (/[!?]{2,}/.test(text)) score += 7;
   if (/\b(cosmique|quantique|nucl[eé]aire|galactique|Mars|NASA|interstellaire)\b/i.test(text)) score += 9;
   if (/\b(grille-pain|pigeon|hamster|lama|parpaing|micro-ondes|poulpe|ragondin)\b/i.test(text)) score += 7;
   if (/\b(carte bleue|code PIN|Dior|Sephora|Leroy Merlin|IKEA|Feu Vert)\b/i.test(text)) score += 8;
-
   const hook = contextNoun(context, mulberry32(hash32(context + ":hook")));
   if (normalize(text).includes(normalize(hook))) score += 9;
-
   const repetition = recent.reduce((m, prev) => Math.max(m, overlap(text, prev)), 0);
   score -= Math.round(repetition * 45);
-
   return Math.max(0, Math.min(100, score));
 }
 
@@ -160,26 +148,20 @@ function templates(context: string, rnd: () => number): Array<{ text: string; re
   const adj = pick(ADJECTIVES, rnd);
   const action = pick(ACTIONS, rnd);
   const hook = contextNoun(context, rnd);
-
   return [
-    { text: `MAIS T'ES UN ${obj.toUpperCase()} ${adj.toUpperCase()} OU QUOI ?!`, recipe: "objet+adjectif" },
-    { text: `QUI A LAISSÉ UN ${animal.toUpperCase()} ${state.toUpperCase()} GÉRER ${hook.toUpperCase()} ?!`, recipe: "animal+état+contexte" },
-    { text: `ESPÈCE DE ${obj.toUpperCase()} ${state.toUpperCase()} !!!`, recipe: "objet+état" },
-    { text: `${hook.toUpperCase()} ${action.toUpperCase()} !!!`, recipe: "contexte+action-impossible" },
-    { text: `ON DIRAIT UN ${animal.toUpperCase()} ${adj.toUpperCase()} QUI ${action.toUpperCase()} !!!`, recipe: "créature+collision+surréalisme" },
-    { text: `AVEC ${hook.toUpperCase()}, ${pick(FINANCIAL_DISASTERS, rnd).toUpperCase()} !!!`, recipe: "catastrophe-financière+quotidien" },
-    { text: `AVEC ${hook.toUpperCase()}, ${pick(COUPLE_CLICHES, rnd).toUpperCase()} !!!`, recipe: "cliché-couple+catastrophe-financière" },
+    { text: "MAIS T’ES UN " + obj.toUpperCase() + " " + adj.toUpperCase() + " OU QUOI ?!", recipe: "objet+adjectif" },
+    { text: "QUI A LAISSÉ UN " + animal.toUpperCase() + " " + state.toUpperCase() + " GÉRER " + hook.toUpperCase() + " ?!", recipe: "animal+état+contexte" },
+    { text: "ESPÈCE DE " + obj.toUpperCase() + " " + state.toUpperCase() + " !!!", recipe: "objet+état" },
+    { text: hook.toUpperCase() + " " + action.toUpperCase() + " !!!", recipe: "contexte+action-impossible" },
+    { text: "ON DIRAIT UN " + animal.toUpperCase() + " " + adj.toUpperCase() + " QUI " + action.toUpperCase() + " !!!", recipe: "créature+collision+surréalisme" },
+    { text: "AVEC " + hook.toUpperCase() + ", " + pick(FINANCIAL_DISASTERS, rnd).toUpperCase() + " !!!", recipe: "catastrophe-financière+quotidien" },
+    { text: "AVEC " + hook.toUpperCase() + ", " + pick(COUPLE_CLICHES, rnd).toUpperCase() + " !!!", recipe: "cliché-couple+catastrophe-financière" },
   ];
 }
 
-export function generateAbsurdInsult(
-  context: string,
-  recent: string[] = [],
-  salt = "",
-): AbsurdInsult {
-  const baseSeed = hash32(`${context}\\n${salt}\\n${recent.slice(-8).join("\\n")}`);
+export function generateAbsurdInsult(context: string, recent: string[] = [], salt = ""): AbsurdInsult {
+  const baseSeed = hash32([context, salt, recent.slice(-8).join("\n")].join("\n"));
   const candidates: AbsurdInsult[] = [];
-
   for (let round = 0; round < 12; round++) {
     const rnd = mulberry32(baseSeed ^ Math.imul(round + 1, 0x9e3779b1));
     for (const item of templates(context, rnd)) {
@@ -190,20 +172,14 @@ export function generateAbsurdInsult(
       });
     }
   }
-
   candidates.sort((a, b) => b.score - a.score || a.text.localeCompare(b.text, "fr"));
-  return candidates[0] ?? {
-    text: "ESPÈCE DE GRILLE-PAIN COSMIQUE !!!",
-    score: 70,
-    recipe: "fallback",
-  };
+  return candidates[0] ?? { text: "ESPÈCE DE GRILLE-PAIN COSMIQUE !!!", score: 70, recipe: "fallback" };
 }
 
 export function absurdInsultCreativeBrief(context: string, recent: string[] = []): string {
   const seedA = generateAbsurdInsult(context, recent, "A");
   const seedB = generateAbsurdInsult(context, [...recent, seedA.text], "B");
   const seedC = generateAbsurdInsult(context, [...recent, seedA.text, seedB.text], "C");
-
   return [
     "ASTRA INSULT LAB — contraintes créatives :",
     "- Fabrique une image absurde neuve, courte, mémorisable et liée au message.",
@@ -211,22 +187,18 @@ export function absurdInsultCreativeBrief(context: string, recent: string[] = []
     "- Utilise aussi des comparaisons de catastrophe financière très visuelles : carte bleue, code PIN, salaire, boutique de luxe, casino, banque.",
     "- Les scènes de couple caricaturales sont permises si elles restent des gags de situation précis et non des affirmations générales sur les femmes ou les hommes.",
     "- Évite les insultes haineuses, discriminatoires, menaçantes ou visant une caractéristique personnelle sensible.",
-    "- Ne copie pas les graines ci-dessous mot pour mot : elles servent seulement à fixer le niveau d'absurdité.",
-    `- Graine A : ${seedA.text}`,
-    `- Graine B : ${seedB.text}`,
-    `- Graine C : ${seedC.text}`,
-    "- Si tu peux faire plus inattendu, fais-le. Une bonne punchline doit donner envie d'être capturée et partagée.",
-  ].join("\\n");
+    "- Ne copie pas les graines ci-dessous mot pour mot : elles servent seulement à fixer le niveau d’absurdité.",
+    "- Graine A : " + seedA.text,
+    "- Graine B : " + seedB.text,
+    "- Graine C : " + seedC.text,
+    "- Si tu peux faire plus inattendu, fais-le. Une bonne punchline doit donner envie d’être capturée et partagée.",
+  ].join("\n");
 }
 
 export function shouldDropAbsurdInsult(context: string, recent: string[] = []): boolean {
   const text = context.trim();
   if (text.length < 8) return false;
   if (/\b(suicide|mourir|mort|deuil|cancer|maladie|agression|viol|urgence)\b/i.test(text)) return false;
-
-  if (/\b(20-0|10-0|100%|s[uû]r|certain|impossible de perdre|all[- ]?in|tapis|combin[eé].*(8|9|10|11|12))\b/i.test(text)) {
-    return true;
-  }
-
-  return hash32(`${text}\\n${recent.slice(-3).join("\\n")}`) % 5 === 0;
+  if (/\b(20-0|10-0|100%|s[uû]r|certain|impossible de perdre|all[- ]?in|tapis|combin[eé].*(8|9|10|11|12))\b/i.test(text)) return true;
+  return hash32([text, recent.slice(-3).join("\n")].join("\n")) % 5 === 0;
 }
