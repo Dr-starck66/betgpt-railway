@@ -75,7 +75,8 @@
     "test:self-heal": "node --test scripts/astra-seo-self-heal.test.mjs",
     "test:resume": "node scripts/astra-resume-guard.mjs",
     "affiliate:guard": "node scripts/astra-affiliate-conversion-guard.mjs",
-    "test:search-truth": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/search/search-truth.test.ts"
+    "test:search-truth": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/search/search-truth.test.ts",
+    "seo:public-readiness": "node scripts/astra-public-seo-readiness-gate.mjs"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.4",
