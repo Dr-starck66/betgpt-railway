@@ -35,7 +35,7 @@ function GrowthAdmin() {
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-link">ASTRA NATIONAL BREAKOUT Ω</p>
         <h1 className="font-display text-3xl tracking-tight">Cockpit de croissance BetGPT</h1>
         <p className="text-sm text-mist">
-          Score <strong className="text-paper">{data.score}/100</strong> · mode <strong className="text-paper">{data.status}</strong> · fenêtre {data.windowHours} h.
+          Score <strong className="text-paper">{data.score == null ? "UNVERIFIED" : `${data.score}/100`}</strong> · mode <strong className="text-paper">{data.status}</strong> · fenêtre {data.windowHours} h.
         </p>
       </header>
 
