@@ -9,7 +9,7 @@ const norm = (text: string) =>
     .trim();
 export function localMatchFacts(question: string, matches: MatchInput[], asOf?: string): string {
   const query = ` ${norm(question)} `;
-  const blockedShorts = new Set(["est", "les", "des", "une", "aux", "par", "sur", "the", "and", "for"]);
+  const blockedShorts = new Set(["est", "les", "des", "une", "aux", "par", "sur", "mon", "ton", "son", "mes", "tes", "ses", "nos", "vos", "the", "and", "for"]);
   const selected = matches.filter((m) => {
     const fullNameMatch = [m.home.name, m.away.name].some((name) => {
       const key = norm(name);
