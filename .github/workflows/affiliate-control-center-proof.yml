@@ -1,0 +1,32 @@
+name: ASTRA Affiliate Control Center Proof
+
+on:
+  push:
+    branches:
+      - astra-affiliate-control-center
+    paths:
+      - "src/lib/store.ts"
+      - "src/lib/desk.functions.ts"
+      - "src/routes/admin.tsx"
+      - ".github/workflows/affiliate-control-center-proof.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Affiliate regression tests
+        run: node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/engine/affiliate-conversion.test.ts src/lib/chat/chat.test.ts
+      - name: Affiliate guard
+        run: npm run affiliate:guard
