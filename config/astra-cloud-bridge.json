@@ -54,14 +54,16 @@
         "jsonText": {
           "requireAll": [
             "Pari à prendre :",
-            "Cote disponible :",
-            "Niveau :"
+            "Meilleure cote trouvée :",
+            "Niveau :",
+            "Lien pour parier : https://"
           ],
           "forbid": [
             "donne-moi les affiches",
             "donne moi les affiches",
             "donnez-moi les affiches",
-            "donnez moi les affiches"
+            "donnez moi les affiches",
+            "Lien pour parier : indisponible"
           ]
         }
       }
@@ -77,5 +79,5 @@
       }
     }
   ],
-  "verificationRevision": "2026-10-01T21:03:00+02:00"
+  "verificationRevision": "ASTRA-CLOUD-BRIDGE-REAL-BOOKMAKER-LINK-V2-2026-10-01"
 }
