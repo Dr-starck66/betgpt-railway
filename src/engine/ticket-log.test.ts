@@ -50,12 +50,15 @@ describe("ledger fixture identity", () => {
     );
   });
 
-  it("drops lottery odds, unlisted odds and 1.07 steamrollers from the public method", () => {
-    assert.equal(isMethodPick(t({ odds: 4.5, book: "Unibet", market: "1X2_A" })), false);
-    assert.equal(isMethodPick(t({ odds: 1.07, book: "Unibet" })), false);
-    assert.equal(isMethodPick(t({ odds: 0, book: "non listé" })), false);
-    assert.equal(isMethodPick(t({ odds: 3.4, book: "Unibet" })), true);
-    assert.equal(isMethodPick(t({ odds: 1.5, book: "Unibet" })), true);
+  it("keeps only canonical ROI5 1X2 home/away BETs in the 1.80-3.00 window", () => {
+    assert.equal(isMethodPick(t({ odds: 3.01, book: "Unibet", market: "1X2_A", decision: "BET" })), false);
+    assert.equal(isMethodPick(t({ odds: 1.79, book: "Unibet", market: "1X2_H", decision: "BET" })), false);
+    assert.equal(isMethodPick(t({ odds: 2.2, book: "Unibet", market: "1X2_D", decision: "BET" })), false);
+    assert.equal(isMethodPick(t({ odds: 2.2, book: "Unibet", market: "BTTS_Y", decision: "BET" })), false);
+    assert.equal(isMethodPick(t({ odds: 2.2, book: "non listé", market: "1X2_H", decision: "BET" })), false);
+    assert.equal(isMethodPick(t({ odds: 2.2, book: "Unibet", market: "1X2_H", decision: "WATCH" })), false);
+    assert.equal(isMethodPick(t({ odds: 1.8, book: "Unibet", market: "1X2_H", decision: "BET" })), true);
+    assert.equal(isMethodPick(t({ odds: 3.0, book: "Unibet", market: "1X2_A", decision: "BET" })), true);
   });
 
   it("keeps one ticket per match across espn/ub clones", () => {
@@ -67,6 +70,7 @@ describe("ledger fixture identity", () => {
         away: "Shakhtar Donetsk",
         odds: 0,
         book: "non listé",
+        decision: "BET",
         kickoff: "2026-09-10T16:45Z",
       }),
       t({
@@ -74,8 +78,9 @@ describe("ledger fixture identity", () => {
         matchId: "ub-psveindhoven|shakhtardonetsk-2026-09-10",
         home: "PSV Eindhoven",
         away: "Shakhtar Donetsk",
-        odds: 3.4,
+        odds: 2.4,
         book: "Unibet",
+        decision: "BET",
         kickoff: "2026-09-10T16:45:00Z",
       }),
       t({
@@ -85,6 +90,7 @@ describe("ledger fixture identity", () => {
         away: "Sabah FK",
         odds: 1.07,
         book: "Unibet",
+        decision: "BET",
         kickoff: "2026-09-10T19:00:00Z",
       }),
       t({
@@ -94,6 +100,7 @@ describe("ledger fixture identity", () => {
         away: "Sabah FK",
         odds: 1.07,
         book: "Unibet",
+        decision: "BET",
         kickoff: "2026-09-10T19:00:00Z",
       }),
       t({
@@ -104,6 +111,7 @@ describe("ledger fixture identity", () => {
         market: "1X2_A",
         odds: 4.5,
         book: "Unibet",
+        decision: "BET",
         kickoff: "2026-09-10T19:00:00Z",
       }),
       t({
@@ -114,6 +122,7 @@ describe("ledger fixture identity", () => {
         market: "1X2_A",
         odds: 4.5,
         book: "Unibet",
+        decision: "BET",
         kickoff: "2026-09-10T19:00:00Z",
       }),
     ];
@@ -122,12 +131,12 @@ describe("ledger fixture identity", () => {
     assert.equal(compact.filter((r) => r.home.startsWith("Manchester")).length, 1);
     assert.equal(compact.filter((r) => r.home === "Como").length, 1);
     const psv = compact.find((r) => r.home.includes("PSV"))!;
-    assert.equal(psv.odds, 3.4);
+    assert.equal(psv.odds, 2.4);
     assert.equal(psv.book, "Unibet");
 
     const publicLines = uniqueByFixture(rows.filter(isMethodPick));
     assert.equal(publicLines.length, 1);
     assert.equal(publicLines[0]!.home, "PSV Eindhoven");
-    assert.equal(publicLines[0]!.odds, 3.4);
+    assert.equal(publicLines[0]!.odds, 2.4);
   });
 });
