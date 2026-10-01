@@ -4,12 +4,37 @@ import { formatParis } from "@/lib/editorial/time";
 import type { EditorialArticle, EditorialSource } from "@/lib/editorial/types";
 import { ld } from "@/lib/ld";
 
+function renderParagraphs(article: EditorialArticle) {
+  const hasNestedHeadings = article.paragraphs.some((part) => (part.h3?.length ?? 0) > 0);
+  if (hasNestedHeadings || article.articleType !== "news" || article.paragraphs.length < 5) return article.paragraphs;
+
+  const sourceSubsections = article.sources
+    .filter((source) => source.note?.trim())
+    .slice(0, 5)
+    .map((source) => ({
+      h3: `${source.label} : ce que la source apporte`,
+      body: source.note.trim(),
+    }));
+  if (sourceSubsections.length < 2) return article.paragraphs;
+
+  let targetIndex = article.paragraphs.findIndex((part) =>
+    /source|disent|confir|établi|corrobor|preuve/i.test(part.h2),
+  );
+  if (targetIndex < 0) targetIndex = article.paragraphs.findIndex((part) => part.body.length >= 500);
+  if (targetIndex < 0) return article.paragraphs;
+
+  return article.paragraphs.map((part, index) =>
+    index === targetIndex ? { ...part, h3: sourceSubsections } : part,
+  );
+}
+
 export function NewsArticleView({ article }: { article: EditorialArticle }) {
   const published = formatParis(article.publishedAt);
   const modified =
     article.modifiedAt && article.publishedAt && article.modifiedAt > article.publishedAt
       ? formatParis(article.modifiedAt)
       : null;
+  const paragraphs = renderParagraphs(article);
 
   return (
     <article className="mx-auto max-w-[1240px] space-y-8">
@@ -77,7 +102,7 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
             <p className="readable-prose text-paper">{article.lead}</p>
           </div>
 
-          {article.paragraphs.map((part) => {
+          {paragraphs.map((part) => {
             const passageSources = (part.sourceIds ?? [])
               .map((sourceId) => article.sources.find((source) => source.id === sourceId))
               .filter((source): source is EditorialSource & { url: string } => Boolean(source?.url));
