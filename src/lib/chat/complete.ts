@@ -1,4 +1,5 @@
-import { getLiveSnapshot, hydrateLiveFromDisk } from "@/engine/live";
+import { ensureLive, getLiveSnapshot, hydrateLiveFromDisk } from "@/engine/live";
+import { runEngine } from "@/engine/pipeline";
 import { stripMarkup } from "@/lib/plain";
 import { betgptPrompt } from "./prompt";
 import { normalizeMemory, parseMode, type ChatRequestBody, type PersonalityMode } from "./types";
@@ -8,13 +9,33 @@ import { historyFacts } from "./history-facts";
 import { hasUnsupportedGroundedClaim } from "./grounding";
 import { extractPunchline, type PunchlineMeta } from "./punch";
 import { absurdInsultCreativeBrief, generateAbsurdInsult, shouldDropAbsurdInsult } from "./absurd-insults";
+import { renderDailyChatPick, selectDailyChatPick } from "./daily-pick";
 
 async function deskNow(question: string): Promise<string> {
   try {
-    const snapshot = getLiveSnapshot() ?? hydrateLiveFromDisk();
-    return [historyFacts(question), localMatchFacts(question, snapshot?.matches ?? [], snapshot?.meta?.asOf)]
+    const snapshot = (await ensureLive()) ?? getLiveSnapshot() ?? hydrateLiveFromDisk();
+    const base = [
+      historyFacts(question),
+      localMatchFacts(question, snapshot?.matches ?? [], snapshot?.meta?.asOf),
+    ]
       .filter(Boolean)
       .join("\n\n");
+
+    if (classifyChatIntent(question) !== "TODAY_PICKS") return base;
+
+    try {
+      const engine = runEngine();
+      const pick = selectDailyChatPick(
+        engine.matches,
+        engine.predictions,
+        engine.liveAsOf,
+        engine.liveStale,
+      );
+      if (!pick) return base;
+      return [base, renderDailyChatPick(pick)].filter(Boolean).join("\n\n");
+    } catch {
+      return base;
+    }
   } catch {
     return "Calendrier indisponible pour l'instant.";
   }
@@ -28,15 +49,22 @@ function localReply(last: string, desk: string, mode: PersonalityMode): string {
       : "Salut 👋 Je suis là. Donne-moi un match, un ticket ou demande-moi ce qui vaut vraiment le coup aujourd’hui.";
   }
   if (intent === "TODAY_PICKS") {
+    if (desk.includes("SÉLECTION AUTOMATIQUE BETGPT")) {
+      const opener =
+        mode === "ROAST"
+          ? "Le desk a déjà bossé, donc je ne vais pas te demander les affiches comme un grille-pain sans Wi-Fi. Voilà le pari qui ressort :"
+          : "Le desk connaît déjà les matchs disponibles. Voilà le pari qui ressort aujourd’hui :";
+      return `${opener}\n\n${desk}`;
+    }
     if (desk.includes("Aucun match exploitable trouvé dans le cache.")) {
       return mode === "ROAST"
-        ? "Aujourd’hui, le desk est vide. Donc pas question de fabriquer un combiné en carton mouillé juste pour faire semblant d’avoir une idée géniale. Pas de match exploitable = pas de pari forcé."
-        : "Aujourd’hui, je ne force rien : le desk ne me remonte aucun match exploitable. Donc pas de pari inventé juste pour avoir quelque chose à jouer. Dès que les affiches remontent, je te sors 1 à 3 idées maximum, avec la raison et le risque principal.";
+        ? "Aujourd’hui, le desk est vide. Pas de cote réelle, pas de pari inventé."
+        : "Aujourd’hui, le desk ne remonte aucun match exploitable ni cote réelle. Je ne vais pas fabriquer un pari.";
     }
     const opener =
       mode === "ROAST"
-        ? "Je ne vais pas fabriquer un combiné en carton mouillé juste pour remplir la case. Voilà ce que le desk a réellement sous la main :"
-        : "Je ne vais pas inventer un pari. Voilà les matchs réellement disponibles dans le desk :";
+        ? "J’ai les affiches du desk sous les yeux. Si aucun pick automatique ne passe, je te montre les données disponibles au lieu de te les redemander."
+        : "J’ai déjà les affiches disponibles dans le desk. Voici les données utilisables :";
     return `${opener}\n\n${desk}`;
   }
   if (intent === "GENERAL_SCHEDULE" || intent === "NAMED_MATCH") return desk;
