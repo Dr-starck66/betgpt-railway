@@ -49,8 +49,33 @@ export function rewriteCanonicalOg(html) {
     CANONICAL_ORIGIN;
   out = upsertMeta(out, "property", "og:url", canonical);
   out = upsertMeta(out, "property", "og:site_name", "BetGPT");
-  out = upsertMeta(out, "property", "og:image", CANONICAL_OG_IMAGE);
-  out = upsertMeta(out, "name", "twitter:image", CANONICAL_OG_IMAGE);
+
+  const existingOgImage =
+    attr(out, /<meta[^>]+property=["']og:image["'][^>]*content=["']([^"']+)["']/i) ||
+    attr(out, /<meta[^>]+content=["']([^"']+)["'][^>]*property=["']og:image["']/i);
+  const isLegacyGrokImage = (value) => {
+    try {
+      const host = new URL(value).hostname.toLowerCase();
+      return host === "og.grok.me" || host.endsWith(".grok.me");
+    } catch {
+      return false;
+    }
+  };
+  const canonicalImage =
+    existingOgImage && !isLegacyGrokImage(existingOgImage)
+      ? existingOgImage
+      : CANONICAL_OG_IMAGE;
+
+  const existingTwitterImage =
+    attr(out, /<meta[^>]+name=["']twitter:image["'][^>]*content=["']([^"']+)["']/i) ||
+    attr(out, /<meta[^>]+content=["']([^"']+)["'][^>]*name=["']twitter:image["']/i);
+  const canonicalTwitterImage =
+    existingTwitterImage && !isLegacyGrokImage(existingTwitterImage)
+      ? existingTwitterImage
+      : canonicalImage;
+
+  out = upsertMeta(out, "property", "og:image", canonicalImage);
+  out = upsertMeta(out, "name", "twitter:image", canonicalTwitterImage);
   out = upsertMeta(out, "name", "twitter:card", "summary_large_image");
   return out;
 }
