@@ -18,6 +18,7 @@ export const analyticsIngestSchema = z.object({
   e: z.string().min(1).max(40),
   p: z.string().max(80).optional(),
   route: z.string().max(120).optional(),
+  s: z.enum(["google", "bing", "duckduckgo", "yahoo", "ecosia", "qwant", "brave", "yandex", "baidu"]).optional(),
 });
 
 export const affiliateClickSchema = z.object({
