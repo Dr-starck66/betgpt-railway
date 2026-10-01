@@ -11,4 +11,12 @@ export type AstraSelfHealSitemapRoute = {
  * This file is rewritten by ASTRA SEO SELF-HEAL Ω after a proven gate failure.
  * Never add a route here unless the route is already classified indexable.
  */
-export const ASTRA_SELF_HEAL_SITEMAP_ROUTES: AstraSelfHealSitemapRoute[] = [];
+export const ASTRA_SELF_HEAL_SITEMAP_ROUTES: AstraSelfHealSitemapRoute[] = [
+  {
+    "path": "/contact",
+    "title": "Contact | BetGPT",
+    "group": "Auto-réparé",
+    "changefreq": "weekly",
+    "priority": "0.5"
+  }
+];
