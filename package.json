@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "node scripts/with-app-env.mjs vite dev --host 0.0.0.0 --port 8080",
     "build": "node scripts/with-app-env.mjs vite build && npm run db:migrate",
-    "prebuild": "node scripts/clean-build.mjs && node scripts/astra-flag-guard.mjs",
+    "prebuild": "node scripts/clean-build.mjs && node scripts/astra-flag-guard.mjs && npm run test:editorial-authority && node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-editorial-authority-gate.ts",
     "prebuild:dev": "node scripts/clean-build.mjs",
     "db:migrate": "node scripts/migrate.mjs",
     "build:dev": "node scripts/with-app-env.mjs vite build --mode development",
@@ -56,7 +56,8 @@
     "release:validate": "node scripts/astra-release-gate.mjs validate",
     "release:preflight": "node scripts/astra-release-gate.mjs preflight",
     "release:postflight": "node scripts/astra-release-gate.mjs postflight",
-    "release:pipeline:editorial": "node scripts/astra-release-gate.mjs pipeline editorial"
+    "release:pipeline:editorial": "node scripts/astra-release-gate.mjs pipeline editorial",
+    "test:editorial-authority": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/editorial/authority-citations.test.ts"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.4",
