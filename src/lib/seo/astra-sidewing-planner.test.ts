@@ -29,12 +29,12 @@ test("planner selects only safe, recommended, deduplicated internal targets", ()
     { href: "/equipe/a", label: "A", family: "entity_links", topicalRelevance: 0.4, indexable: true, selfCanonical: true },
     { href: "https://example.com", label: "External", family: "related_content", topicalRelevance: 1, indexable: true, selfCanonical: true },
     { href: "/hidden", label: "Hidden", family: "related_content", topicalRelevance: 1, indexable: false, selfCanonical: true },
-    { href: "/scores-en-direct", label: "Scores live", family: "freshness_live", topicalRelevance: 0.9, freshness: 1, freshnessVerified: true, indexable: true, selfCanonical: true },
+    { href: "/comparer-cotes", label: "Comparer les cotes", family: "comparison", topicalRelevance: 0.9, businessValue: 0.8, indexable: true, selfCanonical: true },
   ]);
 
   assert.ok(plan.left.some((link) => link.href === "/equipe/a"));
   assert.equal(plan.left.filter((link) => link.href === "/equipe/a").length, 1);
-  assert.ok([...plan.left, ...plan.right].some((link) => link.href === "/scores-en-direct"));
+  assert.ok([...plan.left, ...plan.right].some((link) => link.href === "/comparer-cotes"));
   assert.ok(plan.rejected.some((link) => link.href === "https://example.com"));
   assert.ok(plan.rejected.some((link) => link.href === "/hidden"));
 });
