@@ -1,0 +1,23 @@
+name: verify-public-article
+
+on:
+  push:
+    branches:
+      - verify-public-article-20261001
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Verify health
+        run: |
+          curl -fsS --retry 3 --retry-delay 2 https://betgpt-complete-v5-production.up.railway.app/health >/tmp/health
+          echo "health=PASS"
+      - name: Verify article
+        run: |
+          URL="https://betgpt-complete-v5-production.up.railway.app/actualites/real-madrid-mbappe-recuperation-paris-2026-10-01"
+          curl -fsSL --retry 3 --retry-delay 2 "$URL" -o /tmp/article.html
+          grep -F "Real Madrid : Mbappé poursuit sa récupération après son passage à Paris" /tmp/article.html
+          grep -F "Le Real Madrid a indiqué ce jeudi que Kylian Mbappé poursuivait son processus de récupération." /tmp/article.html
+          echo "article=PASS"
