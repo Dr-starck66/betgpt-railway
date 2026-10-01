@@ -57,7 +57,9 @@ function groundedFallback(desk: string, last: string, mode: PersonalityMode): st
   }
   if (intent === "TODAY_PICKS") return localReply(last, desk, mode);
   if (intent === "GENERAL_SCHEDULE") return desk;
-  return "Je n’ai pas assez de données vérifiées pour affirmer ce détail. Je peux te donner ce que le desk confirme, ou raisonner sans inventer le reste.";
+  return mode === "ROAST"
+    ? "Je peux te chambrer, mais pas inventer les faits : le desk n’a pas assez de données vérifiées pour confirmer ce détail. Donc je garde le grille-pain quantique au placard et je reste sur ce qui est vérifiable."
+    : "Je n’ai pas assez de données vérifiées pour affirmer ce détail. Je peux te donner ce que le desk confirme, ou raisonner sans inventer le reste.";
 }
 
 function shouldGround(question: string): boolean {
