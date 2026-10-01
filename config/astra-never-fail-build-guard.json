@@ -35,6 +35,10 @@
       "command": "npm run test:results-watchdog"
     },
     {
+      "id": "learning-memory",
+      "command": "npm run test:learning-memory"
+    },
+    {
       "id": "search-truth",
       "command": "npm run test:search-truth"
     },
