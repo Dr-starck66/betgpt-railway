@@ -407,9 +407,11 @@ function touchMemory(prev: UserMemory, content: string, mode: PersonalityMode): 
 export function ChatPanel({
   seed,
   initialMode = "NORMAL",
+  shareSource,
 }: {
   seed?: string;
   initialMode?: PersonalityMode;
+  shareSource?: string;
 }) {
   const [messages, setMessages] = useState<ChatMessage[]>([WELCOME]);
   const [busy, setBusy] = useState(false);
@@ -425,6 +427,11 @@ export function ChatPanel({
   useEffect(() => {
     setMemory(loadMemory());
   }, []);
+
+  useEffect(() => {
+    if (!shareSource) return;
+    track("chat_share_return", shareSource);
+  }, [shareSource]);
 
   useEffect(() => {
     const el = scrollRef.current;
