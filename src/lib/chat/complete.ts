@@ -6,7 +6,7 @@ import { classifyChatIntent, localMatchFacts } from "./local";
 import { allowKeyed } from "@/lib/store";
 import { historyFacts } from "./history-facts";
 import { hasUnsupportedGroundedClaim } from "./grounding";
-import { extractPunchline, type PunchlineMeta } from "./punch";
+import { extractPunchline, type PunchlineMeta } from "./punch";\nimport { absurdInsultCreativeBrief, generateAbsurdInsult, shouldDropAbsurdInsult } from "./absurd-insults";
 
 async function deskNow(question: string): Promise<string> {
   try {
@@ -193,8 +193,32 @@ async function callXai(
 
 type CompleteChatSuccess = { ok: true; text: string; punchline?: PunchlineMeta };
 
-function success(text: string, mode: PersonalityMode): CompleteChatSuccess {
-  return { ok: true, ...extractPunchline(text, mode) };
+function insertPunchline(text: string, taggedPunchline: string): string {
+  const firstBreak = text.indexOf("\n");
+  if (firstBreak > 0) return `${text.slice(0, firstBreak)}\n\n${taggedPunchline}\n${text.slice(firstBreak + 1).trimStart()}`;
+  const firstSentence = text.match(/^(.{12,220}?[.!?])\s+/);
+  if (firstSentence) {
+    const cut = firstSentence[0].length;
+    return `${text.slice(0, cut).trim()}\n\n${taggedPunchline}\n\n${text.slice(cut).trimStart()}`;
+  }
+  return `${text}\n\n${taggedPunchline}`;
+}
+
+function success(
+  text: string,
+  mode: PersonalityMode,
+  context: string,
+  recent: string[],
+): CompleteChatSuccess {
+  const firstPass = extractPunchline(text, mode, context);
+  if (firstPass.punchline || mode !== "ROAST" || !shouldDropAbsurdInsult(context, recent)) {
+    return { ok: true, ...firstPass };
+  }
+
+  const insult = generateAbsurdInsult(context, recent, "surprise");
+  const style = /NON|STOP|IMPOSSIBLE|ALL-IN|TAPIS/i.test(context) ? "ANGRY_SHOUT" : "LAUGH_SHOUT";
+  const tagged = `[[PUNCH:${style}]]${insult.text}[[/PUNCH]]`;
+  return { ok: true, ...extractPunchline(insertPunchline(firstPass.text, tagged), mode, context) };
 }
 
 export async function completeChat(
@@ -206,10 +230,16 @@ export async function completeChat(
   if (!(await allowKeyed("chat:service-budget", 60, 60_000)))
     return { ok: false, error: "Trop de messages. Patiente une minute." };
 
-  const desk = await deskNow(body.messages.at(-1)?.content ?? "");
+  const rawLast = body.messages.at(-1)?.content ?? "";
+  const desk = await deskNow(rawLast);
   const mode: PersonalityMode = parseMode(body.requestedMode);
   const memory = normalizeMemory(body.userMemory);
-  const system = betgptPrompt(memory, mode, desk);
+  const recentRoasts = body.messages
+    .filter((m) => m.role === "assistant")
+    .slice(-6)
+    .map((m) => m.content.slice(0, 500));
+  const insultBrief = mode === "ROAST" ? absurdInsultCreativeBrief(rawLast, recentRoasts) : "";
+  const system = betgptPrompt(memory, mode, desk, insultBrief);
   const history = body.messages
     .filter((m) => m.role === "user" || m.role === "assistant")
     .filter((m) => m.content.trim())
@@ -229,10 +259,10 @@ export async function completeChat(
         if (mustGround) {
           const source = `${system}\n\n${history.map((m) => m.content).join("\n")}`;
           if (hasUnsupportedGroundedClaim(out.text, source)) {
-            return success(groundedFallback(desk, last, mode), mode);
+            return success(groundedFallback(desk, last, mode), mode, last, recentRoasts);
           }
         }
-        return success(out.text, mode);
+        return success(out.text, mode, last, recentRoasts);
       }
     } catch {
       /* fall through to ASTRA router, optional cloud provider, then local fallback */
@@ -248,10 +278,10 @@ export async function completeChat(
         if (mustGround) {
           const source = `${system}\n\n${history.map((m) => m.content).join("\n")}`;
           if (hasUnsupportedGroundedClaim(out.text, source)) {
-            return success(groundedFallback(desk, last, mode), mode);
+            return success(groundedFallback(desk, last, mode), mode, last, recentRoasts);
           }
         }
-        return success(out.text, mode);
+        return success(out.text, mode, last, recentRoasts);
       }
     } catch {
       /* fall through to optional cloud provider, then conversational local fallback */
@@ -266,15 +296,15 @@ export async function completeChat(
         if (mustGround) {
           const source = `${system}\n\n${history.map((m) => m.content).join("\n")}`;
           if (hasUnsupportedGroundedClaim(out.text, source)) {
-            return success(groundedFallback(desk, last, mode), mode);
+            return success(groundedFallback(desk, last, mode), mode, last, recentRoasts);
           }
         }
-        return success(out.text, mode);
+        return success(out.text, mode, last, recentRoasts);
       }
     } catch {
       /* fall through to conversational local fallback */
     }
   }
 
-  return success(localReply(last, desk, mode), mode);
+  return success(localReply(last, desk, mode), mode, last, recentRoasts);
 }
