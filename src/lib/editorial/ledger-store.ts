@@ -47,6 +47,12 @@ async function readRemoteLedger(): Promise<EditorialArticle[]> {
 }
 
 export async function readLedgerDurable(): Promise<EditorialArticle[]> {
+  // CI/release gates must audit the exact immutable checkout, never a CDN-delayed
+  // raw GitHub copy of the ledger from another revision.
+  if (process.env.CI === "true" || process.env.GITHUB_ACTIONS === "true") {
+    return readLedger();
+  }
+
   if (dbSource === "neon") {
     if (hydratedFromDatabase && memory.size) return [...memory.values()];
     try {
