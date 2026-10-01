@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { orderedContextualSourceIds } from "@/lib/editorial/authority-citations";
 import { newsArticleLd, breadcrumbLd } from "@/lib/editorial/schema";
 import { formatParis } from "@/lib/editorial/time";
 import type { EditorialArticle, EditorialSource } from "@/lib/editorial/types";
@@ -11,7 +12,7 @@ function SourceCitations({
   sourceIds?: string[];
   sources: EditorialSource[];
 }) {
-  const passageSources = (sourceIds ?? [])
+  const passageSources = orderedContextualSourceIds(sourceIds, sources)
     .map((sourceId) => sources.find((source) => source.id === sourceId))
     .filter((source): source is EditorialSource & { url: string } => Boolean(source?.url));
 
