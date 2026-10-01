@@ -483,7 +483,11 @@ function cleanNewsTitle(title: string, sourceName?: string): string {
     const escaped = sourceName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     value = value.replace(new RegExp(`\\s[-–—|]\\s${escaped}$`, "i"), "").trim();
   }
-  return value.replace(/\s[-–—|]\s(?:Google Actualités|Google News)$/i, "").trim();
+  value = value.replace(/\s[-–—|]\s(?:Google Actualités|Google News)$/i, "").trim();
+  // Publishers sometimes append a vertical label before their own source name,
+  // e.g. "| Foot - Portugal". Keep the headline, drop the navigation chrome.
+  value = value.replace(/\s*\|\s*Foot\s*-\s*[^|]{2,40}$/i, "").trim();
+  return value;
 }
 
 function newsSourceStatus(signal: EditorialNewsSignal, corroborated: boolean): EditorialSource["status"] {
