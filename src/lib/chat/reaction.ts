@@ -87,10 +87,10 @@ export function reactionForPunchline(text: string, context = ""): PunchReaction 
 
   const gifFallback =
     mood === "ANIMAL_CHAOS"
-      ? "/reactions/astra-animal.gif"
+      ? "/reactions/astra-animal.gif?v=4"
       : mood === "BETTING_DISASTER" || mood === "SHOPPING_DISASTER" || mood === "DIY_DISASTER"
-        ? "/reactions/astra-betting.gif"
-        : "/reactions/astra-shock.gif";
+        ? "/reactions/astra-betting.gif?v=4"
+        : mood === "DIY_DISASTER" ? "/reactions/astra-fallback.gif?v=4" : "/reactions/astra-shock.gif?v=4";
 
   return {
     emojis: unique(emojis).slice(0, 3),
