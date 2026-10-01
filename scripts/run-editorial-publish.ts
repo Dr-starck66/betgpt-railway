@@ -7,12 +7,7 @@ import { syncPublishedArticlesToSocial } from "../src/lib/social/run.server.ts";
 const now = new Date();
 const { edition } = await editionFromDesk(now);
 const published = edition.articles.filter(isPublicArticle);
-const AUTHORITY_CUTOVER_MS = Date.parse("2026-10-01T21:03:00.000Z");
 const authorityFailures = published
-  .filter((article) => {
-    const created = Date.parse(article.createdAt);
-    return Number.isFinite(created) && created >= AUTHORITY_CUTOVER_MS;
-  })
   .map((article) => ({ article, gate: contextualAuthorityGate(article) }))
   .filter(({ gate }) => !gate.pass);
 
