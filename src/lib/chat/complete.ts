@@ -341,7 +341,7 @@ export async function completeChat(
     /\bcombin[eé]\b[\s\S]{0,80}\b(?:8|9|1[0-9]|2[0-9])\s*(?:matchs?|s[eé]lections?)?\b/i.test(last);
 
   const absurdScoreClaim =
-    /\b(?:20\s*[-àa]\s*0|vingt(?:s)?\s+[àa]\s+z[eé]ro|vingt(?:s)?\s+z[eé]ro)\b/i.test(last);
+    /\b(?:20\s*[-àa]\s*0|vingt(?:s)?\s+[àa]\s+z[eé]ros?|vingt(?:s)?\s+z[eé]ros?)\b/i.test(last);
   if (absurdScoreClaim) {
     const base =
       mode === "ROAST"
