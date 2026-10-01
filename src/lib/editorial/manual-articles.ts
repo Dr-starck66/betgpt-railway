@@ -386,7 +386,7 @@ const ARTICLES: EditorialArticle[] = [
   {
     id: "manual-2026-10-02-france-italie-nations-league",
     slug: "france-italie-ligue-des-nations-2026-10-02",
-    slot: "night",
+    slot: "evening",
     articleType: "news",
     status: "PUBLISHED",
     title: "France–Italie : horaire, forme, enjeu du groupe et ce qu’il faut savoir avant le choc | BetGPT",
