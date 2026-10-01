@@ -103,7 +103,10 @@ export function clusterSignals(signals: EditorialNewsSignal[]): NewsCluster[] {
 }
 
 export function autoPublishableCluster(cluster: NewsCluster): boolean {
-  if (!cluster.newsworthy) return false;
+  const material = cluster.signals.some((signal) =>
+    isMaterialDevelopment(`${signal.title} ${signal.description ?? ""}`),
+  );
+  if (!cluster.newsworthy && !material) return false;
   if (cluster.official) return true;
   const strong = cluster.signals.filter(
     (signal) => signal.sourceTier === "TIER1" || signal.sourceTier === "OFFICIAL",
