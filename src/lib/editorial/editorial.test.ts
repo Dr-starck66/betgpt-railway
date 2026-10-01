@@ -365,7 +365,7 @@ describe("editorial engine", () => {
     assert.equal(edition.articles.filter((article) => article.articleType === "news").length, 0);
   });
 
-  it("accepts a newsworthy official signal without requiring a second outlet", () => {
+  it("keeps a thin official signal eligible but refuses to publish a thin article", () => {
     const signals: EditorialNewsSignal[] = [
       {
         id: "official",
@@ -385,8 +385,31 @@ describe("editorial engine", () => {
     assert.equal(autoPublishableCluster(clusters[0]!), true);
     const edition = buildEdition({ now: NOW, matches: [], signals });
     const news = edition.articles.find((article) => article.articleType === "news");
+    assert.equal(news, undefined);
+  });
+
+  it("publishes a rich primary-source news item without forcing a second outlet", () => {
+    const signals: EditorialNewsSignal[] = [
+      {
+        id: "official-rich",
+        title: "Équipe de France : la FFF annonce un changement dans le groupe",
+        url: "https://news.google.com/articles/official-rich",
+        sourceName: "FFF",
+        sourceUrl: "https://www.fff.fr",
+        publishedAt: "2026-09-25T16:05:00.000Z",
+        description:
+          "La Fédération française de football annonce officiellement une modification de la liste de l'équipe de France après un point médical réalisé dans l'après-midi. Le communiqué précise l'identité du joueur concerné, la raison sportive de la décision, le moment où il quitte le rassemblement et le fait qu'aucun remplacement supplémentaire n'est prévu à ce stade. La FFF indique également que le reste du groupe poursuit sa préparation selon le programme annoncé et qu'une nouvelle communication sera publiée si la situation évolue avant la prochaine rencontre. Ces éléments constituent la version primaire du dossier et permettent de distinguer la décision officielle des commentaires ou hypothèses publiés ailleurs.",
+        sourceTier: "OFFICIAL",
+        entities: ["France"],
+        language: "fr",
+      },
+    ];
+    const edition = buildEdition({ now: NOW, matches: [], signals });
+    const news = edition.articles.find((article) => article.articleType === "news");
     assert.ok(news);
     assert.ok(news.sources.some((source) => source.status === "OFFICIAL"));
+    assert.ok(news.paragraphs.length >= 5);
+    assert.ok(news.paragraphs.map((part) => part.body).join(" ").length >= 2400);
   });
 
   it("parses Google News RSS and classifies source tiers", () => {
