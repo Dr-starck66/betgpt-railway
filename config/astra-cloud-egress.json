@@ -182,7 +182,121 @@
           ]
         }
       }
+    },
+    {
+      "id": "results-page",
+      "method": "GET",
+      "path": "/resultats-football",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "Résultats football",
+            "Terminé"
+          ]
+        }
+      }
+    },
+    {
+      "id": "odds-comparator",
+      "method": "GET",
+      "path": "/comparer-cotes",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "Comparer les cotes football",
+            "matchs affichés",
+            "Voir les cotes"
+          ]
+        }
+      }
+    },
+    {
+      "id": "pronostics",
+      "method": "GET",
+      "path": "/pronostics-sportifs",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "Pronostics sportifs",
+            "PARIER",
+            "ATTENDRE",
+            "NE PAS PARIER"
+          ]
+        }
+      }
+    },
+    {
+      "id": "daily-pick-chat",
+      "method": "POST",
+      "path": "/api/chat",
+      "body": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Qu'est-ce que tu mises aujourd'hui, et pourquoi ?"
+          }
+        ],
+        "requestedMode": "NORMAL"
+      },
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "jsonPath": "text",
+        "jsonText": {
+          "requireAll": [
+            "Pari à prendre :",
+            "Cote disponible :",
+            "Niveau :"
+          ],
+          "forbid": [
+            "donne-moi les affiches",
+            "donne moi les affiches",
+            "donnez-moi les affiches",
+            "donnez moi les affiches"
+          ]
+        }
+      }
+    },
+    {
+      "id": "robots",
+      "method": "GET",
+      "path": "/robots.txt",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "Sitemap"
+          ]
+        }
+      }
+    },
+    {
+      "id": "sitemap",
+      "method": "GET",
+      "path": "/sitemap.xml",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "<urlset"
+          ]
+        }
+      }
     }
   ],
-  "verificationRevision": "astra-sidewing-zero-recommended"
+  "verificationRevision": "ASTRA-BETGPT-SENTINEL-V1-2026-10-01"
 }
