@@ -27,6 +27,22 @@ type FotMobLeague = {
   matches?: FotMobMatch[];
 };
 
+type EspnCompetition = {
+  slug: string;
+  league: LeagueId;
+  name: string;
+};
+
+const ESPN_COMPETITIONS: EspnCompetition[] = [
+  { slug: "eng.1", league: "PL", name: "Premier League" },
+  { slug: "esp.1", league: "LL", name: "LaLiga" },
+  { slug: "ger.1", league: "BL", name: "Bundesliga" },
+  { slug: "ita.1", league: "SA", name: "Serie A" },
+  { slug: "fra.1", league: "L1", name: "Ligue 1" },
+  { slug: "uefa.champions", league: "CL", name: "UEFA Champions League" },
+  { slug: "uefa.europa", league: "EL", name: "UEFA Europa League" },
+];
+
 const resultsMem = globalThis as typeof globalThis & {
   __betgptResultsArchiveAt?: number;
   __betgptResultsArchive?: Awaited<ReturnType<typeof ensureArchiveHistory>>;
@@ -169,6 +185,75 @@ async function fetchFotMobDay(day: string): Promise<ResultRow[]> {
   return fotMobRows(await response.json());
 }
 
+function espnRows(payload: unknown, competition: EspnCompetition): ResultRow[] {
+  const events = (payload as { events?: Array<Record<string, unknown>> })?.events ?? [];
+  const rows: ResultRow[] = [];
+  for (const event of events) {
+    const status = event.status as { type?: { completed?: boolean } } | undefined;
+    if (!status?.type?.completed) continue;
+    const eventCompetitions = event.competitions as Array<{ competitors?: Array<Record<string, unknown>> }> | undefined;
+    const competitors = eventCompetitions?.[0]?.competitors ?? [];
+    const home = competitors.find((x) => x.homeAway === "home");
+    const away = competitors.find((x) => x.homeAway === "away");
+    const homeTeam = home?.team as { id?: string; displayName?: string; shortDisplayName?: string; logo?: string } | undefined;
+    const awayTeam = away?.team as { id?: string; displayName?: string; shortDisplayName?: string; logo?: string } | undefined;
+    const homeName = String(homeTeam?.displayName ?? "").trim();
+    const awayName = String(awayTeam?.displayName ?? "").trim();
+    const scoreHome = scoreNumber(home?.score as number | string | undefined);
+    const scoreAway = scoreNumber(away?.score as number | string | undefined);
+    const kickoff = String(event.date ?? "");
+    const day = parisDay(kickoff);
+    if (!homeName || !awayName || scoreHome == null || scoreAway == null || !day) continue;
+    const eventId = String(event.id ?? `${slugify(homeName)}-${slugify(awayName)}-${day}`);
+    rows.push({
+      id: `espn-${eventId}`,
+      slug: `${slugify(homeName)}-${slugify(awayName)}-${day}`,
+      league: competition.league,
+      competition: competition.name,
+      home: homeName,
+      away: awayName,
+      homeId: homeTeam?.id,
+      awayId: awayTeam?.id,
+      homeShort: String(homeTeam?.shortDisplayName ?? homeName.slice(0, 3)).slice(0, 4).toUpperCase(),
+      awayShort: String(awayTeam?.shortDisplayName ?? awayName.slice(0, 3)).slice(0, 4).toUpperCase(),
+      homeLogo: homeTeam?.logo,
+      awayLogo: awayTeam?.logo,
+      scoreHome,
+      scoreAway,
+      kickoff,
+      day,
+    });
+  }
+  return rows;
+}
+
+async function fetchEspnCompetitionDay(day: string, competition: EspnCompetition): Promise<ResultRow[]> {
+  const date = day.replaceAll("-", "");
+  const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/${competition.slug}/scoreboard?dates=${date}`;
+  const response = await fetch(url, {
+    signal: AbortSignal.timeout(7000),
+    headers: {
+      Accept: "application/json",
+      "User-Agent": "Mozilla/5.0 (compatible; BetGPT/1.0; +https://betgpt.live)",
+    },
+  });
+  if (!response.ok) throw new Error(`ESPN ${competition.slug} HTTP ${response.status}`);
+  return espnRows(await response.json(), competition);
+}
+
+async function fetchEspnDay(day: string): Promise<ResultRow[]> {
+  const parts = await Promise.all(
+    ESPN_COMPETITIONS.map(async (competition) => {
+      try {
+        return await fetchEspnCompetitionDay(day, competition);
+      } catch {
+        return [] as ResultRow[];
+      }
+    }),
+  );
+  return parts.flat();
+}
+
 async function freshFotMobResults(now = Date.now()): Promise<ResultRow[]> {
   if (
     resultsMem.__betgptFotmobRows &&
@@ -183,7 +268,11 @@ async function freshFotMobResults(now = Date.now()): Promise<ResultRow[]> {
         try {
           return await fetchFotMobDay(day);
         } catch {
-          return [] as ResultRow[];
+          try {
+            return await fetchEspnDay(day);
+          } catch {
+            return [] as ResultRow[];
+          }
         }
       }),
     )
