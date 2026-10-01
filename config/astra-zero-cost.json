@@ -62,7 +62,14 @@
     "requireProviderScope": true,
     "requireReason": true,
     "autoPurchase": false,
-    "autoTopUp": false
+    "autoTopUp": false,
+    "requiredImpactLevel": "TRANSFORMATIVE",
+    "minimumEvidence": "CONCRETE_AND_MEASURABLE",
+    "rejectMarginalImprovements": true,
+    "rejectConvenienceOnly": true,
+    "requireClearUnlock": true,
+    "requireStopCondition": true,
+    "requireExpectedValueStatement": true
   },
   "proposalTemplate": {
     "requiredFields": [
