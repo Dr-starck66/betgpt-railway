@@ -67,3 +67,18 @@ export const MODEL_LABEL: Record<string, string> = {
   DEFENSIVE_COUNTER: "La défense",
   COMPETITIVE_DISCIPLINE: "L'intensité",
 };
+
+
+export const LEAGUE_FLAG: Record<string, string> = {
+  L1: "🇫🇷",
+  PL: "🇬🇧",
+  LL: "🇪🇸",
+  BL: "🇩🇪",
+  SA: "🇮🇹",
+  ER: "🇳🇱",
+  PT: "🇵🇹",
+  SC: "🇬🇧",
+  TR: "🇹🇷",
+  CL: "🇪🇺",
+  EL: "🇪🇺",
+};
