@@ -16,11 +16,21 @@ function norm(p) {
 
 function dynamicCovered(route) {
   return (cfg.dynamicCoverage || []).some((rule) => {
-    const prefix = norm(rule.routePrefix || "/");
-    if (!(route === prefix || route.startsWith(prefix.endsWith("/") ? prefix : prefix + "/"))) return false;
+    let applies = false;
+    if (rule.routePattern) {
+      applies = new RegExp(rule.routePattern).test(route);
+    } else {
+      const prefix = norm(rule.routePrefix || "/");
+      applies = route === prefix || route.startsWith(prefix.endsWith("/") ? prefix : prefix + "/");
+    }
+    if (!applies) return false;
     const src = fs.readFileSync(path.join(root, rule.sitemapSource), "utf8");
     return (rule.requiredFragments || []).every((frag) => src.includes(frag));
   });
+}
+
+function aliasedRoute(route) {
+  return norm((cfg.routeAliases || {})[route] || route);
 }
 
 if (!fs.existsSync(reportPath)) {
@@ -35,7 +45,7 @@ const failures = [];
 const results = [];
 
 for (const item of routes) {
-  const route = norm(item.routePath);
+  const route = aliasedRoute(norm(item.routePath));
   if ((cfg.ignoreRoutes || []).includes(route)) continue;
 
   const literal =
