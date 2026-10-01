@@ -135,6 +135,44 @@ export async function growthWindowSnapshot(windowHours = 24): Promise<{
   }
 }
 
+export type AffiliateClickSummaryRow = {
+  book: string;
+  clicks24h: number;
+  clicks7d: number;
+  lastClick: string | null;
+};
+
+export async function affiliateClickSummary(): Promise<AffiliateClickSummaryRow[]> {
+  const sql = await trySql();
+  if (!sql) return [];
+  try {
+    const rows = await sql.query<{
+      book: string;
+      clicks24h: number;
+      clicks7d: number;
+      lastClick: string | null;
+    }>(
+      `select
+         book,
+         count(*) filter (where t >= now() - interval '24 hours')::int as "clicks24h",
+         count(*) filter (where t >= now() - interval '7 days')::int as "clicks7d",
+         max(t)::text as "lastClick"
+       from affiliate_clicks
+       where t >= now() - interval '7 days'
+       group by book
+       order by "clicks7d" desc, book asc`,
+    );
+    return rows.map((row) => ({
+      book: row.book,
+      clicks24h: Number(row.clicks24h) || 0,
+      clicks7d: Number(row.clicks7d) || 0,
+      lastClick: row.lastClick || null,
+    }));
+  } catch {
+    return [];
+  }
+}
+
 export async function recordClick(book: string, matchId: string, href: string): Promise<void> {
   const sql = await trySql();
   if (!sql) return;
