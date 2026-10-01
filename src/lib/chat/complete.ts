@@ -350,15 +350,6 @@ export async function completeChat(
     /\b(?:100\s*%|s[uû]r(?:e)?\s+[àa]\s+100|impossible\s+de\s+perdre|all[- ]?in|je\s+mets\s+tout|je\s+mise\s+tout|tapis)\b/i.test(last) ||
     /\bcombin[eé]\b[\s\S]{0,80}\b(?:8|9|1[0-9]|2[0-9])\s*(?:matchs?|s[eé]lections?)?\b/i.test(last);
 
-  const absurdScoreClaim =
-    /\b(?:20\s*[-àa]\s*0|vingt(?:s)?\s+[àa]\s+z[eé]ros?|vingt(?:s)?\s+z[eé]ros?)\b/i.test(last);
-  if (absurdScoreClaim) {
-    const base =
-      mode === "ROAST"
-        ? "20-0 ? Là on n’est plus sur un pronostic, on est sur une demande de permis de démolition du stade. Sans données qui soutiennent ça, je ne vais pas transformer une intuition en prophétie."
-        : "20-0 est un scénario extrême. Sans données vérifiables qui le soutiennent, je ne vais pas le présenter comme un pronostic crédible.";
-    return success(base, mode, last, recentRoasts);
-  }
   if (recklessBet) {
     const base =
       mode === "ROAST"
