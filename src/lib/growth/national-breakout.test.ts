@@ -40,3 +40,20 @@ test("ASTRA NATIONAL BREAKOUT accelerates a healthy loop", () => {
   assert.equal(report.status, "ACCELERATE");
   assert.ok(report.score >= 70);
 });
+
+
+test("returns UNVERIFIED when no behavioral signal exists", () => {
+  const report = nationalBreakoutScorecard({
+    windowHours: 24,
+    currentEvents: {},
+    previousEvents: {},
+    affiliateClicks: 0,
+    previousAffiliateClicks: 0,
+    discoverReady: 5,
+    discoverCandidates: 5,
+    topRoutes: [],
+  });
+  assert.equal(report.status, "UNVERIFIED");
+  assert.equal(report.score, null);
+  assert.equal(report.actions[0]?.id, "measurement-warmup");
+});
