@@ -34,6 +34,7 @@ const NATIONAL_FLAG: Record<string, string> = {
   iceland: "🇮🇸",
   islande: "🇮🇸",
   ireland: "🇮🇪",
+  "republic of ireland": "🇮🇪",
   irlande: "🇮🇪",
   england: "🇬🇧",
   angleterre: "🇬🇧",
