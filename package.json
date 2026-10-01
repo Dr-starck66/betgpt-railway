@@ -67,7 +67,9 @@
     "seo:indexability-release": "node scripts/astra-indexability-release-gate.mjs",
     "editorial:corpus-audit": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-editorial-corpus-audit.ts",
     "test:growth": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/growth/national-breakout.test.ts",
-    "test:zero-cost": "node scripts/astra-zero-cost-guard.mjs"
+    "test:zero-cost": "node scripts/astra-zero-cost-guard.mjs",
+    "test:stream-resilience": "node --test scripts/astra-stream-resilience.test.mjs",
+    "guard:stream-resilience": "node scripts/astra-stream-resilience-guard.mjs"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.4",
