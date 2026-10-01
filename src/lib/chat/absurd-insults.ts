@@ -43,6 +43,19 @@ const ACTIONS = [
   "fait du pressing dans un lave-vaisselle",
 ];
 
+const FINANCIAL_DISASTERS = [
+  "autant donner ta carte bleue et le code à un inconnu et le lâcher dans une boutique Dior",
+  "autant confier ton compte bancaire à un hamster avec un abonnement Amazon Prime",
+  "autant jeter ton portefeuille dans un volcan et demander un reçu",
+  "autant donner ton RIB à un poulpe en costume qui dit « fais-moi confiance »",
+  "autant poser ta carte bancaire sur la table et crier « servez-vous, les artistes ! »",
+  "autant remplacer ton conseiller bancaire par une roue de casino sous caféine",
+  "autant mettre ton salaire dans une enveloppe et l'envoyer à « Monsieur Hasard, planète Mars »",
+  "autant laisser un pigeon trader ton livret A depuis un cybercafé",
+  "autant donner ton code PIN à un lama dans une bijouterie et partir déjeuner",
+  "autant convertir ton budget du mois en tickets à gratter et les lancer depuis un hélicoptère",
+];
+
 const CONTEXT_HOOKS: Array<[RegExp, string[]]> = [
   [/(combin[eé]|ticket|pari|mise)/i, ["ton ticket", "ton combiné", "ta mise"]],
   [/(cote|odds|value)/i, ["ta cote", "ta value", "ton calcul"]],
@@ -141,6 +154,7 @@ function templates(context: string, rnd: () => number): Array<{ text: string; re
     { text: `ESPÈCE DE ${obj.toUpperCase()} ${state.toUpperCase()} !!!`, recipe: "objet+état" },
     { text: `${hook.toUpperCase()} ${action.toUpperCase()} !!!`, recipe: "contexte+action impossible" },
     { text: `ON DIRAIT UN ${animal.toUpperCase()} ${adj.toUpperCase()} QUI ${action.toUpperCase()} !!!`, recipe: "créature+collision+surréalisme" },
+    { text: `AVEC ${hook.toUpperCase()}, ${pick(FINANCIAL_DISASTERS, rnd).toUpperCase()} !!!`, recipe: "catastrophe-financière+quotidien" },
   ];
 }
 
@@ -179,7 +193,8 @@ export function absurdInsultCreativeBrief(context: string, recent: string[] = []
   return [
     "ASTRA INSULT LAB — contraintes créatives :",
     "- Fabrique une image absurde neuve, très courte, mémorisable et liée au message.",
-    "- Collision recommandée : objet banal + univers incompatible + état impossible + détail football/paris.",
+    "- Collision recommandée : objet banal + univers incompatible + état impossible + détail football/paris.
+    "- Utilise aussi des comparaisons de catastrophe financière très visuelles : carte bleue, code PIN, salaire, boutique de luxe, casino, banque, etc.",",
     "- Évite toute insulte réaliste, haineuse, discriminatoire, sexuelle ou visant une caractéristique personnelle.",
     "- Ne copie pas les graines ci-dessous mot pour mot : elles servent seulement à fixer le niveau d'absurdité.",
     `- Graine A : ${seedA.text}`,
