@@ -567,28 +567,28 @@ function composeNews(
   const supportSignals = ranked.slice(1, 3);
   const supportNames = [...new Set(supportSignals.map((signal) => signal.sourceName))];
   const supportLine = supportSignals.length
-    ? `${supportNames.join(" et ")} publient également des éléments sur ce même développement. Les formulations qui divergent entre médias ne sont pas fusionnées en un fait unique.`
-    : `${leadSignal.sourceName} est la seule source forte retenue dans ce cluster; l'article n'élargit donc pas la portée du fait au-delà de cette source.`;
+    ? `${supportNames.join(" et ")} ont publié des informations portant sur le même fait. Les détails retenus ici restent ceux que les références concordantes permettent d'établir.`
+    : `À ce stade, ${leadSignal.sourceName} reste la référence journalistique principale pour ce fait précis.`;
   const contextLine = contextMatch
-    ? `${contextMatch.home.name} – ${contextMatch.away.name} est programmé en ${contextMatch.competition}, coup d'envoi ${formatParis(contextMatch.kickoff)}. Ce calendrier situe l'enjeu sportif mais ne sert pas de preuve pour l'information rapportée.`
-    : `Aucun match précis du calendrier BetGPT n'est relié automatiquement à cette information. Cette absence de rattachement évite d'inventer une conséquence sportive qui n'est pas encore établie.`;
+    ? `Le prochain repère sportif est ${contextMatch.home.name} – ${contextMatch.away.name}, programmé en ${contextMatch.competition} avec un coup d'envoi ${formatParis(contextMatch.kickoff)}. Ce rendez-vous permet de mesurer rapidement les conséquences concrètes de l'information.`
+    : `Aucune rencontre précise du calendrier n'est nécessaire pour comprendre ce développement : les prochaines déclarations et décisions officielles permettront d'en préciser la portée.`;
   const subject = entities.length ? entities.join(", ") : "le sujet";
   const material = cluster.signals.some((signal) =>
     isMaterialDevelopment(`${signal.title} ${signal.description ?? ""}`),
   );
-  const lead = `${mainClaim}. ${leadSignal.sourceName} a publié cet élément ${formatParis(leadSignal.publishedAt)}${corroborated ? `, avec ${cluster.distinctSources} sources distinctes dans le cluster` : ""}. ${material ? "Il s'agit d'une évolution matérielle du dossier, pas d'une simple répétition." : "Le fait est présenté avec son niveau de corroboration, sans extrapolation."}`;
+  const lead = `${mainClaim}. ${leadSignal.sourceName} a publié l'information ${formatParis(leadSignal.publishedAt)}. ${corroborated ? `Le même fait est repris par ${cluster.distinctSources} sources distinctes.` : "La formulation reste attribuée à cette source tant qu'une confirmation indépendante n'est pas disponible."}`;
   const paragraphs = [
     paragraph(
-      "Le nouvel élément",
-      `À ${formatParis(leadSignal.publishedAt)}, ${leadSignal.sourceName} rapporte le développement résumé dans le titre : ${mainClaim}. ${supportLine} ${cluster.official ? "Une source officielle figure parmi les références collectées." : "Aucune source officielle n'est ajoutée artificiellement si elle n'apparaît pas dans les références collectées."}`,
+      "Ce que l'on sait",
+      `${leadSignal.sourceName} rapporte : ${mainClaim}. ${supportLine} ${cluster.official ? "Une référence officielle figure également parmi les sources consultées." : "Aucune confirmation officielle n'est présentée comme acquise à ce stade."}`,
     ),
     paragraph(
-      "Ce que cela change dans le dossier",
-      `${contextLine} ${material ? "Le moteur classe cette information comme un changement d'état — confirmation, autorisation, refus, décision ou autre résolution — et la distingue donc d'une alerte antérieure portant sur les mêmes entités." : "Le moteur conserve ce développement dans le même fil tant qu'il n'apporte pas un changement d'état clairement détectable."}`,
+      "Pourquoi cette information compte maintenant",
+      `${contextLine} ${material ? "Il s'agit d'un élément nouveau susceptible de modifier immédiatement la situation sportive ou institutionnelle." : "L'intérêt de cette information dépend désormais de ses conséquences concrètes et des confirmations qui suivront."}`,
     ),
     paragraph(
-      "La prochaine vérification utile",
-      newsConsequenceLine(`${cluster.title} ${ranked.map((signal) => signal.description ?? "").join(" ")}`, subject),
+      "Ce qu'il faut surveiller ensuite",
+      newsConsequenceLine(`${leadSignal.title} ${leadSignal.description ?? ""}`, subject),
     ),
   ];
   const links = contextMatch ? deskLinks(contextMatch, contextMatch.competition) : deskLinks(null, "Football");
