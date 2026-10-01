@@ -1,0 +1,38 @@
+name: BetGPT Chat Gate Fast
+
+on:
+  push:
+    paths:
+      - ".github/workflows/chat-gate-fast.yml"
+      - ".github/chat-gate-fast.trigger"
+
+permissions:
+  contents: read
+
+jobs:
+  chat:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Real production chat POST
+        shell: bash
+        run: |
+          set -euo pipefail
+          payload='{"messages":[{"role":"user","content":"Qu'''est-ce que tu mises aujourd'''hui, et pourquoi ?"}],"requestedMode":"NORMAL"}'
+          body="$(mktemp)"
+          status="$(curl -sS --connect-timeout 8 --max-time 20             -o "$body" -w "%{http_code}"             -H 'content-type: application/json'             -H 'user-agent: BetGPT-Chat-Gate/1.0'             --data-binary "$payload"             https://betgpt.live/api/chat)"
+          echo "HTTP=$status"
+          cat "$body"
+          echo
+          test "$status" = "200"
+          python3 - "$body" <<'PY'
+          import json,sys
+          data=json.load(open(sys.argv[1],encoding="utf-8"))
+          text=str(data.get("text",""))
+          bad=("donne-moi les affiches","donne moi les affiches","donnez-moi les affiches","donnez moi les affiches")
+          assert text.strip(), "empty chat response"
+          assert not any(x in text.lower().replace("’","'") for x in bad), text
+          for required in ("Niveau :", "Pari à prendre :", "Cote disponible :"):
+              assert required in text, f"missing {required}: {text}"
+          print("CHAT_GATE_PASS")
+          PY
