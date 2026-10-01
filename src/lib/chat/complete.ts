@@ -311,6 +311,19 @@ export async function completeChat(
   const last = history.at(-1)?.content ?? "";
   const mustGround = shouldGround(last);
 
+  // Reckless-certainty claims must never fall through to a bland generic model answer.
+  // They are handled deterministically so ROAST mode always produces the visual/punchline layer.
+  const recklessBet =
+    /\b(?:100\s*%|s[uû]r(?:e)?\s+[àa]\s+100|impossible\s+de\s+perdre|all[- ]?in|je\s+mets\s+tout|je\s+mise\s+tout|tapis)\b/i.test(last) ||
+    /\bcombin[eé]\b[\s\S]{0,80}\b(?:8|9|1[0-9]|2[0-9])\s*(?:matchs?|s[eé]lections?)?\b/i.test(last);
+  if (recklessBet) {
+    const base =
+      mode === "ROAST"
+        ? "Non : un combiné pareil n’est jamais « sûr à 100 % ». Douze sélections empilent douze occasions de faire exploser le ticket. Et « je mets tout », c’est précisément le moment où je te dis de réduire la mise, pas de jouer au cascadeur bancaire."
+        : "Un combiné pareil n’est jamais sûr à 100 %. Douze sélections multiplient les points de rupture, et miser tout son budget sur un seul ticket est un risque disproportionné. Réduis la mise ou simplifie le ticket.";
+    return success(base, mode, last, recentRoasts);
+  }
+
   // Daily-pick questions are deterministic when the desk has a real selection:
   // never let a language model replace it with "donne-moi les affiches".
   if (classifyChatIntent(last) === "TODAY_PICKS" && desk.includes("SÉLECTION AUTOMATIQUE BETGPT")) {
