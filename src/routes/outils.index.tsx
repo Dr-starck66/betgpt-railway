@@ -1,6 +1,7 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { Calculator, Percent, Repeat2, TrendingUp } from "lucide-react";
 import { SITE_URL } from "@/lib/programmatic";
+import { AstraSidewings } from "@/components/astra-sidewings";
 
 const TOOLS = [
   { href: "/outils/value-bet", title: "Écart modèle / cote", text: "Probabilité implicite, écart et espérance à partir de tes chiffres.", icon: TrendingUp },
@@ -24,7 +25,33 @@ export const Route = createFileRoute("/outils/")({
 
 function ToolsPage() {
   return (
-    <article className="space-y-8">
+    <AstraSidewings
+      ariaLabel="Navigation contextuelle des outils BetGPT"
+      left={{
+        eyebrow: "Apprendre",
+        title: "Comprendre avant de calculer",
+        intro: "Les calculateurs deviennent plus utiles quand la formule et ses limites sont claires.",
+        links: [
+          { href: "/guides/probabilite-implicite", label: "Probabilité implicite", description: "Transformer une cote en probabilité brute." },
+          { href: "/guides/value-bet", label: "Comprendre la value", description: "Lire l’écart modèle-marché sans promesse de gain." },
+          { href: "/guides/critere-de-kelly", label: "Critère de Kelly", description: "Comprendre la logique avant de calculer une fraction." },
+          { href: "/guides/lire-une-cote", label: "Lire une cote", description: "Décimale, fractionnaire et américaine." },
+        ],
+      }}
+      right={{
+        eyebrow: "Passer aux données",
+        title: "Du calcul au contexte réel",
+        intro: "Relie les outils aux pages où BetGPT expose réellement prix, historique et méthode.",
+        links: [
+          { href: "/comparer-cotes", label: "Comparer les cotes", description: "Observer plusieurs prix sur le même marché." },
+          { href: "/meilleures-cotes", label: "Meilleures cotes", description: "Voir les meilleurs prix relevés sur le desk." },
+          { href: "/opportunities", label: "Opportunités value", description: "Voir où le modèle détecte un écart." },
+          { href: "/ledger", label: "Bilan vérifié", description: "Contrôler les résultats et l’historique public." },
+          { href: "/methodology", label: "Méthodologie", description: "Comprendre les hypothèses derrière les calculs." },
+        ],
+      }}
+    >
+      <article className="space-y-8">
       <section className="hero-panel p-6 sm:p-8">
         <p className="eyebrow">Outils BetGPT</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-5xl">Calculateurs football et paris</h1>
@@ -50,6 +77,7 @@ function ToolsPage() {
           );
         })}
       </ul>
-    </article>
+      </article>
+    </AstraSidewings>
   );
 }
