@@ -12,6 +12,6 @@ export default defineEventHandler(async (event) => {
   }
   const parsed = analyticsIngestSchema.safeParse(raw);
   if (!parsed.success) throw createError({ statusCode: 400, statusMessage: "invalid" });
-  await recordAnalytics(parsed.data.e, parsed.data.p, parsed.data.route);
+  await recordAnalytics(parsed.data.e, parsed.data.p, parsed.data.route, parsed.data.s);
   return { ok: true };
 });
