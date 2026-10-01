@@ -62,4 +62,4 @@ jobs:
         shell: bash
         run: |
           test -f artifacts/cloud-egress/evidence.json
-          node -e 'const fs=require("fs");const e=JSON.parse(fs.readFileSync("artifacts/cloud-egress/evidence.json","utf8"));console.log("ASTRA CLOUD EGRESS FINAL",e.status,e.selectedTarget);if(e.status==="FAIL")process.exit(1)'
+          node -e 'const fs=require("fs");const e=JSON.parse(fs.readFileSync("artifacts/cloud-egress/evidence.json","utf8"));console.log("ASTRA CLOUD EGRESS FINAL",e.status,e.selectedTarget);if(e.status!=="PASS")process.exit(1)'
