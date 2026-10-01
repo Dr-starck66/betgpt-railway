@@ -1,0 +1,51 @@
+{
+  "version": "ASTRA-ZERO-WEAK-PAGE-GUARD-1",
+  "routeDirs": ["src/routes"],
+  "extensions": [".tsx", ".ts", ".jsx", ".js"],
+  "ignoreFiles": [
+    "src/routes/__root.tsx",
+    "src/routes/actu.tsx",
+    "src/routes/actualites.tsx",
+    "src/routes/blog.tsx",
+    "src/routes/calendrier.tsx",
+    "src/routes/classement.tsx",
+    "src/routes/forum.tsx",
+    "src/routes/guides.tsx",
+    "src/routes/outils.tsx",
+    "src/routes/pronostics-football.tsx",
+    "src/routes/resultats-football.tsx",
+    "src/routes/score-hunter.tsx",
+    "src/routes/scores-en-direct.tsx",
+    "src/routes/statistics.tsx"
+  ],
+  "technicalPatterns": [
+    "src/routes/admin",
+    "src/routes/go.tsx$",
+    "src/routes/geo-health.tsx$",
+    "src/routes/lab.tsx$",
+    "src/routes/portefeuille-mots-cles.tsx$"
+  ],
+  "headDelegatePatterns": [
+    "leagueHead\\(",
+    "matchHead\\(",
+    "geoCanonical\\(",
+    "doc\\.title",
+    "doc\\.description"
+  ],
+  "contentDelegatePatterns": [
+    "<GeoArticle",
+    "<CupPage",
+    "<ResultsBoard",
+    "<ScoresHub",
+    "<MatchDetail",
+    "<MatchArticle",
+    "<NewsArticle",
+    "<BlogBody",
+    "<ScoreTable"
+  ],
+  "minIndexableSourceBytes": 1200,
+  "minInternalLinks": 2,
+  "minScore": 78,
+  "sitemapSource": "src/lib/sitemap-urls.ts",
+  "reportPath": "artifacts/seo/zero-weak-pages.json"
+}
