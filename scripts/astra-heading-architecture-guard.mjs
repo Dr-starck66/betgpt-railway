@@ -5,7 +5,16 @@ import { headingArchitectureReasons } from "../src/lib/editorial/quality.ts";
 const strict = process.argv.includes("--strict");
 const failures = [];
 
-for (const article of manualEditorialArticles()) {
+const ledgerRaw = JSON.parse(readFileSync(new URL("../data/editorial/ledger.json", import.meta.url), "utf8"));
+const ledgerArticles = Array.isArray(ledgerRaw) ? ledgerRaw : Array.isArray(ledgerRaw?.articles) ? ledgerRaw.articles : [];
+const articlesBySlug = new Map();
+
+for (const article of ledgerArticles) {
+  if (article?.slug && Array.isArray(article.paragraphs)) articlesBySlug.set(article.slug, article);
+}
+for (const article of manualEditorialArticles()) articlesBySlug.set(article.slug, article);
+
+for (const article of articlesBySlug.values()) {
   const reasons = headingArchitectureReasons(article.paragraphs);
   for (const reason of reasons) failures.push(`${article.slug}: ${reason}`);
 
