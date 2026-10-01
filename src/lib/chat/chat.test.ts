@@ -5,7 +5,8 @@ import { postChat } from "./transport.ts";
 import { classifyChatIntent, localMatchFacts } from "./local.ts";
 import { chatBodySchema } from "../schemas.ts";
 import { hasUnsupportedGroundedClaim } from "./grounding.ts";
-import type { MatchInput } from "../../engine/types.ts";\nimport { extractPunchline } from "./punch.ts";
+import type { MatchInput } from "../../engine/types.ts";
+import { extractPunchline } from "./punch.ts";
 
 it("normalizes corrupt nested memories instead of crashing the prompt", () => {
   assert.deepEqual(normalizeMemory({ blackBook: null, preferences: 42 }), EMPTY_MEMORY);
