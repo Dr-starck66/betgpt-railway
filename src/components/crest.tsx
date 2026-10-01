@@ -2,6 +2,7 @@ import { useState } from "react";
 import { logoCandidates } from "@/lib/crests";
 import { crestSeo } from "@/lib/image-seo";
 import { cn } from "@/lib/utils";
+import { nationalTeamFlag } from "@/lib/team-flags";
 
 export type TeamRef = {
   name: string;
@@ -32,7 +33,17 @@ export function Crest({
   const srcs = logoCandidates(name, id, logo);
   const src = srcs[fail];
   const seo = crestSeo(name, { competition, size, id, logo });
-  const letter = (
+  const flag = nationalTeamFlag(name);
+  const letter = flag ? (
+    <span
+      className="grid shrink-0 place-items-center rounded-sm bg-white ring-1 ring-line"
+      style={{ width: size, height: size, fontSize: Math.max(16, size * 0.72) }}
+      title={name}
+      aria-label={`Drapeau ${name}`}
+    >
+      {flag}
+    </span>
+  ) : (
     <span
       className="grid shrink-0 place-items-center rounded-sm font-bold text-ink ring-1 ring-line"
       style={{
