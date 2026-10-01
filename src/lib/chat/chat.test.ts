@@ -5,7 +5,7 @@ import { postChat } from "./transport.ts";
 import { classifyChatIntent, localMatchFacts } from "./local.ts";
 import { chatBodySchema } from "../schemas.ts";
 import { hasUnsupportedGroundedClaim } from "./grounding.ts";
-import type { MatchInput } from "../../engine/types.ts";
+import type { MatchInput } from "../../engine/types.ts";\nimport { extractPunchline } from "./punch.ts";
 
 it("normalizes corrupt nested memories instead of crashing the prompt", () => {
   assert.deepEqual(normalizeMemory({ blackBook: null, preferences: 42 }), EMPTY_MEMORY);
@@ -33,7 +33,7 @@ it("long conversations send only twelve messages and exactly one request", async
     assert.equal(chatBodySchema.safeParse(body).success, true);
     return Response.json({ text: "Réponse de test" });
   }) as typeof fetch);
-  assert.equal(result, "Réponse de test");
+  assert.equal(result.text, "Réponse de test");
   assert.equal(calls, 1);
 });
 it("HTTP failures are not retried or represented as answers", async () => {
@@ -170,4 +170,21 @@ it("daily-pick intent exposes same-day matches instead of the unknown-team fallb
   assert.match(text, /Matchs du jour disponibles/);
   assert.match(text, /France – Italie/);
   assert.doesNotMatch(text, /Cible nommée non trouvée/);
+});
+
+
+it("extracts one explicitly tagged punchline without exposing technical tags", () => {
+  const out = extractPunchline(
+    'Ton pari part de travers. [[PUNCH:ANGRY_SHOUT]]MAIS T\'ES UN GRILLE-PAIN COSMIQUE OU QUOI ?![[/PUNCH]] Ensuite on reprend les faits.',
+    "NORMAL",
+  );
+  assert.equal(out.punchline?.style, "ANGRY_SHOUT");
+  assert.equal(out.punchline?.score, 100);
+  assert.match(out.text, /GRILLE-PAIN COSMIQUE/);
+  assert.doesNotMatch(out.text, /\[\[PUNCH/);
+});
+
+it("does not force premium voice for an ordinary sentence", () => {
+  const out = extractPunchline("Je regarderais surtout la cote et les compositions.", "ROAST");
+  assert.equal(out.punchline, undefined);
 });
