@@ -63,16 +63,11 @@ jobs:
         if: github.event_name != 'pull_request'
         run: npm run release:pipeline:editorial
 
-      - name: Persist editorial and social ledgers
+      - name: Persist editorial and social ledgers safely
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
-        shell: bash
-        run: |
-          git add data/editorial/ledger.json data/social/ledger.json
-          if git diff --cached --quiet; then
-            echo "No new qualified publication or social job for this run."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "content: auto-publish BetGPT editorial and social ledgers"
-          git push origin HEAD:main
+        run: >-
+          node scripts/astra-safe-push.mjs
+          --branch main
+          --message "content: auto-publish BetGPT editorial and social ledgers"
+          data/editorial/ledger.json
+          data/social/ledger.json
