@@ -71,6 +71,7 @@ import { Route as ActuDayRouteImport } from './routes/actu.$day'
 import { Route as ActualitesIndexRouteImport } from './routes/actualites.index'
 import { Route as ActualitesSlugRouteImport } from './routes/actualites.$slug'
 import { Route as AdminEditorialRouteImport } from './routes/admin_.editorial'
+import { Route as AdminGrowthRouteImport } from './routes/admin_.growth'
 import { Route as AdminSocialRouteImport } from './routes/admin_.social'
 import { Route as AuteursBetgptEditorialRouteImport } from './routes/auteurs_.betgpt-editorial'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
@@ -421,6 +422,11 @@ const AdminEditorialRoute = AdminEditorialRouteImport.update({
   path: '/admin/editorial',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminGrowthRoute = AdminGrowthRouteImport.update({
+  id: '/admin_/growth',
+  path: '/admin/growth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminSocialRoute = AdminSocialRouteImport.update({
   id: '/admin_/social',
   path: '/admin/social',
@@ -686,6 +692,7 @@ export interface FileRoutesByFullPath {
   '/actu/$day': typeof ActuDayRoute
   '/actualites/$slug': typeof ActualitesSlugRoute
   '/admin/editorial': typeof AdminEditorialRoute
+  '/admin/growth': typeof AdminGrowthRoute
   '/admin/social': typeof AdminSocialRoute
   '/auteurs/betgpt-editorial': typeof AuteursBetgptEditorialRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -776,6 +783,7 @@ export interface FileRoutesByTo {
   '/actu/$day': typeof ActuDayRoute
   '/actualites/$slug': typeof ActualitesSlugRoute
   '/admin/editorial': typeof AdminEditorialRoute
+  '/admin/growth': typeof AdminGrowthRoute
   '/admin/social': typeof AdminSocialRoute
   '/auteurs/betgpt-editorial': typeof AuteursBetgptEditorialRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -880,6 +888,7 @@ export interface FileRoutesById {
   '/actu/$day': typeof ActuDayRoute
   '/actualites/$slug': typeof ActualitesSlugRoute
   '/admin_/editorial': typeof AdminEditorialRoute
+  '/admin_/growth': typeof AdminGrowthRoute
   '/admin_/social': typeof AdminSocialRoute
   '/auteurs_/betgpt-editorial': typeof AuteursBetgptEditorialRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -985,6 +994,7 @@ export interface FileRouteTypes {
     | '/actu/$day'
     | '/actualites/$slug'
     | '/admin/editorial'
+    | '/admin/growth'
     | '/auteurs/betgpt-editorial'
     | '/blog/$slug'
     | '/calendrier/$slug'
@@ -1074,6 +1084,7 @@ export interface FileRouteTypes {
     | '/actu/$day'
     | '/actualites/$slug'
     | '/admin/editorial'
+    | '/admin/growth'
     | '/auteurs/betgpt-editorial'
     | '/blog/$slug'
     | '/calendrier/$slug'
@@ -1176,6 +1187,7 @@ export interface FileRouteTypes {
     | '/actu/$day'
     | '/actualites/$slug'
     | '/admin_/editorial'
+    | '/admin_/growth'
     | '/auteurs_/betgpt-editorial'
     | '/blog/$slug'
     | '/calendrier/$slug'
@@ -1277,6 +1289,7 @@ export interface RootRouteChildren {
   SitemapRoute: typeof SitemapRoute
   StatisticsRoute: typeof StatisticsRouteWithChildren
   AdminEditorialRoute: typeof AdminEditorialRoute
+  AdminGrowthRoute: typeof AdminGrowthRoute
   AdminSocialRoute: typeof AdminSocialRoute
   AuteursBetgptEditorialRoute: typeof AuteursBetgptEditorialRoute
   CotesMatchIdRoute: typeof CotesMatchIdRoute
@@ -1723,6 +1736,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/editorial'
       fullPath: '/admin/editorial'
       preLoaderRoute: typeof AdminEditorialRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin_/growth': {
+      id: '/admin_/growth'
+      path: '/admin/growth'
+      fullPath: '/admin/growth'
+      preLoaderRoute: typeof AdminGrowthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin_/social': {
@@ -2246,6 +2266,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapRoute: SitemapRoute,
   StatisticsRoute: StatisticsRouteWithChildren,
   AdminEditorialRoute: AdminEditorialRoute,
+  AdminGrowthRoute: AdminGrowthRoute,
   AdminSocialRoute: AdminSocialRoute,
   AuteursBetgptEditorialRoute: AuteursBetgptEditorialRoute,
   CotesMatchIdRoute: CotesMatchIdRoute,
