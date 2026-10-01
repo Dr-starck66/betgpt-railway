@@ -1,0 +1,19 @@
+{
+  "schema": "astra-model-max/v1",
+  "defaultProfile": "critical",
+  "qualityFirst": true,
+  "requireVerifiedAuthorization": true,
+  "allowUndiscoveredModels": false,
+  "critical": {
+    "requireIndependentCritic": true,
+    "minimumPasses": 2
+  },
+  "rules": [
+    "Discover the runtime-accessible model catalog before selection when the provider exposes discovery.",
+    "Never infer access from documentation, pricing pages, names, aliases or rumors.",
+    "Never select a model that is absent from the authorized runtime catalog.",
+    "For critical work, prefer the highest-scoring authorized model and use an independent critic provider when available.",
+    "Record the actual selected model IDs as evidence; do not claim a hidden or unavailable model was used.",
+    "If only one provider/model is available, return PARTIAL for independent-critic assurance rather than a false PASS."
+  ]
+}
