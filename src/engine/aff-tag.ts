@@ -35,6 +35,12 @@ export function hasAffiliateTags(): boolean {
   return AFF_BOOKS.some((b) => Boolean(tags()[b.key]?.trim()));
 }
 
+export function hasAffiliateTag(book: string): boolean {
+  const spec = specOf(book);
+  if (!spec) return false;
+  return Boolean(tags()[spec.key]?.trim());
+}
+
 export function decorateAffiliateUrl(book: string, raw: string): string | null {
   const spec = specOf(book);
   const tagged = tags();
