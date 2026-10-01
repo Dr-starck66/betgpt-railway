@@ -148,6 +148,60 @@ export async function recordClick(book: string, matchId: string, href: string): 
   }
 }
 
+export async function recordSearchTruthLanding(source: string, route: string): Promise<void> {
+  const sql = await trySql();
+  if (!sql) return;
+  try {
+    await sql.query("insert into search_truth_landings (source, route) values ($1, $2)", [
+      source.slice(0, 40),
+      route.slice(0, 180) || "/",
+    ]);
+  } catch {
+    /* migration may not be deployed yet */
+  }
+}
+
+export async function searchTruthSnapshot(windowHours = 24): Promise<{
+  current: number;
+  previous: number;
+  growth: number | null;
+  bySource: { source: string; n: number }[];
+  topRoutes: { route: string; n: number }[];
+}> {
+  const sql = await trySql();
+  const empty = { current: 0, previous: 0, growth: null, bySource: [], topRoutes: [] };
+  if (!sql) return empty;
+  try {
+    const current = await sql.query<{ n: number }>(
+      "select count(*)::int as n from search_truth_landings where t >= now() - ($1 * interval '1 hour')",
+      [windowHours],
+    );
+    const previous = await sql.query<{ n: number }>(
+      "select count(*)::int as n from search_truth_landings where t < now() - ($1 * interval '1 hour') and t >= now() - ($2 * interval '1 hour')",
+      [windowHours, windowHours * 2],
+    );
+    const bySource = await sql.query<{ source: string; n: number }>(
+      "select source, count(*)::int as n from search_truth_landings where t >= now() - ($1 * interval '1 hour') group by source order by n desc, source asc",
+      [windowHours],
+    );
+    const topRoutes = await sql.query<{ route: string; n: number }>(
+      "select route, count(*)::int as n from search_truth_landings where t >= now() - ($1 * interval '1 hour') group by route order by n desc, route asc limit 20",
+      [windowHours],
+    );
+    const a = Number(current[0]?.n) || 0;
+    const b = Number(previous[0]?.n) || 0;
+    return {
+      current: a,
+      previous: b,
+      growth: b > 0 ? (a - b) / b : a > 0 ? 1 : null,
+      bySource: bySource.map((row) => ({ source: row.source, n: Number(row.n) || 0 })),
+      topRoutes: topRoutes.map((row) => ({ route: row.route || "/", n: Number(row.n) || 0 })),
+    };
+  } catch {
+    return empty;
+  }
+}
+
 export async function allowKeyed(key: string, max: number, windowMs: number): Promise<boolean> {
   const now = Date.now();
   const sql = await trySql();
