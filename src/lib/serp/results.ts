@@ -88,6 +88,18 @@ export function recentResults(rows: ResultRow[], now = Date.now(), days = 21): R
   return rows.filter((r) => r.day >= cutoff).slice(0, 150);
 }
 
+export function recentResultDays(
+  rows: ResultRow[],
+  now = Date.now(),
+  days = 7,
+): { day: string; rows: ResultRow[] }[] {
+  const safeDays = Math.max(1, Math.min(14, Math.floor(days)));
+  return Array.from({ length: safeDays }, (_, i) => {
+    const day = parisOffsetDay(-i, now);
+    return { day, rows: rows.filter((row) => row.day === day) };
+  });
+}
+
 export function bucketResults(rows: ResultRow[], now = Date.now()): {
   today: ResultRow[];
   yesterday: ResultRow[];
