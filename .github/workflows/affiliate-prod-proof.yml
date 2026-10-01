@@ -15,6 +15,32 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 4
     steps:
+      - name: Affiliate health truth proof
+        shell: bash
+        run: |
+          set -euo pipefail
+          health="$(mktemp)"
+          status="$(curl -sS --connect-timeout 8 --max-time 20 -o "$health" -w "%{http_code}" https://betgpt.live/api/affiliate-health)"
+          echo "HEALTH_HTTP=$status"
+          cat "$health"
+          echo
+          test "$status" = "200"
+          python3 - "$health" <<'PY'
+          import json,sys
+          data=json.load(open(sys.argv[1],encoding="utf-8"))
+          assert data.get("schema")=="astra-affiliate-conversion/v1", data
+          assert data.get("status") in ("TRACKING_READY","MONETIZED"), data
+          assert data.get("trackingReady") is True, data
+          books=data.get("books") or []
+          assert books, data
+          forbidden={"tag","affiliateTag","secret","value","token","password"}
+          for book in books:
+            assert not (forbidden & set(book.keys())), book
+            assert book.get("mode") in ("TRACKING_READY","MONETIZED"), book
+            assert book.get("source") in ("env","admin","none"), book
+          print("AFFILIATE_HEALTH_PASS status="+data["status"]+" monetizedCount="+str(data.get("monetizedCount")))
+          PY
+
       - name: Chat to tracked redirect proof
         shell: bash
         run: |
@@ -24,7 +50,7 @@ jobs:
           {"messages":[{"role":"user","content":"Qu'est-ce que tu mises aujourd'hui, et pourquoi ?"}],"requestedMode":"NORMAL"}
           JSON
           body="$(mktemp)"
-          status="$(curl -sS --connect-timeout 8 --max-time 25 -o "$body" -w "%{http_code}" -H 'content-type: application/json' -H 'user-agent: ASTRA-Affiliate-Proof/1.0' --data-binary @"$payload" https://betgpt.live/api/chat)"
+          status="$(curl -sS --connect-timeout 8 --max-time 25 -o "$body" -w "%{http_code}" -H 'content-type: application/json' -H 'user-agent: ASTRA-Affiliate-Proof/2.0' --data-binary @"$payload" https://betgpt.live/api/chat)"
           echo "CHAT_HTTP=$status"
           cat "$body"
           echo
@@ -40,20 +66,46 @@ jobs:
           PY
           )"
           echo "TRACKED_LINK=$link"
+
+          health="$(mktemp)"
+          curl -sS --connect-timeout 8 --max-time 20 -o "$health" https://betgpt.live/api/affiliate-health
+
           headers="$(mktemp)"
           redirect_status="$(curl -sS --connect-timeout 8 --max-time 20 --max-redirs 0 -o /dev/null -D "$headers" -w "%{http_code}" "$link" || true)"
           echo "REDIRECT_HTTP=$redirect_status"
           cat "$headers"
           test "$redirect_status" = "302"
-          python3 - "$headers" <<'PY'
-          import re,sys
+
+          python3 - "$headers" "$health" "$link" <<'PY'
+          import json,re,sys,urllib.parse
           h=open(sys.argv[1],encoding="utf-8",errors="replace").read()
+          health=json.load(open(sys.argv[2],encoding="utf-8"))
+          link=sys.argv[3]
+          q=urllib.parse.parse_qs(urllib.parse.urlparse(link).query)
+          book=(q.get("b") or [""])[0]
           m=re.search(r'(?im)^location:\s*(https://[^\r\n]+)',h)
           assert m, h
           loc=m.group(1)
           assert re.match(r'https://(?:www\.)?(?:unibet\.fr|betclic\.fr|netbet\.fr|winamax\.fr|pmu\.fr|sports\.bwin\.fr|zebet\.fr|vbet\.fr)(?:/|$)',loc), loc
           assert "utm_source=betgpt" in loc, loc
           assert "utm_medium=affiliate" in loc, loc
+
+          mode_h=re.search(r'(?im)^x-betgpt-affiliate-mode:\s*([^\r\n]+)',h)
+          book_h=re.search(r'(?im)^x-betgpt-affiliate-book:\s*([^\r\n]+)',h)
+          assert mode_h and book_h, h
+          redirect_mode=mode_h.group(1).strip()
+
+          normalized=book.lower().replace(" ","")
+          row=None
+          for candidate in health.get("books",[]):
+            if candidate.get("key") in normalized or candidate.get("label","").lower().replace(" ","") in normalized:
+              row=candidate
+              break
+          assert row, (book,health)
+          expected=row["mode"].lower()
+          assert redirect_mode==expected, (redirect_mode,expected,row)
+
           print("REDIRECT_LOCATION="+loc)
+          print("AFFILIATE_MODE="+redirect_mode)
           print("ASTRA_AFFILIATE_PROD_PASS")
           PY
