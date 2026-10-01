@@ -1,4 +1,4 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { citeBySlug, classementAnswer } from "@/engine/cite-public";
 import { loadCite } from "@/lib/cite.functions";
 import { SITE_URL } from "@/lib/programmatic";
@@ -103,6 +103,18 @@ function TablePage() {
           </tbody>
         </table>
       </div>
+      <nav aria-label={`Liens utiles pour ${l.title}`} className="flex flex-wrap gap-2">
+        <Link to="/calendrier/$slug" params={{ slug: l.slug }} className="chip-pill hover:text-link">
+          Calendrier {l.title}
+        </Link>
+        <Link to="/pronostics-football" className="chip-pill hover:text-link">
+          Pronostics football
+        </Link>
+        <Link to="/resultats-football" className="chip-pill hover:text-link">
+          Résultats football
+        </Link>
+      </nav>
+
       <section className="rounded-xl border border-line bg-surface p-5">
         <h2 className="text-lg font-semibold">Questions classement {l.title}</h2>
         <dl className="mt-3 space-y-3">

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { BRAND_LOGO, imageObjectLd } from "@/lib/image-seo";
 import { SITE_URL } from "@/lib/seo";
 import { ld } from "@/lib/ld";
@@ -40,6 +40,19 @@ export const Route = createFileRoute("/redaction")({
         Bundesliga, Serie A, Ligue des champions, Ligue Europa. Mise à jour automatique. Jeu responsable
         18+.
       </p>
+      <section className="rounded-xl border border-line bg-surface p-5">
+        <h2 className="text-lg font-semibold text-paper">Transparence éditoriale</h2>
+        <p className="mt-2 text-sm leading-relaxed text-mist">
+          La rédaction relie ses publications aux règles éditoriales, aux sources de données et à la méthodologie
+          afin que chaque lecteur puisse vérifier comment BetGPT produit et corrige ses contenus.
+        </p>
+        <nav aria-label="Transparence BetGPT" className="mt-4 flex flex-wrap gap-2">
+          <Link to="/editorial-policy" className="chip-pill hover:text-link">Politique éditoriale</Link>
+          <Link to="/data-sources" className="chip-pill hover:text-link">Sources des données</Link>
+          <Link to="/methodology" className="chip-pill hover:text-link">Méthodologie</Link>
+          <Link to="/prediction-history" className="chip-pill hover:text-link">Historique des prédictions</Link>
+        </nav>
+      </section>
     </article>
   ),
 });

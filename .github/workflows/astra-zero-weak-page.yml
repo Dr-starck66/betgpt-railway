@@ -10,6 +10,7 @@ on:
       - "src/lib/geo/**"
       - "src/lib/sitemap-urls.ts"
       - "scripts/astra-zero-weak-page-guard.mjs"
+      - "scripts/astra-zero-weak-page-guard.test.mjs"
       - "config/astra-zero-weak-page-guard.json"
       - "package.json"
       - ".github/workflows/astra-zero-weak-page.yml"
@@ -21,6 +22,7 @@ on:
       - "src/lib/geo/**"
       - "src/lib/sitemap-urls.ts"
       - "scripts/astra-zero-weak-page-guard.mjs"
+      - "scripts/astra-zero-weak-page-guard.test.mjs"
       - "config/astra-zero-weak-page-guard.json"
       - "package.json"
   workflow_dispatch:
@@ -37,6 +39,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Test the guard against false PASS
+        run: node --test scripts/astra-zero-weak-page-guard.test.mjs
       - name: Audit every public route
         run: node scripts/astra-zero-weak-page-guard.mjs --strict
       - name: Upload SEO evidence

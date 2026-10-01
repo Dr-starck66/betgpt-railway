@@ -52,6 +52,12 @@ function ParisPage() {
       <h1 className="text-2xl font-semibold tracking-tight">Paris football</h1>
       <p className="seo-answer text-base font-medium text-paper">{answer}</p>
       <p className="text-sm text-mist">18+ · Jeu responsable · ANJ. Les cotes bougent.</p>
+      <nav aria-label="Liens utiles paris football" className="flex flex-wrap gap-2">
+        <Link to="/comparer-cotes" className="chip-pill hover:text-link">Comparer les cotes</Link>
+        <Link to="/meilleures-cotes" className="chip-pill hover:text-link">Meilleures cotes</Link>
+        <Link to="/methodology" className="chip-pill hover:text-link">Méthodologie</Link>
+        <Link to="/jeu-responsable" className="chip-pill hover:text-link">Jeu responsable</Link>
+      </nav>
       <ul className="space-y-3">
         {data.predictions.filter((p) => !skipEuropeFrenchProno(p)).slice(0, 16).map((p) => {
           const pick = headlineMarket(p.markets);
