@@ -7,11 +7,14 @@ on:
     branches: [main]
     paths:
       - "scripts/astra-release-gate.mjs"
+      - "scripts/astra-deploy-sync-gate.mjs"
+      - "scripts/astra-green-release-sync.mjs"
       - "scripts/ts-alias-hooks.mjs"
       - "scripts/astra-safe-push.mjs"
       - "scripts/astra-public-proxy.mjs"
       - "server/middleware/astra-single-source.ts"
       - "config/astra-release-gate.json"
+      - "docs/astra/ASTRA_DEPLOY_SYNC_GATE.md"
       - ".github/workflows/astra-release-gate.yml"
       - "package.json"
   pull_request:
@@ -61,6 +64,8 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+      - name: Verify GREEN release ↔ manifest ↔ public revision
+        run: node scripts/astra-green-release-sync.mjs
       - name: Validate public/canonical convergence
         run: node scripts/astra-release-gate.mjs postflight
       - name: Upload drift evidence
