@@ -28,3 +28,24 @@ Fallback order:
 6. degrade gracefully
 
 A provider outage or quota exhaustion must trigger fallback/degradation, not an automatic request to pay.
+
+
+## Paid exception = TRANSFORMATIVE only
+
+A paid option may be proposed only when it unlocks a **major, concrete, measurable capability or result** that free/included routes cannot reasonably deliver.
+
+Reject:
+- marginal improvements,
+- convenience-only tools,
+- vague “maybe better” claims,
+- credit packs just to avoid engineering a fallback.
+
+Require before asking for €1:
+- provider,
+- exact capability unlocked,
+- why free/included paths are insufficient,
+- expected measurable benefit,
+- maximum budget,
+- stop condition if the benefit does not materialize.
+
+No automatic purchase. No automatic credit top-up. Explicit approval from Dr Starck is mandatory.
