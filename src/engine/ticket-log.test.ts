@@ -1,5 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
+import { stablePublicEvidenceTickets, type TicketRow } from "./ticket-log.ts";
 import {
   compactTickets,
   fixtureKey,
@@ -138,5 +139,26 @@ describe("ledger fixture identity", () => {
     assert.equal(publicLines.length, 1);
     assert.equal(publicLines[0]!.home, "PSV Eindhoven");
     assert.equal(publicLines[0]!.odds, 2.4);
+  });
+});
+
+
+describe("public prediction evidence durability", () => {
+  it("keeps stable seed evidence and rejects runtime-only ticket ids from sitemap candidates", () => {
+    const stable = t({
+      id: "espn-401879291:1X2",
+      matchId: "espn-401879291",
+      kind: "prono",
+      market: "1X2_H",
+    }) as unknown as TicketRow;
+    const ephemeral = t({
+      id: "espn-runtime-only:1X2",
+      matchId: "espn-runtime-only",
+      kind: "prono",
+      market: "1X2_H",
+    }) as unknown as TicketRow;
+
+    const rows = stablePublicEvidenceTickets([stable, ephemeral]);
+    assert.deepEqual(rows.map((row) => row.id), ["espn-401879291:1X2"]);
   });
 });
