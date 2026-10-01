@@ -1,10 +1,10 @@
 import type { EditorialNewsSignal, NewsSourceTier } from "@/lib/editorial/types";
 import { jaccard, tokens } from "@/lib/editorial/quality";
 
-const CACHE_TTL_MS = 10 * 60 * 1000;
-const MAX_AGE_MS = 36 * 60 * 60 * 1000;
+const CACHE_TTL_MS = 5 * 60 * 1000;
+const MAX_AGE_MS = 24 * 60 * 60 * 1000;
 const FETCH_TIMEOUT_MS = 3200;
-const MAX_SIGNALS = 60;
+const MAX_SIGNALS = 90;
 
 const GOOGLE_NEWS_QUERIES = [
   "football France when:1d",
@@ -12,6 +12,8 @@ const GOOGLE_NEWS_QUERIES = [
   'PSG OR Marseille OR Lyon OR Monaco OR Lens football when:1d',
   '"équipe de France" football when:1d',
   '"Ligue des champions" football when:1d',
+  '"Kylian Mbappé" OR "Real Madrid" OR "FC Barcelone" football when:1d',
+  '"Cristiano Ronaldo" OR "Lionel Messi" OR "Lamine Yamal" football when:1d',
   'CAN Maroc Algérie Sénégal Nigeria football when:1d',
 ];
 
