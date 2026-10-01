@@ -1,4 +1,5 @@
 import type { MatchInput, MarketQuote, PredictionRecord } from "../../engine/types.ts";
+import { BETCLIC_LEAGUE, NETBET_LEAGUE, UNIBET_LEAGUE } from "../../engine/book-pages.ts";
 
 export type ChatDailyPick = {
   matchId: string;
@@ -92,11 +93,30 @@ function affiliateUrlFor(book?: string): string | undefined {
   }
 }
 
-function betLinkFor(book?: string, quoteUrl?: string): { url?: string; affiliate: boolean } {
+function bookmakerFallbackUrl(book?: string, league?: MatchInput["league"]): string | undefined {
+  const n = String(book ?? "").trim().toLowerCase();
+  if (!n) return undefined;
+  if (n.includes("unibet")) return (league && UNIBET_LEAGUE[league]) || "https://www.unibet.fr/paris-football";
+  if (n.includes("betclic")) return (league && BETCLIC_LEAGUE[league]) || "https://www.betclic.fr/football-sfootball";
+  if (n.includes("netbet")) return (league && NETBET_LEAGUE[league]) || "https://www.netbet.fr/football";
+  if (n.includes("winamax")) return "https://www.winamax.fr/paris-sportifs";
+  if (n.includes("pmu")) return "https://paris-sportifs.pmu.fr/";
+  if (n.includes("bwin")) return "https://sports.bwin.fr/fr/sports/football-4";
+  if (n.includes("zebet")) return "https://www.zebet.fr/fr/competition/football";
+  if (n.includes("vbet")) return "https://www.vbet.fr/fr/sports/football";
+  return undefined;
+}
+
+function betLinkFor(
+  book?: string,
+  quoteUrl?: string,
+  league?: MatchInput["league"],
+): { url?: string; affiliate: boolean } {
   const affiliateUrl = affiliateUrlFor(book);
   if (affiliateUrl) return { url: affiliateUrl, affiliate: true };
   const cleanQuoteUrl = String(quoteUrl ?? "").trim();
-  return { url: cleanQuoteUrl || undefined, affiliate: false };
+  if (/^https:\/\//i.test(cleanQuoteUrl)) return { url: cleanQuoteUrl, affiliate: false };
+  return { url: bookmakerFallbackUrl(book, league), affiliate: false };
 }
 
 export function selectDailyChatPick(
@@ -155,7 +175,7 @@ export function selectDailyChatPick(
           : "STANDARD"
         : "STANDARD_FALLBACK";
 
-    const betLink = betLinkFor(quote.bestBook, quote.bestBookUrl);
+    const betLink = betLinkFor(quote.bestBook, quote.bestBookUrl, match.league);
 
     return {
       matchId: match.id,
@@ -205,7 +225,7 @@ export function selectDailyChatPick(
   if (!modelBest) return null;
 
   const { match, quote } = modelBest;
-  const betLink = betLinkFor(quote.bestBook, quote.bestBookUrl);
+  const betLink = betLinkFor(quote.bestBook, quote.bestBookUrl, match.league);
   return {
     matchId: match.id,
     home: match.home.name,
