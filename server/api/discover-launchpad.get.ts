@@ -70,7 +70,7 @@ function normPath(value: string): string {
   }
 }
 
-async function renderedAudit(origin: string, slug: string) {
+async function renderedAudit(origin: string, slug: string, expectedImageSrc: string) {
   const url = new URL(`/actualites/${slug}`, origin).toString();
   const response = await fetch(url, {
     redirect: "follow",
@@ -85,8 +85,10 @@ async function renderedAudit(origin: string, slug: string) {
   const robots = meta(html, "name", "robots").toLowerCase();
   const canonical = link(html, "canonical");
   const ogImage = meta(html, "property", "og:image");
+  const twitterImage = meta(html, "name", "twitter:image");
   const ogWidth = Number(meta(html, "property", "og:image:width") || 0);
   const ogHeight = Number(meta(html, "property", "og:image:height") || 0);
+  const expectedImagePath = normPath(expectedImageSrc);
   const h1 = (html.match(/<h1\b/gi) ?? []).length;
   const schema = jsonLdTypes(html);
   const failures: string[] = [];
@@ -97,6 +99,12 @@ async function renderedAudit(origin: string, slug: string) {
   if (h1 !== 1) failures.push(`H1_${h1}`);
   if (!canonical || normPath(canonical) !== normPath(url)) failures.push("SELF_CANONICAL_MISSING");
   if (!ogImage) failures.push("OG_IMAGE_MISSING");
+  if (ogImage && expectedImagePath && normPath(ogImage) !== expectedImagePath) {
+    failures.push("OG_IMAGE_NOT_ARTICLE_IMAGE");
+  }
+  if (twitterImage && expectedImagePath && normPath(twitterImage) !== expectedImagePath) {
+    failures.push("TWITTER_IMAGE_NOT_ARTICLE_IMAGE");
+  }
   if (ogWidth < 1200) failures.push(`OG_IMAGE_WIDTH_${ogWidth || 0}`);
   if (ogWidth * ogHeight <= 300_000) failures.push(`OG_IMAGE_PIXELS_${ogWidth * ogHeight}`);
   if (!schema.has("NewsArticle") && !schema.has("Article") && !schema.has("BlogPosting")) failures.push("ARTICLE_SCHEMA_MISSING");
@@ -113,6 +121,8 @@ async function renderedAudit(origin: string, slug: string) {
       canonical,
       h1,
       ogImage,
+      twitterImage,
+      expectedImagePath,
       ogWidth,
       ogHeight,
       schemaTypes: [...schema].sort(),
@@ -155,7 +165,7 @@ export default defineEventHandler(async (event) => {
       const staticAudit = discoverLaunchpadStaticAudit(article, now);
       let rendered;
       try {
-        rendered = await renderedAudit(origin, article.slug);
+        rendered = await renderedAudit(origin, article.slug, article.image.src);
       } catch (error) {
         rendered = {
           url: new URL(`/actualites/${article.slug}`, origin).toString(),
