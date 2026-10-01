@@ -57,7 +57,49 @@ function routeHint(file) {
     .replace(/\$/g, ":");
 }
 
+function normalizeRoutePath(value) {
+  if (!value) return "";
+  const dynamic = value.replace(/\$([A-Za-z0-9_]+)/g, ":$1");
+  if (dynamic === "/") return "/";
+  return dynamic.replace(/\/+$/, "");
+}
+
+function routePathFromSource(source, rel) {
+  const match = source.match(/createFileRoute\(\s*["'`]([^"'`]+)["'`]\s*\)/i);
+  return normalizeRoutePath(match?.[1] || routeHint(rel));
+}
+
+function isOutletLayout(source) {
+  return /<Outlet\b/i.test(source) &&
+    !/<h1\b/i.test(source) &&
+    !/\bhead\s*:/i.test(source) &&
+    textSignalBytes(source) < 120;
+}
+
+function extractFirst(source, patterns) {
+  for (const pattern of patterns) {
+    const match = source.match(pattern);
+    if (match?.[1]) return match[1].replace(/\s+/g, " ").trim();
+  }
+  return "";
+}
+
+function quotedRouteInSitemap(source, routePath) {
+  if (!source || !routePath || routePath.includes(":")) return false;
+  const escaped = routePath.replace(/[.*+?^$\{\}()|[\]\\]/g, "\\function routeHint(file) {
+  const base = path.basename(file).replace(/\.(tsx|ts|jsx|js)$/i, "");
+  if (base === "index") return "/";
+  return "/" + base
+    .replace(/\._/g, "/")
+    .replace(/\./g, "/")
+    .replace(/\$/g, ":");
+}
+");
+  return new RegExp(`["'\\`]${escaped}/?["'\\`]`).test(source);
+}
+
 function classify(rel, source) {
+  if (isOutletLayout(source)) return "layout";
   if (technicalRx.some((r) => r.test(rel))) return "technical";
   if (/redirect\s*\(/i.test(source)) return "redirect";
   if (/noindex/i.test(source)) return "noindex";
@@ -70,7 +112,9 @@ function classify(rel, source) {
 }
 
 function audit(rel, source, sitemapSource) {
+  const routePath = routePathFromSource(source, rel);
   const role = classify(rel, source);
+  const layout = role === "layout";
   const redirect = role === "redirect";
   const noindex = /noindex/i.test(source);
   const technical = role === "technical";
@@ -80,24 +124,34 @@ function audit(rel, source, sitemapSource) {
   const title = headDelegated || /\btitle\s*:/i.test(source) || /[{,]\s*title\s*[,}]/i.test(source) || /<title\b/i.test(source);
   const description = headDelegated || /name\s*:\s*["']description["']/i.test(source);
   const canonical = headDelegated || /rel\s*:\s*["']canonical["']/i.test(source);
-  const h1 = contentDelegated || /<h1\b/i.test(source);
+  const h1Count = count(/<h1\b/gi, source);
+  const h1 = contentDelegated || h1Count === 1;
   const internalLinks =
     count(/href\s*=\s*["']\//gi, source) +
     count(/\bto\s*=\s*["']\//gi, source) +
     count(/href\s*:\s*["']\//gi, source);
   const sourceBytes = Buffer.byteLength(source);
   const visibleTextBytes = textSignalBytes(source);
-  const content = contentDelegated || sourceBytes >= Number(cfg.minIndexableSourceBytes || 1200) || visibleTextBytes >= 450;
+  const content = contentDelegated || visibleTextBytes >= Number(cfg.minVisibleTextBytes || 450);
   const links = contentDelegated || internalLinks >= Number(cfg.minInternalLinks || 2);
   const structured =
     contentDelegated ||
     /application\/ld\+json|jsonLd|geoJsonLd|\bld\s*\(/i.test(source);
   const trust =
     /methodology|data-sources|ledger|evidence|source|preuve|fiabil|jeu-responsable|editorial/i.test(source);
-  const sitemapExcluded =
-    technical && sitemapSource ? !sitemapSource.includes(routeHint(rel).replace(/:\w+/g, "")) : true;
+  const sitemapContainsRoute = quotedRouteInSitemap(sitemapSource, routePath);
+  const sitemapExcluded = !sitemapContainsRoute;
+  const titleLiteral = extractFirst(source, [
+    /\btitle\s*:\s*["'`]([^"'`]{3,})["'`]/i,
+  ]);
+  const descriptionLiteral = extractFirst(source, [
+    /name\s*:\s*["']description["'][\s\S]{0,220}?content\s*:\s*["'`]([^"'`]{20,})["'`]/i,
+  ]);
+  const canonicalLiteral = extractFirst(source, [
+    /rel\s*:\s*["']canonical["'][\s\S]{0,180}?href\s*:\s*["'`]([^"'`]+)["'`]/i,
+  ]);
 
-  const signals = { hasHead, title, description, canonical, h1, content, links, structured, trust, noindex };
+  const signals = { hasHead, title, description, canonical, h1, h1Count, content, links, structured, trust, noindex, sitemapContainsRoute };
   let score = 0;
   if (title) score += 12;
   if (description) score += 12;
@@ -114,13 +168,17 @@ function audit(rel, source, sitemapSource) {
   if (!canonical) criticalMissing.push("canonical");
   if (!h1) criticalMissing.push("h1");
   if (!content) criticalMissing.push("main-content");
+  if (!links && role !== "legal") criticalMissing.push("internal-links");
 
   const failures = [];
-  if (technical) {
-    if (!noindex) failures.push("technical-route-must-be-noindex");
-    if (!sitemapExcluded) failures.push("technical-route-found-in-sitemap-source");
-  } else if (!redirect && !noindex) {
+  if (layout) {
+    // Route-tree wrapper only: the child index route owns the public document.
+  } else if (technical || noindex) {
+    if (technical && !noindex) failures.push("technical-route-must-be-noindex");
+    if (!sitemapExcluded) failures.push("nonindexable-route-found-in-sitemap-source");
+  } else if (!redirect) {
     if (!hasHead) failures.push("missing-route-head");
+    if (!contentDelegated && h1Count > 1) failures.push(`multiple-h1:${h1Count}`);
     if (criticalMissing.length) failures.push(`critical:${criticalMissing.join(",")}`);
     const roleMin = Number((cfg.roleMinimums || {})[role] ?? cfg.minScore ?? 78);
     if (score < roleMin) failures.push(`weak-score:${score}<${roleMin}`);
@@ -128,14 +186,16 @@ function audit(rel, source, sitemapSource) {
 
   return {
     file: rel,
+    routePath,
     routeHint: routeHint(rel),
     role,
-    indexable: !redirect && !noindex,
+    indexable: !layout && !redirect && !noindex && !technical,
     sourceBytes,
     visibleTextBytes,
     internalLinks,
     score,
     signals,
+    literals: { title: titleLiteral, description: descriptionLiteral, canonical: canonicalLiteral },
     failures,
     status: failures.length ? "FAIL" : "PASS",
   };
@@ -164,6 +224,44 @@ for (const rel of candidates) {
   const source = await fs.readFile(path.join(root, rel), "utf8");
   if (!/create(?:File|Root)Route/i.test(source)) continue;
   results.push(audit(rel, source, sitemapSource));
+}
+
+function addFailure(item, reason) {
+  if (!item.failures.includes(reason)) item.failures.push(reason);
+  item.status = item.failures.length ? "FAIL" : "PASS";
+}
+
+function enforceUnique(field, label) {
+  const seen = new Map();
+  for (const item of results.filter((r) => r.indexable)) {
+    const value = item.literals?.[field];
+    if (!value) continue;
+    const key = value.toLowerCase();
+    const previous = seen.get(key);
+    if (previous && previous.routePath !== item.routePath) {
+      addFailure(previous, `duplicate-${label}:${item.routePath}`);
+      addFailure(item, `duplicate-${label}:${previous.routePath}`);
+    } else {
+      seen.set(key, item);
+    }
+  }
+}
+
+if (cfg.enforceUniqueMetadata !== false) {
+  enforceUnique("title", "title");
+  enforceUnique("description", "description");
+  enforceUnique("canonical", "canonical");
+}
+
+const routeOwners = new Map();
+for (const item of results.filter((r) => r.indexable && r.routePath)) {
+  const previous = routeOwners.get(item.routePath);
+  if (previous) {
+    addFailure(previous, `duplicate-route-owner:${item.file}`);
+    addFailure(item, `duplicate-route-owner:${previous.file}`);
+  } else {
+    routeOwners.set(item.routePath, item);
+  }
 }
 
 const failures = results.filter((r) => r.status === "FAIL");
