@@ -212,26 +212,15 @@
             "Comparer les cotes football",
             "matchs affichés",
             "Voir les cotes",
-            "Parier chez",
-            "https://www.unibet.fr/"
+            "Parier chez"
           ],
           "requireAny": [
+            "alt=\"Drapeau ",
+            "flagcdn.com/",
+            "twemoji@latest/assets/svg/",
             "🇫🇷",
-            "🇪🇸",
-            "🇩🇪",
-            "🇮🇹",
-            "🇳🇱",
-            "🇵🇹",
-            "🇹🇷",
             "🇪🇺",
-            "🌍",
-            "🇹🇿",
-            "🇸🇳",
-            "🇳🇬",
-            "🇲🇦",
-            "🇩🇿",
-            "🇵🇱",
-            "🇫🇷"
+            "🌍"
           ]
         }
       }
@@ -275,14 +264,16 @@
         "jsonText": {
           "requireAll": [
             "Pari à prendre :",
-            "Cote disponible :",
-            "Niveau :"
+            "Meilleure cote trouvée :",
+            "Niveau :",
+            "Lien pour parier : https://"
           ],
           "forbid": [
             "donne-moi les affiches",
             "donne moi les affiches",
             "donnez-moi les affiches",
-            "donnez moi les affiches"
+            "donnez moi les affiches",
+            "Lien pour parier : indisponible"
           ]
         }
       }
@@ -318,5 +309,5 @@
       }
     }
   ],
-  "verificationRevision": "ASTRA-BETGPT-SENTINEL-V1-2026-10-01"
+  "verificationRevision": "ASTRA-BETGPT-SENTINEL-V2-RENDERED-FLAGS-REAL-LINKS-2026-10-01"
 }
