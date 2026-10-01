@@ -341,6 +341,11 @@ export async function completeChat(
       mode === "ROAST"
         ? "20-0 ? Là, ton scénario a quitté le football pour demander l’asile dans un jeu vidéo. Je peux challenger l’idée, mais je ne vais pas inventer un massacre pareil : sans données solides qui pointent vers un écart gigantesque, c’est du délire pur."
         : "20-0 est un scénario extraordinairement extrême. Sans données solides qui justifient un écart hors norme, je ne vais pas le présenter comme plausible. Je peux en revanche analyser le prochain match réel de la France avec les données disponibles.";
+    if (mode === "ROAST") {
+      const roast = generateAbsurdInsult(last, recentRoasts, "surprise");
+      const tagged = `[[PUNCH:LAUGH_SHOUT]]${roast.text}[[/PUNCH]]`;
+      return success(insertPunchline(base, tagged), mode, last, recentRoasts);
+    }
     return success(base, mode, last, recentRoasts);
   }
 
