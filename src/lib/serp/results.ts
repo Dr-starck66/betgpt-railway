@@ -2,6 +2,7 @@ import type { HistoricalMatch, LeagueId, MatchInput } from "@/engine/types";
 import { slugify } from "@/lib/programmatic";
 import { parisDay, parisOffsetDay } from "@/lib/seo/money-map";
 import { COMPETITION_NAME } from "@/lib/serp/leagues";
+import { logoFor } from "@/lib/crests";
 import { hasScore } from "@/lib/serp/status";
 
 export type ResultRow = {
@@ -11,6 +12,12 @@ export type ResultRow = {
   competition: string;
   home: string;
   away: string;
+  homeId?: string;
+  awayId?: string;
+  homeShort: string;
+  awayShort: string;
+  homeLogo?: string;
+  awayLogo?: string;
   scoreHome: number;
   scoreAway: number;
   kickoff: string;
@@ -28,6 +35,12 @@ export function rowFromMatch(match: MatchInput): ResultRow | null {
     competition: match.competition || COMPETITION_NAME[match.league],
     home: match.home.name,
     away: match.away.name,
+    homeId: match.home.id,
+    awayId: match.away.id,
+    homeShort: match.home.short || match.home.name.slice(0, 3).toUpperCase(),
+    awayShort: match.away.short || match.away.name.slice(0, 3).toUpperCase(),
+    homeLogo: match.home.logo || logoFor(match.home.name, match.home.id),
+    awayLogo: match.away.logo || logoFor(match.away.name, match.away.id),
     scoreHome: match.scoreHome as number,
     scoreAway: match.scoreAway as number,
     kickoff: match.kickoff,
@@ -50,6 +63,12 @@ export function rowFromHistory(h: HistoricalMatch): ResultRow | null {
     competition: COMPETITION_NAME[h.league] ?? h.league,
     home: h.homeName,
     away: h.awayName,
+    homeId: h.homeId,
+    awayId: h.awayId,
+    homeShort: h.homeName.slice(0, 3).toUpperCase(),
+    awayShort: h.awayName.slice(0, 3).toUpperCase(),
+    homeLogo: logoFor(h.homeName, h.homeId),
+    awayLogo: logoFor(h.awayName, h.awayId),
     scoreHome: h.goalsHome,
     scoreAway: h.goalsAway,
     kickoff: h.kickoff,
