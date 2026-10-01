@@ -327,5 +327,18 @@
       }
     }
   ],
-  "verificationRevision": "ASTRA-BETGPT-DISCOVER-ATTACK-NEGREIRA-2026-10-01"
+  "verificationRevision": "ASTRA-BETGPT-SENTINEL-V3-SERP-DOMINATOR-2026-10-01",
+  "serp": {
+    "enabled": true,
+    "sitemapPath": "/sitemap.xml",
+    "newsSitemapPath": "/news-sitemap.xml",
+    "staticPages": [
+      "/resultats-football",
+      "/comparer-cotes",
+      "/pronostics-sportifs",
+      "/ledger"
+    ],
+    "metaDescriptionMin": 40,
+    "articleMinImageWidth": 1200
+  }
 }
