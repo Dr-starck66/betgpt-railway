@@ -7,6 +7,7 @@ on:
     branches: [main]
     paths:
       - "scripts/astra-cloud-egress.mjs"
+      - "scripts/astra-public-autosync.mjs"
       - "config/astra-cloud-egress.json"
       - ".github/workflows/astra-cloud-egress.yml"
 
@@ -27,6 +28,9 @@ jobs:
 
       - name: Validate egress config
         run: node scripts/astra-cloud-egress.mjs config/astra-cloud-egress.json --validate-config
+
+      - name: Validate public autosync syntax
+        run: node --check scripts/astra-public-autosync.mjs
 
       - name: Verify from independent cloud network
         id: egress
