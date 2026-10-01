@@ -1,3 +1,4 @@
+import { contextualAuthorityGate } from "@/lib/editorial/authority-citations";
 import type { DiscoverCheck, EditorialArticle, EditorialSource } from "@/lib/editorial/types";
 
 const CLICKBAIT =
@@ -170,12 +171,15 @@ export function qualityGate(
   if (article.articleType === "news" && body.trim().length < 2400) reasons.push("actualité trop courte pour apporter une vraie valeur éditoriale");
   if (!article.sources.length) reasons.push("aucune source");
   if (sourceQualityScore(article.sources) < 4) reasons.push("sources trop faibles");
-  if (
-    article.articleType === "news" &&
-    article.sources.filter((source) => source.url && sourceStrength(source) >= 6).length < 2
-  ) {
-    reasons.push("actualité insuffisamment corroborée par des sources fortes");
+  if (article.articleType === "news") {
+    const strongExternal = article.sources.filter((source) => source.url && sourceStrength(source) >= 6);
+    const hasOfficial = strongExternal.some((source) => source.status === "OFFICIAL");
+    if (!hasOfficial && strongExternal.length < 2) {
+      reasons.push("actualité sans source officielle insuffisamment corroborée par des sources fortes");
+    }
   }
+  const authority = contextualAuthorityGate(article);
+  reasons.push(...authority.reasons.map((reason) => `traçabilité source: ${reason}`));
   if (article.sources.some((s) => s.status === "UNKNOWN" && /confirmé|officiellement/i.test(s.note))) {
     reasons.push("fait inconnu écrit comme confirmé");
   }
