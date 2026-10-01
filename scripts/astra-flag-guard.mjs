@@ -21,9 +21,8 @@ const component = fs.readFileSync(path.join(root, "src/components/country-flag.t
 const resolver = fs.readFileSync(path.join(root, "src/lib/country-flag-resolver.ts"), "utf8");
 
 const mustContain = [
-  [comparer, "CountryFlag", "comparer-cotes must use CountryFlag"],
-  [comparer, "countryForLeague", "comparer-cotes must resolve league countries centrally"],
-  [comparer, "teamCountryCodeFromShort", "international matches must resolve team country codes centrally"],
+  [comparer, "TeamLine", "comparer-cotes must delegate team visuals to TeamLine"],
+  [crest, "nationalTeamCountryCode", "TeamLine/crest must resolve national-team country codes centrally"],
   [crest, "CountryFlag", "national-team crests must use CountryFlag"],
   [component, "flagcdn.com", "CountryFlag needs primary image source"],
   [component, "cdn.jsdelivr.net/gh/twitter/twemoji", "CountryFlag needs independent image fallback"],
