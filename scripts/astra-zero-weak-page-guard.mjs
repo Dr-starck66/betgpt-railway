@@ -86,16 +86,15 @@ function extractFirst(source, patterns) {
 
 function quotedRouteInSitemap(source, routePath) {
   if (!source || !routePath || routePath.includes(":")) return false;
-  const escaped = routePath.replace(/[.*+?^$\{\}()|[\]\\]/g, "\\function routeHint(file) {
-  const base = path.basename(file).replace(/\.(tsx|ts|jsx|js)$/i, "");
-  if (base === "index") return "/";
-  return "/" + base
-    .replace(/\._/g, "/")
-    .replace(/\./g, "/")
-    .replace(/\$/g, ":");
-}
-");
-  return new RegExp(`["'\\`]${escaped}/?["'\\`]`).test(source);
+  const variants = [
+    `"${routePath}"`,
+    `'${routePath}'`,
+    `\`${routePath}\``,
+    `"${routePath}/"`,
+    `'${routePath}/'`,
+    `\`${routePath}/\``,
+  ];
+  return variants.some((value) => source.includes(value));
 }
 
 function classify(rel, source) {
