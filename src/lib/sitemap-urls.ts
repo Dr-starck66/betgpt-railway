@@ -102,15 +102,6 @@ export async function loadSitemapUrls(): Promise<SitemapUrl[]> {
       image: page.image,
     });
   }
-  urls.push({
-    loc: `${SITE_URL}/auteurs/betgpt-editorial`,
-    path: "/auteurs/betgpt-editorial",
-    title: "BetGPT Editorial",
-    group: "Actualités",
-    lastmod: "",
-    changefreq: "monthly",
-    priority: "0.4",
-  });
   return urls;
 }
 
@@ -141,6 +132,7 @@ export function buildSitemapUrls(input: {
     { loc: SITE_URL, path: "/", title: "Bureau BetGPT", group: "Hubs", lastmod: now, changefreq: "always", priority: "1.0", images: [brandOg(), brandLogo()] },
     { loc: `${SITE_URL}/actu`, path: "/actu", title: "Actu football", group: "Hubs", lastmod: now, changefreq: "always", priority: "1.0" },
     { loc: `${SITE_URL}/about`, path: "/about", title: "À propos de BetGPT", group: "Confiance", lastmod: "", changefreq: "monthly", priority: "0.5" },
+    { loc: `${SITE_URL}/auteurs/betgpt-editorial`, path: "/auteurs/betgpt-editorial", title: "BetGPT Editorial", group: "Actualités", lastmod: "", changefreq: "monthly", priority: "0.4" },
     { loc: `${SITE_URL}/changelog`, path: "/changelog", title: "Changelog BetGPT", group: "Confiance", lastmod: "", changefreq: "weekly", priority: "0.4" },
     { loc: `${SITE_URL}/comparer-cotes`, path: "/comparer-cotes", title: "Comparer les cotes football", group: "Conversion", lastmod: now, changefreq: "hourly", priority: "0.85" },
     { loc: `${SITE_URL}/data-sources`, path: "/data-sources", title: "Sources des données BetGPT", group: "Confiance", lastmod: "", changefreq: "monthly", priority: "0.6" },
