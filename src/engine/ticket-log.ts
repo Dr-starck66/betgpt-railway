@@ -16,6 +16,33 @@ export { compactTickets, fixtureKey, isMethodPick, teamKey, uniqueByFixture } fr
 
 export type TicketKind = "mise" | "prono";
 
+export type LearningContext = {
+  capturedAt: string;
+  modelDisagreement: number;
+  confidenceScore: number;
+  dataQuality: number;
+  tacticalReliability: number;
+  tacticalConflict: number;
+  directionalAgreement: number;
+  devilChallenge: number;
+  openingOdds: number;
+  quotedOdds: number;
+  oddsMove: number;
+  absenceHomeImpact: number;
+  absenceAwayImpact: number;
+  restDiffDays: number;
+  congestionDiff: number;
+  travelAwayKm: number;
+  importance: number;
+  missingInformationCount: number;
+  availableInformationCount: number;
+  lambdaHome: number;
+  lambdaAway: number;
+  homeFormation: string;
+  awayFormation: string;
+  features: Record<string, number>;
+};
+
 export type TicketRow = {
   id: string;
   matchId: string;
@@ -54,6 +81,7 @@ export type TicketRow = {
   engineVersion?: string;
   revision?: number;
   snapshots?: { at: string; market: string; label: string; odds: number; modelProb: number }[];
+  learningContext?: LearningContext;
 };
 
 export function canonicalChampionRows(rows: TicketRow[]): TicketRow[] {
@@ -198,6 +226,74 @@ export function headline1x2(p: PredictionRecord) {
   };
 }
 
+function openingOddsFor(match: MatchInput | undefined, market: MarketKind, fallback: number): number {
+  if (!match) return fallback;
+  const o = match.opening;
+  const byMarket: Partial<Record<MarketKind, number>> = {
+    "1X2_H": o.home,
+    "1X2_D": o.draw,
+    "1X2_A": o.away,
+    "OU_15_O": o.over15,
+    "OU_25_O": o.over25,
+    "OU_35_O": o.over35,
+    "OU_25_U": o.under25,
+    "BTTS_Y": o.bttsYes,
+    "BTTS_N": o.bttsNo,
+  };
+  const value = byMarket[market];
+  return typeof value === "number" && Number.isFinite(value) && value > 1 ? value : fallback;
+}
+
+function absenceImpact(match: MatchInput | undefined, side: "home" | "away"): number {
+  const absences = side === "home" ? match?.absencesHome?.value : match?.absencesAway?.value;
+  if (!Array.isArray(absences)) return 0;
+  return absences.reduce((sum, a) => sum + (Number.isFinite(a.importance) ? a.importance : 0), 0);
+}
+
+function learningContextOf(
+  p: PredictionRecord,
+  match: MatchInput | undefined,
+  market: MarketKind,
+  quotedOdds: number,
+): LearningContext {
+  const openingOdds = openingOddsFor(match, market, quotedOdds);
+  const missingInformationCount =
+    p.coaches.reduce((sum, c) => sum + c.missingInformation.length, 0) +
+    p.devil.riskFactors.length;
+  const features = Object.fromEntries(
+    p.features
+      .filter((f) => Number.isFinite(f.value))
+      .slice(0, 40)
+      .map((f) => [f.key, f.value]),
+  );
+  return {
+    capturedAt: new Date().toISOString(),
+    modelDisagreement: p.intelligence.modelDisagreement,
+    confidenceScore: p.intelligence.confidenceScore,
+    dataQuality: p.intelligence.dataQuality,
+    tacticalReliability: p.meta.tacticalReliability,
+    tacticalConflict: p.consensus.conflictScore,
+    directionalAgreement: p.consensus.directionalAgreement,
+    devilChallenge: p.devil.predictionChallengeScore,
+    openingOdds,
+    quotedOdds,
+    oddsMove: openingOdds > 1 ? quotedOdds / openingOdds - 1 : 0,
+    absenceHomeImpact: absenceImpact(match, "home"),
+    absenceAwayImpact: absenceImpact(match, "away"),
+    restDiffDays: (match?.restHome?.value ?? 0) - (match?.restAway?.value ?? 0),
+    congestionDiff: (match?.congestionAway?.value ?? 0) - (match?.congestionHome?.value ?? 0),
+    travelAwayKm: match?.travelAwayKm?.value ?? 0,
+    importance: match?.importance?.value ?? 0,
+    missingInformationCount,
+    availableInformationCount: p.availableInformation.length,
+    lambdaHome: p.ensemble.lambdaHome,
+    lambdaAway: p.ensemble.lambdaAway,
+    homeFormation: p.home.formation,
+    awayFormation: p.away.formation,
+    features,
+  };
+}
+
 type ScoreHit = { gh: number; ga: number; closing?: Partial<Record<MarketKind, number>> };
 
 function pairKey(home: string, away: string, kickoff: string): string {
@@ -334,6 +430,7 @@ export function syncTickets(
         recordedAt: new Date().toISOString(),
         engineVersion: ENGINE_VERSION,
         revision: 1,
+        learningContext: learningContextOf(p, match, head.market, head.odds),
       };
       attachCover(row, headM?.cover);
       byId.set(pronoId, row);
@@ -382,6 +479,7 @@ export function syncTickets(
       existingProno.pDraw = p.calibrated.draw;
       existingProno.pAway = p.calibrated.away;
       existingProno.engineVersion = ENGINE_VERSION;
+      existingProno.learningContext = learningContextOf(p, match, head.market, head.odds);
       attachCover(existingProno, headM?.cover);
     }
     for (const m of p.markets) {
@@ -414,6 +512,7 @@ export function syncTickets(
           recordedAt: new Date().toISOString(),
           engineVersion: ENGINE_VERSION,
           revision: 1,
+          learningContext: learningContextOf(p, match, m.market, m.bestOdds),
         };
         attachCover(row, m.cover);
         byId.set(id, row);
@@ -435,6 +534,7 @@ export function syncTickets(
         existing.ev = m.ev;
         existing.stakePct = m.stakePct;
         existing.engineVersion = ENGINE_VERSION;
+        existing.learningContext = learningContextOf(p, match, m.market, m.bestOdds);
         attachCover(existing, m.cover);
       }
     }
@@ -460,6 +560,9 @@ export function syncTickets(
   }
   const compact = compactTickets(kept);
   save(compact);
+  void import("./learning-memory")
+    .then((m) => m.persistLearningMemory(compact))
+    .catch(() => undefined);
   return compact;
 }
 
