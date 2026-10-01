@@ -111,7 +111,7 @@ const EVENT_FAMILIES: [RegExp, string][] = [
   [/sanction|suspendu|décision|communiqué|officiel|annonce/i, "official-decision"],
   [/victoire|défaite|score|résultat|retour|remontée/i, "result"],
   [/retraite|retirer|fin de carrière|adieux/i, "retirement"],
-  [/rupture|tension|brouille|conflit|désaccord|polémique/i, "relationship"],
+  [/rupture|tension|brouille|conflit|désaccord|polémique|controverse|débat/i, "relationship"],
   [/portrait|grands moments|carrière|rétrospective|hommage/i, "profile"],
 ];
 
