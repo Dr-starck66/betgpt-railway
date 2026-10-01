@@ -24,21 +24,19 @@ async function deskNow(question: string): Promise<string> {
     if (classifyChatIntent(question) !== "TODAY_PICKS") return base;
 
     try {
-      const engine = runEngine();
-      let pick = selectDailyChatPick(
-        engine.matches,
-        engine.predictions,
-        engine.liveAsOf,
-        engine.liveStale,
-      );
+      let pick = null;
 
-      // The live chat snapshot can be fresher than the engine's persisted disk
-      // snapshot. If the regular engine did not yield a pick, score the exact
-      // fixtures that were just shown to the user with the already-learned
-      // model. This prevents the "I see today's matches but have no pick"
-      // contradiction while keeping the result explicitly non-premium when
-      // bookmaker odds are unavailable.
-      if (!pick && snapshot?.matches?.length) {
+      // For "today" questions, the live snapshot shown to the user is the source
+      // of truth. Score those exact fixtures first so we never answer with a
+      // future match while today's games are visible in the desk.
+      if (snapshot?.matches?.length) {
+        const asOfMs = Date.parse(snapshot.meta?.asOf ?? "");
+        const snapshotStale =
+          Boolean(snapshot.meta?.stale) ||
+          !Number.isFinite(asOfMs) ||
+          Date.now() - asOfMs > 30 * 60_000 ||
+          asOfMs > Date.now() + 60_000;
+
         const livePredictions = snapshot.matches.slice(0, 24).flatMap((match) => {
           try {
             return [predictMatch(match)];
@@ -46,12 +44,7 @@ async function deskNow(question: string): Promise<string> {
             return [];
           }
         });
-        const asOfMs = Date.parse(snapshot.meta?.asOf ?? "");
-        const snapshotStale =
-          Boolean(snapshot.meta?.stale) ||
-          !Number.isFinite(asOfMs) ||
-          Date.now() - asOfMs > 30 * 60_000 ||
-          asOfMs > Date.now() + 60_000;
+
         pick = selectDailyChatPick(
           snapshot.matches,
           livePredictions,
@@ -68,17 +61,14 @@ async function deskNow(question: string): Promise<string> {
         }
       }
 
-      if (!pick && snapshot?.matches?.length) {
-        const asOfMs = Date.parse(snapshot.meta?.asOf ?? "");
-        const snapshotStale =
-          Boolean(snapshot.meta?.stale) ||
-          !Number.isFinite(asOfMs) ||
-          Date.now() - asOfMs > 30 * 60_000 ||
-          asOfMs > Date.now() + 60_000;
-        pick = selectDailyDataFallback(
-          snapshot.matches,
-          snapshot.meta?.asOf,
-          snapshotStale,
+      // Engine fallback only when the current live desk cannot produce anything.
+      if (!pick) {
+        const engine = runEngine();
+        pick = selectDailyChatPick(
+          engine.matches,
+          engine.predictions,
+          engine.liveAsOf,
+          engine.liveStale,
         );
       }
 
@@ -106,7 +96,15 @@ function localReply(last: string, desk: string, mode: PersonalityMode): string {
           ? "Le desk a déjà bossé, donc je ne vais pas te demander les affiches comme un grille-pain sans Wi-Fi. Voilà le pari qui ressort :"
           : "Le desk connaît déjà les matchs disponibles. Voilà le pari qui ressort aujourd’hui :";
       const marker = desk.indexOf("SÉLECTION AUTOMATIQUE BETGPT");
-      const selection = marker >= 0 ? desk.slice(marker) : desk;
+      const selection = (marker >= 0 ? desk.slice(marker) : desk)
+        .split("\n")
+        .filter(
+          (line) =>
+            !line.startsWith("SÉLECTION AUTOMATIQUE BETGPT") &&
+            !line.startsWith("Instruction :"),
+        )
+        .join("\n")
+        .trim();
       return `${opener}\n\n${selection}`;
     }
     if (desk.includes("Aucun match exploitable trouvé dans le cache.")) {
