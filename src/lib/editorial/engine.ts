@@ -868,8 +868,17 @@ function materialize(
   usedImages: Set<string>,
 ): EditorialArticle {
   const scheduled = slotInstant(day, time);
-  const open = scheduled.getTime() <= now.getTime();
-  // Never backdate a first publication: if the scheduler fires late, use the real execution time.
+  const immediateBreakingNews =
+    candidate.articleType === "news" &&
+    candidate.score >= 88 &&
+    Boolean(candidate.news) &&
+    (candidate.news!.official ||
+      candidate.news!.signals.some((signal) =>
+        isMaterialDevelopment(`${signal.title} ${signal.description ?? ""}`),
+      ));
+  const open = immediateBreakingNews || scheduled.getTime() <= now.getTime();
+  // Never backdate a first publication. A high-confidence material development may also open
+  // the next unused slot immediately instead of waiting for the nominal morning/noon/evening time.
   const when = open ? now.toISOString() : scheduled.toISOString();
   const draft = candidate.news
     ? composeNews(candidate.news, pool, slot, day, when, open)
