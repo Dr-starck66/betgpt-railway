@@ -1,7 +1,14 @@
 export type PunchReaction = {
   emojis: string[];
   gifQuery: string;
-  mood: "ANIMAL_CHAOS" | "COSMIC_CHAOS" | "NUCLEAR_CHAOS" | "BETTING_DISASTER" | "ABSURD_SHOCK";
+  mood:
+    | "ANIMAL_CHAOS"
+    | "COSMIC_CHAOS"
+    | "NUCLEAR_CHAOS"
+    | "BETTING_DISASTER"
+    | "SHOPPING_DISASTER"
+    | "DIY_DISASTER"
+    | "ABSURD_SHOCK";
 };
 
 const ANIMALS: Array<[RegExp, string, string]> = [
@@ -22,7 +29,7 @@ function unique<T>(items: T[]): T[] {
 }
 
 export function reactionForPunchline(text: string, context = ""): PunchReaction {
-  const source = `${text} ${context}`;
+  const source = \`\${text} \${context}\`;
   const emojis: string[] = [];
   let mood: PunchReaction["mood"] = "ABSURD_SHOCK";
   const query: string[] = [];
@@ -34,15 +41,27 @@ export function reactionForPunchline(text: string, context = ""): PunchReaction 
     mood = "ANIMAL_CHAOS";
   }
 
+  if (/Dior|Sephora|IKEA|boutique|soldes|carte bleue|code PIN|shopping/i.test(source)) {
+    emojis.push("💳", "🛍️", "💸");
+    query.unshift("shopping spree shocked funny reaction");
+    mood = "SHOPPING_DISASTER";
+  }
+
+  if (/Leroy Merlin|Feu Vert|barbecue|remorque|bricolage|garage/i.test(source)) {
+    emojis.push("🛒", "🔧", "💸");
+    query.unshift("hardware store shopping funny reaction");
+    mood = "DIY_DISASTER";
+  }
+
   if (/nucl[eé]aire|radioactif|centrale|explos|lance-flammes/i.test(source)) {
     emojis.push("☢️", "🔥", "💀");
-    query.push("explosion shocked funny reaction");
+    query.unshift("explosion shocked funny reaction");
     mood = "NUCLEAR_CHAOS";
   }
 
   if (/cosmi|galact|interstell|orbite|Mars|NASA|satellite|fus[eé]e|quantique/i.test(source)) {
     emojis.push("🪐", "🚀", "🤯");
-    query.push("space confused shocked funny reaction");
+    query.unshift("space confused shocked funny reaction");
     if (mood === "ABSURD_SHOCK") mood = "COSMIC_CHAOS";
   }
 
