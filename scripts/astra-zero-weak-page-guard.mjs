@@ -77,7 +77,7 @@ function audit(rel, source, sitemapSource) {
   const headDelegated = headDelegateRx.some((r) => r.test(source));
   const contentDelegated = contentDelegateRx.some((r) => r.test(source));
   const hasHead = /\bhead\s*:/i.test(source);
-  const title = headDelegated || /\\btitle\\s*:/i.test(source) || /[{,]\\s*title\\s*[,}]/i.test(source) || /<title\\b/i.test(source);
+  const title = headDelegated || /\btitle\s*:/i.test(source) || /[{,]\s*title\s*[,}]/i.test(source) || /<title\b/i.test(source);
   const description = headDelegated || /name\s*:\s*["']description["']/i.test(source);
   const canonical = headDelegated || /rel\s*:\s*["']canonical["']/i.test(source);
   const h1 = contentDelegated || /<h1\b/i.test(source);
