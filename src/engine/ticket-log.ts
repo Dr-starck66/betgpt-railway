@@ -56,6 +56,16 @@ export type TicketRow = {
   snapshots?: { at: string; market: string; label: string; odds: number; modelProb: number }[];
 };
 
+export function canonicalChampionRows(rows: TicketRow[]): TicketRow[] {
+  return rows.filter(
+    (row) =>
+      row.engineVersion === ENGINE_VERSION &&
+      row.kind === "prono" &&
+      row.decision === "BET" &&
+      (row.market === "1X2_H" || row.market === "1X2_A"),
+  );
+}
+
 const FILE = "tickets.json";
 let MEM: TicketRow[] | null = null;
 
