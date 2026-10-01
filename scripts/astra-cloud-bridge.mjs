@@ -78,7 +78,12 @@ async function runProbe(target, probe) {
       }
       const response = await requestWithTimeout(url, init, timeoutMs);
       status = response.status;
-      raw = await response.text();
+      raw = await Promise.race([
+        response.text(),
+        new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("response body timeout")), timeoutMs),
+        ),
+      ]);
       const hostHeaders = {
         server: response.headers.get("server"),
         via: response.headers.get("via"),
