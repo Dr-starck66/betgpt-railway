@@ -1,6 +1,6 @@
 import { hubByLeague, SITE_URL, teamPath } from "@/lib/programmatic";
 import { imageFor } from "@/lib/editorial/images";
-import { autoPublishableCluster, clusterSignals, type NewsCluster } from "@/lib/editorial/news-cluster";
+import { autoPublishableCluster, clusterSignals, isMaterialDevelopment, type NewsCluster } from "@/lib/editorial/news-cluster";
 import { discoverChecks, factHash, qualityGate, readinessScore, sourceQualityScore } from "@/lib/editorial/quality";
 import { DEFAULT_TIMES, dayLabel, formatParis, instantParisDate, optimizeTimes, parisDate, slotInstant } from "@/lib/editorial/time";
 import type {
@@ -518,6 +518,25 @@ function matchingContextMatch(cluster: NewsCluster, matches: EditorialMatch[]): 
   return bestScore > 0 ? best : null;
 }
 
+function newsConsequenceLine(text: string, subject: string): string {
+  if (/blessure|blessé|forfait|absent|indisponible|opéré|operation/i.test(text)) {
+    return `Pour ${subject}, les conséquences vérifiables se liront dans le prochain groupe convoqué, le point médical et la feuille de match. Une durée d'absence n'est ajoutée que si une source l'établit.`;
+  }
+  if (/transfert|mercato|accord|signature|prolong|contrat/i.test(text)) {
+    return `Pour ${subject}, la prochaine preuve forte serait un communiqué de club, une signature enregistrée ou un changement contractuel attribuable. Une rumeur, même reprise, ne devient pas un transfert acquis.`;
+  }
+  if (/licenci|limog|entra[iî]neur|coach|nommé|nomination/i.test(text)) {
+    return `Pour ${subject}, la suite concrète se vérifie dans la communication du club, la présence sur le banc et les décisions de staff. BetGPT sépare le changement annoncé des spéculations sur son remplaçant.`;
+  }
+  if (/composition|compo|titulaire|banc|groupe|sélection/i.test(text)) {
+    return `Pour ${subject}, le contrôle suivant porte sur la liste officielle, la feuille de match et les changements de dernière minute. Aucun joueur n'est présenté comme titulaire sans confirmation exploitable.`;
+  }
+  if (/sanction|suspendu|décision|communiqué|officiel|autorisé|autorisation|dément|refus|verdict/i.test(text)) {
+    return `Pour ${subject}, ce nouvel élément modifie l'état du dossier. BetGPT recherche ensuite la décision primaire, ses conditions exactes et son effet sportif plutôt que de recycler l'étape précédente de l'histoire.`;
+  }
+  return `Pour ${subject}, la suite utile dépend d'un fait supplémentaire attribuable : déclaration, décision, résultat, liste officielle ou nouvelle donnée de match. Sans élément nouveau, aucune dépêche supplémentaire n'est créée.`;
+}
+
 function composeNews(
   cluster: NewsCluster,
   matches: EditorialMatch[],
@@ -546,31 +565,30 @@ function composeNews(
   const entities = cluster.entities.length ? cluster.entities : contextMatch ? [contextMatch.home.name, contextMatch.away.name] : [];
   const mainClaim = cleanNewsTitle(leadSignal.title, leadSignal.sourceName);
   const supportSignals = ranked.slice(1, 3);
+  const supportNames = [...new Set(supportSignals.map((signal) => signal.sourceName))];
   const supportLine = supportSignals.length
-    ? supportSignals
-        .map((signal) => `${signal.sourceName} traite également le sujet sous l'angle « ${cleanNewsTitle(signal.title, signal.sourceName)} »`)
-        .join(". ") + "."
-    : `${leadSignal.sourceName} constitue la source principale retenue pour cette alerte.`;
+    ? `${supportNames.join(" et ")} publient également des éléments sur ce même développement. Les formulations qui divergent entre médias ne sont pas fusionnées en un fait unique.`
+    : `${leadSignal.sourceName} est la seule source forte retenue dans ce cluster; l'article n'élargit donc pas la portée du fait au-delà de cette source.`;
   const contextLine = contextMatch
-    ? `${contextMatch.home.name} – ${contextMatch.away.name} est programmé en ${contextMatch.competition}, avec un coup d’envoi indiqué ${formatParis(contextMatch.kickoff)}. Ce rendez-vous donne un contexte immédiat au sujet sans transformer le calendrier en preuve du fait d’actualité.`
-    : `Le sujet n’est pas rattaché automatiquement à un match précis tant qu’aucun lien fiable avec une rencontre du calendrier n’est établi.`;
-  const sourceRule = cluster.official
-    ? `Une source officielle fait partie des références disponibles. Les éléments ci-dessous restent limités à ce qui est effectivement annoncé et aux confirmations publiées.`
-    : `Deux sources journalistiques fortes et distinctes traitent le même développement. Les points qui ne sont pas explicitement confirmés restent présentés comme tels.`;
-  const subject = entities.length ? entities.join(", ") : "le football";
-  const lead = `${mainClaim}. Le développement concerne ${subject} et intervient dans un contexte sportif immédiat. Voici ce qui est confirmé par les sources disponibles, ce que cela peut changer et les prochains éléments à surveiller.`;
+    ? `${contextMatch.home.name} – ${contextMatch.away.name} est programmé en ${contextMatch.competition}, coup d'envoi ${formatParis(contextMatch.kickoff)}. Ce calendrier situe l'enjeu sportif mais ne sert pas de preuve pour l'information rapportée.`
+    : `Aucun match précis du calendrier BetGPT n'est relié automatiquement à cette information. Cette absence de rattachement évite d'inventer une conséquence sportive qui n'est pas encore établie.`;
+  const subject = entities.length ? entities.join(", ") : "le sujet";
+  const material = cluster.signals.some((signal) =>
+    isMaterialDevelopment(`${signal.title} ${signal.description ?? ""}`),
+  );
+  const lead = `${mainClaim}. ${leadSignal.sourceName} a publié cet élément ${formatParis(leadSignal.publishedAt)}${corroborated ? `, avec ${cluster.distinctSources} sources distinctes dans le cluster` : ""}. ${material ? "Il s'agit d'une évolution matérielle du dossier, pas d'une simple répétition." : "Le fait est présenté avec son niveau de corroboration, sans extrapolation."}`;
   const paragraphs = [
     paragraph(
-      "Ce que l’on sait",
-      `${leadSignal.sourceName} rapporte que ${mainClaim.charAt(0).toLowerCase()}${mainClaim.slice(1)}. ${supportLine} ${sourceRule}`,
+      "Le nouvel élément",
+      `À ${formatParis(leadSignal.publishedAt)}, ${leadSignal.sourceName} rapporte le développement résumé dans le titre : ${mainClaim}. ${supportLine} ${cluster.official ? "Une source officielle figure parmi les références collectées." : "Aucune source officielle n'est ajoutée artificiellement si elle n'apparaît pas dans les références collectées."}`,
     ),
     paragraph(
-      "Pourquoi cette information compte",
-      `${contextLine} Lorsqu’il s’agit d’un forfait, d’une composition, d’un transfert, d’une décision officielle ou d’un changement d’entraîneur, l’impact sportif dépend ensuite de la confirmation précise, du calendrier et des choix annoncés par le club, la sélection ou la compétition concernée.`,
+      "Ce que cela change dans le dossier",
+      `${contextLine} ${material ? "Le moteur classe cette information comme un changement d'état — confirmation, autorisation, refus, décision ou autre résolution — et la distingue donc d'une alerte antérieure portant sur les mêmes entités." : "Le moteur conserve ce développement dans le même fil tant qu'il n'apporte pas un changement d'état clairement détectable."}`,
     ),
     paragraph(
-      "Ce qu’il faut surveiller maintenant",
-      `La prochaine étape est une confirmation ou une précision de la source officielle concernée, puis les conséquences visibles sur le groupe, la composition, le calendrier ou la compétition. L’article est mis à jour sur la même URL uniquement lorsqu’un nouvel élément vérifiable est publié.`,
+      "La prochaine vérification utile",
+      newsConsequenceLine(`${cluster.title} ${ranked.map((signal) => signal.description ?? "").join(" ")}`, subject),
     ),
   ];
   const links = contextMatch ? deskLinks(contextMatch, contextMatch.competition) : deskLinks(null, "Football");
@@ -726,7 +744,7 @@ function buildCandidates(
     const ageHours = Math.max(0, (now - publishedMs) / 36e5);
     const strongSources = cluster.signals.filter((signal) => signal.sourceTier === "OFFICIAL" || signal.sourceTier === "TIER1");
     const sourceScore = cluster.official ? 28 : strongSources.length >= 2 ? 22 : 8;
-    const freshness = ageHours <= 3 ? 22 : ageHours <= 8 ? 18 : ageHours <= 18 ? 13 : 8;
+    const freshness = ageHours <= 2 ? 24 : ageHours <= 6 ? 20 : ageHours <= 12 ? 14 : ageHours <= 24 ? 8 : 3;
     const entityText = cluster.entities
       .join(" ")
       .toLowerCase()
@@ -736,7 +754,12 @@ function buildCandidates(
     const entityScore = strongEntity ? 20 : cluster.entities.length ? 12 : 4;
     const corroboration = cluster.distinctSources >= 3 ? 14 : cluster.distinctSources >= 2 ? 10 : cluster.official ? 8 : 0;
     const angle = cluster.newsworthy ? 16 : 0;
-    const score = Math.max(0, Math.min(100, sourceScore + freshness + entityScore + corroboration + angle));
+    const materialBonus = cluster.signals.some((signal) =>
+      isMaterialDevelopment(`${signal.title} ${signal.description ?? ""}`),
+    )
+      ? 8
+      : 0;
+    const score = Math.max(0, Math.min(100, sourceScore + freshness + entityScore + corroboration + angle + materialBonus));
     out.push({
       id: `news-${cluster.id}`,
       match: null,
@@ -758,7 +781,7 @@ export function applyEventOverride<T extends { slot: SlotId; score: number; arti
   const next = [...selected];
   for (const event of breaking) {
     if (event.score < 82) continue;
-    if (event.articleType !== "postmatch" && event.articleType !== "brief") continue;
+    if (event.articleType !== "postmatch" && event.articleType !== "brief" && event.articleType !== "news") continue;
     if (next.some((row) => row.matchId && row.matchId === event.matchId)) continue;
     let weakest = 0;
     for (let i = 1; i < next.length; i += 1) if (next[i]!.score < next[weakest]!.score) weakest = i;
@@ -933,8 +956,14 @@ export function buildEdition(input: EditionInput): EditorialEdition {
     if (picked?.match) usedMatches.add(picked.match.id);
   });
 
+  const selectedCandidateIds = new Set(chosen.map((row) => row.candidate?.id).filter((id): id is string => Boolean(id)));
   const breaking = candidates
-    .filter((candidate) => (candidate.articleType === "postmatch" || candidate.articleType === "brief") && candidate.score >= 82)
+    .filter((candidate) => !selectedCandidateIds.has(candidate.id))
+    .filter((candidate) =>
+      candidate.articleType === "news"
+        ? candidate.score >= 88
+        : (candidate.articleType === "postmatch" || candidate.articleType === "brief") && candidate.score >= 82,
+    )
     .map((candidate) => ({
       slot: "evening" as SlotId,
       score: candidate.score,
@@ -1022,7 +1051,7 @@ export function buildEdition(input: EditionInput): EditorialEdition {
     timeChanges: optimized.changes,
     maxPerDay: 3,
     targetPerDay: 3,
-    publicationPolicy: "THREE_QUALIFIED_ARTICLES",
+    publicationPolicy: "OPPORTUNITY_DRIVEN_MAX_3",
     plannedCount: articles.length,
     targetStatus: articles.length >= 3 ? "MET" : "DEGRADED",
   };
