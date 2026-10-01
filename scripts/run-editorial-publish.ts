@@ -1,3 +1,4 @@
+import { contextualAuthorityGate } from "../src/lib/editorial/authority-citations.ts";
 import { editionFromDesk } from "../src/lib/editorial/run.server.ts";
 import { isPublicArticle } from "../src/lib/editorial/types.ts";
 import { writeLedger } from "../src/lib/editorial/ledger-store.ts";
@@ -6,6 +7,17 @@ import { syncPublishedArticlesToSocial } from "../src/lib/social/run.server.ts";
 const now = new Date();
 const { edition } = await editionFromDesk(now);
 const published = edition.articles.filter(isPublicArticle);
+const authorityFailures = published
+  .map((article) => ({ article, gate: contextualAuthorityGate(article) }))
+  .filter(({ gate }) => !gate.pass);
+
+if (authorityFailures.length) {
+  for (const { article, gate } of authorityFailures) {
+    console.error(`ASTRA_EDITORIAL_AUTHORITY_FAIL ${article.slug}: ${gate.reasons.join(" | ")}`);
+  }
+  process.exit(2);
+}
+
 const persisted = writeLedger(published);
 const social = await syncPublishedArticlesToSocial(published, now);
 
