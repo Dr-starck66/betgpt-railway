@@ -195,6 +195,19 @@ function touchMemory(prev: UserMemory, content: string, mode: PersonalityMode): 
   if ((low.includes("combiné") || low.includes("combine")) && /\b([5-9]|1\d)\b/.test(low)) {
     next.blackBook.combinésDePlus5Matchs += 1;
   }
+  if (/\b(finalement|je change|j'ai changé|j’ai changé|derni[eè]re seconde|derni[eè]re minute)\b/i.test(content)) {
+    next.blackBook.parisModifiésDerniereSeconde += 1;
+  }
+  if (/\b(impossible [àa] perdre|100\s*%|s[uû]r(?:e)? [àa] 100)\b/i.test(content)) {
+    next.blackBook.matchsImpossiblesAPerdre += 1;
+    next.blackBook.niveauDeConfianceInjustifie += 1;
+  }
+  if (/\b(j'ai perdu|j’ai perdu|on a perdu|pari perdu|ticket perdu)\b/i.test(content)) {
+    next.blackBook.matchsEffectivementPerdus += 1;
+  }
+  if (/\b(all[- ]?in|je mets tout|je mise tout|tapis)\b/i.test(content)) {
+    next.blackBook.niveauDeConfianceInjustifie += 1;
+  }
   next.sarcasticIntensity = mode === "ROAST" ? 100 : 40;
   return next;
 }
