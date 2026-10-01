@@ -986,9 +986,10 @@ export function buildEdition(input: EditionInput): EditorialEdition {
   const models = new Map((input.models ?? []).map((model) => [model.matchId, model]));
   const pool = input.matches.filter((match) => inWindow(match, now.getTime(), day));
   const candidates = buildCandidates(pool, input.signals ?? [], now.getTime(), day, models);
-  const frozenToday = (input.frozen ?? [])
-    .filter((article) => article.parisDate === day && isPublicArticle(article))
+  const frozenPublic = (input.frozen ?? [])
+    .filter(isPublicArticle)
     .filter((article) => !isCorruptedFrozenNews(article));
+  const frozenToday = frozenPublic.filter((article) => article.parisDate === day);
   const locked = new Set(frozenToday.map((article) => article.slot));
   const usedMatches = new Set(frozenToday.map((article) => article.matchId).filter((id): id is string => Boolean(id)));
   const usedCandidateIds = new Set<string>();
@@ -1087,14 +1088,14 @@ export function buildEdition(input: EditionInput): EditorialEdition {
   const fresh = chosen.flatMap((row) => (row.article ? [row.article] : []));
 
   const refreshed = frozenToday.map((article) => refreshFrozen(article, pool, models, usedImages, now));
-  let articles = wireRelated([...refreshed, ...fresh]);
-  const filled = new Set(articles.map((article) => article.slot));
+  const archivedFrozen = frozenPublic.filter((article) => article.parisDate !== day);
+  // Published URLs are immutable inventory. The three-slot policy caps new daily
+  // generation; it must never evict an already-published article from the corpus.
+  const articles = wireRelated([...refreshed, ...fresh, ...archivedFrozen]);
+  const filled = new Set(
+    articles.filter((article) => article.parisDate === day).map((article) => article.slot),
+  );
   const skippedClean = skipped.filter((row) => !filled.has(row.slot));
-  const publicCount = articles.filter(isPublicArticle).length;
-  if (publicCount > 3) {
-    const keep = new Set(articles.filter(isPublicArticle).slice(0, 3).map((article) => article.id));
-    articles = articles.filter((article) => !isPublicArticle(article) || keep.has(article.id));
-  }
 
   const slots = (["morning", "noon", "evening"] as SlotId[]).map((slot) => {
     const opens = slotInstant(day, times[slot]);
@@ -1103,7 +1104,8 @@ export function buildEdition(input: EditionInput): EditorialEdition {
       time: times[slot],
       jobId: `ed-${day}-${slot}`,
       opensAt: opens.toISOString(),
-      article: articles.find((article) => article.slot === slot) ?? null,
+      article:
+        articles.find((article) => article.parisDate === day && article.slot === slot) ?? null,
       skipped: skippedClean.find((row) => row.slot === slot) ?? null,
     };
   });
@@ -1141,8 +1143,8 @@ export function buildEdition(input: EditionInput): EditorialEdition {
     maxPerDay: 3,
     targetPerDay: 3,
     publicationPolicy: "OPPORTUNITY_DRIVEN_MAX_3",
-    plannedCount: articles.length,
-    targetStatus: articles.length >= 3 ? "MET" : "DEGRADED",
+    plannedCount: slots.filter((slot) => slot.article).length,
+    targetStatus: slots.filter((slot) => slot.article).length >= 3 ? "MET" : "DEGRADED",
   };
 }
 
