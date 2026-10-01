@@ -33,8 +33,10 @@ jobs:
           data=json.load(open(sys.argv[1],encoding="utf-8"))
           text=str(data.get("text",""))
           bad=("donne-moi les affiches","donne moi les affiches","donnez-moi les affiches","donnez moi les affiches")
+          internal=("SÉLECTION AUTOMATIQUE BETGPT","Instruction :")
           assert text.strip(), "empty chat response"
           assert not any(x in text.lower().replace("’","'") for x in bad), text
+          assert not any(x in text for x in internal), text
           for required in ("Niveau :", "Pari à prendre :", "Cote disponible :"):
               assert required in text, f"missing {required}: {text}"
           print("CHAT_GATE_PASS")
