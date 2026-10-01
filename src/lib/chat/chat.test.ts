@@ -558,9 +558,10 @@ it("viral share engine creates a reusable roast challenge URL", () => {
     "https://betgpt.live",
     "La France va perdre vingt à zéro son prochain match",
   );
-  assert.match(url, /^https:\/\/betgpt\.live\/chat\?/);
-  assert.match(url, /roast=1/);
-  assert.match(decodeURIComponent(url), /France va perdre vingt à zéro/i);
+  const parsed = new URL(url);
+  assert.equal(parsed.origin + parsed.pathname, "https://betgpt.live/chat");
+  assert.equal(parsed.searchParams.get("roast"), "1");
+  assert.match(parsed.searchParams.get("q") ?? "", /France va perdre vingt à zéro/i);
 });
 
 it("viral share engine creates social-native X and Facebook URLs", () => {
