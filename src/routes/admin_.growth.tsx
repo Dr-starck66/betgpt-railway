@@ -56,6 +56,41 @@ function GrowthAdmin() {
       </section>
 
       <section className="surface-card p-5">
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-link">ASTRA SEARCH TRUTH Ω</p>
+        <h2 className="mt-1 text-lg font-semibold">Acquisition organique mesurée</h2>
+        <p className="mt-2 text-sm text-mist">
+          arrivées moteurs {data.searchTruth.measured.organicLandings} · période précédente {data.searchTruth.measured.previousOrganicLandings} · croissance {pct(data.searchTruth.measured.organicGrowth)}
+        </p>
+        <div className="mt-4 grid gap-4 lg:grid-cols-2">
+          <div>
+            <h3 className="text-sm font-semibold text-paper">Moteurs référents</h3>
+            <ul className="mt-2 space-y-1 text-sm text-mist">
+              {data.searchTruth.measured.bySource.map((row) => (
+                <li key={row.source} className="flex justify-between gap-3">
+                  <span>{row.source}</span><span className="tabular text-paper">{row.n}</span>
+                </li>
+              ))}
+              {!data.searchTruth.measured.bySource.length ? <li>Aucune arrivée organique mesurée sur cette fenêtre.</li> : null}
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold text-paper">Landing pages organiques</h3>
+            <ul className="mt-2 space-y-1 text-sm text-mist">
+              {data.searchTruth.measured.topLandingPages.slice(0, 10).map((row) => (
+                <li key={row.route} className="flex justify-between gap-3">
+                  <code>{row.route}</code><span className="tabular text-paper">{row.n}</span>
+                </li>
+              ))}
+              {!data.searchTruth.measured.topLandingPages.length ? <li>Aucune landing organique mesurée sur cette fenêtre.</li> : null}
+            </ul>
+          </div>
+        </div>
+        <p className="mt-4 text-xs text-muted">
+          Requêtes Google, impressions SERP, CTR SERP et position moyenne : UNAVAILABLE tant que Search Console n’est pas connecté. Aucun chiffre n’est estimé.
+        </p>
+      </section>
+
+      <section className="surface-card p-5">
         <h2 className="text-lg font-semibold">3 actions prioritaires</h2>
         {data.actions.length ? (
           <ol className="mt-3 space-y-3">
