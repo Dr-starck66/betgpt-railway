@@ -160,6 +160,7 @@ async function runProbe(target, probe) {
         vercelId: response.headers.get("x-vercel-id"),
         netlifyRequestId: response.headers.get("x-nf-request-id"),
         cache: response.headers.get("x-cache") || response.headers.get("cf-cache-status"),
+        astraPublicRevision: response.headers.get("x-astra-public-revision"),
       };
 
       if (!expectedStatuses.includes(status)) {
@@ -260,7 +261,7 @@ const summary = [
     `- DNS cloud: ${target.dns.pass ? "PASS" : "FAIL"} · A=${target.dns.a.join(",") || "—"} · AAAA=${target.dns.aaaa.join(",") || "—"} · CNAME=${target.dns.cname.join(",") || "—"} · NS=${target.dns.ns.join(",") || "—"} · ${target.dns.latencyMs}ms`,
     ...target.probes.map(
       (probe) =>
-        `- ${probe.pass ? "PASS" : "FAIL"} · ${probe.method} ${new URL(probe.url).pathname} · HTTP ${probe.status || "ERR"} · ${probe.latencyMs}ms · server=${probe.headers.server || "—"} · via=${probe.headers.via || "—"} · railway=${probe.headers.railwayRequestId || "—"} · vercel=${probe.headers.vercelId || "—"} · netlify=${probe.headers.netlifyRequestId || "—"}${probe.failures.length ? ` · ${probe.failures.join("; ")}` : ""}`,
+        `- ${probe.pass ? "PASS" : "FAIL"} · ${probe.method} ${new URL(probe.url).pathname} · HTTP ${probe.status || "ERR"} · ${probe.latencyMs}ms · server=${probe.headers.server || "—"} · via=${probe.headers.via || "—"} · railway=${probe.headers.railwayRequestId || "—"} · vercel=${probe.headers.vercelId || "—"} · netlify=${probe.headers.netlifyRequestId || "—"} · revision=${probe.headers.astraPublicRevision || "—"}${probe.failures.length ? ` · ${probe.failures.join("; ")}` : ""}`,
     ),
     "",
   ]),
