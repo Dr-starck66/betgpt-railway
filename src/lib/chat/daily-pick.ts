@@ -1,5 +1,7 @@
 import type { MatchInput, MarketQuote, PredictionRecord } from "../../engine/types.ts";
 import { BETCLIC_LEAGUE, NETBET_LEAGUE, UNIBET_LEAGUE } from "../../engine/book-pages.ts";
+import { hasAffiliateTag } from "../../engine/aff-tag.ts";
+import { trackedPublicUrl } from "../track.ts";
 
 export type ChatDailyPick = {
   matchId: string;
@@ -67,32 +69,6 @@ function modelFallbackScore(q: MarketQuote): number {
   );
 }
 
-function affiliateUrlFor(book?: string): string | undefined {
-  const cleanBook = String(book ?? "").trim();
-  if (!cleanBook) return undefined;
-
-  const envKey = `BETGPT_AFFILIATE_${cleanBook
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toUpperCase()
-    .replace(/[^A-Z0-9]+/g, "_")
-    .replace(/^_+|_+$/g, "")}_URL`;
-  const direct = process.env[envKey]?.trim();
-  if (direct) return direct;
-
-  const raw = process.env.BETGPT_AFFILIATE_LINKS_JSON?.trim();
-  if (!raw) return undefined;
-  try {
-    const map = JSON.parse(raw) as Record<string, unknown>;
-    const exact = Object.entries(map).find(
-      ([key, value]) => key.trim().toLowerCase() === cleanBook.toLowerCase() && typeof value === "string",
-    )?.[1];
-    return typeof exact === "string" && exact.trim() ? exact.trim() : undefined;
-  } catch {
-    return undefined;
-  }
-}
-
 function bookmakerFallbackUrl(book?: string, league?: MatchInput["league"]): string | undefined {
   const n = String(book ?? "").trim().toLowerCase();
   if (!n) return undefined;
@@ -111,12 +87,19 @@ function betLinkFor(
   book?: string,
   quoteUrl?: string,
   league?: MatchInput["league"],
+  matchId?: string,
 ): { url?: string; affiliate: boolean } {
-  const affiliateUrl = affiliateUrlFor(book);
-  if (affiliateUrl) return { url: affiliateUrl, affiliate: true };
+  const cleanBook = String(book ?? "").trim();
+  if (!cleanBook) return { affiliate: false };
   const cleanQuoteUrl = String(quoteUrl ?? "").trim();
-  if (/^https:\/\//i.test(cleanQuoteUrl)) return { url: cleanQuoteUrl, affiliate: false };
-  return { url: bookmakerFallbackUrl(book, league), affiliate: false };
+  const target = /^https:\/\//i.test(cleanQuoteUrl)
+    ? cleanQuoteUrl
+    : bookmakerFallbackUrl(cleanBook, league);
+  if (!target) return { affiliate: hasAffiliateTag(cleanBook) };
+  return {
+    url: trackedPublicUrl(cleanBook, target, matchId),
+    affiliate: hasAffiliateTag(cleanBook),
+  };
 }
 
 export function selectDailyChatPick(
@@ -175,7 +158,7 @@ export function selectDailyChatPick(
           : "STANDARD"
         : "STANDARD_FALLBACK";
 
-    const betLink = betLinkFor(quote.bestBook, quote.bestBookUrl, match.league);
+    const betLink = betLinkFor(quote.bestBook, quote.bestBookUrl, match.league, match.id);
 
     return {
       matchId: match.id,
@@ -225,7 +208,7 @@ export function selectDailyChatPick(
   if (!modelBest) return null;
 
   const { match, quote } = modelBest;
-  const betLink = betLinkFor(quote.bestBook, quote.bestBookUrl, match.league);
+  const betLink = betLinkFor(quote.bestBook, quote.bestBookUrl, match.league, match.id);
   return {
     matchId: match.id,
     home: match.home.name,
