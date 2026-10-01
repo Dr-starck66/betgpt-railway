@@ -18,7 +18,7 @@ export const Route = createFileRoute("/ledger")({
       {
         name: "description",
         content:
-          "Bilan du champion canonique ROI5 BetGPT : résultats réels des BET, replay chronologique, validation et historique transparent.",
+          "Bilan transparent des pronostics BetGPT : paris publiés, gagnants et perdants, simulations historiques et détail match par match.",
       },
       { name: "robots", content: "index, follow" },
       { property: "og:title", content: "Bilan des pronostics BetGPT" },
@@ -225,36 +225,36 @@ function LedgerPage() {
 
       {ev ? (
         <section className="section-card p-5 sm:p-6">
-          <h2 className="font-display text-xl">Résultats réels du champion canonique</h2>
+          <h2 className="font-display text-xl">Résultats des pronostics réellement publiés</h2>
           <p className="mt-1 text-sm text-mist">
-            Le calcul ne retient ici que les BET 1-N-2 domicile/extérieur produits par la version
-            canonique ROI5 et enregistrés avant le coup d’envoi. WATCH, NO_BET et anciennes
-            versions restent hors du ROI du champion. {ev.sampleLabel}.
+            Ici, on compte seulement les paris 1-N-2 que BetGPT a réellement publiés avant le coup
+            d’envoi. Les simples idées à surveiller, les matchs écartés et les anciennes versions
+            ne gonflent pas le bilan. {ev.sampleLabel}.
           </p>
           <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <Kpi label="Publiés" value={String(ev.published)} />
-            <Kpi label="Avant coup d'envoi" value={String(ev.beforeKickoff)} />
-            <Kpi label="Tranchés (éligibles)" value={String(ev.settled)} />
+            <Kpi label="Paris publiés" value={String(ev.published)} />
+            <Kpi label="Publiés avant le match" value={String(ev.beforeKickoff)} />
+            <Kpi label="Paris terminés" value={String(ev.settled)} />
             <Kpi
-              label="ROI théorique (1 u)"
+              label="Rendement simulé"
               value={ev.roi == null ? "Non vérifié" : fmtSignedPct(ev.roi)}
             />
           </div>
           <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
             <Kpi
-              label="Taux de hits"
+              label="Taux de réussite"
               value={ev.winRate == null ? "Non vérifié" : `${Math.round(ev.winRate * 100)} %`}
             />
             <Kpi
-              label="Brier"
+              label="Erreur des probabilités"
               value={ev.brier == null ? "Non vérifié" : ev.brier.toFixed(3)}
             />
-            <Kpi label="Pertes conservées" value={String(ev.losses)} />
-            <Kpi label="Après coup d'envoi (exclus)" value={String(ev.afterKickoff)} />
+            <Kpi label="Paris perdants" value={String(ev.losses)} />
+            <Kpi label="Publiés trop tard · exclus" value={String(ev.afterKickoff)} />
           </div>
           <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
             <Kpi
-              label="Attendu vs observé"
+              label="Victoires prévues / réelles"
               value={
                 ev.settled && ev.expectedHits != null
                   ? `${ev.expectedHits.toFixed(1)} → ${ev.observedHits}`
@@ -262,20 +262,20 @@ function LedgerPage() {
               }
             />
             <Kpi
-              label="CLV"
+              label="Écart vs cote finale"
               value={ev.clv == null ? "Indisponible" : fmtSignedPct(ev.clv)}
             />
             <Kpi
-              label="Drawdown max"
+              label="Plus forte baisse"
               value={ev.maxDrawdown == null ? "Non vérifié" : ev.maxDrawdown.toFixed(2)}
             />
-            <Kpi label="Série + / −" value={`${ev.longestWin} / ${ev.longestLose}`} />
+            <Kpi label="Plus longue série G / P" value={`${ev.longestWin} / ${ev.longestLose}`} />
           </div>
           <p className="mt-3 text-xs text-muted">
-            ROI = (unités rentrées − unités mises) / unités mises, 1 unité par BET canonique éligible.
-            WATCH et NO_BET ne comptent jamais comme mises. Ce calcul ne mesure pas des mises réellement exécutées.
-            Le filet (score exact, 50 % de la mise) est une simulation séparée, pas le registre.
-            {ev.unavailable.length ? ` Indisponible : ${ev.unavailable.join(", ")}.` : ""}
+            Le rendement est calculé comme si chaque pari retenu valait 1 unité. Aucun argent réel
+            n’est supposé avoir été misé. Les matchs seulement surveillés ou écartés ne sont pas
+            comptés. L’erreur des probabilités est un score technique : plus il est bas, mieux c’est.
+            {ev.unavailable.length ? ` Données indisponibles : ${ev.unavailable.join(", ")}.` : ""}
           </p>
           {ev.calibration.some((b) => b.n > 0) ? (
             <div className="mt-4 overflow-x-auto">
@@ -283,9 +283,9 @@ function LedgerPage() {
                 <thead className="text-left text-[11px] font-semibold uppercase tracking-wider text-muted">
                   <tr className="border-b border-line">
                     <th className="py-2 pr-3 font-medium">Prob. annoncée</th>
-                    <th className="py-2 pr-3 font-medium">n</th>
-                    <th className="py-2 pr-3 font-medium">Observé</th>
-                    <th className="py-2 pr-3 font-medium">Échantillon</th>
+                    <th className="py-2 pr-3 font-medium">Matchs</th>
+                    <th className="py-2 pr-3 font-medium">Réussite réelle</th>
+                    <th className="py-2 pr-3 font-medium">Volume de données</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -313,11 +313,11 @@ function LedgerPage() {
                 <thead className="text-left text-[11px] font-semibold uppercase tracking-wider text-muted">
                   <tr className="border-b border-line">
                     <th className="py-2 pr-3 font-medium">Moteur</th>
-                    <th className="py-2 pr-3 font-medium">n</th>
-                    <th className="py-2 pr-3 font-medium">Brier</th>
-                    <th className="py-2 pr-3 font-medium">ROI</th>
-                    <th className="py-2 pr-3 font-medium">Hits</th>
-                    <th className="py-2 pr-3 font-medium">Échantillon</th>
+                    <th className="py-2 pr-3 font-medium">Matchs</th>
+                    <th className="py-2 pr-3 font-medium">Erreur probas</th>
+                    <th className="py-2 pr-3 font-medium">Rendement simulé</th>
+                    <th className="py-2 pr-3 font-medium">Réussite</th>
+                    <th className="py-2 pr-3 font-medium">Volume de données</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -351,19 +351,19 @@ function LedgerPage() {
       {r.clNight ? <CupNight night={r.clNight} /> : null}
 
       <section className="section-card border-sage/40 p-5 sm:p-6">
-        <h2 className="font-display text-xl">Bilan réel du champion · 100 € par BET</h2>
+        <h2 className="font-display text-xl">Et si on avait misé 100 € sur chaque pari publié ?</h2>
         <p className="mt-1 text-sm text-mist">
-          100 € simulés uniquement sur les BET du champion canonique. Le filet reste une couverture
-          séparée et ne transforme jamais un WATCH ou un NO_BET en mise.
+          Cette simulation applique 100 € à chaque pari réellement retenu par BetGPT. Les matchs
+          simplement surveillés ou écartés ne sont pas ajoutés artificiellement au bilan.
         </p>
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Kpi label="Matchs" value={String(r.sim.n)} />
-          <Kpi label="Pronos 100 €" value={`${fmtEur(r.sim.mainStaked)} → ${fmtEur(r.sim.mainReturned)}`} />
+          <Kpi label="Paris simulés" value={String(r.sim.n)} />
+          <Kpi label="100 € par pari" value={`${fmtEur(r.sim.mainStaked)} → ${fmtEur(r.sim.mainReturned)}`} />
           <Kpi
-            label={`Filets · ${r.sim.covered} fois`}
+            label={`Filets score exact · ${r.sim.covered}`}
             value={`${fmtEur(r.sim.coverStaked)} → ${fmtEur(r.sim.coverReturned)}`}
           />
-          <Kpi label="Bilan total" value={fmtEur(r.sim.profit, true)} />
+          <Kpi label="Bilan simulé" value={fmtEur(r.sim.profit, true)} />
         </div>
         {r.sim.n ? (
           <p className="mt-3 text-sm text-paper">
@@ -382,10 +382,11 @@ function LedgerPage() {
 
       {data.archive ? (
         <section className="section-card border-sage/40 p-5 sm:p-6">
-          <h2 className="font-display text-xl">Replay chronologique du champion canonique</h2>
+          <h2 className="font-display text-xl">Test historique sur les anciennes saisons</h2>
           <p className="mt-1 text-sm text-mist">
-            {data.archive.n} sélections du replay canonique ({data.archive.years}). Ce benchmark
-            chronologique est distinct des résultats réels publiés et ne garantit aucun rendement futur.
+            La méthode actuelle a été rejouée dans l’ordre sur {data.archive.n} anciens matchs
+            ({data.archive.years}). Ce test est séparé des pronostics réellement publiés et ne garantit
+            aucun résultat futur.
           </p>
           <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
             <Kpi label="Pronos justes" value={`${Math.round(data.archive.acc * 100)} %`} />
@@ -427,17 +428,18 @@ function LedgerPage() {
           ) : null}
         </section>
       ) : (
-        <p className="text-sm text-mist">Replay canonique indisponible.</p>
+        <p className="text-sm text-mist">Test historique indisponible.</p>
       )}
 
       <section className="section-card p-5 sm:p-6">
-        <h2 className="font-display text-xl">Comparaison sur les archives</h2>
+        <h2 className="font-display text-xl">Quelle méthode prédit le mieux ?</h2>
         <p className="mt-2 text-sm text-mist">
-          Testé sur {engineN} matchs d'archive. Plus l'erreur est basse, mieux c'est.
+          Comparaison sur {engineN} anciens matchs. Plus le score d’erreur est bas, mieux les
+          probabilités annoncées correspondent aux résultats.
         </p>
         {engineReady && best ? (
           <p className="mt-3 text-paper">
-            Meilleur moteur : {MODEL_LABEL[best.name] ?? best.name}. Erreur {best.brier.toFixed(3)}.
+            Meilleure méthode sur ce test : {MODEL_LABEL[best.name] ?? best.name}. Score d’erreur {best.brier.toFixed(3)}.
           </p>
         ) : (
           <p className="mt-3 text-paper">Non vérifié · échantillon insuffisant pour désigner un moteur.</p>
@@ -449,17 +451,18 @@ function LedgerPage() {
         </p>
         {base && tac ? (
           <p className="mt-1 text-xs text-muted">
-            Erreur chiffres {base.brier.toFixed(3)} · avec lecture du match {tac.brier.toFixed(3)}
-            {r.clv ? ` · CLV ticket ${fmtSignedPct(r.clv)}` : ""}
+            Chiffres seuls : erreur {base.brier.toFixed(3)} · avec lecture du match : {tac.brier.toFixed(3)}
+            {r.clv ? ` · écart vs cote finale ${fmtSignedPct(r.clv)}` : ""}
           </p>
         ) : null}
       </section>
 
       <section className="section-card p-5 sm:p-6">
-        <h2 className="font-display text-xl">Le desk apprend</h2>
+        <h2 className="font-display text-xl">Ce que BetGPT corrige après ses erreurs</h2>
         <p className="mt-1 text-sm text-mist">
-          Recalage des probabilités et règles tirées des résultats enregistrés.
-          Leur utilité doit être évaluée sur des matchs ultérieurs, sans réécrire l'historique.
+          Les probabilités et certaines règles sont ajustées à partir des résultats enregistrés.
+          Une correction n’est considérée utile que si elle améliore ensuite les nouveaux matchs,
+          sans modifier les anciens résultats.
         </p>
         {data.errorLearn ? (
           <>
