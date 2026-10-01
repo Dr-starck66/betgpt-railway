@@ -55,4 +55,4 @@ jobs:
         shell: bash
         run: |
           test -f artifacts/astra-cloud-bridge-evidence.json
-          node -e 'const fs=require("fs");const e=JSON.parse(fs.readFileSync("artifacts/astra-cloud-bridge-evidence.json","utf8"));console.log("ASTRA FINAL",e.status,e.selectedTarget);if(e.status==="FAIL")process.exit(1)'
+          node -e 'const fs=require("fs");const e=JSON.parse(fs.readFileSync("artifacts/astra-cloud-bridge-evidence.json","utf8"));console.log("ASTRA FINAL",e.status,e.selectedTarget);if(e.status!=="PASS")process.exit(1)'
