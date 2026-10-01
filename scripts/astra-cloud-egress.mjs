@@ -78,6 +78,223 @@ function getPath(value, dotted) {
     .reduce((acc, key) => (acc == null ? undefined : acc[key]), value);
 }
 
+
+function htmlDecode(value = "") {
+  return String(value)
+    .replaceAll("&amp;", "&")
+    .replaceAll("&quot;", '"')
+    .replaceAll("&#39;", "'")
+    .replaceAll("&lt;", "<")
+    .replaceAll("&gt;", ">")
+    .trim();
+}
+
+function htmlTags(html, name) {
+  return [...String(html).matchAll(new RegExp(`<${name}\\b[^>]*>`, "gi"))].map((match) => match[0]);
+}
+
+function htmlAttr(tag, name) {
+  const match = String(tag).match(new RegExp(`\\b${name}\\s*=\\s*["']([^"']*)["']`, "i"));
+  return match ? htmlDecode(match[1]) : "";
+}
+
+function metaContent(html, key, value) {
+  for (const tag of htmlTags(html, "meta")) {
+    if (htmlAttr(tag, key).toLowerCase() === String(value).toLowerCase()) return htmlAttr(tag, "content");
+  }
+  return "";
+}
+
+function linkHref(html, rel) {
+  for (const tag of htmlTags(html, "link")) {
+    const rels = htmlAttr(tag, "rel").toLowerCase().split(/\s+/).filter(Boolean);
+    if (rels.includes(String(rel).toLowerCase())) return htmlAttr(tag, "href");
+  }
+  return "";
+}
+
+function htmlTitle(html) {
+  return htmlDecode(String(html).match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] ?? "")
+    .replace(/<[^>]+>/g, "")
+    .trim();
+}
+
+function jsonLdTypes(html) {
+  const out = new Set();
+  for (const match of String(html).matchAll(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
+    try {
+      const root = JSON.parse(match[1]);
+      const walk = (value) => {
+        if (!value || typeof value !== "object") return;
+        if (Array.isArray(value)) {
+          for (const item of value) walk(item);
+          return;
+        }
+        const type = value["@type"];
+        if (typeof type === "string") out.add(type);
+        else if (Array.isArray(type)) {
+          for (const item of type) if (typeof item === "string") out.add(item);
+        }
+        if (Array.isArray(value["@graph"])) {
+          for (const item of value["@graph"]) walk(item);
+        }
+      };
+      walk(root);
+    } catch {
+      // Invalid JSON-LD is reported indirectly through missing required types.
+    }
+  }
+  return out;
+}
+
+function xmlLocs(xml) {
+  return [...String(xml).matchAll(/<loc>([^<]+)<\/loc>/gi)].map((match) => htmlDecode(match[1]));
+}
+
+function normalizedUrlPath(value) {
+  try {
+    const pathname = new URL(value).pathname;
+    return decodeURIComponent(pathname).replace(/\/+$/, "") || "/";
+  } catch {
+    return "";
+  }
+}
+
+async function inspectSerpPage(target, absoluteUrl, kind) {
+  const timeoutMs = Number(config.defaults?.timeoutMs ?? 25000);
+  const response = await fetchWithTimeout(
+    absoluteUrl,
+    {
+      headers: {
+        "user-agent": "ASTRA-SERP-DOMINATOR/1.0",
+        accept: "text/html,application/xhtml+xml,*/*",
+        "cache-control": "no-cache",
+      },
+    },
+    timeoutMs,
+  );
+  const html = await response.text();
+  const failures = [];
+  const title = htmlTitle(html);
+  const description = metaContent(html, "name", "description");
+  const robots = metaContent(html, "name", "robots").toLowerCase();
+  const canonical = linkHref(html, "canonical");
+  const h1Count = (html.match(/<h1\b/gi) ?? []).length;
+  const requestedPath = normalizedUrlPath(absoluteUrl);
+  const canonicalPath = canonical ? normalizedUrlPath(new URL(canonical, target.url).toString()) : "";
+  const types = jsonLdTypes(html);
+  const minDescription = Number(config.serp?.metaDescriptionMin ?? 40);
+
+  if (response.status !== 200) failures.push(`HTTP ${response.status}`);
+  if (!title) failures.push("title absent");
+  if (description.length < minDescription) failures.push(`meta description ${description.length}<${minDescription}`);
+  if (h1Count !== 1) failures.push(`H1=${h1Count}`);
+  if (/noindex/.test(robots)) failures.push("noindex");
+  if (!canonical || canonicalPath !== requestedPath) failures.push(`canonical ${canonical || "absente"}`);
+
+  if (kind === "article") {
+    if (![...types].some((type) => ["Article", "NewsArticle", "BlogPosting"].includes(type))) {
+      failures.push("Article JSON-LD absent");
+    }
+    if (!types.has("BreadcrumbList")) failures.push("BreadcrumbList absent");
+    const image = metaContent(html, "property", "og:image");
+    const width = Number(metaContent(html, "property", "og:image:width") || 0);
+    const minWidth = Number(config.serp?.articleMinImageWidth ?? 1200);
+    if (!image) failures.push("og:image absent");
+    if (width < minWidth) failures.push(`og:image width ${width || "inconnue"}<${minWidth}`);
+    if (!/max-image-preview:large/.test(robots)) failures.push("max-image-preview:large absent");
+  }
+
+  if (kind === "match") {
+    if (!types.has("SportsEvent")) failures.push("SportsEvent absent");
+    if (![...types].some((type) => ["NewsArticle", "LiveBlogPosting"].includes(type))) {
+      failures.push("Article match absent");
+    }
+    if (!types.has("BreadcrumbList")) failures.push("BreadcrumbList absent");
+  }
+
+  if (kind === "prediction") {
+    if (!types.has("WebPage")) failures.push("WebPage JSON-LD absent");
+    if (!types.has("SportsEvent")) failures.push("SportsEvent JSON-LD absent");
+    if (!types.has("BreadcrumbList")) failures.push("BreadcrumbList absent");
+  }
+
+  return {
+    kind,
+    url: absoluteUrl,
+    status: response.status,
+    pass: failures.length === 0,
+    failures,
+    title,
+    descriptionLength: description.length,
+    robots,
+    canonical,
+    h1Count,
+    schemaTypes: [...types].sort(),
+  };
+}
+
+async function runSerpAudit(target) {
+  if (!config.serp?.enabled) return null;
+  const timeoutMs = Number(config.defaults?.timeoutMs ?? 25000);
+  const getXml = async (pathname) => {
+    const url = new URL(pathname, target.url).toString();
+    const response = await fetchWithTimeout(
+      url,
+      { headers: { "user-agent": "ASTRA-SERP-DOMINATOR/1.0", accept: "application/xml,text/xml,*/*" } },
+      timeoutMs,
+    );
+    return { url, status: response.status, text: await response.text() };
+  };
+
+  const [sitemap, newsSitemap] = await Promise.all([
+    getXml(config.serp.sitemapPath || "/sitemap.xml"),
+    getXml(config.serp.newsSitemapPath || "/news-sitemap.xml"),
+  ]);
+  const sitemapLocs = xmlLocs(sitemap.text);
+  const newsLocs = xmlLocs(newsSitemap.text);
+  const failures = [];
+  if (sitemap.status !== 200 || !sitemapLocs.length) failures.push("sitemap vide/FAIL");
+  if (newsSitemap.status !== 200 || !newsLocs.length) failures.push("news sitemap vide/FAIL");
+
+  const targets = (config.serp.staticPages ?? []).map((pathname) => ({
+    kind: "page",
+    url: new URL(pathname, target.url).toString(),
+  }));
+  const matchUrl = sitemapLocs.find((url) => normalizedUrlPath(url).startsWith("/match/"));
+  const predictionUrl = sitemapLocs.find((url) => normalizedUrlPath(url).startsWith("/prediction/"));
+  const articleUrl = newsLocs.find((url) => normalizedUrlPath(url).startsWith("/actualites/"));
+
+  if (matchUrl) targets.push({ kind: "match", url: new URL(normalizedUrlPath(matchUrl), target.url).toString() });
+  else failures.push("aucune fiche match dans sitemap");
+  if (predictionUrl) targets.push({ kind: "prediction", url: new URL(normalizedUrlPath(predictionUrl), target.url).toString() });
+  else failures.push("aucune preuve prediction dans sitemap");
+  if (articleUrl) targets.push({ kind: "article", url: new URL(normalizedUrlPath(articleUrl), target.url).toString() });
+  else failures.push("aucun article recent /actualites/ dans news sitemap");
+
+  const pages = [];
+  for (const item of targets) {
+    try {
+      const page = await inspectSerpPage(target, item.url, item.kind);
+      pages.push(page);
+      for (const failure of page.failures) failures.push(`${normalizedUrlPath(page.url)}: ${failure}`);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      pages.push({ kind: item.kind, url: item.url, status: 0, pass: false, failures: [message] });
+      failures.push(`${normalizedUrlPath(item.url)}: ${message}`);
+    }
+  }
+
+  return {
+    schema: "astra-serp-dominator/evidence-v1",
+    pass: failures.length === 0,
+    sitemap: { status: sitemap.status, urlCount: sitemapLocs.length },
+    newsSitemap: { status: newsSitemap.status, urlCount: newsLocs.length },
+    pages,
+    failures,
+  };
+}
+
 async function cloudDns(hostname) {
   const started = performance.now();
   const result = { hostname, a: [], aaaa: [], cname: [], ns: [], pass: false, latencyMs: 0, errors: [] };
@@ -208,6 +425,7 @@ async function runTarget(target) {
   const dnsEvidence = await cloudDns(parsed.hostname);
   const probes = [];
   for (const probe of config.probes) probes.push(await runProbe(target, probe));
+  const serp = await runSerpAudit(target);
   return {
     id: target.id,
     provider: target.provider || "unknown",
@@ -215,8 +433,9 @@ async function runTarget(target) {
     priority: Number(target.priority ?? 100),
     fallback: Boolean(target.fallback),
     dns: dnsEvidence,
-    pass: dnsEvidence.pass && probes.every((probe) => probe.pass),
+    pass: dnsEvidence.pass && probes.every((probe) => probe.pass) && (!serp || serp.pass),
     probes,
+    serp,
   };
 }
 
@@ -233,7 +452,7 @@ const selected = primary ?? fallback ?? null;
 const status = selected ? (selected.fallback ? "PARTIAL" : "PASS") : "FAIL";
 
 const evidence = {
-  schema: "astra-cloud-egress/evidence-v2",
+  schema: "astra-cloud-egress/evidence-v3",
   generatedAt: new Date().toISOString(),
   configName: config.name,
   verificationRevision: config.verificationRevision ?? null,
@@ -263,6 +482,15 @@ const summary = [
       (probe) =>
         `- ${probe.pass ? "PASS" : "FAIL"} · ${probe.method} ${new URL(probe.url).pathname} · HTTP ${probe.status || "ERR"} · ${probe.latencyMs}ms · server=${probe.headers.server || "—"} · via=${probe.headers.via || "—"} · railway=${probe.headers.railwayRequestId || "—"} · vercel=${probe.headers.vercelId || "—"} · netlify=${probe.headers.netlifyRequestId || "—"} · revision=${probe.headers.astraPublicRevision || "—"}${probe.failures.length ? ` · ${probe.failures.join("; ")}` : ""}`,
     ),
+    ...(target.serp
+      ? [
+          `- SERP DOMINATOR: ${target.serp.pass ? "PASS" : "FAIL"} · sitemap=${target.serp.sitemap.urlCount} · news=${target.serp.newsSitemap.urlCount}`,
+          ...target.serp.pages.map(
+            (page) =>
+              `  - ${page.pass ? "PASS" : "FAIL"} · ${page.kind} ${normalizedUrlPath(page.url)} · HTTP ${page.status || "ERR"}${page.failures?.length ? ` · ${page.failures.join("; ")}` : ""}`,
+          ),
+        ]
+      : []),
     "",
   ]),
 ].join("\n");
