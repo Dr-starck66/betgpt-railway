@@ -162,13 +162,13 @@ function templates(context: string, rnd: () => number): Array<{ text: string; re
   const hook = contextNoun(context, rnd);
 
   return [
-    { text: \`MAIS T'ES UN \${obj.toUpperCase()} \${adj.toUpperCase()} OU QUOI ?!\`, recipe: "objet+adjectif" },
-    { text: \`QUI A LAISSÉ UN \${animal.toUpperCase()} \${state.toUpperCase()} GÉRER \${hook.toUpperCase()} ?!\`, recipe: "animal+état+contexte" },
-    { text: \`ESPÈCE DE \${obj.toUpperCase()} \${state.toUpperCase()} !!!\`, recipe: "objet+état" },
-    { text: \`\${hook.toUpperCase()} \${action.toUpperCase()} !!!\`, recipe: "contexte+action-impossible" },
-    { text: \`ON DIRAIT UN \${animal.toUpperCase()} \${adj.toUpperCase()} QUI \${action.toUpperCase()} !!!\`, recipe: "créature+collision+surréalisme" },
-    { text: \`AVEC \${hook.toUpperCase()}, \${pick(FINANCIAL_DISASTERS, rnd).toUpperCase()} !!!\`, recipe: "catastrophe-financière+quotidien" },
-    { text: \`AVEC \${hook.toUpperCase()}, \${pick(COUPLE_CLICHES, rnd).toUpperCase()} !!!\`, recipe: "cliché-couple+catastrophe-financière" },
+    { text: `MAIS T'ES UN ${obj.toUpperCase()} ${adj.toUpperCase()} OU QUOI ?!`, recipe: "objet+adjectif" },
+    { text: `QUI A LAISSÉ UN ${animal.toUpperCase()} ${state.toUpperCase()} GÉRER ${hook.toUpperCase()} ?!`, recipe: "animal+état+contexte" },
+    { text: `ESPÈCE DE ${obj.toUpperCase()} ${state.toUpperCase()} !!!`, recipe: "objet+état" },
+    { text: `${hook.toUpperCase()} ${action.toUpperCase()} !!!`, recipe: "contexte+action-impossible" },
+    { text: `ON DIRAIT UN ${animal.toUpperCase()} ${adj.toUpperCase()} QUI ${action.toUpperCase()} !!!`, recipe: "créature+collision+surréalisme" },
+    { text: `AVEC ${hook.toUpperCase()}, ${pick(FINANCIAL_DISASTERS, rnd).toUpperCase()} !!!`, recipe: "catastrophe-financière+quotidien" },
+    { text: `AVEC ${hook.toUpperCase()}, ${pick(COUPLE_CLICHES, rnd).toUpperCase()} !!!`, recipe: "cliché-couple+catastrophe-financière" },
   ];
 }
 
@@ -177,7 +177,7 @@ export function generateAbsurdInsult(
   recent: string[] = [],
   salt = "",
 ): AbsurdInsult {
-  const baseSeed = hash32(\`\${context}\\n\${salt}\\n\${recent.slice(-8).join("\\n")}\`);
+  const baseSeed = hash32(`${context}\\n${salt}\\n${recent.slice(-8).join("\\n")}`);
   const candidates: AbsurdInsult[] = [];
 
   for (let round = 0; round < 12; round++) {
@@ -212,9 +212,9 @@ export function absurdInsultCreativeBrief(context: string, recent: string[] = []
     "- Les scènes de couple caricaturales sont permises si elles restent des gags de situation précis et non des affirmations générales sur les femmes ou les hommes.",
     "- Évite les insultes haineuses, discriminatoires, menaçantes ou visant une caractéristique personnelle sensible.",
     "- Ne copie pas les graines ci-dessous mot pour mot : elles servent seulement à fixer le niveau d'absurdité.",
-    \`- Graine A : \${seedA.text}\`,
-    \`- Graine B : \${seedB.text}\`,
-    \`- Graine C : \${seedC.text}\`,
+    `- Graine A : ${seedA.text}`,
+    `- Graine B : ${seedB.text}`,
+    `- Graine C : ${seedC.text}`,
     "- Si tu peux faire plus inattendu, fais-le. Une bonne punchline doit donner envie d'être capturée et partagée.",
   ].join("\\n");
 }
@@ -228,5 +228,5 @@ export function shouldDropAbsurdInsult(context: string, recent: string[] = []): 
     return true;
   }
 
-  return hash32(\`\${text}\\n\${recent.slice(-3).join("\\n")}\`) % 5 === 0;
+  return hash32(`${text}\\n${recent.slice(-3).join("\\n")}`) % 5 === 0;
 }
