@@ -85,42 +85,63 @@ function RichMessageText({ content }: { content: string }) {
   );
 }
 
-function NativeReaction({ reaction }: { reaction: PunchReaction }) {
+function NativeReaction({ reaction, punchline }: { reaction: PunchReaction; punchline?: string }) {
   const icons = reaction.emojis.length ? reaction.emojis.slice(0, 3) : ["🤯", "😂", "💀"];
   const label = REACTION_LABEL[reaction.mood] ?? "chaos";
+  const sceneCopy: Record<string, { kicker: string; headline: string }> = {
+    ANIMAL_CHAOS: { kicker: "ALERTE ZOO", headline: "Quelqu’un a encore donné les clés au règne animal." },
+    COSMIC_CHAOS: { kicker: "HOUSTON ?", headline: "Le raisonnement vient de quitter l’atmosphère." },
+    NUCLEAR_CHAOS: { kicker: "NIVEAU RÉACTEUR", headline: "Ça vient de passer de douteux à radioactif." },
+    BETTING_DISASTER: { kicker: "TICKET EN PLS", headline: "La bankroll demande un avocat." },
+    SHOPPING_DISASTER: { kicker: "CARTE BLEUE", headline: "Le plafond vient de demander l’asile politique." },
+    DIY_DISASTER: { kicker: "BRICOLAGE FINANCIER", headline: "Même la perceuse refuse de signer ce ticket." },
+    ABSURD_SHOCK: { kicker: "MAIS QUOI ?", headline: "Le bon sens vient de déposer sa démission." },
+  };
+  const copy = sceneCopy[reaction.mood] ?? sceneCopy.ABSURD_SHOCK;
   return (
     <div
-      className="relative mt-3 min-h-40 overflow-hidden rounded-2xl border border-line bg-[radial-gradient(circle_at_20%_20%,rgba(124,194,58,0.20),transparent_32%),radial-gradient(circle_at_80%_25%,rgba(15,23,42,0.10),transparent_28%),linear-gradient(135deg,#ffffff,#f8fafc)] p-4"
+      className="relative mt-3 min-h-48 overflow-hidden rounded-2xl border border-line bg-paper px-4 py-5 text-white shadow-lg"
       aria-label={`Réaction animée BetGPT — ${label}`}
     >
-      <div className="pointer-events-none absolute -left-8 -top-8 h-24 w-24 animate-pulse rounded-full bg-sage/20 blur-2xl" />
-      <div className="pointer-events-none absolute -bottom-8 -right-8 h-28 w-28 animate-pulse rounded-full bg-paper/10 blur-2xl" />
-      <div className="relative flex min-h-28 items-center justify-center gap-3">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_15%,rgba(124,194,58,0.35),transparent_28%),radial-gradient(circle_at_82%_80%,rgba(255,255,255,0.12),transparent_32%)]" />
+      <div className="relative flex items-start justify-between gap-3">
+        <span className="rounded-full border border-white/20 bg-white/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em]">
+          {copy.kicker}
+        </span>
+        <span className="text-[10px] font-black uppercase tracking-[0.18em] text-white/60">{label}</span>
+      </div>
+      <div className="relative my-4 flex min-h-20 items-center justify-center gap-2 overflow-hidden">
         {icons.map((icon, index) => (
           <span
             key={`${icon}-${index}`}
             aria-hidden="true"
             className={cn(
-              "select-none text-5xl drop-shadow-sm sm:text-6xl",
-              index === 0 ? "animate-bounce" : index === 1 ? "animate-pulse" : "animate-[spin_2.4s_linear_infinite]",
+              "select-none text-6xl drop-shadow-xl sm:text-7xl",
+              index === 0
+                ? "animate-[bounce_0.75s_ease-in-out_infinite]"
+                : index === 1
+                  ? "animate-[pulse_0.9s_ease-in-out_infinite]"
+                  : "animate-[spin_1.8s_linear_infinite]",
             )}
-            style={{ animationDelay: `${index * 120}ms` }}
+            style={{ animationDelay: `${index * 110}ms` }}
           >
             {icon}
           </span>
         ))}
       </div>
-      <div className="relative mt-2 flex items-center justify-between gap-3">
-        <span className="text-[10px] font-black uppercase tracking-[0.18em] text-muted">{label}</span>
-        <span className="rounded-full border border-line bg-white/85 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-paper">
-          réaction live
-        </span>
-      </div>
+      <p className="relative text-center text-lg font-black leading-tight tracking-tight sm:text-xl">
+        {copy.headline}
+      </p>
+      {punchline ? (
+        <p className="relative mx-auto mt-2 max-w-xl text-center text-xs font-semibold leading-relaxed text-white/65">
+          {punchline.slice(0, 150)}
+        </p>
+      ) : null}
     </div>
   );
 }
 
-function PunchReactionCard({ reaction }: { reaction: PunchReaction }) {
+function PunchReactionCard({ reaction, punchline }: { reaction: PunchReaction; punchline?: string }) {
   const label = REACTION_LABEL[reaction.mood] ?? "chaos";
   const [gif, setGif] = useState<GifReaction>({
     alt: `Réaction animée BetGPT — ${label}`,
@@ -165,7 +186,7 @@ function PunchReactionCard({ reaction }: { reaction: PunchReaction }) {
   }, [reaction.gifQuery, reaction.mood]);
 
   if (gif.provider !== "tenor" || !gif.url) {
-    return <NativeReaction reaction={reaction} />;
+    return <NativeReaction reaction={reaction} punchline={punchline} />;
   }
 
   return (
@@ -393,7 +414,7 @@ export function ChatPanel({ seed }: { seed?: string }) {
                 )}
                 {msg.content ? <RichMessageText content={msg.content} /> : streaming ? "…" : ""}
                 {!mine && msg.reaction && !streaming ? (
-                  <PunchReactionCard reaction={msg.reaction} />
+                  <PunchReactionCard reaction={msg.reaction} punchline={msg.punchline?.text} />
                 ) : null}
                 {!mine && msg.punchline && !streaming ? (
                   <button
