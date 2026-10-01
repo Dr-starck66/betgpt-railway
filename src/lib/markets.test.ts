@@ -58,7 +58,7 @@ describe("prono vs mise", () => {
   it("never lets BTTS or over/under replace the canonical 1X2 stake", () => {
     const markets = [
       mq({ market: "BTTS_Y", group: "BTTS", modelProb: 0.61, bestOdds: 2.16, decision: "BET" }),
-      mq({ market: "OU25_O", group: "OU", modelProb: 0.58, bestOdds: 2.33, decision: "BET" }),
+      mq({ market: "OU_25_O", group: "OU", modelProb: 0.58, bestOdds: 2.33, decision: "BET" }),
       mq({ market: "1X2_H", modelProb: 0.46, bestOdds: 2.05, decision: "BET" }),
       mq({ market: "1X2_A", modelProb: 0.31, bestOdds: 2.8, decision: "WATCH" }),
     ];
@@ -69,7 +69,7 @@ describe("prono vs mise", () => {
   it("returns no main stake when only secondary markets are BET", () => {
     const markets = [
       mq({ market: "BTTS_Y", group: "BTTS", modelProb: 0.61, bestOdds: 2.16, decision: "BET" }),
-      mq({ market: "OU25_O", group: "OU", modelProb: 0.58, bestOdds: 2.33, decision: "BET" }),
+      mq({ market: "OU_25_O", group: "OU", modelProb: 0.58, bestOdds: 2.33, decision: "BET" }),
       mq({ market: "1X2_H", modelProb: 0.46, bestOdds: 2.05, decision: "WATCH" }),
     ];
     assert.equal(betMarket(markets), null);
