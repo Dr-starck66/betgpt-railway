@@ -18,10 +18,10 @@ jobs:
           AZ="https://betgpt.live/actualites/azerbaijan-liechtenstein-postmatch-2026-10-01"
           SITEMAP="https://betgpt.live/sitemap.xml"
 
-          rev_body="$(curl --fail --silent --show-error --location --retry 4 --retry-delay 2 "$REV")"
-          d_body="$(curl --fail --silent --show-error --location --retry 4 --retry-delay 2 "$DEMBELE")"
-          a_body="$(curl --fail --silent --show-error --location --retry 4 --retry-delay 2 "$AZ")"
-          s_body="$(curl --fail --silent --show-error --location --retry 4 --retry-delay 2 "$SITEMAP")"
+          rev_body="$(curl --fail --silent --show-error --location --connect-timeout 5 --max-time 20 --retry 2 --retry-delay 2 "$REV")"
+          d_body="$(curl --fail --silent --show-error --location --connect-timeout 5 --max-time 20 --retry 2 --retry-delay 2 "$DEMBELE")"
+          a_body="$(curl --fail --silent --show-error --location --connect-timeout 5 --max-time 20 --retry 2 --retry-delay 2 "$AZ")"
+          s_body="$(curl --fail --silent --show-error --location --connect-timeout 5 --max-time 20 --retry 2 --retry-delay 2 "$SITEMAP")"
 
           printf '%s' "$rev_body" | grep -F "$EXPECTED"
           printf '%s' "$d_body" | grep -F "Sources de ce passage"
