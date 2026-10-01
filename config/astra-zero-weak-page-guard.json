@@ -1,5 +1,5 @@
 {
-  "version": "ASTRA-ZERO-WEAK-PAGE-GUARD-1",
+  "version": "ASTRA-ZERO-WEAK-PAGE-GUARD-2",
   "routeDirs": [
     "src/routes"
   ],
@@ -9,22 +9,7 @@
     ".jsx",
     ".js"
   ],
-  "ignoreFiles": [
-    "src/routes/__root.tsx",
-    "src/routes/actu.tsx",
-    "src/routes/actualites.tsx",
-    "src/routes/blog.tsx",
-    "src/routes/calendrier.tsx",
-    "src/routes/classement.tsx",
-    "src/routes/forum.tsx",
-    "src/routes/guides.tsx",
-    "src/routes/outils.tsx",
-    "src/routes/pronostics-football.tsx",
-    "src/routes/resultats-football.tsx",
-    "src/routes/score-hunter.tsx",
-    "src/routes/scores-en-direct.tsx",
-    "src/routes/statistics.tsx"
-  ],
+  "ignoreFiles": [],
   "technicalPatterns": [
     "src/routes/admin",
     "src/routes/go.tsx$",
@@ -54,7 +39,6 @@
     "<ZeroRadarView",
     "<PronoSilo"
   ],
-  "minIndexableSourceBytes": 1200,
   "minInternalLinks": 2,
   "minScore": 78,
   "sitemapSource": "src/lib/sitemap-urls.ts",
@@ -65,6 +49,11 @@
     "commercial": 78,
     "editorial": 78,
     "entity": 78,
-    "landing": 78
-  }
+    "landing": 78,
+    "layout": 0,
+    "technical": 0,
+    "redirect": 0
+  },
+  "minVisibleTextBytes": 450,
+  "enforceUniqueMetadata": true
 }
