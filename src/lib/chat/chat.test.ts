@@ -4,7 +4,7 @@ import { EMPTY_MEMORY, normalizeMemory } from "./types.ts";
 import { postChat } from "./transport.ts";
 import { localMatchFacts } from "./local.ts";
 import { chatBodySchema } from "../schemas.ts";
-import { hasUnsupportedGroundedClaim } from "./complete.ts";
+import { hasUnsupportedGroundedClaim } from "./grounding.ts";
 import type { MatchInput } from "../../engine/types.ts";
 
 it("normalizes corrupt nested memories instead of crashing the prompt", () => {
