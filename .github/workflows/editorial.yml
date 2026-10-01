@@ -14,6 +14,7 @@ on:
       - "src/engine/live.ts"
       - "scripts/ts-alias-hooks.mjs"
       - "scripts/astra-release-gate.mjs"
+      - "scripts/astra-safe-push.mjs"
       - "config/astra-release-gate.json"
       - "scripts/run-editorial-publish.ts"
       - "package.json"
