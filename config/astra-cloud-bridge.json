@@ -1,0 +1,66 @@
+{
+  "name": "BetGPT production routing",
+  "defaults": {
+    "timeoutMs": 45000,
+    "retries": 4,
+    "retryDelayMs": 5000
+  },
+  "targets": [
+    {
+      "id": "public-domain",
+      "provider": "public",
+      "url": "https://betgpt.live",
+      "priority": 10,
+      "fallback": false
+    },
+    {
+      "id": "railway-origin",
+      "provider": "railway",
+      "url": "https://betgpt-production-7353.up.railway.app",
+      "priority": 90,
+      "fallback": true
+    }
+  ],
+  "probes": [
+    {
+      "id": "home",
+      "method": "GET",
+      "path": "/",
+      "retries": 2,
+      "expect": {
+        "statuses": [200]
+      }
+    },
+    {
+      "id": "daily-pick-chat",
+      "method": "POST",
+      "path": "/api/chat",
+      "body": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Qu'est-ce que tu mises aujourd'hui, et pourquoi ?"
+          }
+        ],
+        "requestedMode": "NORMAL"
+      },
+      "expect": {
+        "statuses": [200],
+        "jsonPath": "text",
+        "jsonText": {
+          "requireAll": [
+            "Pari à prendre :",
+            "Cote disponible :",
+            "Niveau :"
+          ],
+          "forbid": [
+            "donne-moi les affiches",
+            "donne moi les affiches",
+            "donnez-moi les affiches",
+            "donnez moi les affiches"
+          ]
+        }
+      }
+    }
+  ]
+}
