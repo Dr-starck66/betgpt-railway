@@ -208,3 +208,7 @@ Etendre la refonte visuelle premium a toutes les surfaces encore datees sans ret
 - Article + bet-safety : 14/14 tests PASS.
 - Analyse syntaxique TypeScript ciblee : aucune erreur de syntaxe JSX/TS detectee dans les fichiers Wave 3.
 - Typecheck/build global : UNVERIFIED dans cet environnement car l'installation NPM reste tronquee (`@types/node`, `zod` et autres definitions manquantes apres timeout de restauration). Aucun faux PASS declare.
+
+
+## Déploiement article test — 2026-10-01
+- Publication test Mbappé/Real Madrid intégrée ; déploiement Railway relancé depuis le `main` courant avec Nitro `node-server` explicite.
