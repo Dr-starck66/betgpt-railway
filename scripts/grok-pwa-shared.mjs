@@ -434,8 +434,8 @@ export function injectGrokPwaHead(html, ctx = {}) {
   );
   // Route-level OG/Twitter metadata is more specific than platform chrome.
   // Preserve it. Only x:game image tags remain platform-owned.
-  let next = String(html).replace(/<meta\\b[^>]*>/gi, (tag) => {
-    const attrs = [...tag.matchAll(/\\b(?:property|name)\\s*=\\s*["']([^"']+)["']/gi)];
+  let next = String(html).replace(/<meta\b[^>]*>/gi, (tag) => {
+    const attrs = [...tag.matchAll(/\b(?:property|name)\s*=\s*["']([^"']+)["']/gi)];
     for (const match of attrs) {
       if (String(match[1]).toLowerCase().startsWith("x:game:image")) return "";
     }
@@ -451,12 +451,12 @@ export function injectGrokPwaHead(html, ctx = {}) {
     .map(([, tag]) => tag);
 
   const existingShareKeys = new Set(
-    [...next.matchAll(/<meta\\b[^>]*>/gi)]
-      .flatMap((match) => [...match[0].matchAll(/\\b(?:property|name)\\s*=\\s*["']([^"']+)["']/gi)])
+    [...next.matchAll(/<meta\b[^>]*>/gi)]
+      .flatMap((match) => [...match[0].matchAll(/\b(?:property|name)\s*=\s*["']([^"']+)["']/gi)])
       .map((match) => String(match[1]).toLowerCase()),
   );
   const platformShareTags = grokOgHeadTags({ host, appName, site, documentTitle, cwd }).filter((tag) => {
-    const match = tag.match(/\\b(?:property|name)=["']([^"']+)["']/i);
+    const match = tag.match(/\b(?:property|name)=["']([^"']+)["']/i);
     const key = String(match?.[1] ?? "").toLowerCase();
     return !key || key.startsWith("x:game:image") || !existingShareKeys.has(key);
   });
