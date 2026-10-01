@@ -70,10 +70,10 @@ function PredictionPage() {
       <section className="grid gap-3 sm:grid-cols-2">
         <Fact label="Pronostic" value={row.label} />
         <Fact label="Marché" value={row.market} />
-        <Fact label="Probabilité modèle" value={fmtPct(row.modelProb)} />
-        <Fact label="Espérance (EV)" value={Number.isFinite(row.ev) ? fmtPct(row.ev) : "Non collecté"} />
+        <Fact label="Probabilité estimée" value={fmtPct(row.modelProb)} />
+        <Fact label="Avantage estimé" value={Number.isFinite(row.ev) ? fmtPct(row.ev) : "Non collecté"} />
         <Fact label="Cote figée" value={`${fmtOdds(row.odds)} · ${row.book}`} />
-        <Fact label="Instantané cotes" value={utc(row.recordedAt)} />
+        <Fact label="Cote enregistrée à" value={utc(row.recordedAt)} />
         <Fact label="Publié" value={utc(row.recordedAt)} />
         <Fact label="Coup d'envoi" value={utc(row.kickoff)} />
         <Fact
@@ -90,13 +90,8 @@ function PredictionPage() {
                 : `${Math.abs(minutes)} min après le coup d'envoi`
           }
         />
-        <Fact label="Moteur" value={beforeKickoff ? (row.engineVersion ?? "Non collecté (fiche héritée)") : "Non collecté (après coup d'envoi)"} />
         <Fact
-          label="Hash SHA-256"
-          value={beforeKickoff && row.predictionHash ? row.predictionHash : "Non collecté (fiche héritée)"}
-        />
-        <Fact
-          label="Intégrité du hash"
+          label="Vérification de la preuve"
           value={integrity === "ok" ? "OK" : integrity === "mismatch" ? "Écart détecté" : "Indisponible"}
         />
         <Fact
@@ -112,6 +107,25 @@ function PredictionPage() {
           value={row.result === "win" ? "Gagné" : row.result === "lose" ? "Perdu" : row.result === "void" ? "Annulé" : "En attente"}
         />
       </section>
+
+      <details className="rounded-xl border border-line bg-surface p-5">
+        <summary className="cursor-pointer text-sm font-semibold text-paper">
+          Détails techniques de vérification
+        </summary>
+        <p className="mt-2 text-sm text-mist">
+          Ces informations servent à vérifier qu’un pronostic n’a pas été réécrit après publication.
+        </p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <Fact
+            label="Version interne"
+            value={beforeKickoff ? (row.engineVersion ? "Enregistrée" : "Non collectée") : "Non collectée"}
+          />
+          <Fact
+            label="Empreinte SHA-256"
+            value={beforeKickoff && row.predictionHash ? row.predictionHash : "Non collectée"}
+          />
+        </div>
+      </details>
 
       {row.snapshots && row.snapshots.length ? (
         <section className="rounded-xl border border-line bg-surface p-5">
