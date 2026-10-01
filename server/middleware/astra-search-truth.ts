@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
   if (!source) return;
 
   const human = isHumanSearchLandingRequest({
-    method: event.node.req.method,
+    method: event.node?.req.method ?? "GET",
     pathname: url.pathname,
     userAgent: getRequestHeader(event, "user-agent") || "",
     secFetchDest: getRequestHeader(event, "sec-fetch-dest") || "",
