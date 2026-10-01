@@ -1,6 +1,8 @@
 import { redirectToBook } from "@/engine/go";
 import { logClick, safeAffiliateUrl } from "@/engine/clicks";
 import { decorateAffiliateUrl, landingFor } from "@/engine/aff-tag";
+import { affiliateBookReadiness } from "@/engine/affiliate-conversion";
+import { recordAnalytics } from "@/lib/store";
 
 function isMatchPage(href: string): boolean {
   if (/betclic\.(fr|com)/i.test(href) && /-m\d+/.test(href)) return true;
@@ -29,14 +31,24 @@ export async function handleGoRequest(request: Request): Promise<Response> {
       }
     }
     if (!target) target = landingFor(book);
+    const readiness = affiliateBookReadiness(book);
     const paid = decorateAffiliateUrl(book, target) ?? target;
     const dest = safeAffiliateUrl(paid) ?? paid;
     try {
       logClick(book || "book", dest, matchId);
+      void recordAnalytics("affiliate_click", `${readiness.key}:${readiness.mode.toLowerCase()}`, "/api/go");
     } catch {
       /* le clic part quand même */
     }
-    return Response.redirect(dest, 302);
+    return new Response(null, {
+      status: 302,
+      headers: {
+        location: dest,
+        "cache-control": "no-store",
+        "x-betgpt-affiliate-mode": readiness.mode.toLowerCase(),
+        "x-betgpt-affiliate-book": readiness.key,
+      },
+    });
   } catch {
     return new Response("Lien bookmaker introuvable", { status: 404 });
   }
