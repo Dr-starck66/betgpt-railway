@@ -1,0 +1,70 @@
+{
+  "name": "BetGPT production route gate",
+  "revisionPath": "/api/astra-revision",
+  "wait": {
+    "timeoutMs": 720000,
+    "intervalMs": 10000,
+    "requestTimeoutMs": 15000
+  },
+  "targets": [
+    {
+      "id": "public-domain",
+      "role": "public",
+      "url": "https://betgpt.live"
+    },
+    {
+      "id": "railway-origin",
+      "role": "origin",
+      "url": "https://betgpt-production-7353.up.railway.app"
+    }
+  ],
+  "probes": [
+    {
+      "id": "home",
+      "method": "GET",
+      "path": "/",
+      "expect": {
+        "statuses": [
+          200
+        ]
+      }
+    },
+    {
+      "id": "gif-asset",
+      "method": "GET",
+      "path": "/reactions/astra-shock.gif?v=route-gate",
+      "expect": {
+        "statuses": [
+          200
+        ]
+      }
+    },
+    {
+      "id": "daily-pick-chat",
+      "method": "POST",
+      "path": "/api/chat",
+      "body": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "Qu'est-ce que tu mises aujourd'hui, et pourquoi ?"
+          }
+        ],
+        "requestedMode": "NORMAL"
+      },
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "jsonPath": "text",
+        "jsonText": {
+          "forbid": [
+            "donne-moi les affiches",
+            "donne moi les affiches"
+          ]
+        }
+      }
+    }
+  ],
+  "evidenceDir": "artifacts/astra-public-route-gate"
+}
