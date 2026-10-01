@@ -5,13 +5,25 @@ import { SITE_URL } from "@/lib/programmatic";
 import { siloIndexable } from "@/lib/seo/money-map";
 
 export const Route = createFileRoute("/pronostics-sportifs")({
-  loader: () => getPublicDesk(),
+  loader: async () => {
+    const desk = await getPublicDesk();
+    return {
+      ...desk,
+      engineVersion: undefined,
+      tacticalVersion: undefined,
+      predictions: desk.predictions.map((prediction) => ({
+        ...prediction,
+        engineVersion: undefined,
+        tacticalVersion: undefined,
+      })),
+    } as typeof desk;
+  },
   head: ({ loaderData }) => {
     const n = loaderData ? filterSiloMatches(loaderData, {}).length : 0;
     const index = siloIndexable("pillar", n);
     const title = "Pronostics sportifs : probabilités, cotes et écarts | BetGPT";
     const description =
-      "Pronostics sportifs football du bureau BetGPT : probabilité du modèle, cote listée, probabilité implicite et écart. Pas un bookmaker.";
+      "Pronostics football BetGPT : équipes, horaire, probabilité estimée, cote disponible, écart avec le marché et consigne claire pour savoir s’il faut parier, attendre ou passer.";
     return {
       meta: [
         { title },
@@ -32,7 +44,7 @@ function Page() {
   return (
     <PronoSilo
       h1="Pronostics sportifs"
-      lead="BetGPT couvre le football avec le champion canonique ROI5. Chaque ligne affiche les équipes, l’horaire, le pronostic 1N2, la probabilité du modèle et un verdict clair : PARIER, ATTENDRE ou NE PAS PARIER. Aucune cote inférieure à 1,80 n’est retenue ni mise en avant."
+      lead="Chaque match affiche les équipes, l’horaire, le pronostic 1N2, notre probabilité estimée, la cote disponible et surtout une consigne claire : PARIER, ATTENDRE ou NE PAS PARIER. Aucune cote inférieure à 1,80 n’est retenue ni mise en avant."
       path="/pronostics-sportifs"
       kind="pillar"
       desk={desk}
