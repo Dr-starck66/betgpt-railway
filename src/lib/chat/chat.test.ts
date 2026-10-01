@@ -7,6 +7,8 @@ import { chatBodySchema } from "../schemas.ts";
 import { hasUnsupportedGroundedClaim } from "./grounding.ts";
 import type { MatchInput } from "../../engine/types.ts";
 import { extractPunchline } from "./punch.ts";
+import { generateAbsurdInsult, shouldDropAbsurdInsult } from "./absurd-insults.ts";
+import { reactionForPunchline } from "./reaction.ts";
 
 it("normalizes corrupt nested memories instead of crashing the prompt", () => {
   assert.deepEqual(normalizeMemory({ blackBook: null, preferences: 42 }), EMPTY_MEMORY);
@@ -203,4 +205,42 @@ it("maps absurd animal punchlines to a contextual visual reaction", () => {
   assert.equal(out.punchline?.reaction?.mood, "ANIMAL_CHAOS");
   assert.equal(out.punchline?.reaction?.emojis.includes("🐦"), true);
   assert.match(out.punchline?.reaction?.gifQuery ?? "", /pigeon/);
+});
+
+
+it("ASTRA insult lab generates a contextual, shareable betting roast", () => {
+  const out = generateAbsurdInsult(
+    "Mon combiné de 10 matchs est sûr à 100%, je mets tout.",
+    [],
+    "regression",
+  );
+  assert.ok(out.text.length >= 20);
+  assert.ok(out.score >= 60);
+  assert.match(out.text, /(TICKET|COMBINÉ|MISE|PARI|CARTE BLEUE|Dior|HAMSTER|PIGEON|GRILLE-PAIN)/i);
+});
+
+it("ASTRA insult surprise gate fires for absurd betting certainty", () => {
+  assert.equal(
+    shouldDropAbsurdInsult("Ce combiné de 10 matchs est sûr à 100%, impossible de perdre.", []),
+    true,
+  );
+});
+
+it("reaction engine matches luxury-shopping catastrophe gags", () => {
+  const reaction = reactionForPunchline(
+    "AVEC TON PARI, AUTANT DONNER TA CARTE BLEUE À TA FEMME ET LA LÂCHER CHEZ DIOR !!!",
+    "pari",
+  );
+  assert.equal(reaction.mood, "SHOPPING_DISASTER");
+  assert.deepEqual(reaction.emojis, ["💳", "🛍️", "💸"]);
+  assert.match(reaction.gifQuery, /shopping spree/i);
+});
+
+it("reaction engine matches animal absurdity instead of a random visual", () => {
+  const reaction = reactionForPunchline(
+    "QUI A LAISSÉ UN PIGEON SOUS KÉTAMINE GÉRER TON TICKET ?!",
+    "ticket",
+  );
+  assert.ok(reaction.emojis.includes("🐦"));
+  assert.match(reaction.gifQuery, /pigeon/i);
 });
