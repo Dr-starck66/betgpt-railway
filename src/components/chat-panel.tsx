@@ -59,7 +59,7 @@ const REACTION_LABEL: Record<string, string> = {
   ABSURD_SHOCK: "cerveau débranché",
 };
 
-type GifReaction = { url: string; alt: string };
+type GifReaction = { url?: string; alt: string; provider?: string; scene?: string };
 
 
 function RichMessageText({ content }: { content: string }) {
@@ -85,19 +85,52 @@ function RichMessageText({ content }: { content: string }) {
   );
 }
 
+function NativeReaction({ reaction }: { reaction: PunchReaction }) {
+  const icons = reaction.emojis.length ? reaction.emojis.slice(0, 3) : ["🤯", "😂", "💀"];
+  const label = REACTION_LABEL[reaction.mood] ?? "chaos";
+  return (
+    <div
+      className="relative mt-3 min-h-40 overflow-hidden rounded-2xl border border-line bg-[radial-gradient(circle_at_20%_20%,rgba(124,194,58,0.20),transparent_32%),radial-gradient(circle_at_80%_25%,rgba(15,23,42,0.10),transparent_28%),linear-gradient(135deg,#ffffff,#f8fafc)] p-4"
+      aria-label={`Réaction animée BetGPT — ${label}`}
+    >
+      <div className="pointer-events-none absolute -left-8 -top-8 h-24 w-24 animate-pulse rounded-full bg-sage/20 blur-2xl" />
+      <div className="pointer-events-none absolute -bottom-8 -right-8 h-28 w-28 animate-pulse rounded-full bg-paper/10 blur-2xl" />
+      <div className="relative flex min-h-28 items-center justify-center gap-3">
+        {icons.map((icon, index) => (
+          <span
+            key={`${icon}-${index}`}
+            aria-hidden="true"
+            className={cn(
+              "select-none text-5xl drop-shadow-sm sm:text-6xl",
+              index === 0 ? "animate-bounce" : index === 1 ? "animate-pulse" : "animate-[spin_2.4s_linear_infinite]",
+            )}
+            style={{ animationDelay: `${index * 120}ms` }}
+          >
+            {icon}
+          </span>
+        ))}
+      </div>
+      <div className="relative mt-2 flex items-center justify-between gap-3">
+        <span className="text-[10px] font-black uppercase tracking-[0.18em] text-muted">{label}</span>
+        <span className="rounded-full border border-line bg-white/85 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-paper">
+          réaction live
+        </span>
+      </div>
+    </div>
+  );
+}
+
 function PunchReactionCard({ reaction }: { reaction: PunchReaction }) {
   const label = REACTION_LABEL[reaction.mood] ?? "chaos";
   const [gif, setGif] = useState<GifReaction>({
-    url: reaction.gifFallback,
-    alt: `Réaction BetGPT — ${label}`,
+    alt: `Réaction animée BetGPT — ${label}`,
+    provider: "native",
   });
 
   useEffect(() => {
-    // Local animated GIF is the hard fallback: the visual must never disappear
-    // just because Tenor is unconfigured, rate-limited or offline.
     setGif({
-      url: reaction.gifFallback,
-      alt: `Réaction BetGPT — ${REACTION_LABEL[reaction.mood] ?? "chaos"}`,
+      alt: `Réaction animée BetGPT — ${REACTION_LABEL[reaction.mood] ?? "chaos"}`,
+      provider: "native",
     });
 
     const query = reaction.gifQuery.trim();
@@ -117,17 +150,23 @@ function PunchReactionCard({ reaction }: { reaction: PunchReaction }) {
         return (await response.json()) as GifReaction;
       })
       .then((value) => {
-        if (active && value?.url) setGif(value);
+        if (!active || !value) return;
+        if (value.provider === "tenor" && value.url) setGif(value);
+        else setGif({ ...value, provider: "native" });
       })
       .catch(() => {
-        // Keep the bundled animated GIF already on screen.
+        // Native reaction stays visible: no weak generic GIF fallback.
       });
 
     return () => {
       active = false;
       controller.abort();
     };
-  }, [reaction.gifFallback, reaction.gifQuery, reaction.mood]);
+  }, [reaction.gifQuery, reaction.mood]);
+
+  if (gif.provider !== "tenor" || !gif.url) {
+    return <NativeReaction reaction={reaction} />;
+  }
 
   return (
     <figure
@@ -140,20 +179,13 @@ function PunchReactionCard({ reaction }: { reaction: PunchReaction }) {
         loading="eager"
         decoding="async"
         referrerPolicy="no-referrer"
-        onError={(event) => {
-          const fallback = "/reactions/astra-fallback.gif?v=4";
-          if (!event.currentTarget.src.endsWith(fallback)) event.currentTarget.src = fallback;
-        }}
+        onError={() => setGif({ alt: `Réaction animée BetGPT — ${label}`, provider: "native" })}
         className="max-h-64 w-full max-w-[22rem] rounded-xl border border-line object-contain"
       />
       <figcaption className="mt-2 flex items-center justify-between gap-2">
-        <span className="text-[10px] font-black uppercase tracking-[0.18em] text-muted">
-          {label}
-        </span>
+        <span className="text-[10px] font-black uppercase tracking-[0.18em] text-muted">{label}</span>
         {reaction.emojis.length ? (
-          <span className="text-lg leading-none" aria-hidden="true">
-            {reaction.emojis.join(" ")}
-          </span>
+          <span className="text-lg leading-none" aria-hidden="true">{reaction.emojis.join(" ")}</span>
         ) : null}
       </figcaption>
     </figure>
