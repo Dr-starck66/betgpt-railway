@@ -297,6 +297,28 @@
       }
     },
     {
+      "id": "discover-launchpad",
+      "method": "GET",
+      "path": "/api/discover-launchpad",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "astra-discover-launchpad/v1",
+            "\"status\":\"PASS\"",
+            "\"discoverGuarantee\":false",
+            "\"largeImageMinWidth\":1200",
+            "\"maxImagePreviewLarge\":true"
+          ],
+          "forbid": [
+            "\"status\":\"FAIL\""
+          ]
+        }
+      }
+    },
+    {
       "id": "robots",
       "method": "GET",
       "path": "/robots.txt",
@@ -327,7 +349,7 @@
       }
     }
   ],
-  "verificationRevision": "ASTRA-BETGPT-SENTINEL-V3-SERP-DOMINATOR-2026-10-01",
+  "verificationRevision": "ASTRA-BETGPT-SENTINEL-V4-DISCOVER-LAUNCHPAD-2026-10-01",
   "serp": {
     "enabled": true,
     "sitemapPath": "/sitemap.xml",
