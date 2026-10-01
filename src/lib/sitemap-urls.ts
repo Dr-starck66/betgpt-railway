@@ -52,10 +52,8 @@ export async function loadSitemapUrls(): Promise<SitemapUrl[]> {
   const live = await ensureLive().catch(() => null);
   const liveMatches = live?.matches ?? [];
   const seen = new Set(liveMatches.map((m: { id: string }) => m.id));
-  const ticketIds = new Set(
-    loadTickets()
-      .map((t) => t.matchId),
-  );
+  const tickets = loadTickets();
+  const ticketIds = new Set(tickets.map((t) => t.matchId));
   const extra = loadArchiveHistory()
     .filter((h) => ticketIds.has(h.id) && !seen.has(h.id))
     .map((h) => ({
@@ -75,6 +73,21 @@ export async function loadSitemapUrls(): Promise<SitemapUrl[]> {
     standingsAsOf: sitemapDate(live?.fetchedAt),
   });
   const edition = buildEdition({ now: new Date(), matches: liveMatches as MatchInput[], frozen: await readLedgerDurable() });
+  for (const row of tickets) {
+    if (row.kind !== "prono" || !row.id || !row.home || !row.away || !row.recordedAt) continue;
+    const encoded = encodeURIComponent(row.id);
+    const path = `/prediction/${encoded}`;
+    if (!sitemapAllowed(path) || urls.some((url) => url.path === path)) continue;
+    urls.push({
+      loc: `${SITE_URL}${path}`,
+      path,
+      title: `Vérification pronostic · ${row.home} – ${row.away}`,
+      group: "Preuves",
+      lastmod: sitemapDate(row.recordedAt),
+      changefreq: row.result ? "weekly" : "hourly",
+      priority: row.result ? "0.55" : "0.65",
+    });
+  }
   for (const page of classicNewsPaths(edition)) {
     if (!sitemapAllowed(page.path)) continue;
     if (urls.some((url) => url.path === page.path)) continue;
