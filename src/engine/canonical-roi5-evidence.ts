@@ -66,6 +66,8 @@ export type CanonicalReplayEvidence = {
 };
 
 type ReplayRow = PortfolioTicket & {
+  league: LeagueId;
+  market: "1X2_H" | "1X2_A";
   id: string;
   homeName: string;
   awayName: string;
