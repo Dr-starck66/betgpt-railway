@@ -211,7 +211,27 @@
           "requireAll": [
             "Comparer les cotes football",
             "matchs affichés",
-            "Voir les cotes"
+            "Voir les cotes",
+            "Parier chez",
+            "https://www.unibet.fr/"
+          ],
+          "requireAny": [
+            "🇫🇷",
+            "🇪🇸",
+            "🇩🇪",
+            "🇮🇹",
+            "🇳🇱",
+            "🇵🇹",
+            "🇹🇷",
+            "🇪🇺",
+            "🌍",
+            "🇹🇿",
+            "🇸🇳",
+            "🇳🇬",
+            "🇲🇦",
+            "🇩🇿",
+            "🇵🇱",
+            "🇫🇷"
           ]
         }
       }
