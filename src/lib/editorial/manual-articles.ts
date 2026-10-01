@@ -214,6 +214,154 @@ const ARTICLES: EditorialArticle[] = [
     ],
     factHash: "manual-mbappe-paris-2026-10-01-v4",
     keywords: "Kylian Mbappé, Real Madrid, Paris, blessure Mbappé, récupération Mbappé, La Liga",
+  },,
+  {
+    id: "manual-2026-10-01-negreira-uefa-real-barca",
+    slug: "affaire-negreira-uefa-documents-real-madrid-barca-repond-2026-10-01",
+    slot: "evening",
+    articleType: "news",
+    status: "PUBLISHED",
+    title: "Affaire Negreira : l’UEFA reçoit les documents du Real Madrid, le Barça répond point par point | BetGPT",
+    h1: "Affaire Negreira : l’UEFA reçoit les documents du Real Madrid, le Barça répond point par point",
+    lead:
+      "L’affaire Negreira a connu un nouveau développement ce jeudi 1er octobre : l’UEFA a confirmé avoir reçu une quantité substantielle de documents transmis par le Real Madrid dans le cadre de l’enquête déjà en cours sur le FC Barcelone. Madrid demande que l’examen avance rapidement ; le Barça répond qu’aucune nouvelle procédure n’a été ouverte et que le dossier existant n’a jamais été fermé.",
+    paragraphs: [
+      {
+        h2: "Ce que l’UEFA a réellement confirmé ce 1er octobre",
+        body:
+          "Le fait nouveau est précis et plus limité que certaines formulations apparues dans la journée. Selon le texte de l’UEFA reproduit par le FC Barcelone et rapporté par l’agence EFE, l’instance européenne confirme avoir reçu du Real Madrid une quantité substantielle de documents liés à l’enquête en cours concernant le FC Barcelone et José María Enríquez Negreira, ancien vice-président du Comité technique des arbitres espagnols. Les inspecteurs éthiques et disciplinaires de l’UEFA ont également reçu ces éléments et doivent les examiner dans le cadre de leur revue déjà ouverte. Cette formulation établit donc la réception de nouveaux documents, mais elle ne dit ni qu’une sanction est décidée, ni qu’un nouveau dossier disciplinaire distinct vient d’être créé.",
+        sourceIds: ["barca-negreira-2026-10-01","efe-negreira-2026-10-01"],
+      },
+      {
+        h2: "Pourquoi le Real Madrid considère cette transmission comme une étape majeure",
+        body:
+          "Dans son communiqué officiel publié le même jour, le Real Madrid affirme que sa plainte contient une documentation abondante et des éléments que le club juge d’une gravité extraordinaire pour l’intégrité de la compétition et la confiance dans le système arbitral. Le Real demande à l’UEFA de poursuivre l’enquête avec célérité jusqu’à son terme et annonce vouloir continuer à collaborer avec l’instance. Ces appréciations appartiennent au Real Madrid : elles décrivent la position du club et ne constituent pas, à elles seules, une conclusion de l’UEFA sur la valeur probante ou juridique des documents transmis.",
+        sourceIds: ["realmadrid-negreira-2026-10-01"],
+      },
+      {
+        h2: "La réponse du FC Barcelone : pas de nouvelle procédure ouverte",
+        body:
+          "Le FC Barcelone a réagi quelques heures plus tard pour contester l’idée d’une réactivation du dossier. Le club catalan affirme que l’UEFA n’a ouvert aucune nouvelle procédure : selon sa lecture, l’enquête initiée en 2023 avec la désignation de deux enquêteurs est toujours la même et n’a jamais été clôturée. Barcelone insiste également sur le fait que l’UEFA ne s’est pas prononcée sur le fond des documents transmis par le Real Madrid et n’a, à ce stade, adressé aucune nouvelle demande au club à propos de cette transmission.",
+        sourceIds: ["barca-negreira-2026-10-01"],
+        subsections: [
+          {
+            h3: "Ce que le Barça reconnaît sans ambiguïté",
+            body:
+              "Le communiqué du Barça ne conteste pas que l’UEFA a reçu la documentation du Real Madrid. Il reproduit même le texte de l’instance européenne confirmant cette réception et l’examen à venir par les inspecteurs dans le cadre de l’enquête en cours.",
+            sourceIds: ["barca-negreira-2026-10-01"],
+          },
+          {
+            h3: "Ce que le Barça conteste dans le récit médiatique",
+            body:
+              "Le point de désaccord porte sur la qualification procédurale : le club refuse les termes de réouverture ou de réactivation, puisqu’il affirme que la procédure ouverte en 2023 n’a jamais été fermée. Cette nuance est importante, car recevoir de nouveaux éléments dans une enquête existante n’équivaut pas automatiquement à annoncer une nouvelle procédure ou une décision disciplinaire.",
+            sourceIds: ["barca-negreira-2026-10-01"],
+          },
+        ],
+      },
+      {
+        h2: "Ce qui est établi, et ce qui reste encore à démontrer",
+        body:
+          "Trois faits peuvent être séparés des interprétations des deux clubs. Premièrement, l’UEFA a reçu des documents transmis par le Real Madrid. Deuxièmement, ses inspecteurs doivent les évaluer dans une enquête déjà qualifiée d’en cours. Troisièmement, aucune décision sur le fond de ces documents n’est annoncée dans le texte rendu public. En revanche, la portée exacte des pièces, leur poids dans l’enquête et les conséquences disciplinaires éventuelles ne peuvent pas être déduits des communiqués publiés ce jeudi. BetGPT ne présente donc ni la position du Real Madrid ni celle du FC Barcelone comme le verdict de l’UEFA.",
+        sourceIds: ["realmadrid-negreira-2026-10-01","barca-negreira-2026-10-01","efe-negreira-2026-10-01"],
+      },
+      {
+        h2: "Pourquoi cette séquence est particulièrement sensible avant les prochains grands rendez-vous",
+        body:
+          "Le dossier touche directement deux des clubs les plus exposés médiatiquement en Europe et revient au premier plan au moment où leurs calendriers sportifs continuent de les maintenir sous une forte attention. Cela augmente mécaniquement la circulation des réactions, des extraits de communiqués et des interprétations parfois contradictoires. Pour le lecteur, l’enjeu est donc moins de suivre chaque commentaire que de revenir aux trois textes qui structurent la journée : la confirmation attribuée à l’UEFA, la demande du Real Madrid d’accélérer l’examen et la réponse du FC Barcelone sur la continuité de la procédure.",
+        sourceIds: ["realmadrid-negreira-2026-10-01","barca-negreira-2026-10-01","efe-negreira-2026-10-01"],
+      },
+      {
+        h2: "Le prochain signal décisif viendra de l’UEFA, pas des communiqués des clubs",
+        body:
+          "La suite réellement décisive dépend désormais des inspecteurs éthiques et disciplinaires de l’UEFA. Une demande formelle adressée au FC Barcelone, une communication supplémentaire de l’instance ou une décision procédurale identifiable apporterait un élément nouveau. D’ici là, le niveau de certitude reste limité : le Real Madrid a transmis des documents et souhaite une progression rapide de l’enquête ; le Barça souligne qu’aucune nouvelle procédure n’a été ouverte ; l’UEFA, telle que citée dans les sources disponibles, confirme la réception des documents et leur examen dans une enquête en cours. Toute conclusion plus forte dépasserait les faits publiquement établis ce 1er octobre.",
+        sourceIds: ["barca-negreira-2026-10-01","efe-negreira-2026-10-01"],
+      },
+    ],
+    createdAt: "2026-10-01T21:34:04.000Z",
+    publishedAt: "2026-10-01T21:34:04.000Z",
+    modifiedAt: null,
+    parisDate: "2026-10-01",
+    scheduledTime: "23:34",
+    category: "Actualité football",
+    section: "la-liga",
+    league: "LL",
+    teams: ["Real Madrid", "FC Barcelona"],
+    matchId: null,
+    competition: "La Liga",
+    sources: [
+      {
+        id: "realmadrid-negreira-2026-10-01",
+        label: "Real Madrid — communiqué officiel",
+        status: "OFFICIAL",
+        note: "Le Real Madrid confirme avoir transmis une plainte et une documentation à l’UEFA et demande que l’enquête avance avec célérité.",
+        url: "https://www.realmadrid.com/fr-FR/actualites/club/announcements/comunicado-oficial-01-10-2026",
+      },
+      {
+        id: "barca-negreira-2026-10-01",
+        label: "FC Barcelone — communiqué officiel",
+        status: "OFFICIAL",
+        note: "Le FC Barcelone précise qu’aucune nouvelle procédure n’a été ouverte et reproduit la confirmation de l’UEFA sur la réception des documents du Real Madrid.",
+        url: "https://www.fcbarcelona.fr/fr/actualites/4585252/communique-du-fc-barcelone",
+      },
+      {
+        id: "efe-negreira-2026-10-01",
+        label: "EFE",
+        status: "HIGH_CONFIDENCE",
+        note: "L’agence EFE rapporte la confirmation de l’UEFA et le contenu de sa communication sur l’examen des documents reçus.",
+        url: "https://efe.com/deportes/2026-10-01/uefa-documentacion-real-madrid-caso-negreira/",
+      },
+    ],
+    newsworthiness: 97,
+    discoverOpportunity: {
+      freshness: 20,
+      frenchInterest: 18,
+      entityStrength: 15,
+      novelty: 15,
+      visual: 9,
+      sourceQuality: 10,
+      editorialAngle: 10,
+      total: 97,
+      decision: "PUBLISH",
+      reasons: [],
+    },
+    discoverChecks: {
+      INDEXABLE: true,
+      LARGE_IMAGE: true,
+      IMAGE_GE_1200: true,
+      MAX_IMAGE_PREVIEW_LARGE: true,
+      HELPFUL_CONTENT: true,
+      NON_CLICKBAIT_TITLE: true,
+      ORIGINAL_VALUE: true,
+      MOBILE_TEMPLATE: true,
+    },
+    discoverReadiness: 100,
+    topStories: "TOP_STORIES_ELIGIBILITY_READY",
+    image: {
+      src: "/blog/discover/inline-flags.jpg",
+      alt: "Drapeaux et tribunes dans un stade de football, photo d’illustration",
+      width: 1200,
+      height: 675,
+      credit:
+        "Photo d’illustration libre de droits (Unsplash ou Pexels), recadrée par BetGPT en 1200×675. Elle n’illustre pas une scène précise de l’affaire Negreira.",
+    },
+    links: [
+      { href: "/actualites/la-liga", label: "Actualités La Liga" },
+      { href: "/la-liga", label: "La Liga" },
+      { href: "/methodology", label: "Méthode BetGPT" },
+      { href: "/auteurs/betgpt-editorial", label: "BetGPT Editorial" },
+    ],
+    related: [
+      {
+        href: "/actualites/real-madrid-mbappe-recuperation-paris-2026-10-01",
+        title: "Mbappé à Paris pendant sa récupération : ce que le Real Madrid a réellement autorisé",
+      },
+    ],
+    quality: { pass: true, reasons: [] },
+    duplicateScore: 0,
+    corrections: [],
+    sourceChanges: [],
+    factHash: "manual-negreira-uefa-real-barca-2026-10-01-v1",
+    keywords: "affaire Negreira, UEFA, Real Madrid, FC Barcelone, Barça, enquête UEFA, La Liga",
   },
 ];
 
