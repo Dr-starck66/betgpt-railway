@@ -799,6 +799,11 @@ function refreshFrozen(
   usedImages: Set<string>,
   now: Date,
 ): EditorialArticle {
+  // A news story may be contextually linked to a match, but a desk odds/score
+  // change must never rewrite that story as a generic match preview while
+  // preserving its original news slug. News articles stay frozen unless a
+  // genuine editorial news development creates a new article.
+  if (frozen.articleType === "news") return frozen;
   if (!frozen.matchId) return frozen;
   const match = matches.find((row) => row.id === frozen.matchId);
   if (!match) return frozen;
