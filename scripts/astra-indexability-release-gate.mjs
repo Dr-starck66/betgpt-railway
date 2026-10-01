@@ -10,7 +10,7 @@ function norm(p) {
   if (!p) return "/";
   let x = String(p).split("?")[0].split("#")[0];
   if (!x.startsWith("/")) x = "/" + x;
-  if (x.length > 1) x = x.replace(/\\/+$/, "");
+  if (x.length > 1) x = x.replace(/\/+$/, "");
   return x;
 }
 
