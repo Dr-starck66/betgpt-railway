@@ -1,0 +1,69 @@
+name: ASTRA BetGPT Learning Checkpoint Ω
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/astra-learning-memory-checkpoint.yml"
+      - "server/api/learning-checkpoint.get.ts"
+      - "src/engine/ticket-log.ts"
+      - "src/engine/learning-memory.ts"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: astra-betgpt-learning-checkpoint
+  cancel-in-progress: true
+
+jobs:
+  checkpoint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout durable memory branch
+        uses: actions/checkout@v4
+        with:
+          ref: runtime-memory
+          fetch-depth: 0
+
+      - name: Fetch live BetGPT learning state
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f /tmp/runtime-learning-checkpoint.json
+          for i in $(seq 1 60); do
+            if curl -fsS --connect-timeout 8 --max-time 25               -H 'accept: application/json'               -H 'cache-control: no-cache'               https://betgpt.live/api/learning-checkpoint               -o /tmp/runtime-learning-checkpoint.json               && jq -e '
+                .schema == "astra-betgpt-runtime-checkpoint/v1" and
+                (.tickets | type == "array") and
+                (.learning.schema == "astra-betgpt-learning-memory/v1")
+              ' /tmp/runtime-learning-checkpoint.json >/dev/null; then
+              echo "ASTRA_LEARNING_CHECKPOINT_FETCH_PASS attempt=$i tickets=$(jq '.tickets|length' /tmp/runtime-learning-checkpoint.json)"
+              break
+            fi
+            rm -f /tmp/runtime-learning-checkpoint.json
+            echo "ASTRA_LEARNING_CHECKPOINT_WAIT attempt=$i"
+            sleep 15
+          done
+          test -s /tmp/runtime-learning-checkpoint.json
+
+      - name: Persist checkpoint outside deployment branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp /tmp/runtime-learning-checkpoint.json runtime-learning-checkpoint.json
+          jq -e '.schema == "astra-betgpt-runtime-checkpoint/v1"' runtime-learning-checkpoint.json >/dev/null
+          git config user.name "ASTRA Learning Memory"
+          git config user.email "actions@users.noreply.github.com"
+          git add runtime-learning-checkpoint.json
+          if git diff --cached --quiet; then
+            echo "ASTRA_LEARNING_CHECKPOINT_UNCHANGED"
+            exit 0
+          fi
+          git commit -m "memory: checkpoint BetGPT settled learning state"
+          git pull --rebase origin runtime-memory
+          git push origin HEAD:runtime-memory
+          echo "ASTRA_LEARNING_CHECKPOINT_PERSISTED"
