@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ResultsBoard, dayTitle, resultsLead } from "@/components/results-board";
 import { SITE_URL } from "@/lib/seo";
-import { bucketResults } from "@/lib/serp/results";
+import { recentResultDays } from "@/lib/serp/results";
 import { getResultsBoard } from "@/lib/serp/results.functions";
 
 export const Route = createFileRoute("/resultats-football/")({
@@ -23,17 +23,13 @@ export const Route = createFileRoute("/resultats-football/")({
 
 function ResultsHome() {
   const data = Route.useLoaderData();
-  const buckets = bucketResults(data.rows);
-  const lead = resultsLead(buckets.today.length ? buckets.today : data.rows, buckets.today.length ? "aujourd’hui" : "récents");
-  return (
-    <ResultsBoard
-      h1="Résultats football"
-      lead={lead}
-      sections={[
-        { id: "today", title: "Aujourd’hui", rows: buckets.today },
-        { id: "yesterday", title: "Hier", rows: buckets.yesterday },
-        { id: "previous", title: buckets.previousDay ? dayTitle(buckets.previousDay) : "Date précédente", rows: buckets.previous },
-      ]}
-    />
-  );
+  const days = recentResultDays(data.rows, Date.now(), 7);
+  const today = days[0]?.rows ?? [];
+  const lead = resultsLead(today.length ? today : data.rows, today.length ? "aujourd’hui" : "récents");
+  const sections = days.map(({ day, rows }, index) => ({
+    id: day,
+    title: index === 0 ? "Aujourd’hui" : index === 1 ? "Hier" : dayTitle(day),
+    rows,
+  }));
+  return <ResultsBoard h1="Résultats football" lead={lead} sections={sections} asOf={data.asOf} />;
 }
