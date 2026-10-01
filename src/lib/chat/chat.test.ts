@@ -9,7 +9,7 @@ import type { MatchInput } from "../../engine/types.ts";
 import { extractPunchline } from "./punch.ts";
 import { generateAbsurdInsult, shouldDropAbsurdInsult } from "./absurd-insults.ts";
 import { reactionForPunchline } from "./reaction.ts";
-import { selectDailyChatPick, selectDailyDataFallback } from "./daily-pick.ts";
+import { renderDailyChatPick, selectDailyChatPick, selectDailyDataFallback } from "./daily-pick.ts";
 
 it("normalizes corrupt nested memories instead of crashing the prompt", () => {
   assert.deepEqual(normalizeMemory({ blackBook: null, preferences: 42 }), EMPTY_MEMORY);
@@ -407,6 +407,54 @@ it("daily data fallback always returns one standard pick when today's fixtures e
   assert.equal(pick?.label, "2 — Extérieur");
   assert.equal(pick?.odds, null);
   assert.match(pick?.rationale ?? "", /Portugal/i);
+});
+
+it("daily chat pick exposes the real best-book URL and lets a future affiliate URL override it", () => {
+  const previous = process.env.BETGPT_AFFILIATE_UNIBET_URL;
+  process.env.BETGPT_AFFILIATE_UNIBET_URL = "https://affiliate.example/betgpt-unibet";
+  try {
+    const match = {
+      id: "affiliate-1",
+      home: { name: "Alpha", short: "ALP" },
+      away: { name: "Beta", short: "BET" },
+      competition: "Test League",
+      kickoff: "2026-10-01T21:00:00Z",
+      status: "scheduled",
+    } as MatchInput;
+    const prediction = {
+      matchId: "affiliate-1",
+      markets: [{
+        market: "1X2_H",
+        label: "1 — Domicile",
+        group: "1X2",
+        selection: "1",
+        modelProb: 0.58,
+        fairOdds: 1.72,
+        bestOdds: 2.10,
+        bestBook: "Unibet",
+        bestBookUrl: "https://www.unibet.example/event",
+        implied: 1 / 2.10,
+        edge: 0.1,
+        ev: 0.218,
+        stakePct: 0.02,
+        listed: true,
+        premium: true,
+        opportunityScore: 75,
+        decision: "BET",
+      }],
+    } as unknown as import("../../engine/types.ts").PredictionRecord;
+
+    const pick = selectDailyChatPick([match], [prediction], "2026-10-01T14:00:00Z", false);
+    assert.equal(pick?.bookUrl, "https://affiliate.example/betgpt-unibet");
+    assert.equal(pick?.affiliate, true);
+    const rendered = renderDailyChatPick(pick!);
+    assert.match(rendered, /Meilleure cote trouvée : 2\.10 chez Unibet/);
+    assert.match(rendered, /https:\/\/affiliate\.example\/betgpt-unibet/);
+    assert.match(rendered, /lien affilié BetGPT/);
+  } finally {
+    if (previous == null) delete process.env.BETGPT_AFFILIATE_UNIBET_URL;
+    else process.env.BETGPT_AFFILIATE_UNIBET_URL = previous;
+  }
 });
 
 it("daily chat pick refuses stale desk data instead of manufacturing a current bet", () => {
