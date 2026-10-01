@@ -163,10 +163,19 @@ export function qualityGate(
   if (article.articleType === "slate") reasons.push("article programme générique interdit en Discover auto");
   if (article.h1.trim().length < 20 || article.h1.length > 120) reasons.push("titre hors longueur");
   if (article.lead.trim().length < 90) reasons.push("chapô trop court");
+  if (article.articleType === "news" && article.lead.trim().length < 150) reasons.push("chapô d'actualité trop mince");
   if (article.paragraphs.length < 3) reasons.push("moins de trois parties");
+  if (article.articleType === "news" && article.paragraphs.length < 5) reasons.push("actualité trop peu structurée pour Discover");
   if (article.paragraphs.some((p) => p.body.trim().length < 140)) reasons.push("partie trop mince");
+  if (article.articleType === "news" && body.trim().length < 2400) reasons.push("actualité trop courte pour apporter une vraie valeur éditoriale");
   if (!article.sources.length) reasons.push("aucune source");
   if (sourceQualityScore(article.sources) < 4) reasons.push("sources trop faibles");
+  if (
+    article.articleType === "news" &&
+    article.sources.filter((source) => source.url && sourceStrength(source) >= 6).length < 2
+  ) {
+    reasons.push("actualité insuffisamment corroborée par des sources fortes");
+  }
   if (article.sources.some((s) => s.status === "UNKNOWN" && /confirmé|officiellement/i.test(s.note))) {
     reasons.push("fait inconnu écrit comme confirmé");
   }
@@ -227,9 +236,17 @@ export function discoverChecks(article: EditorialArticle): Record<DiscoverCheck,
     LARGE_IMAGE: article.image.width >= 1200,
     IMAGE_GE_1200: article.image.width >= 1200 && article.image.height >= 675,
     MAX_IMAGE_PREVIEW_LARGE: true,
-    HELPFUL_CONTENT: article.quality.pass && body.length >= 650,
+    HELPFUL_CONTENT:
+      article.quality.pass &&
+      (article.articleType === "news"
+        ? body.length >= 2400 && article.paragraphs.length >= 5
+        : body.length >= 650),
     NON_CLICKBAIT_TITLE: !CLICKBAIT.test(article.h1),
-    ORIGINAL_VALUE: article.quality.pass && article.duplicateScore < 0.66 && article.links.length > 0,
+    ORIGINAL_VALUE:
+      article.quality.pass &&
+      article.duplicateScore < 0.66 &&
+      article.links.length > 0 &&
+      (article.articleType !== "news" || article.paragraphs.length >= 5),
     MOBILE_TEMPLATE: true,
   };
 }
