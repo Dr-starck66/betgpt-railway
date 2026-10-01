@@ -117,7 +117,7 @@ const generatedPaths = [...new Set(generated.map((row) => norm(row.path)))];
 
 for (const item of routes) {
   const rawRoute = norm(item.routePath);
-  const route = publicRoutePattern(rawRoute);
+  const route = aliasedRoute(publicRoutePattern(rawRoute));
   if ((cfg.ignoreRoutes || []).includes(route)) continue;
 
   const re = routeRegex(route);
