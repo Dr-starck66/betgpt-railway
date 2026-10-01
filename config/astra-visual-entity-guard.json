@@ -1,0 +1,55 @@
+{
+  "schema": "astra-visual-entity-guard/v1",
+  "sourceRoots": ["src"],
+  "renderExtensions": [".tsx", ".jsx", ".vue", ".svelte", ".html"],
+  "exclude": [],
+  "forbidDirectRegionalFlagEmoji": true,
+  "remoteAssetOwnership": [
+    {
+      "needle": "flagcdn.com",
+      "owner": "src/components/country-flag.tsx"
+    },
+    {
+      "needle": "cdn.jsdelivr.net/gh/twitter/twemoji",
+      "owner": "src/components/country-flag.tsx"
+    }
+  ],
+  "ownershipContracts": [
+    {
+      "id": "compare-row-single-visual-owner",
+      "file": "src/routes/comparer-cotes.tsx",
+      "mustContain": ["<TeamLine"],
+      "mustNotContain": [
+        "<CountryFlag",
+        "countryForLeague",
+        "teamCountryCodeFromShort",
+        "flagcdn.com",
+        "Drapeau "
+      ]
+    },
+    {
+      "id": "team-line-national-team-owner",
+      "file": "src/components/crest.tsx",
+      "mustContain": [
+        "nationalTeamCountryCode",
+        "<CountryFlag"
+      ]
+    },
+    {
+      "id": "country-flag-provider-owner",
+      "file": "src/components/country-flag.tsx",
+      "mustContain": [
+        "flagcdn.com",
+        "cdn.jsdelivr.net/gh/twitter/twemoji",
+        "onError"
+      ]
+    },
+    {
+      "id": "republic-of-ireland-alias",
+      "file": "src/lib/team-flags.ts",
+      "mustContain": [
+        "\"republic of ireland\": \"🇮🇪\""
+      ]
+    }
+  ]
+}
