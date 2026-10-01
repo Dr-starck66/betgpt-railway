@@ -4,6 +4,7 @@ import { getZeroRadar } from "@/lib/hunter.functions";
 import { BRAND_OG, imageHeadTags } from "@/lib/image-seo";
 import { SITE_URL } from "@/lib/programmatic";
 import { fmtPct } from "@/lib/utils";
+import { AstraSidewings } from "@/components/astra-sidewings";
 
 export const Route = createFileRoute("/statistics/leagues/lowest-0-0")({
   validateSearch: (s: Record<string, unknown>) => ({
@@ -39,7 +40,35 @@ function Page() {
     ? `${data.seasonLabel} : ${top.label} a le moins de 0-0 parmi les ligues avec n≥10 (${fmtPct(top.freq)}, ${top.n00}/${top.n}). Archive ESPN, n global=${data.provenance.n.toLocaleString("fr-FR")}.`
     : `${data.seasonLabel} : échantillon insuffisant. Aucune ligue classée.`;
   return (
-    <ZeroRadarView
+    <AstraSidewings
+      ariaLabel="Ligues avec le moins de 0-0 — navigation statistique"
+      left={{
+        eyebrow: "Radar 0-0",
+        title: "Explorer les statistiques",
+        intro: "Compare cette lecture avec les autres vues statistiques BetGPT.",
+        links: [
+          { href: "/statistics", label: "Toutes les statistiques", description: "Revenir au hub des statistiques football." },
+          { href: "/statistics/leagues/highest-0-0", label: "Ligues avec le plus de 0-0", description: "Voir l’autre extrême du même indicateur." },
+          { href: "/statistics/most-common-scores", label: "Scores les plus fréquents", description: "Comparer le 0-0 aux distributions de scores observées." },
+          { href: "/score-hunter", label: "Score Hunter", description: "Explorer les scénarios de scores à partir des données disponibles." },
+        ],
+      }}
+      right={{
+        eyebrow: "Fiabilité",
+        title: "Interpréter le signal",
+        intro: top ? `${top.label} est le premier échantillon éligible affiché ici pour ${data.seasonLabel}.` : "Échantillon insuffisant pour établir un classement robuste.",
+        stats: top ? [
+          { label: "Fréquence 0-0", value: fmtPct(top.freq), detail: `${top.n00} sur ${top.n} matchs dans l’échantillon.` },
+          { label: "Ligue", value: top.label, detail: data.seasonLabel },
+        ] : [],
+        links: [
+          { href: "/methodology", label: "Méthodologie", description: "Comment BetGPT transforme les données en indicateurs." },
+          { href: "/data-sources", label: "Sources des données", description: "Origine, couverture et limites des archives utilisées." },
+          { href: "/rapports/precision", label: "Rapport de précision", description: "Voir les contrôles de calibration et d’erreur." },
+        ],
+      }}
+    >
+      <ZeroRadarView
       title="Ligues et clubs avec le moins de 0-0"
       intro={intro}
       sort="low"
@@ -52,5 +81,6 @@ function Page() {
       provenance={data.provenance}
       path="/statistics/leagues/lowest-0-0"
     />
+    </AstraSidewings>
   );
 }
