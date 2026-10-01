@@ -128,21 +128,21 @@ export function MatchBoard({
     {
       key: "1",
       market: "1X2_H",
-      odds: listed1x2 ? h?.bestOdds : undefined,
+      odds: listed1x2 && h?.bestOdds != null && oddsPlayable(h.bestOdds) ? h.bestOdds : undefined,
       p: prediction.calibrated.home,
       name: match.home.short,
     },
     {
       key: "X",
       market: "1X2_D",
-      odds: listed1x2 ? d?.bestOdds : undefined,
+      odds: listed1x2 && d?.bestOdds != null && oddsPlayable(d.bestOdds) ? d.bestOdds : undefined,
       p: prediction.calibrated.draw,
       name: "Nul",
     },
     {
       key: "2",
       market: "1X2_A",
-      odds: listed1x2 ? a?.bestOdds : undefined,
+      odds: listed1x2 && a?.bestOdds != null && oddsPlayable(a.bestOdds) ? a.bestOdds : undefined,
       p: prediction.calibrated.away,
       name: match.away.short,
     },
@@ -279,7 +279,7 @@ export function MatchBoard({
             </p>
           ) : (
             <p className="rounded-md border border-line px-4 py-3 text-center text-sm text-mist">
-              Pas de pari conseillé : aucune sélection à 1,80 ou plus.
+              Pas de pari conseillé : aucune sélection conforme au seuil minimum de 1,80.
             </p>
           )}
 
