@@ -40,14 +40,14 @@ export default defineEventHandler(async (event) => {
         crests: crestCount,
         flags: flagCount,
       },
-      fallbackPolicy: ["FotMob", "BetGPT archive", "BetGPT desk"],
+      fallbackPolicy: ["FotMob", "ESPN", "BetGPT archive", "BetGPT desk"],
     };
   } catch (error) {
     setResponseStatus(event, 503);
     return {
       ...auditResultsSnapshot({ httpOk: false, rowCount: 0, visualCount: 0, historySections: 0 }),
       error: error instanceof Error ? error.message : String(error),
-      fallbackPolicy: ["FotMob", "BetGPT archive", "BetGPT desk"],
+      fallbackPolicy: ["FotMob", "ESPN", "BetGPT archive", "BetGPT desk"],
     };
   }
 });
