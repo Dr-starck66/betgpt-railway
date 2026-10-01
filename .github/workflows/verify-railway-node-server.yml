@@ -1,0 +1,28 @@
+name: verify-railway-node-server
+
+on:
+  push:
+    branches:
+      - verify-railway-node-server-20261001
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix-railway-node-server-deeplinks
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Build as Railway
+        env:
+          RAILWAY_PROJECT_ID: ci-railway-project
+        run: |
+          npm run build
+          test -f .output/server/index.mjs
+      - run: npm run news
+      - run: npm run typecheck
