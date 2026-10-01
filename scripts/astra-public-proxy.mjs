@@ -40,7 +40,8 @@ function proxy(req, res) {
     },
     (upstreamRes) => {
       const outHeaders = { ...upstreamRes.headers };
-      outHeaders["x-astra-public-proxy"] = "betgpt-main";
+      outHeaders["x-astra-public-proxy"] = "betgpt-canonical-alias";
+      outHeaders["x-astra-router-mode"] = "ROUTER_ONLY";
       res.writeHead(upstreamRes.statusCode || 502, outHeaders);
       upstreamRes.pipe(res);
     },
@@ -56,5 +57,5 @@ function proxy(req, res) {
 }
 
 http.createServer(proxy).listen(port, "0.0.0.0", () => {
-  console.log("ASTRA_PUBLIC_PROXY_READY", { port, upstream: upstream.toString() });
+  console.log("ASTRA_CANONICAL_ALIAS_READY", { port, upstream: upstream.toString(), mode: "ROUTER_ONLY" });
 });
