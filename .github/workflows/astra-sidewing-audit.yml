@@ -1,0 +1,45 @@
+name: ASTRA Sidewing Auditor
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/lib/seo/astra-sidewing-auditor.ts"
+      - "src/lib/seo/astra-sidewing-auditor.test.ts"
+      - "scripts/astra-sidewing-audit.mjs"
+      - "src/routes/**"
+      - "package.json"
+      - ".github/workflows/astra-sidewing-audit.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Test scoring engine
+        run: npm run test:sidewings
+
+      - name: Audit route architecture
+        run: npm run sidewings:audit
+
+      - name: Print top audit results
+        run: |
+          node -e 'const r=require("./reports/astra-sidewing-audit.json"); console.log(JSON.stringify({summary:r.summary,top:r.rows.slice(0,15)},null,2))'
+
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: astra-sidewing-audit
+          path: reports/astra-sidewing-audit.json
