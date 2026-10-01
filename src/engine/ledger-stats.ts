@@ -59,7 +59,7 @@ function eligible(row: TicketRow): boolean {
   if (row.book === "clôture") return false;
   if (row.result === "void") return false;
   if (row.kind === "mise") return false;
-  if (row.decision === "NO_BET") return false;
+  if (row.decision !== "BET") return false;
   return publishedBeforeKickoff(row);
 }
 
@@ -141,8 +141,8 @@ export function calculateLedgerStats(rows: TicketRow[]): LedgerStats {
   const published = rows.filter((r) => r.kind !== "mise" && r.decision !== "NO_BET" && r.book !== "clôture");
   const before = published.filter((r) => publishedBeforeKickoff(r));
   const after = published.filter((r) => !publishedBeforeKickoff(r));
-  const settled = before.filter((r) => r.result === "win" || r.result === "lose");
-  const pending = before.filter((r) => !r.result);
+  const settled = before.filter((r) => r.decision === "BET" && (r.result === "win" || r.result === "lose"));
+  const pending = before.filter((r) => r.decision === "BET" && !r.result);
   const wins = settled.filter((r) => r.result === "win").length;
   const losses = settled.filter((r) => r.result === "lose").length;
   const oddsComplete = settled.every(validOdds);
