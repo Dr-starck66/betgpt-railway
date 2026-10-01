@@ -6,12 +6,12 @@
     {
       "id": "betgpt-live",
       "url": "https://betgpt.live",
-      "expectedProxyHeader": "betgpt-main"
+      "expectedProxyHeader": "betgpt-canonical-alias"
     },
     {
       "id": "www-betgpt-live",
       "url": "https://www.betgpt.live",
-      "expectedProxyHeader": "betgpt-main"
+      "expectedProxyHeader": "betgpt-canonical-alias"
     }
   ],
   "healthPath": "/api/health",
