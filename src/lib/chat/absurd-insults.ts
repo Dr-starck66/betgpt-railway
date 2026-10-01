@@ -19,9 +19,10 @@ const CREATURES = [
 
 const STATES = [
   "sous caféine", "en orbite", "sous kétamine", "en surchauffe", "en moonwalk",
-  "sous Red Bull", "en apesanteur", "en grève", "en roue libre", "sous stéroïdes cosmiques",
-  "en télétravail sur Mars", "en burn-out quantique", "sous Wi-Fi nucléaire",
-  "en stage chez la NASA", "en RTT intersidéral", "en contrôle fiscal galactique",
+  "sous Red Bull", "en apesanteur", "en grève", "en roue libre",
+  "sous stéroïdes cosmiques", "en télétravail sur Mars", "en burn-out quantique",
+  "sous Wi-Fi nucléaire", "en stage chez la NASA", "en RTT intersidéral",
+  "en contrôle fiscal galactique",
 ];
 
 const ADJECTIVES = [
@@ -56,16 +57,28 @@ const FINANCIAL_DISASTERS = [
   "autant convertir ton budget du mois en tickets à gratter et les lancer depuis un hélicoptère",
 ];
 
+const COUPLE_CLICHES = [
+  "autant donner ta carte bleue à ta femme, le code avec, et la lâcher chez Dior pendant les soldes",
+  "autant donner ta carte bleue à ta copine et lui dire « fais-toi plaisir » devant Sephora",
+  "autant donner ton salaire à ton mec, le déposer chez Feu Vert et lui dire « prends tout ce qui brille »",
+  "autant lâcher ton mari chez Leroy Merlin avec une remorque vide et aucun plafond de carte",
+  "autant donner ta CB à ton mec devant un rayon barbecue et partir trois heures sans téléphone",
+  "autant envoyer ta femme chez IKEA avec ta carte, le code PIN et la phrase « on a besoin de deux-trois trucs »",
+];
+
 const CONTEXT_HOOKS: Array<[RegExp, string[]]> = [
-  [/(combin[eé]|ticket|pari|mise)/i, ["ton ticket", "ton combiné", "ta mise"]],
-  [/(cote|odds|value)/i, ["ta cote", "ta value", "ton calcul"]],
-  [/(score|20-0|10-0|gagne|perd)/i, ["ton scénario", "ton score", "ta prophétie"]],
-  [/(btts|over|under|handicap)/i, ["ton marché", "ton angle", "ton pari"]],
+  [/\b(combin[eé]|ticket|pari|mise)\b/i, ["ton ticket", "ton combiné", "ta mise"]],
+  [/\b(cote|odds|value)\b/i, ["ta cote", "ta value", "ton calcul"]],
+  [/\b(score|20-0|10-0|gagne|perd)\b/i, ["ton scénario", "ton score", "ta prophétie"]],
+  [/\b(btts|over|under|handicap)\b/i, ["ton marché", "ton angle", "ton pari"]],
 ];
 
 const BLOCKED = [
-  // Never generate slurs or attacks tied to protected traits.
-  /n[eè]gr/i, /youp/i, /bougnoul/i, /p[eé]d[eé]/i, /tapette/i, /mongol/i,
+  /n[eè]gr/i,
+  /youp/i,
+  /bougnoul/i,
+  /p[eé]d[eé]/i,
+  /tapette/i,
 ];
 
 function hash32(input: string): number {
@@ -123,13 +136,13 @@ function scoreCandidate(text: string, context: string, recent: string[]): number
   const words = text.split(/\s+/).length;
   let score = 48;
 
-  // Punchy enough to screenshot/share, but not a paragraph.
-  if (words >= 7 && words <= 16) score += 16;
-  else if (words <= 22) score += 8;
+  if (words >= 7 && words <= 18) score += 16;
+  else if (words <= 28) score += 8;
 
   if (/[!?]{2,}/.test(text)) score += 7;
   if (/\b(cosmique|quantique|nucl[eé]aire|galactique|Mars|NASA|interstellaire)\b/i.test(text)) score += 9;
   if (/\b(grille-pain|pigeon|hamster|lama|parpaing|micro-ondes|poulpe|ragondin)\b/i.test(text)) score += 7;
+  if (/\b(carte bleue|code PIN|Dior|Sephora|Leroy Merlin|IKEA|Feu Vert)\b/i.test(text)) score += 8;
 
   const hook = contextNoun(context, mulberry32(hash32(context + ":hook")));
   if (normalize(text).includes(normalize(hook))) score += 9;
@@ -149,12 +162,13 @@ function templates(context: string, rnd: () => number): Array<{ text: string; re
   const hook = contextNoun(context, rnd);
 
   return [
-    { text: `MAIS T'ES UN ${obj.toUpperCase()} ${adj.toUpperCase()} OU QUOI ?!`, recipe: "objet+adjectif" },
-    { text: `QUI A LAISSÉ UN ${animal.toUpperCase()} ${state.toUpperCase()} GÉRER ${hook.toUpperCase()} ?!`, recipe: "animal+état+contexte" },
-    { text: `ESPÈCE DE ${obj.toUpperCase()} ${state.toUpperCase()} !!!`, recipe: "objet+état" },
-    { text: `${hook.toUpperCase()} ${action.toUpperCase()} !!!`, recipe: "contexte+action impossible" },
-    { text: `ON DIRAIT UN ${animal.toUpperCase()} ${adj.toUpperCase()} QUI ${action.toUpperCase()} !!!`, recipe: "créature+collision+surréalisme" },
-    { text: `AVEC ${hook.toUpperCase()}, ${pick(FINANCIAL_DISASTERS, rnd).toUpperCase()} !!!`, recipe: "catastrophe-financière+quotidien" },
+    { text: \`MAIS T'ES UN \${obj.toUpperCase()} \${adj.toUpperCase()} OU QUOI ?!\`, recipe: "objet+adjectif" },
+    { text: \`QUI A LAISSÉ UN \${animal.toUpperCase()} \${state.toUpperCase()} GÉRER \${hook.toUpperCase()} ?!\`, recipe: "animal+état+contexte" },
+    { text: \`ESPÈCE DE \${obj.toUpperCase()} \${state.toUpperCase()} !!!\`, recipe: "objet+état" },
+    { text: \`\${hook.toUpperCase()} \${action.toUpperCase()} !!!\`, recipe: "contexte+action-impossible" },
+    { text: \`ON DIRAIT UN \${animal.toUpperCase()} \${adj.toUpperCase()} QUI \${action.toUpperCase()} !!!\`, recipe: "créature+collision+surréalisme" },
+    { text: \`AVEC \${hook.toUpperCase()}, \${pick(FINANCIAL_DISASTERS, rnd).toUpperCase()} !!!\`, recipe: "catastrophe-financière+quotidien" },
+    { text: \`AVEC \${hook.toUpperCase()}, \${pick(COUPLE_CLICHES, rnd).toUpperCase()} !!!\`, recipe: "cliché-couple+catastrophe-financière" },
   ];
 }
 
@@ -163,7 +177,7 @@ export function generateAbsurdInsult(
   recent: string[] = [],
   salt = "",
 ): AbsurdInsult {
-  const baseSeed = hash32(`${context}\n${salt}\n${recent.slice(-8).join("\n")}`);
+  const baseSeed = hash32(\`\${context}\\n\${salt}\\n\${recent.slice(-8).join("\\n")}\`);
   const candidates: AbsurdInsult[] = [];
 
   for (let round = 0; round < 12; round++) {
@@ -192,30 +206,27 @@ export function absurdInsultCreativeBrief(context: string, recent: string[] = []
 
   return [
     "ASTRA INSULT LAB — contraintes créatives :",
-    "- Fabrique une image absurde neuve, très courte, mémorisable et liée au message.",
-    "- Collision recommandée : objet banal + univers incompatible + état impossible + détail football/paris.
-    "- Utilise aussi des comparaisons de catastrophe financière très visuelles : carte bleue, code PIN, salaire, boutique de luxe, casino, banque, etc.",",
-    "- Évite toute insulte réaliste, haineuse, discriminatoire, sexuelle ou visant une caractéristique personnelle.",
+    "- Fabrique une image absurde neuve, courte, mémorisable et liée au message.",
+    "- Collision recommandée : objet banal + univers incompatible + état impossible + détail football/paris.",
+    "- Utilise aussi des comparaisons de catastrophe financière très visuelles : carte bleue, code PIN, salaire, boutique de luxe, casino, banque.",
+    "- Les scènes de couple caricaturales sont permises si elles restent des gags de situation précis et non des affirmations générales sur les femmes ou les hommes.",
+    "- Évite les insultes haineuses, discriminatoires, menaçantes ou visant une caractéristique personnelle sensible.",
     "- Ne copie pas les graines ci-dessous mot pour mot : elles servent seulement à fixer le niveau d'absurdité.",
-    `- Graine A : ${seedA.text}`,
-    `- Graine B : ${seedB.text}`,
-    `- Graine C : ${seedC.text}`,
+    \`- Graine A : \${seedA.text}\`,
+    \`- Graine B : \${seedB.text}\`,
+    \`- Graine C : \${seedC.text}\`,
     "- Si tu peux faire plus inattendu, fais-le. Une bonne punchline doit donner envie d'être capturée et partagée.",
-  ].join("\n");
+  ].join("\\n");
 }
-
 
 export function shouldDropAbsurdInsult(context: string, recent: string[] = []): boolean {
   const text = context.trim();
   if (text.length < 8) return false;
   if (/\b(suicide|mourir|mort|deuil|cancer|maladie|agression|viol|urgence)\b/i.test(text)) return false;
 
-  // Obvious betting bravado / absurd certainty deserves an immediate roast.
   if (/\b(20-0|10-0|100%|s[uû]r|certain|impossible de perdre|all[- ]?in|tapis|combin[eé].*(8|9|10|11|12))\b/i.test(text)) {
     return true;
   }
 
-  // Surprise drop: about 1 in 5 substantive ROAST turns, deterministic from the
-  // current context + recent conversation so retries do not spray new insults.
-  return hash32(`${text}\n${recent.slice(-3).join("\n")}`) % 5 === 0;
+  return hash32(\`\${text}\\n\${recent.slice(-3).join("\\n")}\`) % 5 === 0;
 }
