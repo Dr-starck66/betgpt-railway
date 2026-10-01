@@ -615,7 +615,7 @@ function composeNews(
   const paragraphs = [
     paragraph(
       "Le fait nouveau qui fait basculer le dossier",
-      `${leadSignal.sourceName} rapporte ${mainClaim}. ${leadDetail && leadDetail !== mainClaim ? leadDetail : ""} ${material ? "Ce nouvel élément modifie l'état du dossier par rapport aux informations qui circulaient auparavant." : "L'information devient pertinente parce qu'elle précise un dossier déjà suivi, sans transformer une hypothèse en certitude."} ${corroborated ? `Au total, ${cluster.distinctSources} rédactions ou sources distinctes alimentent ce cluster d'actualité.` : "À ce stade, une seule source forte porte encore l'essentiel du fait nouveau."}`.replace(/\s+/g, " ").trim(),
+      `${leadSignal.sourceName} rapporte ${mainClaim}. ${material ? "Ce nouvel élément modifie l'état du dossier par rapport aux informations qui circulaient auparavant." : "L'information devient pertinente parce qu'elle précise un dossier déjà suivi, sans transformer une hypothèse en certitude."} ${corroborated ? `Au total, ${cluster.distinctSources} rédactions ou sources distinctes alimentent ce cluster d'actualité.` : "À ce stade, une seule source forte porte encore l'essentiel du fait nouveau."} Les détails complémentaires sont attribués séparément dans la section suivante afin d'éviter de transformer une reprise en confirmation indépendante.`.replace(/\s+/g, " ").trim(),
     ),
     paragraph(
       "Ce que disent précisément les différentes sources",
