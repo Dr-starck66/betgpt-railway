@@ -1,6 +1,14 @@
 import type { EditorialNewsSignal } from "@/lib/editorial/types";
 import { jaccard } from "@/lib/editorial/quality";
 
+
+const MATERIAL_DEVELOPMENT =
+  /\b(finalement|autorisé|autorisee?|autorisation|accord(?:é|e)?|confirmé|confirmee?|démenti?|dément|refusé|refusee?|refus|officiel(?:lement)?|verdict|décision|annonce|renonce|annulé|annulee?|suspendu|forfait confirmé|opéré|operation)\b/i;
+
+export function isMaterialDevelopment(text: string): boolean {
+  return MATERIAL_DEVELOPMENT.test(text);
+}
+
 const NEWSWORTHY = /blessure|blessé|forfait|absent|suspendu|transfert|mercato|accord|signature|prolong|licenci|limog|entra[iî]neur|coach|composition|compo|titulaire|banc|record|qualification|qualifié|élimin|victoire|défaite|exploit|retour|sanction|décision|communiqué|officiel|annonce|nommé|nomination|rupture|contrat|derby|classique|finale/i;
 
 const EVENT_FAMILIES: [RegExp, string][] = [
@@ -41,10 +49,22 @@ export function clusterSignals(signals: EditorialNewsSignal[]): NewsCluster[] {
       const familiesB = eventFamilies(cluster.signals.map((row) => `${row.title} ${row.description ?? ""}`).join(" "));
       const familyOverlap = familiesA.some((family) => familiesB.includes(family));
       const deltaHours = Math.abs(Date.parse(signal.publishedAt) - Date.parse(cluster.publishedAt)) / 36e5;
+      const incomingMaterial = isMaterialDevelopment(`${signal.title} ${signal.description ?? ""}`);
+      const clusterMaterial = cluster.signals.some((row) =>
+        isMaterialDevelopment(`${row.title} ${row.description ?? ""}`),
+      );
+      // A later confirmation / denial / authorization / official decision is a new editorial development,
+      // not merely another corroborating mention of the earlier rumor or controversy.
+      const materialStateChange =
+        entityOverlap &&
+        incomingMaterial &&
+        !clusterMaterial &&
+        deltaHours >= 0.35;
       const sameStory =
-        score >= 0.34 ||
-        (entityOverlap && score >= 0.24) ||
-        (entityOverlap && familyOverlap && deltaHours <= 12);
+        !materialStateChange &&
+        (score >= 0.34 ||
+          (entityOverlap && score >= 0.24) ||
+          (entityOverlap && familyOverlap && deltaHours <= 12));
       if (sameStory && (score > bestScore || (best == null && familyOverlap))) {
         best = cluster;
         bestScore = Math.max(score, familyOverlap ? 0.25 : score);
