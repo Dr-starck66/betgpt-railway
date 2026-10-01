@@ -4,6 +4,87 @@ import { getPublicDesk } from "@/lib/desk.functions";
 import { bestThreeWay } from "@/lib/money";
 import { SITE_URL } from "@/lib/programmatic";
 import { fmtOdds } from "@/lib/utils";
+import { BETCLIC_LEAGUE, NETBET_LEAGUE, UNIBET_LEAGUE } from "@/engine/book-pages";
+import type { LeagueId, MatchInput } from "@/engine/types";
+
+
+const LEAGUE_COUNTRY: Record<LeagueId, { flag: string; label: string }> = {
+  L1: { flag: "🇫🇷", label: "France" },
+  PL: { flag: "🏴", label: "Angleterre" },
+  LL: { flag: "🇪🇸", label: "Espagne" },
+  BL: { flag: "🇩🇪", label: "Allemagne" },
+  SA: { flag: "🇮🇹", label: "Italie" },
+  ER: { flag: "🇳🇱", label: "Pays-Bas" },
+  PT: { flag: "🇵🇹", label: "Portugal" },
+  SC: { flag: "🏴", label: "Écosse" },
+  TR: { flag: "🇹🇷", label: "Turquie" },
+  CL: { flag: "🇪🇺", label: "Europe" },
+  EL: { flag: "🇪🇺", label: "Europe" },
+  NL: { flag: "🌍", label: "International" },
+};
+
+const FIFA_TO_ISO2: Record<string, string> = {
+  ALG:"DZ", ARM:"AM", AUT:"AT", AZE:"AZ", BEL:"BE", BEN:"BJ", BIH:"BA", BFA:"BF", BDI:"BI",
+  CPV:"CV", CYP:"CY", DEN:"DK", FRA:"FR", GAB:"GA", GAM:"GM", GEO:"GE", GER:"DE", GNB:"GW",
+  HUN:"HU", IRL:"IE", ISR:"IL", ITA:"IT", KOS:"XK", LAT:"LV", LBR:"LR", LIE:"LI", LTU:"LT",
+  MAD:"MG", MLI:"ML", MNE:"ME", MAR:"MA", MOZ:"MZ", MWI:"MW", NED:"NL", NER:"NE", NGA:"NG",
+  NOR:"NO", POL:"PL", POR:"PT", ROU:"RO", RWA:"RW", SEN:"SN", SOM:"SO", SSD:"SS", SWE:"SE",
+  TAN:"TZ", TOG:"TG", TUR:"TR", UKR:"UA", ZAM:"ZM", ENG:"GB", SCO:"GB", WAL:"GB", NIR:"GB",
+};
+
+function flagFromIso2(code?: string): string {
+  if (!code || !/^[A-Z]{2}$/.test(code)) return "🏳️";
+  return [...code].map((c) => String.fromCodePoint(127397 + c.charCodeAt(0))).join("");
+}
+
+function teamFlag(team: { short?: string }, league: LeagueId): string {
+  if (league !== "NL") return LEAGUE_COUNTRY[league].flag;
+  return flagFromIso2(FIFA_TO_ISO2[(team.short ?? "").toUpperCase()]);
+}
+
+function bookmakerDestination(book: string, league: LeagueId, direct?: string): string | null {
+  if (direct && /^https:\/\//i.test(direct)) return direct;
+  const n = book.toLowerCase();
+  if (n.includes("unibet")) return UNIBET_LEAGUE[league] ?? "https://www.unibet.fr/paris-football";
+  if (n.includes("betclic")) return BETCLIC_LEAGUE[league] ?? "https://www.betclic.fr/football-sfootball";
+  if (n.includes("netbet")) return NETBET_LEAGUE[league] ?? "https://www.netbet.fr/football";
+  if (n.includes("winamax")) return "https://www.winamax.fr/paris-sportifs";
+  if (n.includes("pmu")) return "https://paris-sportifs.pmu.fr/";
+  if (n.includes("bwin")) return "https://sports.bwin.fr/fr/sports/football-4";
+  if (n.includes("zebet")) return "https://www.zebet.fr/fr/competition/football";
+  if (n.includes("vbet")) return "https://www.vbet.fr/fr/sports/football";
+  return null;
+}
+
+function OddsCell({
+  line,
+  match,
+}: {
+  line: { odds: number; book: string; url?: string };
+  match: MatchInput;
+}) {
+  const href = bookmakerDestination(line.book, match.league, line.url);
+  if (!href) {
+    return (
+      <>
+        <strong className="tabular text-paper">{fmtOdds(line.odds)}</strong>
+        <div className="text-xs text-muted">{line.book}</div>
+      </>
+    );
+  }
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer sponsored"
+      className="group inline-flex min-h-11 flex-col justify-center rounded-md border border-line px-2.5 py-1.5 hover:border-sage hover:bg-sage/10"
+      aria-label={`Parier chez ${line.book}, cote ${fmtOdds(line.odds)}`}
+    >
+      <strong className="tabular text-paper group-hover:text-sage">{fmtOdds(line.odds)}</strong>
+      <span className="text-xs text-muted group-hover:text-paper">{line.book} ↗</span>
+    </a>
+  );
+}
 
 export const Route = createFileRoute("/comparer-cotes")({
   loader: () => getPublicDesk(),
@@ -75,8 +156,14 @@ function OddsCompare() {
                       <Link to="/cotes/$matchId" params={{ matchId: m.slug ?? m.id }} className="hover:text-sage">
                         <TeamLine home={m.home} away={m.away} size={28} names="auto" competition={m.competition} />
                       </Link>
-                      <div className="mt-1 text-xs text-muted">
-                        {m.competition} ·{" "}
+                      <div className="mt-1 flex flex-wrap items-center gap-1 text-xs text-muted">
+                        <span title={LEAGUE_COUNTRY[m.league].label}>
+                          {m.league === "NL"
+                            ? `${teamFlag(m.home, m.league)} ${teamFlag(m.away, m.league)}`
+                            : LEAGUE_COUNTRY[m.league].flag}
+                        </span>
+                        <span>{m.competition}</span>
+                        <span>·</span>{" "}
                         {new Date(m.kickoff).toLocaleString("fr-FR", {
                           timeZone: "Europe/Paris",
                           day: "2-digit",
@@ -88,30 +175,21 @@ function OddsCompare() {
                     </td>
                     <td className="px-3 py-3">
                       {best ? (
-                        <>
-                          <strong className="tabular text-paper">{fmtOdds(best.home.odds)}</strong>
-                          <div className="text-xs text-muted">{best.home.book}</div>
-                        </>
+                        <OddsCell line={best.home} match={m} />
                       ) : (
                         <span className="text-muted">Non disponible</span>
                       )}
                     </td>
                     <td className="px-3 py-3">
                       {best ? (
-                        <>
-                          <strong className="tabular text-paper">{fmtOdds(best.draw.odds)}</strong>
-                          <div className="text-xs text-muted">{best.draw.book}</div>
-                        </>
+                        <OddsCell line={best.draw} match={m} />
                       ) : (
                         <span className="text-muted">Non disponible</span>
                       )}
                     </td>
                     <td className="px-3 py-3">
                       {best ? (
-                        <>
-                          <strong className="tabular text-paper">{fmtOdds(best.away.odds)}</strong>
-                          <div className="text-xs text-muted">{best.away.book}</div>
-                        </>
+                        <OddsCell line={best.away} match={m} />
                       ) : (
                         <span className="text-muted">Non disponible</span>
                       )}
