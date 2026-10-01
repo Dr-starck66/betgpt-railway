@@ -265,14 +265,20 @@ async function freshFotMobResults(now = Date.now()): Promise<ResultRow[]> {
     const days = Array.from({ length: FOTMOB_DAYS }, (_, i) => parisOffsetDay(-i, now));
     resultsMem.__betgptFotmobRefresh = Promise.all(
       days.map(async (day) => {
+        // A provider can return HTTP 200 with an empty payload. That is not
+        // sufficient evidence that there were no finished matches in the
+        // competitions BetGPT tracks, so treat an empty primary result as a
+        // semantic miss and fall back to ESPN for that day.
         try {
-          return await fetchFotMobDay(day);
+          const primary = await fetchFotMobDay(day);
+          if (primary.length) return primary;
         } catch {
-          try {
-            return await fetchEspnDay(day);
-          } catch {
-            return [] as ResultRow[];
-          }
+          // Fall through to the independent provider below.
+        }
+        try {
+          return await fetchEspnDay(day);
+        } catch {
+          return [] as ResultRow[];
         }
       }),
     )
