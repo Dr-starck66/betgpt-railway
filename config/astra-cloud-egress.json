@@ -297,6 +297,24 @@
       }
     },
     {
+      "id": "discover-france-italie-article",
+      "method": "GET",
+      "path": "/actualites/france-italie-ligue-des-nations-2026-10-02",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "France–Italie",
+            "20 h 45",
+            "Stade de France",
+            "Sources"
+          ]
+        }
+      }
+    },
+    {
       "id": "discover-launchpad",
       "method": "GET",
       "path": "/api/discover-launchpad",
@@ -349,7 +367,7 @@
       }
     }
   ],
-  "verificationRevision": "ASTRA-BETGPT-SENTINEL-V4-DISCOVER-LAUNCHPAD-2026-10-01",
+  "verificationRevision": "ASTRA-BETGPT-DISCOVER-ATTACK-FRANCE-ITALY-2026-10-02",
   "serp": {
     "enabled": true,
     "sitemapPath": "/sitemap.xml",
