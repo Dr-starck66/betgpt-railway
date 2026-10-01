@@ -1,0 +1,103 @@
+name: ASTRA SEO Self-Heal
+
+on:
+  workflow_run:
+    workflows: ["ASTRA Never-Fail Candidate Gate"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: astra-seo-self-heal-main
+  cancel-in-progress: false
+
+jobs:
+  self-heal:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'failure' &&
+       github.event.workflow_run.head_branch == 'main')
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Resolve failed candidate SHA
+        id: target
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_run" ]; then
+            echo "sha=${{ github.event.workflow_run.head_sha }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "sha=${{ github.sha }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout failed candidate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.target.outputs.sha }}
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install exact dependencies
+        run: npm ci --include=dev
+
+      - name: Reproduce candidate failure and generate evidence reports
+        shell: bash
+        run: |
+          set +e
+          npm run release:candidate
+          echo "ASTRA_SELF_HEAL_REPRO_EXIT=$?"
+          exit 0
+
+      - name: Apply only deterministic SEO repairs
+        run: node scripts/astra-seo-self-heal.mjs --apply
+
+      - name: Require an actual repair
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo "ASTRA_SEO_SELF_HEAL_BLOCKED: no safe source repair was produced."
+            exit 78
+          fi
+          git diff --check
+
+      - name: Abort stale repairs
+        shell: bash
+        env:
+          TARGET_SHA: ${{ steps.target.outputs.sha }}
+        run: |
+          git fetch origin main
+          CURRENT_MAIN="$(git rev-parse origin/main)"
+          if [ "$CURRENT_MAIN" != "$TARGET_SHA" ]; then
+            echo "ASTRA_SEO_SELF_HEAL_BLOCKED: main advanced from $TARGET_SHA to $CURRENT_MAIN"
+            exit 78
+          fi
+
+      - name: Verify repaired candidate end-to-end
+        run: npm run release:candidate
+
+      - name: Commit verified repair
+        shell: bash
+        env:
+          TARGET_SHA: ${{ steps.target.outputs.sha }}
+        run: |
+          git config user.name "ASTRA SEO Self-Heal"
+          git config user.email "actions@users.noreply.github.com"
+          git add src/lib/sitemap-urls.ts src/lib/seo/astra-self-heal-sitemap.ts artifacts/seo/self-heal.json
+          git commit -m "seo(self-heal): repair verified indexability regression from $TARGET_SHA"
+          git push origin HEAD:main
+
+      - name: Explicitly rerun immutable candidate gate
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail-with-body -L             -X POST             -H "Accept: application/vnd.github+json"             -H "Authorization: Bearer $GH_TOKEN"             -H "X-GitHub-Api-Version: 2022-11-28"             "https://api.github.com/repos/${{ github.repository }}/actions/workflows/astra-never-fail.yml/dispatches"             -d '{"ref":"main"}'
