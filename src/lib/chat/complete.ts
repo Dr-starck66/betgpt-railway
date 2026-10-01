@@ -19,6 +19,52 @@ function localReply(_last: string, desk: string, _mode: PersonalityMode): string
   return desk;
 }
 
+async function callAstraRouter(
+  base: string,
+  token: string,
+  system: string,
+  history: { role: string; content: string }[],
+  mode: PersonalityMode,
+): Promise<{ ok: true; text: string } | { ok: false; status: number }> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 26000);
+  try {
+    const last = history.at(-1)?.content ?? "";
+    const critic =
+      mode === "ROAST" ||
+      /\b(démonte|demontre|critique|audit|contre-argument|contre argument|risque|faiblesse|erreur)\b/i.test(last);
+    const transcript = history
+      .slice(-10)
+      .map((m) => `${m.role === "assistant" ? "BETGPT" : "UTILISATEUR"}: ${m.content}`)
+      .join("\n\n");
+    const upstream = await fetch(`${base.replace(/\/+$/, "")}/api/router_chat`, {
+      method: "POST",
+      signal: controller.signal,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        system: system.slice(0, 18000),
+        user: `CONVERSATION RÉCENTE\n\n${transcript}\n\nRéponds au dernier message de l'utilisateur.`,
+        requestedModel: critic ? "gemma-critic-local" : "qwen-coder-local",
+        maxTokens: mode === "ROAST" ? 700 : 850,
+      }),
+    });
+    const json = (await upstream.json().catch(() => ({}))) as {
+      text?: string;
+      status?: string;
+      reason?: string;
+    };
+    if (!upstream.ok) return { ok: false, status: upstream.status };
+    const text = stripMarkup(json.text ?? "").trim();
+    if (!text) return { ok: false, status: 204 };
+    return { ok: true, text };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 async function callXai(
   apiKey: string,
   system: string,
@@ -78,18 +124,34 @@ export async function completeChat(
     }));
   const last = history.at(-1)?.content ?? "";
 
+  const routerBase = process.env.ASTRA_ROUTER_BASE?.trim();
+  const routerToken = process.env.ASTRA_ROUTER_TOKEN?.trim();
+  if (routerBase && routerToken) {
+    try {
+      const out = await callAstraRouter(routerBase, routerToken, system, history, mode);
+      if (out.ok) return { ok: true, text: out.text };
+    } catch {
+      /* fall through to optional cloud provider, then factual local desk */
+    }
+  }
+
   const apiKey = process.env.XAI_API_KEY;
   if (apiKey) {
     try {
       const out = await callXai(apiKey, system, history, mode);
       if (out.ok) return { ok: true, text: out.text };
     } catch {
-      /* fall through to local desk */
+      /* fall through to factual local desk */
     }
   }
 
+  const reason = routerBase && routerToken
+    ? "le routeur ASTRA n’a pas répondu"
+    : apiKey
+      ? "le service IA n’a pas répondu"
+      : "service IA non configuré";
   return {
     ok: true,
-    text: `Mode local — ${apiKey ? "le service IA n’a pas répondu" : "service IA non configuré"}.\n\n${localReply(last, desk, mode)}`,
+    text: `Mode de secours local — ${reason}.\n\n${localReply(last, desk, mode)}`,
   };
 }
