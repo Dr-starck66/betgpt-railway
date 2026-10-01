@@ -7,7 +7,13 @@ export function bestThreeWay(match: MatchInput): { home: BestLine; draw: BestLin
   if (!books.length) return null;
   const pick = (key: "home" | "draw" | "away", side: BestLine["side"]): BestLine => {
     const b = books.reduce((a, c) => (c[key] > a[key] ? c : a));
-    return { side, odds: b[key], book: b.book, url: key === "home" ? b.homeUrl ?? b.url : key === "draw" ? b.drawUrl ?? b.url : b.awayUrl ?? b.url };
+    const direct = key === "home" ? b.homeUrl ?? b.url : key === "draw" ? b.drawUrl ?? b.url : b.awayUrl ?? b.url;
+    const bookName = b.book.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const fallback = (match.ticketLinks ?? []).find((l) => {
+      const candidate = l.book.toLowerCase().replace(/[^a-z0-9]/g, "");
+      return candidate.includes(bookName) || bookName.includes(candidate);
+    })?.url;
+    return { side, odds: b[key], book: b.book, url: direct ?? fallback };
   };
   return { home: pick("home", "1"), draw: pick("draw", "N"), away: pick("away", "2") };
 }
