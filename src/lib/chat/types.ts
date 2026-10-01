@@ -1,4 +1,5 @@
 import type { PunchlineMeta } from "./punch";
+import type { PunchReaction } from "./reaction";
 
 export type ChatRole = "user" | "assistant";
 
@@ -10,6 +11,7 @@ export type ChatMessage = {
   content: string;
   timestamp: number;
   punchline?: PunchlineMeta;
+  reaction?: PunchReaction;
 };
 
 export type UserMemory = {

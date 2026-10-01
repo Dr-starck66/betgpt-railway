@@ -16,6 +16,7 @@ import {
 import { track } from "@/lib/analytics";
 import { postChat } from "@/lib/chat/transport";
 import { playPunchline } from "@/lib/chat/voice";
+import { reactionForPunchline, type PunchReaction } from "@/lib/chat/reaction";
 
 const WELCOME: ChatMessage = {
   id: "welcome",
@@ -60,16 +61,22 @@ const REACTION_LABEL: Record<string, string> = {
 
 type GifReaction = { url: string; alt: string };
 
-function PunchReactionCard({
-  punchline,
-}: {
-  punchline: NonNullable<ChatMessage["punchline"]>;
-}) {
-  const [gif, setGif] = useState<GifReaction | null>(null);
+function PunchReactionCard({ reaction }: { reaction: PunchReaction }) {
+  const label = REACTION_LABEL[reaction.mood] ?? "chaos";
+  const [gif, setGif] = useState<GifReaction>({
+    url: reaction.gifFallback,
+    alt: `Réaction BetGPT — ${label}`,
+  });
 
   useEffect(() => {
-    if (punchline.score < 92) return;
-    const query = punchline.reaction?.gifQuery?.trim();
+    // Local animated GIF is the hard fallback: the visual must never disappear
+    // just because Tenor is unconfigured, rate-limited or offline.
+    setGif({
+      url: reaction.gifFallback,
+      alt: `Réaction BetGPT — ${REACTION_LABEL[reaction.mood] ?? "chaos"}`,
+    });
+
+    const query = reaction.gifQuery.trim();
     if (!query) return;
 
     const controller = new AbortController();
@@ -89,46 +96,40 @@ function PunchReactionCard({
         if (active && value?.url) setGif(value);
       })
       .catch(() => {
-        // Deliberately no generic GIF fallback: irrelevant visuals kill the joke.
+        // Keep the bundled animated GIF already on screen.
       });
 
     return () => {
       active = false;
       controller.abort();
     };
-  }, [punchline.score, punchline.text, punchline.reaction?.gifQuery]);
-
-  const emojis = punchline.reaction?.emojis ?? [];
-  if (!emojis.length && !gif) return null;
+  }, [reaction.gifFallback, reaction.gifQuery, reaction.mood]);
 
   return (
-    <div
+    <figure
       className="mt-3 overflow-hidden rounded-2xl border border-line bg-white/80 p-2"
-      aria-label="Réaction visuelle BetGPT"
+      aria-label="Réaction GIF BetGPT"
     >
-      {emojis.length ? (
-        <div className="mb-2 text-2xl leading-none" aria-hidden="true">
-          {emojis.join(" ")}
-        </div>
-      ) : null}
-      {gif ? (
-        <img
-          src={gif.url}
-          alt={gif.alt}
-          loading="lazy"
-          referrerPolicy="no-referrer"
-          className="max-h-56 w-auto max-w-full rounded-xl border border-line object-contain"
-        />
-      ) : null}
-      {!gif && punchline.score >= 92 ? (
-        <p className="text-[10px] font-black uppercase tracking-[0.18em] text-muted">
-          {REACTION_LABEL[punchline.reaction?.mood ?? ""] ?? "chaos"}
-        </p>
-      ) : null}
-    </div>
+      <img
+        src={gif.url}
+        alt={gif.alt}
+        loading="lazy"
+        referrerPolicy="no-referrer"
+        className="max-h-64 w-full max-w-[22rem] rounded-xl border border-line object-contain"
+      />
+      <figcaption className="mt-2 flex items-center justify-between gap-2">
+        <span className="text-[10px] font-black uppercase tracking-[0.18em] text-muted">
+          {label}
+        </span>
+        {reaction.emojis.length ? (
+          <span className="text-lg leading-none" aria-hidden="true">
+            {reaction.emojis.join(" ")}
+          </span>
+        ) : null}
+      </figcaption>
+    </figure>
   );
 }
-
 
 function loadMemory(): UserMemory {
   try {
@@ -238,9 +239,15 @@ export function ChatPanel({ seed }: { seed?: string }) {
         userMemory: mem,
         requestedMode: resolved,
       });
+      const visualReaction =
+        resolved === "ROAST"
+          ? reactionForPunchline(out.punchline?.text ?? out.text, content)
+          : out.punchline?.reaction;
       setMessages((prev) =>
         prev.map((m) =>
-          m.id === assistantId ? { ...m, content: out.text, punchline: out.punchline } : m,
+          m.id === assistantId
+            ? { ...m, content: out.text, punchline: out.punchline, reaction: visualReaction }
+            : m,
         ),
       );
       if (out.punchline) void playPunchline(out.punchline);
@@ -311,8 +318,8 @@ export function ChatPanel({ seed }: { seed?: string }) {
                   <p className="mb-1 text-[10px] uppercase tracking-[0.18em] text-muted">BetGPT</p>
                 )}
                 {msg.content || (streaming ? "…" : "")}
-                {!mine && msg.punchline?.reaction && !streaming ? (
-                  <PunchReactionCard punchline={msg.punchline} />
+                {!mine && msg.reaction && !streaming ? (
+                  <PunchReactionCard reaction={msg.reaction} />
                 ) : null}
                 {!mine && msg.punchline && !streaming ? (
                   <button

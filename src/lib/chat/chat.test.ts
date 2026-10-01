@@ -205,6 +205,7 @@ it("maps absurd animal punchlines to a contextual visual reaction", () => {
   assert.equal(out.punchline?.reaction?.mood, "ANIMAL_CHAOS");
   assert.equal(out.punchline?.reaction?.emojis.includes("🐦"), true);
   assert.match(out.punchline?.reaction?.gifQuery ?? "", /pigeon/);
+  assert.match(out.punchline?.reaction?.gifFallback ?? "", /astra-animal\\.gif/);
 });
 
 
@@ -234,6 +235,7 @@ it("reaction engine matches luxury-shopping catastrophe gags", () => {
   assert.equal(reaction.mood, "SHOPPING_DISASTER");
   assert.deepEqual(reaction.emojis, ["💳", "🛍️", "💸"]);
   assert.match(reaction.gifQuery, /shopping spree/i);
+  assert.match(reaction.gifFallback, /astra-betting\\.gif/);
 });
 
 it("reaction engine matches animal absurdity instead of a random visual", () => {

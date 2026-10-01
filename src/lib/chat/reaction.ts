@@ -1,6 +1,7 @@
 export type PunchReaction = {
   emojis: string[];
   gifQuery: string;
+  gifFallback: string;
   mood:
     | "ANIMAL_CHAOS"
     | "COSMIC_CHAOS"
@@ -84,9 +85,17 @@ export function reactionForPunchline(text: string, context = ""): PunchReaction 
   if (!query.length) query.push("shocked laughing disbelief funny reaction");
   if (!emojis.length) emojis.push("🤯", "😂", "💀");
 
+  const gifFallback =
+    mood === "ANIMAL_CHAOS"
+      ? "/reactions/astra-animal.gif"
+      : mood === "BETTING_DISASTER" || mood === "SHOPPING_DISASTER" || mood === "DIY_DISASTER"
+        ? "/reactions/astra-betting.gif"
+        : "/reactions/astra-shock.gif";
+
   return {
     emojis: unique(emojis).slice(0, 3),
     gifQuery: unique(query).slice(0, 2).join(" "),
+    gifFallback,
     mood,
   };
 }
