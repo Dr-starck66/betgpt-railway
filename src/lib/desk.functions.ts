@@ -42,6 +42,7 @@ import { slugify } from "@/lib/programmatic";
 import { buildEdition, newsCards } from "@/lib/editorial/engine";
 import { readLedgerDurable } from "@/lib/editorial/ledger-store";
 import { calculateLedgerStats, ledgerHealth } from "@/engine/ledger-stats";
+import { betMarket } from "@/lib/markets";
 import { canonicalRoi5Evidence } from "@/engine/canonical-roi5-evidence";
 import {
   eventsFor,
@@ -64,7 +65,7 @@ import {
 
 type DeskPayload = ReturnType<typeof deskFromEngine>;
 /** open-window: counts are live + upcoming, not four days of finished games. Bilan = mises only. */
-const DESK_GEN = 47;
+const DESK_GEN = 48;
 const deskMem = globalThis as typeof globalThis & {
   __betgptDeskGen?: number;
   __betgptLastDesk?: DeskPayload | null;
@@ -98,7 +99,7 @@ function pushBroadcast(desk: DeskPayload): void {
       if (match?.status === "finished") continue;
       const day = new Date(p.kickoff).toLocaleDateString("en-CA", { timeZone: "Europe/Paris" });
       if (day !== today && match?.status !== "live") continue;
-      const m = p.markets.find((x) => x.decision === "BET");
+      const m = betMarket(p.markets);
       if (!m || seen.has(p.matchId)) continue;
       seen.add(p.matchId);
       tickets.push({
