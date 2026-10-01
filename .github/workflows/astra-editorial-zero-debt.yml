@@ -21,6 +21,6 @@ jobs:
       - name: Mandatory prebuild guards
         run: npm run prebuild
       - name: Production bundle
-        run: node scripts/with-app-env.mjs vite build
+        run: npm run build
       - name: Evidence
         run: echo "ASTRA_EDITORIAL_ZERO_DEBT_PASS"
