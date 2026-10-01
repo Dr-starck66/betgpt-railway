@@ -97,11 +97,27 @@ function quotedRouteInSitemap(source, routePath) {
   return variants.some((value) => source.includes(value));
 }
 
+function robotsPolicy(source) {
+  const robotsObjects = [...source.matchAll(/\{[^{}]{0,320}name\s*:\s*["']robots["'][^{}]{0,320}\}/gi)].map((m) => m[0]);
+  const joined = robotsObjects.join("\n");
+  const hasNoindex = /noindex/i.test(joined);
+  const hasIndex = /(?:^|[^a-z])index\s*,\s*follow/i.test(joined);
+  return { hasNoindex, hasIndex, alwaysNoindex: hasNoindex && !hasIndex };
+}
+
+function headBlock(source) {
+  const start = source.search(/\bhead\s*:/i);
+  if (start < 0) return "";
+  const component = source.indexOf("component:", start);
+  return source.slice(start, component > start ? component : Math.min(source.length, start + 5000));
+}
+
 function classify(rel, source) {
+  if (/src\/routes\/__root\.(tsx|ts|jsx|js)$/i.test(rel)) return "layout";
   if (isOutletLayout(source)) return "layout";
   if (technicalRx.some((r) => r.test(rel))) return "technical";
   if (/redirect\s*\(/i.test(source)) return "redirect";
-  if (/noindex/i.test(source)) return "noindex";
+  if (robotsPolicy(source).alwaysNoindex) return "noindex";
   if (/rapports\.precision|ledger|methodology|data-sources|prediction-history|editorial-policy|press|redaction/i.test(rel)) return "trust";
   if (/mentions-legales|confidentialite|cookies|cgu|jeu-responsable|politique-publicite|contact/i.test(rel)) return "legal";
   if (/comparer-cotes|meilleures-cotes|pari-du-jour|opportunities|calculateur-mise|meilleur-site-pronostic/i.test(rel)) return "commercial";
@@ -115,7 +131,8 @@ function audit(rel, source, sitemapSource) {
   const role = classify(rel, source);
   const layout = role === "layout";
   const redirect = role === "redirect";
-  const noindex = /noindex/i.test(source);
+  const robots = robotsPolicy(source);
+  const noindex = robots.alwaysNoindex;
   const technical = role === "technical";
   const headDelegated = headDelegateRx.some((r) => r.test(source));
   const contentDelegated = contentDelegateRx.some((r) => r.test(source));
@@ -140,17 +157,18 @@ function audit(rel, source, sitemapSource) {
     /methodology|data-sources|ledger|evidence|source|preuve|fiabil|jeu-responsable|editorial/i.test(source);
   const sitemapContainsRoute = quotedRouteInSitemap(sitemapSource, routePath);
   const sitemapExcluded = !sitemapContainsRoute;
-  const titleLiteral = extractFirst(source, [
+  const head = headBlock(source);
+  const titleLiteral = extractFirst(head, [
     /\btitle\s*:\s*["'`]([^"'`]{3,})["'`]/i,
   ]);
-  const descriptionLiteral = extractFirst(source, [
-    /name\s*:\s*["']description["'][\s\S]{0,220}?content\s*:\s*["'`]([^"'`]{20,})["'`]/i,
+  const descriptionLiteral = extractFirst(head, [
+    /name\s*:\s*["']description["'][^}]{0,220}?content\s*:\s*["'`]([^"'`]{20,})["'`]/i,
   ]);
-  const canonicalLiteral = extractFirst(source, [
-    /rel\s*:\s*["']canonical["'][\s\S]{0,180}?href\s*:\s*["'`]([^"'`]+)["'`]/i,
+  const canonicalLiteral = extractFirst(head, [
+    /rel\s*:\s*["']canonical["'][^}]{0,180}?href\s*:\s*["'`]([^"'`]+)["'`]/i,
   ]);
 
-  const signals = { hasHead, title, description, canonical, h1, h1Count, content, links, structured, trust, noindex, sitemapContainsRoute };
+  const signals = { hasHead, title, description, canonical, h1, h1Count, content, links, structured, trust, noindex, robots, sitemapContainsRoute };
   let score = 0;
   if (title) score += 12;
   if (description) score += 12;
