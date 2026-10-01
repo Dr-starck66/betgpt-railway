@@ -7,7 +7,7 @@ import { parisDay, parisOffsetDay } from "@/lib/seo/money-map";
 import { mergeResults, recentResults, rowFromHistory, rowFromMatch, type ResultRow } from "@/lib/serp/results";
 
 const RESULTS_REFRESH_TTL_MS = 5 * 60_000;
-const FOTMOB_DAYS = 10;
+const RESULTS_PROVIDER_DAYS = 10;
 
 type FotMobMatch = {
   id?: number | string;
@@ -267,7 +267,7 @@ async function freshFotMobResults(now = Date.now()): Promise<ResultRow[]> {
     return resultsMem.__betgptFotmobRows;
   }
   if (!resultsMem.__betgptFotmobRefresh) {
-    const days = Array.from({ length: FOTMOB_DAYS }, (_, i) => parisOffsetDay(-i, now));
+    const days = Array.from({ length: RESULTS_PROVIDER_DAYS }, (_, i) => parisOffsetDay(-i, now));
     resultsMem.__betgptFotmobRefresh = Promise.all(
       days.map(async (day) => {
         // A provider can return HTTP 200 with an empty payload. That is not
