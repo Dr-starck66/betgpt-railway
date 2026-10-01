@@ -1,11 +1,16 @@
 name: ASTRA Single-Source Release Gate Ω
 
 on:
+  schedule:
+    - cron: "*/10 * * * *"
   push:
     branches: [main]
     paths:
       - "scripts/astra-release-gate.mjs"
       - "scripts/ts-alias-hooks.mjs"
+      - "scripts/astra-safe-push.mjs"
+      - "scripts/astra-public-proxy.mjs"
+      - "server/middleware/astra-single-source.ts"
       - "config/astra-release-gate.json"
       - ".github/workflows/astra-release-gate.yml"
       - "package.json"
@@ -27,6 +32,7 @@ concurrency:
 
 jobs:
   preflight:
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -45,6 +51,23 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: astra-release-gate-preflight
+          path: artifacts/astra-release-gate/
+          if-no-files-found: error
+          retention-days: 30
+
+  drift-sentinel:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate public/canonical convergence
+        run: node scripts/astra-release-gate.mjs postflight
+      - name: Upload drift evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: astra-release-gate-postflight
           path: artifacts/astra-release-gate/
           if-no-files-found: error
           retention-days: 30
