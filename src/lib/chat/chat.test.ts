@@ -457,6 +457,41 @@ it("daily chat pick exposes the real best-book URL and lets a future affiliate U
   }
 });
 
+it("daily chat pick falls back to a real bookmaker football URL when the quote has no event URL", () => {
+  const match = {
+    id: "fallback-url-1",
+    slug: "faroe-slovakia-2026-10-01",
+    competition: "Ligue des nations de l'UEFA",
+    league: "NL",
+    kickoff: "2026-10-01T18:45:00Z",
+    status: "scheduled",
+    home: { id: "faroe", name: "Îles Féroé", short: "FRO" },
+    away: { id: "slovakia", name: "Slovaquie", short: "SVK" },
+  } as any;
+  const prediction = {
+    matchId: "fallback-url-1",
+    markets: [{
+      group: "BTTS",
+      market: "BTTS_YES",
+      label: "Les deux équipes marquent — Oui",
+      listed: true,
+      bestOdds: 2.16,
+      bestBook: "Unibet",
+      bestBookUrl: undefined,
+      fairOdds: 1.82,
+      modelProb: 0.55,
+      ev: 0.179,
+      opportunityScore: 82,
+      decision: "BET",
+      premium: true,
+    }],
+  } as any;
+
+  const pick = selectDailyChatPick([match], [prediction], "2026-10-01T14:00:00Z", false);
+  assert.equal(pick?.bookUrl, UNIBET_LEAGUE.NL);
+  assert.match(renderDailyChatPick(pick!), /Lien pour parier : https:\/\/www\.unibet\.fr\//);
+});
+
 it("daily chat pick refuses stale desk data instead of manufacturing a current bet", () => {
   const pick = selectDailyChatPick([], [], "2026-10-01T14:00:00Z", true);
   assert.equal(pick, null);
