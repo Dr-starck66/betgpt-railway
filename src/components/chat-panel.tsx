@@ -17,7 +17,12 @@ import { track } from "@/lib/analytics";
 import { postChat } from "@/lib/chat/transport";
 import { playPunchline } from "@/lib/chat/voice";
 import { reactionForPunchline, type PunchReaction } from "@/lib/chat/reaction";
-import { buildShareMoment } from "@/lib/chat/share";
+import {
+  buildFacebookShareUrl,
+  buildShareMoment,
+  buildXShareUrl,
+  drawShareCard,
+} from "@/lib/chat/share";
 
 const WELCOME: ChatMessage = {
   id: "welcome",
@@ -221,46 +226,129 @@ function ShareMomentButton({
   prompt: string;
   punchline: string;
 }) {
-  const [copied, setCopied] = useState(false);
+  const [status, setStatus] = useState<"idle" | "copied" | "image">("idle");
 
-  const share = async () => {
+  const getMoment = () => {
     const origin = typeof window !== "undefined" ? window.location.origin : "https://betgpt.live";
-    const moment = buildShareMoment(origin, prompt, punchline);
+    return buildShareMoment(origin, prompt, punchline);
+  };
+
+  const resetStatus = () => window.setTimeout(() => setStatus("idle"), 1800);
+
+  const shareNative = async () => {
+    const moment = getMoment();
     try {
+      const canvas = drawShareCard(prompt, punchline, moment.url);
+      const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/png", 0.95));
+      if (blob && typeof File !== "undefined") {
+        const file = new File([blob], "betgpt-roast.png", { type: "image/png" });
+        if (navigator.share && navigator.canShare?.({ files: [file] })) {
+          await navigator.share({ title: moment.title, text: moment.text, url: moment.url, files: [file] });
+          track("chat_share_image");
+          return;
+        }
+      }
       if (navigator.share) {
         await navigator.share(moment);
         track("chat_share");
         return;
       }
       await navigator.clipboard.writeText(`${moment.text}\n${moment.url}`);
-      setCopied(true);
+      setStatus("copied");
       track("chat_share_copy");
-      window.setTimeout(() => setCopied(false), 1800);
+      resetStatus();
     } catch {
-      try {
-        await navigator.clipboard.writeText(`${moment.text}\n${moment.url}`);
-        setCopied(true);
-        track("chat_share_copy");
-        window.setTimeout(() => setCopied(false), 1800);
-      } catch {
-        /* Sharing is optional; never break the conversation. */
-      }
+      /* User cancellation or unavailable share target: keep the chat intact. */
     }
+  };
+
+  const shareX = () => {
+    window.open(buildXShareUrl(getMoment()), "_blank", "noopener,noreferrer");
+    track("chat_share_x");
+  };
+
+  const shareFacebook = () => {
+    window.open(buildFacebookShareUrl(getMoment()), "_blank", "noopener,noreferrer");
+    track("chat_share_facebook");
+  };
+
+  const shareImage = async () => {
+    const moment = getMoment();
+    const canvas = drawShareCard(prompt, punchline, moment.url);
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/png", 0.95));
+    if (!blob) return;
+
+    const file = typeof File !== "undefined"
+      ? new File([blob], "betgpt-roast.png", { type: "image/png" })
+      : null;
+
+    try {
+      if (file && navigator.share && navigator.canShare?.({ files: [file] })) {
+        await navigator.share({
+          title: moment.title,
+          text: moment.text,
+          url: moment.url,
+          files: [file],
+        });
+        track("chat_share_instagram");
+        return;
+      }
+    } catch {
+      /* Fall back to image export below. */
+    }
+
+    const href = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = href;
+    a.download = "betgpt-roast.png";
+    a.click();
+    URL.revokeObjectURL(href);
+    setStatus("image");
+    track("chat_share_image_export");
+    resetStatus();
   };
 
   const nativeShareAvailable = typeof navigator !== "undefined" && typeof navigator.share === "function";
 
   return (
-    <button
-      type="button"
-      onClick={() => void share()}
-      className="mt-2 inline-flex min-h-9 items-center gap-1.5 rounded-full border border-sage/35 bg-sage/10 px-3 text-xs font-black text-paper hover:border-sage hover:bg-sage/20"
-      aria-label="Partager ce moment BetGPT"
-      title="Partager ce moment"
-    >
-      {copied ? <Check size={14} /> : nativeShareAvailable ? <Share2 size={14} /> : <Copy size={14} />}
-      {copied ? "Lien copié" : "Partager ce carnage"}
-    </button>
+    <div className="mt-2 flex flex-wrap items-center gap-1.5" aria-label="Partager ce moment BetGPT">
+      <button
+        type="button"
+        onClick={() => void shareNative()}
+        className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-sage/35 bg-sage/10 px-3 text-xs font-black text-paper hover:border-sage hover:bg-sage/20"
+        title="Partager ce moment"
+      >
+        {status === "copied" ? <Check size={14} /> : nativeShareAvailable ? <Share2 size={14} /> : <Copy size={14} />}
+        {status === "copied" ? "Lien copié" : "Partager"}
+      </button>
+      <button
+        type="button"
+        onClick={shareX}
+        className="inline-flex min-h-9 items-center rounded-full border border-line bg-white px-3 text-xs font-black text-paper hover:border-sage/50"
+        aria-label="Partager sur X"
+        title="Partager sur X"
+      >
+        X
+      </button>
+      <button
+        type="button"
+        onClick={shareFacebook}
+        className="inline-flex min-h-9 items-center rounded-full border border-line bg-white px-3 text-xs font-black text-paper hover:border-sage/50"
+        aria-label="Partager sur Facebook"
+        title="Partager sur Facebook"
+      >
+        Facebook
+      </button>
+      <button
+        type="button"
+        onClick={() => void shareImage()}
+        className="inline-flex min-h-9 items-center rounded-full border border-line bg-white px-3 text-xs font-black text-paper hover:border-sage/50"
+        aria-label="Créer la carte Instagram"
+        title="Créer la carte Instagram"
+      >
+        {status === "image" ? "Carte prête ✓" : "Instagram / Story"}
+      </button>
+    </div>
   );
 }
 
