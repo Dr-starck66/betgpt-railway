@@ -4,6 +4,7 @@ import { EMPTY_MEMORY, normalizeMemory } from "./types.ts";
 import { postChat } from "./transport.ts";
 import { localMatchFacts } from "./local.ts";
 import { chatBodySchema } from "../schemas.ts";
+import { hasUnsupportedGroundedClaim } from "./complete.ts";
 import type { MatchInput } from "../../engine/types.ts";
 
 it("normalizes corrupt nested memories instead of crashing the prompt", () => {
@@ -69,4 +70,25 @@ it("local answers identify a named team and label the freshness limit", () => {
   assert.match(text, /terminé/);
   assert.match(text, /pas un flux garanti/);
   assert.doesNotMatch(text, /matchs du jour/);
+});
+
+
+it("grounding gate rejects invented dates, scores and proper nouns", () => {
+  const source = "Utilisateur: Quel est le prochain match de Marseille ? Données: aucune rencontre vérifiée pour Marseille.";
+  assert.equal(
+    hasUnsupportedGroundedClaim("Marseille joue contre Paris Saint-Germain le 03/10/2026 à 18h00.", source),
+    true,
+  );
+  assert.equal(
+    hasUnsupportedGroundedClaim("Je n’ai pas de donnée vérifiée pour le prochain match de Marseille.", source),
+    false,
+  );
+});
+
+it("grounding gate accepts facts that are actually present in the source", () => {
+  const source = "Données: Marseille – Angers · 03/10/2026 · 18h00.";
+  assert.equal(
+    hasUnsupportedGroundedClaim("Marseille – Angers est indiqué le 03/10/2026 à 18h00.", source),
+    false,
+  );
 });
