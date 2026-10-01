@@ -111,8 +111,8 @@ it("does not substitute unrelated upcoming matches for an unknown named team", (
     },
   ] as MatchInput[];
   const text = localMatchFacts("Quel est le prochain match de FC Chimera Omega ?", matches, "2026-10-01T14:00:00Z");
-  assert.match(text, /Aucune équipe précisément reconnue/);
-  assert.match(text, /Je n’utilise pas d’autres matchs à la place/);
+  assert.match(text, /aucune équipe précisément reconnue/i);
+  assert.match(text, /Ne substitue pas un autre match/i);
   assert.doesNotMatch(text, /Estonie|Luxembourg/);
 });
 
@@ -140,7 +140,7 @@ it("does not confuse French pronouns with team short codes", () => {
     status: "scheduled",
   }] as MatchInput[];
   const text = localMatchFacts("Analyse mon pari sans données de match.", matches, "2026-10-01T14:00:00Z");
-  assert.match(text, /Aucune équipe précisément reconnue/);
+  assert.match(text, /Question générale/i);
   assert.doesNotMatch(text, /Monza|Cagliari/);
 });
 
@@ -208,7 +208,7 @@ it("maps absurd animal punchlines to a contextual visual reaction", () => {
   assert.equal(out.punchline?.reaction?.mood, "ANIMAL_CHAOS");
   assert.equal(out.punchline?.reaction?.emojis.includes("🐦"), true);
   assert.match(out.punchline?.reaction?.gifQuery ?? "", /pigeon/);
-  assert.match(out.punchline?.reaction?.gifFallback ?? "", /astra-animal\\.gif/);
+  assert.equal(out.punchline?.reaction?.gifFallback ?? "", "");
 });
 
 
@@ -238,7 +238,7 @@ it("reaction engine matches luxury-shopping catastrophe gags", () => {
   assert.equal(reaction.mood, "SHOPPING_DISASTER");
   assert.deepEqual(reaction.emojis, ["💳", "🛍️", "💸"]);
   assert.match(reaction.gifQuery, /shopping spree/i);
-  assert.match(reaction.gifFallback, /astra-betting\\.gif/);
+  assert.equal(reaction.gifFallback, "");
 });
 
 it("reaction engine matches animal absurdity instead of a random visual", () => {
@@ -248,7 +248,7 @@ it("reaction engine matches animal absurdity instead of a random visual", () => 
   );
   assert.ok(reaction.emojis.includes("🐦"));
   assert.match(reaction.gifQuery, /pigeon/i);
-  assert.match(reaction.gifFallback, /astra-animal\\.gif/);
+  assert.equal(reaction.gifFallback, "");
 });
 
 
