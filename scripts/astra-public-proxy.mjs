@@ -2,7 +2,21 @@
 import http from "node:http";
 import https from "node:https";
 
-const upstream = new URL(process.env.ASTRA_PUBLIC_UPSTREAM || "https://betgpt-production-7353.up.railway.app");
+const CANONICAL_UPSTREAM = new URL("https://betgpt-production-7353.up.railway.app");
+const requestedUpstream = new URL(process.env.ASTRA_PUBLIC_UPSTREAM || CANONICAL_UPSTREAM.toString());
+
+if (
+  requestedUpstream.protocol !== CANONICAL_UPSTREAM.protocol ||
+  requestedUpstream.host !== CANONICAL_UPSTREAM.host
+) {
+  console.error("ASTRA_PUBLIC_PROXY_FAIL_CLOSED", {
+    requested: requestedUpstream.origin,
+    required: CANONICAL_UPSTREAM.origin,
+  });
+  process.exit(78);
+}
+
+const upstream = CANONICAL_UPSTREAM;
 const port = Number(process.env.PORT || 8080);
 
 function proxy(req, res) {
