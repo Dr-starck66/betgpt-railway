@@ -49,8 +49,9 @@ export function drawShareCard(
   const canvas = document.createElement("canvas");
   canvas.width = 1080;
   canvas.height = 1350;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return canvas;
+  const context = canvas.getContext("2d");
+  if (!context) return canvas;
+  const ctx: CanvasRenderingContext2D = context;
 
   const cleanPrompt = clean(prompt, 180);
   const cleanPunch = clean(punchline, 260);
