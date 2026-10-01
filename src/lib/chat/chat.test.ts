@@ -92,3 +92,34 @@ it("grounding gate accepts facts that are actually present in the source", () =>
     false,
   );
 });
+
+
+it("does not substitute unrelated upcoming matches for an unknown named team", () => {
+  const matches = [
+    {
+      home: { name: "Estonie", short: "EST" },
+      away: { name: "Luxembourg", short: "LUX" },
+      competition: "Ligue des nations",
+      kickoff: "2099-10-03T18:00:00Z",
+      status: "scheduled",
+    },
+  ] as MatchInput[];
+  const text = localMatchFacts("Quel est le prochain match de FC Chimera Omega ?", matches, "2026-10-01T14:00:00Z");
+  assert.match(text, /Aucune équipe précisément reconnue/);
+  assert.match(text, /Je n’utilise pas d’autres matchs à la place/);
+  assert.doesNotMatch(text, /Estonie|Luxembourg/);
+});
+
+it("still lists upcoming matches for an explicit general schedule request", () => {
+  const matches = [
+    {
+      home: { name: "Estonie", short: "EST" },
+      away: { name: "Luxembourg", short: "LUX" },
+      competition: "Ligue des nations",
+      kickoff: "2099-10-03T18:00:00Z",
+      status: "scheduled",
+    },
+  ] as MatchInput[];
+  const text = localMatchFacts("Quel est le programme des prochaines rencontres ?", matches, "2026-10-01T14:00:00Z");
+  assert.match(text, /Estonie – Luxembourg/);
+});
