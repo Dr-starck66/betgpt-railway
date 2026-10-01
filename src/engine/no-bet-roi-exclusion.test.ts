@@ -6,7 +6,8 @@ test("NO_BET is never ROI-eligible", () => {
   assert.equal(isRoiEligibleDecision("NO_BET"), false);
 });
 
-test("actual wager decisions remain ROI-eligible", () => {
+test("only actual BET decisions are ROI-eligible", () => {
   assert.equal(isRoiEligibleDecision("BET"), true);
-  assert.equal(isRoiEligibleDecision("WATCH"), true);
+  assert.equal(isRoiEligibleDecision("WATCH"), false);
+  assert.equal(isRoiEligibleDecision("NO_BET"), false);
 });
