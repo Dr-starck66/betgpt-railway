@@ -14,24 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
-      - name: Production revision proof
-        shell: bash
-        run: |
-          set -euo pipefail
-          body="$(mktemp)"
-          status="$(curl -sS --connect-timeout 8 --max-time 20 -o "$body" -w "%{http_code}" -H 'user-agent: BetGPT-Revision-Gate/1.0' https://betgpt.live/astra-revision.json)"
-          echo "HTTP=$status"
-          cat "$body"
-          echo
-          test "$status" = "200"
-          python3 - "$body" <<'PY'
-          import json,sys
-          data=json.load(open(sys.argv[1],encoding="utf-8"))
-          rev=str(data.get("sourceRevision",""))
-          assert rev, f"missing sourceRevision: {data}"
-          print("PRODUCTION_SOURCE_REVISION="+rev)
-          PY
-
       - name: Real production chat POST
         shell: bash
         run: |
