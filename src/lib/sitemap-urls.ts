@@ -159,7 +159,6 @@ export function buildSitemapUrls(input: {
     { loc: `${SITE_URL}/classement`, path: "/classement", title: "Classement football", group: "Classements", lastmod: standings, changefreq: "hourly", priority: "0.9" },
     { loc: `${SITE_URL}/calendrier`, path: "/calendrier", title: "Calendrier football", group: "Calendriers", lastmod: now, changefreq: "hourly", priority: "0.9" },
     { loc: `${SITE_URL}/redaction`, path: "/redaction", title: "Rédaction", group: "Site", lastmod: now, changefreq: "monthly", priority: "0.3" },
-    { loc: `${SITE_URL}/contact`, path: "/contact", title: "Contact", group: "Site", lastmod: now, changefreq: "yearly", priority: "0.2" },
     { loc: `${SITE_URL}/mentions-legales`, path: "/mentions-legales", title: "Mentions légales", group: "Légal", lastmod: now, changefreq: "yearly", priority: "0.2" },
     { loc: `${SITE_URL}/cgu`, path: "/cgu", title: "CGU", group: "Légal", lastmod: now, changefreq: "yearly", priority: "0.2" },
     { loc: `${SITE_URL}/confidentialite`, path: "/confidentialite", title: "Confidentialité", group: "Légal", lastmod: now, changefreq: "yearly", priority: "0.2" },
