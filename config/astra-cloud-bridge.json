@@ -28,7 +28,9 @@
       "path": "/",
       "retries": 2,
       "expect": {
-        "statuses": [200]
+        "statuses": [
+          200
+        ]
       }
     },
     {
@@ -45,7 +47,9 @@
         "requestedMode": "NORMAL"
       },
       "expect": {
-        "statuses": [200],
+        "statuses": [
+          200
+        ],
         "jsonPath": "text",
         "jsonText": {
           "requireAll": [
@@ -62,5 +66,6 @@
         }
       }
     }
-  ]
+  ],
+  "verificationRevision": "2026-10-01T20:00:00+02:00"
 }
