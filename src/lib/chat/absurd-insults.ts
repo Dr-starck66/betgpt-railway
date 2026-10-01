@@ -188,3 +188,19 @@ export function absurdInsultCreativeBrief(context: string, recent: string[] = []
     "- Si tu peux faire plus inattendu, fais-le. Une bonne punchline doit donner envie d'être capturée et partagée.",
   ].join("\n");
 }
+
+
+export function shouldDropAbsurdInsult(context: string, recent: string[] = []): boolean {
+  const text = context.trim();
+  if (text.length < 8) return false;
+  if (/\b(suicide|mourir|mort|deuil|cancer|maladie|agression|viol|urgence)\b/i.test(text)) return false;
+
+  // Obvious betting bravado / absurd certainty deserves an immediate roast.
+  if (/\b(20-0|10-0|100%|s[uû]r|certain|impossible de perdre|all[- ]?in|tapis|combin[eé].*(8|9|10|11|12))\b/i.test(text)) {
+    return true;
+  }
+
+  // Surprise drop: about 1 in 5 substantive ROAST turns, deterministic from the
+  // current context + recent conversation so retries do not spray new insults.
+  return hash32(`${text}\n${recent.slice(-3).join("\n")}`) % 5 === 0;
+}
