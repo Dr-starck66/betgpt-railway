@@ -64,13 +64,13 @@ function LedgerPage() {
             <p className="eyebrow">Transparence & performance</p>
             <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-5xl">Bilan BetGPT</h1>
             <p className="mt-4 max-w-3xl text-base leading-relaxed text-mist sm:text-lg">
-              Pronos 1-N-2 ou marché réellement misé. Le score exact reste un filet séparé. Les pertes
+              Pronos 1-N-2 ou marché réellement misé. Le pari complémentaire sur le score exact reste affiché séparément. Les pertes
               restent visibles : aucun historique n’est nettoyé après coup. {asOf ? `Scores à ${asOf}.` : ""}
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
               <span className="chip-pill">Historique public</span>
               <span className="chip-pill">Pertes conservées</span>
-              <span className="chip-pill">Calibration visible</span>
+              <span className="chip-pill">Méthode expliquée</span>
             </div>
           </div>
           <aside className="surface-card p-5">
@@ -102,7 +102,7 @@ function LedgerPage() {
           <Kpi label="Rendement du test" value={fmtSignedPct(canonical.summary.roi)} />
           <Kpi label="Test final" value={fmtSignedPct(canonical.summary.validationRoi)} />
           <Kpi label="Paris testés" value={String(canonical.summary.n)} />
-          <Kpi label="Plus forte baisse" value={`${canonical.summary.maxDrawdown.toFixed(2)} mises`} />
+          <Kpi label="Pire recul" value={`${canonical.summary.maxDrawdown.toFixed(2)} mises`} />
         </div>
         <p className="mt-3 text-xs text-muted">
           Sur les {canonical.summary.validationN} paris gardés pour le test final :{" "}
@@ -135,7 +135,7 @@ function LedgerPage() {
           <Kpi label="Victoires" value={String(canonical.summary.wins)} />
           <Kpi label="Défaites" value={String(canonical.summary.losses)} />
           <Kpi label="Taux de réussite" value={`${Math.round(canonical.summary.hitRate * 100)} %`} />
-          <Kpi label="Filets réussis" value={`${canonical.summary.hedgeHits}/${canonical.summary.hedges}`} />
+          <Kpi label="Protections réussies" value={`${canonical.summary.hedgeHits}/${canonical.summary.hedges}`} />
           <Kpi label="Bilan simulé" value={`${canonical.summary.profit >= 0 ? "+" : ""}${canonical.summary.profit.toFixed(2)} unités`} />
         </div>
 
@@ -150,7 +150,7 @@ function LedgerPage() {
                 <th className="py-2 pr-3 font-medium">Cote du test*</th>
                 <th className="py-2 pr-3 font-medium">Score</th>
                 <th className="py-2 pr-3 font-medium">Verdict</th>
-                <th className="py-2 pr-3 font-medium">Filet score exact</th>
+                <th className="py-2 pr-3 font-medium">Protection score exact</th>
                 <th className="py-2 pr-3 font-medium">Gain / perte</th>
                 <th className="py-2 pr-3 font-medium">Total</th>
                 <th className="py-2 pr-3 font-medium">Phase du test</th>
@@ -217,7 +217,7 @@ function LedgerPage() {
           <p>Les scores finaux viennent de l’archive historique des matchs.</p>
           <p>
             Les gains et pertes sont affichés en unités : 1 unité correspond à la mise principale du test.
-            Un petit filet sur un score exact peut s’ajouter quand la méthode le prévoit. Les matchs les plus
+            Un petit pari complémentaire sur un score exact peut s’ajouter quand la méthode le prévoit. Les matchs les plus
             récents sont affichés en premier.
           </p>
         </div>
@@ -246,7 +246,7 @@ function LedgerPage() {
               value={ev.winRate == null ? "Non vérifié" : `${Math.round(ev.winRate * 100)} %`}
             />
             <Kpi
-              label="Erreur des probabilités"
+              label="Score de fiabilité"
               value={ev.brier == null ? "Non vérifié" : ev.brier.toFixed(3)}
             />
             <Kpi label="Paris perdants" value={String(ev.losses)} />
@@ -262,7 +262,7 @@ function LedgerPage() {
               }
             />
             <Kpi
-              label="Écart vs cote finale"
+              label="Évolution face au marché"
               value={ev.clv == null ? "Indisponible" : fmtSignedPct(ev.clv)}
             />
             <Kpi
@@ -274,7 +274,7 @@ function LedgerPage() {
           <p className="mt-3 text-xs text-muted">
             Le rendement est calculé comme si chaque pari retenu valait 1 unité. Aucun argent réel
             n’est supposé avoir été misé. Les matchs seulement surveillés ou écartés ne sont pas
-            comptés. L’erreur des probabilités est un score technique : plus il est bas, mieux c’est.
+            comptés. Le score de fiabilité mesure l’écart entre les probabilités annoncées et les résultats : plus il est bas, mieux c’est.
             {ev.unavailable.length ? ` Données indisponibles : ${ev.unavailable.join(", ")}.` : ""}
           </p>
           {ev.calibration.some((b) => b.n > 0) ? (
@@ -312,18 +312,18 @@ function LedgerPage() {
               <table className="w-full min-w-[480px] text-sm">
                 <thead className="text-left text-[11px] font-semibold uppercase tracking-wider text-muted">
                   <tr className="border-b border-line">
-                    <th className="py-2 pr-3 font-medium">Moteur</th>
+                    <th className="py-2 pr-3 font-medium">Méthode</th>
                     <th className="py-2 pr-3 font-medium">Matchs</th>
-                    <th className="py-2 pr-3 font-medium">Erreur probas</th>
+                    <th className="py-2 pr-3 font-medium">Score de fiabilité*</th>
                     <th className="py-2 pr-3 font-medium">Rendement simulé</th>
                     <th className="py-2 pr-3 font-medium">Réussite</th>
                     <th className="py-2 pr-3 font-medium">Volume de données</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {ev.models.map((m) => (
+                  {ev.models.map((m, index) => (
                     <tr key={m.engine} className="border-b border-line/50">
-                      <td className="py-2 pr-3 text-paper">{m.engine}</td>
+                      <td className="py-2 pr-3 text-paper">{publicMethodName(m.engine, index)}</td>
                       <td className="py-2 pr-3 tabular">{m.n}</td>
                       <td className="py-2 pr-3 tabular">{m.brier == null ? "Non vérifié" : m.brier.toFixed(3)}</td>
                       <td className="py-2 pr-3 tabular">{m.roi == null ? "Non vérifié" : fmtSignedPct(m.roi)}</td>
@@ -343,7 +343,7 @@ function LedgerPage() {
               </table>
             </div>
           ) : (
-            <p className="mt-3 text-sm text-mist">Comparaison des moteurs : données non collectées sur l’historique hérité.</p>
+            <p className="mt-3 text-sm text-mist">Comparaison des méthodes : pas encore assez de données publiques.</p>
           )}
         </section>
       ) : null}
@@ -360,14 +360,14 @@ function LedgerPage() {
           <Kpi label="Paris simulés" value={String(r.sim.n)} />
           <Kpi label="100 € par pari" value={`${fmtEur(r.sim.mainStaked)} → ${fmtEur(r.sim.mainReturned)}`} />
           <Kpi
-            label={`Filets score exact · ${r.sim.covered}`}
+            label={`Protections score exact · ${r.sim.covered}`}
             value={`${fmtEur(r.sim.coverStaked)} → ${fmtEur(r.sim.coverReturned)}`}
           />
           <Kpi label="Bilan simulé" value={fmtEur(r.sim.profit, true)} />
         </div>
         {r.sim.n ? (
           <p className="mt-3 text-sm text-paper">
-            Sans filet : {fmtEur(r.sim.mainReturned - r.sim.mainStaked, true)}. Avec filet : {fmtEur(r.sim.profit, true)} ({fmtSignedPct(r.sim.roi)}). {r.sim.hits} gagnants, {r.sim.covered} couverts, {r.losses} perdants.
+            Sans protection : {fmtEur(r.sim.mainReturned - r.sim.mainStaked, true)}. Avec protection : {fmtEur(r.sim.profit, true)} ({fmtSignedPct(r.sim.roi)}). {r.sim.hits} gagnants, {r.sim.covered} couverts, {r.losses} perdants.
           </p>
         ) : (
           <p className="mt-3 text-sm text-paper">Pas encore de match tranché pour la simu.</p>
@@ -451,7 +451,7 @@ function LedgerPage() {
         </p>
         {base && tac ? (
           <p className="mt-1 text-xs text-muted">
-            Chiffres seuls : erreur {base.brier.toFixed(3)} · avec lecture du match : {tac.brier.toFixed(3)}
+            Chiffres seuls : score {base.brier.toFixed(3)} · avec lecture du match : {tac.brier.toFixed(3)}
             {r.clv ? ` · écart vs cote finale ${fmtSignedPct(r.clv)}` : ""}
           </p>
         ) : null}
@@ -624,6 +624,15 @@ function Tab({
       {children}
     </button>
   );
+}
+
+function publicMethodName(engine: string, index: number): string {
+  const key = String(engine || "").toLowerCase();
+  if (/roi5|canonical|champion/.test(key)) return "Méthode BetGPT principale";
+  if (/tact/.test(key)) return "Avec lecture tactique";
+  if (/baseline|base/.test(key)) return "Modèle statistique";
+  if (/ensemble|blend|mix/.test(key)) return "Combinaison de modèles";
+  return `Méthode BetGPT ${index + 1}`;
 }
 
 function Kpi({ label, value }: { label: string; value: string }) {
