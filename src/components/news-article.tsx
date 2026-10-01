@@ -4,6 +4,34 @@ import { formatParis } from "@/lib/editorial/time";
 import type { EditorialArticle, EditorialSource } from "@/lib/editorial/types";
 import { ld } from "@/lib/ld";
 
+function SourceCitations({
+  sourceIds,
+  sources,
+}: {
+  sourceIds?: string[];
+  sources: EditorialSource[];
+}) {
+  const passageSources = (sourceIds ?? [])
+    .map((sourceId) => sources.find((source) => source.id === sourceId))
+    .filter((source): source is EditorialSource & { url: string } => Boolean(source?.url));
+
+  if (!passageSources.length) return null;
+
+  return (
+    <p className="border-t border-line pt-3 text-xs leading-relaxed text-muted">
+      <span className="font-semibold text-mist">Sources de ce passage : </span>
+      {passageSources.map((source, index) => (
+        <span key={source.id}>
+          {index ? " · " : ""}
+          <a href={source.url} className="font-semibold text-link hover:underline">
+            {source.label}
+          </a>
+        </span>
+      ))}
+    </p>
+  );
+}
+
 export function NewsArticleView({ article }: { article: EditorialArticle }) {
   const published = formatParis(article.publishedAt);
   const modified =
@@ -77,31 +105,37 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
             <p className="readable-prose text-paper">{article.lead}</p>
           </div>
 
-          {article.paragraphs.map((part) => {
-            const passageSources = (part.sourceIds ?? [])
-              .map((sourceId) => article.sources.find((source) => source.id === sourceId))
-              .filter((source): source is EditorialSource & { url: string } => Boolean(source?.url));
+          {article.paragraphs.map((part) => (
+            <section key={part.h2} className="surface-card space-y-4 p-5 sm:p-7">
+              <h2 className="text-2xl font-semibold tracking-tight">{part.h2}</h2>
+              <p className="readable-prose">{part.body}</p>
+              <SourceCitations sourceIds={part.sourceIds} sources={article.sources} />
 
-            return (
-              <section key={part.h2} className="surface-card space-y-4 p-5 sm:p-7">
-                <h2 className="text-2xl font-semibold tracking-tight">{part.h2}</h2>
-                <p className="readable-prose">{part.body}</p>
-                {passageSources.length ? (
-                  <p className="border-t border-line pt-3 text-xs leading-relaxed text-muted">
-                    <span className="font-semibold text-mist">Sources de ce passage : </span>
-                    {passageSources.map((source, index) => (
-                      <span key={source.id}>
-                        {index ? " · " : ""}
-                        <a href={source.url} className="font-semibold text-link hover:underline">
-                          {source.label}
-                        </a>
-                      </span>
-                    ))}
-                  </p>
-                ) : null}
-              </section>
-            );
-          })}
+              {part.subsections?.length ? (
+                <div className="space-y-6 border-t border-line pt-5">
+                  {part.subsections.map((subsection) => (
+                    <section key={subsection.h3} className="space-y-3">
+                      <h3 className="text-xl font-semibold tracking-tight text-paper">{subsection.h3}</h3>
+                      <p className="readable-prose">{subsection.body}</p>
+                      <SourceCitations sourceIds={subsection.sourceIds} sources={article.sources} />
+
+                      {subsection.subsections?.length ? (
+                        <div className="space-y-4 border-l border-line pl-4 sm:pl-5">
+                          {subsection.subsections.map((detail) => (
+                            <section key={detail.h4} className="space-y-2">
+                              <h4 className="text-base font-semibold text-paper">{detail.h4}</h4>
+                              <p className="readable-prose">{detail.body}</p>
+                              <SourceCitations sourceIds={detail.sourceIds} sources={article.sources} />
+                            </section>
+                          ))}
+                        </div>
+                      ) : null}
+                    </section>
+                  ))}
+                </div>
+              ) : null}
+            </section>
+          ))}
 
           {article.corrections.length ? (
             <section className="surface-card p-5 text-sm text-mist sm:p-6">
