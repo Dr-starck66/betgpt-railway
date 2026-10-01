@@ -1,5 +1,6 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { SITE_URL } from "@/lib/programmatic";
+import { AstraSidewings } from "@/components/astra-sidewings";
 
 export const Route = createFileRoute("/meilleur-site-pronostic")({
   head: () => ({
@@ -20,7 +21,32 @@ export const Route = createFileRoute("/meilleur-site-pronostic")({
 
 function Page() {
   return (
-    <article className="max-w-3xl space-y-4">
+    <AstraSidewings
+      ariaLabel="Navigation contextuelle pour évaluer un site de pronostics"
+      left={{
+        eyebrow: "Critères",
+        title: "Vérifier avant de comparer",
+        intro: "Un site de pronostics se juge sur des éléments publics et contrôlables, pas sur un slogan.",
+        links: [
+          { href: "/methodology", label: "Méthodologie BetGPT", description: "Voir les règles, hypothèses et limites publiées." },
+          { href: "/data-sources", label: "Sources des données", description: "Contrôler l’origine des données exploitées." },
+          { href: "/ledger", label: "Bilan public", description: "Voir les décisions gagnantes et perdantes conservées." },
+          { href: "/rapports/precision", label: "Rapport de précision", description: "Lire les métriques avec leur échantillon." },
+        ],
+      }}
+      right={{
+        eyebrow: "Explorer",
+        title: "Passer des critères aux pages réelles",
+        intro: "Consulte les pages opérationnelles plutôt qu’un classement auto-proclamé.",
+        links: [
+          { href: "/pronostics-sportifs", label: "Pronostics sportifs", description: "Voir les analyses actuellement publiées." },
+          { href: "/comparer-cotes", label: "Comparer les cotes", description: "Contrôler les prix disponibles séparément des prédictions." },
+          { href: "/prediction-history", label: "Historique des prédictions", description: "Voir comment BetGPT conserve ses décisions." },
+          { href: "/jeu-responsable", label: "Jeu responsable", description: "Garder les performances et probabilités dans leur contexte." },
+        ],
+      }}
+    >
+      <article className="max-w-3xl space-y-4">
       <h1 className="text-2xl font-semibold">Comment juger un site de pronostics</h1>
       <p className="text-sm leading-relaxed text-mist">
         « Meilleur site » n’est pas un titre que BetGPT s’attribue. Un site de pronostics se juge sur des critères vérifiables, pas sur un slogan.
@@ -70,6 +96,7 @@ function Page() {
           Voir les pronostics sportifs du bureau
         </Link>
       </p>
-    </article>
+      </article>
+    </AstraSidewings>
   );
 }
