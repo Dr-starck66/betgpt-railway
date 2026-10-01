@@ -6,6 +6,7 @@ import { classifyChatIntent, localMatchFacts } from "./local";
 import { allowKeyed } from "@/lib/store";
 import { historyFacts } from "./history-facts";
 import { hasUnsupportedGroundedClaim } from "./grounding";
+import { extractPunchline, type PunchlineMeta } from "./punch";
 
 async function deskNow(question: string): Promise<string> {
   try {
@@ -190,9 +191,15 @@ async function callXai(
   }
 }
 
+type CompleteChatSuccess = { ok: true; text: string; punchline?: PunchlineMeta };
+
+function success(text: string, mode: PersonalityMode): CompleteChatSuccess {
+  return { ok: true, ...extractPunchline(text, mode) };
+}
+
 export async function completeChat(
   body: ChatRequestBody,
-): Promise<{ ok: true; text: string } | { ok: false; error: string }> {
+): Promise<CompleteChatSuccess | { ok: false; error: string }> {
   if (!Array.isArray(body.messages) || body.messages.length === 0) {
     return { ok: false, error: "Écris un message." };
   }
@@ -222,10 +229,10 @@ export async function completeChat(
         if (mustGround) {
           const source = `${system}\n\n${history.map((m) => m.content).join("\n")}`;
           if (hasUnsupportedGroundedClaim(out.text, source)) {
-            return { ok: true, text: groundedFallback(desk, last, mode) };
+            return success(groundedFallback(desk, last, mode), mode);
           }
         }
-        return { ok: true, text: out.text };
+        return success(out.text, mode);
       }
     } catch {
       /* fall through to ASTRA router, optional cloud provider, then local fallback */
@@ -241,10 +248,10 @@ export async function completeChat(
         if (mustGround) {
           const source = `${system}\n\n${history.map((m) => m.content).join("\n")}`;
           if (hasUnsupportedGroundedClaim(out.text, source)) {
-            return { ok: true, text: groundedFallback(desk, last, mode) };
+            return success(groundedFallback(desk, last, mode), mode);
           }
         }
-        return { ok: true, text: out.text };
+        return success(out.text, mode);
       }
     } catch {
       /* fall through to optional cloud provider, then conversational local fallback */
@@ -259,18 +266,15 @@ export async function completeChat(
         if (mustGround) {
           const source = `${system}\n\n${history.map((m) => m.content).join("\n")}`;
           if (hasUnsupportedGroundedClaim(out.text, source)) {
-            return { ok: true, text: groundedFallback(desk, last, mode) };
+            return success(groundedFallback(desk, last, mode), mode);
           }
         }
-        return { ok: true, text: out.text };
+        return success(out.text, mode);
       }
     } catch {
       /* fall through to conversational local fallback */
     }
   }
 
-  return {
-    ok: true,
-    text: localReply(last, desk, mode),
-  };
+  return success(localReply(last, desk, mode), mode);
 }
