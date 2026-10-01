@@ -26,7 +26,7 @@ function t(over: Partial<TicketRow>): TicketRow {
     ev: 0.1,
     dailyBest: false,
     kind: "prono",
-    decision: "WATCH",
+    decision: "BET",
     recordedAt: "2026-09-10T10:00:00.000Z",
     result: "win",
     ...over,
@@ -57,6 +57,13 @@ describe("canonical ledger stats", () => {
     const buckets = calculateCalibration([t({ modelProb: 0.2 }), t({ id: "low", modelProb: 0.05 })]);
     assert.equal(buckets.reduce((sum, bucket) => sum + bucket.n, 0), 2);
   });
+  it("excludes WATCH rows from ROI accounting", () => {
+    const s = calculateLedgerStats([t({ decision: "WATCH", result: "win" })]);
+    assert.equal(s.published, 1);
+    assert.equal(s.settled, 0);
+    assert.equal(s.roi, null);
+  });
+
   it("returns null ROI / winRate on zero settled", () => {
     const s = calculateLedgerStats([]);
     assert.equal(s.settled, 0);
