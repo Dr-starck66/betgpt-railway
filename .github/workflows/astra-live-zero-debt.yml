@@ -1,0 +1,35 @@
+name: ASTRA Live Zero Debt
+on:
+  push:
+    branches:
+      - astra/live-verify-zero-debt-8e9e
+
+jobs:
+  verify-live:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify exact live revision and repaired corpus
+        shell: bash
+        run: |
+          set -euo pipefail
+          EXPECTED="8e9e2a4ee7101c0bbd98425fde3dd6c6bb5d8312"
+          REV="https://betgpt.live/astra-revision.json"
+          DEMBELE="https://betgpt.live/actualites/equipe-de-france-dembele-est-il-le-leader-d-attaque-2026-10-01"
+          AZ="https://betgpt.live/actualites/azerbaijan-liechtenstein-postmatch-2026-10-01"
+          SITEMAP="https://betgpt.live/sitemap.xml"
+
+          rev_body="$(curl --fail --silent --show-error --location --retry 4 --retry-delay 2 "$REV")"
+          d_body="$(curl --fail --silent --show-error --location --retry 4 --retry-delay 2 "$DEMBELE")"
+          a_body="$(curl --fail --silent --show-error --location --retry 4 --retry-delay 2 "$AZ")"
+          s_body="$(curl --fail --silent --show-error --location --retry 4 --retry-delay 2 "$SITEMAP")"
+
+          printf '%s' "$rev_body" | grep -F "$EXPECTED"
+          printf '%s' "$d_body" | grep -F "Sources de ce passage"
+          printf '%s' "$d_body" | grep -F "Fédération Française de Football"
+          printf '%s' "$d_body" | grep -F "www.fff.fr/selection/matchs/3776-france-italie.html"
+          printf '%s' "$a_body" | grep -F "Sources de ce passage"
+
+          count="$(printf '%s' "$s_body" | grep -o 'https://betgpt.live/auteurs/betgpt-editorial' | wc -l | tr -d ' ')"
+          test "$count" = "1"
+
+          echo "ASTRA_LIVE_ZERO_DEBT_PASS sourceSha=$EXPECTED dembele_contextual_sources=present fff_official=present azerbaijan_contextual_sources=present author_sitemap_count=$count"
