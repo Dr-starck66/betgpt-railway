@@ -1,6 +1,7 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { getPublicDesk } from "@/lib/desk.functions";
 import { SITE_URL } from "@/lib/programmatic";
+import { AstraSidewings } from "@/components/astra-sidewings";
 
 export const Route = createFileRoute("/rapports/precision")({
   loader: () => getPublicDesk(),
@@ -29,7 +30,36 @@ function Page() {
   const desk = Route.useLoaderData();
   const e = desk.evidence;
   return (
-    <article className="max-w-3xl space-y-4">
+    <AstraSidewings
+      ariaLabel="Navigation contextuelle du rapport de précision"
+      left={{
+        eyebrow: "Preuves",
+        title: "Du chiffre au registre",
+        intro: "Relie les métriques synthétiques aux pages où BetGPT expose les décisions et leur méthode.",
+        links: [
+          { href: "/ledger", label: "Bilan détaillé", description: "Voir les paris, règlements et résultats ligne par ligne." },
+          { href: "/prediction-history", label: "Historique des prédictions", description: "Comprendre comment les décisions sont conservées." },
+          { href: "/methodology", label: "Méthodologie", description: "Définition des métriques, limites et hypothèses." },
+          { href: "/data-sources", label: "Sources des données", description: "Origine et couverture des données utilisées." },
+        ],
+      }}
+      right={{
+        eyebrow: "Repères",
+        title: "Lire la précision correctement",
+        intro: "Les métriques sont utiles seulement avec leur taille d’échantillon, leur disponibilité et leurs limites.",
+        stats: [
+          { label: "Réglés", value: String(e.settled), detail: "Pronostics disposant d’un règlement exploitable." },
+          { label: "Gagnés / perdus", value: `${e.wins} / ${e.losses}`, detail: "Résultats observés dans l’échantillon affiché." },
+          { label: "Échantillon", value: e.sampleLabel, detail: "Contexte utilisé par ce rapport public." },
+        ],
+        links: [
+          { href: "/evidence.json", label: "Evidence JSON", description: "Export brut machine-readable." },
+          { href: "/evidence.csv", label: "Evidence CSV", description: "Export tabulaire du bilan." },
+          { href: "/jeu-responsable", label: "Jeu responsable", description: "Interpréter les performances sans promesse de gain." },
+        ],
+      }}
+    >
+      <article className="max-w-3xl space-y-4">
       <h1 className="text-2xl font-semibold">Rapport de précision</h1>
       <p className="text-sm text-mist">
         Ces chiffres reprennent le bilan des lignes éligibles, enregistrées avant le coup d’envoi. Ils ne sont pas un taux marketing.
@@ -62,7 +92,8 @@ function Page() {
           Méthode
         </Link>
       </p>
-    </article>
+      </article>
+    </AstraSidewings>
   );
 }
 
