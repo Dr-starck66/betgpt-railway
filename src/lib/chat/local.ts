@@ -18,7 +18,14 @@ export function localMatchFacts(question: string, matches: MatchInput[], asOf?: 
   const upcoming = matches
     .filter((m) => m.status === "scheduled" && Date.parse(m.kickoff) > Date.now())
     .sort((a, b) => a.kickoff.localeCompare(b.kickoff));
-  const rows = (selected.length ? selected : upcoming).slice(0, 6);
+  const explicitNamedTarget =
+    /\b(?:prochain(?:e)?\s+)?(?:match|rencontre)\s+(?:de|du|des|pour)\b/i.test(question) ||
+    /\b(?:analyse|pronostic)\s+(?:de|du|des|pour)?\s*[A-ZÀ-ÖØ-Þ]/u.test(question);
+  const asksGeneralSchedule =
+    /\b(?:calendrier|programme|matchs?\s+(?:du\s+jour|d['’]aujourd['’]hui|aujourd['’]hui|demain)|prochaines?\s+rencontres?)\b/i.test(question);
+  const rows = (
+    selected.length ? selected : explicitNamedTarget ? [] : asksGeneralSchedule ? upcoming : []
+  ).slice(0, 6);
   const stamp =
     asOf && Number.isFinite(Date.parse(asOf))
       ? new Date(asOf).toLocaleString("fr-FR", { timeZone: "Europe/Paris" })
@@ -26,7 +33,11 @@ export function localMatchFacts(question: string, matches: MatchInput[], asOf?: 
   return [
     `Données disponibles au ${stamp} (heure de Paris). Ce n’est pas un flux garanti en temps réel.`,
     !selected.length
-      ? "Aucune équipe précisément reconnue dans ta question. Voici les prochaines rencontres disponibles :"
+      ? explicitNamedTarget
+        ? "Aucune équipe précisément reconnue dans ta question. Je n’utilise pas d’autres matchs à la place."
+        : rows.length
+          ? "Voici les prochaines rencontres disponibles :"
+          : "Aucune équipe précisément reconnue dans ta question."
       : "Rencontres correspondant à ta demande :",
     ...rows.map((m) => {
       const date = Number.isFinite(Date.parse(m.kickoff))
