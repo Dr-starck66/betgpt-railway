@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { SERP_COMPETITIONS } from "@/lib/serp/leagues";
 import { parisTime } from "@/lib/serp/answer";
 import type { ResultRow } from "@/lib/serp/results";
+import { TeamLine } from "@/components/crest";
 
 const MONTHS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
 
@@ -27,8 +28,14 @@ function Table({ rows, caption }: { rows: ResultRow[]; caption: string }) {
               <tr key={row.slug} className="border-t border-line transition-colors hover:bg-slate-50/70">
                 <td className="px-4 py-4 tabular text-mist">{parisTime(row.kickoff) || "—"}</td>
                 <td className="px-4 py-4">
-                  <Link to="/match/$matchId" params={{ matchId: row.slug }} className="font-semibold text-paper hover:text-link">
-                    {row.home} – {row.away}
+                  <Link to="/match/$matchId" params={{ matchId: row.slug }} className="block font-semibold text-paper hover:text-link">
+                    <TeamLine
+                      home={{ name: row.home, short: row.homeShort, id: row.homeId, logo: row.homeLogo }}
+                      away={{ name: row.away, short: row.awayShort, id: row.awayId, logo: row.awayLogo }}
+                      size={30}
+                      names="full"
+                      competition={row.competition}
+                    />
                   </Link>
                   <span className="mt-1 block text-xs text-muted">{row.competition}</span>
                 </td>
