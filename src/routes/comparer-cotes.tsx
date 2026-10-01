@@ -5,7 +5,7 @@ import { bestThreeWay } from "@/lib/money";
 import { SITE_URL } from "@/lib/programmatic";
 import { fmtOdds } from "@/lib/utils";
 import { BETCLIC_LEAGUE, NETBET_LEAGUE, UNIBET_LEAGUE } from "@/engine/book-pages";
-import type { MatchInput } from "@/engine/types";
+import type { LeagueId, MatchInput } from "@/engine/types";
 
 
 function bookmakerDestination(book: string, league: LeagueId, direct?: string): string | null {
