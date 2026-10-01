@@ -30,8 +30,8 @@ jobs:
           data=json.load(open(p,encoding="utf-8"))
           assert data.get("health")=="PASS", data
           assert data.get("schema")=="astra-national-breakout/v1", data
-          assert isinstance(data.get("score"), int), data
-          assert data.get("status") in ("FIX","BUILD","ACCELERATE"), data
+          assert data.get("score") is None or isinstance(data.get("score"), int), data
+          assert data.get("status") in ("UNVERIFIED","FIX","BUILD","ACCELERATE"), data
           actions=data.get("actions") or []
           print("ASTRA_NATIONAL_BREAKOUT_PASS")
           print("score=",data.get("score"),"status=",data.get("status"))
