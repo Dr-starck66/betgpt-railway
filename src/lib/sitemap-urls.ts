@@ -19,6 +19,7 @@ import type { MatchInput } from "@/engine/types";
 import { buildEdition } from "@/lib/editorial/engine";
 import { readLedgerDurable } from "@/lib/editorial/ledger-store";
 import { classicNewsPaths, renderNewsSitemap } from "@/lib/editorial/feed";
+import { ASTRA_SELF_HEAL_SITEMAP_ROUTES } from "@/lib/seo/astra-self-heal-sitemap";
 
 export type SitemapImage = { loc: string; title?: string; caption?: string };
 export type SitemapUrl = {
@@ -172,6 +173,17 @@ export function buildSitemapUrls(input: {
     { loc: `${SITE_URL}/statistics/leagues/highest-0-0`, path: "/statistics/leagues/highest-0-0", title: "Ligues les plus 0-0", group: "Stats", lastmod: now, changefreq: "weekly", priority: "0.8" },
     { loc: `${SITE_URL}/sitemap`, path: "/sitemap", title: "Plan du site", group: "Site", lastmod: now, changefreq: "hourly", priority: "0.4" },
   ];
+  for (const page of ASTRA_SELF_HEAL_SITEMAP_ROUTES) {
+    out.push({
+      loc: `${SITE_URL}${page.path}`,
+      path: page.path,
+      title: page.title,
+      group: page.group,
+      lastmod: "",
+      changefreq: page.changefreq,
+      priority: page.priority,
+    });
+  }
   for (const page of moneySitemapPaths(input.matches)) {
     out.push({
       loc: `${SITE_URL}${page.path}`,
