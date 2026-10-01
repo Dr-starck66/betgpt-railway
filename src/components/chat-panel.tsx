@@ -61,6 +61,30 @@ const REACTION_LABEL: Record<string, string> = {
 
 type GifReaction = { url: string; alt: string };
 
+
+function RichMessageText({ content }: { content: string }) {
+  const parts = content.split(/(https?:\/\/[^\s]+)/g);
+  return (
+    <>
+      {parts.map((part, index) =>
+        /^https?:\/\//.test(part) ? (
+          <a
+            key={`url-${index}`}
+            href={part}
+            target="_blank"
+            rel="nofollow sponsored noopener noreferrer"
+            className="font-semibold text-sage underline decoration-sage/40 underline-offset-2 hover:decoration-sage"
+          >
+            {part}
+          </a>
+        ) : (
+          part
+        ),
+      )}
+    </>
+  );
+}
+
 function PunchReactionCard({ reaction }: { reaction: PunchReaction }) {
   const label = REACTION_LABEL[reaction.mood] ?? "chaos";
   const [gif, setGif] = useState<GifReaction>({
@@ -322,7 +346,7 @@ export function ChatPanel({ seed }: { seed?: string }) {
                 {!mine && (
                   <p className="mb-1 text-[10px] uppercase tracking-[0.18em] text-muted">BetGPT</p>
                 )}
-                {msg.content || (streaming ? "…" : "")}
+                {msg.content ? <RichMessageText content={msg.content} /> : streaming ? "…" : ""}
                 {!mine && msg.reaction && !streaming ? (
                   <PunchReactionCard reaction={msg.reaction} />
                 ) : null}
