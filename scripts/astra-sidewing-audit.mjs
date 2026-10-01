@@ -99,6 +99,7 @@ const rows = filesIn(ROUTES).map((file) => {
     duplicateLinkRatio: duplicateRatio,
     thinContentRisk: wordCount(source) < 120 && !redirect,
     hasVisibleTrustSignals: /source|method|author|auteur|preuve|ledger/i.test(source),
+    hasSidewings: sidewings,
   });
 
   return {
@@ -117,7 +118,7 @@ const rows = filesIn(ROUTES).map((file) => {
   };
 });
 
-const order = { PRIORITY: 0, RECOMMENDED: 1, OPTIONAL: 2, SKIP: 3 };
+const order = { PRIORITY: 0, RECOMMENDED: 1, OPTIMIZE: 2, OPTIONAL: 3, SKIP: 4 };
 rows.sort((a, b) => order[a.verdict] - order[b.verdict] || b.seoOpportunity - a.seoOpportunity || b.sidewingNeed - a.sidewingNeed);
 
 const summary = rows.reduce((acc, row) => {
