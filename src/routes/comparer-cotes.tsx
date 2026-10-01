@@ -1,46 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { TeamLine } from "@/components/crest";
+import { CountryFlag } from "@/components/country-flag";
 import { getPublicDesk } from "@/lib/desk.functions";
 import { bestThreeWay } from "@/lib/money";
 import { SITE_URL } from "@/lib/programmatic";
 import { fmtOdds } from "@/lib/utils";
 import { BETCLIC_LEAGUE, NETBET_LEAGUE, UNIBET_LEAGUE } from "@/engine/book-pages";
-import type { LeagueId, MatchInput } from "@/engine/types";
+import type { MatchInput } from "@/engine/types";
+import { countryForLeague, teamCountryCodeFromShort } from "@/lib/country-flag-resolver";
 
-
-const LEAGUE_COUNTRY: Record<LeagueId, { flag: string; label: string }> = {
-  L1: { flag: "🇫🇷", label: "France" },
-  PL: { flag: "🏴", label: "Angleterre" },
-  LL: { flag: "🇪🇸", label: "Espagne" },
-  BL: { flag: "🇩🇪", label: "Allemagne" },
-  SA: { flag: "🇮🇹", label: "Italie" },
-  ER: { flag: "🇳🇱", label: "Pays-Bas" },
-  PT: { flag: "🇵🇹", label: "Portugal" },
-  SC: { flag: "🏴", label: "Écosse" },
-  TR: { flag: "🇹🇷", label: "Turquie" },
-  CL: { flag: "🇪🇺", label: "Europe" },
-  EL: { flag: "🇪🇺", label: "Europe" },
-  NL: { flag: "🌍", label: "International" },
-};
-
-const FIFA_TO_ISO2: Record<string, string> = {
-  ALG:"DZ", ARM:"AM", AUT:"AT", AZE:"AZ", BEL:"BE", BEN:"BJ", BIH:"BA", BFA:"BF", BDI:"BI",
-  CPV:"CV", CYP:"CY", DEN:"DK", FRA:"FR", GAB:"GA", GAM:"GM", GEO:"GE", GER:"DE", GNB:"GW",
-  HUN:"HU", IRL:"IE", ISR:"IL", ITA:"IT", KOS:"XK", LAT:"LV", LBR:"LR", LIE:"LI", LTU:"LT",
-  MAD:"MG", MLI:"ML", MNE:"ME", MAR:"MA", MOZ:"MZ", MWI:"MW", NED:"NL", NER:"NE", NGA:"NG",
-  NOR:"NO", POL:"PL", POR:"PT", ROU:"RO", RWA:"RW", SEN:"SN", SOM:"SO", SSD:"SS", SWE:"SE",
-  TAN:"TZ", TOG:"TG", TUR:"TR", UKR:"UA", ZAM:"ZM", ENG:"GB", SCO:"GB", WAL:"GB", NIR:"GB",
-};
-
-function flagFromIso2(code?: string): string {
-  if (!code || !/^[A-Z]{2}$/.test(code)) return "🏳️";
-  return [...code].map((c) => String.fromCodePoint(127397 + c.charCodeAt(0))).join("");
-}
-
-function teamFlag(team: { short?: string }, league: LeagueId): string {
-  if (league !== "NL") return LEAGUE_COUNTRY[league].flag;
-  return flagFromIso2(FIFA_TO_ISO2[(team.short ?? "").toUpperCase()]);
-}
 
 function bookmakerDestination(book: string, league: LeagueId, direct?: string): string | null {
   if (direct && /^https:\/\//i.test(direct)) return direct;
@@ -157,11 +125,26 @@ function OddsCompare() {
                         <TeamLine home={m.home} away={m.away} size={28} names="auto" competition={m.competition} />
                       </Link>
                       <div className="mt-1 flex flex-wrap items-center gap-1 text-xs text-muted">
-                        <span title={LEAGUE_COUNTRY[m.league].label}>
-                          {m.league === "NL"
-                            ? `${teamFlag(m.home, m.league)} ${teamFlag(m.away, m.league)}`
-                            : LEAGUE_COUNTRY[m.league].flag}
-                        </span>
+                        {m.league === "NL" ? (
+                          <span className="inline-flex items-center gap-1" title="Pays des sélections">
+                            <CountryFlag
+                              code={teamCountryCodeFromShort(m.home.short)}
+                              label={m.home.name}
+                              size={16}
+                            />
+                            <CountryFlag
+                              code={teamCountryCodeFromShort(m.away.short)}
+                              label={m.away.name}
+                              size={16}
+                            />
+                          </span>
+                        ) : (
+                          <CountryFlag
+                            code={countryForLeague(m.league).code}
+                            label={countryForLeague(m.league).label}
+                            size={16}
+                          />
+                        )}
                         <span>{m.competition}</span>
                         <span>·</span>{" "}
                         {new Date(m.kickoff).toLocaleString("fr-FR", {
