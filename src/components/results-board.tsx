@@ -71,7 +71,7 @@ export function ResultsBoard({
     .sort((a, b) => b.kickoff.localeCompare(a.kickoff))[0];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8" data-results-as-of={asOf || ""} data-results-history-days={sections.length}>
       <header className="hero-panel p-6 sm:p-8">
         <p className="eyebrow">Résultats football</p>
         <h1 className="mt-2 text-3xl font-bold tracking-tight text-paper sm:text-4xl">{h1}</h1>
