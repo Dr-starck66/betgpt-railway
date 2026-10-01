@@ -2,7 +2,7 @@ import { it } from "node:test";
 import assert from "node:assert/strict";
 import { EMPTY_MEMORY, normalizeMemory } from "./types.ts";
 import { postChat } from "./transport.ts";
-import { localMatchFacts } from "./local.ts";
+import { classifyChatIntent, localMatchFacts } from "./local.ts";
 import { chatBodySchema } from "../schemas.ts";
 import { hasUnsupportedGroundedClaim } from "./grounding.ts";
 import type { MatchInput } from "../../engine/types.ts";
@@ -136,4 +136,38 @@ it("does not confuse French pronouns with team short codes", () => {
   const text = localMatchFacts("Analyse mon pari sans données de match.", matches, "2026-10-01T14:00:00Z");
   assert.match(text, /Aucune équipe précisément reconnue/);
   assert.doesNotMatch(text, /Monza|Cagliari/);
+});
+
+
+it("routes daily betting questions as daily picks instead of an unknown team", () => {
+  assert.equal(
+    classifyChatIntent("Qu'est-ce que tu mises aujourd'hui, et pourquoi ?"),
+    "TODAY_PICKS",
+  );
+});
+
+it("routes a plain greeting as casual conversation", () => {
+  assert.equal(classifyChatIntent("bonjour"), "CASUAL");
+});
+
+it("daily-pick intent exposes same-day matches instead of the unknown-team fallback", () => {
+  const matches = [
+    {
+      home: { name: "France", short: "FRA" },
+      away: { name: "Italie", short: "ITA" },
+      competition: "Ligue des nations",
+      kickoff: "2026-10-01T18:45:00Z",
+      status: "scheduled",
+      formHome: "WW",
+      formAway: "WL",
+    },
+  ] as MatchInput[];
+  const text = localMatchFacts(
+    "Qu'est-ce que tu mises aujourd'hui, et pourquoi ?",
+    matches,
+    "2026-10-01T14:00:00Z",
+  );
+  assert.match(text, /Matchs du jour disponibles/);
+  assert.match(text, /France – Italie/);
+  assert.doesNotMatch(text, /Cible nommée non trouvée/);
 });
