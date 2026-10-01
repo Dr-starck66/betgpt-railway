@@ -1,4 +1,4 @@
-import type { DiscoverCheck, EditorialArticle, EditorialSource } from "@/lib/editorial/types";
+import type { DiscoverCheck, EditorialArticle, EditorialParagraph, EditorialSource } from "@/lib/editorial/types";
 
 const CLICKBAIT =
   /incroyable|vous n['’]allez jamais|ne ratez pas|à ne pas manquer|urgent|scandale|dernier moment|dingue|immanquable|!!!/i;
@@ -130,6 +130,61 @@ export function nearDuplicateParagraphs(paragraphs: { body: string }[]): number 
   return collisions;
 }
 
+export function editorialParagraphText(paragraph: EditorialParagraph): string {
+  const nested = (paragraph.h3 ?? []).flatMap((subsection) => [
+    subsection.h3,
+    subsection.body,
+    ...(subsection.h4 ?? []).flatMap((detail) => [detail.h4, detail.body]),
+  ]);
+  return [paragraph.body, ...nested].filter(Boolean).join(" ").replace(/\s+/g, " ").trim();
+}
+
+export function headingArchitectureReasons(
+  article: Pick<EditorialArticle, "articleType" | "paragraphs">,
+): string[] {
+  const reasons: string[] = [];
+  const seenH2 = new Set<string>();
+  const seenH3 = new Set<string>();
+  const seenH4 = new Set<string>();
+  let h3Count = 0;
+
+  for (const paragraph of article.paragraphs) {
+    const h2 = paragraph.h2.trim().toLowerCase();
+    if (!h2) reasons.push("H2 vide");
+    else if (seenH2.has(h2)) reasons.push("H2 dupliqué");
+    else seenH2.add(h2);
+
+    for (const subsection of paragraph.h3 ?? []) {
+      h3Count += 1;
+      const h3 = subsection.h3.trim().toLowerCase();
+      if (!h3) reasons.push("H3 vide");
+      else if (seenH3.has(h3)) reasons.push("H3 dupliqué");
+      else seenH3.add(h3);
+
+      for (const detail of subsection.h4 ?? []) {
+        const h4 = detail.h4.trim().toLowerCase();
+        if (!h4) reasons.push("H4 vide");
+        else if (seenH4.has(h4)) reasons.push("H4 dupliqué");
+        else seenH4.add(h4);
+      }
+    }
+
+    const text = editorialParagraphText(paragraph);
+    const obviousMultiIdea =
+      text.length >= 650 &&
+      /\b(?:premier|première|deuxième|second|seconde|troisième|d'abord|ensuite|enfin|trois|plusieurs)\b/i.test(text);
+    if (obviousMultiIdea && !(paragraph.h3?.length)) {
+      reasons.push("section dense à plusieurs idées sans H3");
+    }
+  }
+
+  if (article.articleType === "news" && article.paragraphs.length >= 5 && h3Count === 0) {
+    reasons.push("actualité longue sans sous-sections H3");
+  }
+
+  return [...new Set(reasons)];
+}
+
 export function factHash(parts: string[]): string {
   const raw = parts.join("|");
   let h = 5381;
@@ -158,7 +213,7 @@ export function qualityGate(
   priorTexts: string[],
 ): { pass: boolean; reasons: string[]; duplicateScore: number } {
   const reasons: string[] = [];
-  const body = article.paragraphs.map((p) => p.body).join("\n");
+  const body = article.paragraphs.map(editorialParagraphText).join("\n");
   const all = `${article.title}\n${article.h1}\n${article.lead}\n${body}`;
   if (article.articleType === "slate") reasons.push("article programme générique interdit en Discover auto");
   if (article.h1.trim().length < 20 || article.h1.length > 120) reasons.push("titre hors longueur");
@@ -166,7 +221,8 @@ export function qualityGate(
   if (article.articleType === "news" && article.lead.trim().length < 150) reasons.push("chapô d'actualité trop mince");
   if (article.paragraphs.length < 3) reasons.push("moins de trois parties");
   if (article.articleType === "news" && article.paragraphs.length < 5) reasons.push("actualité trop peu structurée pour Discover");
-  if (article.paragraphs.some((p) => p.body.trim().length < 140)) reasons.push("partie trop mince");
+  if (article.paragraphs.some((p) => editorialParagraphText(p).length < 140)) reasons.push("partie trop mince");
+  reasons.push(...headingArchitectureReasons(article));
   if (article.articleType === "news" && body.trim().length < 2400) reasons.push("actualité trop courte pour apporter une vraie valeur éditoriale");
   if (!article.sources.length) reasons.push("aucune source");
   if (sourceQualityScore(article.sources) < 4) reasons.push("sources trop faibles");
@@ -230,7 +286,7 @@ export function qualityGate(
 }
 
 export function discoverChecks(article: EditorialArticle): Record<DiscoverCheck, boolean> {
-  const body = article.paragraphs.map((p) => p.body).join(" ");
+  const body = article.paragraphs.map(editorialParagraphText).join(" ");
   return {
     INDEXABLE: article.quality.pass && (article.status === "PUBLISHED" || article.status === "UPDATED"),
     LARGE_IMAGE: article.image.width >= 1200,

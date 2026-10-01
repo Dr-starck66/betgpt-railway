@@ -4,12 +4,37 @@ import { formatParis } from "@/lib/editorial/time";
 import type { EditorialArticle, EditorialSource } from "@/lib/editorial/types";
 import { ld } from "@/lib/ld";
 
+function renderParagraphs(article: EditorialArticle) {
+  const hasNestedHeadings = article.paragraphs.some((part) => (part.h3?.length ?? 0) > 0);
+  if (hasNestedHeadings || article.articleType !== "news" || article.paragraphs.length < 5) return article.paragraphs;
+
+  const sourceSubsections = article.sources
+    .filter((source) => source.note?.trim())
+    .slice(0, 5)
+    .map((source) => ({
+      h3: `${source.label} : ce que la source apporte`,
+      body: source.note.trim(),
+    }));
+  if (sourceSubsections.length < 2) return article.paragraphs;
+
+  let targetIndex = article.paragraphs.findIndex((part) =>
+    /source|disent|confir|établi|corrobor|preuve/i.test(part.h2),
+  );
+  if (targetIndex < 0) targetIndex = article.paragraphs.findIndex((part) => part.body.length >= 500);
+  if (targetIndex < 0) return article.paragraphs;
+
+  return article.paragraphs.map((part, index) =>
+    index === targetIndex ? { ...part, h3: sourceSubsections } : part,
+  );
+}
+
 export function NewsArticleView({ article }: { article: EditorialArticle }) {
   const published = formatParis(article.publishedAt);
   const modified =
     article.modifiedAt && article.publishedAt && article.modifiedAt > article.publishedAt
       ? formatParis(article.modifiedAt)
       : null;
+  const paragraphs = renderParagraphs(article);
 
   return (
     <article className="mx-auto max-w-[1240px] space-y-8">
@@ -77,7 +102,7 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
             <p className="readable-prose text-paper">{article.lead}</p>
           </div>
 
-          {article.paragraphs.map((part) => {
+          {paragraphs.map((part) => {
             const passageSources = (part.sourceIds ?? [])
               .map((sourceId) => article.sources.find((source) => source.id === sourceId))
               .filter((source): source is EditorialSource & { url: string } => Boolean(source?.url));
@@ -86,6 +111,18 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
               <section key={part.h2} className="surface-card space-y-4 p-5 sm:p-7">
                 <h2 className="text-2xl font-semibold tracking-tight">{part.h2}</h2>
                 <p className="readable-prose">{part.body}</p>
+                {part.h3?.map((subsection) => (
+                  <div key={subsection.h3} className="space-y-3 border-l-2 border-line pl-4 sm:pl-5">
+                    <h3 className="text-xl font-semibold tracking-tight text-paper">{subsection.h3}</h3>
+                    <p className="readable-prose">{subsection.body}</p>
+                    {subsection.h4?.map((detail) => (
+                      <div key={detail.h4} className="space-y-2 pl-3 sm:pl-4">
+                        <h4 className="text-base font-semibold tracking-tight text-paper">{detail.h4}</h4>
+                        <p className="readable-prose">{detail.body}</p>
+                      </div>
+                    ))}
+                  </div>
+                ))}
                 {passageSources.length ? (
                   <p className="border-t border-line pt-3 text-xs leading-relaxed text-muted">
                     <span className="font-semibold text-mist">Sources de ce passage : </span>

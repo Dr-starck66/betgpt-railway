@@ -21,13 +21,37 @@ const ARTICLES: EditorialArticle[] = [
       {
         h2: "Le point qui change tout : le voyage avait été validé",
         body:
-          "L'élément décisif est arrivé ensuite. Foot Mercato, en s'appuyant sur les informations du quotidien AS, indique que Mbappé avait reçu l'aval du Real Madrid, de José Mourinho ainsi que des staffs technique et médical pour se rendre à Paris. Real-France rapporte la même ligne : selon les informations relayées depuis Madrid, le déplacement n'était pas une initiative prise contre l'avis du club. Les médecins considèrent à ce stade que la récupération passe surtout par du repos actif et qu'une présence quotidienne au centre d'entraînement n'apporterait pas nécessairement de bénéfice supplémentaire. Cette précision ne dit pas quand Mbappé rejouera et ne permet pas d'évaluer à distance l'état exact de son genou. En revanche, elle répond à la question la plus explosive de la matinée : son absence de Valdebebas n'est pas, en elle-même, la preuve d'un écart au protocole fixé par le Real Madrid.",
+          "L'élément décisif est arrivé ensuite : les informations publiées depuis Madrid décrivent un déplacement effectué avec l'accord du club et de l'encadrement chargé de la récupération du joueur.",
+        h3: [
+          {
+            h3: "Qui a autorisé le déplacement de Mbappé à Paris ?",
+            body:
+              "Foot Mercato, en s'appuyant sur les informations du quotidien AS, indique que Mbappé avait reçu l'aval du Real Madrid, de José Mourinho ainsi que des staffs technique et médical pour se rendre à Paris. Real-France rapporte la même ligne : selon les informations relayées depuis Madrid, le déplacement n'était pas une initiative prise contre l'avis du club.",
+          },
+          {
+            h3: "Pourquoi le repos actif restait compatible avec sa récupération",
+            body:
+              "Les médecins considèrent à ce stade que la récupération passe surtout par du repos actif et qu'une présence quotidienne au centre d'entraînement n'apporterait pas nécessairement de bénéfice supplémentaire. Cette précision ne dit pas quand Mbappé rejouera et ne permet pas d'évaluer à distance l'état exact de son genou. En revanche, elle répond à la question la plus explosive de la matinée : son absence de Valdebebas n'est pas, en elle-même, la preuve d'un écart au protocole fixé par le Real Madrid.",
+          },
+        ],
         sourceIds: ["footmercato-mbappe-paris-2026-10-01","realfrance-mbappe-paris-2026-10-01"],
       },
       {
         h2: "Ce que le Real Madrid confirme officiellement sur sa récupération",
         body:
-          "La communication officielle du Real Madrid apporte un deuxième repère, plus sobre mais plus solide. Dans son compte rendu d'entraînement publié le 1er octobre, le club classe Kylian Mbappé parmi les joueurs qui poursuivent leur processus de récupération. Le même point mentionne également d'autres joueurs engagés dans un travail individualisé ou une phase de retour. Surtout, le Real ne publie dans cette communication ni date ferme de reprise collective, ni calendrier précis de retour à la compétition pour l'attaquant français. C'est une différence importante avec les estimations qui circulent dans la presse : le statut officiel disponible est celui d'un joueur encore en récupération. BetGPT retient donc ce niveau de certitude et n'en déduit pas une date de retour. Tant qu'une reprise complète de l'entraînement ou une convocation n'est pas annoncée, toute projection plus précise reste une estimation extérieure au communiqué du club.",
+          "La communication officielle du Real Madrid apporte un deuxième repère, plus sobre mais plus solide : elle permet de séparer ce que le club affirme de ce que la presse ou les réseaux peuvent extrapoler.",
+        h3: [
+          {
+            h3: "Le statut officiel de Mbappé au 1er octobre",
+            body:
+              "Dans son compte rendu d'entraînement publié le 1er octobre, le club classe Kylian Mbappé parmi les joueurs qui poursuivent leur processus de récupération. Le même point mentionne également d'autres joueurs engagés dans un travail individualisé ou une phase de retour.",
+          },
+          {
+            h3: "Ce que le Real Madrid ne confirme pas encore",
+            body:
+              "Le Real ne publie dans cette communication ni date ferme de reprise collective, ni calendrier précis de retour à la compétition pour l'attaquant français. C'est une différence importante avec les estimations qui circulent dans la presse : le statut officiel disponible est celui d'un joueur encore en récupération. BetGPT retient donc ce niveau de certitude et n'en déduit pas une date de retour. Tant qu'une reprise complète de l'entraînement ou une convocation n'est pas annoncée, toute projection plus précise reste une estimation extérieure au communiqué du club.",
+          },
+        ],
         sourceIds: ["realmadrid-training-2026-10-01"],
       },
       {
@@ -51,13 +75,44 @@ const ARTICLES: EditorialArticle[] = [
       {
         h2: "Les trois signaux vraiment utiles à surveiller maintenant",
         body:
-          "La suite de ce dossier peut être suivie avec trois indicateurs beaucoup plus fiables que les commentaires sur les réseaux sociaux. Le premier sera le retour de Mbappé à une séance collective complète, car il montrera que la récupération a franchi une étape. Le deuxième sera sa présence ou son absence dans une liste de joueurs convoqués par le Real Madrid. Le troisième sera un nouveau communiqué médical ou une mise à jour officielle du club si son état nécessite davantage d'explications. Jusqu'à l'apparition de l'un de ces signaux, la situation reste simple : Mbappé est toujours présenté comme étant en récupération, son voyage à Paris a été décrit par plusieurs sources comme autorisé, et aucune date officielle de retour n'est publiée. C'est cette distinction entre faits établis, informations attribuées et inconnues restantes qui permet de suivre l'affaire sans amplifier artificiellement la polémique.",
+          "La suite de ce dossier peut être suivie avec trois indicateurs beaucoup plus fiables que les commentaires sur les réseaux sociaux. Ils permettent de distinguer une progression sportive vérifiable d'une simple rumeur sur son retour.",
+        h3: [
+          {
+            h3: "Les deux signaux sportifs les plus importants",
+            body:
+              "Le retour au travail collectif et la présence dans une liste de joueurs convoqués sont les deux indices les plus concrets d'une progression vers la compétition.",
+            h4: [
+              {
+                h4: "1. Le retour à l'entraînement collectif",
+                body:
+                  "Une séance collective complète montrerait que la récupération a franchi une étape mesurable par rapport au travail individualisé ou au repos actif.",
+              },
+              {
+                h4: "2. Une présence dans le groupe convoqué",
+                body:
+                  "La présence ou l'absence de Mbappé dans une liste officielle du Real Madrid donnera un signal beaucoup plus fiable sur sa disponibilité sportive qu'une apparition publique à Paris.",
+              },
+            ],
+          },
+          {
+            h3: "Le signal médical à surveiller",
+            body:
+              "Un nouveau point médical ou une mise à jour officielle du club pourrait préciser l'évolution de son genou si la situation le nécessite.",
+            h4: [
+              {
+                h4: "3. Un nouveau communiqué médical du Real Madrid",
+                body:
+                  "Jusqu'à une nouvelle communication, la situation reste simple : Mbappé est présenté comme étant en récupération, son voyage à Paris a été décrit par plusieurs sources comme autorisé et aucune date officielle de retour n'est publiée.",
+              },
+            ],
+          },
+        ],
         sourceIds: ["realmadrid-training-2026-10-01","realmadrid-medical-2026-09-26"],
       },
     ],
     createdAt: "2026-10-01T15:18:00.000Z",
     publishedAt: "2026-10-01T15:18:00.000Z",
-    modifiedAt: "2026-10-01T20:28:00.000Z",
+    modifiedAt: "2026-10-01T20:41:00.000Z",
     parisDate: "2026-10-01",
     scheduledTime: "17:18",
     category: "Actualité football",
@@ -163,8 +218,12 @@ const ARTICLES: EditorialArticle[] = [
         at: "2026-10-01T20:28:00.000Z",
         note: "Ajout de citations externes contextuelles par passage, retrait du nofollow systématique sur les sources éditoriales fiables et ajout du communiqué médical officiel du Real Madrid.",
       },
+      {
+        at: "2026-10-01T20:41:00.000Z",
+        note: "Restructuration sémantique de l'article avec des H3 et H4 utiles : autorisation du déplacement, statut officiel de récupération et signaux concrets à surveiller.",
+      },
     ],
-    factHash: "manual-mbappe-paris-2026-10-01-v3",
+    factHash: "manual-mbappe-paris-2026-10-01-v4",
     keywords: "Kylian Mbappé, Real Madrid, Paris, blessure Mbappé, récupération Mbappé, La Liga",
   },
 ];
@@ -172,7 +231,14 @@ const ARTICLES: EditorialArticle[] = [
 export function manualEditorialArticles(): EditorialArticle[] {
   return ARTICLES.map((article) => ({
     ...article,
-    paragraphs: article.paragraphs.map((part) => ({ ...part, sourceIds: part.sourceIds ? [...part.sourceIds] : undefined })),
+    paragraphs: article.paragraphs.map((part) => ({
+      ...part,
+      sourceIds: part.sourceIds ? [...part.sourceIds] : undefined,
+      h3: part.h3?.map((subsection) => ({
+        ...subsection,
+        h4: subsection.h4?.map((detail) => ({ ...detail })),
+      })),
+    })),
     sources: article.sources.map((source) => ({ ...source })),
     links: article.links.map((link) => ({ ...link })),
     related: article.related.map((item) => ({ ...item })),
