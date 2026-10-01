@@ -1,11 +1,19 @@
 {
-  "schema": "astra-indexability-release-gate/v1",
+  "schema": "astra-indexability-release-gate/v2",
   "zeroWeakReport": "artifacts/seo/zero-weak-pages.json",
   "sitemapSource": "src/lib/sitemap-urls.ts",
   "reportPath": "artifacts/seo/indexability-release-gate.json",
   "failOnDuplicateLiteralPaths": true,
   "ignoreRoutes": [],
   "dynamicCoverage": [
+    {
+      "routePattern": "^/auteurs/betgpt-editorial$",
+      "sitemapSource": "src/lib/sitemap-urls.ts",
+      "requiredFragments": [
+        "/auteurs/betgpt-editorial",
+        "loadSitemapUrls"
+      ]
+    },
     {
       "routePattern": "^/actu/:day$",
       "sitemapSource": "src/lib/sitemap-urls.ts",
