@@ -1,3 +1,5 @@
+import { classifySearchReferrer } from "@/lib/search/search-truth";
+
 export const ANALYTICS_EVENTS = {
   landing: "landing",
   match_view: "match_view",
@@ -20,6 +22,20 @@ export type AnalyticsEvent = (typeof ANALYTICS_EVENTS)[keyof typeof ANALYTICS_EV
 
 const KEY = "betgpt-analytics";
 const VISIT = "betgpt-visit";
+const SEARCH_SOURCE = "betgpt-search-source";
+
+function currentSearchSource(): ReturnType<typeof classifySearchReferrer> {
+  if (typeof window === "undefined") return null;
+  try {
+    const existing = sessionStorage.getItem(SEARCH_SOURCE);
+    if (existing) return classifySearchReferrer(`https://${existing}`) ?? (existing as ReturnType<typeof classifySearchReferrer>);
+    const source = classifySearchReferrer(document.referrer || "");
+    if (source) sessionStorage.setItem(SEARCH_SOURCE, source);
+    return source;
+  } catch {
+    return classifySearchReferrer(document.referrer || "");
+  }
+}
 
 type Row = { t: number; e: string; p?: string };
 
@@ -48,10 +64,11 @@ export function track(event: AnalyticsEvent, payload?: string): void {
   rows.push({ t: Date.now(), e: event, p: payload?.slice(0, 80) });
   write(rows);
   const route = window.location.pathname.slice(0, 120);
+  const s = currentSearchSource() ?? undefined;
   void fetch("/api/analytics", {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ e: event, p: payload?.slice(0, 80), route }),
+    body: JSON.stringify({ e: event, p: payload?.slice(0, 80), route, s }),
     credentials: "omit",
     keepalive: true,
   }).catch(() => undefined);
