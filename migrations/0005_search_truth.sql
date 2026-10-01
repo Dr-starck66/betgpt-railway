@@ -9,3 +9,7 @@ create table if not exists search_truth_landings (
 create index if not exists search_truth_landings_t on search_truth_landings (t desc);
 create index if not exists search_truth_landings_source_t on search_truth_landings (source, t desc);
 create index if not exists search_truth_landings_route_t on search_truth_landings (route, t desc);
+
+-- Session-scoped organic attribution for existing analytics events.
+alter table analytics_events add column if not exists search_source text;
+create index if not exists analytics_events_search_source_t on analytics_events (search_source, t desc);
