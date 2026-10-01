@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "mode": "RESUME_FROM_LAST_PROVEN_CHECKPOINT",
+  "requirements": {
+    "idempotentSteps": true,
+    "checkpointAfterCriticalStep": true,
+    "persistProofLedger": true,
+    "retryTransientFailures": true,
+    "boundedExponentialBackoff": true,
+    "resumeInsteadOfRestart": true,
+    "neverDeclarePassWithoutFinalProof": true,
+    "neverWaitSilentlyForUserReconnect": true
+  },
+  "retryPolicy": {
+    "maxAttempts": 4,
+    "baseDelaySeconds": 5,
+    "maxDelaySeconds": 60,
+    "retryableClasses": [
+      "network",
+      "timeout",
+      "rate_limit",
+      "temporary_5xx",
+      "connector_session_refresh"
+    ],
+    "nonRetryableClasses": [
+      "invalid_credentials",
+      "permission_denied",
+      "invalid_input",
+      "policy_block"
+    ]
+  },
+  "checkpointPolicy": {
+    "directory": ".astra/checkpoints",
+    "ledger": ".astra/resume-ledger.json",
+    "atomicWrite": true,
+    "include": [
+      "taskId",
+      "stepId",
+      "status",
+      "commitSha",
+      "deploymentId",
+      "proof",
+      "updatedAt"
+    ]
+  },
+  "failurePolicy": "FAIL_CLOSED_BUT_RESUMABLE"
+}
