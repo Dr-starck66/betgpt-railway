@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
   const canonical = new URL(canonicalOrigin);
   if (normalizedHost(canonical.host) === host) return;
 
-  const requestPath = event.node.req.url || "/";
+  const requestPath = event.node?.req.url || "/";
   const target = new URL(requestPath, canonical).toString();
 
   setHeader(event, "x-astra-public-proxy", process.env.ASTRA_PUBLIC_PROXY_ID || "astra-canonical");
