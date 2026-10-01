@@ -1,6 +1,6 @@
 "use client";
 
-import { Send } from "lucide-react";
+import { Send, Volume2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { SeoImg } from "@/components/seo-img";
 import { BRAND_LOGO } from "@/lib/image-seo";
@@ -15,6 +15,7 @@ import {
 } from "@/lib/chat/types";
 import { track } from "@/lib/analytics";
 import { postChat } from "@/lib/chat/transport";
+import { playPunchline } from "@/lib/chat/voice";
 
 const WELCOME: ChatMessage = {
   id: "welcome",
@@ -150,14 +151,17 @@ export function ChatPanel({ seed }: { seed?: string }) {
           content: m.content,
           timestamp: m.timestamp,
         }));
-      const textOut = await postChat({
+      const out = await postChat({
         messages: payload,
         userMemory: mem,
         requestedMode: resolved,
       });
       setMessages((prev) =>
-        prev.map((m) => (m.id === assistantId ? { ...m, content: textOut } : m)),
+        prev.map((m) =>
+          m.id === assistantId ? { ...m, content: out.text, punchline: out.punchline } : m,
+        ),
       );
+      if (out.punchline) void playPunchline(out.punchline);
     } catch (err) {
       const msg =
         err instanceof Error && err.name === "AbortError"
@@ -225,6 +229,18 @@ export function ChatPanel({ seed }: { seed?: string }) {
                   <p className="mb-1 text-[10px] uppercase tracking-[0.18em] text-muted">BetGPT</p>
                 )}
                 {msg.content || (streaming ? "…" : "")}
+                {!mine && msg.punchline && !streaming ? (
+                  <button
+                    type="button"
+                    onClick={() => void playPunchline(msg.punchline!)}
+                    className="mt-2 flex min-h-9 items-center gap-1.5 rounded-full border border-line bg-white px-3 text-xs font-semibold text-paper hover:border-sage/50"
+                    aria-label="Rejouer la punchline"
+                    title="Rejouer la punchline"
+                  >
+                    <Volume2 size={14} />
+                    Rejouer le cri
+                  </button>
+                ) : null}
                 {streaming && (
                   <span className="ml-1 inline-block h-3 w-1.5 animate-pulse bg-sage align-middle" />
                 )}
