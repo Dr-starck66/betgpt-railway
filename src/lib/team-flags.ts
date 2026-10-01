@@ -56,7 +56,6 @@ const NATIONAL_FLAG: Record<string, string> = {
   bosnia and herzegovina: "🇧🇦",
   bosnie herzegovine: "🇧🇦",
   montenegro: "🇲🇪",
-  montenegro: "🇲🇪",
   albania: "🇦🇱",
   albanie: "🇦🇱",
   north macedonia: "🇲🇰",
