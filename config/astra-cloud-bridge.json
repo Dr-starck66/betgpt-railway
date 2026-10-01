@@ -1,9 +1,9 @@
 {
   "name": "BetGPT production routing",
   "defaults": {
-    "timeoutMs": 45000,
-    "retries": 4,
-    "retryDelayMs": 5000
+    "timeoutMs": 20000,
+    "retries": 2,
+    "retryDelayMs": 2500
   },
   "targets": [
     {
@@ -77,5 +77,5 @@
       }
     }
   ],
-  "verificationRevision": "2026-10-01T20:41:00+02:00"
+  "verificationRevision": "2026-10-01T21:03:00+02:00"
 }
