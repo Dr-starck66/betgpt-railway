@@ -27,7 +27,7 @@ export const Route = createFileRoute("/ledger")({
       {
         name: "description",
         content:
-          "Historique des pronostics BetGPT : résultats gagnants et perdants, dates enregistrées, ROI théorique à mise constante et simulations d'archives clairement séparées.",
+          "Bilan du champion canonique ROI5 BetGPT : résultats réels des BET, replay chronologique, validation et historique transparent.",
       },
       { name: "robots", content: "index, follow" },
       { property: "og:title", content: "Bilan des pronostics BetGPT" },
@@ -119,7 +119,7 @@ function LedgerPage() {
 
       {ev ? (
         <section className="section-card p-5 sm:p-6">
-          <h2 className="font-display text-xl">Résultats du registre</h2>
+          <h2 className="font-display text-xl">Résultats réels du champion canonique</h2>
           <p className="mt-1 text-sm text-mist">
             Le calcul conserve les gagnants et les perdants enregistrés avant le coup d'envoi,
             selon l'horodatage stocké. Ces dates internes ne constituent pas une certification
@@ -245,7 +245,7 @@ function LedgerPage() {
       {r.clNight ? <CupNight night={r.clNight} /> : null}
 
       <section className="section-card border-sage/40 p-5 sm:p-6">
-        <h2 className="font-display text-xl">Simu 100 € par match</h2>
+        <h2 className="font-display text-xl">Bilan réel du champion · 100 € par BET</h2>
         <p className="mt-1 text-sm text-mist">
           100 € sur le prono 1-N-2. Filet = score exact à 50 % de la mise, uniquement si ce score
           tombe. Ça ne remplace pas le prono.
@@ -276,7 +276,7 @@ function LedgerPage() {
 
       {data.archive ? (
         <section className="section-card border-sage/40 p-5 sm:p-6">
-          <h2 className="font-display text-xl">Simulation rétrospective sur les archives</h2>
+          <h2 className="font-display text-xl">Replay chronologique du champion canonique</h2>
           <p className="mt-1 text-sm text-mist">
             {data.archive.n} sélections ({data.archive.years}) recalculées avec la méthode actuelle.
             Elles n'ont pas été publiées avant ces matchs. Cette simulation ne démontre pas
@@ -293,6 +293,7 @@ function LedgerPage() {
               <li key={n}>{n}</li>
             ))}
           </ul>
+          {data.archive.byLeague.length ? (
           <div className="mt-4 overflow-x-auto">
             <table className="w-full min-w-[520px] text-sm">
               <thead className="text-left text-[11px] font-semibold uppercase tracking-wider text-muted">
@@ -318,6 +319,7 @@ function LedgerPage() {
               </tbody>
             </table>
           </div>
+          ) : null}
         </section>
       ) : (
         <p className="text-sm text-mist">Chargement des 5 saisons…</p>
