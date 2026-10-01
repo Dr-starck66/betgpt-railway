@@ -58,10 +58,12 @@ export function ResultsBoard({
   h1,
   lead,
   sections,
+  asOf,
 }: {
   h1: string;
   lead: string;
   sections: { id: string; title: string; rows: ResultRow[] }[];
+  asOf?: string;
 }) {
   return (
     <div className="space-y-8">
@@ -69,6 +71,9 @@ export function ResultsBoard({
         <p className="eyebrow">Résultats football</p>
         <h1 className="mt-2 text-3xl font-bold tracking-tight text-paper sm:text-4xl">{h1}</h1>
         <p className="seo-answer mt-4 max-w-3xl text-base leading-relaxed text-mist sm:text-lg">{lead}</p>
+        {asOf ? (
+          <p className="mt-3 text-sm text-muted">Données actualisées à {parisTime(asOf) || "l’instant"} (heure de Paris) · historique continu sur 7 jours.</p>
+        ) : null}
         <nav aria-label="Résultats par compétition" className="mt-5 flex flex-wrap gap-2 text-sm">
           <a href="/scores-en-direct" className="chip-pill hover:border-sage/30 hover:text-link">Scores en direct</a>
           <a href="/resultats-football" className="chip-pill hover:border-sage/30 hover:text-link">Tous les résultats</a>
