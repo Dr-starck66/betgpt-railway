@@ -2,10 +2,11 @@ import { discoverLaunchpadStaticAudit, recentDiscoverCandidates } from "@/lib/ed
 import { readLedgerDurable } from "@/lib/editorial/ledger-store";
 import { manualEditorialArticles } from "@/lib/editorial/manual-articles";
 import { nationalBreakoutScorecard } from "@/lib/growth/national-breakout";
+import { buildSearchTruth } from "@/lib/search/server";
 import { growthWindowSnapshot } from "@/lib/store";
 
 export async function buildNationalBreakout(windowHours = 24) {
-  const growth = await growthWindowSnapshot(windowHours);
+  const [growth, searchTruth] = await Promise.all([growthWindowSnapshot(windowHours), buildSearchTruth(windowHours)]);
   let discoverReady = 0;
   let discoverCandidates = 0;
 
@@ -21,10 +22,13 @@ export async function buildNationalBreakout(windowHours = 24) {
     discoverCandidates = 0;
   }
 
-  return nationalBreakoutScorecard({
-    windowHours,
-    ...growth,
-    discoverReady,
-    discoverCandidates,
-  });
+  return {
+    ...nationalBreakoutScorecard({
+      windowHours,
+      ...growth,
+      discoverReady,
+      discoverCandidates,
+    }),
+    searchTruth,
+  };
 }
