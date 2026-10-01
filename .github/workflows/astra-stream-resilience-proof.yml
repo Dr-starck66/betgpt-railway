@@ -1,0 +1,20 @@
+name: ASTRA Stream Resilience Proof
+on:
+  push:
+    branches:
+      - astra/stream-resilience-proof
+
+jobs:
+  proof:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Exact recovery tests
+        run: npm run test:stream-resilience
+      - name: Release guard proof
+        run: npm run guard:stream-resilience
+      - name: Evidence
+        run: echo "ASTRA_STREAM_RESILIENCE_PROOF_PASS"
