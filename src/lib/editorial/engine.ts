@@ -268,6 +268,18 @@ function absenceSentence(match: EditorialMatch): { text: string; source: Editori
 }
 
 function coreSources(match: EditorialMatch | null, competition: string): EditorialSource[] {
+  if (match?.id?.startsWith("espn-")) {
+    const gameId = match.id.slice("espn-".length);
+    return [
+      {
+        id: `cal-${match.id}`,
+        label: "ESPN",
+        status: "CORROBORATED",
+        note: `${match.home.name} – ${match.away.name}, ${match.competition}, coup d'envoi ${match.kickoff}. Données match attribuées au fournisseur ESPN.`,
+        url: `https://www.espn.com/soccer/match/_/gameId/${gameId}`,
+      },
+    ];
+  }
   return [
     {
       id: match ? `cal-${match.id}` : "cal-day",
