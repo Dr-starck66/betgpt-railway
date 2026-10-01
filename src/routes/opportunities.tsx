@@ -17,7 +17,7 @@ import { CoconMesh } from "@/components/cocon-mesh";
 import { meshHub } from "@/lib/cocon";
 import { SITE_URL } from "@/lib/seo";
 import { skipEuropeFrenchProno } from "@/engine/french-clubs";
-import { headlineMarket, matchPick, oddsPlayable } from "@/lib/markets";
+import { betMarket, headlineMarket, matchPick, oddsPlayable } from "@/lib/markets";
 
 export const Route = createFileRoute("/opportunities")({
   loader: () => getPublicDesk(),
@@ -145,7 +145,7 @@ function OpportunitiesPage() {
     [data.matches],
   );
   const tonightBets = useMemo(
-    () => tonightMatches.filter((x) => x.p.markets.some((m) => m.decision === "BET")).length,
+    () => tonightMatches.filter((x) => Boolean(betMarket(x.p.markets))).length,
     [tonightMatches],
   );
   const activeFilter = filter === "TONIGHT" && tonightMatches.length === 0 ? "ALL" : filter;
@@ -222,7 +222,7 @@ function OpportunitiesPage() {
                       {p.home.name} – {p.away.name}
                     </p>
                     <p className="mt-2 text-sm text-paper">
-                      {playable ? `${pick.label} · ${fmtOdds(pick.bestOdds)}` : "Pas de mise · cote hors 1,80–4,20"}
+                      {playable ? `${pick.label} · ${fmtOdds(pick.bestOdds)}` : "Pas de mise · hors fenêtre canonique 1,80–3,00"}
                     </p>
                   </Link>
                 </li>
