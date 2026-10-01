@@ -65,7 +65,7 @@ export type EditorialArticle = {
   title: string;
   h1: string;
   lead: string;
-  paragraphs: { h2: string; body: string }[];
+  paragraphs: { h2: string; body: string; sourceIds?: string[] }[];
   createdAt: string;
   publishedAt: string | null;
   modifiedAt: string | null;
