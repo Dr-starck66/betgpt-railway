@@ -19,6 +19,10 @@
       "command": "npm run test:repairs"
     },
     {
+      "id": "stream-resilience",
+      "command": "npm run guard:stream-resilience"
+    },
+    {
       "id": "results-watchdog",
       "command": "npm run test:results-watchdog"
     },
@@ -42,6 +46,8 @@
     "productionPromotionRequiresGreenCandidate": true,
     "keepLastHealthyProductionOnBlock": true,
     "neverPromoteFromWorkingTree": true,
-    "immutableCommitOnly": true
+    "immutableCommitOnly": true,
+    "streamRecoveryRequired": true,
+    "resumeFromDurableCheckpoint": true
   }
 }
