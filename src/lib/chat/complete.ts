@@ -9,6 +9,7 @@ import { historyFacts } from "./history-facts";
 import { hasUnsupportedGroundedClaim } from "./grounding";
 import { extractPunchline, type PunchlineMeta } from "./punch";
 import { absurdInsultCreativeBrief, generateAbsurdInsult, shouldDropAbsurdInsult } from "./absurd-insults";
+import { personalityBrief } from "./personality";
 import { renderDailyChatPick, selectDailyChatPick, selectDailyDataFallback } from "./daily-pick";
 
 async function deskNow(question: string): Promise<string> {
@@ -86,14 +87,14 @@ function localReply(last: string, desk: string, mode: PersonalityMode): string {
   const intent = classifyChatIntent(last);
   if (intent === "CASUAL") {
     return mode === "ROAST"
-      ? "Salut 😈 BetGPT est réveillé. Balance ton match, ton ticket ou ta théorie football — je sortirai le grille-pain quantique si le raisonnement le mérite."
+      ? "Salut 😈 BetGPT est réveillé. Balance ton match, ton ticket ou ta théorie football — on verra si ça mérite le contrôle technique."
       : "Salut 👋 Je suis là. Donne-moi un match, un ticket ou demande-moi ce qui vaut vraiment le coup aujourd’hui.";
   }
   if (intent === "TODAY_PICKS") {
     if (desk.includes("SÉLECTION AUTOMATIQUE BETGPT")) {
       const opener =
         mode === "ROAST"
-          ? "Le desk a déjà bossé, donc je ne vais pas te demander les affiches comme un grille-pain sans Wi-Fi. Voilà le pari qui ressort :"
+          ? "Le desk a déjà bossé. Pas besoin de te redemander les affiches : voilà ce qui ressort."
           : "Le desk connaît déjà les matchs disponibles. Voilà le pari qui ressort aujourd’hui :";
       const marker = desk.indexOf("SÉLECTION AUTOMATIQUE BETGPT");
       const selection = (marker >= 0 ? desk.slice(marker) : desk)
@@ -120,7 +121,7 @@ function localReply(last: string, desk: string, mode: PersonalityMode): string {
   }
   if (intent === "GENERAL_SCHEDULE" || intent === "NAMED_MATCH") return desk;
   return mode === "ROAST"
-    ? "Le moteur conversationnel est momentanément en secours local. Je peux toujours vérifier un match ou démonter un ticket, mais je préfère éviter de broder comme un poulpe consultant."
+    ? "Le moteur conversationnel est momentanément en secours local. Je peux toujours vérifier un match ou démonter un ticket, mais je ne vais pas broder pour remplir."
     : "Le moteur conversationnel est momentanément en secours local. Je peux toujours vérifier un match ou un ticket à partir des données disponibles, sans inventer.";
 }
 
@@ -132,14 +133,14 @@ function groundedFallback(desk: string, last: string, mode: PersonalityMode): st
   if (desk.includes("Rencontres correspondant à la demande :")) {
     const intro =
       mode === "ROAST"
-        ? "Je peux démonter ton scénario, mais je reste collé aux faits du desk — pas de record historique sorti d’un grille-pain quantique."
+        ? "Je peux démonter ton scénario, mais je reste collé aux faits du desk — pas de record historique inventé pour faire joli."
         : "Voilà ce que le desk confirme réellement pour cette équipe ou cette rencontre.";
     return `${intro}\n\n${desk}`;
   }
   if (intent === "TODAY_PICKS") return localReply(last, desk, mode);
   if (intent === "GENERAL_SCHEDULE") return desk;
   return mode === "ROAST"
-    ? "Je peux te chambrer, mais pas inventer les faits : le desk n’a pas assez de données vérifiées pour confirmer ce détail. Donc je garde le grille-pain quantique au placard et je reste sur ce qui est vérifiable."
+    ? "Je peux te chambrer, mais pas inventer les faits : le desk n’a pas assez de données vérifiées pour confirmer ce détail. Je reste sur ce qui est vérifiable."
     : "Je n’ai pas assez de données vérifiées pour affirmer ce détail. Je peux te donner ce que le desk confirme, ou raisonner sans inventer le reste.";
 }
 
