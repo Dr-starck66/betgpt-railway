@@ -122,7 +122,8 @@ function audit(rel, source, sitemapSource) {
   } else if (!redirect && !noindex) {
     if (!hasHead) failures.push("missing-route-head");
     if (criticalMissing.length) failures.push(`critical:${criticalMissing.join(",")}`);
-    const roleMin = Number((cfg.roleMinimums || {})[role] ?? cfg.minScore ?? 78);\n    if (score < roleMin) failures.push(`weak-score:${score}<${roleMin}`);
+    const roleMin = Number((cfg.roleMinimums || {})[role] ?? cfg.minScore ?? 78);
+    if (score < roleMin) failures.push(`weak-score:${score}<${roleMin}`);
   }
 
   return {
