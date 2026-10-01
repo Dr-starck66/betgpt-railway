@@ -1,3 +1,5 @@
+import type { PunchlineMeta } from "./punch";
+
 export type ChatRole = "user" | "assistant";
 
 export type PersonalityMode = "NORMAL" | "ROAST";
@@ -7,6 +9,7 @@ export type ChatMessage = {
   role: ChatRole;
   content: string;
   timestamp: number;
+  punchline?: PunchlineMeta;
 };
 
 export type UserMemory = {
