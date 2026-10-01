@@ -83,14 +83,14 @@ export function selectDailyChatPick(
         continue;
       }
 
-      // Fallback visible in chat only: a real listed 1X2 quote backed by the model,
-      // clearly labelled non-premium. It does not mutate the engine decision.
+      // Fallback visible in chat only: always keep at least one real listed
+      // non-draw 1X2 option when the desk has usable odds. It is explicitly
+      // labelled non-premium and never mutates the engine decision.
       if (
         quote.group === "1X2" &&
         quote.market !== "1X2_D" &&
-        quote.modelProb >= 0.34 &&
-        Number.isFinite(quote.ev) &&
-        quote.ev >= -0.02
+        quote.modelProb >= 0.28 &&
+        Number.isFinite(quote.ev)
       ) {
         candidates.push({ match, quote, score: candidateScore(quote) });
       }
