@@ -8,7 +8,14 @@ on:
   pull_request:
     paths:
       - "src/lib/editorial/**"
+      - "src/lib/social/**"
+      - "src/lib/social.functions.ts"
       - "src/routes/admin_.editorial.tsx"
+      - "src/routes/admin_.social.tsx"
+      - "migrations/0004_social_ledger.sql"
+      - "data/social/ledger.json"
+      - "scripts/run-editorial-publish.ts"
+      - "package.json"
       - "api/editorial-run.ts"
       - ".github/workflows/editorial.yml"
   workflow_dispatch:
@@ -35,6 +42,13 @@ jobs:
       - name: Editorial regression tests
         run: npm run news
 
+      - name: ASTRA SOCIAL regression tests
+        run: npm run social:audit
+
+      - name: Production build gate
+        if: github.event_name == 'pull_request'
+        run: npm run build
+
       - name: TypeScript verification
         if: github.event_name == 'pull_request'
         run: npm run typecheck
@@ -43,16 +57,16 @@ jobs:
         if: github.event_name != 'pull_request'
         run: npm run editorial:publish
 
-      - name: Persist published ledger
+      - name: Persist editorial and social ledgers
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         shell: bash
         run: |
-          git add data/editorial/ledger.json
+          git add data/editorial/ledger.json data/social/ledger.json
           if git diff --cached --quiet; then
-            echo "No new qualified publication for this run."
+            echo "No new qualified publication or social job for this run."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "content: auto-publish BetGPT editorial ledger"
+          git commit -m "content: auto-publish BetGPT editorial and social ledgers"
           git push origin HEAD:main
