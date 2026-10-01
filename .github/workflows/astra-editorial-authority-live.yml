@@ -1,0 +1,37 @@
+name: ASTRA Editorial Authority Live
+on:
+  push:
+    branches:
+      - astra/editorial-authority-guard-20261001
+
+jobs:
+  verify-production:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for exact BetGPT source SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          EXPECTED="$GITHUB_SHA"
+          REV="https://betgpt.live/api/astra-revision"
+          PAGE="https://betgpt.live/actualites/real-madrid-mbappe-recuperation-paris-2026-10-01"
+
+          matched=""
+          for i in $(seq 1 36); do
+            body="$(curl --fail --silent --show-error --location --retry 2 "$REV" || true)"
+            echo "attempt=$i revision=$body"
+            if printf '%s' "$body" | grep -F "\"sourceSha\":\"$EXPECTED\"" >/dev/null; then
+              matched="yes"
+              break
+            fi
+            sleep 10
+          done
+
+          test "$matched" = "yes"
+
+          page_body="$(curl --fail --silent --show-error --location --retry 3 "$PAGE")"
+          printf '%s' "$page_body" | grep -F "Sources de ce passage"
+          printf '%s' "$page_body" | grep -F "Real Madrid — communiqué médical"
+          printf '%s' "$page_body" | grep -F "parte-medico-de-mbappe-26-09-2026"
+
+          echo "ASTRA_EDITORIAL_AUTHORITY_LIVE_PASS sourceSha=$EXPECTED"
