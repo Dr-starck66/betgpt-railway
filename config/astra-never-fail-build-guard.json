@@ -7,6 +7,10 @@
       "command": "npm run prebuild"
     },
     {
+      "id": "self-heal-tests",
+      "command": "npm run test:self-heal"
+    },
+    {
       "id": "indexability-release",
       "command": "npm run seo:indexability-release"
     },
