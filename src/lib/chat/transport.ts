@@ -5,7 +5,7 @@ export async function postChat(
   fetcher: typeof fetch = fetch,
 ): Promise<string> {
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 20000);
+  const timer = setTimeout(() => controller.abort(), 40000);
   try {
     const response = await fetcher("/api/chat", {
       method: "POST",
