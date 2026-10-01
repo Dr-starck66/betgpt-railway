@@ -11,6 +11,7 @@ import { extractPunchline } from "./punch.ts";
 import { generateAbsurdInsult, shouldDropAbsurdInsult } from "./absurd-insults.ts";
 import { reactionForPunchline } from "./reaction.ts";
 import { personalityBrief } from "./personality.ts";
+import { buildChallengeUrl, buildFacebookShareUrl, buildShareMoment, buildXShareUrl } from "./share.ts";
 import { renderDailyChatPick, selectDailyChatPick, selectDailyDataFallback } from "./daily-pick.ts";
 
 it("normalizes corrupt nested memories instead of crashing the prompt", () => {
@@ -549,4 +550,27 @@ it("personality director never invents a callback when memory and history are em
     "Analyse ce pari",
   );
   assert.match(brief, /n’invente pas un souvenir/i);
+});
+
+
+it("viral share engine creates a reusable roast challenge URL", () => {
+  const url = buildChallengeUrl(
+    "https://betgpt.live",
+    "La France va perdre vingt à zéro son prochain match",
+  );
+  assert.match(url, /^https:\/\/betgpt\.live\/chat\?/);
+  assert.match(url, /roast=1/);
+  assert.match(decodeURIComponent(url), /France va perdre vingt à zéro/i);
+});
+
+it("viral share engine creates social-native X and Facebook URLs", () => {
+  const moment = buildShareMoment(
+    "https://betgpt.live",
+    "Mon combiné de 12 matchs est sûr à 100 %",
+    "TON ANALYSE FAIT DU MOONWALK DANS UNE CENTRALE NUCLÉAIRE !!!",
+  );
+  assert.match(moment.text, /BetGPT vient de me sortir/i);
+  assert.match(moment.url, /\/chat\?/);
+  assert.match(buildXShareUrl(moment), /^https:\/\/x\.com\/intent\/post\?/);
+  assert.match(buildFacebookShareUrl(moment), /^https:\/\/www\.facebook\.com\/sharer\/sharer\.php\?/);
 });
