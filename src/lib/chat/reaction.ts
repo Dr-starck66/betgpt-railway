@@ -29,7 +29,7 @@ function unique<T>(items: T[]): T[] {
 }
 
 export function reactionForPunchline(text: string, context = ""): PunchReaction {
-  const source = \`\${text} \${context}\`;
+  const source = `${text} ${context}`;
   const emojis: string[] = [];
   let mood: PunchReaction["mood"] = "ABSURD_SHOCK";
   const query: string[] = [];
