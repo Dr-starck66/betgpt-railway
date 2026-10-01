@@ -7,6 +7,7 @@ import { fmtOdds, fmtPct } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Crest } from "@/components/crest";
 import { AstraSidewings } from "@/components/astra-sidewings";
+import { ld } from "@/lib/ld";
 
 export const Route = createFileRoute("/prediction/$predictionId")({
   loader: async ({ params }) => {
@@ -31,11 +32,71 @@ export const Route = createFileRoute("/prediction/$predictionId")({
         { name: "robots", content: "index, follow" },
       ],
       links: [{ rel: "canonical", href: `${SITE_URL}/prediction/${params.predictionId}` }],
+      scripts: row
+        ? [
+            {
+              type: "application/ld+json",
+              children: ld(predictionEvidenceLd(row, params.predictionId, title)),
+            },
+          ]
+        : [],
     };
   },
   component: PredictionPage,
   notFoundComponent: () => <p className="text-muted">Pronostic introuvable.</p>,
 });
+
+function predictionEvidenceLd(
+  row: {
+    id: string;
+    matchId: string;
+    home: string;
+    away: string;
+    kickoff: string;
+    recordedAt: string;
+    label: string;
+    result?: "win" | "lose" | "void";
+  },
+  predictionId: string,
+  title: string,
+): object {
+  const url = `${SITE_URL}/prediction/${predictionId}`;
+  const eventId = `${SITE_URL}/match/${encodeURIComponent(row.matchId)}#event`;
+  const description = `Pronostic horodaté ${row.label} pour ${row.home} – ${row.away}. Registre public BetGPT conservé avant et après le résultat.`;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": `${url}#webpage`,
+        url,
+        name: title,
+        description,
+        datePublished: row.recordedAt,
+        inLanguage: "fr-FR",
+        isPartOf: { "@id": `${SITE_URL}/#website` },
+        about: { "@id": eventId },
+      },
+      {
+        "@type": "SportsEvent",
+        "@id": eventId,
+        name: `${row.home} vs ${row.away}`,
+        startDate: row.kickoff,
+        sport: "Soccer",
+        homeTeam: { "@type": "SportsTeam", name: row.home },
+        awayTeam: { "@type": "SportsTeam", name: row.away },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Accueil", item: SITE_URL },
+          { "@type": "ListItem", position: 2, name: "Bilan BetGPT", item: `${SITE_URL}/ledger` },
+          { "@type": "ListItem", position: 3, name: `${row.home} – ${row.away}`, item: url },
+        ],
+      },
+    ],
+  };
+}
 
 function utc(iso: string) {
   const t = Date.parse(iso);
