@@ -77,12 +77,34 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
             <p className="readable-prose text-paper">{article.lead}</p>
           </div>
 
-          {article.paragraphs.map((part) => (
-            <section key={part.h2} className="surface-card space-y-4 p-5 sm:p-7">
-              <h2 className="text-2xl font-semibold tracking-tight">{part.h2}</h2>
-              <p className="readable-prose">{part.body}</p>
-            </section>
-          ))}
+          {article.paragraphs.map((part) => {
+            const passageSources = (part.sourceIds ?? [])
+              .map((sourceId) => article.sources.find((source) => source.id === sourceId))
+              .filter(
+                (source): source is EditorialArticle["sources"][number] & { url: string } =>
+                  Boolean(source?.url),
+              );
+
+            return (
+              <section key={part.h2} className="surface-card space-y-4 p-5 sm:p-7">
+                <h2 className="text-2xl font-semibold tracking-tight">{part.h2}</h2>
+                <p className="readable-prose">{part.body}</p>
+                {passageSources.length ? (
+                  <p className="border-t border-line pt-3 text-xs leading-relaxed text-muted">
+                    <span className="font-semibold text-mist">Sources de ce passage : </span>
+                    {passageSources.map((source, index) => (
+                      <span key={source.id}>
+                        {index ? " · " : ""}
+                        <a href={source.url} className="font-semibold text-link hover:underline">
+                          {source.label}
+                        </a>
+                      </span>
+                    ))}
+                  </p>
+                ) : null}
+              </section>
+            );
+          })}
 
           {article.corrections.length ? (
             <section className="surface-card p-5 text-sm text-mist sm:p-6">
@@ -105,7 +127,7 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
               {article.sources.map((source) => (
                 <li key={source.id}>
                   {source.url ? (
-                    <a href={source.url} rel="nofollow noopener noreferrer" className="font-semibold text-link hover:underline">
+                    <a href={source.url} className="font-semibold text-link hover:underline">
                       {source.label}
                     </a>
                   ) : (
