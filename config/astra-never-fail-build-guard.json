@@ -23,6 +23,10 @@
       "command": "npm run test:repairs"
     },
     {
+      "id": "affiliate-conversion",
+      "command": "npm run affiliate:guard"
+    },
+    {
       "id": "stream-resilience",
       "command": "npm run guard:stream-resilience"
     },
@@ -52,6 +56,8 @@
     "neverPromoteFromWorkingTree": true,
     "immutableCommitOnly": true,
     "streamRecoveryRequired": true,
-    "resumeFromDurableCheckpoint": true
+    "resumeFromDurableCheckpoint": true,
+    "affiliateTrackingRequired": true,
+    "affiliateFalseMonetizationForbidden": true
   }
 }
