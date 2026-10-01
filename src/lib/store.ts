@@ -85,6 +85,55 @@ export async function analyticsSummary(limit = 40): Promise<{ e: string; n: numb
   }
 }
 
+export async function growthWindowSnapshot(windowHours = 24): Promise<{
+  currentEvents: Record<string, number>;
+  previousEvents: Record<string, number>;
+  affiliateClicks: number;
+  previousAffiliateClicks: number;
+  topRoutes: { route: string; n: number }[];
+}> {
+  const sql = await trySql();
+  const empty = {
+    currentEvents: {} as Record<string, number>,
+    previousEvents: {} as Record<string, number>,
+    affiliateClicks: 0,
+    previousAffiliateClicks: 0,
+    topRoutes: [] as { route: string; n: number }[],
+  };
+  if (!sql) return empty;
+  try {
+    const current = await sql.query<{ e: string; n: number }>(
+      "select e, count(*)::int as n from analytics_events where t >= now() - ($1 * interval '1 hour') group by e",
+      [windowHours],
+    );
+    const previous = await sql.query<{ e: string; n: number }>(
+      "select e, count(*)::int as n from analytics_events where t < now() - ($1 * interval '1 hour') and t >= now() - ($2 * interval '1 hour') group by e",
+      [windowHours, windowHours * 2],
+    );
+    const clicks = await sql.query<{ n: number }>(
+      "select count(*)::int as n from affiliate_clicks where t >= now() - ($1 * interval '1 hour')",
+      [windowHours],
+    );
+    const previousClicks = await sql.query<{ n: number }>(
+      "select count(*)::int as n from affiliate_clicks where t < now() - ($1 * interval '1 hour') and t >= now() - ($2 * interval '1 hour')",
+      [windowHours, windowHours * 2],
+    );
+    const routes = await sql.query<{ route: string; n: number }>(
+      "select coalesce(route, '/') as route, count(*)::int as n from analytics_events where t >= now() - ($1 * interval '1 hour') group by route order by n desc limit 10",
+      [windowHours],
+    );
+    return {
+      currentEvents: Object.fromEntries(current.map((row) => [row.e, Number(row.n) || 0])),
+      previousEvents: Object.fromEntries(previous.map((row) => [row.e, Number(row.n) || 0])),
+      affiliateClicks: Number(clicks[0]?.n) || 0,
+      previousAffiliateClicks: Number(previousClicks[0]?.n) || 0,
+      topRoutes: routes.map((row) => ({ route: row.route || "/", n: Number(row.n) || 0 })),
+    };
+  } catch {
+    return empty;
+  }
+}
+
 export async function recordClick(book: string, matchId: string, href: string): Promise<void> {
   const sql = await trySql();
   if (!sql) return;
