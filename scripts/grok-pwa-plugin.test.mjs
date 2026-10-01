@@ -110,17 +110,17 @@ test("does not duplicate x:creator tags", () => {
   assert.equal(twice.split('property="x:creator:id"').length - 1, 1);
 });
 
-test("platform chrome overwrites share-card metas and always sets og:title", () => {
+test("platform chrome preserves route-level share metadata", () => {
   const html =
-    '<html><head><title>Hello World</title><meta property="og:title" content="Old"><meta name="twitter:card" content="summary"></head></html>';
+    '<html><head><title>Hello World</title><meta property="og:title" content="Article title"><meta name="twitter:card" content="summary_large_image"><meta property="og:image" content="https://betgpt.live/blog/discover/article.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="675"></head></html>';
   const out = injectGrokPwaHead(html, isolatedCtx({ appName: "Wild Race" }));
   assert.match(out, /name="twitter:card" content="summary_large_image"/);
-  assert.match(out, /property="og:title" content="Hello World"/);
-  assert.doesNotMatch(out, /content="Old"/);
-  assert.doesNotMatch(out, /content="summary"/);
+  assert.match(out, /property="og:title" content="Article title"/);
+  assert.match(out, /property="og:image" content="https:\/\/betgpt\.live\/blog\/discover\/article\.jpg"/);
+  assert.match(out, /property="og:image:height" content="675"/);
   assert.equal(out.split('name="twitter:card"').length - 1, 1);
   assert.equal(out.split('property="og:title"').length - 1, 1);
-  assert.doesNotMatch(out, /property="og:image"/);
+  assert.equal(out.split('property="og:image"').length - 1, 1);
 });
 
 test("does not duplicate twitter:card or og:title", () => {
