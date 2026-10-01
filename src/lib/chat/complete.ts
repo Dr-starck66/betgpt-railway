@@ -96,6 +96,42 @@ async function callAstraRouter(
   }
 }
 
+async function callLocalChat(
+  base: string,
+  system: string,
+  history: { role: string; content: string }[],
+  mode: PersonalityMode,
+): Promise<{ ok: true; text: string } | { ok: false; status: number }> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 30000);
+  try {
+    const upstream = await fetch(`${base.replace(/\/+$/, "")}/chat/completions`, {
+      method: "POST",
+      signal: controller.signal,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer astra-private",
+      },
+      body: JSON.stringify({
+        model: "qwen-chat-local",
+        stream: false,
+        temperature: mode === "ROAST" ? 0.72 : 0.38,
+        max_tokens: 360,
+        messages: [{ role: "system", content: system.slice(0, 12000) }, ...history],
+      }),
+    });
+    if (!upstream.ok) return { ok: false, status: upstream.status };
+    const json = (await upstream.json().catch(() => ({}))) as {
+      choices?: { message?: { content?: string } }[];
+    };
+    const text = stripMarkup(json.choices?.[0]?.message?.content ?? "").trim();
+    if (!text) return { ok: false, status: 204 };
+    return { ok: true, text };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 async function callXai(
   apiKey: string,
   system: string,
@@ -155,6 +191,24 @@ export async function completeChat(
     }));
   const last = history.at(-1)?.content ?? "";
   const mustGround = shouldGround(last);
+
+  const localChatBase = process.env.ASTRA_LOCAL_CHAT_BASE?.trim();
+  if (localChatBase) {
+    try {
+      const out = await callLocalChat(localChatBase, system, history, mode);
+      if (out.ok) {
+        if (mustGround) {
+          const source = `${system}\n\n${history.map((m) => m.content).join("\n")}`;
+          if (hasUnsupportedGroundedClaim(out.text, source)) {
+            return { ok: true, text: groundedFallback(desk) };
+          }
+        }
+        return { ok: true, text: out.text };
+      }
+    } catch {
+      /* fall through to ASTRA router, optional cloud provider, then local fallback */
+    }
+  }
 
   const routerBase = process.env.ASTRA_ROUTER_BASE?.trim();
   const routerToken = process.env.ASTRA_ROUTER_TOKEN?.trim();
