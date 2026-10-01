@@ -3,6 +3,8 @@ import { logoCandidates } from "@/lib/crests";
 import { crestSeo } from "@/lib/image-seo";
 import { cn } from "@/lib/utils";
 import { nationalTeamCountryCode } from "@/lib/team-flags";
+import { countryForLeague } from "@/lib/country-flag-resolver";
+import type { LeagueId } from "@/engine/types";
 import { CountryFlag } from "./country-flag";
 
 export type TeamRef = {
@@ -76,6 +78,7 @@ export function TeamLine({
   names = "auto",
   competition,
   className,
+  league,
 }: {
   home: TeamRef;
   away: TeamRef;
@@ -83,9 +86,19 @@ export function TeamLine({
   names?: "short" | "full" | "auto";
   competition?: string;
   className?: string;
+  league?: LeagueId;
 }) {
+  const leagueCountry = league && league !== "NL" ? countryForLeague(league) : null;
   return (
     <span className={cn("flex min-w-0 items-center gap-2", className)}>
+      {leagueCountry ? (
+        <CountryFlag
+          code={leagueCountry.code}
+          label={leagueCountry.label}
+          size={Math.max(16, Math.round(size * 0.62))}
+          className="object-cover"
+        />
+      ) : null}
       <TeamChip team={home} size={size} names={names} competition={competition} />
       <span className="shrink-0 text-muted">–</span>
       <TeamChip team={away} size={size} names={names} competition={competition} />
