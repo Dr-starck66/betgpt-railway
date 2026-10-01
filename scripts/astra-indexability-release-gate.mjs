@@ -28,18 +28,11 @@ function routeRegex(routePattern) {
     .map((seg) => {
       if (!seg) return "";
       if (seg.startsWith(":") || seg.startsWith("$")) return "[^/]+";
-      return seg.replace(/[.*+?^${}()|[\]\\]/g, "\\function norm(p) {
-  if (!p) return "/";
-  let x = String(p).split("?")[0].split("#")[0];
-  if (!x.startsWith("/")) x = "/" + x;
-  if (x.length > 1) x = x.replace(/\/+$/, "");
-  return x;
-}");
+      return seg.replace(/[.*+?^${}()|[\]\\]/g, (ch) => "\\" + ch);
     })
     .join("/");
   return new RegExp("^" + escaped + "$");
 }
-
 function syntheticMatches() {
   const leagues = ["PL", "LL", "BL", "SA", "L1", "ER", "PT", "SC", "TR", "CL", "EL", "NL"];
   const now = Date.now();
