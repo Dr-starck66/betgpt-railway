@@ -1,0 +1,24 @@
+name: ASTRA Editorial Authority Guard
+on:
+  push:
+    branches:
+      - astra/editorial-authority-guard-20261001
+
+jobs:
+  editorial-authority:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Authority unit tests
+        run: npm run test:editorial-authority
+      - name: Editorial integration tests
+        run: npm run news
+      - name: Production build with mandatory authority gate
+        run: npm run build
+      - name: Evidence
+        run: echo "ASTRA_EDITORIAL_AUTHORITY_INTEGRATION_PASS"
