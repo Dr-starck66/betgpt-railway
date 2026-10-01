@@ -110,7 +110,7 @@ async function callLocalChat(
       signal: controller.signal,
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer astra-private",
+        Authorization: `Bearer ${process.env.ASTRA_LOCAL_CHAT_TOKEN?.trim() || "astra-private"}`,
       },
       body: JSON.stringify({
         model: "qwen-chat-local",
