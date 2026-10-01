@@ -1,0 +1,39 @@
+{
+  "schema": "astra-never-fail-build-guard/v1",
+  "reportPath": "artifacts/release/never-fail-build.json",
+  "requiredChecks": [
+    {
+      "id": "prebuild-guards",
+      "command": "npm run prebuild"
+    },
+    {
+      "id": "typecheck",
+      "command": "npm run typecheck"
+    },
+    {
+      "id": "repair-tests",
+      "command": "npm run test:repairs"
+    },
+    {
+      "id": "results-watchdog",
+      "command": "npm run test:results-watchdog"
+    },
+    {
+      "id": "production-bundle",
+      "command": "node scripts/with-app-env.mjs vite build"
+    }
+  ],
+  "extendedChecks": [
+    {
+      "id": "full-test-suite",
+      "command": "npm test"
+    }
+  ],
+  "policy": {
+    "failClosed": true,
+    "productionPromotionRequiresGreenCandidate": true,
+    "keepLastHealthyProductionOnBlock": true,
+    "neverPromoteFromWorkingTree": true,
+    "immutableCommitOnly": true
+  }
+}
