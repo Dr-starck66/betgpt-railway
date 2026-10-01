@@ -16,7 +16,7 @@ export const Route = createFileRoute("/pronostics-sportifs")({
         engineVersion: undefined,
         tacticalVersion: undefined,
       })),
-    } as typeof desk;
+    } as unknown as typeof desk;
   },
   head: ({ loaderData }) => {
     const n = loaderData ? filterSiloMatches(loaderData, {}).length : 0;
