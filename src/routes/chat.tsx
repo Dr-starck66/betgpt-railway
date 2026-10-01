@@ -6,7 +6,7 @@ import { SITE_URL } from "@/lib/seo";
 export const Route = createFileRoute("/chat")({
   pendingMs: 0,
   pendingComponent: ChatPending,
-  validateSearch: (search: Record<string, unknown>): { q?: string; roast?: boolean } => ({
+  validateSearch: (search: Record<string, unknown>): { q?: string; roast?: boolean; share_source?: string } => ({
     q: typeof search.q === "string" ? search.q : undefined,
     roast: search.roast === "1" || search.roast === 1 || search.roast === true,
     share_source: typeof search.share_source === "string" ? search.share_source.slice(0, 24) : undefined,
