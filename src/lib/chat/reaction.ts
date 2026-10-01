@@ -85,12 +85,7 @@ export function reactionForPunchline(text: string, context = ""): PunchReaction 
   if (!query.length) query.push("shocked laughing disbelief funny reaction");
   if (!emojis.length) emojis.push("🤯", "😂", "💀");
 
-  const gifFallback =
-    mood === "ANIMAL_CHAOS"
-      ? "/reactions/astra-animal.gif?v=4"
-      : mood === "BETTING_DISASTER" || mood === "SHOPPING_DISASTER" || mood === "DIY_DISASTER"
-        ? "/reactions/astra-betting.gif?v=4"
-        : mood === "DIY_DISASTER" ? "/reactions/astra-fallback.gif?v=4" : "/reactions/astra-shock.gif?v=4";
+  const gifFallback = ""; // NativeReaction is the resilient fallback; external GIFs are optional.
 
   return {
     emojis: unique(emojis).slice(0, 3),
