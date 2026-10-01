@@ -87,39 +87,39 @@ function LedgerPage() {
       <section className="section-card border-sage/40 p-5 sm:p-6">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <p className="eyebrow">Champion canonique ROI5</p>
-            <h2 className="mt-1 font-display text-2xl">Méthode validée &gt; 30 %</h2>
+            <p className="eyebrow">Notre meilleure méthode historique</p>
+            <h2 className="mt-1 font-display text-2xl">Ce que le test historique a réellement donné</h2>
             <p className="mt-2 max-w-3xl text-sm leading-relaxed text-mist">
-              Benchmark rétrospectif chronologique du gate canonique actuellement appliqué aux
-              décisions de production. Il est séparé du registre public réel ci-dessous : ce
-              dernier conserve tous les résultats observés et ne doit jamais être réécrit pour
-              reproduire artificiellement le backtest.
+              Nous avons rejoué la méthode actuelle match après match, sans utiliser le résultat final
+              à l’avance. Sur cet historique, elle affiche {fmtSignedPct(canonical.summary.roi)} de
+              rendement simulé. Ce n’est ni un bénéfice réellement encaissé, ni une promesse pour les
+              prochains paris.
             </p>
           </div>
-          <span className="chip-pill">Gate production actif</span>
+          <span className="chip-pill">Méthode utilisée aujourd’hui</span>
         </div>
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Kpi label="ROI canonique" value={fmtSignedPct(canonical.summary.roi)} />
-          <Kpi label="Validation chronologique" value={fmtSignedPct(canonical.summary.validationRoi)} />
-          <Kpi label="Échantillon canonique" value={String(canonical.summary.n)} />
-          <Kpi label="Drawdown max" value={canonical.summary.maxDrawdown.toFixed(2)} />
+          <Kpi label="Rendement du test" value={fmtSignedPct(canonical.summary.roi)} />
+          <Kpi label="Test final" value={fmtSignedPct(canonical.summary.validationRoi)} />
+          <Kpi label="Paris testés" value={String(canonical.summary.n)} />
+          <Kpi label="Plus forte baisse" value={`${canonical.summary.maxDrawdown.toFixed(2)} mises`} />
         </div>
         <p className="mt-3 text-xs text-muted">
-          Validation : {canonical.summary.validationN} sélections · drawdown max{" "}
-          {canonical.summary.validationMaxDrawdown.toFixed(2)}. Performance historique,
-          non garantie pour les prochains paris.
+          Sur les {canonical.summary.validationN} paris gardés pour le test final :{" "}
+          {fmtSignedPct(canonical.summary.validationRoi)} de rendement simulé, avec une plus forte baisse
+          de {canonical.summary.validationMaxDrawdown.toFixed(2)} mises. Résultats historiques uniquement.
         </p>
       </section>
 
       <section className="section-card p-5 sm:p-6">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <p className="eyebrow">Preuve match par match</p>
-            <h2 className="mt-1 font-display text-2xl">Les {canonical.summary.n} sélections derrière le bilan</h2>
+            <p className="eyebrow">Match par match</p>
+            <h2 className="mt-1 font-display text-2xl">Les {canonical.summary.n} paris utilisés pour calculer ce bilan</h2>
             <p className="mt-2 max-w-4xl text-sm leading-relaxed text-mist">
-              Chaque ligne correspond à une sélection réellement incluse dans le replay chronologique du
-              champion ROI5. Le score final vient de l’archive historique. La cote affichée est la cote
-              synthétique/reconstruite utilisée par le replay, et non une cote bookmaker horodatée.
+              Ici, rien n’est caché : chaque match du test est affiché avec le pari choisi, la cote utilisée
+              par la simulation, le score final et le gain ou la perte simulé. Les cotes ne sont pas des
+              captures d’un bookmaker prises au moment du match : elles ont été reconstruites pour ce test.
             </p>
           </div>
           <button
@@ -134,9 +134,9 @@ function LedgerPage() {
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-5">
           <Kpi label="Victoires" value={String(canonical.summary.wins)} />
           <Kpi label="Défaites" value={String(canonical.summary.losses)} />
-          <Kpi label="Hits" value={`${Math.round(canonical.summary.hitRate * 100)} %`} />
-          <Kpi label="Couvertures" value={`${canonical.summary.hedgeHits}/${canonical.summary.hedges}`} />
-          <Kpi label="Profit" value={`${canonical.summary.profit >= 0 ? "+" : ""}${canonical.summary.profit.toFixed(2)} u`} />
+          <Kpi label="Taux de réussite" value={`${Math.round(canonical.summary.hitRate * 100)} %`} />
+          <Kpi label="Filets réussis" value={`${canonical.summary.hedgeHits}/${canonical.summary.hedges}`} />
+          <Kpi label="Bilan simulé" value={`${canonical.summary.profit >= 0 ? "+" : ""}${canonical.summary.profit.toFixed(2)} unités`} />
         </div>
 
         <div className="mt-4 overflow-x-auto">
@@ -147,13 +147,13 @@ function LedgerPage() {
                 <th className="py-2 pr-3 font-medium">Date</th>
                 <th className="py-2 pr-3 font-medium">Match</th>
                 <th className="py-2 pr-3 font-medium">Pari</th>
-                <th className="py-2 pr-3 font-medium">Cote*</th>
+                <th className="py-2 pr-3 font-medium">Cote du test*</th>
                 <th className="py-2 pr-3 font-medium">Score</th>
-                <th className="py-2 pr-3 font-medium">Résultat</th>
-                <th className="py-2 pr-3 font-medium">Couverture</th>
-                <th className="py-2 pr-3 font-medium">P&L</th>
-                <th className="py-2 pr-3 font-medium">Cumul</th>
-                <th className="py-2 pr-3 font-medium">Validation</th>
+                <th className="py-2 pr-3 font-medium">Verdict</th>
+                <th className="py-2 pr-3 font-medium">Filet score exact</th>
+                <th className="py-2 pr-3 font-medium">Gain / perte</th>
+                <th className="py-2 pr-3 font-medium">Total</th>
+                <th className="py-2 pr-3 font-medium">Phase du test</th>
               </tr>
             </thead>
             <tbody>
@@ -164,20 +164,36 @@ function LedgerPage() {
                     {format(new Date(row.kickoff), "dd/MM/yyyy")}
                   </td>
                   <td className="py-3 pr-3">
-                    <div className="font-medium text-paper">{row.home} – {row.away}</div>
+                    <div className="flex min-w-[280px] flex-wrap items-center gap-2 font-medium text-paper">
+                      <Crest
+                        name={row.home}
+                        short={row.home.slice(0, 3)}
+                        size={26}
+                        competition={row.league}
+                      />
+                      <span>{row.home}</span>
+                      <span className="text-muted">–</span>
+                      <Crest
+                        name={row.away}
+                        short={row.away.slice(0, 3)}
+                        size={26}
+                        competition={row.league}
+                      />
+                      <span>{row.away}</span>
+                    </div>
                     <div className="mt-1 text-xs text-muted">{LEAGUE_LABEL[row.league] ?? row.league}</div>
                   </td>
                   <td className="py-3 pr-3 text-paper">
-                    {row.market === "1X2_H" ? "1" : "2"} · {row.selection}
+                    Victoire {row.selection}
                   </td>
                   <td className="py-3 pr-3 tabular">{row.odds.toFixed(2)}</td>
                   <td className="py-3 pr-3 tabular font-medium text-paper">{row.score}</td>
                   <td className="py-3 pr-3">
-                    <span className="chip-pill">{row.result === "win" ? "WIN" : "LOSS"}</span>
+                    <span className="chip-pill">{row.result === "win" ? "Gagné" : "Perdu"}</span>
                   </td>
                   <td className="py-3 pr-3 text-xs text-mist">
                     {row.hedge
-                      ? `${row.hedge.score} @ ${row.hedge.odds.toFixed(2)} · ${row.hedge.stake.toFixed(2)} u · ${row.hedge.hit ? "HIT" : "MISS"}`
+                      ? `${row.hedge.score} à ${row.hedge.odds.toFixed(2)} · ${row.hedge.stake.toFixed(2)} u · ${row.hedge.hit ? "réussi" : "raté"}`
                       : "—"}
                   </td>
                   <td className="py-3 pr-3 tabular">
@@ -186,7 +202,7 @@ function LedgerPage() {
                   <td className="py-3 pr-3 tabular">
                     {row.cumulativePnl >= 0 ? "+" : ""}{row.cumulativePnl.toFixed(2)} u
                   </td>
-                  <td className="py-3 pr-3 text-xs text-mist">{row.validation20 ? "20 % final" : "Développement"}</td>
+                  <td className="py-3 pr-3 text-xs text-mist">{row.validation20 ? "Test final" : "Mise au point"}</td>
                 </tr>
               ))}
             </tbody>
@@ -194,12 +210,15 @@ function LedgerPage() {
         </div>
 
         <div className="mt-4 space-y-1 text-xs leading-relaxed text-muted">
-          <p>* {canonical.oddsDisclosure}</p>
-          <p>{canonical.scoreDisclosure}</p>
           <p>
-            P&L en unités normalisées : 1 u sur le pari principal, plus la petite couverture exacte
-            lorsqu’elle est sélectionnée par la règle canonique. Les lignes sont affichées des plus récentes
-            aux plus anciennes ; le cumul reste calculé dans l’ordre chronologique du replay.
+            * Cote du test : valeur reconstruite pour la simulation historique, pas une cote bookmaker
+            enregistrée à l’heure du match.
+          </p>
+          <p>Les scores finaux viennent de l’archive historique des matchs.</p>
+          <p>
+            Les gains et pertes sont affichés en unités : 1 unité correspond à la mise principale du test.
+            Un petit filet sur un score exact peut s’ajouter quand la méthode le prévoit. Les matchs les plus
+            récents sont affichés en premier.
           </p>
         </div>
       </section>
