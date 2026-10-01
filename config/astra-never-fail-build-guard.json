@@ -7,6 +7,10 @@
       "command": "npm run prebuild"
     },
     {
+      "id": "indexability-release",
+      "command": "npm run seo:indexability-release"
+    },
+    {
       "id": "typecheck",
       "command": "npm run typecheck"
     },
