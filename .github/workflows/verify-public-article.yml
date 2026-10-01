@@ -1,3 +1,4 @@
+# rerun after Nitro node-server fix
 name: verify-public-article
 
 on:
