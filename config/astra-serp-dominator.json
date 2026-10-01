@@ -1,0 +1,21 @@
+{
+  "schema": "astra-serp-dominator/v1",
+  "siteId": "betgpt.live",
+  "baseUrl": "https://betgpt.live",
+  "canonicalOrigin": "https://betgpt-production-7353.up.railway.app",
+  "sitemapPath": "/sitemap.xml",
+  "newsSitemapPath": "/news-sitemap.xml",
+  "staticPages": [
+    "/resultats-football",
+    "/comparer-cotes",
+    "/pronostics-sportifs",
+    "/ledger"
+  ],
+  "requirements": {
+    "oneH1": true,
+    "selfCanonical": true,
+    "indexable": true,
+    "metaDescriptionMin": 40,
+    "articleMinImageWidth": 1200
+  }
+}
