@@ -2,10 +2,11 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { buildEdition, applyEventOverride } from "./engine.ts";
 import { newsEntries, learnTopics, renderNewsSitemap } from "./feed.ts";
-import { qualityGate } from "./quality.ts";
+import { editorialParagraphText, headingArchitectureReasons, qualityGate } from "./quality.ts";
 import { optimizeTimes, parisDate, slotInstant } from "./time.ts";
 import type { ArticleType, EditorialMatch, EditorialNewsSignal, SlotId } from "./types.ts";
 import { autoPublishableCluster, clusterSignals, parseGoogleNewsRss, sourceTier } from "./news-scout.server.ts";
+import { manualEditorialArticleBySlug } from "./manual-articles.ts";
 
 function match(over: Partial<EditorialMatch> & Pick<EditorialMatch, "id" | "home" | "away" | "kickoff">): EditorialMatch {
   return {
@@ -418,6 +419,28 @@ describe("editorial engine", () => {
     assert.equal(sourceTier("https://www.fff.fr", "FFF"), "OFFICIAL");
   });
 
+  it("keeps a semantic H2/H3/H4 hierarchy on the Mbappé article", () => {
+    const article = manualEditorialArticleBySlug("real-madrid-mbappe-recuperation-paris-2026-10-01");
+    assert.ok(article);
+    assert.deepEqual(headingArchitectureReasons(article), []);
+    assert.ok(article.paragraphs.some((part) => (part.h3?.length ?? 0) >= 2));
+    assert.ok(article.paragraphs.some((part) => part.h3?.some((subsection) => (subsection.h4?.length ?? 0) >= 1)));
+  });
+
+  it("fails long news that stays flat without useful H3 sections", () => {
+    const reasons = headingArchitectureReasons({
+      articleType: "news",
+      paragraphs: [
+        { h2: "Premier axe", body: "Premier élément. Ensuite, un deuxième élément complète la même section avec suffisamment de matière pour justifier une sous-structure. ".repeat(7) },
+        { h2: "Deuxième axe", body: "Un contenu distinct développe les faits et leurs limites sans créer de nouvelle sous-section. ".repeat(7) },
+        { h2: "Troisième axe", body: "Une troisième partie fournit du contexte complémentaire et plusieurs éléments successifs. ".repeat(7) },
+        { h2: "Quatrième axe", body: "Une quatrième partie poursuit l'analyse factuelle avec des détails supplémentaires. ".repeat(7) },
+        { h2: "Cinquième axe", body: "Une cinquième partie termine le dossier avec plusieurs points à surveiller ensuite. ".repeat(7) },
+      ],
+    });
+    assert.ok(reasons.some((reason) => /sans H3/.test(reason)));
+  });
+
   it("does not invent topic learning", () => {
     assert.equal(learnTopics([{ league: "L1", type: "preview", clicks: null }]).status, "UNKNOWN");
   });
@@ -426,7 +449,7 @@ describe("editorial engine", () => {
     const edition = buildEdition({ now: NOW, matches: board() });
     const senegal = edition.articles.find((article) => article.matchId === "sen");
     assert.ok(senegal, "le match à cote 1,30 doit avoir sa page, pas seulement la liste");
-    assert.match(senegal.paragraphs.map((part) => part.body).join(" "), /sous 1,80/);
+    assert.match(senegal.paragraphs.map(editorialParagraphText).join(" "), /sous 1,80/);
   });
 
   it("rejects internally repetitive and templated editorial copy", () => {
