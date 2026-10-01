@@ -30,13 +30,14 @@ jobs:
           test "$a_status" = "200"
           test "$s_status" = "200"
 
-          grep -aF "$EXPECTED" rev.txt
-          grep -aF "Sources de ce passage" dembele.html
-          grep -aF "Fédération Française de Football" dembele.html
-          grep -aF "www.fff.fr/selection/matchs/3776-france-italie.html" dembele.html
-          grep -aF "Sources de ce passage" az.html
+          grep -aqF "$EXPECTED" rev.txt
+          grep -aqF "Sources de ce passage" dembele.html
+          grep -aqF "Fédération Française de Football" dembele.html
+          grep -aqF "www.fff.fr/selection/matchs/3776-france-italie.html" dembele.html
+          grep -aqF "Sources de ce passage" az.html
 
           count="$(grep -ao 'https://betgpt.live/auteurs/betgpt-editorial' sitemap.xml | wc -l | tr -d ' ')"
+          echo "AUTHOR_SITEMAP_COUNT=$count"
           test "$count" = "1"
 
           echo "ASTRA_LIVE_ZERO_DEBT_PASS sourceSha=$EXPECTED dembele_contextual_sources=present fff_official=present azerbaijan_contextual_sources=present author_sitemap_count=$count"
