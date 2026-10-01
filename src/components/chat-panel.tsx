@@ -48,12 +48,12 @@ const ACTIONS: { label: string; text: string; mode?: PersonalityMode }[] = [
 const MEMORY_KEY = "betgpt-chat-memory";
 const LEGACY_MEMORY_KEY = "calibre-betgpt-memory";
 
-const REACTION_GIF: Record<string, string> = {
-  ANIMAL_CHAOS: "/reactions/astra-amused.gif",
-  COSMIC_CHAOS: "/reactions/astra-disbelief.gif",
-  NUCLEAR_CHAOS: "/reactions/astra-savage.gif",
-  BETTING_DISASTER: "/reactions/astra-facepalm.gif",
-  ABSURD_SHOCK: "/reactions/astra-disbelief.gif",
+const REACTION_LABEL: Record<string, string> = {
+  ANIMAL_CHAOS: "zoo intersidéral",
+  COSMIC_CHAOS: "orbite perdue",
+  NUCLEAR_CHAOS: "réacteur en PLS",
+  BETTING_DISASTER: "ticket carbonisé",
+  ABSURD_SHOCK: "cerveau débranché",
 };
 
 function loadMemory(): UserMemory {
@@ -246,13 +246,18 @@ export function ChatPanel({ seed }: { seed?: string }) {
                       {msg.punchline.reaction.emojis.join(" ")}
                     </div>
                     {msg.punchline.score >= 92 ? (
-                      <img
-                        src={REACTION_GIF[msg.punchline.reaction.mood]}
-                        alt={`Réaction BetGPT : ${msg.punchline.reaction.mood.toLowerCase().replaceAll("_", " ")}`}
-                        loading="lazy"
-                        decoding="async"
-                        className="block aspect-video w-full max-w-[320px] rounded-xl border border-line object-cover"
-                      />
+                      <div
+                        className="flex min-h-24 w-full max-w-[320px] items-center justify-center overflow-hidden rounded-xl border border-line bg-slate-950 px-4 text-center"
+                        role="img"
+                        aria-label={`Réaction BetGPT : ${REACTION_LABEL[msg.punchline.reaction.mood] ?? "chaos"}`}
+                      >
+                        <span className="animate-bounce text-4xl" aria-hidden="true">
+                          {msg.punchline.reaction.emojis.join(" ")}
+                        </span>
+                        <span className="ml-3 text-xs font-black uppercase tracking-[0.18em] text-white">
+                          {REACTION_LABEL[msg.punchline.reaction.mood] ?? "chaos"}
+                        </span>
+                      </div>
                     ) : null}
                   </div>
                 ) : null}
