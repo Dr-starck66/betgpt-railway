@@ -42,6 +42,24 @@ if (run("git", ["commit", "-m", message]).status !== 0) {
   process.exit(1);
 }
 
+// Editorial/build commands may leave runtime caches, snapshots or other
+// non-persistent files dirty. Isolate that noise before rebasing the explicit
+// artifact commit. The CI workspace is ephemeral, so the stash is evidence-only.
+const dirty = run("git", ["status", "--porcelain"], { capture: true });
+if (dirty.status !== 0) {
+  console.error("ASTRA_SAFE_PUSH_FAIL: cannot inspect worktree");
+  process.exit(1);
+}
+if (String(dirty.stdout || "").trim()) {
+  console.log("ASTRA_SAFE_PUSH_STASH_RUNTIME");
+  console.log(String(dirty.stdout || "").trim());
+  const stash = run("git", ["stash", "push", "--include-untracked", "-m", "ASTRA_SAFE_PUSH_RUNTIME"]);
+  if (stash.status !== 0) {
+    console.error("ASTRA_SAFE_PUSH_FAIL: could not isolate runtime changes");
+    process.exit(1);
+  }
+}
+
 for (let attempt = 1; attempt <= attempts; attempt += 1) {
   console.log(`ASTRA_SAFE_PUSH attempt=${attempt}/${attempts} branch=${branch}`);
   if (run("git", ["fetch", "origin", branch]).status !== 0) {
