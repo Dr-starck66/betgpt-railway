@@ -8,10 +8,14 @@ function clean(value: string, max: number): string {
   return value.replace(/\s+/g, " ").trim().slice(0, max);
 }
 
-export function buildChallengeUrl(origin: string, prompt: string): string {
+export function buildChallengeUrl(
+  origin: string,
+  prompt: string,
+  source = "share",
+): string {
   const base = origin.replace(/\/+$/, "");
   const q = clean(prompt, 500);
-  const params = new URLSearchParams({ q, roast: "1" });
+  const params = new URLSearchParams({ q, roast: "1", share_source: clean(source, 24) || "share" });
   return `${base}/chat?${params.toString()}`;
 }
 
@@ -21,7 +25,7 @@ export function buildShareMoment(
   punchline: string,
 ): ShareMoment {
   const punch = clean(punchline, 220);
-  const url = buildChallengeUrl(origin, prompt);
+  const url = buildChallengeUrl(origin, prompt, "native");
   return {
     title: "BetGPT a détruit mon pari 😂",
     text: `BetGPT vient de me sortir : « ${punch} »\n\nEssaie avec ton propre ticket 👇`,
@@ -30,14 +34,18 @@ export function buildShareMoment(
 }
 
 export function buildXShareUrl(moment: ShareMoment): string {
+  const url = new URL(moment.url);
+  url.searchParams.set("share_source", "x");
   const params = new URLSearchParams({
-    text: `${moment.text}\n\n${moment.url}`,
+    text: `${moment.text}\n\n${url.toString()}`,
   });
   return `https://x.com/intent/post?${params.toString()}`;
 }
 
 export function buildFacebookShareUrl(moment: ShareMoment): string {
-  const params = new URLSearchParams({ u: moment.url });
+  const url = new URL(moment.url);
+  url.searchParams.set("share_source", "facebook");
+  const params = new URLSearchParams({ u: url.toString() });
   return `https://www.facebook.com/sharer/sharer.php?${params.toString()}`;
 }
 
