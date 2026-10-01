@@ -5,6 +5,7 @@ on:
     paths:
       - ".github/workflows/odds-comparator-gate.yml"
       - ".github/odds-comparator-gate.trigger"
+      - "scripts/astra-wait-public-revision.mjs"
 
 permissions:
   contents: read
@@ -14,6 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 3
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Wait for public autosync revision
+        run: node scripts/astra-wait-public-revision.mjs "$GITHUB_SHA"
+
       - name: Public odds comparator gate
         shell: bash
         run: |
@@ -27,7 +34,9 @@ jobs:
           html=open(sys.argv[1],encoding="utf-8").read()
           assert "Comparer les cotes football" in html, "missing comparator heading"
           flags=("🇫🇷","🇪🇸","🇩🇪","🇮🇹","🇳🇱","🇵🇹","🇹🇷","🇪🇺","🌍","🇹🇿","🇸🇳","🇳🇬","🇲🇦","🇩🇿","🇵🇱","🏴")
-          assert any(x in html for x in flags), "missing country/competition flags"
+          has_flag_emoji=any(x in html for x in flags)
+          has_flag_image=('alt="Drapeau ' in html) or ('flagcdn.com/' in html) or ('twemoji@latest/assets/svg/' in html)
+          assert has_flag_emoji or has_flag_image, "missing country/competition flags"
           assert "Parier chez" in html, "missing clickable odds aria-label"
           assert re.search(r'href="https://(?:www\.)?(?:unibet\.fr|betclic\.fr|netbet\.fr|winamax\.fr|pmu\.fr|sports\.bwin\.fr|zebet\.fr|vbet\.fr)', html), "missing real bookmaker external href"
           print("ODDS_GATE_PASS")
