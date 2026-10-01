@@ -134,6 +134,13 @@
       "requiredFragments": [
         "/score-hunter/"
       ]
+    },
+    {
+      "routePrefix": "/auteurs/betgpt-editorial",
+      "sitemapSource": "src/lib/sitemap-urls.ts",
+      "requiredFragments": [
+        "/auteurs/betgpt-editorial"
+      ]
     }
   ],
   "routeAliases": {
