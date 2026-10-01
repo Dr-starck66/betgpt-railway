@@ -165,20 +165,50 @@ export function stablePublicEvidenceTickets(rows: TicketRow[] = loadTickets()): 
 }
 
 let ticketsHydrated = false;
+const RUNTIME_CHECKPOINT_URL =
+  "https://raw.githubusercontent.com/Dr-starck66/betgpt-railway/runtime-memory/runtime-learning-checkpoint.json";
 
-/** Merge durable Postgres kv into the in-process ledger (Vercel / Neon). */
+async function loadRuntimeCheckpoint(): Promise<TicketRow[]> {
+  try {
+    const res = await fetch(RUNTIME_CHECKPOINT_URL, {
+      headers: {
+        accept: "application/json",
+        "cache-control": "no-cache",
+        "user-agent": "BetGPT-Learning-Failover/1.0",
+      },
+      cache: "no-store",
+    });
+    if (!res.ok) return [];
+    const payload = (await res.json()) as { schema?: string; tickets?: unknown };
+    if (payload.schema !== "astra-betgpt-runtime-checkpoint/v1" || !Array.isArray(payload.tickets)) return [];
+    return parseRows(payload.tickets);
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Hydrate the ledger from every durable source available.
+ * Priority order is local seed < GitHub runtime checkpoint < Postgres KV.
+ * The checkpoint branch is a zero-cost failover when Railway has no durable DB.
+ */
 export async function hydrateTickets(): Promise<void> {
   if (ticketsHydrated) return;
   ticketsHydrated = true;
+
+  let merged = loadTickets();
+  const checkpoint = await loadRuntimeCheckpoint();
+  if (checkpoint.length) merged = mergeTickets(merged, checkpoint);
+
   try {
     const { kvGet } = await import("@/lib/store");
     const remote = await kvGet<TicketRow[]>("tickets");
-    if (!Array.isArray(remote) || !remote.length) return;
-    const local = loadTickets();
-    MEM = stripFakeProof(compactTickets(mergeTickets(local, parseRows(remote))));
+    if (Array.isArray(remote) && remote.length) merged = mergeTickets(merged, parseRows(remote));
   } catch {
     /* preview / missing table */
   }
+
+  MEM = stripFakeProof(compactTickets(merged));
 }
 
 function save(rows: TicketRow[]): void {
