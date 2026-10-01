@@ -12,6 +12,7 @@ import { featuredAnswer, matchPath } from "@/lib/seo";
 import { headlineMarket } from "@/lib/markets";
 import { parisLong } from "@/lib/serp/answer";
 import { fmtOdds } from "@/lib/utils";
+import { AstraSidewings } from "@/components/astra-sidewings";
 
 export const Route = createFileRoute("/equipe/$team")({
   loader: async ({ params }) => {
@@ -67,8 +68,34 @@ function TeamPage() {
   const lastLabel = last
     ? `Dernier résultat ${name} : ${last.home.name} ${last.scoreHome}–${last.scoreAway} ${last.away.name}.`
     : `Aucun résultat récent ${name} n’est listé ici.`;
+  const leagueSlug = slugify(sample.league);
   return (
-    <div className="space-y-6">
+    <AstraSidewings
+      ariaLabel={`Navigation contextuelle de l’équipe ${name}`}
+      left={{
+        eyebrow: "Équipe",
+        title: `Explorer ${name}`,
+        intro: "Accède aux pages qui prolongent naturellement la recherche sur cette équipe.",
+        links: [
+          { href: `/pronostics-football/${leagueSlug}`, label: "Pronostics de la compétition", description: "Voir les analyses des matchs du même championnat ou tournoi." },
+          { href: `/resultats-football/${leagueSlug}`, label: "Résultats de la compétition", description: "Voir les derniers scores du même contexte." },
+          { href: `/calendrier/${leagueSlug}`, label: "Calendrier de la compétition", description: "Voir les prochaines rencontres disponibles." },
+          { href: `/classement/${leagueSlug}`, label: "Classement de la compétition", description: "Situer l’équipe dans la hiérarchie." },
+        ],
+      }}
+      right={{
+        eyebrow: "Repères",
+        title: `Prochaines étapes pour ${name}`,
+        intro: `${nextLabel} ${lastLabel}`,
+        links: [
+          ...(next ? [{ href: matchPath(next), label: `Prochain match : ${next.home.name} – ${next.away.name}`, description: "Ouvrir la fiche match et son analyse." }] : []),
+          { href: "/scores-en-direct", label: "Scores en direct", description: "Suivre les matchs actuellement en jeu." },
+          { href: "/comparer-cotes", label: "Comparer les cotes", description: "Comparer les prix disponibles sur les matchs couverts." },
+          { href: "/ledger", label: "Bilan vérifié", description: "Contrôler la performance historique publiée." },
+        ],
+      }}
+    >
+      <div className="space-y-6">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -138,6 +165,7 @@ function TeamPage() {
           );
         })}
       </ul>
-    </div>
+      </div>
+    </AstraSidewings>
   );
 }
