@@ -6,6 +6,7 @@ import { classifyChatIntent, localMatchFacts } from "./local.ts";
 import { chatBodySchema } from "../schemas.ts";
 import { hasUnsupportedGroundedClaim } from "./grounding.ts";
 import type { MatchInput } from "../../engine/types.ts";
+import { UNIBET_LEAGUE } from "../../engine/book-pages.ts";
 import { extractPunchline } from "./punch.ts";
 import { generateAbsurdInsult, shouldDropAbsurdInsult } from "./absurd-insults.ts";
 import { reactionForPunchline } from "./reaction.ts";
