@@ -1,5 +1,5 @@
 import { ensureLive, getLiveSnapshot, hydrateLiveFromDisk } from "@/engine/live";
-import { runEngine } from "@/engine/pipeline";
+import { predictMatch, runEngine } from "@/engine/pipeline";
 import { stripMarkup } from "@/lib/plain";
 import { betgptPrompt } from "./prompt";
 import { normalizeMemory, parseMode, type ChatRequestBody, type PersonalityMode } from "./types";
@@ -25,12 +25,41 @@ async function deskNow(question: string): Promise<string> {
 
     try {
       const engine = runEngine();
-      const pick = selectDailyChatPick(
+      let pick = selectDailyChatPick(
         engine.matches,
         engine.predictions,
         engine.liveAsOf,
         engine.liveStale,
       );
+
+      // The live chat snapshot can be fresher than the engine's persisted disk
+      // snapshot. If the regular engine did not yield a pick, score the exact
+      // fixtures that were just shown to the user with the already-learned
+      // model. This prevents the "I see today's matches but have no pick"
+      // contradiction while keeping the result explicitly non-premium when
+      // bookmaker odds are unavailable.
+      if (!pick && snapshot?.matches?.length) {
+        const livePredictions = snapshot.matches.slice(0, 24).flatMap((match) => {
+          try {
+            return [predictMatch(match)];
+          } catch {
+            return [];
+          }
+        });
+        const asOfMs = Date.parse(snapshot.meta?.asOf ?? "");
+        const snapshotStale =
+          Boolean(snapshot.meta?.stale) ||
+          !Number.isFinite(asOfMs) ||
+          Date.now() - asOfMs > 30 * 60_000 ||
+          asOfMs > Date.now() + 60_000;
+        pick = selectDailyChatPick(
+          snapshot.matches,
+          livePredictions,
+          snapshot.meta?.asOf,
+          snapshotStale,
+        );
+      }
+
       if (!pick) return base;
       return [base, renderDailyChatPick(pick)].filter(Boolean).join("\n\n");
     } catch {
