@@ -382,7 +382,7 @@ const ARTICLES: EditorialArticle[] = [
     sourceChanges: [],
     factHash: "manual-negreira-uefa-real-barca-2026-10-01-v2",
     keywords: "affaire Negreira, UEFA, Real Madrid, FC Barcelone, Barça, enquête UEFA, La Liga",
-  },,
+  },
   {
     id: "manual-2026-10-02-france-italie-nations-league",
     slug: "france-italie-ligue-des-nations-2026-10-02",
