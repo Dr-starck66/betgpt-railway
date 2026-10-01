@@ -71,6 +71,7 @@ import { Route as ActuDayRouteImport } from './routes/actu.$day'
 import { Route as ActualitesIndexRouteImport } from './routes/actualites.index'
 import { Route as ActualitesSlugRouteImport } from './routes/actualites.$slug'
 import { Route as AdminEditorialRouteImport } from './routes/admin_.editorial'
+import { Route as AdminSocialRouteImport } from './routes/admin_.social'
 import { Route as AuteursBetgptEditorialRouteImport } from './routes/auteurs_.betgpt-editorial'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -420,6 +421,11 @@ const AdminEditorialRoute = AdminEditorialRouteImport.update({
   path: '/admin/editorial',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminSocialRoute = AdminSocialRouteImport.update({
+  id: '/admin_/social',
+  path: '/admin/social',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuteursBetgptEditorialRoute = AuteursBetgptEditorialRouteImport.update({
   id: '/auteurs_/betgpt-editorial',
   path: '/auteurs/betgpt-editorial',
@@ -680,6 +686,7 @@ export interface FileRoutesByFullPath {
   '/actu/$day': typeof ActuDayRoute
   '/actualites/$slug': typeof ActualitesSlugRoute
   '/admin/editorial': typeof AdminEditorialRoute
+  '/admin/social': typeof AdminSocialRoute
   '/auteurs/betgpt-editorial': typeof AuteursBetgptEditorialRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/calendrier/$slug': typeof CalendrierSlugRoute
@@ -769,6 +776,7 @@ export interface FileRoutesByTo {
   '/actu/$day': typeof ActuDayRoute
   '/actualites/$slug': typeof ActualitesSlugRoute
   '/admin/editorial': typeof AdminEditorialRoute
+  '/admin/social': typeof AdminSocialRoute
   '/auteurs/betgpt-editorial': typeof AuteursBetgptEditorialRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/calendrier/$slug': typeof CalendrierSlugRoute
@@ -872,6 +880,7 @@ export interface FileRoutesById {
   '/actu/$day': typeof ActuDayRoute
   '/actualites/$slug': typeof ActualitesSlugRoute
   '/admin_/editorial': typeof AdminEditorialRoute
+  '/admin_/social': typeof AdminSocialRoute
   '/auteurs_/betgpt-editorial': typeof AuteursBetgptEditorialRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/calendrier/$slug': typeof CalendrierSlugRoute
@@ -1268,6 +1277,7 @@ export interface RootRouteChildren {
   SitemapRoute: typeof SitemapRoute
   StatisticsRoute: typeof StatisticsRouteWithChildren
   AdminEditorialRoute: typeof AdminEditorialRoute
+  AdminSocialRoute: typeof AdminSocialRoute
   AuteursBetgptEditorialRoute: typeof AuteursBetgptEditorialRoute
   CotesMatchIdRoute: typeof CotesMatchIdRoute
   EquipeTeamRoute: typeof EquipeTeamRoute
@@ -1713,6 +1723,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/editorial'
       fullPath: '/admin/editorial'
       preLoaderRoute: typeof AdminEditorialRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin_/social': {
+      id: '/admin_/social'
+      path: '/admin/social'
+      fullPath: '/admin/social'
+      preLoaderRoute: typeof AdminSocialRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auteurs_/betgpt-editorial': {
@@ -2229,6 +2246,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapRoute: SitemapRoute,
   StatisticsRoute: StatisticsRouteWithChildren,
   AdminEditorialRoute: AdminEditorialRoute,
+  AdminSocialRoute: AdminSocialRoute,
   AuteursBetgptEditorialRoute: AuteursBetgptEditorialRoute,
   CotesMatchIdRoute: CotesMatchIdRoute,
   EquipeTeamRoute: EquipeTeamRoute,
