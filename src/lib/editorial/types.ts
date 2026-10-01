@@ -44,6 +44,24 @@ export type EditorialImage = {
 
 export type EditorialLink = { href: string; label: string };
 
+export type EditorialH4 = {
+  h4: string;
+  body: string;
+};
+
+export type EditorialH3 = {
+  h3: string;
+  body: string;
+  h4?: EditorialH4[];
+};
+
+export type EditorialParagraph = {
+  h2: string;
+  body: string;
+  sourceIds?: string[];
+  h3?: EditorialH3[];
+};
+
 export type Correction = { at: string; note: string };
 
 export type DiscoverCheck =
@@ -65,7 +83,7 @@ export type EditorialArticle = {
   title: string;
   h1: string;
   lead: string;
-  paragraphs: { h2: string; body: string; sourceIds?: string[] }[];
+  paragraphs: EditorialParagraph[];
   createdAt: string;
   publishedAt: string | null;
   modifiedAt: string | null;
