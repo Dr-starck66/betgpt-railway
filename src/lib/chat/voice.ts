@@ -9,18 +9,15 @@ async function cacheKey(punchline: PunchlineMeta): Promise<string> {
     .join("");
 }
 
-function browserFallback(text: string) {
-  if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
-  window.speechSynthesis.cancel();
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "fr-FR";
-  utterance.rate = 1.08;
-  utterance.pitch = 0.82;
-  utterance.volume = 1;
-  window.speechSynthesis.speak(utterance);
-}
-
-export async function playPunchline(punchline: PunchlineMeta): Promise<"ELEVENLABS" | "BROWSER" | "BLOCKED"> {
+/**
+ * Premium-only voice policy:
+ * - ElevenLabs or silence.
+ * - Never fall back to browser speech synthesis: robotic TTS would break the product tone.
+ * - Cached clips may still replay without a new paid request.
+ */
+export async function playPunchline(
+  punchline: PunchlineMeta,
+): Promise<"ELEVENLABS" | "UNAVAILABLE" | "BLOCKED"> {
   try {
     const key = await cacheKey(punchline);
     const cacheRequest = new Request(`/__betgpt_voice_cache__/${key}.mp3`);
@@ -35,10 +32,9 @@ export async function playPunchline(punchline: PunchlineMeta): Promise<"ELEVENLA
           headers: { "content-type": "application/json" },
           body: JSON.stringify(punchline),
         });
-        if (fresh.ok) {
-          response = fresh.clone();
-          await cache.put(cacheRequest, fresh.clone());
-        }
+        if (!fresh.ok) return "UNAVAILABLE";
+        response = fresh.clone();
+        await cache.put(cacheRequest, fresh.clone());
       }
     } else {
       const fresh = await fetch("/api/punch-voice", {
@@ -46,12 +42,8 @@ export async function playPunchline(punchline: PunchlineMeta): Promise<"ELEVENLA
         headers: { "content-type": "application/json" },
         body: JSON.stringify(punchline),
       });
-      if (fresh.ok) response = fresh;
-    }
-
-    if (!response) {
-      browserFallback(punchline.text);
-      return "BROWSER";
+      if (!fresh.ok) return "UNAVAILABLE";
+      response = fresh;
     }
 
     const blob = await response.blob();
@@ -60,18 +52,15 @@ export async function playPunchline(punchline: PunchlineMeta): Promise<"ELEVENLA
     audio.volume = 1;
     audio.addEventListener("ended", () => URL.revokeObjectURL(url), { once: true });
     audio.addEventListener("error", () => URL.revokeObjectURL(url), { once: true });
+
     try {
       await audio.play();
-      return response.headers.get("x-betgpt-voice-provider") === "elevenlabs"
-        ? "ELEVENLABS"
-        : "BROWSER";
+      return "ELEVENLABS";
     } catch {
       URL.revokeObjectURL(url);
-      browserFallback(punchline.text);
       return "BLOCKED";
     }
   } catch {
-    browserFallback(punchline.text);
-    return "BROWSER";
+    return "UNAVAILABLE";
   }
 }
