@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "mode": "AUTO_RECONCILE_CONCURRENT_WRITES",
+  "silentAutoRecovery": true,
+  "userNotificationPolicy": "TERMINAL_ONLY",
+  "maxAttempts": 5,
+  "backoffSeconds": [2,4,6,8,10],
+  "benignConcurrentWriteClasses": [
+    "stale_blob_sha",
+    "http_409_conflict",
+    "http_422_sha_required_or_changed",
+    "non_fast_forward",
+    "branch_advanced_after_read"
+  ],
+  "strategy": [
+    "refetch_latest_branch",
+    "reapply_semantic_mutation",
+    "commit_on_latest_state",
+    "push",
+    "verify_remote_head"
+  ],
+  "semanticModes": [
+    "write_if_absent",
+    "replace_exact",
+    "ensure_block",
+    "replace_file"
+  ],
+  "terminalConditions": [
+    "semantic_target_ambiguous",
+    "target_deleted_and_required",
+    "permission_denied",
+    "invalid_credentials",
+    "branch_protection_requires_human_approval"
+  ],
+  "failurePolicy": "NEVER_OVERWRITE_UNMERGEABLE_CONCURRENT_INTENT"
+}
