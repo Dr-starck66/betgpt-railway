@@ -139,7 +139,7 @@ for (const item of routes) {
 }
 
 const duplicateStaticPaths = [];
-const staticMatches = [...sitemapSource.matchAll(/\\bpath:\\s*["']([^"']+)["']/g)].map((m) => m[1]);
+const staticMatches = [...sitemapSource.matchAll(/\bpath:\s*["']([^"']+)["']/g)].map((m) => norm(m[1]));
 const seen = new Set();
 for (const value of staticMatches) {
   if (seen.has(value)) duplicateStaticPaths.push(value);
