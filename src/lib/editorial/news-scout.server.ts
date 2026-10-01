@@ -53,6 +53,10 @@ const TIER1_HOSTS = [
   "20minutes.fr",
   "leparisien.fr",
   "ouest-france.fr",
+  "reuters.com",
+  "apnews.com",
+  "bbc.com",
+  "bbc.co.uk",
 ];
 
 const ENTITY_PATTERNS: [RegExp, string][] = [
@@ -80,6 +84,11 @@ const ENTITY_PATTERNS: [RegExp, string][] = [
   [/\bnigeria\b|\bnigéria\b/i, "Nigeria"],
   [/\bmbapp[ée]\b/i, "Kylian Mbappé"],
   [/\bdemb[ée]l[ée]\b/i, "Ousmane Dembélé"],
+  [/\bcristiano ronaldo\b|\bronaldo\b/i, "Cristiano Ronaldo"],
+  [/\blionel messi\b|\bmessi\b/i, "Lionel Messi"],
+  [/\blamine yamal\b|\byamal\b/i, "Lamine Yamal"],
+  [/\bportugal\b/i, "Portugal"],
+  [/\bdanemark\b|\bdenmark\b/i, "Danemark"],
 ];
 
 
@@ -101,6 +110,9 @@ const EVENT_FAMILIES: [RegExp, string][] = [
   [/qualification|qualifié|élimin/i, "qualification"],
   [/sanction|suspendu|décision|communiqué|officiel|annonce/i, "official-decision"],
   [/victoire|défaite|score|résultat|retour|remontée/i, "result"],
+  [/retraite|retirer|fin de carrière|adieux/i, "retirement"],
+  [/rupture|tension|brouille|conflit|désaccord|polémique/i, "relationship"],
+  [/portrait|grands moments|carrière|rétrospective|hommage/i, "profile"],
 ];
 
 function eventFamilies(text: string): string[] {
@@ -264,6 +276,10 @@ export function clusterSignals(signals: EditorialNewsSignal[]): NewsCluster[] {
       const familiesA = eventFamilies(`${signal.title} ${signal.description ?? ""}`);
       const familiesB = eventFamilies(cluster.signals.map((row) => `${row.title} ${row.description ?? ""}`).join(" "));
       const familyOverlap = familiesA.some((family) => familiesB.includes(family));
+      const familyConflict =
+        familiesA.length > 0 &&
+        familiesB.length > 0 &&
+        !familyOverlap;
       const deltaHours = Math.abs(Date.parse(signal.publishedAt) - Date.parse(cluster.publishedAt)) / 36e5;
       const incomingMaterial = isMaterialDevelopment(`${signal.title} ${signal.description ?? ""}`);
       const clusterMaterial = cluster.signals.some((row) =>
@@ -278,9 +294,10 @@ export function clusterSignals(signals: EditorialNewsSignal[]): NewsCluster[] {
         deltaHours >= 0.35;
       const sameStory =
         !materialStateChange &&
-        (score >= 0.34 ||
-          (entityOverlap && score >= 0.24) ||
-          (entityOverlap && familyOverlap && deltaHours <= 12));
+        !familyConflict &&
+        (score >= 0.4 ||
+          (entityOverlap && familyOverlap && score >= 0.2 && deltaHours <= 12) ||
+          (entityOverlap && familyOverlap && deltaHours <= 4));
       if (sameStory && (score > bestScore || (best == null && familyOverlap))) {
         best = cluster;
         bestScore = Math.max(score, familyOverlap ? 0.25 : score);
