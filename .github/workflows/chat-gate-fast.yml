@@ -41,5 +41,7 @@ jobs:
               assert required in text, f"missing {required}: {text}"
           if "Meilleure cote trouvée : indisponible" not in text:
               assert "Lien pour parier :" in text, f"missing betting link line: {text}"
+              link_line=next((line for line in text.splitlines() if line.startswith("Lien pour parier :")), "")
+              assert "http://" in link_line or "https://" in link_line, f"missing real betting URL: {text}"
           print("CHAT_GATE_PASS")
           PY
