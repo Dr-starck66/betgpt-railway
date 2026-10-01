@@ -20,7 +20,7 @@ const WELCOME: ChatMessage = {
   id: "welcome",
   role: "assistant",
   content:
-    "Bienvenue sur BetGPT.\n\nQuel match veux-tu analyser ? Je distingue les données disponibles, les estimations et ce qui reste à vérifier. Aucun pronostic ne garantit un gain.",
+    "Bienvenue sur BetGPT 👋\n\nParle-moi foot normalement : un match, un ticket, une cote, une intuition ou même une théorie complètement lunaire. Je te dirai ce qui tient debout — et ce qui mérite le carton rouge.",
   timestamp: 0,
 };
 
@@ -193,7 +193,7 @@ export function ChatPanel({ seed }: { seed?: string }) {
           />
           <div>
             <p className="text-sm font-semibold tracking-tight text-paper">BetGPT</p>
-            <p className="text-xs text-muted">Données disponibles · estimations explicites</p>
+            <p className="text-xs text-muted">Foot, données, paris et vraie conversation</p>
           </div>
         </div>
         <span className="shrink-0 text-xs text-muted" role="status">
