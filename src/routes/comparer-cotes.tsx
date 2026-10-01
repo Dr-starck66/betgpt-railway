@@ -1,13 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { TeamLine } from "@/components/crest";
-import { CountryFlag } from "@/components/country-flag";
 import { getPublicDesk } from "@/lib/desk.functions";
 import { bestThreeWay } from "@/lib/money";
 import { SITE_URL } from "@/lib/programmatic";
 import { fmtOdds } from "@/lib/utils";
 import { BETCLIC_LEAGUE, NETBET_LEAGUE, UNIBET_LEAGUE } from "@/engine/book-pages";
 import type { LeagueId, MatchInput } from "@/engine/types";
-import { countryForLeague, teamCountryCodeFromShort } from "@/lib/country-flag-resolver";
 
 
 function bookmakerDestination(book: string, league: LeagueId, direct?: string): string | null {
@@ -122,17 +120,9 @@ function OddsCompare() {
                   <tr key={m.id} className="border-t border-line align-middle">
                     <td className="min-w-0 px-2 py-3 sm:px-3">
                       <Link to="/cotes/$matchId" params={{ matchId: m.slug ?? m.id }} className="block min-w-0 hover:text-sage">
-                        <TeamLine home={m.home} away={m.away} size={28} names="auto" competition={m.competition} className="max-w-full" />
+                        <TeamLine home={m.home} away={m.away} size={28} names="auto" competition={m.competition} league={m.league} className="max-w-full" />
                       </Link>
                       <div className="mt-1 flex min-w-0 flex-wrap items-center gap-1 text-xs text-muted">
-                        {m.league === "NL" ? (
-                          <span className="inline-flex shrink-0 items-center gap-1" title="Pays des sélections">
-                            <CountryFlag code={teamCountryCodeFromShort(m.home.short)} label={m.home.name} size={16} />
-                            <CountryFlag code={teamCountryCodeFromShort(m.away.short)} label={m.away.name} size={16} />
-                          </span>
-                        ) : (
-                          <CountryFlag code={countryForLeague(m.league).code} label={countryForLeague(m.league).label} size={16} />
-                        )}
                         <span className="min-w-0 truncate">{m.competition}</span>
                         <span>·</span>{" "}
                         {new Date(m.kickoff).toLocaleString("fr-FR", {
