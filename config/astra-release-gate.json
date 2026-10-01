@@ -23,6 +23,7 @@
     "npm run test:results-watchdog",
     "npm run test:flags",
     "npm run test:model-max",
+    "npm run test:visual-entities",
     "npm run news",
     "npm run social:audit",
     "npm run build"
