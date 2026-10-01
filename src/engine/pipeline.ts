@@ -1,7 +1,6 @@
 import { bestFreshMainQuote } from "./best-odds-engine.ts";
 import { applyLowScoringNoBetGateToMarkets, type LowScoringContext } from "./low-scoring-no-bet-gate.ts";
-import { applyRoi5DominanceGateToMarkets, type Roi5DominancePolicy } from "./roi5-dominance-gate.ts";
-import { learnContinuousRoi5Policy } from "./roi5-continuous-learning.ts";
+import { applyRoi5DominanceGateToMarkets, DEFAULT_ROI5_DOMINANCE_POLICY, type Roi5DominancePolicy } from "./roi5-dominance-gate.ts";
 import { applyRoiExpansionShadowGateToMarkets } from "./roi-league-expansion.ts";
 import { hedgeXgEligibility } from "./hedge-xg-eligibility.ts";
 import {
@@ -44,6 +43,7 @@ import {
   pickCoverScore,
   fairCoverOdds,
   getTicket,
+  canonicalChampionRows,
   type TicketRow,
 } from "./ticket-log";
 import { liveSuperBet } from "./live-super";
@@ -923,7 +923,7 @@ function dataQualityOf(match: MatchInput): number {
   return clamp(0.56 + 0.18 * liveOdds + 0.1 * form + 0.08 * venue + 0.06 * match.importance.confidence, 0.5, 0.9);
 }
 
-export function buildPrediction(match: MatchInput, learned: Learned, roi5Policy?: Roi5DominancePolicy): PredictionRecord {
+export function buildPrediction(match: MatchInput, learned: Learned, roi5Policy: Roi5DominancePolicy = DEFAULT_ROI5_DOMINANCE_POLICY): PredictionRecord {
   const { models, ensemble } = runStatisticalStack(match, learned.rho);
   const calibratedStat = calibrateEnsemble(ensemble, learned.platt);
   const coaches = runCoachAgents(match, learned.agentWeights);
@@ -1660,8 +1660,7 @@ function runEngineUncached(): EngineRun {
   const kept: MatchInput[] = [];
   for (const m of matches) {
     try {
-      const roi5Continuous = learnContinuousRoi5Policy(actualTickets, m.kickoff);
-      const rec = attachLiveIntel(m, buildPrediction(m, learned, roi5Continuous.policy));
+      const rec = attachLiveIntel(m, buildPrediction(m, learned, DEFAULT_ROI5_DOMINANCE_POLICY));
       const asOfMs = Date.parse(live?.meta?.asOf ?? "");
       enforceBetSafety(rec.markets, m, Boolean(live?.meta?.stale) || !Number.isFinite(asOfMs) || Date.now() - asOfMs > 30 * 60_000 || asOfMs > Date.now() + 60_000);
       applyAdaptiveLearningGate(rec, m, actualTickets, archive?.tickets ?? [], adaptiveLearning);
@@ -1694,7 +1693,7 @@ function runEngineUncached(): EngineRun {
   if (process.env.BETGPT_OFFLINE !== "1") void pushNewPredictions({ predictions, matches: kept }).catch((err) => {
     console.error("[BETGPT WEBHOOK] FAILED:", err instanceof Error ? err.message : err);
   });
-  const review = reviewOf(liveTickets);
+  const review = reviewOf(canonicalChampionRows(liveTickets));
   const bets = predictions.flatMap((p) => p.markets.filter((m) => m.decision === "BET").map((m) => ({ p, m })));
   if (process.env.BETGPT_OFFLINE !== "1") void publishDigest(buildDigest(dailyBest, bets));
   const openIds = new Set(kept.filter((m) => m.status !== "finished").map((m) => m.id));
@@ -1770,7 +1769,7 @@ export function getPrediction(id: string): { match: MatchInput; prediction: Pred
 }
 
 export function predictMatch(match: MatchInput): PredictionRecord {
-  const rec = attachLiveIntel(match, buildPrediction(match, learnedNow()));
+  const rec = attachLiveIntel(match, buildPrediction(match, learnedNow(), DEFAULT_ROI5_DOMINANCE_POLICY));
   try {
     const v = recordPredictionVersion(match, rec);
     const series = versionsFor(match.id);
