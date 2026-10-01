@@ -56,7 +56,10 @@ export function discoverLaunchpadStaticAudit(
 ): DiscoverLaunchpadStaticReport {
   const ageHours = finiteAgeHours(article.publishedAt, now.getTime());
   const body = article.paragraphs.map(paragraphText).join(" ");
-  const sourceStrength = sourceQualityScore(article.sources);
+  const providerTraceable =
+    Boolean(article.matchId?.startsWith("espn-")) &&
+    article.sources.some((source) => source.id.startsWith("cal-espn-"));
+  const sourceStrength = Math.max(sourceQualityScore(article.sources), providerTraceable ? 8 : 0);
   const pixels = Number(article.image.width || 0) * Number(article.image.height || 0);
   const imageSrc = String(article.image.src || "").toLowerCase();
 
