@@ -51,7 +51,12 @@
     "test:results-watchdog": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/serp/results-watchdog.test.ts",
     "cloud:verify": "node scripts/astra-cloud-egress.mjs config/astra-cloud-egress.json",
     "cloud:verify:config": "node scripts/astra-cloud-egress.mjs config/astra-cloud-egress.json --validate-config",
-    "test:flags": "node scripts/astra-flag-guard.mjs"
+    "test:flags": "node scripts/astra-flag-guard.mjs",
+    "test:module-resolution": "node --experimental-strip-types --import ./scripts/ts-alias.mjs -e \"await import('./src/engine/live.ts'); console.log('ASTRA_MODULE_RESOLUTION_PASS')\"",
+    "release:validate": "node scripts/astra-release-gate.mjs validate",
+    "release:preflight": "node scripts/astra-release-gate.mjs preflight",
+    "release:postflight": "node scripts/astra-release-gate.mjs postflight",
+    "release:pipeline:editorial": "node scripts/astra-release-gate.mjs pipeline editorial"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.4",
