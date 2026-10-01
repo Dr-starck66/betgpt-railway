@@ -45,7 +45,9 @@
     "roi5:report": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/run-dominance-roi-gate.mjs",
     "editorial:publish": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/run-editorial-publish.ts",
     "start": "node .output/server/index.mjs",
-    "social:audit": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/social/social.test.ts"
+    "social:audit": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/social/social.test.ts",
+    "test:sidewings": "node --experimental-strip-types --test src/lib/seo/astra-sidewing-auditor.test.ts",
+    "sidewings:audit": "node --experimental-strip-types scripts/astra-sidewing-audit.mjs"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.4",
