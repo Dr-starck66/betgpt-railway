@@ -86,6 +86,18 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
               <section key={part.h2} className="surface-card space-y-4 p-5 sm:p-7">
                 <h2 className="text-2xl font-semibold tracking-tight">{part.h2}</h2>
                 <p className="readable-prose">{part.body}</p>
+                {part.h3?.map((subsection) => (
+                  <div key={subsection.h3} className="space-y-3 border-l-2 border-line pl-4 sm:pl-5">
+                    <h3 className="text-xl font-semibold tracking-tight text-paper">{subsection.h3}</h3>
+                    <p className="readable-prose">{subsection.body}</p>
+                    {subsection.h4?.map((detail) => (
+                      <div key={detail.h4} className="space-y-2 pl-3 sm:pl-4">
+                        <h4 className="text-base font-semibold tracking-tight text-paper">{detail.h4}</h4>
+                        <p className="readable-prose">{detail.body}</p>
+                      </div>
+                    ))}
+                  </div>
+                ))}
                 {passageSources.length ? (
                   <p className="border-t border-line pt-3 text-xs leading-relaxed text-muted">
                     <span className="font-semibold text-mist">Sources de ce passage : </span>
