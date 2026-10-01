@@ -35,6 +35,10 @@
       "command": "npm run test:results-watchdog"
     },
     {
+      "id": "search-truth",
+      "command": "npm run test:search-truth"
+    },
+    {
       "id": "national-breakout",
       "command": "npm run test:growth"
     },
