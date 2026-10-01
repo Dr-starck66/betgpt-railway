@@ -411,12 +411,13 @@ it("daily data fallback always returns one standard pick when today's fixtures e
   assert.match(pick?.rationale ?? "", /Portugal/i);
 });
 
-it("daily chat pick exposes the real best-book URL and lets a future affiliate URL override it", () => {
-  const previous = process.env.BETGPT_AFFILIATE_UNIBET_URL;
-  process.env.BETGPT_AFFILIATE_UNIBET_URL = "https://affiliate.example/betgpt-unibet";
+it("daily chat pick routes the best-book URL through BetGPT tracking and marks configured affiliate tags", () => {
+  const previous = process.env.AFF_UNIBET;
+  process.env.AFF_UNIBET = "test-btag";
   try {
     const match = {
       id: "affiliate-1",
+      league: "NL",
       home: { name: "Alpha", short: "ALP" },
       away: { name: "Beta", short: "BET" },
       competition: "Test League",
@@ -434,7 +435,7 @@ it("daily chat pick exposes the real best-book URL and lets a future affiliate U
         fairOdds: 1.72,
         bestOdds: 2.10,
         bestBook: "Unibet",
-        bestBookUrl: "https://www.unibet.example/event",
+        bestBookUrl: "https://www.unibet.fr/paris-football/international/ligue-des-nations",
         implied: 1 / 2.10,
         edge: 0.1,
         ev: 0.218,
@@ -447,51 +448,63 @@ it("daily chat pick exposes the real best-book URL and lets a future affiliate U
     } as unknown as import("../../engine/types.ts").PredictionRecord;
 
     const pick = selectDailyChatPick([match], [prediction], "2026-10-01T14:00:00Z", false);
-    assert.equal(pick?.bookUrl, "https://affiliate.example/betgpt-unibet");
+    assert.match(pick?.bookUrl ?? "", /^https:\/\/betgpt\.live\/api\/go\?/);
+    assert.match(pick?.bookUrl ?? "", /b=Unibet/);
+    assert.match(pick?.bookUrl ?? "", /m=affiliate-1/);
     assert.equal(pick?.affiliate, true);
     const rendered = renderDailyChatPick(pick!);
     assert.match(rendered, /Meilleure cote trouvée : 2\.10 chez Unibet/);
-    assert.match(rendered, /https:\/\/affiliate\.example\/betgpt-unibet/);
+    assert.match(rendered, /https:\/\/betgpt\.live\/api\/go\?/);
     assert.match(rendered, /lien affilié BetGPT/);
   } finally {
-    if (previous == null) delete process.env.BETGPT_AFFILIATE_UNIBET_URL;
-    else process.env.BETGPT_AFFILIATE_UNIBET_URL = previous;
+    if (previous == null) delete process.env.AFF_UNIBET;
+    else process.env.AFF_UNIBET = previous;
   }
 });
 
-it("daily chat pick falls back to a real bookmaker football URL when the quote has no event URL", () => {
-  const match = {
-    id: "fallback-url-1",
-    slug: "faroe-slovakia-2026-10-01",
-    competition: "Ligue des nations de l'UEFA",
-    league: "NL",
-    kickoff: "2026-10-01T18:45:00Z",
-    status: "scheduled",
-    home: { id: "faroe", name: "Îles Féroé", short: "FRO" },
-    away: { id: "slovakia", name: "Slovaquie", short: "SVK" },
-  } as any;
-  const prediction = {
-    matchId: "fallback-url-1",
-    markets: [{
-      group: "BTTS",
-      market: "BTTS_YES",
-      label: "Les deux équipes marquent — Oui",
-      listed: true,
-      bestOdds: 2.16,
-      bestBook: "Unibet",
-      bestBookUrl: undefined,
-      fairOdds: 1.82,
-      modelProb: 0.55,
-      ev: 0.179,
-      opportunityScore: 82,
-      decision: "BET",
-      premium: true,
-    }],
-  } as any;
+it("daily chat pick wraps bookmaker fallback URLs in the BetGPT tracked redirect", () => {
+  const previous = process.env.AFF_UNIBET;
+  delete process.env.AFF_UNIBET;
+  try {
+    const match = {
+      id: "fallback-url-1",
+      slug: "faroe-slovakia-2026-10-01",
+      competition: "Ligue des nations de l'UEFA",
+      league: "NL",
+      kickoff: "2026-10-01T18:45:00Z",
+      status: "scheduled",
+      home: { id: "faroe", name: "Îles Féroé", short: "FRO" },
+      away: { id: "slovakia", name: "Slovaquie", short: "SVK" },
+    } as any;
+    const prediction = {
+      matchId: "fallback-url-1",
+      markets: [{
+        group: "BTTS",
+        market: "BTTS_YES",
+        label: "Les deux équipes marquent — Oui",
+        listed: true,
+        bestOdds: 2.16,
+        bestBook: "Unibet",
+        bestBookUrl: undefined,
+        fairOdds: 1.82,
+        modelProb: 0.55,
+        ev: 0.179,
+        opportunityScore: 82,
+        decision: "BET",
+        premium: true,
+      }],
+    } as any;
 
-  const pick = selectDailyChatPick([match], [prediction], "2026-10-01T14:00:00Z", false);
-  assert.equal(pick?.bookUrl, UNIBET_LEAGUE.NL);
-  assert.match(renderDailyChatPick(pick!), /Lien pour parier : https:\/\/www\.unibet\.fr\//);
+    const pick = selectDailyChatPick([match], [prediction], "2026-10-01T14:00:00Z", false);
+    assert.match(pick?.bookUrl ?? "", /^https:\/\/betgpt\.live\/api\/go\?/);
+    assert.match(pick?.bookUrl ?? "", /b=Unibet/);
+    assert.match(pick?.bookUrl ?? "", /m=fallback-url-1/);
+    assert.ok(decodeURIComponent(pick?.bookUrl ?? "").includes(UNIBET_LEAGUE.NL));
+    assert.match(renderDailyChatPick(pick!), /Lien pour parier : https:\/\/betgpt\.live\/api\/go\?/);
+  } finally {
+    if (previous == null) delete process.env.AFF_UNIBET;
+    else process.env.AFF_UNIBET = previous;
+  }
 });
 
 it("daily chat pick refuses stale desk data instead of manufacturing a current bet", () => {
