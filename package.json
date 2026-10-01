@@ -48,7 +48,9 @@
     "social:audit": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/social/social.test.ts",
     "test:sidewings": "node --experimental-strip-types --test src/lib/seo/astra-sidewing-auditor.test.ts src/lib/seo/astra-sidewing-planner.test.ts",
     "sidewings:audit": "node --experimental-strip-types scripts/astra-sidewing-audit.mjs",
-    "test:results-watchdog": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/serp/results-watchdog.test.ts"
+    "test:results-watchdog": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/serp/results-watchdog.test.ts",
+    "cloud:verify": "node scripts/astra-cloud-egress.mjs config/astra-cloud-egress.json",
+    "cloud:verify:config": "node scripts/astra-cloud-egress.mjs config/astra-cloud-egress.json --validate-config"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.4",
