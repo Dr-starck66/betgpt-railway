@@ -30,7 +30,7 @@ Le scénario « polémique sur le déplacement de Kylian Mbappé » puis « le R
 
 ## État
 Branche d'implémentation : `astra-discover-footmercato-v2`.
-PASS final interdit tant que la CI de pull request n'a pas confirmé les tests.
+CI PASS le 2026-10-01 : `npm run news` PASS et `npm run typecheck` PASS sur GitHub Actions. Le déploiement public reste à vérifier séparément après fusion.
 
 ---
 
