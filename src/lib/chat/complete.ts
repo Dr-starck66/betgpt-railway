@@ -48,6 +48,13 @@ function groundedFallback(desk: string, last: string, mode: PersonalityMode): st
     return "Je n’ai pas retrouvé ce match ou cette équipe dans les données disponibles. Donne-moi le nom exact si tu veux, mais je ne vais pas inventer l’adversaire, la date ou la cote.";
   }
   const intent = classifyChatIntent(last);
+  if (desk.includes("Rencontres correspondant à la demande :")) {
+    const intro =
+      mode === "ROAST"
+        ? "Je peux démonter ton scénario, mais je reste collé aux faits du desk — pas de record historique sorti d’un grille-pain quantique."
+        : "Voilà ce que le desk confirme réellement pour cette équipe ou cette rencontre.";
+    return `${intro}\n\n${desk}`;
+  }
   if (intent === "TODAY_PICKS") return localReply(last, desk, mode);
   if (intent === "GENERAL_SCHEDULE") return desk;
   return "Je n’ai pas assez de données vérifiées pour affirmer ce détail. Je peux te donner ce que le desk confirme, ou raisonner sans inventer le reste.";
@@ -55,7 +62,12 @@ function groundedFallback(desk: string, last: string, mode: PersonalityMode): st
 
 function shouldGround(question: string): boolean {
   const intent = classifyChatIntent(question);
-  return intent === "NAMED_MATCH" || intent === "TODAY_PICKS" || intent === "GENERAL_SCHEDULE";
+  return (
+    intent === "NAMED_MATCH" ||
+    intent === "TODAY_PICKS" ||
+    intent === "GENERAL_SCHEDULE" ||
+    /\b(prochain(?:e)?|aujourd['’]?hui|demain|ce soir|score|perdre|gagner|victoire|défaite)\b/i.test(question)
+  );
 }
 
 async function callAstraRouter(
