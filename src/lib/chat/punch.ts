@@ -90,7 +90,7 @@ export function extractPunchline(
     .sort((a, b) => b.score - a.score);
 
   const best = candidates[0];
-  if (!best || best.score < 86) return { text: clean };
+  if (!best || best.score < 58) return { text: clean };
   return {
     text: clean,
     punchline: { text: best.text, score: best.score, style: inferStyle(best.text), reaction: reactionForPunchline(best.text, context) },
