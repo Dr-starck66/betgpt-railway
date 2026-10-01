@@ -16,6 +16,11 @@ function normalizeGroundingText(text: string): string {
 }
 
 export function hasUnsupportedGroundedClaim(answer: string, source: string): boolean {
+  const normalizedAnswer = normalizeGroundingText(answer);
+  const absoluteClaimMarkers = ["jamais", "toujours", "record", "historique", "de l'histoire"];
+  for (const marker of absoluteClaimMarkers) {
+    if (normalizedAnswer.includes(marker) && !normalizeGroundingText(source).includes(marker)) return true;
+  }
   const normalizedSource = normalizeGroundingText(source);
   const sensitivePatterns = [
     /\b\d{1,2}\s*[hH:]\s*\d{2}\b/g,
