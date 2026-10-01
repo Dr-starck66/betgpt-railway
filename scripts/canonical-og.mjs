@@ -53,6 +53,7 @@ export function rewriteCanonicalOg(html) {
   const existingOgImage =
     attr(out, /<meta[^>]+property=["']og:image["'][^>]*content=["']([^"']+)["']/i) ||
     attr(out, /<meta[^>]+content=["']([^"']+)["'][^>]*property=["']og:image["']/i);
+  /** @param {string} value */
   const isLegacyGrokImage = (value) => {
     try {
       const host = new URL(value).hostname.toLowerCase();
