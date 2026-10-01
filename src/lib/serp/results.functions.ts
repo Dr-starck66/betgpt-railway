@@ -39,6 +39,11 @@ const ESPN_COMPETITIONS: EspnCompetition[] = [
   { slug: "ger.1", league: "BL", name: "Bundesliga" },
   { slug: "ita.1", league: "SA", name: "Serie A" },
   { slug: "fra.1", league: "L1", name: "Ligue 1" },
+  { slug: "ned.1", league: "ER", name: "Eredivisie" },
+  { slug: "por.1", league: "PT", name: "Primeira Liga" },
+  { slug: "sco.1", league: "SC", name: "Premiership écossaise" },
+  { slug: "tur.1", league: "TR", name: "Süper Lig" },
+  { slug: "uefa.nations", league: "NL", name: "Ligue des nations" },
   { slug: "uefa.champions", league: "CL", name: "UEFA Champions League" },
   { slug: "uefa.europa", league: "EL", name: "UEFA Europa League" },
 ];
