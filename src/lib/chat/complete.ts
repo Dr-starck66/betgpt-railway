@@ -26,6 +26,11 @@ function localReply(last: string, desk: string, mode: PersonalityMode): string {
       : "Salut 👋 Je suis là. Donne-moi un match, un ticket ou demande-moi ce qui vaut vraiment le coup aujourd’hui.";
   }
   if (intent === "TODAY_PICKS") {
+    if (desk.includes("Aucun match exploitable trouvé dans le cache.")) {
+      return mode === "ROAST"
+        ? "Aujourd’hui, le desk est vide. Donc pas question de fabriquer un combiné en carton mouillé juste pour faire semblant d’avoir une idée géniale. Pas de match exploitable = pas de pari forcé."
+        : "Aujourd’hui, je ne force rien : le desk ne me remonte aucun match exploitable. Donc pas de pari inventé juste pour avoir quelque chose à jouer. Dès que les affiches remontent, je te sors 1 à 3 idées maximum, avec la raison et le risque principal.";
+    }
     const opener =
       mode === "ROAST"
         ? "Je ne vais pas fabriquer un combiné en carton mouillé juste pour remplir la case. Voilà ce que le desk a réellement sous la main :"
@@ -38,10 +43,13 @@ function localReply(last: string, desk: string, mode: PersonalityMode): string {
     : "Le moteur conversationnel est momentanément en secours local. Je peux toujours vérifier un match ou un ticket à partir des données disponibles, sans inventer.";
 }
 
-function groundedFallback(desk: string): string {
+function groundedFallback(desk: string, last: string, mode: PersonalityMode): string {
   if (desk.includes("Cible nommée non trouvée")) {
     return "Je n’ai pas retrouvé ce match ou cette équipe dans les données disponibles. Donne-moi le nom exact si tu veux, mais je ne vais pas inventer l’adversaire, la date ou la cote.";
   }
+  const intent = classifyChatIntent(last);
+  if (intent === "TODAY_PICKS") return localReply(last, desk, mode);
+  if (intent === "GENERAL_SCHEDULE") return desk;
   return "Je n’ai pas assez de données vérifiées pour affirmer ce détail. Je peux te donner ce que le desk confirme, ou raisonner sans inventer le reste.";
 }
 
@@ -200,7 +208,7 @@ export async function completeChat(
         if (mustGround) {
           const source = `${system}\n\n${history.map((m) => m.content).join("\n")}`;
           if (hasUnsupportedGroundedClaim(out.text, source)) {
-            return { ok: true, text: groundedFallback(desk) };
+            return { ok: true, text: groundedFallback(desk, last, mode) };
           }
         }
         return { ok: true, text: out.text };
@@ -219,7 +227,7 @@ export async function completeChat(
         if (mustGround) {
           const source = `${system}\n\n${history.map((m) => m.content).join("\n")}`;
           if (hasUnsupportedGroundedClaim(out.text, source)) {
-            return { ok: true, text: groundedFallback(desk) };
+            return { ok: true, text: groundedFallback(desk, last, mode) };
           }
         }
         return { ok: true, text: out.text };
@@ -237,7 +245,7 @@ export async function completeChat(
         if (mustGround) {
           const source = `${system}\n\n${history.map((m) => m.content).join("\n")}`;
           if (hasUnsupportedGroundedClaim(out.text, source)) {
-            return { ok: true, text: groundedFallback(desk) };
+            return { ok: true, text: groundedFallback(desk, last, mode) };
           }
         }
         return { ok: true, text: out.text };
