@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { auditSidewingOpportunity, recommendedLinkBudget } from "./astra-sidewing-auditor";
+import { auditSidewingOpportunity, recommendedLinkBudget } from "./astra-sidewing-auditor.ts";
 
 test("flags narrow desktop article with weak internal linking as priority", () => {
   const result = auditSidewingOpportunity({
