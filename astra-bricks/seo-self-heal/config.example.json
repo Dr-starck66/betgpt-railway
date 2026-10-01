@@ -1,0 +1,16 @@
+{
+  "schema": "astra-seo-self-heal/v1",
+  "zeroWeakReport": "artifacts/seo/zero-weak-pages.json",
+  "indexabilityReport": "artifacts/seo/indexability-release-gate.json",
+  "sitemapSource": "src/lib/sitemap-urls.ts",
+  "registrySource": "src/lib/seo/astra-self-heal-sitemap.ts",
+  "reportPath": "artifacts/seo/self-heal.json",
+  "policy": {
+    "safeRepairsOnly": true,
+    "noAutomaticNoindexRemoval": true,
+    "noAutomaticContentRewrite": true,
+    "noAutomaticCanonicalGuessing": true,
+    "verifyFullCandidateBeforeCommit": true,
+    "staleHeadMustAbort": true
+  }
+}
