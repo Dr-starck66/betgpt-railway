@@ -9,12 +9,26 @@ const norm = (text: string) =>
     .trim();
 export function localMatchFacts(question: string, matches: MatchInput[], asOf?: string): string {
   const query = ` ${norm(question)} `;
+  const blockedShorts = new Set(["est", "les", "des", "une", "aux", "par", "sur", "the", "and", "for"]);
+  const selected = matches.filter((m) => {
+    const fullNameMatch = [m.home.name, m.away.name].some((name) => {
+      const key = norm(name);
+      return key.length >= 3 && query.includes(` ${key} `);
+    });
+    if (fullNameMatch) return true;
+    return [m.home.short, m.away.short].some((short) => {
+      const key = norm(short);
+      if (key.length < 3 || blockedShorts.has(key)) return false;
+      const escaped = String(short).replace(/[.*+?^$()|[\]\\]/g, "\\  const query = ` ${norm(question)} `;
   const selected = matches.filter((m) =>
     [m.home.name, m.away.name, m.home.short, m.away.short].some((name) => {
       const key = norm(name);
       return key.length >= 3 && query.includes(` ${key} `);
     }),
-  );
+  );");
+      return new RegExp(`\\b${escaped}\\b`, "i").test(question);
+    });
+  });
   const upcoming = matches
     .filter((m) => m.status === "scheduled" && Date.parse(m.kickoff) > Date.now())
     .sort((a, b) => a.kickoff.localeCompare(b.kickoff));
