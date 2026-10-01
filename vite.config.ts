@@ -318,7 +318,13 @@ export default defineConfig(({ command, isPreview }) => ({
     ...(command === "build" || isPreview
       ? [
           nitro({
-            preset: process.env.RAILWAY_ENVIRONMENT ? "node-server" : "vercel",
+            preset:
+              process.env.RAILWAY_ENVIRONMENT ||
+              process.env.RAILWAY_ENVIRONMENT_ID ||
+              process.env.RAILWAY_PROJECT_ID ||
+              process.env.RAILWAY_SERVICE_ID
+                ? "node-server"
+                : "vercel",
             // Auto-registers server/middleware/* (the PWA install page +
             // manifest + head-tag middleware). Nitro v3 defaults serverDir to
             // false, so removing this silently unwires /?install=1 on deploys.
