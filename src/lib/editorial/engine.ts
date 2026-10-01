@@ -12,6 +12,7 @@ import type {
   EditorialMatch,
   EditorialModel,
   EditorialNewsSignal,
+  EditorialParagraph,
   EditorialSource,
   SkippedSlot,
   SlotId,
@@ -296,8 +297,8 @@ function hashOf(match: EditorialMatch | null, model?: EditorialModel): string {
   ]);
 }
 
-function paragraph(h2: string, body: string): { h2: string; body: string } {
-  return { h2, body };
+function paragraph(h2: string, body: string, h3?: EditorialParagraph["h3"]): EditorialParagraph {
+  return h3?.length ? { h2, body, h3 } : { h2, body };
 }
 
 function composeMatch(
@@ -354,13 +355,28 @@ function composeMatch(
           : "Les dernières données confirmées avant le coup d'envoi",
     `${match.home.name} – ${match.away.name} figure au calendrier de ${match.competition}${match.venue ? `, au ${match.venue}` : ""}. Le coup d'envoi est indiqué ${kickLabel}.${score ? ` Le score actuellement enregistré est ${score}${match.clock ? ` (${match.clock})` : ""}.` : ""} ${formBits ? `Les séries de forme disponibles sont : ${formBits}.` : "Les données de forme ne sont pas suffisamment complètes pour être présentées comme un fait."}`,
   );
+  const oddsBody = odds
+    ? odds.text.replace(/Le desk observe/g, "Les cotes 1N2 disponibles indiquent").replace(/sur le desk BetGPT/g, "dans les données disponibles")
+    : "Aucune cote 1N2 suffisamment fiable n'est disponible pour cette affiche.";
+  const absencesBody = absences.text
+    .replace(/BetGPT ne dispose pas, dans ce signal,/g, "Les données disponibles ne contiennent")
+    .replace(/Signal d'absence présent dans le desk, au-dessus du seuil de confiance interne :/g, "Des absences sont signalées avec un niveau de confiance suffisant :")
+    .replace(/Tant que le club ne figure pas comme source primaire, BetGPT ne parle pas de forfait officiel\./g, "Elles ne sont pas présentées comme officielles sans confirmation primaire.");
+  const modelBody = modelBit
+    ? modelBit.text
+    : "Aucune probabilité chiffrée n'est ajoutée lorsqu'un modèle exploitable n'est pas disponible.";
   const context = paragraph(
     slot === "morning"
       ? "Ce que montrent les données disponibles"
       : slot === "noon"
         ? "Ce que disent les chiffres et les absences signalées"
         : "Cotes, absences et signaux à vérifier avant le match",
-    `${odds ? odds.text.replace(/Le desk observe/g, "Les cotes 1N2 disponibles indiquent").replace(/sur le desk BetGPT/g, "dans les données disponibles") : "Aucune cote 1N2 suffisamment fiable n'est disponible pour cette affiche."} ${absences.text.replace(/BetGPT ne dispose pas, dans ce signal,/g, "Les données disponibles ne contiennent").replace(/Signal d'absence présent dans le desk, au-dessus du seuil de confiance interne :/g, "Des absences sont signalées avec un niveau de confiance suffisant :").replace(/Tant que le club ne figure pas comme source primaire, BetGPT ne parle pas de forfait officiel\./g, "Elles ne sont pas présentées comme officielles sans confirmation primaire.")} ${modelBit ? modelBit.text : "Aucune probabilité chiffrée n'est ajoutée lorsqu'un modèle exploitable n'est pas disponible."}`,
+    "Les informations disponibles sont séparées par famille afin de distinguer clairement le marché, les absences et les estimations du modèle sans mélanger des niveaux de preuve différents.",
+    [
+      { h3: "Cotes 1N2 disponibles", body: oddsBody },
+      { h3: "Absences et disponibilité des joueurs", body: absencesBody },
+      { h3: "Probabilités et estimation du modèle", body: modelBody },
+    ],
   );
   const unknown = paragraph(
     slot === "morning"
@@ -606,8 +622,19 @@ function composeNews(
     : `Aucune rencontre précise du calendrier BetGPT n'est suffisamment reliée à ce sujet pour servir de prétexte à une projection sportive. L'article reste donc centré sur les faits publiés par les sources, sans fabriquer de prochain match ni de calendrier de retour.`;
 
   const sourceReading = detailLines.length
-    ? detailLines.join(" ")
-    : `${leadSignal.sourceName} fournit pour l'instant l'élément factuel principal : ${mainClaim}. Les autres signaux disponibles ne contiennent pas assez de détails distincts pour ajouter un récit supplémentaire sans répétition.`;
+    ? "Les sources sont présentées séparément ci-dessous afin que le lecteur puisse distinguer immédiatement ce que chacune apporte au dossier."
+    : `${leadSignal.sourceName} fournit pour l'instant l'élément factuel principal. Les autres signaux disponibles ne contiennent pas assez de détails distincts pour ajouter un récit supplémentaire sans répétition.`;
+  const sourceSubsections = usefulSignals.length
+    ? usefulSignals.map((signal) => ({
+        h3: `${signal.sourceName} : ${cleanNewsTitle(signal.title, signal.sourceName)}`,
+        body: `${formatParis(signal.publishedAt)} — ${cleanDetail(signal)}`,
+      }))
+    : [
+        {
+          h3: `${leadSignal.sourceName} : l'élément principal publié`,
+          body: leadDetail || mainClaim,
+        },
+      ];
 
   const leadDetail = cleanDetail(leadSignal);
   const lead = `${mainClaim}. ${leadSignal.sourceName} a publié cette information ${formatParis(leadSignal.publishedAt)}. ${corroborated ? `Le dossier est repris par ${cluster.distinctSources} sources distinctes.` : "La formulation reste attribuée à cette source tant qu'une corroboration indépendante n'est pas disponible."} ${leadDetail && leadDetail !== mainClaim ? leadDetail : ""}`.replace(/\s+/g, " ").trim();
@@ -619,7 +646,8 @@ function composeNews(
     ),
     paragraph(
       "Ce que disent précisément les différentes sources",
-      `${sourceReading} Cette présentation reste volontairement attribuée source par source : lorsque deux médias racontent le même épisode avec des détails différents, BetGPT ne fusionne pas automatiquement ces détails en un fait unique. Une information n'est élevée au rang de fait établi que si son niveau de source le justifie ou si plusieurs références indépendantes convergent réellement.`,
+      `${sourceReading} Une information n'est élevée au rang de fait établi que si son niveau de source le justifie ou si plusieurs références indépendantes convergent réellement.`,
+      sourceSubsections,
     ),
     paragraph(
       "La chronologie des publications",
