@@ -79,6 +79,16 @@ async function runProbe(target, probe) {
       const response = await requestWithTimeout(url, init, timeoutMs);
       status = response.status;
       raw = await response.text();
+      const hostHeaders = {
+        server: response.headers.get("server"),
+        via: response.headers.get("via"),
+        xVercelId: response.headers.get("x-vercel-id"),
+        xNetlifyRequestId: response.headers.get("x-nf-request-id"),
+        xRailwayRequestId: response.headers.get("x-railway-request-id"),
+        xServedBy: response.headers.get("x-served-by"),
+        finalUrl: response.url,
+      };
+      console.log("ASTRA_HEADERS", target.id, probe.id, JSON.stringify(hostHeaders));
 
       if (!expectedStatuses.includes(status)) failures.push(`HTTP ${status}, expected ${expectedStatuses.join(",")}`);
 
