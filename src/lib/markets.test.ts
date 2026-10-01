@@ -1,7 +1,7 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import type { MarketQuote } from "../engine/types.ts";
-import { betMarket, headlineMarket, matchPick, pronoVsStake } from "./markets.ts";
+import { betMarket, headlineMarket, matchPick, oddsPlayable, pronoVsStake } from "./markets.ts";
 
 function mq(
   partial: Partial<MarketQuote> & Pick<MarketQuote, "market" | "modelProb" | "bestOdds" | "decision">,
@@ -54,4 +54,16 @@ describe("prono vs mise", () => {
     assert.equal(stake?.market, "1X2_H");
     assert.equal(split, false);
   });
+});
+
+
+it("rejects every BET below the 1.80 floor", () => {
+  const markets = [
+    mq({ market: "1X2_H", modelProb: 0.62, bestOdds: 1.79, decision: "BET" }),
+    mq({ market: "1X2_D", modelProb: 0.2, bestOdds: 3.8, decision: "NO_BET" }),
+    mq({ market: "1X2_A", modelProb: 0.18, bestOdds: 4.1, decision: "NO_BET" }),
+  ];
+  assert.equal(oddsPlayable(1.79), false);
+  assert.equal(oddsPlayable(1.8), true);
+  assert.equal(betMarket(markets), null);
 });
