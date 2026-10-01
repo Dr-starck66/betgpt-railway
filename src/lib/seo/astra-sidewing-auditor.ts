@@ -53,6 +53,7 @@ export type AstraAuditInput = {
   thinContentRisk?: boolean;
   staleContentRisk?: boolean;
   hasVisibleTrustSignals?: boolean;
+  hasSidewings?: boolean;
 };
 
 export type AstraFamilyRecommendation = {
@@ -63,10 +64,10 @@ export type AstraFamilyRecommendation = {
   reason: string;
 };
 
-export type AstraAuditVerdict = "PRIORITY" | "RECOMMENDED" | "OPTIONAL" | "SKIP";
+export type AstraAuditVerdict = "PRIORITY" | "RECOMMENDED" | "OPTIMIZE" | "OPTIONAL" | "SKIP";
 
 export type AstraAuditResult = {
-  version: "ASTRA-SIDEWING-AUDITOR-1";
+  version: "ASTRA-SIDEWING-AUDITOR-2";
   verdict: AstraAuditVerdict;
   sidewingNeed: number;
   seoOpportunity: number;
@@ -117,7 +118,7 @@ export function auditSidewingOpportunity(input: AstraAuditInput): AstraAuditResu
 
   if (input.isRedirect) {
     return {
-      version: "ASTRA-SIDEWING-AUDITOR-1",
+      version: "ASTRA-SIDEWING-AUDITOR-2",
       verdict: "SKIP",
       sidewingNeed: 0,
       seoOpportunity: 0,
@@ -271,9 +272,13 @@ export function auditSidewingOpportunity(input: AstraAuditInput): AstraAuditResu
 
   if (!input.selfCanonical) verdict = "SKIP";
   if (!input.indexable && verdict === "PRIORITY") verdict = "RECOMMENDED";
+  if (input.hasSidewings && input.selfCanonical && input.indexable) {
+    verdict = seo >= 35 ? "OPTIMIZE" : "SKIP";
+    reasons.push("Sidewings already exist; audit their SEO quality instead of recommending a duplicate rail.");
+  }
 
   return {
-    version: "ASTRA-SIDEWING-AUDITOR-1",
+    version: "ASTRA-SIDEWING-AUDITOR-2",
     verdict,
     sidewingNeed: need,
     seoOpportunity: seo,
@@ -289,6 +294,11 @@ export function auditSidewingOpportunity(input: AstraAuditInput): AstraAuditResu
 export function recommendedLinkBudget(result: AstraAuditResult): number {
   if (result.verdict === "SKIP") return 0;
   const requested = result.families.reduce((sum, row) => sum + row.maxLinks, 0);
-  const cap = result.verdict === "PRIORITY" ? 14 : result.verdict === "RECOMMENDED" ? 10 : 6;
+  const cap =
+    result.verdict === "PRIORITY"
+      ? 14
+      : result.verdict === "RECOMMENDED" || result.verdict === "OPTIMIZE"
+        ? 10
+        : 6;
   return Math.min(requested, cap);
 }
