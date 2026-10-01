@@ -110,17 +110,29 @@ function TeamChip({
   names: "short" | "full" | "auto";
   competition?: string;
 }) {
+  const flag = nationalTeamFlag(team.name);
   return (
     <span className="inline-flex min-w-0 items-center gap-1.5 overflow-hidden">
-      <Crest
-        name={team.name}
-        short={team.short}
-        logo={team.logo}
-        color={team.color}
-        id={team.id}
-        size={size}
-        competition={competition}
-      />
+      {flag ? (
+        <span
+          className="grid shrink-0 place-items-center rounded-sm bg-white ring-1 ring-line"
+          style={{ width: size, height: size, fontSize: Math.max(16, size * 0.72) }}
+          aria-label={`Drapeau ${team.name}`}
+          title={team.name}
+        >
+          {flag}
+        </span>
+      ) : (
+        <Crest
+          name={team.name}
+          short={team.short}
+          logo={team.logo}
+          color={team.color}
+          id={team.id}
+          size={size}
+          competition={competition}
+        />
+      )}
       {names === "short" ? (
         <span className="truncate font-medium text-paper">{team.short}</span>
       ) : names === "full" ? (
