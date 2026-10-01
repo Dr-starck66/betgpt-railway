@@ -44,6 +44,26 @@ export type EditorialImage = {
 
 export type EditorialLink = { href: string; label: string };
 
+export type EditorialHeadingLevel4 = {
+  h4: string;
+  body: string;
+  sourceIds?: string[];
+};
+
+export type EditorialSubsection = {
+  h3: string;
+  body: string;
+  sourceIds?: string[];
+  subsections?: EditorialHeadingLevel4[];
+};
+
+export type EditorialParagraph = {
+  h2: string;
+  body: string;
+  sourceIds?: string[];
+  subsections?: EditorialSubsection[];
+};
+
 export type Correction = { at: string; note: string };
 
 export type DiscoverCheck =
@@ -65,7 +85,7 @@ export type EditorialArticle = {
   title: string;
   h1: string;
   lead: string;
-  paragraphs: { h2: string; body: string; sourceIds?: string[] }[];
+  paragraphs: EditorialParagraph[];
   createdAt: string;
   publishedAt: string | null;
   modifiedAt: string | null;
