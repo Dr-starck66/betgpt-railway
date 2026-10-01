@@ -64,7 +64,7 @@
     "release:candidate": "node scripts/astra-never-fail-build-guard.mjs",
     "release:candidate:extended": "node scripts/astra-never-fail-build-guard.mjs --extended",
     "test:editorial-authority": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/editorial/authority-citations.test.ts",
-    "seo:indexability-release": "node scripts/astra-indexability-release-gate.mjs"
+    "seo:indexability-release": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-indexability-release-gate.mjs"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.4",
