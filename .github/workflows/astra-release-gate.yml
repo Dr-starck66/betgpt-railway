@@ -1,0 +1,50 @@
+name: ASTRA Single-Source Release Gate Ω
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/astra-release-gate.mjs"
+      - "scripts/ts-alias-hooks.mjs"
+      - "config/astra-release-gate.json"
+      - ".github/workflows/astra-release-gate.yml"
+      - "package.json"
+  pull_request:
+    paths:
+      - "scripts/astra-release-gate.mjs"
+      - "scripts/ts-alias-hooks.mjs"
+      - "config/astra-release-gate.json"
+      - ".github/workflows/astra-release-gate.yml"
+      - "package.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: astra-release-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Validate gate manifest
+        run: npm run release:validate
+      - name: Full fail-closed preflight
+        run: npm run release:preflight
+      - name: Upload gate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: astra-release-gate-preflight
+          path: artifacts/astra-release-gate/
+          if-no-files-found: error
+          retention-days: 30
