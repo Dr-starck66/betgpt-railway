@@ -1,4 +1,5 @@
 import { SITE_URL } from "@/lib/programmatic";
+import { absImg } from "@/lib/image-seo";
 import type { EditorialArticle, EditorialEdition } from "@/lib/editorial/types";
 import { isPublicArticle } from "@/lib/editorial/types";
 
@@ -26,7 +27,7 @@ export function newsEntries(edition: EditorialEdition, now = Date.now()): NewsSi
         title: article.h1,
         published: article.publishedAt!,
         keywords: article.keywords,
-        image: `${SITE_URL}${article.image.src}`,
+        image: absImg(article.image.src),
         imageTitle: article.image.alt,
       },
     ];
@@ -38,7 +39,7 @@ export function classicNewsPaths(edition: EditorialEdition): { path: string; tit
     path: `/actualites/${article.slug}`,
     title: article.h1,
     lastmod: article.modifiedAt ?? article.publishedAt ?? "",
-    image: `${SITE_URL}${article.image.src}`,
+    image: absImg(article.image.src),
   }));
   const hubs = [{ path: "/actualites", title: "Actualités football", lastmod: edition.generatedAt }];
   const football = edition.articles.filter(isPublicArticle);
@@ -91,7 +92,7 @@ export function actualitesRss(articles: EditorialArticle[]): string {
     <pubDate>${new Date(article.publishedAt ?? article.createdAt).toUTCString()}</pubDate>
     <category>${esc(article.category)}</category>
     <description>${esc(article.lead)}</description>
-    <enclosure url="${SITE_URL}${article.image.src}" type="image/jpeg" length="0"/>
+    <enclosure url="${absImg(article.image.src)}" type="image/jpeg" length="0"/>
   </item>`;
   });
   return `<?xml version="1.0" encoding="UTF-8"?>
