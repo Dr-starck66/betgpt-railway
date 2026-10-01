@@ -40,12 +40,33 @@ function intent(kind) {
   return "informational";
 }
 
-function widthGuess(text) {
-  const matches = [...text.matchAll(/max-w-\[(\d+)px\]|max-w-(3xl|4xl|5xl|6xl|7xl)/g)];
-  if (!matches.length) return 1120;
+function parseWidth(classText) {
   const map = { "3xl": 768, "4xl": 896, "5xl": 1024, "6xl": 1152, "7xl": 1280 };
-  const values = matches.map((m) => (m[1] ? Number(m[1]) : map[m[2]] ?? 1120));
-  return Math.min(...values);
+  const px = classText.match(/max-w-\[(\d+)px\]/);
+  if (px) return Number(px[1]);
+  const named = classText.match(/max-w-(3xl|4xl|5xl|6xl|7xl)/);
+  return named ? map[named[1]] ?? null : null;
+}
+
+function widthGuess(text) {
+  // Prefer the first actual JSX container returned by the route component.
+  // Do not treat a nested paragraph's max-width as the width of the whole page.
+  const returnBlock = text.match(/return\s*\(\s*<([A-Za-z][\w.]*)\b([\s\S]{0,800}?)(?:>|\/>)/);
+  if (returnBlock) {
+    const tag = returnBlock[1];
+    const attrs = returnBlock[2] ?? "";
+    if (/AstraSidewings$/.test(tag)) return 1120;
+    const classMatch = attrs.match(/className\s*=\s*["'`]([^"'`]+)["'`]/);
+    const rootWidth = classMatch ? parseWidth(classMatch[1]) : null;
+    if (rootWidth) return rootWidth;
+    // A root article/div/section without an explicit max-width usually inherits
+    // the application's wide content shell; don't punish inner readable prose.
+    if (/^(article|div|main|section)$/i.test(tag)) return 1280;
+  }
+
+  // Conservative fallback for unusual render shapes.
+  const outer = text.match(/className\s*=\s*["'`]([^"'`]*(?:max-w-\[\d+px\]|max-w-(?:3xl|4xl|5xl|6xl|7xl))[^"'`]*)["'`]/);
+  return outer ? parseWidth(outer[1]) ?? 1120 : 1120;
 }
 
 function routeDepth(file) {
