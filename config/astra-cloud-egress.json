@@ -1,0 +1,72 @@
+{
+  "name": "BetGPT remote production verification",
+  "defaults": {
+    "timeoutMs": 30000,
+    "retries": 3,
+    "retryDelayMs": 2500,
+    "excerptChars": 1500
+  },
+  "targets": [
+    {
+      "id": "public-domain",
+      "provider": "public",
+      "url": "https://betgpt.live",
+      "priority": 10,
+      "fallback": false
+    },
+    {
+      "id": "railway-origin",
+      "provider": "railway",
+      "url": "https://betgpt-production-7353.up.railway.app",
+      "priority": 90,
+      "fallback": true
+    }
+  ],
+  "probes": [
+    {
+      "id": "health",
+      "method": "GET",
+      "path": "/api/health",
+      "expect": {
+        "statuses": [
+          200
+        ]
+      }
+    },
+    {
+      "id": "ledger-sidewings",
+      "method": "GET",
+      "path": "/ledger",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "Bilan BetGPT",
+            "Comprendre le bilan",
+            "Lire les chiffres correctement"
+          ]
+        }
+      }
+    },
+    {
+      "id": "tools-sidewings",
+      "method": "GET",
+      "path": "/outils",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "Calculateurs football et paris",
+            "Comprendre avant de calculer",
+            "Du calcul au contexte réel"
+          ]
+        }
+      }
+    }
+  ],
+  "verificationRevision": "ASTRA-CLOUD-EGRESS-V2-2026-10-01"
+}
