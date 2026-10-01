@@ -7,14 +7,15 @@ export type ChatDailyPick = {
   competition: string;
   kickoff: string;
   label: string;
-  odds: number;
-  book: string;
+  odds: number | null;
+  fairOdds: number;
+  book?: string;
   modelProb: number;
   ev: number;
   opportunityScore: number;
   decision: MarketQuote["decision"];
   premium: boolean;
-  grade: "PREMIUM" | "STANDARD" | "STANDARD_FALLBACK";
+  grade: "PREMIUM" | "STANDARD" | "STANDARD_FALLBACK" | "STANDARD_MODEL";
   limitation?: string;
 };
 
@@ -38,6 +39,13 @@ function isHardBlock(reason?: string): boolean {
   );
 }
 
+function isModelSafetyBlock(reason?: string): boolean {
+  if (!reason) return false;
+  return /donn(?:ée|e)s anciennes|mise suspendue|après le coup d.?envoi|loterie|gelées|toxique|challenger promu refuse|français.*europe|pas de nouvelle mise/i.test(
+    reason,
+  );
+}
+
 function candidateScore(q: MarketQuote): number {
   const tier = q.decision === "BET" ? (q.premium ? 3 : 2) : 1;
   return (
@@ -45,6 +53,13 @@ function candidateScore(q: MarketQuote): number {
     (Number.isFinite(q.opportunityScore) ? q.opportunityScore : 0) * 10 +
     (Number.isFinite(q.modelProb) ? q.modelProb : 0) * 100 +
     (Number.isFinite(q.ev) ? Math.max(-0.2, q.ev) : -0.2) * 10
+  );
+}
+
+function modelFallbackScore(q: MarketQuote): number {
+  return (
+    (Number.isFinite(q.modelProb) ? q.modelProb : 0) * 1000 +
+    (Number.isFinite(q.opportunityScore) ? q.opportunityScore : 0) * 10
   );
 }
 
@@ -83,9 +98,6 @@ export function selectDailyChatPick(
         continue;
       }
 
-      // Fallback visible in chat only: always keep at least one real listed
-      // non-draw 1X2 option when the desk has usable odds. It is explicitly
-      // labelled non-premium and never mutates the engine decision.
       if (
         quote.group === "1X2" &&
         quote.market !== "1X2_D" &&
@@ -98,16 +110,61 @@ export function selectDailyChatPick(
   }
 
   const best = candidates.sort((a, b) => b.score - a.score)[0];
-  if (!best) return null;
+  if (best) {
+    const { match, quote } = best;
+    const grade =
+      quote.decision === "BET"
+        ? quote.premium
+          ? "PREMIUM"
+          : "STANDARD"
+        : "STANDARD_FALLBACK";
 
-  const { match, quote } = best;
-  const grade =
-    quote.decision === "BET"
-      ? quote.premium
-        ? "PREMIUM"
-        : "STANDARD"
-      : "STANDARD_FALLBACK";
+    return {
+      matchId: match.id,
+      home: match.home.name,
+      away: match.away.name,
+      competition: match.competition,
+      kickoff: match.kickoff,
+      label: quote.label,
+      odds: quote.bestOdds,
+      fairOdds: quote.fairOdds,
+      book: quote.bestBook,
+      modelProb: quote.modelProb,
+      ev: quote.ev,
+      opportunityScore: quote.opportunityScore,
+      decision: quote.decision,
+      premium: quote.premium,
+      grade,
+      limitation:
+        grade === "STANDARD_FALLBACK"
+          ? quote.rejectionReason || "Le filtre premium n'est pas validé."
+          : quote.premium
+            ? undefined
+            : "Pari validé par le moteur mais hors niveau premium.",
+    };
+  }
 
+  // Last-resort chat fallback: when the fixture/model exists but no bookmaker
+  // quote is currently usable, still answer with the strongest non-draw 1X2
+  // model selection. This is explicitly NOT a value bet and never mutates
+  // the engine/ticket ledger.
+  const modelCandidates: Array<{ match: MatchInput; quote: MarketQuote; score: number }> = [];
+  for (const match of scope) {
+    const prediction = predictionById.get(match.id);
+    if (!prediction) continue;
+    for (const quote of prediction.markets ?? []) {
+      if (quote.group !== "1X2" || quote.market === "1X2_D") continue;
+      if (!Number.isFinite(quote.modelProb) || quote.modelProb < 0.28) continue;
+      if (!Number.isFinite(quote.fairOdds)) continue;
+      if (isModelSafetyBlock(quote.rejectionReason)) continue;
+      modelCandidates.push({ match, quote, score: modelFallbackScore(quote) });
+    }
+  }
+
+  const modelBest = modelCandidates.sort((a, b) => b.score - a.score)[0];
+  if (!modelBest) return null;
+
+  const { match, quote } = modelBest;
   return {
     matchId: match.id,
     home: match.home.name,
@@ -115,20 +172,17 @@ export function selectDailyChatPick(
     competition: match.competition,
     kickoff: match.kickoff,
     label: quote.label,
-    odds: quote.bestOdds,
-    book: quote.bestBook,
+    odds: quote.listed && Number.isFinite(quote.bestOdds) ? quote.bestOdds : null,
+    fairOdds: quote.fairOdds,
+    book: quote.listed ? quote.bestBook : undefined,
     modelProb: quote.modelProb,
-    ev: quote.ev,
+    ev: Number.isFinite(quote.ev) ? quote.ev : 0,
     opportunityScore: quote.opportunityScore,
     decision: quote.decision,
-    premium: quote.premium,
-    grade,
+    premium: false,
+    grade: "STANDARD_MODEL",
     limitation:
-      grade === "STANDARD_FALLBACK"
-        ? quote.rejectionReason || "Le filtre premium n'est pas validé."
-        : quote.premium
-          ? undefined
-          : "Pari validé par le moteur mais hors niveau premium.",
+      "Aucune cote bookmaker exploitable n'est disponible pour ce choix. C'est la meilleure issue 1X2 du modèle, pas un pari premium ni une value validée.",
   };
 }
 
@@ -138,18 +192,27 @@ export function renderDailyChatPick(pick: ChatDailyPick): string {
       ? "PREMIUM"
       : pick.grade === "STANDARD"
         ? "STANDARD"
-        : "STANDARD — fallback modèle, non premium";
+        : pick.grade === "STANDARD_FALLBACK"
+          ? "STANDARD — fallback modèle, non premium"
+          : "STANDARD MODÈLE — non premium, cote live indisponible";
   const prob = `${Math.round(pick.modelProb * 100)} %`;
-  const ev = `${pick.ev >= 0 ? "+" : ""}${(pick.ev * 100).toFixed(1)} %`;
+  const oddsLine =
+    pick.odds != null
+      ? `Cote disponible : ${pick.odds.toFixed(2)} chez ${pick.book || "bookmaker"}`
+      : `Cote disponible : indisponible · cote juste modèle : ${pick.fairOdds.toFixed(2)}`;
+  const evLine =
+    pick.odds != null
+      ? `EV modèle : ${pick.ev >= 0 ? "+" : ""}${(pick.ev * 100).toFixed(1)} %`
+      : "EV modèle : non validable sans cote bookmaker disponible.";
 
   return [
     "SÉLECTION AUTOMATIQUE BETGPT — À UTILISER DANS LA RÉPONSE",
     `Niveau : ${level}`,
     `Match : ${pick.home} – ${pick.away} · ${pick.competition}`,
     `Pari à prendre : ${pick.label}`,
-    `Cote disponible : ${pick.odds.toFixed(2)} chez ${pick.book}`,
+    oddsLine,
     `Probabilité modèle : ${prob}`,
-    `EV modèle : ${ev}`,
+    evLine,
     pick.limitation ? `Limite principale : ${pick.limitation}` : "",
     "Instruction : réponds directement avec cette sélection. Ne demande jamais à l'utilisateur de fournir les affiches si ce bloc existe.",
   ]
