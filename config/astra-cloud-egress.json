@@ -365,9 +365,49 @@
           ]
         }
       }
+    },
+    {
+      "id": "search-truth",
+      "method": "GET",
+      "path": "/api/search-truth",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "astra-search-truth/v1",
+            "\"status\":\"PASS\"",
+            "\"organicLandings\":\"MEASURED\"",
+            "\"queries\":\"UNAVAILABLE\"",
+            "\"serpImpressions\":\"UNAVAILABLE\"",
+            "\"serpCtr\":\"UNAVAILABLE\"",
+            "\"averagePosition\":\"UNAVAILABLE\""
+          ]
+        }
+      }
+    },
+    {
+      "id": "national-breakout",
+      "method": "GET",
+      "path": "/api/national-breakout",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "astra-national-breakout/v1",
+            "\"health\":\"PASS\"",
+            "\"searchTruth\"",
+            "\"organicLandings\":\"MEASURED\"",
+            "\"queries\":\"UNAVAILABLE\""
+          ]
+        }
+      }
     }
   ],
-  "verificationRevision": "ASTRA-BETGPT-DISCOVER-ATTACK-FRANCE-ITALY-2026-10-02",
+  "verificationRevision": "ASTRA-SEARCH-TRUTH-NATIONAL-BREAKOUT-2026-10-02",
   "serp": {
     "enabled": true,
     "sitemapPath": "/sitemap.xml",
