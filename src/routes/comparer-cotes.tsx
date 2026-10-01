@@ -1,11 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { TeamLine } from "@/components/crest";
+import { CountryFlag } from "@/components/country-flag";
 import { getPublicDesk } from "@/lib/desk.functions";
 import { bestThreeWay } from "@/lib/money";
 import { SITE_URL } from "@/lib/programmatic";
 import { fmtOdds } from "@/lib/utils";
 import { BETCLIC_LEAGUE, NETBET_LEAGUE, UNIBET_LEAGUE } from "@/engine/book-pages";
 import type { LeagueId, MatchInput } from "@/engine/types";
+import { countryForLeague, teamCountryCodeFromShort } from "@/lib/country-flag-resolver";
 
 
 function bookmakerDestination(book: string, league: LeagueId, direct?: string): string | null {
@@ -43,11 +45,11 @@ function OddsCell({
       href={href}
       target="_blank"
       rel="noopener noreferrer sponsored"
-      className="group inline-flex min-h-11 flex-col justify-center rounded-md border border-line px-2.5 py-1.5 hover:border-sage hover:bg-sage/10"
+      className="group inline-flex min-h-11 w-full min-w-0 max-w-[8.25rem] flex-col justify-center rounded-md border border-line px-2 py-1.5 hover:border-sage hover:bg-sage/10"
       aria-label={`Parier chez ${line.book}, cote ${fmtOdds(line.odds)}`}
     >
       <strong className="tabular text-paper group-hover:text-sage">{fmtOdds(line.odds)}</strong>
-      <span className="text-xs text-muted group-hover:text-paper">{line.book} ↗</span>
+      <span className="max-w-full truncate text-xs text-muted group-hover:text-paper">{line.book} ↗</span>
     </a>
   );
 }
@@ -79,7 +81,7 @@ function OddsCompare() {
   const withOdds = rows.filter((row) => row.best).length;
 
   return (
-    <article className="space-y-6">
+    <article className="min-w-0 space-y-6">
       <header className="hero-panel p-6 sm:p-8">
         <p className="eyebrow">Comparateur 1N2</p>
         <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-5xl">Comparer les cotes football</h1>
@@ -103,27 +105,35 @@ function OddsCompare() {
           </p>
         </div>
       ) : (
-        <div className="surface-card overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[760px] text-left text-sm">
+        <div className="surface-card min-w-0 overflow-hidden">
+          <div className="w-full min-w-0 overflow-x-auto overscroll-x-contain">
+            <table className="w-full min-w-[680px] table-fixed text-left text-sm md:min-w-0">
               <thead className="bg-raised text-[11px] uppercase tracking-wider text-muted">
                 <tr>
-                  <th className="px-3 py-2">Match</th>
-                  <th className="px-3 py-2">1</th>
-                  <th className="px-3 py-2">N</th>
-                  <th className="px-3 py-2">2</th>
-                  <th className="px-3 py-2">Détail</th>
+                  <th className="w-[38%] px-2 py-2 sm:px-3">Match</th>
+                  <th className="w-[14%] px-2 py-2 sm:px-3">1</th>
+                  <th className="w-[14%] px-2 py-2 sm:px-3">N</th>
+                  <th className="w-[14%] px-2 py-2 sm:px-3">2</th>
+                  <th className="w-[20%] px-2 py-2 sm:px-3">Détail</th>
                 </tr>
               </thead>
               <tbody>
                 {rows.map(({ m, best }) => (
                   <tr key={m.id} className="border-t border-line align-middle">
-                    <td className="px-3 py-3">
-                      <Link to="/cotes/$matchId" params={{ matchId: m.slug ?? m.id }} className="hover:text-sage">
-                        <TeamLine home={m.home} away={m.away} size={28} names="auto" competition={m.competition} />
+                    <td className="min-w-0 px-2 py-3 sm:px-3">
+                      <Link to="/cotes/$matchId" params={{ matchId: m.slug ?? m.id }} className="block min-w-0 hover:text-sage">
+                        <TeamLine home={m.home} away={m.away} size={28} names="auto" competition={m.competition} className="max-w-full" />
                       </Link>
-                      <div className="mt-1 flex flex-wrap items-center gap-1 text-xs text-muted">
-                        <span>{m.competition}</span>
+                      <div className="mt-1 flex min-w-0 flex-wrap items-center gap-1 text-xs text-muted">
+                        {m.league === "NL" ? (
+                          <span className="inline-flex shrink-0 items-center gap-1" title="Pays des sélections">
+                            <CountryFlag code={teamCountryCodeFromShort(m.home.short)} label={m.home.name} size={16} />
+                            <CountryFlag code={teamCountryCodeFromShort(m.away.short)} label={m.away.name} size={16} />
+                          </span>
+                        ) : (
+                          <CountryFlag code={countryForLeague(m.league).code} label={countryForLeague(m.league).label} size={16} />
+                        )}
+                        <span className="min-w-0 truncate">{m.competition}</span>
                         <span>·</span>{" "}
                         {new Date(m.kickoff).toLocaleString("fr-FR", {
                           timeZone: "Europe/Paris",
@@ -134,32 +144,32 @@ function OddsCompare() {
                         })}
                       </div>
                     </td>
-                    <td className="px-3 py-3">
+                    <td className="min-w-0 px-2 py-3 sm:px-3">
                       {best ? (
                         <OddsCell line={best.home} match={m} />
                       ) : (
                         <span className="text-muted">Non disponible</span>
                       )}
                     </td>
-                    <td className="px-3 py-3">
+                    <td className="min-w-0 px-2 py-3 sm:px-3">
                       {best ? (
                         <OddsCell line={best.draw} match={m} />
                       ) : (
                         <span className="text-muted">Non disponible</span>
                       )}
                     </td>
-                    <td className="px-3 py-3">
+                    <td className="min-w-0 px-2 py-3 sm:px-3">
                       {best ? (
                         <OddsCell line={best.away} match={m} />
                       ) : (
                         <span className="text-muted">Non disponible</span>
                       )}
                     </td>
-                    <td className="px-3 py-3">
+                    <td className="min-w-0 px-2 py-3 sm:px-3">
                       <Link
                         to="/cotes/$matchId"
                         params={{ matchId: m.slug ?? m.id }}
-                        className="inline-flex min-h-9 items-center rounded-md border border-line px-3 text-xs font-semibold text-paper hover:border-sage hover:text-sage"
+                        className="inline-flex min-h-9 max-w-full items-center whitespace-nowrap rounded-md border border-line px-2.5 text-xs font-semibold text-paper hover:border-sage hover:text-sage"
                       >
                         Voir les cotes
                       </Link>
