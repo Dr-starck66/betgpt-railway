@@ -58,14 +58,15 @@ export async function kvSet(key: string, value: unknown): Promise<void> {
   }
 }
 
-export async function recordAnalytics(e: string, p?: string, route?: string): Promise<void> {
+export async function recordAnalytics(e: string, p?: string, route?: string, searchSource?: string): Promise<void> {
   const sql = await trySql();
   if (!sql) return;
   try {
-    await sql.query("insert into analytics_events (e, p, route) values ($1, $2, $3)", [
+    await sql.query("insert into analytics_events (e, p, route, search_source) values ($1, $2, $3, $4)", [
       e.slice(0, 40),
       (p ?? "").slice(0, 80) || null,
       (route ?? "").slice(0, 120) || null,
+      (searchSource ?? "").slice(0, 20) || null,
     ]);
   } catch {
     /* */
