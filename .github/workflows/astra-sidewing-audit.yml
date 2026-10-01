@@ -4,8 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "src/lib/seo/astra-sidewing-auditor.ts"
-      - "src/lib/seo/astra-sidewing-auditor.test.ts"
+      - "src/lib/seo/astra-sidewing-*.ts"
       - "scripts/astra-sidewing-audit.mjs"
       - "src/routes/**"
       - "package.json"
