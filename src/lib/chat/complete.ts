@@ -315,12 +315,6 @@ export async function completeChat(
   const desk = await deskNow(rawLast);
   const mode: PersonalityMode = parseMode(body.requestedMode);
   const memory = normalizeMemory(body.userMemory);
-  const recentRoasts = body.messages
-    .filter((m) => m.role === "assistant")
-    .slice(-6)
-    .map((m) => m.content.slice(0, 500));
-  const insultBrief = mode === "ROAST" ? absurdInsultCreativeBrief(rawLast, recentRoasts) : "";
-  const system = betgptPrompt(memory, mode, desk, insultBrief);
   const history = body.messages
     .filter((m) => m.role === "user" || m.role === "assistant")
     .filter((m) => m.content.trim())
@@ -330,6 +324,13 @@ export async function completeChat(
       content: m.content.slice(0, 4000),
     }));
   const last = history.at(-1)?.content ?? "";
+  const recentRoasts = history
+    .filter((m) => m.role === "assistant")
+    .slice(-6)
+    .map((m) => m.content.slice(0, 500));
+  const insultBrief = mode === "ROAST" ? absurdInsultCreativeBrief(last, recentRoasts) : "";
+  const personality = personalityBrief(memory, mode, history, last);
+  const system = betgptPrompt(memory, mode, desk, insultBrief, personality);
   const mustGround = shouldGround(last);
 
   // Reckless-certainty claims must never fall through to a bland generic model answer.
