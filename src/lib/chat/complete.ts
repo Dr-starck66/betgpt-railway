@@ -13,9 +13,25 @@ import { absurdInsultCreativeBrief, generateAbsurdInsult, shouldDropAbsurdInsult
 import { personalityBrief } from "./personality";
 import { renderDailyChatPick, selectDailyChatPick, selectDailyDataFallback } from "./daily-pick";
 
+async function ensureLiveForChat(timeoutMs = 3500) {
+  const cached = getLiveSnapshot() ?? hydrateLiveFromDisk();
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    const live = await Promise.race([
+      ensureLive().catch(() => null),
+      new Promise<null>((resolve) => {
+        timer = setTimeout(() => resolve(null), timeoutMs);
+      }),
+    ]);
+    return live ?? cached;
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
+
 async function deskNow(question: string): Promise<string> {
   try {
-    const snapshot = (await ensureLive()) ?? getLiveSnapshot() ?? hydrateLiveFromDisk();
+    const snapshot = await ensureLiveForChat();
     const base = [
       historyFacts(question),
       localMatchFacts(question, snapshot?.matches ?? [], snapshot?.meta?.asOf),
@@ -158,6 +174,16 @@ function shouldGround(question: string): boolean {
     intent === "TODAY_PICKS" ||
     intent === "GENERAL_SCHEDULE" ||
     /\b(prochain(?:e)?|aujourd['’]?hui|demain|ce soir|score|perdre|gagner|victoire|défaite)\b/i.test(question)
+  );
+}
+
+export function chatNeedsDesk(question: string): boolean {
+  const intent = classifyChatIntent(question);
+  return (
+    intent === "NAMED_MATCH" ||
+    intent === "TODAY_PICKS" ||
+    intent === "GENERAL_SCHEDULE" ||
+    shouldGround(question)
   );
 }
 
@@ -319,7 +345,6 @@ export async function completeChat(
     return { ok: false, error: "Trop de messages. Patiente une minute." };
 
   const rawLast = body.messages.at(-1)?.content ?? "";
-  const desk = await deskNow(rawLast);
   const mode: PersonalityMode = parseMode(body.requestedMode);
   const memory = normalizeMemory(body.userMemory);
   const history = body.messages
@@ -335,11 +360,9 @@ export async function completeChat(
     .filter((m) => m.role === "assistant")
     .slice(-6)
     .map((m) => m.content.slice(0, 500));
-  const insultBrief = mode === "ROAST" ? absurdInsultCreativeBrief(last, recentRoasts) : "";
-  const personality = personalityBrief(memory, mode, history, last);
-  const system = betgptPrompt(memory, mode, desk, insultBrief, personality);
-  const mustGround = shouldGround(last);
 
+  // Fast deterministic guards run before any live-data refresh or model call.
+  // This keeps obvious conversational cases instant even when a sports feed is slow.
   const absurdScoreClaim = isAbsurdScoreClaim(last);
   if (absurdScoreClaim) {
     const base =
@@ -367,6 +390,12 @@ export async function completeChat(
         : "Un combiné pareil n’est jamais sûr à 100 %. Douze sélections multiplient les points de rupture, et miser tout son budget sur un seul ticket est un risque disproportionné. Réduis la mise ou simplifie le ticket.";
     return success(base, mode, last, recentRoasts);
   }
+
+  const mustGround = shouldGround(last);
+  const desk = chatNeedsDesk(last) ? await deskNow(last) : "";
+  const insultBrief = mode === "ROAST" ? absurdInsultCreativeBrief(last, recentRoasts) : "";
+  const personality = personalityBrief(memory, mode, history, last);
+  const system = betgptPrompt(memory, mode, desk, insultBrief, personality);
 
   // Daily-pick questions are deterministic when the desk has a real selection:
   // never let a language model replace it with "donne-moi les affiches".
