@@ -389,6 +389,20 @@ export const getTeamDesk = createServerFn({ method: "GET" })
       }
     }
     if (!matches.length) {
+      // Keep team hubs aligned with the sitemap's full live snapshot. The
+      // engine can legitimately filter fixtures that are still present in the
+      // provider snapshot; those teams must not become sitemap 404s.
+      try {
+        await ensureLive();
+      } catch {
+        /* use the latest in-process snapshot if refresh is unavailable */
+      }
+      matches = (getUpcomingMatches() as MatchInput[])
+        .filter((m) => same(m.home.name) || same(m.away.name))
+        .slice(0, 24);
+      predictions = [];
+    }
+    if (!matches.length) {
       matches = loadArchiveHistory()
         .filter((h) => same(h.homeName ?? "") || same(h.awayName ?? ""))
         .sort((a, b) => b.kickoff.localeCompare(a.kickoff))
