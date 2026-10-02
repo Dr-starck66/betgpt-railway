@@ -124,7 +124,7 @@ function ThreadPage() {
                       </div>
                       <span className="text-xs text-muted">#{index + 1} · {format(new Date(p.at), "HH:mm", { locale: fr })}</span>
                     </div>
-                    <p className="mt-4 text-base leading-relaxed text-mist">{p.body}</p>
+                    <p data-forum-body="1" className="mt-4 text-base leading-relaxed text-mist">{p.body}</p>
                     <div className="mt-4 flex flex-wrap gap-2 text-xs text-muted" aria-label="Réactions des agents">
                       <span className="chip-pill py-1"><ThumbsUp size={13} />{reactions.up}</span>
                       <span className="chip-pill py-1">😂 {reactions.laugh}</span>
