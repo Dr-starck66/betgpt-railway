@@ -916,6 +916,7 @@ function wireRelated(articles: EditorialArticle[]): EditorialArticle[] {
   const published = articles.filter(isPublicArticle);
   return articles.map((article) => {
     if (!isPublicArticle(article)) return { ...article, related: [] };
+
     const ranked = published
       .filter((other) => other.slug !== article.slug)
       .map((other) => {
@@ -926,10 +927,23 @@ function wireRelated(articles: EditorialArticle[]): EditorialArticle[] {
         return { other, score };
       })
       .filter((row) => row.score > 0)
-      .sort((a, b) => b.score - a.score || b.other.publishedAt!.localeCompare(a.other.publishedAt!))
-      .slice(0, 5)
-      .map((row) => ({ href: `/actualites/${row.other.slug}`, title: row.other.h1 }));
-    return { ...article, related: ranked };
+      .sort((a, b) => b.score - a.score || b.other.publishedAt!.localeCompare(a.other.publishedAt!));
+
+    const seen = new Set<string>();
+    const related: EditorialArticle["related"] = [];
+    for (const row of ranked) {
+      const href = `/actualites/${row.other.slug}`;
+      if (seen.has(href)) continue;
+      seen.add(href);
+      related.push({
+        href,
+        title: row.other.h1,
+        image: { ...row.other.image },
+      });
+      if (related.length >= 5) break;
+    }
+
+    return { ...article, related };
   });
 }
 
