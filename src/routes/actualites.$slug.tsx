@@ -5,6 +5,7 @@ import { HUB_SECTIONS, SECTION_MIN, articleUrl, sectionArticles } from "@/lib/ed
 import { formatParis } from "@/lib/editorial/time";
 import { isPublicArticle } from "@/lib/editorial/types";
 import { absImg } from "@/lib/image-seo";
+import { publicEditorialImageCopy } from "@/lib/editorial/image-copy";
 import { SITE_URL } from "@/lib/programmatic";
 import { manualEditorialArticleBySlug } from "@/lib/editorial/manual-articles";
 
@@ -52,6 +53,7 @@ export const Route = createFileRoute("/actualites/$slug")({
     const article = loaderData.article;
     const url = articleUrl(article.slug);
     const image = absImg(article.image.src);
+    const imageCopy = publicEditorialImageCopy(article);
     return {
       meta: [
         { title: article.title },
@@ -63,7 +65,7 @@ export const Route = createFileRoute("/actualites/$slug")({
         { property: "og:description", content: article.lead },
         { property: "og:url", content: url },
         { property: "og:image", content: image },
-        { property: "og:image:alt", content: article.image.alt },
+        { property: "og:image:alt", content: imageCopy.alt },
         { property: "og:image:width", content: String(article.image.width) },
         { property: "og:image:height", content: String(article.image.height) },
         { property: "og:image:type", content: "image/jpeg" },
@@ -109,7 +111,7 @@ function SlugPage() {
               <Link to="/actualites/$slug" params={{ slug: article.slug }} className="surface-card block h-full overflow-hidden">
                 <img
                   src={article.image.src}
-                  alt={article.image.alt}
+                  alt={publicEditorialImageCopy(article).alt}
                   width={article.image.width}
                   height={article.image.height}
                   className="aspect-[16/10] w-full object-cover"
