@@ -1,6 +1,6 @@
 import { writeFileSync, readFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { AGENTS, padToTen, type ForumPost, type ForumThread } from "./forum";
+import { AGENTS, MIN_POSTS, padToTen, type ForumPost, type ForumThread } from "./forum";
 import { kvGet, kvSet } from "@/lib/store";
 
 const IA_FILE = join(process.cwd(), "data", "forum-ia.json");
@@ -117,6 +117,12 @@ type CachedAgentThread = {
   thread: ForumThread;
 };
 
+type PersistedForumThread = {
+  schema: "betgpt-forum-thread/v1";
+  savedAt: number;
+  thread: ForumThread;
+};
+
 const forumAiGlobal = globalThis as typeof globalThis & {
   __betgptForumAiCache?: Map<string, CachedAgentThread>;
   __betgptForumAiInflight?: Map<string, Promise<void>>;
@@ -127,6 +133,49 @@ const FORUM_AI_CACHE =
 const FORUM_AI_INFLIGHT =
   forumAiGlobal.__betgptForumAiInflight ??
   (forumAiGlobal.__betgptForumAiInflight = new Map<string, Promise<void>>());
+
+
+/**
+ * Durable forum archive, independent from the short live desk window.
+ * This is the SEO/UX safety net that lets every supported match keep its
+ * conversation URL after the fixture falls out of the live snapshot.
+ */
+export async function persistForumThread(thread: ForumThread): Promise<void> {
+  if (
+    thread.id === "edition" ||
+    !thread.matchHref ||
+    !thread.indexable ||
+    (thread.posts?.length ?? 0) < MIN_POSTS
+  ) {
+    return;
+  }
+  const stored: PersistedForumThread = {
+    schema: "betgpt-forum-thread/v1",
+    savedAt: Date.now(),
+    thread: {
+      ...thread,
+      indexable: true,
+      posts: thread.posts.slice(0, 48),
+    },
+  };
+  await kvSet(`forum-thread:${thread.id}`, stored);
+}
+
+export async function readPersistedForumThread(id: string): Promise<ForumThread | null> {
+  try {
+    const stored = await kvGet<PersistedForumThread>(`forum-thread:${id}`);
+    if (
+      stored?.schema !== "betgpt-forum-thread/v1" ||
+      !stored.thread?.matchHref ||
+      (stored.thread.posts?.length ?? 0) < MIN_POSTS
+    ) {
+      return null;
+    }
+    return { ...stored.thread, indexable: true };
+  } catch {
+    return null;
+  }
+}
 
 function generatedPosts(
   text: string,
@@ -215,6 +264,7 @@ async function refreshMatchThreadAi(thread: ForumThread): Promise<void> {
       };
       FORUM_AI_CACHE.set(thread.id, cached);
       await kvSet(`forum-ai:${thread.id}`, cached);
+      await persistForumThread(enriched).catch(() => undefined);
     } finally {
       FORUM_AI_INFLIGHT.delete(thread.id);
     }
@@ -229,7 +279,9 @@ async function refreshMatchThreadAi(thread: ForumThread): Promise<void> {
  * in the background and the durable cache is served on subsequent requests.
  */
 export async function enrichForumThreadWithAi(thread: ForumThread): Promise<ForumThread> {
-  if (thread.id === "edition" || thread.generator) return thread;
+  if (thread.id === "edition") return thread;
+  void persistForumThread(thread).catch(() => undefined);
+  if (thread.generator) return thread;
 
   const memory = FORUM_AI_CACHE.get(thread.id);
   if (memory && memory.expiresAt > Date.now()) return memory.thread;
@@ -245,6 +297,7 @@ export async function enrichForumThreadWithAi(thread: ForumThread): Promise<Foru
       durable.thread?.posts?.length
     ) {
       FORUM_AI_CACHE.set(thread.id, durable);
+      void persistForumThread(durable.thread).catch(() => undefined);
       return durable.thread;
     }
   } catch {
