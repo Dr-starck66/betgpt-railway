@@ -4,7 +4,7 @@ import { blogImageSeo, type ImageSeo } from "@/lib/image-seo";
 
 export type BlogImg = ImageSeo;
 
-const CREDIT = "Photo libre de droits (Unsplash / Pexels) · 1200×675 Google Discover.";
+const CREDIT = "";
 
 type CoverSpec = { alt: string; caption: string; inline: string };
 
@@ -284,8 +284,8 @@ export function blogCover(a: BlogArticle): BlogImg {
   if (!spec) {
     return blogImageSeo(
       "/blog/discover/pronostic-football-aujourdhui.jpg",
-      `${a.h1} — football, photo libre de droits`,
-      CREDIT,
+      `${a.h1} — football`,
+      `${a.h1} : analyse football, données et contexte sur BetGPT.`,
     );
   }
   return blogImageSeo(src, spec.alt, spec.caption);
