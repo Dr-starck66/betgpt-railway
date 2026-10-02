@@ -60,7 +60,9 @@ const manifestSha = String(manifest?.sourceSha || "");
 const publicSha = String(publicRevision?.sourceSha || "");
 const canonicalSha = String(canonicalRevision?.sourceSha || "");
 
-if (green?.schema !== "astra-green-release/v1") failures.push("invalid-green-schema");
+if (!["astra-green-release/v1", "astra-green-release/v2"].includes(String(green?.schema || ""))) {
+  failures.push("invalid-green-schema");
+}
 if (green?.greenVerified !== true) failures.push("green-not-verified");
 if (String(green?.sourceRepo || "") !== SOURCE_REPO) failures.push("green-source-repo-mismatch");
 if (!validSha(greenSha)) failures.push("green-sha-invalid");
