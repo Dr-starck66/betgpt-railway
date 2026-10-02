@@ -250,18 +250,26 @@ export function PronoSilo({
           </ul>
         </div>
       </section>
-      {kind === "pillar" ? (
+      {kind === "pillar" || kind === "football" ? (
         <section className="surface-card space-y-3 p-5 text-sm leading-relaxed text-mist sm:p-6">
-          <h2 className="text-base font-semibold text-paper">Comment lire le tableau</h2>
-          <p><strong>Pronostic</strong> = issue 1N2 la plus probable. <strong>Probabilité</strong> = estimation BetGPT. Les cotes inférieures à <strong>1,80</strong> sont ignorées et non mises en avant. La colonne <strong>À faire</strong> tranche clairement : PARIER, ATTENDRE ou NE PAS PARIER.</p>
+          <h2 className="text-base font-semibold text-paper">Comment lire les pronostics football BetGPT</h2>
           <p>
-            Après le match, la fiche garde le score et dit si le 1N2 affiché colle au résultat. Le règlement des mises est le{" "}
-            <Link to="/ledger" className="underline">bilan</Link>, pas cette colonne. Export :{" "}
-            <a href="/evidence.json" className="underline">evidence.json</a>
-            {" · "}
-            <a href="/evidence.csv" className="underline">evidence.csv</a>.
+            <strong>Pronostic</strong> = issue 1N2 la plus probable. <strong>Probabilité</strong> = estimation BetGPT.
+            La décision <strong>PARIER</strong> n’apparaît que lorsque les critères du moteur sont réunis ; sinon la page affiche
+            <strong> ATTENDRE</strong> ou <strong>NE PAS PARIER</strong>.
           </p>
-          <p>BetGPT ne couvre pas le tennis ni le basket, ne classe pas les bookmakers, et ne promet pas une position Google.</p>
+          <p>
+            Le portefeuille canonique reste centré sur le <strong>1N2</strong> et sa fenêtre historique de cotes
+            <strong> 1,80 à 3,00</strong>. Un éventuel score exact de couverture reste séparé du pronostic principal et du bilan 1N2.
+          </p>
+          <p>
+            Après le match, le score et l’issue restent visibles. Les gagnants comme les perdants sont conservés dans le{" "}
+            <Link to="/ledger" className="underline">bilan vérifiable</Link>. La logique de calcul et ses limites sont détaillées dans la{" "}
+            <Link to="/methodology" className="underline">méthodologie</Link>.
+          </p>
+          <p>
+            Les cotes évoluent et aucune estimation ne garantit un gain. Une donnée absente reste absente : BetGPT ne complète pas une fiche avec une valeur inventée.
+          </p>
         </section>
       ) : null}
       <p className="text-xs text-muted">
