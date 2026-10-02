@@ -1,8 +1,11 @@
 {
   "name": "findinsurancequotes",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
+  "packageManager": "npm@11.6.1",
   "scripts": {
+    "build": "node tests.mjs",
     "start": "node server.mjs",
     "test": "node tests.mjs"
   },
