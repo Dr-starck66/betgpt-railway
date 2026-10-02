@@ -4,16 +4,16 @@ import { durableForumLeague } from "./forum-durability";
 import { MIN_POSTS, padToTen, type ForumPost } from "./forum";
 import { buildSitemapUrls } from "@/lib/sitemap-urls";
 
-test("durable forum league allowlist matches persisted archive coverage", () => {
-  for (const league of ["PL", "LL", "BL", "SA", "L1", "CL", "EL", "NL"]) {
+test("every supported BetGPT league gets a durable forum", () => {
+  for (const league of ["PL", "LL", "BL", "SA", "L1", "ER", "PT", "SC", "TR", "CL", "EL", "NL"]) {
     assert.equal(durableForumLeague(league), true, league);
   }
-  for (const league of ["ER", "PT", "SC", "TR", "", "UNKNOWN"]) {
+  for (const league of ["", "UNKNOWN", "MLS", "XX"]) {
     assert.equal(durableForumLeague(league), false, league);
   }
 });
 
-test("sitemap never promises a forum leaf for a live-only league", () => {
+test("sitemap exposes forum leaves across supported competitions", () => {
   const day = new Date(Date.now() + 2 * 86400000).toISOString().slice(0, 10);
   const mk = (league: string, slug: string, home: string, away: string) => ({
     id: slug,
@@ -25,26 +25,26 @@ test("sitemap never promises a forum leaf for a live-only league", () => {
     away: { name: away, id: `${slug}-a` },
   });
 
-  const pl = `arsenal-chelsea-${day}`;
-  const er = `feyenoord-psv-${day}`;
-  const nl = `cyprus-armenia-${day}`;
+  const rows = [
+    ["PL", `arsenal-chelsea-${day}`, "Arsenal", "Chelsea"],
+    ["ER", `feyenoord-psv-${day}`, "Feyenoord", "PSV Eindhoven"],
+    ["PT", `benfica-porto-${day}`, "Benfica", "Porto"],
+    ["SC", `celtic-rangers-${day}`, "Celtic", "Rangers"],
+    ["TR", `galatasaray-fenerbahce-${day}`, "Galatasaray", "Fenerbahçe"],
+    ["NL", `cyprus-armenia-${day}`, "Cyprus", "Armenia"],
+  ] as const;
+
   const urls = buildSitemapUrls({
-    matches: [
-      mk("PL", pl, "Arsenal", "Chelsea"),
-      mk("ER", er, "Feyenoord", "PSV Eindhoven"),
-      mk("NL", nl, "Cyprus", "Armenia"),
-    ],
+    matches: rows.map(([league, slug, home, away]) => mk(league, slug, home, away)),
     asOf: new Date().toISOString(),
   });
   const paths = new Set(urls.map((x) => x.path));
 
-  assert.equal(paths.has(`/match/${pl}`), true);
-  assert.equal(paths.has(`/forum/${pl}`), true);
-  assert.equal(paths.has(`/match/${er}`), true);
-  assert.equal(paths.has(`/forum/${er}`), false);
-  assert.equal(paths.has(`/forum/${nl}`), true);
+  for (const [, slug] of rows) {
+    assert.equal(paths.has(`/match/${slug}`), true, slug);
+    assert.equal(paths.has(`/forum/${slug}`), true, slug);
+  }
 });
-
 
 test("agent-first forum density gate requires a real conversation", () => {
   assert.ok(MIN_POSTS >= 30, `expected dense thread, got MIN_POSTS=${MIN_POSTS}`);
