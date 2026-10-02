@@ -4,6 +4,7 @@ import type { MatchArticle as Article } from "@/engine/article";
 import { formatParis } from "@/lib/match-clock";
 
 import { fmtPct } from "@/lib/utils";
+import { BroadcastLinks, BroadcasterText } from "@/components/broadcaster-text";
 
 export function MatchVerdict({
   article,
@@ -58,7 +59,7 @@ export function MatchVerdict({
         Dernière mise à jour : {asOf ? formatParis(asOf) : "horodatage indisponible"}
         {freshness ? ` · Fraîcheur : ${freshness}` : ""}
       </p>
-      <p className="seo-answer mt-4 text-sm leading-relaxed text-paper">{article.lead}</p>
+      <p className="seo-answer mt-4 text-sm leading-relaxed text-paper"><BroadcasterText text={article.lead} /></p>
     </section>
   );
 }
@@ -66,6 +67,7 @@ export function MatchVerdict({
 export function MatchArticleBody({ article }: { article: Article }) {
   return (
     <div className="space-y-6">
+      <BroadcastLinks texts={[article.lead, ...article.sections.flatMap((section) => [...section.paragraphs, ...(section.items ?? [])])]} />
       <nav aria-label="Sommaire de l’analyse" className="flex flex-wrap gap-2">
         {article.sections.map((s) => (
           <a
@@ -86,20 +88,20 @@ export function MatchArticleBody({ article }: { article: Article }) {
           <h2 className="text-lg font-semibold tracking-tight">{s.h2}</h2>
           {s.paragraphs.map((p) => (
             <p key={p} className="mt-3 max-w-prose text-base leading-relaxed text-paper">
-              {p}
+              <BroadcasterText text={p} />
             </p>
           ))}
           {s.items?.length ? (
             s.id === "cles" ? (
               <ol className="mt-3 list-decimal space-y-3 pl-5 text-sm leading-relaxed text-paper">
                 {s.items.map((item) => (
-                  <li key={item.slice(0, 40)}>{item}</li>
+                  <li key={item.slice(0, 40)}><BroadcasterText text={item} /></li>
                 ))}
               </ol>
             ) : (
               <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-paper">
                 {s.items.map((item) => (
-                  <li key={item.slice(0, 40)}>{item}</li>
+                  <li key={item.slice(0, 40)}><BroadcasterText text={item} /></li>
                 ))}
               </ul>
             )
@@ -146,7 +148,7 @@ export function MatchAdvanced({ article, children }: { article: Article; childre
           {article.advanced.map((row) => (
             <div key={row.label}>
               <p className="text-sm font-medium text-paper">{row.label}</p>
-              <p className="mt-1 text-sm text-mist">{row.text}</p>
+              <p className="mt-1 text-sm text-mist"><BroadcasterText text={row.text} /></p>
               {row.tooltip ? <p className="mt-1 text-xs text-muted">{row.tooltip}</p> : null}
             </div>
           ))}
@@ -167,7 +169,7 @@ export function MatchFaq({ article }: { article: Article }) {
             <dt>
               <h3 className="text-sm font-medium text-paper">{f.q}</h3>
             </dt>
-            <dd className="mt-1 text-sm text-mist">{f.a}</dd>
+            <dd className="mt-1 text-sm text-mist"><BroadcasterText text={f.a} /></dd>
           </div>
         ))}
       </dl>
