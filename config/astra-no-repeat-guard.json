@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "name": "ASTRA NO-REPEAT GUARD Ω",
+  "policy": "Every persistent requirement must be represented by at least one machine-verifiable check. A remembered rule without a guard is UNGUARDED and must not produce PASS.",
+  "requirements": [
+    {
+      "id": "ASTRA_FLAG_GUARD",
+      "description": "Resilient image flags/crests must be used on team surfaces, including live scores.",
+      "checks": [
+        {"type":"fileContains","file":"src/components/scores-hub.tsx","needles":["<TeamLine","league={m.league}"]},
+        {"type":"fileContains","file":"src/components/country-flag.tsx","needles":["flagcdn.com","cdn.jsdelivr.net/gh/twitter/twemoji"]},
+        {"type":"packageScriptContains","script":"prebuild","needles":["astra-flag-guard.mjs"]}
+      ]
+    },
+    {
+      "id": "ASTRA_ZERO_WEAK_PAGE_GUARD",
+      "description": "Public SEO pages must pass the zero-weak-page gate.",
+      "checks": [
+        {"type":"packageScriptContains","script":"prebuild","needles":["astra-zero-weak-page-guard.mjs","--strict"]}
+      ]
+    },
+    {
+      "id": "ASTRA_HEADING_ARCHITECTURE_GUARD",
+      "description": "Editorial pages must preserve semantic heading architecture.",
+      "checks": [
+        {"type":"packageScriptContains","script":"prebuild","needles":["astra-heading-architecture-guard.mjs","--strict"]}
+      ]
+    },
+    {
+      "id": "ASTRA_MODEL_MAX_GUARD",
+      "description": "Model-selection policy must remain guarded.",
+      "checks": [
+        {"type":"packageScriptContains","script":"prebuild","needles":["astra-model-max-guard.mjs"]}
+      ]
+    },
+    {
+      "id": "ASTRA_VISUAL_ENTITY_GUARD",
+      "description": "Required visual entities must remain guarded.",
+      "checks": [
+        {"type":"packageScriptContains","script":"prebuild","needles":["astra-visual-entity-guard.mjs"]}
+      ]
+    },
+    {
+      "id": "ASTRA_ZERO_COST_GUARD",
+      "description": "Zero-cost constraints must remain guarded.",
+      "checks": [
+        {"type":"packageScriptContains","script":"prebuild","needles":["astra-zero-cost-guard.mjs"]}
+      ]
+    },
+    {
+      "id": "ASTRA_RESUME_GUARD",
+      "description": "Previously established project state must remain resumable.",
+      "checks": [
+        {"type":"packageScriptContains","script":"prebuild","needles":["astra-resume-guard.mjs"]}
+      ]
+    }
+  ]
+}
