@@ -20,6 +20,7 @@ HEADERS = {"x-worker-token": TOKEN, "content-type": "application/json"}
 NEGATIVE = "worst quality, low quality, blurry, jittery, distorted, malformed, identity drift, character redesign, morphing face, changing armor, extra limbs, extra fingers, duplicated body parts, melted geometry, watermark, subtitles, captions, text artifacts"
 
 PROVIDERS = [
+    ("minimax-h3-ref-zero", "multimodalart/minimax-h3-reference"),
     ("wan22-fast-zero", "zerogpu-aoti/wan2-2-fp8da-aoti-faster"),
     ("ltx-zero", "Lightricks/ltx-video-distilled"),
 ]
@@ -69,6 +70,37 @@ def normalize_file(result):
                         f.write(chunk)
         return target
     raise RuntimeError(f"provider output is not a readable file: {result}")
+
+
+def generate_minimax_h3(prompt, aspect, duration, seed, reference_image=None):
+    if not reference_image:
+        raise RuntimeError("minimax-h3-ref-zero requires the locked BetGPT reference image")
+    c = client_for("multimodalart/minimax-h3-reference")
+    if aspect == "9:16":
+        canvas = "768x1344 · 9:16 full"
+    elif aspect == "1:1":
+        canvas = "768x768 · 1:1 full"
+    else:
+        canvas = "1344x768 · 16:9 full"
+
+    # API order follows the current Space signature:
+    # prompt, image_1, audio, video, canvas, image_2..image_9,
+    # match, duration, steps, seed, upsample.
+    args = [
+        prompt,
+        handle_file(str(reference_image)),
+        None,
+        None,
+        canvas,
+        None, None, None, None, None, None, None, None,
+        False,
+        max(2, min(int(round(float(duration))), 5)),
+        28,
+        int(seed) % 2147483647,
+        False,
+    ]
+    result = c.predict(*args, api_name="/generate")
+    return normalize_file(result)
 
 
 def generate_wan22(prompt, aspect, duration, seed, reference_image=None):
@@ -270,7 +302,9 @@ def process(payload):
         for provider, _space in candidates:
             try:
                 print(f"[job {job['id']}] trying {provider}", flush=True)
-                if provider == "wan22-fast-zero":
+                if provider == "minimax-h3-ref-zero":
+                    first_clip = generate_minimax_h3(first["prompt"], aspect, first.get("duration", 4), seed, reference)
+                elif provider == "wan22-fast-zero":
                     first_clip = generate_wan22(first["prompt"], aspect, first.get("duration", 4), seed, reference)
                 elif provider == "ltx-zero":
                     first_clip = generate_ltx(first["prompt"], aspect, first.get("duration", 4), seed, reference)
@@ -291,7 +325,9 @@ def process(payload):
         clips.append(first_target)
 
         for idx, shot in enumerate(shots[1:], start=1):
-            if chosen == "wan22-fast-zero":
+            if chosen == "minimax-h3-ref-zero":
+                generated = generate_minimax_h3(shot["prompt"], aspect, shot.get("duration", 4), seed + idx, reference)
+            elif chosen == "wan22-fast-zero":
                 generated = generate_wan22(shot["prompt"], aspect, shot.get("duration", 4), seed + idx, reference)
             elif chosen == "ltx-zero":
                 generated = generate_ltx(shot["prompt"], aspect, shot.get("duration", 4), seed + idx, reference)
@@ -315,7 +351,7 @@ def process(payload):
 def ensure_smoke_job():
     if not BOOTSTRAP_SMOKE:
         return
-    marker = os.environ.get("SMOKE_MARKER", "BETGPT_ZERO_GPU_SMOKE_OMEGA_V7_WAN22_VERTICAL")
+    marker = os.environ.get("SMOKE_MARKER", "BETGPT_ZERO_GPU_SMOKE_OMEGA_V10_MINIMAX_H3")
     try:
         jobs = requests.get(ORCHESTRATOR + "/api/jobs", timeout=30).json().get("jobs", [])
         if any(marker in j.get("prompt", "") for j in jobs):
