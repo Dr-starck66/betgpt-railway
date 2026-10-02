@@ -1,0 +1,13 @@
+{
+  "schema": "astra-sidebar-image-release/v1",
+  "purpose": "Promote source state containing related-article image metadata for Discover-ready right-column cards",
+  "requiredLedgerCommit": "30f1a896f14d98e364c2ea395d338912e8be69e7",
+  "article": "/actualites/france-italie-ligue-des-nations-2026-10-02",
+  "requirements": {
+    "relatedCardsHaveSpecificImages": true,
+    "imageWidthMin": 1200,
+    "maxImagePreviewLarge": true,
+    "noDuplicateRelatedHref": true
+  },
+  "requestedAt": "2026-10-02T13:17:04.909Z"
+}
