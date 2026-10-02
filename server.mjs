@@ -9,6 +9,16 @@ const articles = JSON.parse(fs.readFileSync(path.join(__dirname, "content", "art
 const PORT = Number(process.env.PORT || 8080);
 const SITE_URL = (process.env.SITE_URL || "").replace(/\/$/, "");
 const INDEXABLE = process.env.INDEXABLE === "true";
+const partnerCatalog = [
+  {id:"insurify", name:"Insurify", products:["auto","home","renters","business","life"], status:process.env.INSURIFY_URL?"active":"pending", url:process.env.INSURIFY_URL||"", payoutModel:"negotiated"},
+  {id:"smartfinancial", name:"SmartFinancial", products:["auto","home","business"], status:process.env.SMARTFINANCIAL_URL?"active":"pending", url:process.env.SMARTFINANCIAL_URL||"", payoutModel:"qualified-lead"},
+  {id:"policygenius", name:"Policygenius", products:["life","home","auto"], status:process.env.POLICYGENIUS_URL?"active":"pending", url:process.env.POLICYGENIUS_URL||"", payoutModel:"partner"},
+  {id:"lendingtree", name:"LendingTree", products:["home"], status:process.env.LENDINGTREE_URL?"active":"pending", url:process.env.LENDINGTREE_URL||"", payoutModel:"partner"}
+];
+function partnerFor(product){
+  const eligible=partnerCatalog.filter(p=>p.status==="active"&&p.products.includes(product));
+  return eligible[0]||null;
+}
 
 const trustPages = {
   "/about": ["About FindInsuranceQuotes.net", "We build plain-English insurance comparison tools and editorial guides. We are not an insurer, broker, or insurance producer. When approved partner programs are connected, we may earn compensation for qualified referrals."],
@@ -122,7 +132,8 @@ async function readJson(req){let b="";for await(const c of req){b+=c;if(b.length
 const server=http.createServer(async(req,res)=>{
  const url=new URL(req.url,"http://localhost");
  const p=url.pathname;
- if(req.method==="GET"&&p==="/api/health") return send(res,200,"application/json",JSON.stringify({ok:true,service:"findinsurancequotes",indexable:INDEXABLE}));
+ if(req.method==="GET"&&p==="/api/health") return send(res,200,"application/json",JSON.stringify({ok:true,service:"findinsurancequotes",indexable:INDEXABLE,activePartners:partnerCatalog.filter(x=>x.status==="active").length}));
+ if(req.method==="GET"&&p==="/api/partner"){const product=(url.searchParams.get("product")||"").toLowerCase();const partner=partnerFor(product);return send(res,200,"application/json",JSON.stringify(partner?{active:true,partner:{id:partner.id,name:partner.name,url:partner.url,payoutModel:partner.payoutModel}}:{active:false,reason:"No verified partner is active for this product yet."}));}
  if(req.method==="POST"&&p==="/api/chat"){const j=await readJson(req);return send(res,200,"application/json",JSON.stringify({reply:assistant(String(j.message||""))}));}
  if(req.method==="GET"&&p==="/robots.txt"){const base=baseUrl(req);return send(res,200,"text/plain; charset=utf-8",INDEXABLE?`User-agent: *\nAllow: /\nSitemap: ${base}/sitemap.xml\nSitemap: ${base}/news-sitemap.xml\n`:"User-agent: *\nDisallow: /\n");}
  if(req.method==="GET"&&p==="/sitemap.xml"){const base=baseUrl(req);const urls=["/","/guides",...Object.keys(trustPages),...articles.map(a=>"/guides/"+a.slug)];return send(res,200,"application/xml; charset=utf-8",`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map(x=>`<url><loc>${base+x}</loc></url>`).join("")}</urlset>`);}
