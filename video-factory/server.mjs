@@ -11,6 +11,7 @@ const JOBS_FILE = path.join(DATA_DIR, "jobs.json");
 const WORKER_TOKEN = process.env.GPU_WORKER_TOKEN || "";
 const API_KEY = process.env.VIDEO_FACTORY_API_KEY || "";
 const MAX_UPLOAD_BYTES = Number(process.env.MAX_UPLOAD_BYTES || 600 * 1024 * 1024);
+const ROBOT_REFERENCE_URL = process.env.BETGPT_ROBOT_REFERENCE_URL || "https://astra-voice-mobile.floot.app/_cdn/static/74a2d252-cf98-49ad-92e1-9f8bb4f4f3d3-betgpt-robot-reference.png";
 
 fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
@@ -55,22 +56,30 @@ function publicJob(job) {
 }
 
 function buildShots(prompt, duration) {
-  const count = Math.max(1, Math.min(6, Math.ceil(duration / 5)));
+  const shotLength = 4;
+  const count = Math.max(1, Math.min(8, Math.ceil(duration / shotLength)));
   return Array.from({ length: count }, (_, index) => ({
     index,
-    duration: Math.min(5, Math.max(1, duration - index * 5)),
+    duration: Math.min(shotLength, Math.max(1, duration - index * shotLength)),
     prompt:
-      `${prompt}. ${cameraBeats[index % cameraBeats.length]}. Photorealistic, cinematic, professional advertising film, physically plausible motion, coherent character design, no watermarks, no captions, no malformed text.`,
+      `${prompt}. ${cameraBeats[index % cameraBeats.length]}. Preserve the exact same BetGPT robot identity from the supplied reference image: same face, proportions, white and graphite armor and emerald luminous accents. Premium cinematic sports advertising film, physically plausible motion, stable anatomy, crisp materials, realistic reflections, controlled camera motion, no redesign, no morphing, no extra limbs, no watermarks, no captions, no malformed text.`,
   }));
 }
 
 function configuredProviders() {
-  return providers.map((p) => ({
+  const configured = providers.map((p) => ({
     id: p.id,
     label: p.label,
     configured: Boolean(process.env[p.env]),
     mode: p.mode,
   }));
+  configured.push({
+    id: "ltx-zero",
+    label: "LTX Video ZeroGPU · gratuit",
+    configured: Boolean(WORKER_TOKEN),
+    mode: "pull",
+  });
+  return configured;
 }
 
 function selectProvider(model) {
@@ -268,7 +277,7 @@ const html = String.raw`<!doctype html>
 .card{background:linear-gradient(180deg,#111725dd,#0b0f18ee);border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 18px 60px #0006}.card h2{font-size:17px;margin:0 0 16px}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}@media(max-width:560px){.row,.row3{grid-template-columns:1fr}}
 label{display:block;font-size:12px;font-weight:700;color:#aeb7c6;margin:12px 0 7px}textarea,input,select{width:100%;border:1px solid #2b3547;background:#080c13;color:white;border-radius:13px;padding:12px 13px;outline:none}textarea{min-height:150px;resize:vertical}textarea:focus,input:focus,select:focus{border-color:var(--accent2)}
 button{width:100%;margin-top:16px;border:0;border-radius:14px;padding:14px 16px;font-weight:900;font-size:15px;cursor:pointer;background:linear-gradient(90deg,var(--accent),#7df4ff);color:#03120a;box-shadow:0 10px 30px #52f28f28}button:disabled{opacity:.5;cursor:not-allowed}.models{display:grid;gap:9px}.model{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);border-radius:13px;padding:11px 12px;background:#090d15}.dot{width:9px;height:9px;border-radius:50%;background:#ffb84d}.dot.on{background:var(--accent);box-shadow:0 0 15px #52f28f}
-.status{margin-top:15px;padding:12px;border-radius:13px;background:#080c13;border:1px solid var(--line);color:#cbd3df;font-size:13px;white-space:pre-wrap}.jobs{margin-top:18px;display:grid;gap:10px}.job{border:1px solid var(--line);border-radius:15px;padding:13px;background:#090d15}.jobhead{display:flex;justify-content:space-between;gap:10px;font-size:12px}.pill{padding:4px 8px;border-radius:999px;background:#182235;color:#a7c6ff;font-weight:800}.job p{color:#aeb7c6;font-size:13px;line-height:1.45;margin:9px 0}.job video{width:100%;border-radius:12px;background:#000;margin-top:10px}.tiny{font-size:11px;color:#748095}.progress{height:5px;background:#192130;border-radius:99px;overflow:hidden;margin-top:8px}.progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));width:0}
+.mascot{display:flex;gap:12px;align-items:center;margin:0 0 14px;padding:10px;border:1px solid var(--line);border-radius:15px;background:#080c13}.mascot img{width:78px;height:78px;object-fit:cover;border-radius:13px}.mascot b{display:block;font-size:13px}.mascot span{display:block;color:var(--muted);font-size:11px;line-height:1.35;margin-top:4px}.status{margin-top:15px;padding:12px;border-radius:13px;background:#080c13;border:1px solid var(--line);color:#cbd3df;font-size:13px;white-space:pre-wrap}.jobs{margin-top:18px;display:grid;gap:10px}.job{border:1px solid var(--line);border-radius:15px;padding:13px;background:#090d15}.jobhead{display:flex;justify-content:space-between;gap:10px;font-size:12px}.pill{padding:4px 8px;border-radius:999px;background:#182235;color:#a7c6ff;font-weight:800}.job p{color:#aeb7c6;font-size:13px;line-height:1.45;margin:9px 0}.job video{width:100%;border-radius:12px;background:#000;margin-top:10px}.tiny{font-size:11px;color:#748095}.progress{height:5px;background:#192130;border-radius:99px;overflow:hidden;margin-top:8px}.progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));width:0}
 </style>
 </head>
 <body><main class="wrap">
@@ -276,6 +285,7 @@ button{width:100%;margin-top:16px;border:0;border-radius:14px;padding:14px 16px;
 <div class="grid">
 <section class="card">
 <h2>Créer une publicité BetGPT</h2>
+<div class="mascot"><img src="https://astra-voice-mobile.floot.app/_cdn/static/74a2d252-cf98-49ad-92e1-9f8bb4f4f3d3-betgpt-robot-reference.png" alt="Mascotte BetGPT de référence"><div><b>Mascotte BetGPT verrouillée</b><span>Injectée automatiquement dans chaque génération pour conserver le même robot.</span></div></div>
 <label>Concept / prompt</label>
 <textarea id="prompt">A premium BetGPT advertising film. A small futuristic BetGPT robot mascot enters a packed football stadium at night, analyzes the match with glowing holographic data, then turns toward the camera with a confident playful attitude. Ultra realistic materials, cinematic lighting, energetic sports-commercial pacing.</textarea>
 <div class="row3">
@@ -283,8 +293,8 @@ button{width:100%;margin-top:16px;border:0;border-radius:14px;padding:14px 16px;
 <div><label>Format</label><select id="aspect"><option selected>9:16</option><option>16:9</option><option>1:1</option></select></div>
 <div><label>Modèle</label><select id="model"><option value="auto">AUTO</option><option value="wan22">Wan 2.2</option><option value="skyreels-v3">SkyReels V3</option><option value="ltx2">LTX-2</option></select></div>
 </div>
-<label>Images de référence (URLs, séparées par des virgules)</label>
-<input id="refs" placeholder="Mascotte BetGPT, produit, décor..." />
+<label>Références supplémentaires (optionnel)</label>
+<input id="refs" placeholder="Produit, décor, stade… La mascotte BetGPT est déjà fournie automatiquement." />
 <button id="go">GÉNÉRER LA PUB</button>
 <div class="status" id="status">Prêt.</div>
 </section>
@@ -361,6 +371,8 @@ const server = http.createServer(async (req, res) => {
         max_duration_seconds: 30,
         formats: ["9:16", "16:9", "1:1"],
         truthful_completion_gate: true,
+        default_reference_image: ROBOT_REFERENCE_URL,
+        quality_mode: "premium-image-to-video",
       });
     }
 
@@ -371,6 +383,10 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "POST" && pathname === "/api/jobs") {
       const input = await readJson(req);
       const job = createJob(input);
+      job.reference_images = [ROBOT_REFERENCE_URL, ...job.reference_images.filter((x) => x !== ROBOT_REFERENCE_URL)].slice(0, 4);
+      job.quality_preset = "premium-image-to-video";
+      job.updated_at = now();
+      saveJobs();
       await dispatchPush(job, req);
       return sendJson(res, 201, publicJob(job));
     }

@@ -7,7 +7,7 @@ from pathlib import Path
 
 import imageio_ffmpeg
 import requests
-from gradio_client import Client
+from gradio_client import Client, handle_file
 
 ORCHESTRATOR = os.environ["ORCHESTRATOR_URL"].rstrip("/")
 TOKEN = os.environ["GPU_WORKER_TOKEN"]
@@ -16,7 +16,7 @@ HF_TOKEN = os.environ.get("HF_TOKEN") or None
 BOOTSTRAP_SMOKE = os.environ.get("BOOTSTRAP_SMOKE", "1") == "1"
 
 HEADERS = {"x-worker-token": TOKEN, "content-type": "application/json"}
-NEGATIVE = "worst quality, low quality, blurry, jittery, distorted, malformed, watermark, subtitles, captions, text artifacts"
+NEGATIVE = "worst quality, low quality, blurry, jittery, distorted, malformed, identity drift, character redesign, morphing face, changing armor, extra limbs, extra fingers, duplicated body parts, melted geometry, watermark, subtitles, captions, text artifacts"
 
 PROVIDERS = [
     ("ltx-zero", "Lightricks/ltx-video-distilled"),
@@ -38,11 +38,12 @@ def client_for(space):
 
 
 def dimensions(aspect):
+    # Higher native render size than the previous 448x768 profile.
     if aspect == "9:16":
-        return 768, 448
+        return 1024, 576
     if aspect == "1:1":
-        return 640, 640
-    return 448, 768
+        return 768, 768
+    return 576, 1024
 
 
 def normalize_file(result):
@@ -69,26 +70,39 @@ def normalize_file(result):
     raise RuntimeError(f"provider output is not a readable file: {result}")
 
 
-def generate_ltx(prompt, aspect, duration, seed):
+def generate_ltx(prompt, aspect, duration, seed, reference_image=None):
     h, w = dimensions(aspect)
     c = client_for("Lightricks/ltx-video-distilled")
-    result = c.predict(
+    duration = max(0.5, min(float(duration), 8.0))
+    common = [
         prompt,
         NEGATIVE,
-        None,
+        handle_file(str(reference_image)) if reference_image else None,
         None,
         h,
         w,
-        "text-to-video",
-        max(0.5, min(float(duration), 8.0)),
+        "image-to-video" if reference_image else "text-to-video",
+        duration,
         9,
         int(seed) % (2**32 - 1),
         False,
-        3.0,
+        3.5,
         True,
-        api_name="/text_to_video",
+    ]
+    result = c.predict(
+        *common,
+        api_name="/image_to_video" if reference_image else "/text_to_video",
     )
     return normalize_file(result)
+
+def download_reference(url, target):
+    with requests.get(url, stream=True, timeout=120) as r:
+        r.raise_for_status()
+        with target.open("wb") as f:
+            for chunk in r.iter_content(1024 * 1024):
+                if chunk:
+                    f.write(chunk)
+    return target
 
 
 def generate_cog(prompt, aspect, duration, seed):
@@ -111,13 +125,18 @@ def concat_mp4(clips, target, aspect):
     if len(clips) == 1:
         shutil.copy2(clips[0], target)
         return
-    h, w = dimensions(aspect)
     manifest = target.with_suffix(".txt")
     manifest.write_text("\n".join(f"file '{str(p).replace(chr(39), chr(39)+chr(92)+chr(39)+chr(39))}'" for p in clips))
+    if aspect == "9:16":
+        out_w, out_h = 1080, 1920
+    elif aspect == "1:1":
+        out_w, out_h = 1080, 1080
+    else:
+        out_w, out_h = 1920, 1080
     subprocess.run([
         ffmpeg, "-y", "-f", "concat", "-safe", "0", "-i", str(manifest),
-        "-vf", f"scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2",
-        "-c:v", "libx264", "-preset", "medium", "-crf", "18",
+        "-vf", f"scale={out_w}:{out_h}:flags=lanczos,unsharp=5:5:0.35:5:5:0.0",
+        "-c:v", "libx264", "-preset", "slow", "-crf", "17",
         "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(target)
     ], check=True)
 
@@ -159,10 +178,15 @@ def process(payload):
     job = payload["job"]
     work = Path(tempfile.mkdtemp(prefix="betgpt-hf-zero-"))
     try:
-        shots = job.get("shots") or [{"index": 0, "duration": min(5, job.get("duration", 5)), "prompt": job["prompt"]}]
+        shots = job.get("shots") or [{"index": 0, "duration": min(4, job.get("duration", 4)), "prompt": job["prompt"]}]
         aspect = job.get("aspect_ratio", "9:16")
         seed = int(job.get("seed", 42))
         provider_errors = []
+        reference = None
+        refs = job.get("reference_images") or []
+        if refs:
+            reference = download_reference(refs[0], work / "betgpt-reference.png")
+            print(f"[job {job['id']}] reference image downloaded: {reference}", flush=True)
 
         # Pick a provider by actually generating the first shot.
         chosen = None
@@ -172,7 +196,7 @@ def process(payload):
             try:
                 print(f"[job {job['id']}] trying {provider}", flush=True)
                 if provider == "ltx-zero":
-                    first_clip = generate_ltx(first["prompt"], aspect, first.get("duration", 5), seed)
+                    first_clip = generate_ltx(first["prompt"], aspect, first.get("duration", 4), seed, reference)
                 else:
                     first_clip = generate_cog(first["prompt"], aspect, first.get("duration", 5), seed)
                 chosen = provider
@@ -191,7 +215,7 @@ def process(payload):
 
         for idx, shot in enumerate(shots[1:], start=1):
             if chosen == "ltx-zero":
-                generated = generate_ltx(shot["prompt"], aspect, shot.get("duration", 5), seed + idx)
+                generated = generate_ltx(shot["prompt"], aspect, shot.get("duration", 4), seed + idx, reference)
             else:
                 generated = generate_cog(shot["prompt"], aspect, shot.get("duration", 5), seed + idx)
             target = work / f"shot-{idx:02d}.mp4"
@@ -212,7 +236,7 @@ def process(payload):
 def ensure_smoke_job():
     if not BOOTSTRAP_SMOKE:
         return
-    marker = os.environ.get("SMOKE_MARKER", "BETGPT_ZERO_GPU_SMOKE_OMEGA_V3")
+    marker = os.environ.get("SMOKE_MARKER", "BETGPT_ZERO_GPU_SMOKE_OMEGA_V4_I2V")
     try:
         jobs = requests.get(ORCHESTRATOR + "/api/jobs", timeout=30).json().get("jobs", [])
         if any(marker in j.get("prompt", "") for j in jobs):
