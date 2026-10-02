@@ -12,6 +12,8 @@ const GOOGLE_NEWS_QUERIES = [
   'PSG OR Marseille OR Lyon OR Monaco OR Lens football when:1d',
   '"équipe de France" football when:1d',
   '"Ligue des champions" football when:1d',
+  'PSG "Ligue des champions féminine" OR "Women\'s Champions League" when:1d',
+  '"France Espoirs" OR "France U21" football when:1d',
   '"Kylian Mbappé" OR "Real Madrid" OR "FC Barcelone" football when:1d',
   '"Cristiano Ronaldo" OR "Lionel Messi" OR "Lamine Yamal" football when:1d',
   'CAN Maroc Algérie Sénégal Nigeria football when:1d',
