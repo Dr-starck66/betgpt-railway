@@ -54,19 +54,19 @@ function normalizeCountryName(name) {
   return String(name ?? "")
     .toLowerCase()
     .normalize("NFD")
-    .replace(/[\\u0300-\\u036f]/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9]+/g, " ")
     .trim();
 }
 
-const nationalFlagMatch = teamFlags.match(/const NATIONAL_FLAG:[\\s\\S]*?= \\{([\\s\\S]*?)\\n\\};/);
+const nationalFlagMatch = teamFlags.match(/const NATIONAL_FLAG:[\s\S]*?= \{([\s\S]*?)\n\};/);
 if (!nationalFlagMatch) {
   throw new Error("ASTRA FLAG GUARD FAIL: NATIONAL_FLAG registry not found");
 }
 const registeredNames = new Set();
-for (const line of nationalFlagMatch[1].split("\\n")) {
-  const quoted = line.match(/^\\s*"([^"]+)"\\s*:/);
-  const bare = line.match(/^\\s*([a-z][a-z0-9 ]*)\\s*:/);
+for (const line of nationalFlagMatch[1].split("\n")) {
+  const quoted = line.match(/^\s*"([^"]+)"\s*:/);
+  const bare = line.match(/^\s*([a-z][a-z0-9 ]*)\s*:/);
   const key = quoted?.[1] ?? bare?.[1];
   if (key) registeredNames.add(normalizeCountryName(key));
 }
