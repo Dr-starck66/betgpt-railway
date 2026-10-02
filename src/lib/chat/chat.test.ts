@@ -529,6 +529,23 @@ it("daily chat pick refuses stale desk data instead of manufacturing a current b
 });
 
 
+it("hardens ROAST persona into mandatory arrogant shareable humor", () => {
+  const brief = personalityBrief(
+    EMPTY_MEMORY,
+    "ROAST",
+    [{ role: "user", content: "Analyse mon pari" }],
+    "Analyse mon pari",
+  );
+  assert.match(brief, /punchline forte obligatoire/i);
+  assert.match(brief, /ne cherche PAS à être sympathique/i);
+
+  const prompt = betgptPrompt(EMPTY_MEMORY, "ROAST", "", "", brief);
+  assert.match(prompt, /chaque réponse non sérieuse/i);
+  assert.match(prompt, /supériorité intellectuelle/i);
+  assert.match(prompt, /quel connard, c’est drôle/i);
+  assert.match(prompt, /incident administratif/i);
+});
+
 it("personality director cools down recently used signature motifs", () => {
   const history = [
     { role: "user", content: "Mon combiné est incroyable" },

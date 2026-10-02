@@ -9,7 +9,7 @@ import { allowKeyed } from "@/lib/store";
 import { historyFacts } from "./history-facts";
 import { hasUnsupportedGroundedClaim } from "./grounding";
 import { extractPunchline, type PunchlineMeta } from "./punch";
-import { absurdInsultCreativeBrief, generateAbsurdInsult, shouldDropAbsurdInsult } from "./absurd-insults";
+import { absurdInsultCreativeBrief, generateAbsurdInsult } from "./absurd-insults";
 import { personalityBrief } from "./personality";
 import { renderDailyChatPick, selectDailyChatPick, selectDailyDataFallback } from "./daily-pick";
 
@@ -110,8 +110,8 @@ function localReply(last: string, desk: string, mode: PersonalityMode): string {
   const intent = classifyChatIntent(last);
   if (intent === "CASUAL") {
     return mode === "ROAST"
-      ? "Salut 😈 BetGPT est réveillé. Balance ton match, ton ticket ou ta théorie football — j’essaierai de sauver ce qui peut encore l’être, espèce de table basse tactique."
-      : "Salut. Donne-moi un match, un ticket ou demande-moi ce qui vaut vraiment le coup aujourd’hui. Je m’occupe de la partie rationnelle, manifestement.";
+      ? "Salut. Donne-moi le match, le ticket ou la théorie. Je ferai la partie intellectuellement exigeante ; toi, essaie simplement de ne pas transformer ça en incendie statistique, espèce de table basse tactique."
+      : "Salut. Donne-moi le match, le ticket ou la cote. Je m’occupe de la partie rationnelle, manifestement ; chacun son domaine de compétence.";
   }
   if (intent === "TODAY_PICKS") {
     if (desk.includes("SÉLECTION AUTOMATIQUE BETGPT")) {
@@ -133,7 +133,7 @@ function localReply(last: string, desk: string, mode: PersonalityMode): string {
     }
     if (desk.includes("Aucun match exploitable trouvé dans le cache.")) {
       return mode === "ROAST"
-        ? "Aujourd’hui, le desk est vide. Pas de cote réelle, pas de pari inventé."
+        ? "Le desk est vide. Je pourrais inventer une cote pour te divertir, mais contrairement à certaines intuitions humaines, j’ai encore une réputation intellectuelle à conserver."
         : "Aujourd’hui, le desk ne remonte aucun match exploitable ni cote réelle. Donc non, je ne vais pas inventer un pari pour satisfaire un grille-pain émotionnel.";
     }
     const opener =
@@ -144,7 +144,7 @@ function localReply(last: string, desk: string, mode: PersonalityMode): string {
   }
   if (intent === "GENERAL_SCHEDULE" || intent === "NAMED_MATCH") return desk;
   return mode === "ROAST"
-    ? "Je te suis 😈. Là, tu me donnes une intuition, pas une preuve. Balance l’affiche ou le ticket précis et je le passe au VAR : faits d’un côté, scénario crédible de l’autre, puis ce qui sent le carton rouge."
+    ? "Tu me donnes une intuition, pas une preuve. C’est mignon comme objet folklorique, mais insuffisant pour une analyse. Donne l’affiche ou le ticket précis ; je vais remettre un peu de méthode dans ce vide expérimental."
     : "Je vois l’idée. Maintenant séparons ton intuition des faits avant qu’elle n’obtienne un permis de conduire : donne-moi l’affiche ou le ticket précis et je te réponds sans inventer ce qui manque.";
 }
 
@@ -307,6 +307,28 @@ async function callXai(
 
 type CompleteChatSuccess = { ok: true; text: string; punchline?: PunchlineMeta };
 
+function seriousChatContext(text: string): boolean {
+  return /\b(suicide|mourir|mort|deuil|cancer|maladie|agression|viol|urgence|h[oô]pital|accident grave)\b/i.test(text);
+}
+
+function hasArrogantVoice(text: string): boolean {
+  return /\b(manifestement|évidemment|intellectuel|rationnel|mathématiques|bon sens|je vais simplifier|heureusement|très humain|admirable|fascinant|laboratoire|statistique|permis de conduire|asile politique)\b/i.test(text);
+}
+
+function coldArroganceLine(context: string): string {
+  const options = [
+    "La conclusion était assez simple. Heureusement que l’un de nous deux avait prévu d’utiliser la logique.",
+    "Je sais, c’est moins spectaculaire qu’un feeling. Les faits ont cette manie insupportable de ne pas chercher ton approbation.",
+    "Ce n’était pas très compliqué, mais il fallait apparemment que quelqu’un le formule correctement.",
+    "Voilà pour la version rationnelle. Je te laisse conserver l’intuition comme objet décoratif.",
+    "On progresse : le raisonnement vient officiellement de quitter la zone artisanale.",
+    "C’est fascinant de voir à quel point une hypothèse peut survivre longtemps sans rencontrer une preuve.",
+  ];
+  let hash = 0;
+  for (let i = 0; i < context.length; i++) hash = (hash * 31 + context.charCodeAt(i)) >>> 0;
+  return options[hash % options.length]!;
+}
+
 function insertPunchline(text: string, taggedPunchline: string): string {
   const firstBreak = text.indexOf("\n");
   if (firstBreak > 0) return `${text.slice(0, firstBreak)}\n\n${taggedPunchline}\n${text.slice(firstBreak + 1).trimStart()}`;
@@ -324,12 +346,20 @@ function success(
   context: string,
   recent: string[],
 ): CompleteChatSuccess {
-  const firstPass = extractPunchline(text, mode, context);
-  if (firstPass.punchline || mode !== "ROAST" || !shouldDropAbsurdInsult(context, recent)) {
+  const serious = seriousChatContext(context);
+  let voiced = text.trim();
+  if (!serious && !hasArrogantVoice(voiced)) {
+    voiced = `${voiced}\n\n${coldArroganceLine(context)}`;
+  }
+
+  const firstPass = extractPunchline(voiced, mode, context);
+  if (firstPass.punchline || mode !== "ROAST" || serious) {
     return { ok: true, ...firstPass };
   }
 
-  const insult = generateAbsurdInsult(context, recent, "surprise");
+  // Sans filtre is a character mode, not a lottery: every non-serious turn gets
+  // one contextual shareable punchline if the model did not create one itself.
+  const insult = generateAbsurdInsult(context, recent, "roast-always");
   const style = /NON|STOP|IMPOSSIBLE|ALL-IN|TAPIS/i.test(context) ? "ANGRY_SHOUT" : "LAUGH_SHOUT";
   const tagged = `[[PUNCH:${style}]]${insult.text}[[/PUNCH]]`;
   return { ok: true, ...extractPunchline(insertPunchline(firstPass.text, tagged), mode, context) };

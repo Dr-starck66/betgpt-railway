@@ -150,6 +150,9 @@ function templates(context: string, rnd: () => number): Array<{ text: string; re
   const hook = contextNoun(context, rnd);
   return [
     { text: "MAIS T’ES UN " + obj.toUpperCase() + " " + adj.toUpperCase() + " OU QUOI ?!", recipe: "objet+adjectif" },
+    { text: "JE VAIS SIMPLIFIER : " + hook.toUpperCase() + " A LA STABILITÉ INTELLECTUELLE D’UN " + obj.toUpperCase() + " " + state.toUpperCase() + " !!!", recipe: "condescendance+objet" },
+    { text: "CE N’EST PAS UNE ANALYSE, C’EST UN INCIDENT STATISTIQUE AVEC UN " + animal.toUpperCase() + " " + state.toUpperCase() + " AUX COMMANDES !!!", recipe: "verdict+animal" },
+    { text: "LES MATHÉMATIQUES VIENNENT DE DEMANDER À NE PLUS ÊTRE ASSOCIÉES À " + hook.toUpperCase() + " !!!", recipe: "maths+deadpan" },
     { text: "QUI A LAISSÉ UN " + animal.toUpperCase() + " " + state.toUpperCase() + " GÉRER " + hook.toUpperCase() + " ?!", recipe: "animal+état+contexte" },
     { text: "ESPÈCE DE " + obj.toUpperCase() + " " + state.toUpperCase() + " !!!", recipe: "objet+état" },
     { text: hook.toUpperCase() + " " + action.toUpperCase() + " !!!", recipe: "contexte+action-impossible" },
