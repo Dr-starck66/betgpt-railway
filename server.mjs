@@ -120,7 +120,7 @@ function guidePage(req,a){
  const base=baseUrl(req); const canonical=base+"/guides/"+a.slug;
  const schema={"@context":"https://schema.org","@type":"Article","headline":a.title,"dateModified":a.updated,"mainEntityOfPage":canonical};
  const sections=a.sections.map(s=>`<section><h2>${htmlEscape(s.heading)}</h2><p>${htmlEscape(s.text)}</p></section>`).join("");
- const sources=(a.sources||[]).length?`<section class="sources"><h2>Sources and further reading</h2><ul>${a.sources.map(([name,url])=>`<li><a href="${htmlEscape(url)}" target="_blank" rel="noopener noreferrer">${htmlEscape(name)}</a></li>`).join("")}</ul></section>`:"";
+ const sources=(a.sources||[]).length?`<section class="sources"><h2>Sources and further reading</h2><ul>${a.sources.map(src=>{const name=Array.isArray(src)?src[0]:src.name;const url=Array.isArray(src)?src[1]:src.url;return `<li><a href="${htmlEscape(url||"#")}" target="_blank" rel="noopener noreferrer">${htmlEscape(name||"Source")}</a></li>`}).join("")}</ul></section>`:"";
  const takeaways=(a.keyTakeaways||[]).length?`<aside class="takeaways"><span class="eyebrow">Key takeaways</span><ul>${a.keyTakeaways.map(x=>`<li>${htmlEscape(x)}</li>`).join("")}</ul></aside>`:"";
  const faq=(a.faq||[]).length?`<section class="faq"><h2>Frequently asked questions</h2>${a.faq.map(x=>`<details><summary>${htmlEscape(x.q)}</summary><p>${htmlEscape(x.a)}</p></details>`).join("")}</section>`:"";
  const related=(a.relatedSlugs||[]).map(slug=>articles.find(x=>x.slug===slug)).filter(x=>x&&publishableArticle(x));
