@@ -3,11 +3,12 @@ import { TeamLine } from "@/components/crest";
 import { MIN_BET_ODDS, oddsPlayable, pronoVsStake } from "@/lib/markets";
 import { matchPath } from "@/lib/seo";
 import { GUIDES, PRONO_LEAGUES, parisDay } from "@/lib/seo/money-map";
-import { collectionJsonLd, itemListJsonLd, SITE_URL } from "@/lib/programmatic";
-import { breadcrumbJsonLd } from "@/lib/cocon";
+import { collectionJsonLd, hubByLeague, itemListJsonLd, SITE_URL } from "@/lib/programmatic";
+import { breadcrumbJsonLd, calendrierPath, classementPath } from "@/lib/cocon";
 import { ld } from "@/lib/ld";
 import { fmtOdds, fmtPct } from "@/lib/utils";
 import { LEAGUE_FLAG } from "@/lib/labels";
+import { competitionByLeague } from "@/lib/serp/leagues";
 import type { LeagueId, MatchInput, PredictionRecord } from "@/engine/types";
 
 export type SiloDesk = {
@@ -65,6 +66,8 @@ export function PronoSilo({
   kind: "pillar" | "day" | "league" | "football";
 }) {
   const rows = filterSiloMatches(desk, filter);
+  const leagueHub = kind === "league" && filter.league ? hubByLeague(filter.league) : null;
+  const leagueCompetition = kind === "league" && filter.league ? competitionByLeague(filter.league) : null;
   const listLd = itemListJsonLd(
     h1,
     `${SITE_URL}${path}`,
@@ -192,6 +195,73 @@ export function PronoSilo({
           </div>
         </div>
       )}
+      {kind === "league" && filter.league && leagueHub ? (
+        <section className="surface-card space-y-5 p-5 text-sm leading-relaxed text-mist sm:p-6">
+          <div>
+            <p className="eyebrow">Guide {leagueHub.title}</p>
+            <h2 className="mt-1 text-xl font-semibold text-paper">
+              Pronostics {leagueHub.title} : la page reste utile même entre deux journées
+            </h2>
+          </div>
+          <p>
+            BetGPT ne remplit jamais cette page avec un match, une cote ou une probabilité inventés pour éviter un écran vide.
+            Lorsqu’aucune rencontre de {leagueHub.title} n’est exploitable dans la fenêtre courante, le tableau peut donc être vide,
+            mais le point d’entrée vers la compétition reste actif et documenté.
+          </p>
+          <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+            <Link to={leagueHub.path} className="chip-pill justify-center hover:border-sage/30 hover:text-link">
+              Vue complète {leagueHub.title}
+            </Link>
+            <Link to={calendrierPath(filter.league)} className="chip-pill justify-center hover:border-sage/30 hover:text-link">
+              Calendrier {leagueHub.title}
+            </Link>
+            <Link to={classementPath(filter.league)} className="chip-pill justify-center hover:border-sage/30 hover:text-link">
+              Classement {leagueHub.title}
+            </Link>
+            {leagueCompetition ? (
+              <>
+                <Link to={leagueCompetition.scoresPath} className="chip-pill justify-center hover:border-sage/30 hover:text-link">
+                  Scores {leagueHub.title}
+                </Link>
+                <Link to={leagueCompetition.resultsPath} className="chip-pill justify-center hover:border-sage/30 hover:text-link">
+                  Résultats {leagueHub.title}
+                </Link>
+              </>
+            ) : null}
+            <Link to="/methodology" className="chip-pill justify-center hover:border-sage/30 hover:text-link">
+              Méthodologie BetGPT
+            </Link>
+          </div>
+          <div className="space-y-2">
+            <h3 className="text-base font-semibold text-paper">Ce que BetGPT attend avant d’afficher un pronostic</h3>
+            <p>
+              Une ligne apparaît seulement lorsqu’une rencontre réelle de {leagueHub.title} est présente dans le desk et qu’une
+              prédiction lui est effectivement associée. La page sépare ensuite le pronostic 1N2, la probabilité du modèle, la cote
+              réellement disponible lorsqu’elle existe, l’écart à cette cote et la décision opérationnelle. Une donnée absente reste
+              absente au lieu d’être remplacée par une valeur plausible.
+            </p>
+          </div>
+          <div className="space-y-2">
+            <h3 className="text-base font-semibold text-paper">Comment lire un pronostic {leagueHub.title}</h3>
+            <p>
+              Le choix 1N2 indique l’issue considérée comme la plus probable par le modèle, pas une certitude. La cote représente un
+              prix de marché observé, et l’écart mesure la différence entre ce prix et l’estimation BetGPT. La décision PARIER n’est
+              affichée que si les critères du moteur sont réunis ; ATTENDRE ou NE PAS PARIER sont des sorties normales lorsque le
+              signal est incomplet ou insuffisant.
+            </p>
+          </div>
+          <div className="space-y-2">
+            <h3 className="text-base font-semibold text-paper">Pourquoi une absence de ligne vaut mieux qu’un faux contenu</h3>
+            <p>
+              Entre deux journées de {leagueHub.title}, une page honnête peut ne proposer aucun pari immédiat. Elle doit néanmoins
+              aider à continuer la navigation, expliquer ce qui manque et renvoyer vers les données réellement disponibles.
+              C’est le rôle de ce bloc : aucune rencontre fictive, aucune cote reconstruite et aucun faux signal simplement pour
+              donner l’impression que la page est remplie.
+            </p>
+          </div>
+        </section>
+      ) : null}
+
       <section className="grid gap-4 lg:grid-cols-2">
         <div className="surface-card p-5 sm:p-6">
           <h2 className="text-sm font-semibold">Compétitions</h2>
@@ -273,9 +343,9 @@ export function PronoSilo({
         </section>
       ) : null}
       <p className="text-xs text-muted">
-        Page {path}. Une cote absente reste absente. Le bilan des lignes enregistrées avant le coup d’envoi est sur{" "}
+        Une cote absente reste absente. Le bilan des lignes enregistrées avant le coup d’envoi est disponible dans{" "}
         <Link to="/ledger" className="underline">
-          le registre
+          le registre public
         </Link>
         .
       </p>

@@ -4,11 +4,13 @@ import {
   GUIDE_ALIASES,
   GUIDES,
   MONEY_KEYWORDS,
+  PRONO_LEAGUE_ALIASES,
   bankableScore,
   fixtureKeywords,
   moneySitemapPaths,
   parisOffsetDay,
   primaryCollisions,
+  pronoLeagueBySlug,
   siloIndexable,
 } from "./money-map.ts";
 
@@ -42,6 +44,19 @@ describe("money map", () => {
     assert.equal(siloIndexable("league", 0), false);
     assert.equal(siloIndexable("league", 1), true);
     assert.equal(siloIndexable("pillar", 0), true);
+  });
+
+  it("resolves shorthand and legacy league URLs to one canonical slug", () => {
+    assert.equal(PRONO_LEAGUE_ALIASES.l1, "ligue-1");
+    assert.equal(pronoLeagueBySlug("l1")?.slug, "ligue-1");
+    assert.equal(pronoLeagueBySlug("ligue-1")?.isAlias, false);
+    assert.equal(pronoLeagueBySlug("liga")?.slug, "la-liga");
+    assert.equal(pronoLeagueBySlug("europa-league")?.slug, "ligue-europa");
+    const sitemap = moneySitemapPaths();
+    assert.ok(sitemap.some((p) => p.path === "/pronostics-football/la-liga"));
+    assert.ok(sitemap.some((p) => p.path === "/pronostics-football/ligue-europa"));
+    assert.equal(sitemap.some((p) => p.path === "/pronostics-football/liga"), false);
+    assert.equal(sitemap.some((p) => p.path === "/pronostics-football/europa-league"), false);
   });
 
   it("keeps guide copy free of guaranteed-win claims", () => {

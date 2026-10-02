@@ -64,6 +64,142 @@
           ]
         }
       }
+    },
+    {
+      "id": "prono-ligue-1",
+      "method": "GET",
+      "path": "/pronostics-football/ligue-1",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "Pronostic Ligue 1",
+            "Pronostics Ligue 1 : la page reste utile même entre deux journées",
+            "Comment lire un pronostic Ligue 1"
+          ]
+        }
+      }
+    },
+    {
+      "id": "prono-premier-league",
+      "method": "GET",
+      "path": "/pronostics-football/premier-league",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "Pronostic Premier League",
+            "Pronostics Premier League : la page reste utile même entre deux journées",
+            "Comment lire un pronostic Premier League"
+          ]
+        }
+      }
+    },
+    {
+      "id": "prono-la-liga",
+      "method": "GET",
+      "path": "/pronostics-football/la-liga",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "Pronostic La Liga",
+            "Pronostics La Liga : la page reste utile même entre deux journées",
+            "Comment lire un pronostic La Liga"
+          ]
+        }
+      }
+    },
+    {
+      "id": "prono-bundesliga",
+      "method": "GET",
+      "path": "/pronostics-football/bundesliga",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "Pronostic Bundesliga",
+            "Pronostics Bundesliga : la page reste utile même entre deux journées",
+            "Comment lire un pronostic Bundesliga"
+          ]
+        }
+      }
+    },
+    {
+      "id": "prono-serie-a",
+      "method": "GET",
+      "path": "/pronostics-football/serie-a",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "Pronostic Serie A",
+            "Pronostics Serie A : la page reste utile même entre deux journées",
+            "Comment lire un pronostic Serie A"
+          ]
+        }
+      }
+    },
+    {
+      "id": "prono-champions-league",
+      "method": "GET",
+      "path": "/pronostics-football/champions-league",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "Pronostic Ligue des champions",
+            "Pronostics Ligue des champions : la page reste utile même entre deux journées",
+            "Comment lire un pronostic Ligue des champions"
+          ]
+        }
+      }
+    },
+    {
+      "id": "prono-ligue-europa",
+      "method": "GET",
+      "path": "/pronostics-football/ligue-europa",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "Pronostic Ligue Europa",
+            "Pronostics Ligue Europa : la page reste utile même entre deux journées",
+            "Comment lire un pronostic Ligue Europa"
+          ]
+        }
+      }
+    },
+    {
+      "id": "prono-alias-l1",
+      "method": "GET",
+      "path": "/pronostics-football/l1",
+      "expect": {
+        "statuses": [
+          200
+        ],
+        "text": {
+          "requireAll": [
+            "Pronostic Ligue 1",
+            "Pronostics Ligue 1 : la page reste utile même entre deux journées",
+            "Comment lire un pronostic Ligue 1"
+          ]
+        }
+      }
     }
   ],
   "evidenceDir": "artifacts/astra-public-route-gate"

@@ -21,15 +21,47 @@ export type KeywordRow = {
   primary: boolean;
 };
 
-export const PRONO_LEAGUES: { slug: string; league: "L1" | "PL" | "LL" | "BL" | "SA" | "CL" | "EL"; title: string }[] = [
+export type PronoLeagueMeta = {
+  slug: string;
+  league: "L1" | "PL" | "LL" | "BL" | "SA" | "CL" | "EL";
+  title: string;
+};
+
+export const PRONO_LEAGUES: PronoLeagueMeta[] = [
   { slug: "ligue-1", league: "L1", title: "Ligue 1" },
   { slug: "premier-league", league: "PL", title: "Premier League" },
-  { slug: "liga", league: "LL", title: "La Liga" },
+  { slug: "la-liga", league: "LL", title: "La Liga" },
   { slug: "bundesliga", league: "BL", title: "Bundesliga" },
   { slug: "serie-a", league: "SA", title: "Serie A" },
   { slug: "champions-league", league: "CL", title: "Ligue des champions" },
-  { slug: "europa-league", league: "EL", title: "Ligue Europa" },
+  { slug: "ligue-europa", league: "EL", title: "Ligue Europa" },
 ];
+
+export const PRONO_LEAGUE_ALIASES: Record<string, string> = {
+  l1: "ligue-1",
+  ligue1: "ligue-1",
+  pl: "premier-league",
+  premierleague: "premier-league",
+  ll: "la-liga",
+  liga: "la-liga",
+  laliga: "la-liga",
+  bl: "bundesliga",
+  sa: "serie-a",
+  cl: "champions-league",
+  ldc: "champions-league",
+  "ligue-des-champions": "champions-league",
+  el: "ligue-europa",
+  "europa-league": "ligue-europa",
+};
+
+export function pronoLeagueBySlug(slug: string):
+  | (PronoLeagueMeta & { requestedSlug: string; canonicalSlug: string; isAlias: boolean })
+  | null {
+  const requestedSlug = String(slug ?? "").trim().toLowerCase();
+  const canonicalSlug = PRONO_LEAGUE_ALIASES[requestedSlug] ?? requestedSlug;
+  const meta = PRONO_LEAGUES.find((league) => league.slug === canonicalSlug);
+  return meta ? { ...meta, requestedSlug, canonicalSlug, isAlias: requestedSlug !== canonicalSlug } : null;
+}
 
 export const GUIDES: { slug: string; title: string; description: string; h1: string; paragraphs: string[]; links: { href: string; label: string }[] }[] = [
   {
@@ -221,10 +253,10 @@ export const MONEY_KEYWORDS: KeywordRow[] = [
   row("pronostic ligue 1", "D", "transactional", "/pronostics-football/ligue-1", null, 5, "P1", true),
   row("pronostic champions league", "D", "transactional", "/pronostics-football/champions-league", null, 5, "P1", true),
   row("pronostic premier league", "D", "transactional", "/pronostics-football/premier-league", null, 4, "P1", true),
-  row("pronostic liga", "D", "transactional", "/pronostics-football/liga", null, 4, "P2", true),
+  row("pronostic liga", "D", "transactional", "/pronostics-football/la-liga", null, 4, "P2", true),
   row("pronostic serie a", "D", "transactional", "/pronostics-football/serie-a", null, 3, "P2", true),
   row("pronostic bundesliga", "D", "transactional", "/pronostics-football/bundesliga", null, 3, "P2", true),
-  row("pronostic europa league", "D", "transactional", "/pronostics-football/europa-league", null, 4, "P2", true),
+  row("pronostic europa league", "D", "transactional", "/pronostics-football/ligue-europa", null, 4, "P2", true),
   row("pronostic score exact", "F", "informational", "/score-hunter", null, 3, "P2", true),
   row("pronostic over under", "F", "informational", "/score-hunter/over-2-5", null, 3, "P2", true),
   row("pronostic les deux équipes marquent", "F", "informational", "/score-hunter/btts", null, 3, "P2", true),

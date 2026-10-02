@@ -1,30 +1,44 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { PronoSilo, filterSiloMatches } from "@/components/prono-silo";
 import { getLeagueDesk } from "@/lib/desk.functions";
-import { PRONO_LEAGUES, siloIndexable } from "@/lib/seo/money-map";
+import { pronoLeagueBySlug, siloIndexable } from "@/lib/seo/money-map";
 import { SITE_URL } from "@/lib/programmatic";
 
 export const Route = createFileRoute("/pronostics-football/$league")({
   loader: async ({ params }) => {
-    const meta = PRONO_LEAGUES.find((l) => l.slug === params.league);
-    if (!meta) throw notFound();
-    const desk = await getLeagueDesk({ data: { league: meta.league } });
-    return { meta, desk };
+    const resolved = pronoLeagueBySlug(params.league);
+    if (!resolved) throw notFound();
+    const desk = await getLeagueDesk({ data: { league: resolved.league } });
+    return {
+      meta: { slug: resolved.slug, league: resolved.league, title: resolved.title },
+      desk,
+      isAlias: resolved.isAlias,
+    };
   },
   head: ({ loaderData, params }) => {
-    const title = loaderData ? `Pronostic ${loaderData.meta.title} : probabilités | BetGPT` : "Pronostic";
-    const path = `/pronostics-football/${params.league}`;
-    const n = loaderData ? filterSiloMatches(loaderData.desk, { league: loaderData.meta.league }).length : 0;
+    const resolved = loaderData?.meta ?? pronoLeagueBySlug(params.league);
+    if (!resolved) {
+      return {
+        meta: [
+          { title: "Pronostic football | BetGPT" },
+          { name: "robots", content: "noindex, follow" },
+        ],
+      };
+    }
+    const title = `Pronostic ${resolved.title} : probabilités | BetGPT`;
+    const path = `/pronostics-football/${resolved.slug}`;
+    const n = loaderData ? filterSiloMatches(loaderData.desk, { league: resolved.league }).length : 0;
+    const alias = params.league !== resolved.slug;
     return {
       meta: [
         { title },
         {
           name: "description",
-          content: loaderData
-            ? `Pronostics ${loaderData.meta.title} issus du bureau BetGPT : modèle, cote listée et écart. Sans match inventé.`
-            : "Compétition introuvable.",
+          content: n
+            ? `Pronostics ${resolved.title} issus du bureau BetGPT : modèle, cote listée, écart et décision. Sans match inventé.`
+            : `Pronostic ${resolved.title} : méthode BetGPT, accès au calendrier, classement, scores et résultats pendant l’attente du prochain match exploitable.`,
         },
-        { name: "robots", content: siloIndexable("league", n) ? "index, follow" : "noindex, follow" },
+        { name: "robots", content: alias ? "noindex, follow" : siloIndexable("league", n) ? "index, follow" : "noindex, follow" },
         { property: "og:url", content: `${SITE_URL}${path}` },
       ],
       links: [{ rel: "canonical", href: `${SITE_URL}${path}` }],
@@ -36,10 +50,15 @@ export const Route = createFileRoute("/pronostics-football/$league")({
 
 function Page() {
   const { meta, desk } = Route.useLoaderData();
+  const n = filterSiloMatches(desk, { league: meta.league }).length;
   return (
     <PronoSilo
       h1={`Pronostic ${meta.title}`}
-      lead={`Uniquement les matchs de ${meta.title} présents dans le bureau. Le classement et le calendrier de la compétition restent sur leurs pages dédiées.`}
+      lead={
+        n
+          ? `${n} match${n > 1 ? "s" : ""} de ${meta.title} ${n > 1 ? "ont" : "a"} actuellement une estimation dans le bureau BetGPT. Le classement, le calendrier, les scores et les résultats restent accessibles depuis cette page.`
+          : `Aucun match de ${meta.title} n’est actuellement exploitable dans la fenêtre du bureau. La page reste utile : méthode de lecture, calendrier, classement, scores et résultats sont disponibles sans inventer de rencontre ni de cote.`
+      }
       path={`/pronostics-football/${meta.slug}`}
       kind="league"
       desk={desk}
