@@ -13,6 +13,7 @@ import { reactionForPunchline } from "./reaction.ts";
 import { personalityBrief } from "./personality.ts";
 import { buildChallengeUrl, buildFacebookShareUrl, buildShareMoment, buildXShareUrl } from "./share.ts";
 import { renderDailyChatPick, selectDailyChatPick, selectDailyDataFallback } from "./daily-pick.ts";
+import { isAbsurdScoreClaim } from "./complete.ts";
 
 it("normalizes corrupt nested memories instead of crashing the prompt", () => {
   assert.deepEqual(normalizeMemory({ blackBook: null, preferences: 42 }), EMPTY_MEMORY);
@@ -579,4 +580,10 @@ it("viral share engine creates social-native X and Facebook URLs", () => {
   assert.match(decodeURIComponent(x), /share_source=x/);
   assert.match(fb, /^https:\/\/www\.facebook\.com\/sharer\/sharer\.php\?/);
   assert.match(decodeURIComponent(fb), /share_source=facebook/);
+});
+
+it("detects absurd score claims beyond the old 10-0/20-0 special cases", () => {
+  assert.equal(isAbsurdScoreClaim("La France va perdre son prochain match 25-0"), true);
+  assert.equal(isAbsurdScoreClaim("La France va perdre vingt-cinq à zéro"), true);
+  assert.equal(isAbsurdScoreClaim("Victoire 2-0"), false);
 });
