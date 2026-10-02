@@ -487,31 +487,88 @@
     "slug": "home-insurance-deductibles-explained",
     "category": "Home insurance",
     "title": "Home Insurance Deductibles Explained: Flat Dollar, Percentage and Storm Deductibles",
-    "description": "How different homeowners-insurance deductible structures change the amount you may owe after a covered loss.",
+    "description": "How homeowners-insurance deductibles work, why percentage and catastrophe deductibles need special attention, and how to compare policies without underestimating your out-of-pocket exposure.",
     "updated": "2026-10-02",
+    "heroImage": "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1600&h=900&q=82",
+    "heroAlt": "House keys and paperwork representing the deductible choices inside a homeowners policy.",
+    "imageCredit": "Unsplash",
+    "imageCreditUrl": "https://unsplash.com/",
+    "keyTakeaways": [
+      "A deductible is the amount or formula applied before the insurer's covered payment, subject to policy terms.",
+      "Percentage deductibles can be far larger in dollars than they first appear.",
+      "Wind, hurricane or named-storm deductibles can differ from the all-peril deductible.",
+      "Ask for the dollar equivalent of every deductible shown on the quote.",
+      "Compare deductible triggers as well as amounts."
+    ],
     "sections": [
       {
-        "heading": "Flat-dollar deductibles are the simplest",
-        "text": "A flat deductible is a stated dollar amount applied under the policy terms to a covered claim. It is easy to compare across quotes, but make sure the same deductible applies to the same categories of loss."
+        "heading": "Why the deductible deserves its own line in every home-insurance comparison",
+        "body": "Homeowners quotes often lead with the annual premium, but the deductible determines how much of a covered property loss you retain. Two policies can have identical dwelling limits and dramatically different claim economics if one uses a $1,000 flat deductible and another applies a percentage deductible to certain events.\n\nThe deductible is not always one simple number. A policy can have a standard deductible for many covered losses plus a separate wind, hurricane, named-storm, earthquake or other catastrophe deductible. The applicable deductible depends on the policy and the cause of loss. That means “my deductible is $1,000” can be incomplete.\n\nWhen shopping, ask the insurer to list every deductible and the events that trigger each one. If a percentage appears, request the current dollar equivalent based on the insured amount. Store that number with the quote. The percentage may look small on paper but produce a substantial out-of-pocket obligation after a major loss. This is one of the clearest places where a slightly cheaper annual premium can hide much more retained risk."
       },
       {
-        "heading": "Percentage deductibles can be much larger",
-        "text": "A percentage deductible is generally tied to an insured amount rather than the size of the claim. A small-looking percentage can therefore produce a substantial out-of-pocket amount. Ask the insurer to show the dollar equivalent for the home being insured."
+        "heading": "Flat-dollar deductibles are straightforward, but still need context",
+        "body": "A flat-dollar deductible states a fixed amount, such as $500, $1,000 or another figure. In a covered claim to which the deductible applies, the policyholder generally bears that amount before the insurer's covered payment is calculated according to the contract. The simplicity makes flat deductibles easy to compare across carriers.\n\nBut do not stop at the number. Confirm whether the deductible applies per occurrence and whether different coverage sections have different treatment. Some policies may handle certain losses or endorsements differently. Review the declarations and any special forms rather than assuming the headline deductible applies everywhere.\n\nAlso compare the premium effect of different deductible options. A higher deductible can reduce premium, but the savings should be measured against the extra amount you would need after a claim. The same risk-retention logic used in auto insurance applies here, except home losses can be much larger and catastrophe deductibles can operate differently. Keep the quote versions so you can see exactly what the higher deductible saves rather than relying on a generic rule of thumb."
       },
       {
-        "heading": "Storm deductibles may have separate triggers",
-        "text": "Wind, hurricane or named-storm deductibles can have their own definitions and triggers. Review the policy wording and state-specific disclosures because the same weather event may be handled differently across carriers and jurisdictions."
+        "heading": "Percentage deductibles need to be converted into dollars",
+        "body": "A percentage deductible is commonly calculated from an insured value specified by the policy, often the dwelling limit, rather than as a percentage of the claim amount. The exact basis is defined by the contract. This distinction matters enormously. A 2% deductible on a $400,000 insured dwelling would correspond to $8,000 if the policy uses that dwelling amount as the base. That arithmetic example is illustrative, not a statement about any particular policy.\n\nAlways ask the insurer to show the dollar equivalent at the time of quote. If the dwelling limit rises at renewal, the dollar amount represented by the same percentage may rise too. Store both the percentage and the current dollar figure in your comparison sheet.\n\nDo not assume a percentage deductible is bad or unusual. In catastrophe-exposed markets it can be a standard feature. The consumer issue is transparency: you should know the amount you are retaining before a storm occurs, not after. When comparing two policies, normalize the percentage to dollars using each policy's actual insured amount before you compare premiums."
+      },
+      {
+        "heading": "Wind, hurricane and named-storm deductibles can have different triggers",
+        "body": "Policies in coastal or severe-weather areas may use special deductibles for windstorm, hurricane or named-storm losses. The wording matters because the event that activates a hurricane deductible may differ from the event that activates a broader wind deductible. Trigger definitions can involve official storm designations, timing and location, and state law can affect permitted structures.\n\nDo not generalize from another state's policy. Ask the insurer to identify the deductible name, percentage or dollar amount, and trigger language for the property being quoted. State insurance departments often publish consumer guides or approved-form information that can help you understand the local framework.\n\nWhen comparing carriers, one may offer a lower premium with a higher catastrophe deductible while another charges more but leaves you with less retained risk. Compare the potential dollar exposure alongside the premium. A homeowners policy is designed for severe losses, so catastrophe deductible structure can be more important than a small difference in annual price."
+      },
+      {
+        "heading": "How deductibles interact with smaller claims",
+        "body": "If covered damage is below the applicable deductible, there may be no insurance payment for that property loss. If damage is only modestly above the deductible, the insurer's payment may be relatively small after the deductible and other policy provisions. That reality should shape how you think about the policy.\n\nA higher deductible effectively shifts smaller property losses back to the homeowner while preserving protection for larger covered events. Some households prefer that trade because they have emergency savings and want a lower premium. Others prefer a lower deductible because a sudden multi-thousand-dollar expense would be difficult to absorb.\n\nThe correct deductible is therefore partly a liquidity decision. Keep enough accessible savings to cover the amount you choose. Do not select a deductible based solely on the monthly premium if paying it after a loss would delay repairs or require expensive borrowing. The policy should remain usable on the day something goes wrong, not only affordable on the day you buy it."
+      },
+      {
+        "heading": "Build an emergency-fund plan around the largest deductible you could owe",
+        "body": "A useful stress test is to identify the largest plausible deductible shown on the policy, not merely the standard one printed most prominently. If the policy has a $1,000 all-peril deductible but a hurricane deductible that could equal several thousand dollars, your emergency-fund planning should reflect the larger exposure.\n\nYou do not need to keep a separate bank account labeled “insurance deductible,” but the money should be accessible enough to support repairs after a covered loss. Consider that a catastrophe can create multiple household expenses at once: temporary lodging, transportation, food, cleanup or uncovered damage. The deductible is one part of that cash demand.\n\nIf the highest deductible would be impossible to fund, ask whether a different deductible option exists and what it would cost. Compare that extra premium with the benefit of reducing your retained risk. This is a more useful conversation than simply asking for the cheapest homeowners quote because it connects the insurance contract to real household liquidity."
+      },
+      {
+        "heading": "Separate flood, earthquake and other excluded-peril questions",
+        "body": "A deductible only matters if the policy covers the cause of loss. Standard homeowners policies generally do not substitute for flood insurance, and earthquake coverage may also require a separate policy or endorsement depending on the market. A low homeowners deductible does not help with an excluded peril.\n\nWhen comparing policies, first ask whether the peril is covered, excluded or separately insured. Then evaluate the deductible for the relevant product. Flood policies, earthquake policies and specialty endorsements can have their own structures that should not be blended casually with the standard homeowners deductible.\n\nThis sequence prevents a common misunderstanding: optimizing a deductible for a risk the policy does not cover. Coverage scope comes first, deductible second, premium third. A well-designed comparison sheet therefore has separate rows for excluded or separately insured catastrophes, rather than forcing every hazard into one “deductible” box."
+      },
+      {
+        "heading": "A worksheet for comparing home-insurance deductibles",
+        "body": "For each quote, record the standard all-peril deductible, any wind deductible, hurricane deductible, named-storm deductible and other catastrophe deductible shown. Add the calculation base for every percentage deductible and convert it into a current dollar amount. Record the dwelling limit used for the calculation.\n\nThen note the premium associated with alternative deductible choices. If changing the standard deductible also changes another part of the policy, reset the quote and isolate one variable at a time. Add a column for any special deductible waiver or endorsement, but verify the conditions rather than assuming it always applies.\n\nFinally, compare your emergency savings with the largest deductible you could plausibly owe. The policy can be perfectly valid and still be a poor fit if you cannot fund the retained amount. A quote worksheet turns a vague percentage into an actual household cash-flow decision and gives you something concrete to review again at renewal."
+      },
+      {
+        "heading": "Questions to ask before binding coverage",
+        "body": "Ask: What deductible applies to fire? What applies to theft? What applies to wind? Is there a hurricane or named-storm deductible? Is any deductible expressed as a percentage, and if so what is the current dollar amount? What insured value is used as the base? Does the percentage change automatically when the dwelling limit changes?\n\nAlso ask whether special endorsements have separate deductibles and whether there are state-specific notices you should read. Save the answers with the quote and review the declarations after the policy is issued. If the declarations do not match what you expected, contact the insurer promptly rather than waiting for a claim.\n\nA consumer should never need to reverse-engineer deductible exposure from a marketing page after a catastrophe. The quote process is the right time to make the retained risk visible and deliberate."
+      }
+    ],
+    "faq": [
+      {
+        "q": "Is a 2% homeowners deductible 2% of the repair bill?",
+        "a": "Not necessarily. Percentage deductibles are commonly calculated from an insured amount specified in the policy, often the dwelling limit. Read the contract and ask for the current dollar equivalent."
+      },
+      {
+        "q": "Can my policy have more than one deductible?",
+        "a": "Yes. A policy can have a standard deductible and separate deductibles for wind, hurricane, named storms or other causes of loss."
+      },
+      {
+        "q": "Does a higher deductible always make home insurance cheaper?",
+        "a": "It often reduces premium, but the amount varies. Compare the actual quote difference with the extra cash you would retain after a claim."
+      },
+      {
+        "q": "Should I keep my deductible amount in emergency savings?",
+        "a": "That is a useful planning approach. A deductible is a foreseeable cash exposure, so choosing an amount you can fund makes the policy more usable after a loss."
       }
     ],
     "sources": [
-      [
-        "NAIC Consumer Insurance",
-        "https://content.naic.org/consumer"
-      ],
-      [
-        "FEMA",
-        "https://www.fema.gov/"
-      ]
+      {
+        "name": "NAIC Consumer Insurance",
+        "url": "https://content.naic.org/consumer"
+      },
+      {
+        "name": "NAIC State Insurance Departments",
+        "url": "https://content.naic.org/state-insurance-departments"
+      }
+    ],
+    "relatedSlugs": [
+      "home-insurance-replacement-cost-guide",
+      "home-insurance-flood-not-covered"
     ]
   },
   {
