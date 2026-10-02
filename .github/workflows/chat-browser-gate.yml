@@ -6,7 +6,8 @@ on:
     paths:
       - ".github/workflows/chat-browser-gate.yml"
       - "src/components/chat-panel.tsx"
-      - "src/routes/chat.tsx"\n      - "src/routes/__root.tsx"
+      - "src/routes/chat.tsx"
+      - "src/routes/__root.tsx"
 
 permissions:
   contents: read
