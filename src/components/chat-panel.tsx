@@ -13,7 +13,12 @@ import {
 } from "@/lib/chat/types";
 import { track } from "@/lib/analytics";
 import { postChat } from "@/lib/chat/transport";
-import { playPunchline } from "@/lib/chat/voice";
+import {
+  isBrowserVoiceTestEnabled,
+  playBrowserVoiceTest,
+  playPunchline,
+  setBrowserVoiceTestEnabled,
+} from "@/lib/chat/voice";
 import { reactionForPunchline, type PunchReaction } from "@/lib/chat/reaction";
 import { ChatDiploma } from "@/components/chat-diploma";
 import { selectChatDiploma, type ChatDiplomaId } from "@/lib/chat/diplomas";
@@ -466,6 +471,8 @@ export function ChatPanel({
   const [diplomas, setDiplomas] = useState<Record<string, ChatDiplomaId>>({});
   const [speakingMessageId, setSpeakingMessageId] = useState<string | null>(null);
   const [reduceMotion, setReduceMotion] = useState(false);
+  const [browserVoiceTest, setBrowserVoiceTest] = useState(false);
+  const [browserVoiceUnavailable, setBrowserVoiceUnavailable] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const boxRef = useRef<HTMLTextAreaElement>(null);
   const seeded = useRef(false);
@@ -475,6 +482,7 @@ export function ChatPanel({
 
   useEffect(() => {
     setMemory(loadMemory());
+    setBrowserVoiceTest(isBrowserVoiceTestEnabled());
   }, []);
 
   useEffect(() => {
@@ -501,6 +509,29 @@ export function ChatPanel({
     const el = scrollRef.current;
     if (el) el.scrollTop = el.scrollHeight;
   }, [messages]);
+
+  const toggleBrowserVoiceTest = () => {
+    if (browserVoiceTest) {
+      setBrowserVoiceTestEnabled(false);
+      setBrowserVoiceTest(false);
+      setBrowserVoiceUnavailable(false);
+      track("chat_browser_voice_test_off");
+      return;
+    }
+
+    setBrowserVoiceTestEnabled(true);
+    const result = playBrowserVoiceTest();
+    if (result === "BROWSER") {
+      setBrowserVoiceTest(true);
+      setBrowserVoiceUnavailable(false);
+      track("chat_browser_voice_test_on");
+    } else {
+      setBrowserVoiceTestEnabled(false);
+      setBrowserVoiceTest(false);
+      setBrowserVoiceUnavailable(true);
+      track("chat_browser_voice_test_unavailable");
+    }
+  };
 
   const markSpeaking = (messageId: string, answer: string) => {
     if (speakingTimer.current) window.clearTimeout(speakingTimer.current);
@@ -796,7 +827,7 @@ export function ChatPanel({
             </button>
           ))}
         </div>
-        <div className="mb-2 flex gap-1">
+        <div className="mb-2 flex flex-wrap gap-1">
           {MODES.map((m) => (
             <button
               key={m.id}
@@ -813,6 +844,26 @@ export function ChatPanel({
               {m.label}
             </button>
           ))}
+          <button
+            type="button"
+            aria-pressed={browserVoiceTest}
+            onClick={toggleBrowserVoiceTest}
+            className={cn(
+              "inline-flex min-h-10 items-center gap-1.5 rounded-full px-4 text-sm font-semibold",
+              browserVoiceTest
+                ? "bg-paper text-white shadow-sm"
+                : "border border-line bg-white text-muted hover:border-sage/50 hover:text-paper",
+            )}
+            title={browserVoiceTest ? "Désactiver la voix gratuite du navigateur" : "Tester la voix gratuite du navigateur"}
+          >
+            <Volume2 size={14} />
+            {browserVoiceTest ? "Voix navigateur ✓" : "Tester la voix"}
+          </button>
+          {browserVoiceUnavailable ? (
+            <span className="self-center px-2 text-xs font-semibold text-rust">
+              Voix navigateur indisponible sur cet appareil.
+            </span>
+          ) : null}
         </div>
         <form
           onSubmit={(e) => {

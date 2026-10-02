@@ -1,5 +1,7 @@
 import type { PunchlineMeta } from "./punch";
 
+const BROWSER_VOICE_TEST_KEY = "betgpt-browser-voice-test";
+
 async function cacheKey(punchline: PunchlineMeta): Promise<string> {
   const input = `${punchline.style}:\n${punchline.text}`;
   const bytes = new TextEncoder().encode(input);
@@ -35,6 +37,40 @@ function browserVoice(punchline: PunchlineMeta): "BROWSER" | "UNAVAILABLE" {
   }
 }
 
+export function isBrowserVoiceTestEnabled(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    return window.localStorage.getItem(BROWSER_VOICE_TEST_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+export function setBrowserVoiceTestEnabled(enabled: boolean): void {
+  if (typeof window === "undefined") return;
+  try {
+    if (enabled) window.localStorage.setItem(BROWSER_VOICE_TEST_KEY, "1");
+    else window.localStorage.removeItem(BROWSER_VOICE_TEST_KEY);
+  } catch {
+    /* Browser storage is optional; voice still works for the current click. */
+  }
+  if (!enabled && "speechSynthesis" in window) window.speechSynthesis.cancel();
+}
+
+export function playBrowserVoiceTest(): "BROWSER" | "UNAVAILABLE" {
+  return browserVoice({
+    text: "Voix navigateur activée. Enfin une décision techniquement raisonnable.",
+    score: 100,
+    style: "SHOUT",
+    reaction: {
+      mood: "ABSURD_SHOCK",
+      emojis: ["🔊"],
+      gifQuery: "",
+      gifFallback: "",
+    },
+  });
+}
+
 /**
  * Voice policy:
  * - Prefer ElevenLabs when configured.
@@ -45,6 +81,8 @@ function browserVoice(punchline: PunchlineMeta): "BROWSER" | "UNAVAILABLE" {
 export async function playPunchline(
   punchline: PunchlineMeta,
 ): Promise<"ELEVENLABS" | "BROWSER" | "UNAVAILABLE" | "BLOCKED"> {
+  if (isBrowserVoiceTestEnabled()) return browserVoice(punchline);
+
   try {
     const key = await cacheKey(punchline);
     const cacheRequest = new Request(`/__betgpt_voice_cache__/${key}.mp3`);
