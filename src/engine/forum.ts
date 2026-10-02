@@ -34,6 +34,8 @@ export type ForumThread = {
   keywords: string;
   /** False means useful live UI, but not a durable search-engine promise. */
   indexable?: boolean;
+  /** Which model/router produced the additional agent conversation, when present. */
+  generator?: string;
 };
 
 function line(parts: string[]): string {
