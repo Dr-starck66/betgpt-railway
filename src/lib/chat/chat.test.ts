@@ -13,7 +13,7 @@ import { reactionForPunchline } from "./reaction.ts";
 import { personalityBrief } from "./personality.ts";
 import { buildChallengeUrl, buildFacebookShareUrl, buildShareMoment, buildXShareUrl } from "./share.ts";
 import { renderDailyChatPick, selectDailyChatPick, selectDailyDataFallback } from "./daily-pick.ts";
-import { isAbsurdScoreClaim } from "./complete.ts";
+import { chatNeedsDesk, isAbsurdScoreClaim } from "./complete.ts";
 
 it("normalizes corrupt nested memories instead of crashing the prompt", () => {
   assert.deepEqual(normalizeMemory({ blackBook: null, preferences: 42 }), EMPTY_MEMORY);
@@ -586,4 +586,14 @@ it("detects absurd score claims beyond the old 10-0/20-0 special cases", () => {
   assert.equal(isAbsurdScoreClaim("La France va perdre son prochain match 25-0"), true);
   assert.equal(isAbsurdScoreClaim("La France va perdre vingt-cinq à zéro"), true);
   assert.equal(isAbsurdScoreClaim("Victoire 2-0"), false);
+});
+
+it("skips the live desk for pure conversation and tactics", () => {
+  assert.equal(chatNeedsDesk("Pourquoi un 4-4-2 peut souffrir face à un 3-2-5 ?"), false);
+  assert.equal(chatNeedsDesk("Salut, tu penses quoi du pressing haut ?"), false);
+});
+
+it("keeps the live desk for factual current football requests", () => {
+  assert.equal(chatNeedsDesk("Qu'est-ce que tu mises aujourd'hui ?"), true);
+  assert.equal(chatNeedsDesk("Quel est le prochain match de la France ?"), true);
 });
