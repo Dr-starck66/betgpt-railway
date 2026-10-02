@@ -23,7 +23,7 @@ export const ANALYTICS_EVENTS = {
   ad_impression: "ad_impression",
 } as const;
 
-export type AnalyticsEvent = (typeof ANALYTICS_EVENTS)[keyof typeof ANALYTICS_EVENTS] | `chat_share_${string}`;
+export type AnalyticsEvent = (typeof ANALYTICS_EVENTS)[keyof typeof ANALYTICS_EVENTS] | `chat_share_${string}` | `chat_diploma_${string}`;
 
 const KEY = "betgpt-analytics";
 const VISIT = "betgpt-visit";
