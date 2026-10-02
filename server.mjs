@@ -115,7 +115,6 @@ function guidePage(req,a){
  const schema={"@context":"https://schema.org","@type":"Article","headline":a.title,"dateModified":a.updated,"mainEntityOfPage":canonical};
  const sections=a.sections.map(s=>`<section><h2>${htmlEscape(s.heading)}</h2><p>${htmlEscape(s.text)}</p></section>`).join("");
  const sources=(a.sources||[]).length?`<section class="sources"><h2>Sources and further reading</h2><ul>${a.sources.map(([name,url])=>`<li><a href="${htmlEscape(url)}" target="_blank" rel="noopener noreferrer">${htmlEscape(name)}</a></li>`).join("")}</ul></section>`:"";
- const sources=(a.sources||[]).length?`<section class="sources"><h2>Sources and further reading</h2><ul>${a.sources.map(([name,url])=>`<li><a href="${htmlEscape(url)}" target="_blank" rel="noopener noreferrer">${htmlEscape(name)}</a></li>`).join("")}</ul></section>`:"";
  const body=header()+`<main class="article"><a class="back" href="/guides">← All guides</a><span class="eyebrow">${a.category}</span><h1>${htmlEscape(a.title)}</h1><p class="lede">${htmlEscape(a.description)}</p><div class="meta">Updated ${a.updated} · Editorial review required before material changes</div>${sections}${sources}
  <aside class="cta"><h2>Ready to compare?</h2><p>Approved quote partners will appear here only after the commercial relationship and tracking are verified.</p><a class="primary" href="/#compare">Start with your insurance type</a></aside>
  <script type="application/ld+json">${JSON.stringify(schema)}</script></main>`+footer();
