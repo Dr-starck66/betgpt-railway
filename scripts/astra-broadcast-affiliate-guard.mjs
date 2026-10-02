@@ -25,7 +25,7 @@ for (const [id, file, fragments] of checks) {
 }
 
 const registry = read("src/lib/broadcaster-links.ts");
-for (const required of ["beIN SPORTS", "DAZN", "CANAL+", "TF1", "M6", "L'Équipe"]) {
+for (const required of ["beIN SPORTS", "DAZN", "CANAL+", "TF1", "M6", "L'Équipe", "Awin", "Amazon Partenaires"]) {
   if (!registry.includes(required)) failures.push({ id: "coverage", reason: "missing-broadcaster", required });
 }
 
