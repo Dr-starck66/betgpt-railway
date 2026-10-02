@@ -21,7 +21,7 @@ function row(i: number, result: "win" | "lose", odds = 2.1): TicketRow {
     modelProb: 0.52,
     ev: 0.08,
     dailyBest: false,
-    kind: "prono",
+    kind: "mise",
     decision: "BET",
     league: "L1",
     pHome: 0.52,
