@@ -11,7 +11,12 @@ import { cn } from "@/lib/utils";
 import { markVisit } from "@/lib/analytics";
 import { Home, Radar, Activity, MessageCircle, Menu, X, ShieldCheck, Sparkles } from "lucide-react";
 
-const MOBILE_ICONS = [Home, Radar, Activity, MessageCircle];
+const MOBILE_PRIMARY = [
+  { to: "/", label: "Accueil", icon: Home },
+  { to: "/pronostics-sportifs", label: "Pronostics", icon: Radar },
+  { to: "/scores-en-direct", label: "Scores", icon: Activity },
+  { to: "/chat", label: "Chat IA", icon: MessageCircle },
+] as const;
 
 const PRIMARY = [
   { to: "/", label: "Accueil" },
@@ -175,9 +180,9 @@ export function AppShell({ children }: { children: ReactNode }) {
             className="mobile-nav fixed inset-x-3 bottom-3 z-40 grid grid-cols-5 rounded-[1.35rem] border border-line/90 bg-white/94 text-paper shadow-[0_18px_46px_rgba(15,23,42,0.12)] backdrop-blur xl:hidden"
             aria-label="Principal mobile"
           >
-            {PRIMARY.slice(0, 4).map((item, index) => {
+            {MOBILE_PRIMARY.map((item) => {
               const active = item.to === "/" ? pathname === "/" : pathname.startsWith(item.to);
-              const Icon = MOBILE_ICONS[index]!;
+              const Icon = item.icon;
               return (
                 <Link
                   key={item.to}
@@ -224,6 +229,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 {MORE.filter((item) => ["/score-hunter", "/opportunities", "/pari-du-jour", "/ledger"].includes(item.to)).map((item) => (
                   <MenuLink key={item.to} to={item.to} label={item.label} />
                 ))}
+                <MenuLink to="/resultats-football" label="Résultats" />
                 <MenuLink to="/calendrier" label="Calendrier" />
                 <MenuLink to="/classement" label="Classements" />
               </MenuGroup>
@@ -240,6 +246,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 {MORE.filter((item) => ["/blog", "/forum", "/actu", "/chat"].includes(item.to)).map((item) => (
                   <MenuLink key={item.to} to={item.to} label={item.label} />
                 ))}
+                <MenuLink to="/actualites" label="Actualités" />
                 <MenuLink to="/guides" label="Guides" />
                 <MenuLink to="/chat" label="Chat BetGPT" />
               </MenuGroup>
