@@ -6,6 +6,7 @@ on:
     paths:
       - ".github/workflows/chat-browser-gate.yml"
       - "src/components/chat-panel.tsx"
+      - "src/components/chat-diploma.tsx"
       - "src/routes/chat.tsx"
       - "src/routes/__root.tsx"
 
@@ -58,6 +59,19 @@ jobs:
           await box.fill("La France va perdre 25-0 son prochain match.");
           await page.getByRole("button",{name:"Envoyer",exact:true}).click({timeout:10000});
           await page.getByText(/calamar|asile|carton rouge|score pareil/i).first().waitFor({timeout:25000});
+          await box.fill("Mon combiné de 10 matchs est sûr à 100%, je mets tout.");
+          await page.getByRole("button",{name:"Envoyer",exact:true}).click({timeout:10000});
+          const enlarge=page.getByRole("button",{name:/Agrandir le diplôme/i}).first();
+          await enlarge.waitFor({state:"visible",timeout:25000});
+          await enlarge.click({timeout:10000});
+          const diplomaDialog=page.getByRole("dialog",{name:/Diplôme BetGPT en plein écran/i});
+          await diplomaDialog.waitFor({state:"visible",timeout:10000});
+          const rect=await diplomaDialog.boundingBox();
+          if(!rect || rect.width < 380 || rect.height < 830) throw new Error("DIPLOMA_NOT_FULLSCREEN");
+          console.log("DIPLOMA_FULLSCREEN_PASS="+JSON.stringify(rect));
+          await page.getByRole("button",{name:"Fermer le diplôme en plein écran",exact:true}).click({timeout:10000});
+          await diplomaDialog.waitFor({state:"hidden",timeout:10000});
+          console.log("DIPLOMA_FULLSCREEN_CLOSE_PASS");
           console.log("ASTRA_CHAT_BROWSER_PASS");
           console.log("BROWSER_ERRORS="+JSON.stringify(errors));
           console.log("HTTP_ERRORS="+JSON.stringify(bad));
