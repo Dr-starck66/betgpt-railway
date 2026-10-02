@@ -7,6 +7,9 @@ on:
       - ".github/workflows/chat-browser-gate.yml"
       - "src/components/chat-panel.tsx"
       - "src/components/chat-diploma.tsx"
+      - "src/lib/chat/diplomas.ts"
+      - "src/lib/chat/diplomas.test.ts"
+      - "public/diplomes/**"
       - "src/lib/chat/reaction.ts"
       - "server/api/punch-gif.post.ts"
       - "server/api/punch-voice.post.ts"
@@ -89,7 +92,12 @@ jobs:
           await diplomaDialog.waitFor({state:"visible",timeout:10000});
           const rect=await diplomaDialog.boundingBox();
           if(!rect || rect.width < 380 || rect.height < 830) throw new Error("DIPLOMA_NOT_FULLSCREEN");
+          const portrait=page.getByLabel("Diplôme BetGPT portrait");
+          await portrait.waitFor({state:"visible",timeout:10000});
+          const portraitMetrics=await portrait.evaluate(img=>({naturalWidth:img.naturalWidth,naturalHeight:img.naturalHeight,width:img.getBoundingClientRect().width,height:img.getBoundingClientRect().height}));
+          if(!(portraitMetrics.naturalHeight>portraitMetrics.naturalWidth && portraitMetrics.height>portraitMetrics.width)) throw new Error("DIPLOMA_NOT_PORTRAIT="+JSON.stringify(portraitMetrics));
           console.log("DIPLOMA_FULLSCREEN_PASS="+JSON.stringify(rect));
+          console.log("DIPLOMA_PORTRAIT_PASS="+JSON.stringify(portraitMetrics));
           await page.getByRole("button",{name:"Fermer le diplôme en plein écran",exact:true}).click({timeout:10000});
           await diplomaDialog.waitFor({state:"hidden",timeout:10000});
           console.log("DIPLOMA_FULLSCREEN_CLOSE_PASS");

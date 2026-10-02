@@ -140,10 +140,11 @@ export function ChatDiploma({ diplomaId }: { diplomaId: ChatDiplomaId }) {
             onClick={(event) => event.stopPropagation()}
           >
             <img
-              src={diploma.image}
-              alt={"Diplôme BetGPT : " + diploma.title}
+              src={diploma.portraitImage}
+              alt={"Diplôme BetGPT portrait : " + diploma.title}
+              aria-label="Diplôme BetGPT portrait"
               decoding="async"
-              className="max-h-[calc(100dvh-1rem)] max-w-[calc(100vw-1rem)] object-contain sm:max-h-[calc(100dvh-2.5rem)] sm:max-w-[calc(100vw-2.5rem)]"
+              className="h-[min(96dvh,calc(100vw*16/9))] w-auto max-w-[96vw] rounded-[1.75rem] object-contain shadow-2xl sm:max-h-[calc(100dvh-2.5rem)]"
             />
           </div>
         </div>

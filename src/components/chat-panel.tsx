@@ -470,7 +470,7 @@ export function ChatPanel({
   const boxRef = useRef<HTMLTextAreaElement>(null);
   const seeded = useRef(false);
   const sending = useRef(false);
-  const lastDiplomaRef = useRef<ChatDiplomaId | undefined>(undefined);
+  const diplomaHistoryRef = useRef<ChatDiplomaId[]>([]);
   const speakingTimer = useRef<number | null>(null);
 
   useEffect(() => {
@@ -595,10 +595,10 @@ export function ChatPanel({
         punchline: out.punchline?.text,
         memory: mem,
         mode: resolved,
-        avoid: lastDiplomaRef.current,
+        recent: diplomaHistoryRef.current,
       });
       if (awardedDiploma) {
-        lastDiplomaRef.current = awardedDiploma;
+        diplomaHistoryRef.current = [...diplomaHistoryRef.current, awardedDiploma].slice(-5);
         setDiplomas((prev) => ({ ...prev, [assistantId]: awardedDiploma }));
       }
       setMessages((prev) =>
