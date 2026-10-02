@@ -90,13 +90,15 @@ export function crestSeo(
 
 export function blogImageSeo(src: string, alt: string, caption: string): ImageSeo {
   const filename = src.split("/").pop() ?? "image-football-betgpt.jpg";
+  const cleanAlt = String(alt || "").replace(/\s+/g, " ").trim();
+  const cleanCaption = String(caption || "").replace(/\s+/g, " ").trim();
   return {
     src,
-    alt,
-    title: alt,
-    description: caption,
+    alt: cleanAlt,
+    title: cleanAlt,
+    description: cleanCaption,
     filename,
-    caption,
+    caption: cleanCaption,
     width: 1200,
     height: 675,
   };
