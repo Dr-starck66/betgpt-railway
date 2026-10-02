@@ -78,7 +78,7 @@
     "affiliate:guard": "node scripts/astra-affiliate-conversion-guard.mjs",
     "test:search-truth": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/search/search-truth.test.ts",
     "seo:public-readiness": "node scripts/astra-public-seo-readiness-gate.mjs",
-    "test:forum-durability": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/engine/forum-durability.test.ts",
+    "test:forum-durability": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/engine/forum-durability.test.ts src/engine/forum-diversity.test.ts",
     "test:no-repeat": "node scripts/astra-no-repeat-guard.mjs",
     "test:broadcast-affiliate": "node --experimental-strip-types --test src/lib/broadcaster-links.test.ts src/lib/match-broadcasts.test.ts && node scripts/astra-broadcast-affiliate-guard.mjs",
     "test:mobile-parity": "node scripts/astra-mobile-parity-guard.mjs"
