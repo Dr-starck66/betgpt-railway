@@ -56,8 +56,7 @@ def bootstrap_wan():
             marker.write_text("ok")
     if not WAN_CKPT.exists():
         run([
-            sys.executable, "-m", "huggingface_hub.commands.huggingface_cli",
-            "download", "Wan-AI/Wan2.2-TI2V-5B",
+            "hf", "download", "Wan-AI/Wan2.2-TI2V-5B",
             "--local-dir", WAN_CKPT
         ])
 
@@ -66,21 +65,42 @@ def size_for(aspect):
         return "704*1280"
     return "1280*704"
 
+def gpu_count():
+    try:
+        out = subprocess.check_output(["nvidia-smi", "--query-gpu=index", "--format=csv,noheader"], text=True)
+        return max(1, len([line for line in out.splitlines() if line.strip()]))
+    except Exception:
+        return 1
+
 def generate_clip(prompt, aspect, seed, output_path, reference_image=None):
-    cmd = [
-        sys.executable, "generate.py",
+    n_gpu = gpu_count()
+    common = [
+        "generate.py",
         "--task", "ti2v-5B",
         "--size", size_for(aspect),
         "--ckpt_dir", str(WAN_CKPT),
-        "--offload_model", "True",
-        "--convert_model_dtype",
-        "--t5_cpu",
         "--base_seed", str(seed),
         "--save_file", str(output_path),
         "--prompt", prompt,
     ]
     if reference_image:
-        cmd += ["--image", reference_image]
+        common += ["--image", reference_image]
+
+    if n_gpu >= 2:
+        # Kaggle currently exposes T4 x2. Use Wan's official distributed path
+        # so the 5B model can be sharded instead of requiring 24GB on one GPU.
+        cmd = [
+            "torchrun", "--nproc_per_node", str(n_gpu),
+            *common,
+            "--dit_fsdp", "--t5_fsdp", "--ulysses_size", str(n_gpu),
+        ]
+    else:
+        cmd = [
+            sys.executable, *common,
+            "--offload_model", "True",
+            "--convert_model_dtype",
+            "--t5_cpu",
+        ]
     run(cmd, cwd=WAN_REPO)
 
 def download_reference(url, target):
