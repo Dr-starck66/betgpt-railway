@@ -25,8 +25,8 @@ it("keeps the arrogant socially awkward BetGPT voice active in NORMAL mode", () 
   const prompt = betgptPrompt(EMPTY_MEMORY, "NORMAL", "", "", brief);
   assert.match(prompt, /très hautain/i);
   assert.match(prompt, /socialement maladroit/i);
-  assert.match(prompt, /même en mode Normal/i);
-  assert.match(prompt, /garde la personnalité hautaine/i);
+  assert.match(prompt, /MODE NORMAL ACTIF/i);
+  assert.match(prompt, /arrogance froide et visible/i);
 });
 
 it("normalizes corrupt nested memories instead of crashing the prompt", () => {
@@ -543,7 +543,7 @@ it("hardens ROAST persona into mandatory arrogant shareable humor", () => {
   assert.match(prompt, /chaque réponse non sérieuse/i);
   assert.match(prompt, /supériorité intellectuelle/i);
   assert.match(prompt, /quel connard, c’est drôle/i);
-  assert.match(prompt, /incident administratif/i);
+  assert.match(prompt, /accident administratif/i);
 });
 
 it("personality director cools down recently used signature motifs", () => {
