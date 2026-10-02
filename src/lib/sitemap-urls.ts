@@ -13,6 +13,7 @@ import { GEO_PAGES } from "@/lib/geo/entity";
 import { moneySitemapPaths } from "@/lib/seo/money-map";
 import { fixtureIndexable, sitemapAllowed } from "@/lib/geo/quality";
 import { skipEuropeFrenchProno } from "@/engine/french-clubs";
+import { durableForumLeague } from "@/engine/forum-durability";
 import { SERP_COMPETITIONS } from "@/lib/serp/leagues";
 import { loadResultsBoardData } from "@/lib/serp/results.functions";
 import { bucketResults } from "@/lib/serp/results";
@@ -323,7 +324,7 @@ export function buildSitemapUrls(input: {
         home: m.home,
         away: m.away,
       });
-    if (!frenchEurope) {
+    if (!frenchEurope && durableForumLeague(m.league)) {
       out.push({
         loc: `${SITE_URL}/forum/${slug}`,
         path: `/forum/${slug}`,

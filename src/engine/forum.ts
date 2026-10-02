@@ -2,6 +2,7 @@ import type { LeagueId, MatchInput, PredictionRecord } from "./types";
 import { AGENT_LABEL, LEAGUE_LABEL } from "@/lib/labels";
 import { headlineMarket } from "@/lib/markets";
 import { skipEuropeFrenchProno } from "./french-clubs";
+import { durableForumLeague } from "./forum-durability";
 
 export const MIN_POSTS = 10;
 export const AGENTS = ["Structure", "Pressing", "Bloc", "Gestion", "Duels", "Avocat du diable", "Consensus", "Live", "Cotes", "Terrain"] as const;
@@ -26,6 +27,8 @@ export type ForumThread = {
   published: string;
   matchHref?: string;
   keywords: string;
+  /** False means useful live UI, but not a durable search-engine promise. */
+  indexable?: boolean;
 };
 
 function line(parts: string[]): string {
@@ -161,6 +164,7 @@ export function threadForMatch(match: MatchInput, p: PredictionRecord): ForumThr
     published: match.kickoff,
     matchHref: `/match/${match.slug ?? match.id}`,
     keywords: `${match.home.name}, ${match.away.name}, ${match.competition}, table ronde, pronostic, analyse, forum football`,
+    indexable: durableForumLeague(match.league),
   };
 }
 
@@ -239,6 +243,7 @@ export function roundThreads(matches: MatchInput[], predictions: PredictionRecor
       lead,
       published: round[0]?.kickoff ?? new Date().toISOString(),
       keywords: `${label}, journée, table ronde, pronostic, analyse, forum football, BetGPT`,
+      indexable: durableForumLeague(league),
     });
   }
   return out;

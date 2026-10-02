@@ -38,7 +38,7 @@ export const Route = createFileRoute("/forum/$threadId")({
       meta: [
         { title: `${thread.title} | BetGPT` },
         { name: "description", content: thread.lead ?? thread.excerpt },
-        { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1" },
+        { name: "robots", content: thread.indexable === false ? "noindex, follow, max-image-preview:large, max-snippet:-1" : "index, follow, max-image-preview:large, max-snippet:-1" },
         { name: "news_keywords", content: thread.keywords },
         { property: "og:title", content: thread.title },
         { property: "og:description", content: thread.lead ?? thread.excerpt },
