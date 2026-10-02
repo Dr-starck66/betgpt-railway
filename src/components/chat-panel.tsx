@@ -15,6 +15,8 @@ import { track } from "@/lib/analytics";
 import { postChat } from "@/lib/chat/transport";
 import { playPunchline } from "@/lib/chat/voice";
 import { reactionForPunchline, type PunchReaction } from "@/lib/chat/reaction";
+import { ChatDiploma } from "@/components/chat-diploma";
+import { selectChatDiploma, type ChatDiplomaId } from "@/lib/chat/diplomas";
 import {
   buildFacebookShareUrl,
   buildShareMoment,
@@ -435,12 +437,14 @@ export function ChatPanel({
   const [placeholder] = useState("Un match, un pari, un feeling…");
   const [memory, setMemory] = useState<UserMemory>(EMPTY_MEMORY);
   const [challengeAccepted, setChallengeAccepted] = useState(false);
+  const [diplomas, setDiplomas] = useState<Record<string, ChatDiplomaId>>({});
   const [speakingMessageId, setSpeakingMessageId] = useState<string | null>(null);
   const [reduceMotion, setReduceMotion] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const boxRef = useRef<HTMLTextAreaElement>(null);
   const seeded = useRef(false);
   const sending = useRef(false);
+  const lastDiplomaRef = useRef<ChatDiplomaId | undefined>(undefined);
   const speakingTimer = useRef<number | null>(null);
 
   useEffect(() => {
@@ -539,6 +543,18 @@ export function ChatPanel({
         resolved === "ROAST"
           ? reactionForPunchline(out.punchline?.text ?? out.text, content)
           : out.punchline?.reaction;
+      const awardedDiploma = selectChatDiploma({
+        userText: content,
+        assistantText: out.text,
+        punchline: out.punchline?.text,
+        memory: mem,
+        mode: resolved,
+        avoid: lastDiplomaRef.current,
+      });
+      if (awardedDiploma) {
+        lastDiplomaRef.current = awardedDiploma;
+        setDiplomas((prev) => ({ ...prev, [assistantId]: awardedDiploma }));
+      }
       setMessages((prev) =>
         prev.map((m) =>
           m.id === assistantId
@@ -690,6 +706,9 @@ export function ChatPanel({
                 {msg.content ? <RichMessageText content={msg.content} /> : streaming ? "…" : ""}
                 {!mine && msg.reaction && !streaming ? (
                   <PunchReactionCard reaction={msg.reaction} punchline={msg.punchline?.text} />
+                ) : null}
+                {!mine && !streaming && diplomas[msg.id] ? (
+                  <ChatDiploma diplomaId={diplomas[msg.id]} />
                 ) : null}
                 {!mine && msg.punchline && !streaming ? (
                   <div className="flex flex-wrap items-center gap-2">
