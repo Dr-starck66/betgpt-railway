@@ -10,6 +10,8 @@ export const ANALYTICS_EVENTS = {
   chat_ask: "chat_ask",
   chat_share: "chat_share",
   chat_share_copy: "chat_share_copy",
+  chat_challenge_view: "chat_challenge_view",
+  chat_challenge_accept: "chat_challenge_accept",
   favorite_add: "favorite_add",
   favorite_remove: "favorite_remove",
   return_visit: "return_visit",
