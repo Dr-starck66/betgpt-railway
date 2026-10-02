@@ -1,4 +1,5 @@
 import type { TicketRow } from "./ticket-log.ts";
+import { isCanonicalRoi5Selection } from "./ledger-pick.ts";
 import {
   DEFAULT_ROI5_DOMINANCE_POLICY,
   oneXTwoDominanceMargin,
@@ -52,7 +53,8 @@ function finiteProb(v: unknown): v is number {
 
 function isHonestSettledSide(row: TicketRow, beforeMs: number): row is EligibleRow {
   if (row.result !== "win" && row.result !== "lose") return false;
-  if (row.market !== "1X2_H" && row.market !== "1X2_A") return false;
+  if (row.kind !== "mise") return false;
+  if (!isCanonicalRoi5Selection(row)) return false;
   if (!finiteProb(row.pHome) || !finiteProb(row.pDraw) || !finiteProb(row.pAway)) return false;
   if (!Number.isFinite(row.odds) || row.odds < 1.5 || row.odds > 5) return false;
   const kickoff = Date.parse(row.kickoff);
