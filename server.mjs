@@ -75,7 +75,7 @@ function home(req) {
 <section class="hero"><div class="heroCopy"><span class="pill">Insurance clarity, without the sales fog</span><h1>Compare smarter. Understand coverage. Pay less when possible.</h1><p>Start with your insurance goal. We explain what matters, then route qualified shoppers to approved quote partners when available.</p>
 <div class="heroActions"><a class="primary" href="#compare">Compare options</a><button class="secondary" data-open-chat>Ask the quote assistant</button></div>
 <div class="trustrow"><span>✓ Editorial / commercial separation</span><span>✓ No invented premiums</span><span>✓ Partner links disclosed</span></div></div>
-<div class="scorecard"><div><b>6</b><span>core insurance verticals</span></div><div><b>0</b><span>fake quote numbers</span></div><div><b>100%</b><span>partner disclosure</span></div></div></section>
+<div class="scorecard"><div><b>${articles.length}</b><span>full insurance guides</span></div><div><b>6</b><span>core insurance verticals</span></div><div><b>0</b><span>fake quote numbers</span></div></div></section>
 
 <section id="compare" class="compare"><div><span class="eyebrow">Quote finder</span><h2>What do you want to insure?</h2><p>Choose a category. Until approved partner integrations are active, we show the information path instead of fabricating a quote.</p></div>
 <div class="quoteGrid">
@@ -103,7 +103,8 @@ function guidePage(req,a){
  const base=baseUrl(req); const canonical=base+"/guides/"+a.slug;
  const schema={"@context":"https://schema.org","@type":"Article","headline":a.title,"dateModified":a.updated,"mainEntityOfPage":canonical};
  const sections=a.sections.map(s=>`<section><h2>${htmlEscape(s.heading)}</h2><p>${htmlEscape(s.text)}</p></section>`).join("");
- const body=header()+`<main class="article"><a class="back" href="/guides">← All guides</a><span class="eyebrow">${a.category}</span><h1>${htmlEscape(a.title)}</h1><p class="lede">${htmlEscape(a.description)}</p><div class="meta">Updated ${a.updated} · Editorial review required before material changes</div>${sections}
+ const sources=(a.sources||[]).length?`<section class="sources"><h2>Sources and further reading</h2><ul>${a.sources.map(([name,url])=>`<li><a href="${htmlEscape(url)}" target="_blank" rel="noopener noreferrer">${htmlEscape(name)}</a></li>`).join("")}</ul></section>`:"";
+ const body=header()+`<main class="article"><a class="back" href="/guides">← All guides</a><span class="eyebrow">${a.category}</span><h1>${htmlEscape(a.title)}</h1><p class="lede">${htmlEscape(a.description)}</p><div class="meta">Updated ${a.updated} · Editorial review required before material changes</div>${sections}${sources}
  <aside class="cta"><h2>Ready to compare?</h2><p>Approved quote partners will appear here only after the commercial relationship and tracking are verified.</p><a class="primary" href="/#compare">Start with your insurance type</a></aside>
  <script type="application/ld+json">${JSON.stringify(schema)}</script></main>`+footer();
  return layout({title:a.title+" | Find Insurance Quotes",description:a.description,canonical,body});
@@ -140,6 +141,15 @@ const server=http.createServer(async(req,res)=>{
  if(req.method==="GET"&&p==="/news-sitemap.xml"){const base=baseUrl(req);const fresh=articles.filter(a=>Date.now()-Date.parse(a.updated)<48*3600*1000);return send(res,200,"application/xml; charset=utf-8",`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${fresh.map(a=>`<url><loc>${base}/guides/${a.slug}</loc></url>`).join("")}</urlset>`);}
  if(req.method==="GET"&&p==="/") return send(res,200,"text/html; charset=utf-8",home(req));
  if(req.method==="GET"&&p==="/guides") return send(res,200,"text/html; charset=utf-8",guideIndex(req));
+ if(req.method==="GET"&&p.startsWith("/category/")){
+   const key=decodeURIComponent(p.slice(10)).replace(/-/g," ").toLowerCase();
+   const matches=articles.filter(a=>a.category.toLowerCase().includes(key));
+   if(matches.length){
+     const base=baseUrl(req);
+     const cards=matches.map(a=>`<article class="card"><span class="eyebrow">${htmlEscape(a.category)}</span><h2><a href="/guides/${a.slug}">${htmlEscape(a.title)}</a></h2><p>${htmlEscape(a.description)}</p><small>Updated ${a.updated}</small></article>`).join("");
+     return send(res,200,"text/html; charset=utf-8",layout({title:matches[0].category+" Guides | Find Insurance Quotes",description:"Insurance guides for "+matches[0].category+".",canonical:base+p,body:header()+`<main class="content"><h1>${htmlEscape(matches[0].category)} guides</h1><div class="cards">${cards}</div></main>`+footer()}));
+   }
+ }
  if(req.method==="GET"&&trustPages[p]) return send(res,200,"text/html; charset=utf-8",trustPage(req,p));
  if(req.method==="GET"&&p.startsWith("/guides/")){const slug=p.slice(8);const a=articles.find(x=>x.slug===slug);if(a)return send(res,200,"text/html; charset=utf-8",guidePage(req,a));}
  if(req.method==="GET"&&staticFile(res,p)) return;
