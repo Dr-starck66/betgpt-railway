@@ -44,6 +44,47 @@ for (const [text, needle, message] of mustContain) {
   if (!text.includes(needle)) throw new Error(`ASTRA FLAG GUARD FAIL: ${message}`);
 }
 
+const flagBranchIndex = crest.indexOf("if (flagCode)");
+const logoBranchIndex = crest.indexOf("const srcs = logoCandidates");
+if (flagBranchIndex < 0 || logoBranchIndex < 0 || flagBranchIndex > logoBranchIndex) {
+  throw new Error("ASTRA FLAG GUARD FAIL: national teams must prefer CountryFlag before external crest/logo candidates");
+}
+
+function normalizeCountryName(name) {
+  return String(name ?? "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\\u0300-\\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+const nationalFlagMatch = teamFlags.match(/const NATIONAL_FLAG:[\\s\\S]*?= \\{([\\s\\S]*?)\\n\\};/);
+if (!nationalFlagMatch) {
+  throw new Error("ASTRA FLAG GUARD FAIL: NATIONAL_FLAG registry not found");
+}
+const registeredNames = new Set();
+for (const line of nationalFlagMatch[1].split("\\n")) {
+  const quoted = line.match(/^\\s*"([^"]+)"\\s*:/);
+  const bare = line.match(/^\\s*([a-z][a-z0-9 ]*)\\s*:/);
+  const key = quoted?.[1] ?? bare?.[1];
+  if (key) registeredNames.add(normalizeCountryName(key));
+}
+
+const nationalNames = new Set(
+  (liveSnapshot.matches ?? [])
+    .filter((match) => match?.league === "NL")
+    .flatMap((match) => [match?.home?.name, match?.away?.name])
+    .filter(Boolean)
+    .map(normalizeCountryName),
+);
+const unresolvedNationalTeams = [...nationalNames].filter((name) => !registeredNames.has(name)).sort();
+if (unresolvedNationalTeams.length) {
+  throw new Error(
+    `ASTRA FLAG GUARD FAIL: national-team flag resolution must cover every NL team; missing: ${unresolvedNationalTeams.join(", ")}`,
+  );
+}
+
 const regionalPair = /[\u{1F1E6}-\u{1F1FF}]{2}/gu;
 
 function walk(dir) {
