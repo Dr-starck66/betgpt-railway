@@ -310,44 +310,59 @@ function ShareMomentButton({
 
   const nativeShareAvailable = typeof navigator !== "undefined" && typeof navigator.share === "function";
 
+  useEffect(() => {
+    track("chat_share_offer");
+  }, []);
+
   return (
-    <div className="mt-2 flex flex-wrap items-center gap-1.5" aria-label="Partager ce moment BetGPT">
-      <button
-        type="button"
-        onClick={() => void shareNative()}
-        className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-sage/35 bg-sage/10 px-3 text-xs font-black text-paper hover:border-sage hover:bg-sage/20"
-        title="Partager ce moment"
-      >
-        {status === "copied" ? <Check size={14} /> : nativeShareAvailable ? <Share2 size={14} /> : <Copy size={14} />}
-        {status === "copied" ? "Lien copié" : "Partager"}
-      </button>
-      <button
-        type="button"
-        onClick={shareX}
-        className="inline-flex min-h-9 items-center rounded-full border border-line bg-white px-3 text-xs font-black text-paper hover:border-sage/50"
-        aria-label="Partager sur X"
-        title="Partager sur X"
-      >
-        X
-      </button>
-      <button
-        type="button"
-        onClick={shareFacebook}
-        className="inline-flex min-h-9 items-center rounded-full border border-line bg-white px-3 text-xs font-black text-paper hover:border-sage/50"
-        aria-label="Partager sur Facebook"
-        title="Partager sur Facebook"
-      >
-        Facebook
-      </button>
-      <button
-        type="button"
-        onClick={() => void shareImage()}
-        className="inline-flex min-h-9 items-center rounded-full border border-line bg-white px-3 text-xs font-black text-paper hover:border-sage/50"
-        aria-label="Créer la carte Instagram"
-        title="Créer la carte Instagram"
-      >
-        {status === "image" ? "Carte prête ✓" : "Instagram / Story"}
-      </button>
+    <div
+      className="mt-3 overflow-hidden rounded-2xl border border-sage/35 bg-[linear-gradient(135deg,rgba(124,194,58,0.12),rgba(255,255,255,0.96))] p-3 shadow-sm"
+      aria-label="Défier un ami avec ce moment BetGPT"
+    >
+      <div className="flex flex-col gap-1">
+        <p className="text-[10px] font-black uppercase tracking-[0.18em] text-sage">🔥 Moment à partager</p>
+        <p className="text-sm font-black leading-tight text-paper">Tu crois qu’un pote peut faire pire ? Envoie-lui exactement ce défi.</p>
+        <p className="text-[11px] leading-relaxed text-muted">Le lien rouvre la question en mode Sans filtre et mesure le réseau qui ramène le challenger.</p>
+      </div>
+
+      <div className="mt-3 flex flex-wrap items-center gap-1.5">
+        <button
+          type="button"
+          onClick={() => void shareNative()}
+          className="inline-flex min-h-10 items-center gap-1.5 rounded-full bg-sage px-4 text-xs font-black text-ink shadow-sm hover:brightness-95"
+          title="Défier un pote en mode Sans filtre"
+        >
+          {status === "copied" ? <Check size={14} /> : nativeShareAvailable ? <Share2 size={14} /> : <Copy size={14} />}
+          {status === "copied" ? "Défi copié ✓" : "Défie un pote"}
+        </button>
+        <button
+          type="button"
+          onClick={shareX}
+          className="inline-flex min-h-9 items-center rounded-full border border-line bg-white px-3 text-xs font-black text-paper hover:border-sage/50"
+          aria-label="Partager le défi sur X"
+          title="Partager le défi sur X"
+        >
+          X
+        </button>
+        <button
+          type="button"
+          onClick={shareFacebook}
+          className="inline-flex min-h-9 items-center rounded-full border border-line bg-white px-3 text-xs font-black text-paper hover:border-sage/50"
+          aria-label="Partager le défi sur Facebook"
+          title="Partager le défi sur Facebook"
+        >
+          Facebook
+        </button>
+        <button
+          type="button"
+          onClick={() => void shareImage()}
+          className="inline-flex min-h-9 items-center rounded-full border border-line bg-white px-3 text-xs font-black text-paper hover:border-sage/50"
+          aria-label="Créer la carte Instagram ou Story"
+          title="Créer la carte Instagram ou Story"
+        >
+          {status === "image" ? "Carte prête ✓" : "Instagram / Story"}
+        </button>
+      </div>
     </div>
   );
 }
