@@ -1207,31 +1207,96 @@
     "slug": "general-liability-vs-professional-liability",
     "category": "Business insurance",
     "title": "General Liability vs. Professional Liability: The Difference Small Businesses Miss",
-    "description": "Why bodily-injury and property-damage exposures are different from claims arising from professional services or advice.",
+    "description": "A plain-English comparison of general liability and professional liability, including the types of allegations each may address, claims-made issues, contracts, exclusions and quote questions.",
     "updated": "2026-10-02",
+    "heroImage": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1600&h=900&q=82",
+    "heroAlt": "Business professionals reviewing documents, representing the difference between general liability and professional liability contracts.",
+    "imageCredit": "Unsplash",
+    "imageCreditUrl": "https://unsplash.com/",
+    "keyTakeaways": [
+      "General liability and professional liability address different categories of allegations.",
+      "Professional-services exclusions can leave advice or service errors outside general liability.",
+      "Many professional policies are claims-made, making retroactive dates and reporting periods critical.",
+      "Client contracts may require both coverages with specific limits and endorsements.",
+      "Compare definitions and exclusions, not just premium and limit."
+    ],
     "sections": [
       {
-        "heading": "General liability addresses common third-party exposures",
-        "text": "General liability commonly addresses allegations involving bodily injury, property damage and certain personal or advertising injuries, subject to policy terms. It is often foundational for businesses with premises, customers or job-site exposure."
+        "heading": "Why businesses confuse the two coverages",
+        "body": "Both policies contain the word liability, so it is easy to assume one is a broader version of the other. They are better understood as tools for different claim types. General liability commonly addresses certain third-party bodily injury, property damage and personal or advertising injury arising from business operations. Professional liability, often called errors and omissions in some industries, addresses certain financial-loss allegations arising from professional services, advice or failure to perform those services as expected.\n\nA consultant can have no storefront and still face a professional claim. A retail business that gives no professional advice can still face a general-liability claim when a customer is injured on the premises. A technology company can face both.\n\nStart with the allegation rather than the policy name. What could a customer claim the business did wrong? If the answer involves physical injury or property damage from ordinary operations, general liability may be the relevant conversation. If it involves bad advice, design, analysis, missed deadlines or service errors, professional liability may be the relevant conversation."
       },
       {
-        "heading": "Professional liability focuses on professional services",
-        "text": "Professional liability, often called errors and omissions coverage in some industries, addresses different allegations tied to professional services, advice or failure to perform as promised. A general liability policy should not be assumed to replace it."
+        "heading": "What general liability commonly addresses",
+        "body": "General liability policies commonly include coverage sections for bodily injury and property damage, personal and advertising injury and certain medical payments, subject to exclusions and definitions. They can also address liability for damage to rented premises under specific provisions. The exact form matters.\n\nExamples can include a customer slipping in a store, a contractor damaging a client's property or an advertising-related allegation that falls within covered offenses. These are examples of claim categories, not promises that a particular event is covered.\n\nGeneral liability also contains important exclusions. Auto liability, workers compensation, professional services, pollution and damage to the insured's own work or product can be restricted or excluded depending on the form. Read the exclusions in the context of your operations instead of assuming the broad policy title covers every lawsuit."
       },
       {
-        "heading": "Contracts can require both",
-        "text": "Clients, landlords and project owners may require specific coverages and limits before work begins. Review insurance requirements before signing contracts so coverage can be priced and arranged rather than discovered after an agreement is already binding."
+        "heading": "What professional liability commonly addresses",
+        "body": "Professional liability focuses on services where a client relies on specialized skill, advice, design or judgment. Depending on the occupation, the policy may be called errors and omissions, malpractice or another specialty name. It can address allegations that the business's professional error caused a client financial harm.\n\nThe definition of professional services is crucial. A policy written for software consulting should describe the actual services performed. If the business begins offering a new service that falls outside the definition, the coverage may not evolve automatically.\n\nExclusions also vary widely. Contractual liability, guarantees, intellectual property, cyber events, bodily injury, fraud and prior known circumstances may be treated differently across policies. The quote should be reviewed alongside the actual policy wording."
+      },
+      {
+        "heading": "Claims-made coverage changes the importance of timing",
+        "body": "Many professional-liability policies are claims-made, meaning coverage depends on when a claim is made and reported as well as when the underlying work occurred. A retroactive date can exclude services performed before that date. If a claims-made policy is cancelled without replacement or extended reporting, a later claim from old work can fall into a gap.\n\nContinuity therefore matters. When switching insurers, preserve the appropriate retroactive date if possible and compare the definition of claim and reporting requirements. Ask about extended reporting periods, sometimes called tail coverage, when closing a business or ending coverage.\n\nA low premium can be misleading if it comes with a recent retroactive date that excludes years of prior work. Put the retroactive date in the comparison table next to the limit and deductible."
+      },
+      {
+        "heading": "Defense costs can be inside or outside the policy limit",
+        "body": "Legal defense can consume significant resources. Some liability policies pay defense in addition to the stated limit, while others include defense costs within the limit or use a separate structure. The wording varies by coverage and insurer.\n\nIf defense erodes the limit, a policy with a $1 million limit may have less than $1 million left for settlement or judgment after substantial legal expenses. That does not make the policy automatically inferior, but it changes the economics.\n\nAsk how defense costs are handled, who selects counsel, whether the insurer has a duty to defend or reimburses defense, and how consent-to-settle provisions work. These terms can be as important as the headline limit in a serious claim."
+      },
+      {
+        "heading": "Contracts often require both policies for different reasons",
+        "body": "A client contract may require general liability because work occurs on the client's premises and professional liability because the client relies on your advice. Construction and technology agreements frequently contain detailed insurance schedules, but the exact requirements vary.\n\nDo not assume a certificate of insurance changes the policy to match the contract. If the agreement requires an additional insured on general liability, that may be possible through an endorsement. Professional-liability policies often do not use additional-insured status in the same way because the coverage is designed differently.\n\nSend the contract language to the broker before signing. Ask whether every requested limit, endorsement and notice provision can be satisfied. If not, negotiate the contract or coverage rather than discovering the problem after work begins."
+      },
+      {
+        "heading": "Businesses that often need both conversations",
+        "body": "A technology consultant can visit client premises, damage property and also be accused of a service error. An architect can face premises or operational liability as well as design allegations. A marketing agency can face ordinary office liability, advertising claims and professional mistakes. A medical or wellness practice may need general liability plus a specialized professional-liability form.\n\nThe point is not that every business must buy both policies. It is that physical or operational risks and professional-service risks can coexist. A risk map makes the overlap visible.\n\nAsk your broker to explain which policy is intended to respond to each realistic claim scenario. If both policies could potentially apply, ask how exclusions coordinate. If neither appears to respond, identify the gap rather than assuming the broadest-sounding policy will solve it."
+      },
+      {
+        "heading": "Examples that show the difference",
+        "body": "Consider a marketing consultant who visits a client's office. If the consultant knocks over equipment and causes physical property damage, general liability may be the relevant coverage. If the client alleges that the consultant's campaign advice caused a financial loss, professional liability may be the relevant coverage.\n\nA contractor may damage a customer's wall during installation, raising a general-liability issue, while an architect's alleged design error creates a professional-liability issue. A software provider can face bodily injury or property allegations in rare circumstances, professional errors-and-omissions claims, and cyber incidents that belong in yet another coverage discussion.\n\nThese examples show why “Which liability policy is better?” is the wrong question. The policies solve different claim categories and often belong together in a broader program."
+      },
+      {
+        "heading": "How to compare general-liability quotes",
+        "body": "Normalize occurrence and aggregate limits, deductibles or self-insured retentions, products-completed-operations treatment and key endorsements. Review exclusions tied to your operations, subcontractors, property in your care, contractual liability and additional-insured requirements.\n\nConfirm the legal entity, locations and operations shown on the application. If a broker uses an industry code that does not match your activities, correct it before binding. Misdescribed operations can create problems later.\n\nCompare the insurer's claims service and financial strength as well as price. Save endorsements and certificates with the policy rather than keeping only the declarations page."
+      },
+      {
+        "heading": "How to compare professional-liability quotes",
+        "body": "Start with the definition of professional services, policy limit, deductible or retention and claims-made trigger. Record the retroactive date, definition of claim, reporting requirements, prior-knowledge exclusion and extended-reporting options.\n\nThen review exclusions for contractual liability, warranties, intellectual property, cyber, bodily injury, property damage and subcontracted services. If the business operates internationally, check territory and jurisdiction. If the policy includes cyber or media elements, compare their sublimits rather than assuming they equal the main limit.\n\nAsk whether defense costs erode the limit and whether the insurer can settle without your consent. A detailed professional-liability comparison often explains premium differences that look mysterious on a one-line quote."
+      },
+      {
+        "heading": "A final decision checklist",
+        "body": "Map each major business exposure to a coverage. If a risk appears in no policy, decide whether that gap is intentional. Verify contract requirements, policy limits, deductibles, retroactive dates and endorsements. Check that the legal business name and operations are correct.\n\nDo not cancel a claims-made policy until replacement continuity is confirmed. Do not rely on a certificate as proof that a requested endorsement exists. Keep applications because statements made during underwriting can matter later.\n\nThe objective is not maximum coverage at any price. It is a coherent program in which general liability and professional liability each do the job they are designed to do, without being mistaken for substitutes."
+      }
+    ],
+    "faq": [
+      {
+        "q": "Do consultants need general liability if they have professional liability?",
+        "a": "Possibly. Professional liability addresses service-related allegations, while general liability can address bodily injury, property damage and other operational exposures. The need depends on activities and contracts."
+      },
+      {
+        "q": "Is errors and omissions the same as professional liability?",
+        "a": "The terms are often used for similar coverage categories, but policy forms differ by profession and insurer. Review the actual definition of professional services and exclusions."
+      },
+      {
+        "q": "What is a retroactive date?",
+        "a": "On many claims-made policies, it is the date before which acts or services are not covered. Preserving continuity can be important when changing insurers."
+      },
+      {
+        "q": "Does a certificate of insurance add coverage?",
+        "a": "No. A certificate is evidence of coverage. The policy and endorsements determine the actual rights and obligations."
       }
     ],
     "sources": [
-      [
-        "U.S. Small Business Administration",
-        "https://www.sba.gov/business-guide/manage-your-business/get-business-insurance"
-      ],
-      [
-        "NAIC Consumer Insurance",
-        "https://content.naic.org/consumer"
-      ]
+      {
+        "name": "U.S. Small Business Administration — Get business insurance",
+        "url": "https://www.sba.gov/business-guide/manage-your-business/get-business-insurance"
+      },
+      {
+        "name": "NAIC Consumer Insurance",
+        "url": "https://content.naic.org/consumer"
+      }
+    ],
+    "relatedSlugs": [
+      "small-business-insurance-starting-point",
+      "cyber-insurance-small-business-checklist"
     ]
   },
   {
