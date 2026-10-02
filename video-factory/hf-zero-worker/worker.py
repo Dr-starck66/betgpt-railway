@@ -348,6 +348,13 @@ def process(payload):
         final = work / "betgpt-final.mp4"
         concat_mp4(clips, final, aspect)
         result = upload(payload["upload_url"], final, chosen)
+        public_url = result.get("video_url") if isinstance(result, dict) else None
+        if not public_url:
+            raise RuntimeError("upload callback returned no public video_url")
+        proof = requests.get(public_url, headers={"Range": "bytes=0-1023"}, timeout=45)
+        if proof.status_code not in (200, 206) or len(proof.content) < 512:
+            raise RuntimeError(f"public video verification failed: HTTP {proof.status_code}, bytes={len(proof.content)}")
+        print(f"[public-proof] HTTP {proof.status_code} bytes={len(proof.content)} url={public_url}", flush=True)
         print(f"[job {job['id']}] COMPLETED via {chosen}: {result}", flush=True)
     except Exception as exc:
         print(f"[job {job['id']}] FAILED: {exc}", flush=True)
