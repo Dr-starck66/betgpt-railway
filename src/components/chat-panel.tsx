@@ -2,8 +2,6 @@
 
 import { Check, Copy, Send, Share2, Volume2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { SeoImg } from "@/components/seo-img";
-import { BRAND_LOGO } from "@/lib/image-seo";
 import { cn } from "@/lib/utils";
 import {
   EMPTY_MEMORY,
@@ -545,13 +543,18 @@ export function ChatPanel({
     <div className="chat-panel flex min-w-0 flex-col overflow-hidden rounded-[1.35rem] border border-line bg-white shadow-soft">
       <header className="flex items-center justify-between gap-3 border-b border-line px-4 py-3 sm:px-5">
         <div className="flex items-center gap-2.5">
-          <SeoImg
-            seo={{ ...BRAND_LOGO, width: 28, height: 28 }}
-            priority
-            width={28}
-            height={28}
-            className="h-8 w-8 rounded-xl border border-line object-cover shadow-sm"
-          />
+          <div className="relative shrink-0">
+            <div className="absolute -inset-1 rounded-2xl bg-sage/20 blur-md" aria-hidden="true" />
+            <img
+              src="/betgpt-mascot-avatar.webp"
+              alt="Mascotte BetGPT, assistant football sans filtre"
+              width={48}
+              height={48}
+              loading="eager"
+              decoding="async"
+              className="relative h-12 w-12 rounded-2xl border border-sage/35 object-cover shadow-sm"
+            />
+          </div>
           <div>
             <p className="text-sm font-semibold tracking-tight text-paper">BetGPT</p>
             <p className="text-xs text-muted">Foot, données, paris et vraie conversation</p>
@@ -603,7 +606,19 @@ export function ChatPanel({
           const streaming = busy && i === messages.length - 1 && !mine;
           if (!msg.content && !streaming) return null;
           return (
-            <div key={msg.id} className={cn("flex", mine ? "justify-end" : "justify-start")}>
+            <div key={msg.id} className={cn("flex items-end gap-2", mine ? "justify-end" : "justify-start")}>
+              {!mine ? (
+                <img
+                  src="/betgpt-mascot-avatar.webp"
+                  alt=""
+                  aria-hidden="true"
+                  width={32}
+                  height={32}
+                  loading="lazy"
+                  decoding="async"
+                  className="mb-0.5 h-8 w-8 shrink-0 rounded-xl border border-sage/30 object-cover shadow-sm"
+                />
+              ) : null}
               <div
                 className={cn(
                   "min-w-0 max-w-[95%] break-words rounded-2xl px-4 py-3 text-base leading-relaxed whitespace-pre-wrap sm:max-w-[80%]",
