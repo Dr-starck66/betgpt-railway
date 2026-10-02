@@ -118,7 +118,7 @@ export type EditorialArticle = {
   topStories: "TOP_STORIES_ELIGIBILITY_READY" | "NOT_READY";
   image: EditorialImage;
   links: EditorialLink[];
-  related: { href: string; title: string }[];
+  related: { href: string; title: string; image?: EditorialImage }[];
   quality: { pass: boolean; reasons: string[] };
   duplicateScore: number;
   corrections: Correction[];
