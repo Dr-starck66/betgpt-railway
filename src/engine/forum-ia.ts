@@ -6,6 +6,7 @@ import { kvGet, kvSet } from "@/lib/store";
 const IA_FILE = join(process.cwd(), "data", "forum-ia.json");
 const MAX_AGE_MS = 2 * 3600_000;
 const REFRESH_AGE_MS = 45 * 60_000;
+const FORUM_CONTENT_VERSION = "v2-diverse";
 
 type StoredIaThread = ForumThread & { fetchedAt?: number; generator?: string };
 
@@ -111,14 +112,14 @@ async function generateDiscussion(
 }
 
 type CachedAgentThread = {
-  schema: "betgpt-forum-ai-cache/v1";
+  schema: "betgpt-forum-ai-cache/v2";
   cachedAt: number;
   expiresAt: number;
   thread: ForumThread;
 };
 
 type PersistedForumThread = {
-  schema: "betgpt-forum-thread/v1";
+  schema: "betgpt-forum-thread/v2";
   savedAt: number;
   thread: ForumThread;
 };
@@ -165,7 +166,7 @@ export async function persistForumThread(
   FORUM_THREAD_SAVED_AT.set(thread.id, now);
 
   const stored: PersistedForumThread = {
-    schema: "betgpt-forum-thread/v1",
+    schema: "betgpt-forum-thread/v2",
     savedAt: Date.now(),
     thread: {
       ...thread,
@@ -174,7 +175,7 @@ export async function persistForumThread(
     },
   };
   try {
-    await kvSet(`forum-thread:${thread.id}`, stored);
+    await kvSet(`forum-thread:${FORUM_CONTENT_VERSION}:${thread.id}`, stored);
   } catch (error) {
     FORUM_THREAD_SAVED_AT.delete(thread.id);
     throw error;
@@ -183,9 +184,9 @@ export async function persistForumThread(
 
 export async function readPersistedForumThread(id: string): Promise<ForumThread | null> {
   try {
-    const stored = await kvGet<PersistedForumThread>(`forum-thread:${id}`);
+    const stored = await kvGet<PersistedForumThread>(`forum-thread:${FORUM_CONTENT_VERSION}:${id}`);
     if (
-      stored?.schema !== "betgpt-forum-thread/v1" ||
+      stored?.schema !== "betgpt-forum-thread/v2" ||
       !stored.thread?.matchHref ||
       (stored.thread.posts?.length ?? 0) < MIN_POSTS
     ) {
@@ -277,13 +278,13 @@ async function refreshMatchThreadAi(thread: ForumThread): Promise<void> {
       const enriched = mergeGenerated(thread, generated);
       if (!enriched) return;
       const cached: CachedAgentThread = {
-        schema: "betgpt-forum-ai-cache/v1",
+        schema: "betgpt-forum-ai-cache/v2",
         cachedAt: Date.now(),
         expiresAt: Date.now() + 6 * 3600_000,
         thread: enriched,
       };
       FORUM_AI_CACHE.set(thread.id, cached);
-      await kvSet(`forum-ai:${thread.id}`, cached);
+      await kvSet(`forum-ai:${FORUM_CONTENT_VERSION}:${thread.id}`, cached);
       await persistForumThread(enriched, { force: true }).catch(() => undefined);
     } finally {
       FORUM_AI_INFLIGHT.delete(thread.id);
@@ -308,11 +309,11 @@ export async function enrichForumThreadWithAi(thread: ForumThread): Promise<Foru
 
   try {
     const durable = await Promise.race([
-      kvGet<CachedAgentThread>(`forum-ai:${thread.id}`),
+      kvGet<CachedAgentThread>(`forum-ai:${FORUM_CONTENT_VERSION}:${thread.id}`),
       new Promise<null>((resolve) => setTimeout(() => resolve(null), 250)),
     ]);
     if (
-      durable?.schema === "betgpt-forum-ai-cache/v1" &&
+      durable?.schema === "betgpt-forum-ai-cache/v2" &&
       durable.expiresAt > Date.now() &&
       durable.thread?.posts?.length
     ) {
