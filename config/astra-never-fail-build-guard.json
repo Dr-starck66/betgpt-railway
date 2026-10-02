@@ -39,6 +39,10 @@
       "command": "npm run test:learning-memory"
     },
     {
+      "id": "roi5-continuous",
+      "command": "npm run test:roi5-continuous"
+    },
+    {
       "id": "search-truth",
       "command": "npm run test:search-truth"
     },
