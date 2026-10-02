@@ -5,21 +5,21 @@ import type { ArticleType, EditorialImage, LeagueId } from "@/lib/editorial/type
  * Ce sont des illustrations, jamais présentées comme la photo du match.
  */
 const POOL: { src: string; alt: string; leagues?: LeagueId[] }[] = [
-  { src: "/blog/discover/inline-night.jpg", alt: "Stade de football éclairé la nuit, photo d'illustration libre de droits", leagues: ["CL", "EL"] },
-  { src: "/blog/discover/inline-flags.jpg", alt: "Public et drapeaux dans un stade, photo d'illustration libre de droits", leagues: ["NL"] },
-  { src: "/blog/discover/inline-crowd.jpg", alt: "Tribunes d'un stade de football, photo d'illustration libre de droits", leagues: ["L1", "PL"] },
-  { src: "/blog/discover/inline-action.jpg", alt: "Joueurs de football en action, photo d'illustration libre de droits", leagues: ["LL", "SA"] },
-  { src: "/blog/discover/inline-shot.jpg", alt: "Frappe au but pendant un match, photo d'illustration libre de droits", leagues: ["BL"] },
-  { src: "/blog/discover/inline-aerial.jpg", alt: "Pelouse de stade vue du dessus, photo d'illustration libre de droits" },
-  { src: "/blog/discover/inline-pitch.jpg", alt: "Ballon sur une pelouse de football, photo d'illustration libre de droits" },
-  { src: "/blog/discover/inline-live.jpg", alt: "Supporters pendant un match de football, photo d'illustration libre de droits" },
-  { src: "/blog/discover/score-en-direct-ligue-1.jpg", alt: "Ambiance de match de football, photo d'illustration libre de droits", leagues: ["L1"] },
-  { src: "/blog/discover/pronostic-ligue-des-champions.jpg", alt: "Stade avant une soirée de football, photo d'illustration libre de droits", leagues: ["CL"] },
-  { src: "/blog/discover/pronostic-ligue-europa.jpg", alt: "Pelouse et stade de football, photo d'illustration libre de droits", leagues: ["EL"] },
-  { src: "/blog/discover/xg-en-direct.jpg", alt: "Action de jeu sur un terrain de football, photo d'illustration libre de droits" },
+  { src: "/blog/discover/inline-night.jpg", alt: "Stade de football éclairé la nuit", leagues: ["CL", "EL"] },
+  { src: "/blog/discover/inline-flags.jpg", alt: "Public et drapeaux dans un stade", leagues: ["NL"] },
+  { src: "/blog/discover/inline-crowd.jpg", alt: "Tribunes d'un stade de football", leagues: ["L1", "PL"] },
+  { src: "/blog/discover/inline-action.jpg", alt: "Joueurs de football en action", leagues: ["LL", "SA"] },
+  { src: "/blog/discover/inline-shot.jpg", alt: "Frappe au but pendant un match", leagues: ["BL"] },
+  { src: "/blog/discover/inline-aerial.jpg", alt: "Pelouse de stade vue du dessus" },
+  { src: "/blog/discover/inline-pitch.jpg", alt: "Ballon sur une pelouse de football" },
+  { src: "/blog/discover/inline-live.jpg", alt: "Supporters pendant un match de football" },
+  { src: "/blog/discover/score-en-direct-ligue-1.jpg", alt: "Ambiance de match de football", leagues: ["L1"] },
+  { src: "/blog/discover/pronostic-ligue-des-champions.jpg", alt: "Stade avant une soirée de football", leagues: ["CL"] },
+  { src: "/blog/discover/pronostic-ligue-europa.jpg", alt: "Pelouse et stade de football", leagues: ["EL"] },
+  { src: "/blog/discover/xg-en-direct.jpg", alt: "Action de jeu sur un terrain de football" },
 ];
 
-const CREDIT = "Illustration libre de droits (Unsplash ou Pexels), recadrée par BetGPT en 1200×675. Ce n'est pas une photo du match cité.";
+const CREDIT = "Football : actualités, contexte et analyse sur BetGPT.";
 
 export function hashKey(value: string): number {
   let h = 0;
