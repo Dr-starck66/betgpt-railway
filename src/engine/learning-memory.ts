@@ -47,7 +47,7 @@ export type LearningMemorySnapshot = {
 function honestSettled(row: TicketRow): row is TicketRow & { result: "win" | "lose" } {
   if (row.result !== "win" && row.result !== "lose") return false;
   if (!isCanonicalRoi5Selection(row)) return false;
-  if (row.kind !== "prono") return false;
+  if (row.kind !== "mise") return false;
   if (/cl[oô]ture|d[eé]riv[eé]|archive/i.test(row.book || "")) return false;
   const recorded = Date.parse(row.recordedAt);
   const kickoff = Date.parse(row.kickoff);
