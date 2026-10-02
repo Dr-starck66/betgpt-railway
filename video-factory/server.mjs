@@ -318,6 +318,38 @@ button{width:100%;margin-top:16px;border:0;border-radius:14px;padding:14px 16px;
 <script>
 const q=(s)=>document.querySelector(s);
 let apiKey=localStorage.getItem("betgptVideoApiKey")||"";
+const localVideoUrls=new Map();
+
+function openVideoDb(){
+  return new Promise((resolve,reject)=>{
+    const req=indexedDB.open("betgpt-video-factory",1);
+    req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains("videos"))db.createObjectStore("videos",{keyPath:"id"});};
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error);
+  });
+}
+async function cacheVideoJob(job){
+  if(!job?.id||!job?.video_url||job.status!=="COMPLETED") return;
+  const db=await openVideoDb();
+  const existing=await new Promise((resolve,reject)=>{const r=db.transaction("videos","readonly").objectStore("videos").get(job.id);r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);});
+  if(existing?.blob?.size>0){db.close();return;}
+  const response=await fetch(job.video_url,{cache:"no-store"});
+  if(!response.ok) throw new Error("video_cache_http_"+response.status);
+  const blob=await response.blob();
+  if(!blob.size) throw new Error("video_cache_empty");
+  await new Promise((resolve,reject)=>{const tx=db.transaction("videos","readwrite");tx.objectStore("videos").put({id:job.id,job:{...job,video_url:null},blob,cached_at:new Date().toISOString()});tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);});
+  db.close();
+}
+async function getCachedVideos(){
+  const db=await openVideoDb();
+  const rows=await new Promise((resolve,reject)=>{const r=db.transaction("videos","readonly").objectStore("videos").getAll();r.onsuccess=()=>resolve(r.result||[]);r.onerror=()=>reject(r.error);});
+  db.close();
+  return rows;
+}
+function blobUrlFor(id,blob){
+  if(localVideoUrls.has(id)) return localVideoUrls.get(id);
+  const u=URL.createObjectURL(blob); localVideoUrls.set(id,u); return u;
+}
 const headers=()=>({"content-type":"application/json",...(apiKey?{"x-api-key":apiKey}:{})});
 async function api(url,opts={}){const r=await fetch(url,{...opts,headers:{...headers(),...(opts.headers||{})}});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||("HTTP "+r.status));return j}
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
@@ -325,11 +357,29 @@ async function refresh(){
   try{
     const c=await api("/api/capabilities");
     q("#models").innerHTML=c.providers.map(p=>'<div class="model"><b>'+esc(p.label)+'</b><span><span class="dot '+(p.configured?"on":"")+'"></span> '+(p.configured?"connecté":"en attente")+'</span></div>').join("");
-    q("#router").textContent=c.pull_worker_enabled?"Worker pull sécurisé actif : un GPU Kaggle/Colab peut réclamer les jobs.":"Worker GPU non appairé. Le studio accepte les jobs mais ne les déclarera jamais terminés sans vraie sortie vidéo.";
+    q("#router").textContent=c.pull_worker_enabled?"Worker GPU actif. Les vidéos terminées sont sauvegardées automatiquement dans ce navigateur pour survivre aux redéploiements Railway.":"Worker GPU non appairé.";
     const data=await api("/api/jobs");
-    q("#jobs").innerHTML=data.jobs.filter(j=>!String(j.prompt||"").startsWith("BETGPT_ZERO_GPU_SMOKE_OMEGA_")).slice(0,8).map(j=>{
+    const remote=data.jobs.filter(j=>!String(j.prompt||"").startsWith("BETGPT_ZERO_GPU_SMOKE_OMEGA_"));
+    for(const j of remote.filter(j=>j.status==="COMPLETED"&&j.video_url)){cacheVideoJob(j).catch(()=>{});}
+    const cached=await getCachedVideos().catch(()=>[]);
+    const cachedMap=new Map(cached.map(x=>[x.id,x]));
+    const merged=[];
+    const seen=new Set();
+    for(const j of remote){
+      const cx=cachedMap.get(j.id);
+      merged.push({...j,_cachedBlob:cx?.blob||null,_cachedAt:cx?.cached_at||null});
+      seen.add(j.id);
+    }
+    for(const cx of cached.sort((a,b)=>String(b.cached_at).localeCompare(String(a.cached_at)))){
+      if(!seen.has(cx.id)) merged.push({...cx.job,id:cx.id,status:"COMPLETED",_cachedBlob:cx.blob,_cachedAt:cx.cached_at});
+    }
+    q("#jobs").innerHTML=merged.slice(0,10).map(j=>{
       const pct=Number(j.progress||0);
-      return '<div class="job"><div class="jobhead"><span class="pill">'+esc(j.status)+'</span><span>'+new Date(j.created_at).toLocaleString()+'</span></div><p>'+esc(j.prompt).slice(0,180)+'</p><div class="tiny">'+esc(j.provider||j.model)+' · '+j.duration+'s · '+esc(j.aspect_ratio)+'</div><div class="progress"><i style="width:'+pct+'%"></i></div>'+(j.video_url?'<video controls playsinline src="'+esc(j.video_url)+'"></video>':'')+(j.last_error?'<div class="tiny" style="margin-top:8px">Erreur: '+esc(j.last_error)+'</div>':'')+'</div>'
+      const local=j._cachedBlob?blobUrlFor(j.id,j._cachedBlob):null;
+      const src=local||j.video_url||"";
+      const cacheNote=local?'<div class="tiny" style="margin-top:7px;color:#52f28f">✓ MP4 sauvegardé localement · persiste après redéploiement</div>':'';
+      const media=src?'<video controls playsinline src="'+esc(src)+'"></video><a href="'+esc(src)+'" download="betgpt-'+esc(j.id)+'.mp4" style="display:inline-block;margin-top:9px;color:#7df4ff;font-size:12px;font-weight:800">TÉLÉCHARGER LE MP4</a>':'';
+      return '<div class="job"><div class="jobhead"><span class="pill">'+esc(j.status)+'</span><span>'+new Date(j.created_at||j._cachedAt).toLocaleString()+'</span></div><p>'+esc(j.prompt).slice(0,180)+'</p><div class="tiny">'+esc(j.provider||j.model)+' · '+j.duration+'s · '+esc(j.aspect_ratio)+'</div><div class="progress"><i style="width:'+pct+'%"></i></div>'+media+cacheNote+(j.last_error?'<div class="tiny" style="margin-top:8px">Erreur: '+esc(j.last_error)+'</div>':'')+'</div>'
     }).join("")||'<div class="tiny">Aucun job.</div>';
   }catch(e){q("#router").textContent=e.message}
 }
@@ -380,7 +430,7 @@ const server = http.createServer(async (req, res) => {
         formats: ["9:16", "16:9", "1:1"],
         truthful_completion_gate: true,
         default_reference_image: ROBOT_REFERENCE_URL,
-        quality_mode: "wan22-14b-8step-premium-i2v",
+        quality_mode: "wan22-14b-8step-premium-i2v+browser-persistent-cache",
       });
     }
 
