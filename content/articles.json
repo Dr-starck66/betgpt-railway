@@ -2,127 +2,539 @@
   {
     "slug": "how-to-compare-car-insurance-quotes",
     "category": "Auto insurance",
-    "title": "How to compare car insurance quotes without comparing apples to oranges",
-    "description": "A practical checklist for matching limits, deductibles and optional coverages before judging price.",
+    "title": "How to Compare Car Insurance Quotes Without Comparing Apples to Oranges",
+    "description": "A practical framework for comparing auto insurance quotes on equal coverage, deductibles and policy features before you judge price.",
     "updated": "2026-10-02",
     "sections": [
       {
-        "heading": "Match liability limits first",
-        "text": "Two quotes are not comparable when one carries lower bodily injury or property damage limits. Put every quote on the same liability structure before comparing the premium."
+        "heading": "Start by matching liability limits",
+        "text": "The cheapest quote can look attractive simply because it carries less protection. Before comparing premiums, put every quote on the same bodily-injury and property-damage liability limits. If one insurer quotes a lower limit, treat that as a different product rather than a better price. The same principle applies to uninsured and underinsured motorist coverage where offered."
       },
       {
-        "heading": "Normalize deductibles",
-        "text": "Collision and comprehensive deductibles can materially change price. Compare the same deductible whenever possible and note whether glass coverage or special deductibles differ."
+        "heading": "Normalize deductibles and optional coverages",
+        "text": "Collision and comprehensive deductibles can materially change the premium. Compare the same deductible amount whenever possible, then review rental reimbursement, roadside assistance, glass coverage, gap protection and new-car replacement separately. A policy that removes optional protections may be cheaper, but the savings are not a like-for-like comparison."
       },
       {
-        "heading": "Check what is missing",
-        "text": "Uninsured motorist, rental reimbursement, roadside assistance, gap coverage and new-car replacement can change the value of a policy. A lower premium can simply mean fewer protections."
+        "heading": "Check the insurer and the policy, not only the number",
+        "text": "Price is one input. Claims handling, complaint data, financial strength, policy exclusions and the exact wording of endorsements can matter when a loss occurs. Ask for a copy of the coverage summary and verify what is included before you treat the lowest premium as the best value."
       }
+    ],
+    "sources": [
+      [
+        "NAIC Consumer Insurance",
+        "https://content.naic.org/consumer"
+      ],
+      [
+        "USA.gov — Car insurance",
+        "https://www.usa.gov/car-insurance"
+      ]
     ]
   },
   {
     "slug": "home-insurance-replacement-cost-guide",
     "category": "Home insurance",
-    "title": "Replacement cost vs. market value: the home insurance distinction that changes your quote",
-    "description": "Why dwelling coverage should be compared on rebuilding cost rather than the price you could sell the property for.",
+    "title": "Replacement Cost vs. Market Value: The Home Insurance Distinction That Changes Your Quote",
+    "description": "Why dwelling coverage is based on rebuilding exposure rather than the price you could sell the property for.",
     "updated": "2026-10-02",
     "sections": [
       {
         "heading": "Market value is not rebuilding cost",
-        "text": "Land value, neighborhood demand and transaction prices do not equal the cost of rebuilding the structure after a covered loss."
+        "text": "A home's sale price includes land, location, local demand and other factors that are not part of rebuilding the structure after a covered loss. Insurance dwelling limits are generally intended to reflect reconstruction exposure, so comparing the insured amount with the home's market price can lead to the wrong conclusion."
       },
       {
-        "heading": "Review coverage assumptions",
-        "text": "Construction type, square footage, local labor and material costs, special features and code requirements can all affect a replacement-cost estimate."
+        "heading": "Construction assumptions matter",
+        "text": "Square footage, construction type, roof and exterior materials, local labor costs, debris removal, code upgrades and special features can all affect estimated replacement cost. When two insurers use different assumptions, ask what is driving the difference instead of focusing only on the premium."
       },
       {
-        "heading": "Watch percentage deductibles",
-        "text": "Some wind, hurricane or catastrophe deductibles are expressed as a percentage of insured value rather than a flat dollar amount. That can materially change out-of-pocket exposure."
+        "heading": "Review deductibles and catastrophe terms",
+        "text": "Some policies use separate wind, named-storm, hurricane or other catastrophe deductibles. Those deductibles can be expressed as a percentage rather than a flat dollar amount. Read the declarations page carefully because two policies with similar annual premiums may expose the homeowner to very different out-of-pocket costs."
       }
+    ],
+    "sources": [
+      [
+        "NAIC Consumer Insurance",
+        "https://content.naic.org/consumer"
+      ],
+      [
+        "FEMA National Flood Insurance Program",
+        "https://www.floodsmart.gov/"
+      ]
     ]
   },
   {
     "slug": "term-life-insurance-quote-checklist",
     "category": "Life insurance",
-    "title": "Term life insurance quote checklist: what to compare before price",
-    "description": "Term length, coverage amount, underwriting and policy features that matter before choosing the cheapest offer.",
+    "title": "Term Life Insurance Quote Checklist: What to Compare Before Price",
+    "description": "A term-life comparison checklist covering benefit amount, term length, underwriting, conversion provisions and policy features.",
     "updated": "2026-10-02",
     "sections": [
       {
-        "heading": "Keep coverage amount and term identical",
-        "text": "A 20-year policy and a 30-year policy are different products. Compare quotes only when term length and death benefit match."
+        "heading": "Keep the death benefit and term identical",
+        "text": "A 20-year policy and a 30-year policy are not equivalent products, even if the benefit amount is the same. Start by matching the death benefit and the policy term. This makes the premium comparison more meaningful and avoids choosing a cheaper quote that protects the family for a shorter period."
       },
       {
-        "heading": "Understand underwriting",
-        "text": "Accelerated, simplified and fully underwritten policies can price risk differently. The fastest application is not always the least expensive long-term option."
+        "heading": "Understand the underwriting path",
+        "text": "Fully underwritten, simplified-issue and accelerated-underwriting policies can ask different questions and use different evidence. The fastest application is not automatically the least expensive option. Compare the underwriting route, any exam requirement and the conditions under which the quoted class can change."
       },
       {
-        "heading": "Read conversion and rider provisions",
-        "text": "Conversion rights and optional riders can matter later. Compare them explicitly instead of treating every term policy as interchangeable."
+        "heading": "Review conversion rights and riders",
+        "text": "Term conversion provisions can matter if health changes later. Riders such as accelerated death benefit, waiver of premium or child coverage can also differ. Treat these features as part of the product rather than assuming every term policy is interchangeable."
       }
+    ],
+    "sources": [
+      [
+        "NAIC Consumer Insurance",
+        "https://content.naic.org/consumer"
+      ],
+      [
+        "Insurance Information Institute — Life insurance",
+        "https://www.iii.org/article/what-are-principal-types-life-insurance"
+      ]
     ]
   },
   {
     "slug": "renters-insurance-coverage-checklist",
     "category": "Renters insurance",
-    "title": "Renters insurance: the 5 coverages worth checking before you buy",
-    "description": "Personal property, liability, loss of use and deductible details that make inexpensive renters policies meaningfully different.",
+    "title": "Renters Insurance: The 5 Coverages Worth Checking Before You Buy",
+    "description": "A renter-focused checklist for personal property, liability, loss of use, deductibles and common exclusions.",
     "updated": "2026-10-02",
     "sections": [
       {
-        "heading": "Personal property valuation",
-        "text": "Know whether damaged belongings are paid at replacement cost or actual cash value, which can deduct depreciation."
+        "heading": "Know how personal property is valued",
+        "text": "Replacement-cost coverage and actual-cash-value coverage can lead to very different claim payments. Actual cash value generally reflects depreciation, while replacement-cost provisions are designed around the cost of replacing covered items, subject to policy terms and limits. Check which basis applies before comparing premiums."
       },
       {
-        "heading": "Liability protection",
-        "text": "Liability limits can matter far more than the value of your furniture if someone is injured and you are legally responsible."
+        "heading": "Do not overlook personal liability",
+        "text": "Renters insurance is not only about replacing a laptop or furniture. Personal liability coverage can respond when you are legally responsible for injury or property damage to someone else, subject to exclusions and limits. Compare liability limits separately from the personal-property amount."
       },
       {
-        "heading": "Loss of use",
-        "text": "Temporary housing and additional living expense coverage can be crucial when a covered loss makes the rental uninhabitable."
+        "heading": "Check loss-of-use coverage and exclusions",
+        "text": "If a covered loss makes the rental uninhabitable, loss-of-use coverage may help with eligible additional living expenses. Also review exclusions for flood, earthquakes, certain high-value property and business equipment. A low premium can reflect narrower protection."
       }
+    ],
+    "sources": [
+      [
+        "NAIC Consumer Insurance",
+        "https://content.naic.org/consumer"
+      ],
+      [
+        "Insurance Information Institute — Renters insurance",
+        "https://www.iii.org/article/renters-insurance"
+      ]
     ]
   },
   {
     "slug": "small-business-insurance-starting-point",
     "category": "Business insurance",
-    "title": "Small-business insurance: where to start before requesting quotes",
-    "description": "A coverage map for general liability, property, professional liability, cyber, workers compensation and commercial auto.",
+    "title": "Small-Business Insurance: Where to Start Before Requesting Quotes",
+    "description": "A practical coverage map for general liability, property, professional liability, cyber, workers compensation and commercial auto.",
     "updated": "2026-10-02",
     "sections": [
       {
-        "heading": "Start from the actual risk",
-        "text": "A consultant, restaurant, contractor and ecommerce company have very different exposures. Coverage should follow operations rather than a generic bundle."
+        "heading": "Start from the operations, not a generic bundle",
+        "text": "A consultant, restaurant, contractor and ecommerce business face different risks. Build the insurance request around actual activities, payroll, locations, revenue, vehicles, professional services, customer data and contractual obligations. This helps prevent both unnecessary coverage and important gaps."
       },
       {
-        "heading": "Separate liability types",
-        "text": "General liability, professional liability and cyber liability address different categories of loss. One is not automatically a substitute for another."
+        "heading": "Separate liability categories",
+        "text": "General liability, professional liability, cyber liability and employment-related coverage respond to different allegations and losses. One policy is not automatically a substitute for another. When comparing proposals, map each major risk to the policy intended to address it."
       },
       {
-        "heading": "Confirm compulsory coverages",
-        "text": "Workers compensation, commercial auto and other requirements vary by jurisdiction. Verify obligations with the relevant regulator or licensed professional."
+        "heading": "Verify compulsory or contract-required insurance",
+        "text": "Workers compensation, commercial auto and other obligations vary by jurisdiction and business structure. Landlords, clients and lenders may also require specific limits or certificates. Verify those requirements before requesting quotes so every insurer is pricing the same target coverage."
       }
+    ],
+    "sources": [
+      [
+        "U.S. Small Business Administration — Business insurance",
+        "https://www.sba.gov/business-guide/manage-your-business/get-business-insurance"
+      ],
+      [
+        "NAIC Consumer Insurance",
+        "https://content.naic.org/consumer"
+      ]
     ]
   },
   {
     "slug": "health-plan-total-cost-checklist",
     "category": "Health insurance",
-    "title": "Health insurance: compare total cost, not just the monthly premium",
-    "description": "A framework for evaluating deductibles, copays, coinsurance, networks and out-of-pocket maximums.",
+    "title": "Health Insurance: Compare Total Cost, Not Just the Monthly Premium",
+    "description": "A framework for comparing premiums, deductibles, copays, coinsurance, networks, prescriptions and out-of-pocket limits.",
     "updated": "2026-10-02",
     "sections": [
       {
-        "heading": "Premium is only one cost",
-        "text": "A plan with a low monthly premium can still expose you to a high deductible or out-of-pocket maximum."
+        "heading": "Premium is only one part of cost",
+        "text": "A plan with a low monthly premium may carry a higher deductible, coinsurance requirement or out-of-pocket maximum. Compare the premium together with the amount you could pay when using care, especially if you expect regular prescriptions, specialist visits or planned procedures."
       },
       {
-        "heading": "Check the network",
-        "text": "Doctors, hospitals and pharmacies may be treated differently in-network and out-of-network. Verify the providers that matter to you."
+        "heading": "Verify the provider and drug networks",
+        "text": "A plan can be poor value if the doctors, hospitals or medicines you rely on are not covered as expected. Check network participation and the formulary directly with the plan before enrollment, because directories and covered-drug lists can change."
       },
       {
-        "heading": "Model likely use",
-        "text": "Consider regular prescriptions, specialist visits, planned procedures and worst-case annual exposure rather than optimizing one number."
+        "heading": "Model likely and worst-case use",
+        "text": "It can help to compare at least two scenarios: a normal year based on your expected use and a high-cost year approaching the plan's out-of-pocket limit. This makes trade-offs between premium and cost sharing easier to see."
       }
+    ],
+    "sources": [
+      [
+        "HealthCare.gov — How to pick a plan",
+        "https://www.healthcare.gov/choose-a-plan/"
+      ],
+      [
+        "CMS",
+        "https://www.cms.gov/"
+      ]
+    ]
+  },
+  {
+    "slug": "full-coverage-car-insurance-meaning",
+    "category": "Auto insurance",
+    "title": "What Does “Full Coverage” Car Insurance Actually Mean?",
+    "description": "Why “full coverage” is not a standardized policy name and how to compare the protections people usually mean by it.",
+    "updated": "2026-10-02",
+    "sections": [
+      {
+        "heading": "There is no universal full-coverage package",
+        "text": "The phrase full coverage is commonly used to describe a combination of liability, collision and comprehensive coverage, but it is not a single standardized policy form. Limits, deductibles and optional protections can still differ materially from one quote to another."
+      },
+      {
+        "heading": "Lender requirements are different from your own needs",
+        "text": "A lender or lessor may require physical-damage coverage on a financed vehicle, but satisfying the contract does not automatically mean every personal exposure is addressed. Liability limits, uninsured-motorist protection and rental or gap coverage may still need separate review."
+      },
+      {
+        "heading": "Compare the declarations, not the label",
+        "text": "When an insurer or comparison site uses the phrase full coverage, ask for the exact limits and deductibles. Two policies carrying the same marketing label can create very different claim outcomes."
+      }
+    ],
+    "sources": [
+      [
+        "NAIC Consumer Insurance",
+        "https://content.naic.org/consumer"
+      ]
+    ]
+  },
+  {
+    "slug": "car-insurance-deductible-500-vs-1000",
+    "category": "Auto insurance",
+    "title": "$500 vs. $1,000 Car Insurance Deductible: How to Compare the Trade-Off",
+    "description": "A simple way to judge whether a higher collision or comprehensive deductible is worth the premium savings.",
+    "updated": "2026-10-02",
+    "sections": [
+      {
+        "heading": "Measure the annual premium difference",
+        "text": "Start with two otherwise identical quotes and isolate the premium change created by the deductible. If the higher deductible saves only a small amount each year, it may take a long time for the savings to offset the extra amount you would pay after a covered claim."
+      },
+      {
+        "heading": "Consider your emergency cash position",
+        "text": "A deductible is money you may need to produce at an inconvenient moment. A higher deductible can reduce premium, but it also transfers more short-term risk to you. Choose an amount that you could realistically pay without relying on high-cost debt."
+      },
+      {
+        "heading": "Separate collision and comprehensive choices",
+        "text": "Insurers may allow different deductibles for collision and comprehensive coverage. Because claim patterns and premium effects differ, compare each one independently rather than assuming both deductibles should always be the same."
+      }
+    ],
+    "sources": [
+      [
+        "NAIC Consumer Insurance",
+        "https://content.naic.org/consumer"
+      ]
+    ]
+  },
+  {
+    "slug": "home-insurance-deductibles-explained",
+    "category": "Home insurance",
+    "title": "Home Insurance Deductibles Explained: Flat Dollar, Percentage and Storm Deductibles",
+    "description": "How different homeowners-insurance deductible structures change the amount you may owe after a covered loss.",
+    "updated": "2026-10-02",
+    "sections": [
+      {
+        "heading": "Flat-dollar deductibles are the simplest",
+        "text": "A flat deductible is a stated dollar amount applied under the policy terms to a covered claim. It is easy to compare across quotes, but make sure the same deductible applies to the same categories of loss."
+      },
+      {
+        "heading": "Percentage deductibles can be much larger",
+        "text": "A percentage deductible is generally tied to an insured amount rather than the size of the claim. A small-looking percentage can therefore produce a substantial out-of-pocket amount. Ask the insurer to show the dollar equivalent for the home being insured."
+      },
+      {
+        "heading": "Storm deductibles may have separate triggers",
+        "text": "Wind, hurricane or named-storm deductibles can have their own definitions and triggers. Review the policy wording and state-specific disclosures because the same weather event may be handled differently across carriers and jurisdictions."
+      }
+    ],
+    "sources": [
+      [
+        "NAIC Consumer Insurance",
+        "https://content.naic.org/consumer"
+      ],
+      [
+        "FEMA",
+        "https://www.fema.gov/"
+      ]
+    ]
+  },
+  {
+    "slug": "home-insurance-flood-not-covered",
+    "category": "Home insurance",
+    "title": "Why Standard Home Insurance Usually Is Not a Substitute for Flood Insurance",
+    "description": "A clear explanation of the flood-coverage gap and the questions to ask before assuming water damage is insured.",
+    "updated": "2026-10-02",
+    "sections": [
+      {
+        "heading": "Water damage is not one category",
+        "text": "Insurance treatment can depend on the source and timing of water. A burst pipe, roof leak, sewer backup and rising surface water can fall under different provisions. The fact that one kind of water loss is covered does not mean flood is covered."
+      },
+      {
+        "heading": "Flood insurance is typically a separate decision",
+        "text": "Homeowners should verify whether they need a separate flood policy or endorsement based on location, lender requirements and risk tolerance. Do not infer flood protection from a standard homeowners premium."
+      },
+      {
+        "heading": "Ask about waiting periods and effective dates",
+        "text": "Coverage may not begin the moment an application is submitted. If flood protection matters, confirm the effective date, waiting period and any exceptions directly with the insurer or program before relying on the policy."
+      }
+    ],
+    "sources": [
+      [
+        "FEMA National Flood Insurance Program",
+        "https://www.floodsmart.gov/"
+      ],
+      [
+        "NAIC Consumer Insurance",
+        "https://content.naic.org/consumer"
+      ]
+    ]
+  },
+  {
+    "slug": "life-insurance-how-much-coverage",
+    "category": "Life insurance",
+    "title": "How Much Life Insurance Coverage Should You Compare?",
+    "description": "A needs-based framework for estimating a starting death-benefit range without pretending one formula fits every household.",
+    "updated": "2026-10-02",
+    "sections": [
+      {
+        "heading": "Start with obligations, not a multiple alone",
+        "text": "Rules of thumb based on income can be a rough starting point, but a household may also need to account for mortgage or rent, other debts, childcare, education goals, final expenses and the period during which survivors would need income replacement."
+      },
+      {
+        "heading": "Subtract resources that are truly available",
+        "text": "Savings, existing life insurance and other survivor resources may reduce the amount of new coverage needed. Be careful not to count assets that are illiquid, already earmarked for another purpose or uncertain."
+      },
+      {
+        "heading": "Revisit the number after major changes",
+        "text": "Marriage, divorce, a new child, a home purchase, a major income change or a business obligation can alter the amount and duration of protection that makes sense. Life insurance is not necessarily a one-time calculation."
+      }
+    ],
+    "sources": [
+      [
+        "NAIC Consumer Insurance",
+        "https://content.naic.org/consumer"
+      ],
+      [
+        "Social Security Administration — Survivors",
+        "https://www.ssa.gov/survivor"
+      ]
+    ]
+  },
+  {
+    "slug": "term-vs-whole-life-insurance",
+    "category": "Life insurance",
+    "title": "Term vs. Whole Life Insurance: What You Are Actually Comparing",
+    "description": "A neutral breakdown of temporary term protection versus permanent cash-value life insurance.",
+    "updated": "2026-10-02",
+    "sections": [
+      {
+        "heading": "The coverage duration is different",
+        "text": "Term insurance is designed to provide protection for a stated period, while whole life is a form of permanent insurance intended to remain in force if required premiums are paid and policy conditions are met. That difference alone makes headline premiums difficult to compare."
+      },
+      {
+        "heading": "Cash value changes the product economics",
+        "text": "Whole life policies generally include a cash-value component and guarantees defined by the contract. Term insurance usually focuses on death-benefit protection without the same savings element. Compare what each product is designed to do before comparing price."
+      },
+      {
+        "heading": "Suitability depends on the objective",
+        "text": "Someone protecting a temporary income-replacement need may evaluate products differently from someone considering permanent estate or legacy objectives. Complex permanent-policy decisions can warrant review with a properly licensed professional."
+      }
+    ],
+    "sources": [
+      [
+        "NAIC Consumer Insurance",
+        "https://content.naic.org/consumer"
+      ]
+    ]
+  },
+  {
+    "slug": "renters-insurance-how-much-personal-property",
+    "category": "Renters insurance",
+    "title": "How Much Personal Property Coverage Do Renters Need?",
+    "description": "A room-by-room method for estimating belongings before choosing a renters-insurance personal-property limit.",
+    "updated": "2026-10-02",
+    "sections": [
+      {
+        "heading": "Inventory the home by room",
+        "text": "Walk through each room and list the items you would need to replace after a major loss: furniture, clothing, electronics, kitchen equipment, sports gear and other belongings. Small items can add up to a surprisingly large total."
+      },
+      {
+        "heading": "Pay attention to special limits",
+        "text": "Policies may apply lower sublimits to categories such as jewelry, collectibles, cash, firearms, business property or certain electronics. If you own higher-value items, ask whether scheduled coverage or a separate endorsement is appropriate."
+      },
+      {
+        "heading": "Keep evidence that can help after a claim",
+        "text": "Photos, receipts, serial numbers and a simple digital inventory can make it easier to document ownership and value. Store a copy somewhere that would remain accessible if the residence itself were damaged."
+      }
+    ],
+    "sources": [
+      [
+        "NAIC Consumer Insurance",
+        "https://content.naic.org/consumer"
+      ],
+      [
+        "Insurance Information Institute",
+        "https://www.iii.org/"
+      ]
+    ]
+  },
+  {
+    "slug": "renters-insurance-roommates",
+    "category": "Renters insurance",
+    "title": "Renters Insurance and Roommates: Do You Need Separate Policies?",
+    "description": "What roommates should verify about named insureds, shared belongings and liability before assuming one policy covers everyone.",
+    "updated": "2026-10-02",
+    "sections": [
+      {
+        "heading": "Do not assume every roommate is automatically insured",
+        "text": "Policy definitions determine who qualifies as an insured. Unrelated roommates may need separate policies unless the insurer specifically adds or recognizes them. Verify the names shown on the policy rather than relying on the lease alone."
+      },
+      {
+        "heading": "Shared property can complicate claims",
+        "text": "When several people own property in the same home, keeping separate inventories and receipts can reduce confusion after a loss. A policyholder should understand which property belongs to whom and how the carrier treats property of others."
+      },
+      {
+        "heading": "Liability exposure is personal",
+        "text": "A liability claim involving one roommate can raise questions about who is insured and which conduct is covered. Separate policies can sometimes create clearer boundaries, but the correct structure depends on the carrier's rules and the household."
+      }
+    ],
+    "sources": [
+      [
+        "NAIC Consumer Insurance",
+        "https://content.naic.org/consumer"
+      ]
+    ]
+  },
+  {
+    "slug": "general-liability-vs-professional-liability",
+    "category": "Business insurance",
+    "title": "General Liability vs. Professional Liability: The Difference Small Businesses Miss",
+    "description": "Why bodily-injury and property-damage exposures are different from claims arising from professional services or advice.",
+    "updated": "2026-10-02",
+    "sections": [
+      {
+        "heading": "General liability addresses common third-party exposures",
+        "text": "General liability commonly addresses allegations involving bodily injury, property damage and certain personal or advertising injuries, subject to policy terms. It is often foundational for businesses with premises, customers or job-site exposure."
+      },
+      {
+        "heading": "Professional liability focuses on professional services",
+        "text": "Professional liability, often called errors and omissions coverage in some industries, addresses different allegations tied to professional services, advice or failure to perform as promised. A general liability policy should not be assumed to replace it."
+      },
+      {
+        "heading": "Contracts can require both",
+        "text": "Clients, landlords and project owners may require specific coverages and limits before work begins. Review insurance requirements before signing contracts so coverage can be priced and arranged rather than discovered after an agreement is already binding."
+      }
+    ],
+    "sources": [
+      [
+        "U.S. Small Business Administration",
+        "https://www.sba.gov/business-guide/manage-your-business/get-business-insurance"
+      ],
+      [
+        "NAIC Consumer Insurance",
+        "https://content.naic.org/consumer"
+      ]
+    ]
+  },
+  {
+    "slug": "cyber-insurance-small-business-checklist",
+    "category": "Business insurance",
+    "title": "Cyber Insurance for Small Businesses: A Pre-Quote Checklist",
+    "description": "The controls, data exposure and operational details insurers may care about when evaluating cyber risk.",
+    "updated": "2026-10-02",
+    "sections": [
+      {
+        "heading": "Know what data and systems matter",
+        "text": "Map the customer, employee and payment information the business stores or processes. Identify critical cloud services, internal systems and vendors whose outage could interrupt operations. This gives the insurance application a more accurate picture of exposure."
+      },
+      {
+        "heading": "Document security controls honestly",
+        "text": "Applications may ask about multifactor authentication, backups, endpoint protection, patching, email security and employee training. Answers can affect underwriting and claim disputes, so do not guess or overstate controls that are not consistently implemented."
+      },
+      {
+        "heading": "Compare response services as well as limits",
+        "text": "Cyber policies can include access to breach counsel, forensics, notification, credit monitoring, ransomware response and business-interruption coverage. Compare sublimits, waiting periods, exclusions and panel-provider requirements rather than looking only at the headline limit."
+      }
+    ],
+    "sources": [
+      [
+        "CISA — Cyber guidance for small businesses",
+        "https://www.cisa.gov/resources-tools/resources/cyber-guidance-small-businesses"
+      ],
+      [
+        "U.S. Small Business Administration",
+        "https://www.sba.gov/"
+      ]
+    ]
+  },
+  {
+    "slug": "health-insurance-deductible-vs-out-of-pocket-max",
+    "category": "Health insurance",
+    "title": "Deductible vs. Out-of-Pocket Maximum: The Health Insurance Difference That Matters",
+    "description": "How deductibles and annual out-of-pocket limits interact, and why neither number should be evaluated alone.",
+    "updated": "2026-10-02",
+    "sections": [
+      {
+        "heading": "The deductible is an early cost threshold",
+        "text": "A deductible is generally the amount you pay for covered services before certain plan benefits begin to pay, although some services may be covered before the deductible depending on the plan. It is one part of the cost-sharing structure."
+      },
+      {
+        "heading": "The out-of-pocket maximum is a broader annual cap",
+        "text": "For covered in-network care under qualifying plans, the out-of-pocket maximum limits how much you pay in eligible cost sharing during the year. Premiums and some categories of spending generally do not count toward that limit, so review the plan documents carefully."
+      },
+      {
+        "heading": "Compare the full path between the two",
+        "text": "After the deductible, copays or coinsurance may still apply until the out-of-pocket maximum is reached. Two plans with similar deductibles can therefore produce very different total annual costs."
+      }
+    ],
+    "sources": [
+      [
+        "HealthCare.gov — Costs",
+        "https://www.healthcare.gov/choose-a-plan/your-total-costs/"
+      ],
+      [
+        "CMS",
+        "https://www.cms.gov/"
+      ]
+    ]
+  },
+  {
+    "slug": "hmo-vs-ppo-vs-epo",
+    "category": "Health insurance",
+    "title": "HMO vs. PPO vs. EPO: What to Compare Beyond the Acronym",
+    "description": "A practical guide to network flexibility, referrals, out-of-network care and cost differences among common plan structures.",
+    "updated": "2026-10-02",
+    "sections": [
+      {
+        "heading": "Start with network rules",
+        "text": "Plan types can differ in how tightly they limit non-emergency care to network providers. If you have preferred doctors or hospitals, verify their participation directly rather than assuming an acronym guarantees access."
+      },
+      {
+        "heading": "Check referral and specialist rules",
+        "text": "Some plans may require a primary-care referral for specialist care while others allow more direct access. The administrative difference can matter to people who use specialists frequently."
+      },
+      {
+        "heading": "Balance flexibility against total cost",
+        "text": "Broader provider choice can come with higher premiums or cost sharing. Compare not only the plan label but also the actual network, deductible, copays, coinsurance and out-of-pocket maximum."
+      }
+    ],
+    "sources": [
+      [
+        "HealthCare.gov — Plan types",
+        "https://www.healthcare.gov/choose-a-plan/plan-types/"
+      ]
     ]
   }
 ]
