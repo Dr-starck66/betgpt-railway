@@ -1,0 +1,10 @@
+{
+  "principle": "Never optimize on advertised payout alone. Prefer measured EPC and qualified conversion after compliance gates.",
+  "metrics": ["clicks","qualified_leads","sales","revenue","epc","qualification_rate","conversion_rate","reversal_rate"],
+  "partners": [
+    {"id":"insurify","status":"pending","products":["auto","home","renters","business","life"],"publicTerms":"competitive commission / partnership; exact economics negotiated"},
+    {"id":"smartfinancial","status":"pending","products":["auto","home","business"],"publicTerms":"one-time fee per qualifying quote request under written insertion order"},
+    {"id":"policygenius","status":"pending","products":["life","home","auto"],"publicTerms":"partner program; exact publisher economics not assumed"},
+    {"id":"lendingtree","status":"pending","products":["home"],"publicTerms":"partner program; exact economics not assumed"}
+  ]
+}
