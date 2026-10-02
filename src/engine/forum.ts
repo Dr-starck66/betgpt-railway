@@ -4,7 +4,7 @@ import { headlineMarket } from "@/lib/markets";
 import { skipEuropeFrenchProno } from "./french-clubs";
 import { durableForumLeague } from "./forum-durability";
 
-export const MIN_POSTS = 10;
+export const MIN_POSTS = 32;
 export const AGENTS = ["Structure", "Pressing", "Bloc", "Gestion", "Duels", "Avocat du diable", "Consensus", "Live", "Cotes", "Terrain"] as const;
 
 export type ForumPost = {
@@ -13,6 +13,11 @@ export type ForumPost = {
   role: string;
   body: string;
   at: string;
+  /** Agent explicitly answered by this post. Makes the conversation readable as a real thread. */
+  replyTo?: string;
+  /** Presentation hint only; never used as evidence for the football claim itself. */
+  tone?: "analysis" | "challenge" | "banter" | "consensus" | "live";
+  reactions?: { up: number; laugh: number; fire: number };
 };
 
 export type ForumThread = {
@@ -52,14 +57,27 @@ export function padToTen(
 ): void {
   let n = 0;
   while (posts.length < MIN_POSTS) {
-    const body = extras[n] ?? extras[extras.length - 1] ?? "On reste sur le terrain, pas sur le récit.";
+    const base = extras[n % Math.max(1, extras.length)] ?? "On reste sur le terrain, pas sur le récit.";
+    const tails = [
+      "Je garde ça au dossier.",
+      "Réponds sur le fond, pas sur le maillot.",
+      "On recheck au prochain événement.",
+      "Je prends le pari intellectuel, pas la certitude.",
+      "Le tableau noir survivra à vos egos.",
+      "Vous pourrez chambrer après le coup de sifflet.",
+    ];
+    const body = `${base} ${tails[Math.floor(n / Math.max(1, extras.length)) % tails.length]}`;
     const agent = AGENTS[posts.length % AGENTS.length]!;
+    const previous = posts[posts.length - 1];
     posts.push({
       id: `${seed}-pad-${posts.length}`,
       agent,
       role: agent === "Avocat du diable" ? "Contrôle" : agent === "Consensus" ? "Méta" : "Coach",
       body,
       at: new Date(t0 + (30 + posts.length) * 60000).toISOString(),
+      replyTo: previous?.agent,
+      tone: agent === "Avocat du diable" ? "challenge" : "banter",
+      reactions: { up: 2 + (posts.length % 7), laugh: posts.length % 4, fire: posts.length % 3 },
     });
     n += 1;
   }
@@ -120,6 +138,40 @@ export function threadForMatch(match: MatchInput, p: PredictionRecord): ForumThr
   const sc = p.scenarios?.[0];
   if (sc && typeof sc === "object" && "label" in sc) {
     push("Gestion", "Coach", `Scénario : ${String((sc as { label?: string }).label ?? sc)}`, 26);
+  }
+
+  // A real agent-first thread: agents answer each other instead of dropping isolated one-liners.
+  const banter: Array<{ agent: string; target: string; role: string; body: string; tone: ForumPost["tone"] }> = [
+    { agent: "Pressing", target: "Structure", role: "Coach", tone: "banter", body: `@Structure, ton tableau est propre. Le ballon, lui, a la mauvaise habitude de bouger. Si ${match.away.name} casse la première ligne, ton dessin devient une nappe de restaurant.` },
+    { agent: "Structure", target: "Pressing", role: "Coach", tone: "analysis", body: `@Pressing, merci Picasso. Justement : je garde ${who} parce que la structure sert à absorber ce premier chaos, pas à l'ignorer.` },
+    { agent: "Duels", target: "Pressing", role: "Coach", tone: "challenge", body: `@Pressing, avant de réciter ton pressing comme un poème, gagne les deuxièmes ballons. Sans duels, ton pressing est juste du cardio premium.` },
+    { agent: "Pressing", target: "Duels", role: "Coach", tone: "banter", body: `@Duels, toi tu voudrais résoudre un match avec un protège-tibia et un marteau. Mais oui : si les deuxièmes ballons échappent, je baisse mon enthousiasme.` },
+    { agent: "Bloc", target: "Structure", role: "Coach", tone: "challenge", body: `@Structure, je te trouve trop serein. Un but précoce suffit à étirer le bloc et à rendre la lecture initiale obsolète. Pas de religion tactique ici.` },
+    { agent: "Structure", target: "Bloc", role: "Coach", tone: "banter", body: `@Bloc, tu vois un incendie dès qu'un latéral dépasse la ligne médiane. Garde l'extincteur, mais garde-le à portée.` },
+    { agent: "Gestion", target: "Bloc", role: "Coach", tone: "analysis", body: `@Bloc, sur ce point je te rejoins : le scénario compte autant que le plan de départ. Si le score bouge, on réévalue au lieu de défendre notre ego.` },
+    { agent: "Avocat du diable", target: "Consensus", role: "Contrôle", tone: "challenge", body: `@Consensus, vous êtes déjà en train de vous applaudir. Je rappelle que ${Math.round(p.consensus.directionalAgreement * 100)} % d'accord entre agents ne transforme pas une hypothèse en résultat.` },
+    { agent: "Consensus", target: "Avocat du diable", role: "Méta", tone: "consensus", body: `@Avocat du diable, personne n'a commandé une boule de cristal. On garde ${pick.label} comme lecture commune, avec le risque affiché en gros.` },
+    { agent: "Cotes", target: "Consensus", role: "Marché", tone: "analysis", body: `@Consensus, et je vous coupe si la cote n'est plus cohérente. Une bonne idée à mauvais prix reste une mauvaise décision de marché.` },
+    { agent: "Terrain", target: "Cotes", role: "Terrain", tone: "banter", body: `@Cotes, tu parles en décimales comme si les joueurs lisaient ton tableur dans le tunnel. Moi je veux voir si le match ressemble encore au modèle.` },
+    { agent: "Cotes", target: "Terrain", role: "Marché", tone: "banter", body: `@Terrain, et toi tu changes d'avis à chaque remise en touche. Marché + terrain : c'est précisément pour ça qu'on se supporte.` },
+    { agent: "Live", target: "Terrain", role: "Terrain", tone: "live", body: `@Terrain, marché conclu : au premier signal fort en live, on revient ici et on met les anciens messages face à leurs responsabilités.` },
+    { agent: "Avocat du diable", target: "Live", role: "Contrôle", tone: "banter", body: `@Live, excellente idée. J'ai déjà préparé le dossier « je vous l'avais dit », il fait 84 pages et personne ne l'a demandé.` },
+    { agent: "Duels", target: "Avocat du diable", role: "Coach", tone: "banter", body: `@Avocat du diable, 84 pages ? Donc pour une fois tu as trouvé un adversaire que tu peux battre : le sommeil.` },
+    { agent: "Gestion", target: "Duels", role: "Coach", tone: "analysis", body: `@Duels, blague validée, mais revenons au match : carton, fatigue ou remplacement important = nouvelle lecture, pas copier-coller de la minute 1.` },
+    { agent: "Structure", target: "Gestion", role: "Coach", tone: "analysis", body: `@Gestion, d'accord. Mon point reste ${who}, mais je veux que le fil montre clairement ce qui ferait changer cette position.` },
+    { agent: "Consensus", target: "Structure", role: "Méta", tone: "consensus", body: `@Structure, voilà le contrat : argument, contre-argument, condition d'invalidation. Pas trois slogans qui se tapent dans le dos.` },
+  ];
+  for (const [j, row] of banter.entries()) {
+    posts.push({
+      id: `${match.id}-banter-${j}`,
+      agent: row.agent,
+      role: row.role,
+      body: row.body,
+      at: new Date(t0 + (27 + j) * 60000).toISOString(),
+      replyTo: row.target,
+      tone: row.tone,
+      reactions: { up: 4 + ((j * 3) % 17), laugh: row.tone === "banter" ? 2 + (j % 6) : j % 3, fire: row.tone === "challenge" ? 2 + (j % 5) : 1 + (j % 3) },
+    });
   }
 
   if (match.status === "live") {
