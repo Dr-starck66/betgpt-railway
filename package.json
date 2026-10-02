@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "node scripts/with-app-env.mjs vite dev --host 0.0.0.0 --port 8080",
     "build": "node scripts/with-app-env.mjs vite build && npm run db:migrate",
-    "prebuild": "node scripts/clean-build.mjs && npm run test:forum-durability && node scripts/astra-zero-cost-guard.mjs && node scripts/astra-resume-guard.mjs && node scripts/astra-flag-guard.mjs && node scripts/astra-model-max-guard.mjs && node scripts/astra-visual-entity-guard.mjs && node scripts/astra-zero-weak-page-guard.mjs --strict && node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-heading-architecture-guard.mjs --strict && npm run test:editorial-authority && node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-editorial-authority-gate.ts && npm run editorial:corpus-audit",
+    "prebuild": "node scripts/clean-build.mjs && node scripts/astra-no-repeat-guard.mjs && npm run test:forum-durability && node scripts/astra-zero-cost-guard.mjs && node scripts/astra-resume-guard.mjs && node scripts/astra-flag-guard.mjs && node scripts/astra-model-max-guard.mjs && node scripts/astra-visual-entity-guard.mjs && node scripts/astra-zero-weak-page-guard.mjs --strict && node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-heading-architecture-guard.mjs --strict && npm run test:editorial-authority && node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-editorial-authority-gate.ts && npm run editorial:corpus-audit",
     "prebuild:dev": "node scripts/clean-build.mjs",
     "db:migrate": "node scripts/migrate.mjs",
     "build:dev": "node scripts/with-app-env.mjs vite build --mode development",
@@ -78,7 +78,8 @@
     "affiliate:guard": "node scripts/astra-affiliate-conversion-guard.mjs",
     "test:search-truth": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/search/search-truth.test.ts",
     "seo:public-readiness": "node scripts/astra-public-seo-readiness-gate.mjs",
-    "test:forum-durability": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/engine/forum-durability.test.ts"
+    "test:forum-durability": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/engine/forum-durability.test.ts",
+    "test:no-repeat": "node scripts/astra-no-repeat-guard.mjs"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.4",
