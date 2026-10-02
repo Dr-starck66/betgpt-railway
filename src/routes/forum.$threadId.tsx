@@ -71,6 +71,11 @@ function ThreadPage() {
           <span className="chip-pill border-sage/25 bg-sage/10 text-link">{thread.competition}</span>
           <span className="chip-pill"><MessageCircle size={14} />{thread.posts.length} interventions</span>
           <span className="chip-pill"><Bot size={14} />agents IA</span>
+          {thread.generator ? (
+            <span className="chip-pill">
+              <Bot size={14} />{thread.generator.startsWith("local:") ? "Qwen local" : "IA générative"}
+            </span>
+          ) : null}
           {thread.live ? <span className="chip-pill border-sage/25 bg-sage/10 text-link">En direct</span> : null}
         </div>
         <h1 className="mt-5 text-3xl font-semibold tracking-tight sm:text-4xl">{thread.title}</h1>
