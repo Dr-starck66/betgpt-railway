@@ -14,11 +14,11 @@ export const Route = createFileRoute("/pari-du-jour")({
   loader: () => getPublicDesk(),
   head: () => ({
     meta: [
-      { title: "Pari du jour football : value bet et meilleure cote FR | BetGPT" },
+      { title: "Pari du jour football : pronostic 1N2, cote et value | BetGPT" },
       {
         name: "description",
         content:
-          "Le pari du jour BetGPT : value bet, meilleure cote France, mise conseillée. Clique et parie chez Unibet, Betclic, Winamax.",
+          "Pari du jour football BetGPT : sélection 1N2, probabilité modèle, meilleure cote disponible et edge. Aucun pari n’est forcé ; historique consultable.",
       },
     ],
     links: [{ rel: "canonical", href: `${SITE_URL}/pari-du-jour` }],
@@ -44,7 +44,7 @@ function PariDuJour() {
             mainEntity: [
               {
                 "@type": "Question",
-                name: "Quel est le pari du jour ?",
+                name: "Quel est le pari du jour football ?",
                 acceptedAnswer: {
                   "@type": "Answer",
                   text: data.dailyBest
@@ -54,10 +54,18 @@ function PariDuJour() {
               },
               {
                 "@type": "Question",
-                name: "Où parier avec la meilleure cote ?",
+                name: "Comment BetGPT choisit-il le pari du jour ?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Sur BetGPT on compare les books accessibles en France et on ouvre le ticket chez celui qui affiche la cote la plus haute.",
+                  text: "Le pari principal suit le marché 1N2 canonique lorsque les critères historiques sont réunis. La probabilité modèle, la cote et l’edge sont affichés séparément.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Que se passe-t-il si aucun pari n’est assez solide ?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "BetGPT ne force pas de ticket. Si les seuils ne sont pas réunis, la page indique qu’aucune mise nette n’est disponible.",
                 },
               },
             ],
@@ -65,9 +73,9 @@ function PariDuJour() {
         }}
       />
       <header>
-        <h1 className="text-2xl font-semibold tracking-tight">Pari du jour : value bet et meilleure cote</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Pari du jour football : pronostic 1N2 et meilleure cote</h1>
         <p className="seo-answer mt-2 max-w-3xl text-sm text-paper">
-          Le ticket du jour, la mise, la cote FR, le filet 50 %. Joueurs confirmés : on ne force rien. 18+.
+          Le choix 1N2 le mieux classé par les gates BetGPT, avec probabilité modèle, cote, edge et historique vérifiable. Si aucun signal ne franchit les seuils, aucun pari n’est forcé. 18+.
         </p>
       </header>
       <CoconMesh
@@ -113,6 +121,21 @@ function PariDuJour() {
             </li>
           ))}
         </ul>
+      </section>
+      <section className="surface-card space-y-3 p-5 text-sm leading-relaxed text-mist sm:p-6">
+        <h2 className="text-base font-semibold text-paper">Pourquoi ce pari plutôt qu’un autre ?</h2>
+        <p>
+          Le pari principal de BetGPT reste le <strong>1N2</strong>. La sélection doit rester dans la fenêtre canonique de cotes
+          <strong> 1,80 à 3,00</strong> et franchir les gates historiques du moteur avant d’être présentée comme une mise.
+        </p>
+        <p>
+          La probabilité modèle et la cote du bookmaker restent deux informations distinctes : l’edge mesure leur écart.
+          Un score exact éventuel sert uniquement de couverture séparée et ne remplace pas le pronostic principal.
+        </p>
+        <p>
+          Le résultat est ensuite conservé dans le <Link to="/ledger" className="underline">bilan public</Link>.
+          Les règles sont documentées dans la <Link to="/methodology" className="underline">méthodologie</Link>.
+        </p>
       </section>
       <p className="text-xs text-muted">Jeu responsable. 18+. Les cotes bougent ; vérifie avant de valider.</p>
     </article>
