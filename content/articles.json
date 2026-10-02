@@ -358,31 +358,96 @@
     "slug": "small-business-insurance-starting-point",
     "category": "Business insurance",
     "title": "Small-Business Insurance: Where to Start Before Requesting Quotes",
-    "description": "A practical coverage map for general liability, property, professional liability, cyber, workers compensation and commercial auto.",
+    "description": "A risk-first framework for small businesses to map liability, property, workers compensation, professional, cyber and auto exposures before asking insurers for quotes.",
     "updated": "2026-10-02",
+    "heroImage": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1600&h=900&q=82",
+    "heroAlt": "A modern small-business office representing the risks owners should map before comparing business insurance.",
+    "imageCredit": "Unsplash",
+    "imageCreditUrl": "https://unsplash.com/",
+    "keyTakeaways": [
+      "Start with the business's actual operations, assets, contracts and people rather than buying a generic bundle.",
+      "General liability, professional liability, property, cyber, workers compensation and commercial auto solve different risks.",
+      "Legal requirements vary by state and business structure, so verify them with regulators and qualified professionals.",
+      "Use the same revenue, payroll, locations and operations on every quote to keep comparisons meaningful.",
+      "Review insurance requirements in leases and client contracts before work begins."
+    ],
     "sections": [
       {
-        "heading": "Start from the operations, not a generic bundle",
-        "text": "A consultant, restaurant, contractor and ecommerce business face different risks. Build the insurance request around actual activities, payroll, locations, revenue, vehicles, professional services, customer data and contractual obligations. This helps prevent both unnecessary coverage and important gaps."
+        "heading": "Build a risk map before you build an insurance shopping list",
+        "body": "Small-business insurance becomes much easier to compare when you first describe what the company actually does. A consultant working from a laptop, a restaurant serving the public, a contractor visiting job sites and an online retailer shipping goods may all be called small businesses, but their loss exposures are very different. Starting with a generic package can hide those differences.\n\nCreate a one-page risk map. List products and services, customer interactions, locations, owned and leased property, employees, contractors, vehicles, professional advice, customer data, payment systems and contractual obligations. Add any activity that could injure someone, damage property, cause a financial loss, interrupt operations or create a regulatory obligation.\n\nThe purpose is not to predict every claim. It is to make sure each major exposure has a coverage conversation. Once the map exists, you can ask which policy is intended to respond, which risks remain excluded, and which risks you plan to retain. That produces a much better quote request than simply asking for “full business insurance.”"
       },
       {
-        "heading": "Separate liability categories",
-        "text": "General liability, professional liability, cyber liability and employment-related coverage respond to different allegations and losses. One policy is not automatically a substitute for another. When comparing proposals, map each major risk to the policy intended to address it."
+        "heading": "General liability is foundational, but it is not universal coverage",
+        "body": "General liability commonly addresses certain third-party bodily-injury, property-damage and personal or advertising injury allegations, subject to exclusions and policy terms. A retail shop, contractor or office with visitors may view it as foundational because ordinary operations can create these exposures.\n\nBut general liability does not automatically replace professional liability, cyber insurance, workers compensation, commercial auto or property coverage. A consultant sued over advice may face a professional-services exclusion. A data breach may require a cyber policy. An employee injury is generally handled through workers compensation rather than ordinary general liability.\n\nWhen comparing quotes, normalize limits and deductibles, then inspect exclusions, additional-insured provisions and contractual-liability language. A cheaper general-liability quote may be narrower in a way that matters to your contracts or operations. Ask the agent to identify which exposures on your risk map are intended to be covered and which require another policy."
       },
       {
-        "heading": "Verify compulsory or contract-required insurance",
-        "text": "Workers compensation, commercial auto and other obligations vary by jurisdiction and business structure. Landlords, clients and lenders may also require specific limits or certificates. Verify those requirements before requesting quotes so every insurer is pricing the same target coverage."
+        "heading": "Commercial property coverage starts with a realistic asset inventory",
+        "body": "List furniture, equipment, inventory, improvements, tools and other business property. Separate property you own from property you lease or borrow. Record where it is located and whether it regularly travels away from the primary premises. A policy designed for office contents may not automatically solve exposures for tools at job sites or inventory in transit.\n\nConsider the building if the business owns it, and review lease responsibilities if it does not. Tenants can still be responsible for improvements, glass, equipment or damage to rented premises depending on the contract and policy. Do not assume the landlord's insurance protects the tenant's contents or income.\n\nCompare replacement-cost and actual-cash-value treatment, deductibles, special limits and catastrophe exclusions. Flood and earthquake often require separate consideration. Keep an inventory and photographs off-site so claims can be documented after a serious loss."
+      },
+      {
+        "heading": "Business interruption coverage depends on the trigger",
+        "body": "A fire can destroy equipment, but the larger financial loss may come from weeks or months without normal revenue. Business-income or business-interruption coverage is designed to address certain lost income and continuing expenses after a covered cause of loss, subject to the policy's definitions, waiting periods, limits and period of restoration.\n\nThis coverage does not automatically respond to every reason a business stops operating. The underlying cause generally matters. If flood is excluded from the property policy, interruption caused by flood may also require separate analysis. Supply-chain disruption, utility failure and dependent-property losses can have specific extensions or exclusions.\n\nEstimate how long the business could survive without normal revenue and what fixed expenses would continue. Compare policy limits, waiting periods and extra-expense provisions. A restaurant, manufacturer and software firm may have very different recovery timelines even with similar revenue."
+      },
+      {
+        "heading": "Workers compensation and employment obligations require state-specific verification",
+        "body": "Workers compensation requirements vary by state, industry, number of employees and other factors. Do not rely on a national article for a definitive obligation. Use the state's insurance or labor regulator and a licensed professional to verify current rules before hiring employees or assuming an exemption applies.\n\nEven when the coverage is legally required, the quote still depends on accurate payroll, job classifications and operations. Misclassifying employees to obtain a lower premium can create audit and claim problems. Keep payroll estimates realistic and update the insurer when operations change.\n\nSeparate workers compensation from employment-practices liability. Workers compensation focuses on work-related injury or illness under the applicable system, while employment-practices coverage can address certain allegations such as discrimination, harassment or wrongful termination. The two should not be treated as substitutes."
+      },
+      {
+        "heading": "Professional services create a different liability category",
+        "body": "If customers rely on the business's advice, design, analysis, technology, health service or other professional work, ask whether a professional-liability or errors-and-omissions policy is appropriate. General liability commonly contains professional-services exclusions because the risk is different from a customer slipping on a floor.\n\nProfessional policies can be written on a claims-made basis, which makes retroactive dates, reporting periods and continuity important. A policy can look inexpensive but leave a gap if the retroactive date excludes earlier work or if coverage ends before a claim is reported.\n\nWhen comparing professional-liability quotes, normalize limits and deductibles, then compare the definition of professional services, exclusions, retroactive date, defense treatment and any extended reporting options. Make sure the policy description matches what the business actually does, not merely the industry label selected in an online form."
+      },
+      {
+        "heading": "Cyber exposure exists even in small companies",
+        "body": "Any business that relies on email, cloud accounts, payment systems, customer records or connected devices has cyber exposure. A small firm can suffer phishing, ransomware, account takeover, business-email compromise or accidental data disclosure without operating a large data center.\n\nCyber insurance can include incident response, forensics, legal support, notification costs, data restoration, business interruption and third-party liability, depending on the policy. Coverage names and sublimits vary significantly. The application may ask about multifactor authentication, backups, endpoint security, employee training and vendor controls.\n\nAnswer cyber applications accurately. Overstating a control that is not actually implemented can create serious problems. Use CISA's small-business guidance to improve security independently of insurance. Insurance is one layer of risk financing, not a substitute for basic controls."
+      },
+      {
+        "heading": "Commercial auto and personal vehicles used for business need a separate conversation",
+        "body": "If the company owns vehicles, transports goods, sends employees to jobs or regularly uses personal vehicles for business, discuss commercial-auto exposure. Personal auto policies can restrict certain business uses, and a business can face liability from employees driving on company business even when it does not own the vehicle.\n\nList owned, leased and hired vehicles, drivers, radius of operation, cargo and use. Ask about hired and non-owned auto liability where relevant. Do not assume an employee's personal policy will protect the business.\n\nAs with personal auto insurance, compare identical liability limits, physical-damage deductibles and optional features. Accurate driver and vehicle information is essential because commercial fleets can change quickly."
+      },
+      {
+        "heading": "Contracts can create insurance requirements before you realize it",
+        "body": "Leases, customer agreements, construction contracts and vendor agreements can require specific insurance types, limits, additional-insured status, waivers of subrogation or certificates. Review those clauses before signing. A contract can create an obligation that your current program does not satisfy.\n\nSend insurance clauses to the broker or agent and ask whether the requested endorsement is available and appropriate. A certificate of insurance is evidence of coverage; it does not rewrite the policy. If the contract requires broader protection than the policy provides, a certificate alone does not solve the gap.\n\nTrack renewal dates and certificate requests centrally. Contract compliance is an operational process, not a one-time purchase."
+      },
+      {
+        "heading": "How to request quotes that are genuinely comparable",
+        "body": "Prepare a common underwriting packet: legal business name, entity type, locations, revenue, payroll, employee count, operations, subcontractor use, property values, vehicles, loss history and desired limits. Send the same information to every insurer or broker. Explain unusual operations rather than selecting the closest dropdown description and hoping it is accurate.\n\nCreate a comparison table with policy type, insurer, limits, deductible or retention, coverage form, major endorsements, exclusions, claims-made dates, premium and fees. Mark unresolved questions.\n\nThe lowest total premium may be a poor value if an important exposure on the risk map is excluded. The goal is a documented program where every major risk is either insured, transferred by contract, controlled operationally or consciously retained."
+      }
+    ],
+    "faq": [
+      {
+        "q": "Does every small business need the same insurance?",
+        "a": "No. Operations, employees, property, vehicles, contracts, professional services and data exposure differ. Start with a risk map and verify state-specific requirements."
+      },
+      {
+        "q": "Is a business owner's policy enough?",
+        "a": "A BOP can package useful property and liability coverages, but it does not automatically solve professional liability, workers compensation, cyber, commercial auto or every specialty exposure."
+      },
+      {
+        "q": "Do independent contractors eliminate workers compensation risk?",
+        "a": "Not necessarily. Worker classification and insurance obligations are state-specific. Verify the rules with the appropriate regulator and qualified professional."
+      },
+      {
+        "q": "Should I buy insurance before signing a client contract?",
+        "a": "Review the contract first so you know what insurance it requires. Confirm with your broker or insurer that the required terms can actually be met before committing."
       }
     ],
     "sources": [
-      [
-        "U.S. Small Business Administration — Business insurance",
-        "https://www.sba.gov/business-guide/manage-your-business/get-business-insurance"
-      ],
-      [
-        "NAIC Consumer Insurance",
-        "https://content.naic.org/consumer"
-      ]
+      {
+        "name": "U.S. Small Business Administration — Get business insurance",
+        "url": "https://www.sba.gov/business-guide/manage-your-business/get-business-insurance"
+      },
+      {
+        "name": "CISA — Cyber Guidance for Small Businesses",
+        "url": "https://www.cisa.gov/resources-tools/resources/cyber-guidance-small-businesses"
+      },
+      {
+        "name": "NAIC Consumer Insurance",
+        "url": "https://content.naic.org/consumer"
+      }
+    ],
+    "relatedSlugs": [
+      "general-liability-vs-professional-liability",
+      "cyber-insurance-small-business-checklist"
     ]
   },
   {
