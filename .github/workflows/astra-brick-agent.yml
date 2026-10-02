@@ -1,0 +1,81 @@
+name: ASTRA Brick Agent Ω
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/astra-brick-agent.yml"
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: astra-brick-agent-main
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout BetGPT
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          path: target
+
+      - name: Checkout canonical ASTRA bricks
+        uses: actions/checkout@v4
+        with:
+          repository: Dr-starck66/zip-github
+          ref: main
+          path: library
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Plan managed bricks
+        run: |
+          node library/astra-bricks/registry/astra-brick-rollout.mjs plan \
+            --library library \
+            --profile betgpt-v1 \
+            --target target \
+            --json
+
+      - name: Apply safe rollout
+        run: |
+          node library/astra-bricks/registry/astra-brick-rollout.mjs apply \
+            --library library \
+            --profile betgpt-v1 \
+            --target target
+
+      - name: Verify after rollout
+        run: |
+          node library/astra-bricks/registry/astra-brick-rollout.mjs verify \
+            --library library \
+            --profile betgpt-v1 \
+            --target target
+
+      - name: Persist managed brick state
+        working-directory: target
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "ASTRA Brick Agent"
+          git config user.email "astra-brick-agent@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "ASTRA_BRICK_AGENT_NO_CHANGES"
+            exit 0
+          fi
+          git commit -m "chore(astra): sync managed bricks"
+          git pull --rebase origin main
+          git push origin HEAD:main
+          echo "ASTRA_BRICK_AGENT_PUSH_PASS"
+
+      - name: Evidence
+        run: echo "ASTRA_BRICK_AGENT_PASS profile=betgpt-v1"
