@@ -77,7 +77,7 @@ function configuredProviders() {
     }));
   configured.push({
     id: "wan22-fast-zero",
-    label: "Wan 2.2 14B Fast I2V · gratuit · PRIORITAIRE",
+    label: "Wan 2.2 14B I2V · 8-step PREMIUM · connecté",
     configured: Boolean(WORKER_TOKEN),
     mode: "pull",
   });
@@ -289,7 +289,7 @@ button{width:100%;margin-top:16px;border:0;border-radius:14px;padding:14px 16px;
 </style>
 </head>
 <body><main class="wrap">
-<div class="top"><div class="brand"><div class="orb"></div><div><div class="eyebrow">BETGPT CREATIVE CLOUD</div><div class="title">Video Factory Ω</div></div></div><div class="sub">Génération vidéo IA image-to-video. AUTO utilise Wan 2.2 14B Fast en priorité et bascule sur LTX si nécessaire. La mascotte BetGPT est injectée automatiquement.</div></div>
+<div class="top"><div class="brand"><div class="orb"></div><div><div class="eyebrow">BETGPT CREATIVE CLOUD</div><div class="title">Video Factory Ω</div></div></div><div class="sub">Génération vidéo IA image-to-video. AUTO utilise Wan 2.2 14B en mode premium 8 étapes, avec la mascotte BetGPT injectée automatiquement et LTX en secours.</div></div>
 <div class="grid">
 <section class="card">
 <h2>Créer une publicité BetGPT</h2>
@@ -299,7 +299,7 @@ button{width:100%;margin-top:16px;border:0;border-radius:14px;padding:14px 16px;
 <div class="row3">
 <div><label>Durée</label><select id="duration"><option>5</option><option>10</option><option selected>15</option><option>20</option><option>30</option></select></div>
 <div><label>Format</label><select id="aspect"><option selected>9:16</option><option>16:9</option><option>1:1</option></select></div>
-<div><label>Modèle</label><select id="model"><option value="auto">AUTO · qualité</option><option value="wan22">Wan 2.2 14B Fast</option><option value="ltx2">LTX Video secours</option></select></div>
+<div><label>Modèle</label><select id="model"><option value="auto">AUTO · PREMIUM 8-step</option><option value="wan22">Wan 2.2 14B · PREMIUM</option><option value="ltx2">LTX Video · secours</option></select></div>
 </div>
 <label>Références supplémentaires (optionnel)</label>
 <input id="refs" placeholder="Produit, décor, stade… La mascotte BetGPT est déjà fournie automatiquement." />
@@ -327,7 +327,7 @@ async function refresh(){
     q("#models").innerHTML=c.providers.map(p=>'<div class="model"><b>'+esc(p.label)+'</b><span><span class="dot '+(p.configured?"on":"")+'"></span> '+(p.configured?"connecté":"en attente")+'</span></div>').join("");
     q("#router").textContent=c.pull_worker_enabled?"Worker pull sécurisé actif : un GPU Kaggle/Colab peut réclamer les jobs.":"Worker GPU non appairé. Le studio accepte les jobs mais ne les déclarera jamais terminés sans vraie sortie vidéo.";
     const data=await api("/api/jobs");
-    q("#jobs").innerHTML=data.jobs.slice(0,8).map(j=>{
+    q("#jobs").innerHTML=data.jobs.filter(j=>!String(j.prompt||"").startsWith("BETGPT_ZERO_GPU_SMOKE_OMEGA_")).slice(0,8).map(j=>{
       const pct=Number(j.progress||0);
       return '<div class="job"><div class="jobhead"><span class="pill">'+esc(j.status)+'</span><span>'+new Date(j.created_at).toLocaleString()+'</span></div><p>'+esc(j.prompt).slice(0,180)+'</p><div class="tiny">'+esc(j.provider||j.model)+' · '+j.duration+'s · '+esc(j.aspect_ratio)+'</div><div class="progress"><i style="width:'+pct+'%"></i></div>'+(j.video_url?'<video controls playsinline src="'+esc(j.video_url)+'"></video>':'')+(j.last_error?'<div class="tiny" style="margin-top:8px">Erreur: '+esc(j.last_error)+'</div>':'')+'</div>'
     }).join("")||'<div class="tiny">Aucun job.</div>';
@@ -380,7 +380,7 @@ const server = http.createServer(async (req, res) => {
         formats: ["9:16", "16:9", "1:1"],
         truthful_completion_gate: true,
         default_reference_image: ROBOT_REFERENCE_URL,
-        quality_mode: "premium-image-to-video",
+        quality_mode: "wan22-14b-8step-premium-i2v",
       });
     }
 
