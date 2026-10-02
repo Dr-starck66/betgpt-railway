@@ -78,3 +78,17 @@ test("future settled rows cannot influence an earlier target kickoff", () => {
   const r = learnContinuousRoi5Policy(rows, cutoff);
   assert.ok(r.eligibleSettledN <= 40);
 });
+
+
+test("WATCH/NO_BET and odds outside canonical 1.80-3.00 never train ROI5 production policy", () => {
+  const rows = Array.from({ length: 80 }, (_, i) => {
+    const r = row(i, 0.12, true);
+    if (i % 3 === 0) r.decision = "WATCH";
+    else if (i % 3 === 1) r.odds = 3.4;
+    else r.kind = "prono";
+    return r;
+  });
+  const report = learnContinuousRoi5Policy(rows, "2030-01-01T00:00:00Z");
+  assert.equal(report.eligibleSettledN, 0);
+  assert.equal(report.status, "DEFAULT_SHADOW");
+});
