@@ -101,7 +101,7 @@ export function MatchArticleBody({ article }: { article: Article }) {
             ) : (
               <ul className="mt-3 list-disc space-y-2 pl-5 text-sm leading-relaxed text-paper">
                 {s.items.map((item) => (
-                  <li key={item.slice(0, 40)}>{item}</li>
+                  <li key={item.slice(0, 40)}><BroadcasterText text={item} /></li>
                 ))}
               </ul>
             )
