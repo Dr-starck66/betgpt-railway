@@ -107,5 +107,26 @@
     "remotePostUrl": null,
     "error": null,
     "retryCount": 0
+  },
+  {
+    "id": "x:ed-2026-10-02-noon:v1",
+    "articleId": "ed-2026-10-02-noon",
+    "articleSlug": "france-italie-ligue-des-nations-a-match-en-direct-le-02-10-2026-2026-10-02",
+    "articleTitle": "France - Italie, Ligue des nations A, match en direct le 02/10/2026",
+    "articleUrl": "https://betgpt.live/actualites/france-italie-ligue-des-nations-a-match-en-direct-le-02-10-2026-2026-10-02",
+    "trackedUrl": "https://betgpt.live/actualites/france-italie-ligue-des-nations-a-match-en-direct-le-02-10-2026-2026-10-02?utm_source=x&utm_medium=social&utm_campaign=editorial_auto&utm_content=france-italie-ligue-des-nations-a-match-en-direct-le-02-10-2026-2026-10-02",
+    "network": "x",
+    "text": "🔴 France - Italie, Ligue des nations A, match en direct le 02/10/2026\n\nÀ lire sur BetGPT 👇\n\nhttps://betgpt.live/actualites/france-italie-ligue-des-nations-a-match-en-direct-le-02-10-2026-2026-10-02?utm_source=x&utm_medium=social&utm_campaign=editorial_auto&utm_content=france-it",
+    "hashtags": [],
+    "imageUrl": "https://betgpt.live/blog/discover/inline-night.jpg",
+    "createdAt": "2026-10-02T11:07:25.537Z",
+    "scheduledAt": "2026-10-02T11:07:25.537Z",
+    "attemptedAt": null,
+    "publishedAt": null,
+    "status": "READY_TO_X",
+    "remotePostId": null,
+    "remotePostUrl": null,
+    "error": null,
+    "retryCount": 0
   }
 ]
