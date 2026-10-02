@@ -86,7 +86,8 @@ function articleWordCount(a){
 function publishableArticle(a){return articleWordCount(a)>=1500 && !!a.heroImage && (a.sources||[]).length>0;}
 function home(req) {
   const base=baseUrl(req);
-  const liveArticles=articles.filter(publishableArticle);\n  const cards=liveArticles.slice(0,6).map(a=>`<article class="card"><a class="cardImageLink" href="/guides/${a.slug}"><img class="cardImage" src="${htmlEscape(a.heroImage)}" alt="${htmlEscape(a.heroAlt||a.title)}" width="800" height="450" loading="lazy"></a><span class="eyebrow">${htmlEscape(a.category)}</span><h3><a href="/guides/${a.slug}">${htmlEscape(a.title)}</a></h3><p>${htmlEscape(a.description)}</p><small>${articleWordCount(a).toLocaleString("en-US")} words · Updated ${htmlEscape(a.updated)}</small></article>`).join("");
+  const liveArticles=articles.filter(publishableArticle);
+  const cards=liveArticles.slice(0,6).map(a=>`<article class="card"><a class="cardImageLink" href="/guides/${a.slug}"><img class="cardImage" src="${htmlEscape(a.heroImage)}" alt="${htmlEscape(a.heroAlt||a.title)}" width="800" height="450" loading="lazy"></a><span class="eyebrow">${htmlEscape(a.category)}</span><h3><a href="/guides/${a.slug}">${htmlEscape(a.title)}</a></h3><p>${htmlEscape(a.description)}</p><small>${articleWordCount(a).toLocaleString("en-US")} words · Updated ${htmlEscape(a.updated)}</small></article>`).join("");
   const body=`${header()}<main>
 <section class="hero"><div class="heroCopy"><span class="pill">Insurance clarity, without the sales fog</span><h1>Compare smarter. Understand coverage. Pay less when possible.</h1><p>Start with your insurance goal. We explain what matters, then route qualified shoppers to approved quote partners when available.</p>
 <div class="heroActions"><a class="primary" href="#compare">Compare options</a><button class="secondary" data-open-chat>Ask the quote assistant</button></div>
