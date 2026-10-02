@@ -70,7 +70,7 @@ async function generateDiscussion(preview: string): Promise<{ text: string; gene
     process.env.FORUM_LOCAL_LLM_URL?.trim() ||
     process.env.ASTRA_LOCAL_CHAT_BASE?.trim();
   if (localUrl) {
-    const models = (process.env.FORUM_LOCAL_LLM_MODELS || "qwen3:4b,qwen2.5:7b")
+    const models = (process.env.FORUM_LOCAL_LLM_MODELS || "qwen-chat-local,qwen3:4b,qwen2.5:7b")
       .split(",")
       .map((m) => m.trim())
       .filter(Boolean)
