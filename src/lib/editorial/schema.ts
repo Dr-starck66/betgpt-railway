@@ -1,6 +1,7 @@
 import { BRAND_LOGO, absImg, imageObjectLd } from "@/lib/image-seo";
 import { SITE_URL } from "@/lib/programmatic";
 import type { EditorialArticle } from "@/lib/editorial/types";
+import { publicEditorialImageCopy } from "@/lib/editorial/image-copy";
 
 function articleUrl(slug: string): string {
   return `${SITE_URL}/actualites/${slug}`;
@@ -11,6 +12,7 @@ export function newsArticleLd(article: EditorialArticle): Record<string, unknown
   const published = article.publishedAt ?? article.createdAt;
   const modified = article.modifiedAt && article.publishedAt && article.modifiedAt > article.publishedAt ? article.modifiedAt : published;
   const image = absImg(article.image.src);
+  const imageCopy = publicEditorialImageCopy(article);
   return {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
@@ -29,11 +31,11 @@ export function newsArticleLd(article: EditorialArticle): Record<string, unknown
       primaryImageOfPage: imageObjectLd(
         {
           src: article.image.src,
-          alt: article.image.alt,
+          alt: imageCopy.alt,
           title: article.h1,
           description: article.lead,
           filename: article.image.src.split("/").pop() ?? "image-article-football.jpg",
-          caption: article.image.credit,
+          caption: imageCopy.caption,
           width: article.image.width,
           height: article.image.height,
         },
@@ -45,7 +47,7 @@ export function newsArticleLd(article: EditorialArticle): Record<string, unknown
       url: image,
       width: article.image.width,
       height: article.image.height,
-      caption: article.image.credit,
+      caption: imageCopy.caption,
     },
     author: {
       "@type": "Organization",
