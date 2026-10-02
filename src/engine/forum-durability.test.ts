@@ -4,10 +4,10 @@ import { durableForumLeague } from "./forum-durability";
 import { buildSitemapUrls } from "@/lib/sitemap-urls";
 
 test("durable forum league allowlist matches persisted archive coverage", () => {
-  for (const league of ["PL", "LL", "BL", "SA", "L1", "CL", "EL"]) {
+  for (const league of ["PL", "LL", "BL", "SA", "L1", "CL", "EL", "NL"]) {
     assert.equal(durableForumLeague(league), true, league);
   }
-  for (const league of ["ER", "PT", "SC", "TR", "NL", "", "UNKNOWN"]) {
+  for (const league of ["ER", "PT", "SC", "TR", "", "UNKNOWN"]) {
     assert.equal(durableForumLeague(league), false, league);
   }
 });
@@ -26,10 +26,12 @@ test("sitemap never promises a forum leaf for a live-only league", () => {
 
   const pl = `arsenal-chelsea-${day}`;
   const er = `feyenoord-psv-${day}`;
+  const nl = `cyprus-armenia-${day}`;
   const urls = buildSitemapUrls({
     matches: [
       mk("PL", pl, "Arsenal", "Chelsea"),
       mk("ER", er, "Feyenoord", "PSV Eindhoven"),
+      mk("NL", nl, "Cyprus", "Armenia"),
     ],
     asOf: new Date().toISOString(),
   });
@@ -39,4 +41,5 @@ test("sitemap never promises a forum leaf for a live-only league", () => {
   assert.equal(paths.has(`/forum/${pl}`), true);
   assert.equal(paths.has(`/match/${er}`), true);
   assert.equal(paths.has(`/forum/${er}`), false);
+  assert.equal(paths.has(`/forum/${nl}`), true);
 });
