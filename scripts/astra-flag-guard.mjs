@@ -6,6 +6,7 @@ const required = [
   "src/components/country-flag.tsx",
   "src/lib/country-flag-resolver.ts",
   "src/routes/comparer-cotes.tsx",
+  "src/components/scores-hub.tsx",
   "src/components/crest.tsx",
 ];
 
@@ -16,6 +17,7 @@ for (const rel of required) {
 }
 
 const comparer = fs.readFileSync(path.join(root, "src/routes/comparer-cotes.tsx"), "utf8");
+const scoresHub = fs.readFileSync(path.join(root, "src/components/scores-hub.tsx"), "utf8");
 const crest = fs.readFileSync(path.join(root, "src/components/crest.tsx"), "utf8");
 const component = fs.readFileSync(path.join(root, "src/components/country-flag.tsx"), "utf8");
 const resolver = fs.readFileSync(path.join(root, "src/lib/country-flag-resolver.ts"), "utf8");
@@ -23,6 +25,8 @@ const resolver = fs.readFileSync(path.join(root, "src/lib/country-flag-resolver.
 const mustContain = [
   [comparer, "<TeamLine", "comparer-cotes must delegate team/country visuals to TeamLine"],
   [comparer, "league={m.league}", "comparer-cotes must pass league context to TeamLine"],
+  [scoresHub, "<TeamLine", "scores-en-direct must render TeamLine instead of text-only teams"],
+  [scoresHub, "league={m.league}", "scores-en-direct must pass league context for country flags"],
   [crest, "CountryFlag", "TeamLine/Crest visual owner must use CountryFlag"],
   [crest, "countryForLeague", "TeamLine must resolve league countries centrally"],
   [crest, "nationalTeamCountryCode", "TeamLine must resolve national-team countries centrally"],
