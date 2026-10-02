@@ -1,0 +1,17 @@
+{
+  "status": "prepared_not_connected",
+  "hard_rules": [
+    "Never claim AdSense approval before Google approves the site.",
+    "No ads on 404, error, navigation-only, technical, thin, under-construction or unreviewed legacy pages.",
+    "No copied/replicated articles without substantial original editorial value.",
+    "Advertising must not mimic navigation or obstruct publisher content.",
+    "Privacy disclosures must describe Google/third-party cookies and identifiers when Google ads are enabled.",
+    "EEA/UK/Switzerland personalized ads require a Google-certified CMP integrated with IAB TCF.",
+    "ads.txt and AdSense code must use the real publisher ID; never invent one."
+  ],
+  "runtime_flags": {
+    "ADSENSE_CLIENT": "",
+    "ADSENSE_APPROVED": "false",
+    "CMP_READY": "false"
+  }
+}
