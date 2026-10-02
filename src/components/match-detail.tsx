@@ -16,6 +16,8 @@ import { recentLineLabel } from "@/engine/team-form";
 import { ld } from "@/lib/ld";
 import { compileArticle } from "@/engine/article";
 import { MatchAdvanced, MatchArticleBody, MatchFaq, MatchVerdict } from "@/components/match-article";
+import { BroadcastLinks } from "@/components/broadcaster-text";
+import { matchBroadcast } from "@/lib/match-broadcasts";
 import { MatchAnswer } from "@/components/match-answer";
 import { LiveRecap } from "@/components/live-recap";
 import { CoconMesh } from "@/components/cocon-mesh";
@@ -84,6 +86,7 @@ export function MatchDetail({
   const pair = matchPair(match.home.name, match.away.name);
   const slug = match.slug ?? match.id;
   const article = compileArticle(match, prediction);
+  const broadcast = matchBroadcast(match);
   const state = strictStatus(match);
   const stale = (state === "LIVE" || state === "HALFTIME") && scoreFreshness(liveAsOf).stale;
   const clock = matchClock({ kickoff: match.kickoff, predictionAt: prediction.timestamp, versions });
@@ -122,6 +125,19 @@ export function MatchDetail({
         </div>
 
         <MatchAnswer match={match} liveAsOf={liveAsOf} video={video} />
+
+        {broadcast ? (
+          <div className="mt-5">
+            <BroadcastLinks texts={[broadcast.label]} />
+            <p className="mt-2 text-xs text-muted">
+              Diffusion France vérifiée via{" "}
+              <a href={broadcast.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-link underline underline-offset-2">
+                {broadcast.sourceLabel}
+              </a>
+              {" · "}contrôlée le {formatParis(broadcast.verifiedAt)}.
+            </p>
+          </div>
+        ) : null}
 
         <div className="mt-6 inline-flex flex-wrap gap-1 rounded-2xl border border-line bg-slate-100/80 p-1" data-nosnippet>
           {TABS.map((t) => (
