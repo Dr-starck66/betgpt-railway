@@ -8,6 +8,8 @@ const required = [
   "src/routes/comparer-cotes.tsx",
   "src/components/scores-hub.tsx",
   "src/components/crest.tsx",
+  "src/lib/team-flags.ts",
+  "data/live-snapshot.json",
 ];
 
 for (const rel of required) {
@@ -21,6 +23,8 @@ const scoresHub = fs.readFileSync(path.join(root, "src/components/scores-hub.tsx
 const crest = fs.readFileSync(path.join(root, "src/components/crest.tsx"), "utf8");
 const component = fs.readFileSync(path.join(root, "src/components/country-flag.tsx"), "utf8");
 const resolver = fs.readFileSync(path.join(root, "src/lib/country-flag-resolver.ts"), "utf8");
+const teamFlags = fs.readFileSync(path.join(root, "src/lib/team-flags.ts"), "utf8");
+const liveSnapshot = JSON.parse(fs.readFileSync(path.join(root, "data/live-snapshot.json"), "utf8"));
 
 const mustContain = [
   [comparer, "<TeamLine", "comparer-cotes must delegate team/country visuals to TeamLine"],

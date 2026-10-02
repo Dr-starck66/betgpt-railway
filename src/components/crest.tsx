@@ -33,13 +33,14 @@ export function Crest({
   competition?: string;
 }) {
   const [fail, setFail] = useState(0);
-  const srcs = logoCandidates(name, id, logo);
-  const src = srcs[fail];
   const seo = crestSeo(name, { competition, size, id, logo });
   const flagCode = nationalTeamCountryCode(name);
-  const letter = flagCode ? (
-    <CountryFlag code={flagCode} label={name} size={size} className="object-cover" />
-  ) : (
+  if (flagCode) {
+    return <CountryFlag code={flagCode} label={name} size={size} className="object-cover" />;
+  }
+  const srcs = logoCandidates(name, id, logo);
+  const src = srcs[fail];
+  const letter = (
     <span
       className="grid shrink-0 place-items-center rounded-sm font-bold text-ink ring-1 ring-line"
       style={{
