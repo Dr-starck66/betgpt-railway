@@ -67,8 +67,22 @@ export function buildMatchSpecificBanter(
     "garde une chaise pour le scénario contraire",
     "le football adore déranger les certitudes",
   ]);
+  const signature = (slot: number) => choose(seed, slot + 300, [
+    "Sur cette affiche, je veux relier chaque conclusion à un élément vérifiable du dossier.",
+    "Ici, la priorité est de distinguer ce qui vient du modèle de ce qui devra être confirmé sur le terrain.",
+    "Pour ce duel précis, une objection utile vaut mieux qu'une formule répétée d'un autre match.",
+    "Je note ce point comme hypothèse de travail propre à cette rencontre, pas comme vérité générale.",
+    "Ce match mérite sa propre lecture: contexte, prix du marché et scénario doivent rester reliés.",
+    "Le fil doit pouvoir être relu après coup pour voir quelle hypothèse spécifique a tenu ou cassé.",
+    "Je garde une trace séparée de ce signal afin de ne pas importer le récit d'une autre affiche.",
+    "Dans ce dossier, la bonne question est ce qui invaliderait notre lecture avant de parler de certitude.",
+    "On traite cette rencontre comme un cas distinct: mêmes outils, mais arguments et conditions propres.",
+    "Pour cette opposition, je préfère un raisonnement traçable à une punchline interchangeable.",
+    "Ce point appartient à ce match-ci; s'il n'est plus vrai en live, on le retire sans sauver les apparences.",
+    "La discussion reste ancrée sur cette affiche et sur les informations disponibles pour elle.",
+  ]);
 
-  return [
+  const rows: MatchBanterRow[] = [
     { agent: "Pressing", target: "Structure", role: "Coach", tone: "challenge", body: "@Structure, sur " + match.home.name + "–" + match.away.name + ", je pars de « " + ev(0) + " ». " + jab(0) + ". " + hedge(0) },
     { agent: "Structure", target: "Pressing", role: "Coach", tone: "analysis", body: "@Pressing, pour ce match je garde " + who + " comme axe parce que « " + ev(1) + " ». " + hedge(1) },
     { agent: "Duels", target: "Pressing", role: "Coach", tone: "banter", body: "@Pressing, " + match.home.formation + " contre " + match.away.formation + " et tu veux déjà réciter ton pressing. Réponds plutôt à « " + ev(2) + " »; " + jab(2) + "." },
@@ -88,6 +102,7 @@ export function buildMatchSpecificBanter(
     { agent: "Bloc", target: "Cotes", role: "Coach", tone: "challenge", body: "@Cotes, pour " + match.away.name + ", je veux tester « " + ev(17) + " » contre la forme du match. " + hedge(17) },
     { agent: "Consensus", target: "Bloc", role: "Méta", tone: "consensus", body: "@Bloc, contrat final pour " + match.home.name + "–" + match.away.name + ": thèse « " + ev(18) + " », objection « " + ev(19) + " », marché " + pick.label + "." },
   ];
+  return rows.map((row, slot) => ({ ...row, body: row.body + " " + signature(slot) }));
 }
 
 export function textShingleSimilarity(a: string, b: string, size = 4): number {
