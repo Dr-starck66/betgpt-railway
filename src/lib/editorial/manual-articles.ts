@@ -568,7 +568,7 @@ const ARTICLES: EditorialArticle[] = [
 ];
 
 export function manualEditorialArticles(): EditorialArticle[] {
-  return ARTICLES.map((article) => ({
+  const articles: EditorialArticle[] = ARTICLES.map((article) => ({
     ...article,
     paragraphs: article.paragraphs.map((part) => ({
       ...part,
@@ -594,6 +594,15 @@ export function manualEditorialArticles(): EditorialArticle[] {
       reasons: [...article.discoverOpportunity.reasons],
     },
     discoverChecks: { ...article.discoverChecks },
+  }));
+
+  const byHref = new Map(articles.map((article) => [`/actualites/${article.slug}`, article]));
+  return articles.map((article) => ({
+    ...article,
+    related: article.related.map((item) => {
+      const target = byHref.get(item.href);
+      return target ? { ...item, image: { ...target.image } } : item;
+    }),
   }));
 }
 
