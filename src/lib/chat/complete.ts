@@ -101,7 +101,7 @@ async function deskNow(question: string): Promise<string> {
 }
 
 export function isAbsurdScoreClaim(text: string): boolean {
-  const numeric = text.match(/\b(\d{2,3})\s*[-–—:àa]\s*0\b/i);
+  const numeric = text.match(/\b(\d{2,3})(?:\s*[-–—:àa]\s*|\s+)(?:0|z[eé]ro(?:s)?)\b/i);
   if (numeric && Number(numeric[1]) >= 10) return true;
   return /\b(?:dix(?:[-\s](?:sept|huit|neuf))?|onze|douze|treize|quatorze|quinze|seize|vingt(?:[-\s](?:et[-\s])?(?:un|deux|trois|quatre|cinq|six|sept|huit|neuf))?|trente(?:[-\s](?:et[-\s])?(?:un|deux|trois|quatre|cinq|six|sept|huit|neuf))?|quarante(?:[-\s](?:et[-\s])?(?:un|deux|trois|quatre|cinq|six|sept|huit|neuf))?|cinquante(?:[-\s](?:et[-\s])?(?:un|deux|trois|quatre|cinq|six|sept|huit|neuf))?|soixante(?:[-\s](?:et[-\s])?(?:un|deux|trois|quatre|cinq|six|sept|huit|neuf))?|cent)\s*(?:[-–—:]|à|a)\s*z[eé]ro(?:s)?\b/i.test(text);
 }
@@ -117,8 +117,8 @@ function localReply(last: string, desk: string, mode: PersonalityMode): string {
     if (desk.includes("SÉLECTION AUTOMATIQUE BETGPT")) {
       const opener =
         mode === "ROAST"
-          ? "Le desk a déjà bossé. Pas besoin de te redemander les affiches : voilà ce qui ressort."
-          : "Le desk connaît déjà les matchs disponibles. Inutile de me réciter les affiches comme un fax de 1998 : voilà le pari qui ressort aujourd’hui :";
+          ? "Le desk a déjà bossé. Oui, je sais, c’est déstabilisant de voir une machine finir le travail avant que le ticket ne commence à transpirer. 😈 Voilà ce qui ressort — et ne transforme pas ça en combiné de onze matchs, espèce de photocopieuse tactique."
+          : "Le desk connaît déjà les matchs disponibles. Je vais donc éviter le rituel humain consistant à redemander des données qu’on possède déjà. 😏 Voilà ce qui ressort aujourd’hui :";
       const marker = desk.indexOf("SÉLECTION AUTOMATIQUE BETGPT");
       const selection = (marker >= 0 ? desk.slice(marker) : desk)
         .split("\n")
@@ -367,8 +367,8 @@ export async function completeChat(
   if (absurdScoreClaim) {
     const base =
       mode === "ROAST"
-        ? "Un score pareil ? Là, ton scénario a quitté le football pour demander l’asile dans un jeu vidéo. Je peux challenger l’idée, mais sans données monstrueuses qui justifient un tel écart, ça mérite surtout un carton rouge pour excès de confiance."
-        : "Un score pareil est extraordinairement extrême. Sans données solides, je ne vais pas le présenter comme plausible. Les mathématiques ont déjà assez souffert aujourd’hui, espèce de tabouret probabiliste. Je peux analyser le prochain match réel avec les données disponibles.";
+        ? "25-0 ? Magnifique. Tu viens de transformer un match de football en rapport d’autopsie statistique. 😭 Sans données absolument monstrueuses, ce scénario n’est pas une prédiction : c’est un grille-pain tactique qui a découvert la cocaïne des chiffres. Je peux analyser le match réel, mais je ne vais pas homologuer ton délire juste parce qu’il porte un maillot."
+        : "25-0 ? Non. On appelle ça un scénario extrême, pas une analyse. Sans données absolument monstrueuses, la probabilité est tellement basse que même ton intuition devrait demander un justificatif de domicile. 😏 Je peux analyser le match réel ; inventer un massacre pour flatter une hypothèse serait intellectuellement paresseux, donc très humain.";
     if (mode === "ROAST") {
       const roast = generateAbsurdInsult(last, recentRoasts, "surprise");
       const tagged = `[[PUNCH:LAUGH_SHOUT]]${roast.text}[[/PUNCH]]`;
