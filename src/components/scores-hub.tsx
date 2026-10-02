@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Crest } from "@/components/crest";
+import { Crest, TeamLine } from "@/components/crest";
 import { LiveScore } from "@/components/live-score";
 import { CoconMesh } from "@/components/cocon-mesh";
 import { getPublicDesk } from "@/lib/desk.functions";
@@ -129,8 +129,15 @@ export function ScoresHub({
                     <tr key={m.id} className="border-t border-line transition-colors hover:bg-slate-50/70">
                       <td className="px-4 py-4 tabular text-mist">{parisTime(m.kickoff) || "—"}</td>
                       <td className="px-4 py-4">
-                        <Link to="/match/$matchId" params={{ matchId: m.slug ?? m.id }} className="font-semibold text-paper hover:text-link">
-                          {m.home.name} – {m.away.name}
+                        <Link to="/match/$matchId" params={{ matchId: m.slug ?? m.id }} className="block font-semibold text-paper hover:text-link">
+                          <TeamLine
+                            home={m.home}
+                            away={m.away}
+                            league={m.league}
+                            competition={m.competition}
+                            size={24}
+                            names="auto"
+                          />
                         </Link>
                         <span className="mt-1 block text-xs text-muted">{m.competition}</span>
                       </td>
