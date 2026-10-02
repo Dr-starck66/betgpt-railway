@@ -136,6 +136,38 @@ def download_reference(url, target):
     return target
 
 
+def prepare_reference_for_aspect(source, aspect, target):
+    img = Image.open(source).convert("RGB")
+    if aspect == "9:16":
+        canvas_w, canvas_h = 576, 1024
+    elif aspect == "16:9":
+        canvas_w, canvas_h = 1024, 576
+    else:
+        canvas_w, canvas_h = 768, 768
+
+    # Create a soft background extension from the real reference instead of
+    # stretching or cropping the BetGPT robot.
+    bg = img.copy()
+    bg.thumbnail((canvas_w, canvas_h))
+    scale = max(canvas_w / bg.width, canvas_h / bg.height)
+    bg = bg.resize((max(canvas_w, int(bg.width * scale)), max(canvas_h, int(bg.height * scale))), Image.Resampling.LANCZOS)
+    left = (bg.width - canvas_w) // 2
+    top = (bg.height - canvas_h) // 2
+    bg = bg.crop((left, top, left + canvas_w, top + canvas_h)).filter(ImageFilter.GaussianBlur(radius=24))
+    overlay = Image.new("RGB", (canvas_w, canvas_h), (7, 13, 18))
+    overlay = Image.blend(bg, overlay, 0.42)
+
+    fg = img.copy()
+    max_w = int(canvas_w * (0.72 if aspect == "16:9" else 0.88))
+    max_h = int(canvas_h * 0.88)
+    fg.thumbnail((max_w, max_h), Image.Resampling.LANCZOS)
+    x = (canvas_w - fg.width) // 2
+    y = (canvas_h - fg.height) // 2
+    overlay.paste(fg, (x, y))
+    overlay.save(target, quality=96, subsampling=0)
+    return target
+
+
 def generate_cog(prompt, aspect, duration, seed):
     c = client_for("kaidjuric/cogvideox-5b-text-to-video")
     frames = 17 if float(duration) <= 2.5 else 33 if float(duration) <= 4.5 else 49
@@ -166,7 +198,7 @@ def concat_mp4(clips, target, aspect):
         out_w, out_h = 1920, 1080
     subprocess.run([
         ffmpeg, "-y", "-f", "concat", "-safe", "0", "-i", str(manifest),
-        "-vf", f"scale={out_w}:{out_h}:flags=lanczos,unsharp=5:5:0.35:5:5:0.0",
+        "-vf", f"scale={out_w}:{out_h}:force_original_aspect_ratio=increase:flags=lanczos,crop={out_w}:{out_h},setsar=1,unsharp=5:5:0.35:5:5:0.0",
         "-c:v", "libx264", "-preset", "slow", "-crf", "17",
         "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(target)
     ], check=True)
@@ -216,8 +248,9 @@ def process(payload):
         reference = None
         refs = job.get("reference_images") or []
         if refs:
-            reference = download_reference(refs[0], work / "betgpt-reference.png")
-            print(f"[job {job['id']}] reference image downloaded: {reference}", flush=True)
+            raw_reference = download_reference(refs[0], work / "betgpt-reference-raw.png")
+            reference = prepare_reference_for_aspect(raw_reference, aspect, work / "betgpt-reference-aspect.jpg")
+            print(f"[job {job['id']}] reference image prepared for {aspect}: {reference}", flush=True)
 
         # Pick a provider by actually generating the first shot.
         chosen = None
@@ -271,7 +304,7 @@ def process(payload):
 def ensure_smoke_job():
     if not BOOTSTRAP_SMOKE:
         return
-    marker = os.environ.get("SMOKE_MARKER", "BETGPT_ZERO_GPU_SMOKE_OMEGA_V6_WAN22_QUALITY")
+    marker = os.environ.get("SMOKE_MARKER", "BETGPT_ZERO_GPU_SMOKE_OMEGA_V7_WAN22_VERTICAL")
     try:
         jobs = requests.get(ORCHESTRATOR + "/api/jobs", timeout=30).json().get("jobs", [])
         if any(marker in j.get("prompt", "") for j in jobs):
@@ -284,7 +317,7 @@ def ensure_smoke_job():
         )
         r = requests.post(
             ORCHESTRATOR + "/api/jobs",
-            json={"prompt": prompt, "duration": 5, "aspect_ratio": "16:9", "model": "auto"},
+            json={"prompt": prompt, "duration": 5, "aspect_ratio": "9:16", "model": "auto"},
             timeout=30,
         )
         print("[smoke] create", r.status_code, r.text[:500], flush=True)
