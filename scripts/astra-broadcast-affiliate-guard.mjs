@@ -10,6 +10,8 @@ const checks = [
   ["link-component", "src/components/broadcaster-text.tsx", ["target=\"_blank\"", "data-affiliate-ready=\"true\"", "sponsored nofollow noopener noreferrer"]],
   ["news-global", "src/components/news-article.tsx", ["BroadcasterText", "BroadcastLinks", "articleBroadcastTexts"]],
   ["match-global", "src/components/match-article.tsx", ["BroadcasterText", "BroadcastLinks"]],
+  ["match-tv-registry", "src/lib/match-broadcasts.ts", ["borussia-dortmund-werder-bremen-2026-10-09", "beIN SPORTS MAX 10", "sourceUrl"]],
+  ["match-tv-surface", "src/components/match-detail.tsx", ["matchBroadcast(match)", "<BroadcastLinks texts={[broadcast.label]} />", "Diffusion France vérifiée"]],
 ];
 
 const failures = [];
@@ -25,7 +27,7 @@ for (const [id, file, fragments] of checks) {
 }
 
 const registry = read("src/lib/broadcaster-links.ts");
-for (const required of ["beIN SPORTS", "DAZN", "CANAL+", "TF1", "M6", "L'Équipe"]) {
+for (const required of ["beIN SPORTS", "DAZN", "CANAL+", "TF1", "M6", "L'Équipe", "Awin", "Amazon Partenaires"]) {
   if (!registry.includes(required)) failures.push({ id: "coverage", reason: "missing-broadcaster", required });
 }
 
