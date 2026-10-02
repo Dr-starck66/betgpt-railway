@@ -833,11 +833,21 @@ export const getLiveTick = createServerFn({ method: "GET" }).handler(async () =>
     }));
 });
 
-function slimForumThread(t: ReturnType<typeof buildForum>[number]) {
+function forumPreviewThread(t: ReturnType<typeof buildForum>[number]) {
   return {
     ...t,
     excerpt: t.excerpt.slice(0, 180),
-    posts: t.posts.slice(0, 12).map((p) => ({ ...p, body: p.body.slice(0, 360) })),
+    posts: t.posts.slice(0, 6).map((p) => ({ ...p, body: p.body.slice(0, 260) })),
+  };
+}
+
+function forumFullThread(t: ReturnType<typeof buildForum>[number]) {
+  return {
+    ...t,
+    excerpt: t.excerpt.slice(0, 220),
+    // Keep the full server-rendered conversation for humans and crawlers.
+    // The cap is a safety ceiling, not a teaser limit.
+    posts: t.posts.slice(0, 48).map((p) => ({ ...p, body: p.body.slice(0, 700) })),
   };
 }
 
@@ -866,7 +876,7 @@ export const getForum = createServerFn({ method: "GET" }).handler(async () => {
   const desk = await forumDesk();
   const ia = readIaThread();
   const threads = buildForum(desk.matches, desk.predictions, ia ? [ia] : [])
-    .map(slimForumThread)
+    .map(forumPreviewThread)
     .slice(0, 40);
   return { threads, live: desk.matches.some((m) => m.status === "live") };
 });
@@ -877,7 +887,7 @@ export const getForumThread = createServerFn({ method: "GET" })
     const desk = await forumDesk();
     const ia = readIaThread();
     const liveThread = buildForum(desk.matches, desk.predictions, ia ? [ia] : [])
-      .map(slimForumThread)
+      .map(forumFullThread)
       .find((t) => t.id === data.id);
     if (liveThread) return liveThread;
 
@@ -888,7 +898,7 @@ export const getForumThread = createServerFn({ method: "GET" })
     const matchId = stored.match.slug ?? stored.match.id;
     if (skipEuropeFrenchProno(stored.match)) return { redirectMatchId: matchId };
     const thread = buildForum([stored.match], [stored.prediction])
-      .map(slimForumThread)
+      .map(forumFullThread)
       .find((t) => t.matchHref);
     return thread ?? { redirectMatchId: matchId };
   });
