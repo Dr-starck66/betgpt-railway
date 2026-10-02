@@ -1,0 +1,140 @@
+{
+  "states": [
+    [
+      "alabama-car-insurance",
+      "Alabama"
+    ],
+    [
+      "alaska-car-insurance",
+      "Alaska"
+    ],
+    [
+      "arizona-car-insurance",
+      "Arizona"
+    ],
+    [
+      "arkansas-car-insurance",
+      "Arkansas"
+    ],
+    [
+      "california-car-insurance",
+      "California"
+    ],
+    [
+      "connecticut-auto-insurance-is-required-to-legally-drive-there",
+      "Connecticut"
+    ],
+    [
+      "delaware-auto-insurance-requirements",
+      "Delaware"
+    ],
+    [
+      "florida-car-insurance",
+      "Florida"
+    ],
+    [
+      "georgia-auto-insurance",
+      "Georgia"
+    ],
+    [
+      "hawaii-car-insurance",
+      "Hawaii"
+    ],
+    [
+      "idaho-car-insurance",
+      "Idaho"
+    ],
+    [
+      "illinois-car-insurance",
+      "Illinois"
+    ],
+    [
+      "indiana-wants-you-to-have-minimum-auto-insurance-coverage",
+      "Indiana"
+    ],
+    [
+      "liability-insurance-only-is-needed-in-iowa",
+      "Iowa"
+    ],
+    [
+      "kentucky-auto-insurance",
+      "Kentucky"
+    ],
+    [
+      "louisiana-car-insurance",
+      "Louisiana"
+    ],
+    [
+      "maine-car-insurance",
+      "Maine"
+    ],
+    [
+      "michigan-car-insurance",
+      "Michigan"
+    ],
+    [
+      "new-jersey-car-insurance",
+      "New Jersey"
+    ],
+    [
+      "new-york-car-insurance",
+      "New York"
+    ],
+    [
+      "north-carolina-car-insurance",
+      "North Carolina"
+    ],
+    [
+      "ohio-car-insurance",
+      "Ohio"
+    ],
+    [
+      "texas-car-insurance",
+      "Texas"
+    ],
+    [
+      "uninsuredunderinsured-auto-coverage-needed-in-kansas",
+      "Kansas"
+    ]
+  ],
+  "aliases": {
+    "/alabama-car-insurance/alabama%20car%20insurance": "/alabama-car-insurance/",
+    "/alabama-car-insurance/alabamacarinsurance": "/alabama-car-insurance/",
+    "/alabama-car-insurance/car%20insurance%20quotes": "/alabama-car-insurance/",
+    "/alabama-car-insurance/carinsurancequotes": "/alabama-car-insurance/",
+    "/illinois-car-insurance/auto%20insurance%20illinois": "/illinois-car-insurance/",
+    "/illinois-car-insurance/autoinsuranceillinois": "/illinois-car-insurance/",
+    "/illinois-car-insurance/car%20insurance%20illinois": "/illinois-car-insurance/",
+    "/illinois-car-insurance/carinsuranceillinois": "/illinois-car-insurance/",
+    "/illinois-car-insurance/illinois%20auto%20insurance": "/illinois-car-insurance/",
+    "/illinois-car-insurance/illinoisautoinsurance": "/illinois-car-insurance/",
+    "/illinois-car-insurance/illinoiscarinsurance": "/illinois-car-insurance/",
+    "/new-jersey-car-insurance/car%20insurance%20new%20jersey": "/new-jersey-car-insurance/",
+    "/new-jersey-car-insurance/carinsurancenewjersey": "/new-jersey-car-insurance/",
+    "/new-jersey-car-insurance/new%20jersey%20aut": "/new-jersey-car-insurance/",
+    "/new-jersey-car-insurance/new%20jersey%20auto%20insurance": "/new-jersey-car-insurance/",
+    "/new-jersey-car-insurance/new%20jersey%20car%20insurance": "/new-jersey-car-insurance/",
+    "/new-jersey-car-insurance/newjerseyautoinsurance": "/new-jersey-car-insurance/",
+    "/new-jersey-car-insurance/newjerseycarinsurance": "/new-jersey-car-insurance/",
+    "/new-york-car-insurance/autoinsurancenewyork": "/new-york-car-insurance/",
+    "/new-york-car-insurance/car%20insurance%20new%20york": "/new-york-car-insurance/",
+    "/new-york-car-insurance/carinsurancenewyork": "/new-york-car-insurance/",
+    "/new-york-car-insurance/carinsuranceny": "/new-york-car-insurance/",
+    "/texas-car-insurance/cheap%20auto%20insuranc": "/texas-car-insurance/",
+    "/texas-car-insurance/cheap%20auto%20insurance": "/texas-car-insurance/",
+    "/texas-car-insurance/cheap%20auto%20insurance%20texas": "/texas-car-insurance/",
+    "/texas-car-insurance/cheap%20car%20insurance%20texa": "/texas-car-insurance/",
+    "/texas-car-insurance/cheapautoinsurance": "/texas-car-insurance/",
+    "/texas-car-insurance/cheapautoinsurancetexas": "/texas-car-insurance/",
+    "/texas-car-insurance/cheapcarinsurancetexas": "/texas-car-insurance/",
+    "/contact-us/": "/contact",
+    "/insurance/index.php": "/guides",
+    "/auto/v1funnel;jsessionid=A7B902F25DCF3758CC6A6A92A168B73B": "/#compare"
+  },
+  "junkPatterns": [
+    "/info/",
+    "/.well-known/",
+    "/mainCounter.",
+    "/bw_popup.php"
+  ]
+}
