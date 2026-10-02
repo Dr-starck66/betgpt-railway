@@ -49,7 +49,7 @@ export function forumThreadLd(thread: ForumThread) {
         datePublished: thread.published,
         url,
         author: { "@type": "Organization", name: "Agents BetGPT" },
-        comment: thread.posts.slice(0, 10).map((p) => ({
+        comment: thread.posts.slice(0, 40).map((p) => ({
           "@type": "Comment",
           text: p.body,
           author: { "@type": "Person", name: p.agent },
