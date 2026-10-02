@@ -143,6 +143,11 @@ function localReply(last: string, desk: string, mode: PersonalityMode): string {
     return `${opener}\n\n${desk}`;
   }
   if (intent === "GENERAL_SCHEDULE" || intent === "NAMED_MATCH") return desk;
+  if (/\b(?:4-4-2|3-2-5|4-3-3|3-4-3|pressing|bloc|demi[- ]?espace|surnombre|piston|largeur|milieu|ligne défensive|ligne defensive)\b/i.test(last)) {
+    return mode === "ROAST"
+      ? "Le principe est assez élémentaire, même si le football a manifestement décidé de le cacher derrière des flèches sur un tableau. Face à un 3-2-5, un 4-4-2 peut se retrouver en infériorité au milieu, étiré par la largeur des cinq joueurs de dernière ligne et obligé de choisir entre sortir sur les demi-espaces ou protéger l’axe. S’il presse mal, les deux milieux courent après trois ou quatre zones à la fois. Bref : deux lignes de quatre très propres sur PowerPoint, beaucoup moins quand cinq joueurs viennent leur faire de la géométrie appliquée."
+      : "Un 4-4-2 peut souffrir face à un 3-2-5 parce que le 3-2-5 surcharge le milieu et occupe cinq couloirs offensifs. Les deux milieux centraux du 4-4-2 peuvent être attirés hors de leur zone, tandis que les ailiers doivent choisir entre fermer l’intérieur ou suivre la largeur. Si le pressing n’est pas parfaitement coordonné, des espaces apparaissent entre les lignes et dans les demi-espaces. Voilà. Ce n’était pas de la sorcellerie tactique ; simplement de la supériorité numérique et de l’occupation rationnelle de l’espace.";
+  }
   return mode === "ROAST"
     ? "Tu me donnes une intuition, pas une preuve. C’est mignon comme objet folklorique, mais insuffisant pour une analyse. Donne l’affiche ou le ticket précis ; je vais remettre un peu de méthode dans ce vide expérimental."
     : "Je vois l’idée. Maintenant séparons ton intuition des faits avant qu’elle n’obtienne un permis de conduire : donne-moi l’affiche ou le ticket précis et je te réponds sans inventer ce qui manque.";
