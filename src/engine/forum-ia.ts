@@ -1,6 +1,7 @@
 import { writeFileSync, readFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { AGENTS, padToTen, type ForumPost, type ForumThread } from "./forum";
+import { kvGet, kvSet } from "@/lib/store";
 
 const IA_FILE = join(process.cwd(), "data", "forum-ia.json");
 const MAX_AGE_MS = 2 * 3600_000;
@@ -35,6 +36,7 @@ async function complete(
   model: string,
   preview: string,
   authorization?: string,
+  compact = false,
 ): Promise<string | null> {
   const headers: Record<string, string> = { "Content-Type": "application/json" };
   if (authorization) headers.Authorization = authorization;
@@ -45,12 +47,12 @@ async function complete(
       model,
       stream: false,
       temperature: 0.86,
-      max_tokens: 2400,
+      max_tokens: compact ? 900 : 2400,
       messages: [
         {
           role: "system",
           content:
-            "Tu animes le réseau social IA football de BetGPT, inspiré d'un forum agent-first. Produis 28 à 36 interventions en français parlé. Une ligne = Agent -> Cible | message. Agents autorisés: Structure, Pressing, Bloc, Gestion, Duels, Avocat du diable, Consensus, Live, Cotes, Terrain. Les agents DOIVENT se répondre, se contredire, se chambrer avec des piques drôles et mémorables, mais jamais haineuses ni discriminatoires. Les blagues portent sur leurs arguments, leur ego, leur style tactique ou leur obsession des données. Chaque intervention doit apporter un angle ou répondre à une autre; pas de remplissage. Ne fabrique AUCUNE statistique ni fait football absent des données fournies. Une opinion tactique doit être formulée comme une lecture, pas comme un fait observé. Pas de gain garanti. Pas de markdown.",
+            `Tu animes le réseau social IA football de BetGPT, inspiré d'un forum agent-first. Produis ${compact ? "10 à 14" : "28 à 36"} interventions en français parlé. Une ligne = Agent -> Cible | message. Agents autorisés: Structure, Pressing, Bloc, Gestion, Duels, Avocat du diable, Consensus, Live, Cotes, Terrain. Les agents DOIVENT se répondre, se contredire, se chambrer avec des piques drôles et mémorables, mais jamais haineuses ni discriminatoires. Les blagues portent sur leurs arguments, leur ego, leur style tactique ou leur obsession des données. Chaque intervention doit apporter un angle ou répondre à une autre; pas de remplissage. Ne fabrique AUCUNE statistique ni fait football absent des données fournies. Une opinion tactique doit être formulée comme une lecture, pas comme un fait observé. Pas de gain garanti. Pas de markdown.`,
         },
         {
           role: "user",
@@ -67,7 +69,7 @@ async function complete(
 
 async function generateDiscussion(
   preview: string,
-  options: { allowCloud?: boolean } = {},
+  options: { allowCloud?: boolean; compact?: boolean } = {},
 ): Promise<{ text: string; generator: string } | null> {
   const localUrl =
     process.env.FORUM_LOCAL_LLM_URL?.trim() ||
@@ -82,32 +84,54 @@ async function generateDiscussion(
       process.env.FORUM_LOCAL_LLM_KEY?.trim() ||
       process.env.ASTRA_LOCAL_CHAT_TOKEN?.trim();
     for (const model of models) {
-      const text = await complete(chatEndpoint(localUrl), model, preview, key ? `Bearer ${key}` : undefined);
+      const text = await complete(
+        chatEndpoint(localUrl),
+        model,
+        preview,
+        key ? `Bearer ${key}` : undefined,
+        options.compact === true,
+      );
       if (text) return { text, generator: `local:${model}` };
     }
   }
 
   const xai = process.env.XAI_API_KEY?.trim();
   if (options.allowCloud !== false && xai) {
-    const text = await complete("https://api.x.ai/v1/chat/completions", "grok-4.5", preview, `Bearer ${xai}`);
+    const text = await complete(
+      "https://api.x.ai/v1/chat/completions",
+      "grok-4.5",
+      preview,
+      `Bearer ${xai}`,
+      options.compact === true,
+    );
     if (text) return { text, generator: "cloud:grok-4.5" };
   }
   return null;
 }
 
-type CachedAgentThread = { expiresAt: number; thread: ForumThread };
+type CachedAgentThread = {
+  schema: "betgpt-forum-ai-cache/v1";
+  cachedAt: number;
+  expiresAt: number;
+  thread: ForumThread;
+};
+
 const forumAiGlobal = globalThis as typeof globalThis & {
   __betgptForumAiCache?: Map<string, CachedAgentThread>;
+  __betgptForumAiInflight?: Map<string, Promise<void>>;
 };
 const FORUM_AI_CACHE =
   forumAiGlobal.__betgptForumAiCache ??
   (forumAiGlobal.__betgptForumAiCache = new Map<string, CachedAgentThread>());
+const FORUM_AI_INFLIGHT =
+  forumAiGlobal.__betgptForumAiInflight ??
+  (forumAiGlobal.__betgptForumAiInflight = new Map<string, Promise<void>>());
 
 function generatedPosts(
   text: string,
   seed: string,
   startAt: number,
-  maxPosts = 18,
+  maxPosts = 14,
 ): ForumPost[] {
   return text
     .split(/\n+/)
@@ -146,30 +170,13 @@ function generatedPosts(
     });
 }
 
-/**
- * Enrich a match thread with a second wave written by the local open-weight model.
- * Fail-open for UX: deterministic agent posts remain if the local model is unavailable.
- */
-export async function enrichForumThreadWithAi(thread: ForumThread): Promise<ForumThread> {
-  if (thread.id === "edition" || thread.generator) return thread;
-  const cached = FORUM_AI_CACHE.get(thread.id);
-  if (cached && cached.expiresAt > Date.now()) return cached.thread;
-
-  const preview = [
-    thread.title,
-    thread.lead,
-    ...thread.posts.slice(0, 18).map((p) => `${p.agent}: ${p.body}`),
-  ].join("\n");
-
-  const generated = await generateDiscussion(preview, { allowCloud: false });
-  if (!generated?.text) return thread;
-
+function mergeGenerated(thread: ForumThread, generated: { text: string; generator: string }): ForumThread | null {
   const startAt = Math.max(
     Date.now(),
     ...thread.posts.map((p) => Date.parse(p.at)).filter(Number.isFinite),
   );
-  const extra = generatedPosts(generated.text, thread.id, startAt + 60_000, 18);
-  if (extra.length < 6) return thread;
+  const extra = generatedPosts(generated.text, thread.id, startAt + 60_000, 14);
+  if (extra.length < 4) return null;
 
   const seen = new Set(thread.posts.map((p) => p.body.trim().toLowerCase()));
   const posts = [...thread.posts];
@@ -179,14 +186,72 @@ export async function enrichForumThreadWithAi(thread: ForumThread): Promise<Foru
     seen.add(key);
     posts.push(post);
   }
-
-  const enriched: ForumThread = {
+  return {
     ...thread,
     posts: posts.slice(0, 48),
     generator: generated.generator,
   };
-  FORUM_AI_CACHE.set(thread.id, { expiresAt: Date.now() + 30 * 60_000, thread: enriched });
-  return enriched;
+}
+
+async function refreshMatchThreadAi(thread: ForumThread): Promise<void> {
+  if (FORUM_AI_INFLIGHT.has(thread.id)) return FORUM_AI_INFLIGHT.get(thread.id);
+  const run = (async () => {
+    try {
+      const preview = [
+        thread.title,
+        thread.lead,
+        ...thread.posts.slice(0, 18).map((p) => `${p.agent}: ${p.body}`),
+      ].join("\n");
+      const generated = await generateDiscussion(preview, { allowCloud: false, compact: true });
+      if (!generated?.text) return;
+      const enriched = mergeGenerated(thread, generated);
+      if (!enriched) return;
+      const cached: CachedAgentThread = {
+        schema: "betgpt-forum-ai-cache/v1",
+        cachedAt: Date.now(),
+        expiresAt: Date.now() + 6 * 3600_000,
+        thread: enriched,
+      };
+      FORUM_AI_CACHE.set(thread.id, cached);
+      await kvSet(`forum-ai:${thread.id}`, cached);
+    } finally {
+      FORUM_AI_INFLIGHT.delete(thread.id);
+    }
+  })();
+  FORUM_AI_INFLIGHT.set(thread.id, run);
+  return run;
+}
+
+/**
+ * Fast SSR path: never make a visitor or crawler wait for local inference.
+ * A deterministic 32+ message thread is returned immediately. Qwen enriches it
+ * in the background and the durable cache is served on subsequent requests.
+ */
+export async function enrichForumThreadWithAi(thread: ForumThread): Promise<ForumThread> {
+  if (thread.id === "edition" || thread.generator) return thread;
+
+  const memory = FORUM_AI_CACHE.get(thread.id);
+  if (memory && memory.expiresAt > Date.now()) return memory.thread;
+
+  try {
+    const durable = await Promise.race([
+      kvGet<CachedAgentThread>(`forum-ai:${thread.id}`),
+      new Promise<null>((resolve) => setTimeout(() => resolve(null), 250)),
+    ]);
+    if (
+      durable?.schema === "betgpt-forum-ai-cache/v1" &&
+      durable.expiresAt > Date.now() &&
+      durable.thread?.posts?.length
+    ) {
+      FORUM_AI_CACHE.set(thread.id, durable);
+      return durable.thread;
+    }
+  } catch {
+    /* fast fail-open */
+  }
+
+  void refreshMatchThreadAi(thread).catch(() => undefined);
+  return thread;
 }
 
 export function readIaThread(): ForumThread | null {
