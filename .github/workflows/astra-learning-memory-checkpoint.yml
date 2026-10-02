@@ -11,6 +11,8 @@ on:
       - "server/api/learning-checkpoint.get.ts"
       - "src/engine/ticket-log.ts"
       - "src/engine/learning-memory.ts"
+      - "src/engine/roi5-continuous-learning.test.ts"
+      - "src/engine/roi5-continuous-learning.ts"
 
 permissions:
   contents: write
