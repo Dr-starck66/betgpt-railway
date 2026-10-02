@@ -21,7 +21,6 @@ HEADERS = {"x-worker-token": TOKEN, "content-type": "application/json"}
 NEGATIVE = "worst quality, low quality, blurry, jittery, distorted, malformed, identity drift, character redesign, morphing face, changing armor, extra limbs, extra fingers, duplicated body parts, melted geometry, watermark, subtitles, captions, text artifacts"
 
 PROVIDERS = [
-    ("minimax-h3-ref-zero", "multimodalart/minimax-h3-reference"),
     ("wan22-fast-zero", "zerogpu-aoti/wan2-2-fp8da-aoti-faster"),
     ("ltx-zero", "Lightricks/ltx-video-distilled"),
 ]
@@ -120,7 +119,7 @@ def generate_wan22(prompt, aspect, duration, seed, reference_image=None):
     args = [
         handle_file(str(reference_image)),
         prompt,
-        4,
+        8,
         NEGATIVE,
         duration,
         1.0,
@@ -360,7 +359,7 @@ def process(payload):
 def ensure_smoke_job():
     if not BOOTSTRAP_SMOKE:
         return
-    marker = os.environ.get("SMOKE_MARKER", "BETGPT_ZERO_GPU_SMOKE_OMEGA_V10_MINIMAX_H3")
+    marker = os.environ.get("SMOKE_MARKER", "BETGPT_ZERO_GPU_SMOKE_OMEGA_V12_WAN22_8STEP")
     try:
         jobs = requests.get(ORCHESTRATOR + "/api/jobs", timeout=30).json().get("jobs", [])
         if any(marker in j.get("prompt", "") for j in jobs):
