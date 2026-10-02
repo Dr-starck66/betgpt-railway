@@ -75,7 +75,7 @@ jobs:
           console.log("REACTION_GIF_PASS="+gifSrc);
           console.log("REACTION_EMOJIS_PASS="+emojiText);
           await page.waitForTimeout(500);
-          const punchVoice5xx=bad.filter(x=>/ 5\d\d https:\/\/betgpt\.live\/api\/punch-voice/.test(x));
+          const punchVoice5xx=bad.filter(x=>/^5\\d\\d https:\\/\\/betgpt\\.live\\/api\\/punch-voice(?:\\?|$)/.test(x));
           if(punchVoice5xx.length) throw new Error("PUNCH_VOICE_5XX="+JSON.stringify(punchVoice5xx));
           console.log("PUNCH_VOICE_DEGRADE_PASS");
           await box.fill("Mon combiné de 10 matchs est sûr à 100%, je mets tout.");
