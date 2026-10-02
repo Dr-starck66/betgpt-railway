@@ -126,6 +126,7 @@ type PersistedForumThread = {
 const forumAiGlobal = globalThis as typeof globalThis & {
   __betgptForumAiCache?: Map<string, CachedAgentThread>;
   __betgptForumAiInflight?: Map<string, Promise<void>>;
+  __betgptForumThreadSavedAt?: Map<string, number>;
 };
 const FORUM_AI_CACHE =
   forumAiGlobal.__betgptForumAiCache ??
@@ -134,13 +135,21 @@ const FORUM_AI_INFLIGHT =
   forumAiGlobal.__betgptForumAiInflight ??
   (forumAiGlobal.__betgptForumAiInflight = new Map<string, Promise<void>>());
 
+const FORUM_THREAD_SAVED_AT =
+  forumAiGlobal.__betgptForumThreadSavedAt ??
+  (forumAiGlobal.__betgptForumThreadSavedAt = new Map<string, number>());
+const FORUM_THREAD_WRITE_COOLDOWN_MS = 30 * 60_000;
+
 
 /**
  * Durable forum archive, independent from the short live desk window.
  * This is the SEO/UX safety net that lets every supported match keep its
  * conversation URL after the fixture falls out of the live snapshot.
  */
-export async function persistForumThread(thread: ForumThread): Promise<void> {
+export async function persistForumThread(
+  thread: ForumThread,
+  options: { force?: boolean } = {},
+): Promise<void> {
   if (
     thread.id === "edition" ||
     !thread.matchHref ||
@@ -149,6 +158,12 @@ export async function persistForumThread(thread: ForumThread): Promise<void> {
   ) {
     return;
   }
+
+  const now = Date.now();
+  const previousWrite = FORUM_THREAD_SAVED_AT.get(thread.id) ?? 0;
+  if (!options.force && now - previousWrite < FORUM_THREAD_WRITE_COOLDOWN_MS) return;
+  FORUM_THREAD_SAVED_AT.set(thread.id, now);
+
   const stored: PersistedForumThread = {
     schema: "betgpt-forum-thread/v1",
     savedAt: Date.now(),
@@ -158,7 +173,12 @@ export async function persistForumThread(thread: ForumThread): Promise<void> {
       posts: thread.posts.slice(0, 48),
     },
   };
-  await kvSet(`forum-thread:${thread.id}`, stored);
+  try {
+    await kvSet(`forum-thread:${thread.id}`, stored);
+  } catch (error) {
+    FORUM_THREAD_SAVED_AT.delete(thread.id);
+    throw error;
+  }
 }
 
 export async function readPersistedForumThread(id: string): Promise<ForumThread | null> {
@@ -264,7 +284,7 @@ async function refreshMatchThreadAi(thread: ForumThread): Promise<void> {
       };
       FORUM_AI_CACHE.set(thread.id, cached);
       await kvSet(`forum-ai:${thread.id}`, cached);
-      await persistForumThread(enriched).catch(() => undefined);
+      await persistForumThread(enriched, { force: true }).catch(() => undefined);
     } finally {
       FORUM_AI_INFLIGHT.delete(thread.id);
     }
