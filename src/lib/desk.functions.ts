@@ -16,7 +16,7 @@ import { affiliateConversionSnapshot } from "@/engine/affiliate-conversion";
 import { latestDigest } from "@/engine/email";
 import { completeChat } from "@/lib/chat/complete";
 import type { ChatRequestBody } from "@/lib/chat/types";
-import { maybeRefreshIaDesk, readIaThread } from "@/engine/forum-ia";
+import { enrichForumThreadWithAi, maybeRefreshIaDesk, readIaThread } from "@/engine/forum-ia";
 import { buildForum } from "@/engine/forum";
 import { legalIdentity, legalReady } from "@/lib/legal";
 import { stripMarkup } from "./plain";
@@ -890,7 +890,7 @@ export const getForumThread = createServerFn({ method: "GET" })
     const liveThread = buildForum(desk.matches, desk.predictions, ia ? [ia] : [])
       .map(forumFullThread)
       .find((t) => t.id === data.id);
-    if (liveThread) return liveThread;
+    if (liveThread) return enrichForumThreadWithAi(liveThread);
 
     // The public desk can be a short window. A match page still resolves from
     // the engine or the archive — the forum URL must do the same.
@@ -901,7 +901,7 @@ export const getForumThread = createServerFn({ method: "GET" })
     const thread = buildForum([stored.match], [stored.prediction])
       .map(forumFullThread)
       .find((t) => t.matchHref);
-    return thread ?? { redirectMatchId: matchId };
+    return thread ? enrichForumThreadWithAi(thread) : { redirectMatchId: matchId };
   });
 
 function sistersFor(match: MatchInput): MatchInput[] {
