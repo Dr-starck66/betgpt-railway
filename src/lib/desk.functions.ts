@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { ensureLive, getUpcomingMatches, hydrateLiveFromDisk, bustLive, fetchEspnEvent } from "@/engine/live";
+import { fetchOfficialLineupsForMatch, unavailableLineups } from "@/engine/official-lineups";
 import { ensureArchiveHistory, loadArchiveHistory } from "@/engine/archive";
 import {
   bustEngine,
@@ -67,6 +68,10 @@ import {
 type DeskPayload = ReturnType<typeof deskFromEngine>;
 /** open-window: counts are live + upcoming, not four days of finished games. Bilan = mises only. */
 const DESK_GEN = 48;
+const MATCH_ROUTE_FORM_BUDGET_MS = 900;
+const MATCH_ROUTE_LIVE_BUDGET_MS = 1800;
+const MATCH_ROUTE_EVENT_BUDGET_MS = 3200;
+const MATCH_LINEUPS_BUDGET_MS = 2400;
 const deskMem = globalThis as typeof globalThis & {
   __betgptDeskGen?: number;
   __betgptLastDesk?: DeskPayload | null;
@@ -934,7 +939,10 @@ function sistersFor(match: MatchInput): MatchInput[] {
 async function withObservedForm<T extends { match: MatchInput }>(found: T): Promise<T> {
   try {
     const { hydrateMatchForm } = await import("@/engine/team-form-live");
-    await hydrateMatchForm([found.match], { limit: 2 });
+    await Promise.race([
+      hydrateMatchForm([found.match], { limit: 2 }),
+      new Promise<void>((resolve) => setTimeout(resolve, MATCH_ROUTE_FORM_BUDGET_MS)),
+    ]);
   } catch {
     /* form stays unobserved */
   }
@@ -952,20 +960,49 @@ function packMatchDesk(found: { match: MatchInput; prediction: ReturnType<typeof
   };
 }
 
+export const getOfficialLineups = createServerFn({ method: "GET" })
+  .validator((data: { id: string }) => idParamSchema.parse(data))
+  .handler(async ({ data }) => {
+    hydrateLiveFromDisk();
+    let stored = resolveStoredMatch(data.id);
+    if (!stored) {
+      try {
+        await Promise.race([
+          ensureLive(),
+          new Promise((resolve) => setTimeout(resolve, MATCH_ROUTE_LIVE_BUDGET_MS)),
+        ]);
+      } catch {
+        /* provider unavailable */
+      }
+      stored = resolveStoredMatch(data.id);
+    }
+    if (!stored) return unavailableLineups("Match introuvable dans les sources BetGPT.");
+    const eventId = String(stored.match.id ?? "").replace(/^espn-/i, "");
+    return Promise.race([
+      fetchOfficialLineupsForMatch(stored.match),
+      new Promise<ReturnType<typeof unavailableLineups>>((resolve) =>
+        setTimeout(
+          () => resolve(unavailableLineups("Délai fournisseur dépassé : composition laissée non vérifiée.", /^\d{5,12}$/.test(eventId) ? eventId : undefined)),
+          MATCH_LINEUPS_BUDGET_MS,
+        ),
+      ),
+    ]);
+  });
+
 export const getMatchDesk = createServerFn({ method: "GET" })
   .validator((data: { id: string }) => idParamSchema.parse(data))
   .handler(async ({ data }) => {
-    const cached = getPrediction(data.id);
+    const cached = resolveStoredMatch(data.id) ?? getPrediction(data.id);
     if (cached) {
       refreshDesk();
       return packMatchDesk(await withObservedForm(cached));
     }
     try {
-      await Promise.race([ensureLive(), new Promise((r) => setTimeout(r, 8000))]);
+      await Promise.race([ensureLive(), new Promise((r) => setTimeout(r, MATCH_ROUTE_LIVE_BUDGET_MS))]);
     } catch {
       /* stale */
     }
-    const found = getPrediction(data.id);
+    const found = resolveStoredMatch(data.id) ?? getPrediction(data.id);
     if (found) {
       try {
         setLastDesk(deskFromEngine(runEngine()));
@@ -975,7 +1012,10 @@ export const getMatchDesk = createServerFn({ method: "GET" })
       return packMatchDesk(await withObservedForm(found));
     }
     try {
-      const espn = await fetchEspnEvent(data.id);
+      const espn = await Promise.race([
+        fetchEspnEvent(data.id),
+        new Promise<null>((resolve) => setTimeout(() => resolve(null), MATCH_ROUTE_EVENT_BUDGET_MS)),
+      ]);
       if (espn) {
         const prediction = predictMatch(espn as MatchInput);
         return packMatchDesk(await withObservedForm({ match: espn as MatchInput, prediction }));

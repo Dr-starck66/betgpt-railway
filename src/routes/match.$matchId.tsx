@@ -1,6 +1,7 @@
 import { createFileRoute, notFound, redirect } from "@tanstack/react-router";
 import { MatchDetail } from "@/components/match-detail";
 import { MatchHunter } from "@/components/match-hunter";
+import { MatchLineups } from "@/components/match-lineups";
 import { MatchMissing } from "@/components/match-missing";
 import { getMatchDesk } from "@/lib/desk.functions";
 import { matchHead, datesFromVersions } from "@/lib/seo";
@@ -66,6 +67,11 @@ function MatchPage() {
         versions={data.versions ?? []}
         liveAsOf={data.liveAsOf ?? null}
         video={data.video ?? null}
+      />
+      <MatchLineups
+        matchId={data.match.slug ?? data.match.id}
+        homeName={data.match.home.name}
+        awayName={data.match.away.name}
       />
       <MatchHunter matchId={data.match.id} />
     </div>
