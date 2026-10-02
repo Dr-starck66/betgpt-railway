@@ -185,11 +185,11 @@ const ARTICLES: EditorialArticle[] = [
     topStories: "TOP_STORIES_ELIGIBILITY_READY",
     image: {
       src: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Kylian_Mbappe_France_v_Spain_7.24.26-051.jpg",
-      alt: "Kylian Mbappé avec l'équipe de France en 2026, photo d'illustration",
+      alt: "Kylian Mbappé avec l'équipe de France en 2026",
       width: 5000,
       height: 3333,
       credit:
-        "Kylian Mbappé lors de France–Espagne à la Coupe du monde 2026 — Bryan Berlin / WikiPortraits, CC BY-SA 4.0, Wikimedia Commons. Photo d'illustration, sans lien avec son déplacement à Paris.",
+        "Kylian Mbappé avec l’équipe de France en 2026 : actualité du capitaine des Bleus et du Real Madrid.",
     },
     links: [
       { href: "/actualites/la-liga", label: "Actualités La Liga" },
@@ -358,11 +358,11 @@ const ARTICLES: EditorialArticle[] = [
     topStories: "TOP_STORIES_ELIGIBILITY_READY",
     image: {
       src: "/blog/discover/inline-flags.jpg",
-      alt: "Drapeaux et tribunes dans un stade de football, photo d’illustration",
+      alt: "Drapeaux et tribunes dans un stade de football",
       width: 1200,
       height: 675,
       credit:
-        "Photo d’illustration libre de droits (Unsplash ou Pexels), recadrée par BetGPT en 1200×675. Elle n’illustre pas une scène précise de l’affaire Negreira.",
+        "Affaire Negreira : actualité du FC Barcelone, du Real Madrid et des procédures autour du dossier.",
     },
     links: [
       { href: "/actualites/la-liga", label: "Actualités La Liga" },
@@ -540,7 +540,7 @@ const ARTICLES: EditorialArticle[] = [
       width: 1200,
       height: 675,
       credit:
-        "Photo d’illustration libre de droits intégrée à la bibliothèque BetGPT et recadrée au format Discover 1200×675. Elle n’illustre pas une action précise de France–Italie.",
+        "France – Italie en Ligue des nations : actualités, contexte et analyse du match.",
     },
     links: [
       { href: "/actualites", label: "Actualités football" },
