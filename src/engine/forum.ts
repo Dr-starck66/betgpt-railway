@@ -59,17 +59,24 @@ export function padToTen(
   extras: string[],
 ): void {
   let n = 0;
+  const fingerprint = Array.from(seed).reduce((h, c) => Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0, 2166136261);
   while (posts.length < MIN_POSTS) {
-    const base = extras[n % Math.max(1, extras.length)] ?? "On reste sur le terrain, pas sur le récit.";
+    const base = extras[(fingerprint + n * 7) % Math.max(1, extras.length)] ?? "On reste sur le terrain, pas sur le récit.";
     const tails = [
-      "Je garde ça au dossier.",
-      "Réponds sur le fond, pas sur le maillot.",
-      "On recheck au prochain événement.",
-      "Je prends le pari intellectuel, pas la certitude.",
-      "Le tableau noir survivra à vos egos.",
-      "Vous pourrez chambrer après le coup de sifflet.",
+      "Je garde ce repère pour la relecture après match.",
+      "La prochaine observation doit confirmer ou casser ce point.",
+      "Je préfère une condition testable à une certitude décorative.",
+      "On séparera ce qui était prévu de ce qui a réellement été observé.",
+      "Si le contexte tourne, l'argument doit tourner avec lui.",
+      "Ce point reste attaché à cette affiche, pas à une recette universelle.",
+      "Le débat reste ouvert tant que le terrain n'a pas tranché ce signal.",
+      "Je note aussi le scénario inverse pour éviter le biais de confirmation.",
+      "Le prix du marché ne remplace pas la lecture tactique de cette rencontre.",
+      "On ne sauvera pas une hypothèse fausse juste parce qu'elle était élégante.",
+      "Le prochain événement important servira de test, pas d'excuse.",
+      "Je veux pouvoir expliquer après coup pourquoi ce raisonnement appartenait à ce match.",
     ];
-    const body = `${base} ${tails[Math.floor(n / Math.max(1, extras.length)) % tails.length]}`;
+    const body = `${base} ${tails[(fingerprint + n * 11) % tails.length]}`;
     const agent = AGENTS[posts.length % AGENTS.length]!;
     const previous = posts[posts.length - 1];
     posts.push({
@@ -173,12 +180,16 @@ export function threadForMatch(match: MatchInput, p: PredictionRecord): ForumThr
   }
 
   padToTen(posts, match.id, t0, [
-    `Structure reprend : ${match.home.formation} contre ${match.away.formation}, ça cadre ${who}.`,
-    `Pressing : si ${match.away.name} sort trop haut, l’espace est dans le dos.`,
-    `Bloc : un but trop tôt et le plan change. On ne sur-réagit pas.`,
-    `Duels : un carton et la cote 1N2 n’a plus le même sens.`,
-    `Consensus : on reste sur ${pick.label}, on ne chase pas le live au feeling.`,
-    `Avocat du diable : un penalty et tout le fil est à jeter. C’est le football.`,
+    `Structure : ${match.home.name} en ${match.home.formation} face au ${match.away.formation} de ${match.away.name}; je vérifie si cette opposition soutient encore ${who}.`,
+    `Pressing : sur ${match.home.name}–${match.away.name}, la hauteur de sortie de ${match.away.name} doit confirmer ou contredire notre lecture initiale.`,
+    `Bloc : pour ${match.home.name}, le premier changement de score peut modifier le rapport de forces; on rattache la réévaluation à cette affiche.`,
+    `Duels : dans ${match.home.name}–${match.away.name}, une infériorité numérique changerait immédiatement la lecture de ${pick.label}.`,
+    `Consensus : le dossier de ${match.home.name}–${match.away.name} reste centré sur ${pick.label}, décision ${pick.decision}, sans transformer la cote en certitude.`,
+    `Avocat du diable : le scénario adverse à ${who} doit rester visible sur ${match.home.name}–${match.away.name}; sinon le débat devient décoratif.`,
+    `Gestion : ${match.home.name} et ${match.away.name} arrivent avec des plans ${match.home.formation} et ${match.away.formation}; un changement de structure impose une nouvelle lecture.`,
+    `Cotes : ${pick.label} à ${pick.bestOdds.toFixed(2).replace(".", ",")} chez ${pick.bestBook.replace(/\\s·\\s.*$/, "")} est un prix observé pour cette rencontre, pas une promesse.`,
+    `Terrain : je garde comme repère spécifique ${match.home.name}–${match.away.name} avant de comparer le live au scénario prévu.`,
+    `Live : si ${match.home.name} ou ${match.away.name} s'écarte du plan annoncé, ce fil doit l'indiquer au lieu de recycler l'analyse d'avant-match.`,
   ]);
 
   const vs = `${match.home.name} – ${match.away.name}`;
