@@ -15,6 +15,7 @@ TOKEN = os.environ["GPU_WORKER_TOKEN"]
 POLL_SECONDS = int(os.environ.get("POLL_SECONDS", "8"))
 HF_TOKEN = os.environ.get("HF_TOKEN") or None
 BOOTSTRAP_SMOKE = os.environ.get("BOOTSTRAP_SMOKE", "1") == "1"
+MINIMAX_TIMEOUT_SECONDS = int(os.environ.get("MINIMAX_TIMEOUT_SECONDS", "120"))
 
 HEADERS = {"x-worker-token": TOKEN, "content-type": "application/json"}
 NEGATIVE = "worst quality, low quality, blurry, jittery, distorted, malformed, identity drift, character redesign, morphing face, changing armor, extra limbs, extra fingers, duplicated body parts, melted geometry, watermark, subtitles, captions, text artifacts"
@@ -99,7 +100,15 @@ def generate_minimax_h3(prompt, aspect, duration, seed, reference_image=None):
         int(seed) % 2147483647,
         False,
     ]
-    result = c.predict(*args, api_name="/generate")
+    job = c.submit(*args, api_name="/generate")
+    try:
+        result = job.result(timeout=MINIMAX_TIMEOUT_SECONDS)
+    except TimeoutError:
+        try:
+            job.cancel()
+        except Exception:
+            pass
+        raise RuntimeError(f"MiniMax H3 exceeded {MINIMAX_TIMEOUT_SECONDS}s timeout")
     return normalize_file(result)
 
 
