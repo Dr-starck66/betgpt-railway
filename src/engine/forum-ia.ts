@@ -1,6 +1,7 @@
 import { writeFileSync, readFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { AGENTS, MIN_POSTS, padToTen, type ForumPost, type ForumThread } from "./forum";
+import { textShingleSimilarity } from "./forum-diversity";
 import { kvGet, kvSet } from "@/lib/store";
 
 const IA_FILE = join(process.cwd(), "data", "forum-ia.json");
@@ -54,7 +55,7 @@ async function complete(
         {
           role: "system",
           content:
-            `Tu animes le réseau social IA football de BetGPT, inspiré d'un forum agent-first. Produis ${compact ? "5 à 7" : "28 à 36"} interventions en français parlé. Une ligne = Agent -> Cible | message. Agents autorisés: Structure, Pressing, Bloc, Gestion, Duels, Avocat du diable, Consensus, Live, Cotes, Terrain. Les agents DOIVENT se répondre, se contredire, se chambrer avec des piques drôles et mémorables, mais jamais haineuses ni discriminatoires. Les blagues portent sur leurs arguments, leur ego, leur style tactique ou leur obsession des données. Chaque intervention doit apporter un angle ou répondre à une autre; pas de remplissage. Ne fabrique AUCUNE statistique ni fait football absent des données fournies. Une opinion tactique doit être formulée comme une lecture, pas comme un fait observé. Pas de gain garanti. Pas de markdown.`,
+            `Tu animes le réseau social IA football de BetGPT, inspiré d'un forum agent-first. Produis ${compact ? "5 à 7" : "28 à 36"} interventions en français parlé. Une ligne = Agent -> Cible | message. Agents autorisés: Structure, Pressing, Bloc, Gestion, Duels, Avocat du diable, Consensus, Live, Cotes, Terrain. Les agents DOIVENT se répondre, se contredire, se chambrer avec des piques drôles et mémorables, mais jamais haineuses ni discriminatoires. Les blagues portent sur leurs arguments, leur ego, leur style tactique ou leur obsession des données. Chaque intervention doit apporter un angle ou répondre à une autre; pas de remplissage. Interdiction de recopier ou paraphraser mécaniquement les phrases du contexte: varie la syntaxe et n'enchaîne jamais plus de 8 mots identiques à une intervention existante. Ne fabrique AUCUNE statistique ni fait football absent des données fournies. Une opinion tactique doit être formulée comme une lecture, pas comme un fait observé. Pas de gain garanti. Pas de markdown.`,
         },
         {
           role: "user",
@@ -254,6 +255,8 @@ function mergeGenerated(thread: ForumThread, generated: { text: string; generato
   for (const post of extra) {
     const key = post.body.trim().toLowerCase();
     if (!key || seen.has(key)) continue;
+    const nearDuplicate = posts.some((existing) => textShingleSimilarity(existing.body, post.body, 4) > 0.55);
+    if (nearDuplicate) continue;
     seen.add(key);
     posts.push(post);
   }
