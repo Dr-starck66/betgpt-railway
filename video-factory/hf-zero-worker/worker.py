@@ -29,7 +29,7 @@ _clients = {}
 def client_for(space):
     if space not in _clients:
         print(f"[provider] connecting {space}", flush=True)
-        _clients[space] = Client(space, token=HF_TOKEN, verbose=False)
+        _clients[space] = Client(space, hf_token=HF_TOKEN, verbose=False)
         try:
             _clients[space].view_api(print_info=False)
         except Exception as exc:
@@ -212,7 +212,7 @@ def process(payload):
 def ensure_smoke_job():
     if not BOOTSTRAP_SMOKE:
         return
-    marker = "BETGPT_ZERO_GPU_SMOKE_OMEGA"
+    marker = "BETGPT_ZERO_GPU_SMOKE_OMEGA_V2"
     try:
         jobs = requests.get(ORCHESTRATOR + "/api/jobs", timeout=30).json().get("jobs", [])
         if any(marker in j.get("prompt", "") for j in jobs):
