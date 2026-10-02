@@ -66,14 +66,18 @@ async function complete(
 }
 
 async function generateDiscussion(preview: string): Promise<{ text: string; generator: string } | null> {
-  const localUrl = process.env.FORUM_LOCAL_LLM_URL?.trim();
+  const localUrl =
+    process.env.FORUM_LOCAL_LLM_URL?.trim() ||
+    process.env.ASTRA_LOCAL_CHAT_BASE?.trim();
   if (localUrl) {
     const models = (process.env.FORUM_LOCAL_LLM_MODELS || "qwen3:4b,qwen2.5:7b")
       .split(",")
       .map((m) => m.trim())
       .filter(Boolean)
       .slice(0, 4);
-    const key = process.env.FORUM_LOCAL_LLM_KEY?.trim();
+    const key =
+      process.env.FORUM_LOCAL_LLM_KEY?.trim() ||
+      process.env.ASTRA_LOCAL_CHAT_TOKEN?.trim();
     for (const model of models) {
       const text = await complete(chatEndpoint(localUrl), model, preview, key ? `Bearer ${key}` : undefined);
       if (text) return { text, generator: `local:${model}` };
