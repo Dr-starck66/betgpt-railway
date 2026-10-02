@@ -1,6 +1,6 @@
 "use client";
 
-import { Share2, Trophy } from "lucide-react";
+import { Maximize2, Share2, Trophy, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { track } from "@/lib/analytics";
 import { CHAT_DIPLOMAS, type ChatDiplomaId } from "@/lib/chat/diplomas";
@@ -8,10 +8,30 @@ import { CHAT_DIPLOMAS, type ChatDiplomaId } from "@/lib/chat/diplomas";
 export function ChatDiploma({ diplomaId }: { diplomaId: ChatDiplomaId }) {
   const diploma = CHAT_DIPLOMAS[diplomaId];
   const [shared, setShared] = useState(false);
+  const [fullscreen, setFullscreen] = useState(false);
 
   useEffect(() => {
     track("chat_diploma_award", diplomaId);
   }, [diplomaId]);
+
+  useEffect(() => {
+    if (!fullscreen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setFullscreen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [fullscreen]);
+
+  const openFullscreen = () => {
+    setFullscreen(true);
+    track("chat_diploma_fullscreen_open", diplomaId);
+  };
 
   const share = async () => {
     const absolute = new URL(diploma.image, window.location.origin).toString();
@@ -64,7 +84,12 @@ export function ChatDiploma({ diplomaId }: { diplomaId: ChatDiplomaId }) {
           {diplomaId}
         </span>
       </div>
-      <a href={diploma.image} target="_blank" rel="noopener noreferrer" className="block bg-white">
+      <button
+        type="button"
+        onClick={openFullscreen}
+        className="group relative block w-full bg-white text-left"
+        aria-label={"Agrandir le diplôme " + diploma.title}
+      >
         <img
           src={diploma.image}
           alt={"Diplôme BetGPT : " + diploma.title}
@@ -72,7 +97,11 @@ export function ChatDiploma({ diplomaId }: { diplomaId: ChatDiplomaId }) {
           decoding="async"
           className="h-auto w-full"
         />
-      </a>
+        <span className="absolute bottom-2 right-2 inline-flex min-h-9 items-center gap-1.5 rounded-full border border-white/70 bg-black/70 px-3 text-[11px] font-black text-white shadow-lg backdrop-blur transition group-active:scale-95">
+          <Maximize2 size={14} aria-hidden="true" />
+          Plein écran
+        </span>
+      </button>
       <figcaption className="flex flex-col gap-2 px-3 py-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-sm font-black leading-tight text-paper">{diploma.title}</p>
@@ -88,6 +117,37 @@ export function ChatDiploma({ diplomaId }: { diplomaId: ChatDiplomaId }) {
           {shared ? "Partagé ✓" : "Partager"}
         </button>
       </figcaption>
+
+      {fullscreen ? (
+        <div
+          className="fixed inset-0 z-[120] flex items-center justify-center bg-black/95 p-2 sm:p-5"
+          role="dialog"
+          aria-modal="true"
+          aria-label={"Diplôme BetGPT en plein écran : " + diploma.title}
+          onClick={() => setFullscreen(false)}
+        >
+          <button
+            type="button"
+            onClick={() => setFullscreen(false)}
+            className="fixed right-[max(0.75rem,env(safe-area-inset-right))] top-[max(0.75rem,env(safe-area-inset-top))] z-[121] inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-black/65 text-white shadow-xl backdrop-blur"
+            aria-label="Fermer le diplôme en plein écran"
+          >
+            <X size={24} />
+          </button>
+
+          <div
+            className="flex h-full w-full items-center justify-center"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <img
+              src={diploma.image}
+              alt={"Diplôme BetGPT : " + diploma.title}
+              decoding="async"
+              className="max-h-[calc(100dvh-1rem)] max-w-[calc(100vw-1rem)] object-contain sm:max-h-[calc(100dvh-2.5rem)] sm:max-w-[calc(100vw-2.5rem)]"
+            />
+          </div>
+        </div>
+      ) : null}
     </figure>
   );
 }
