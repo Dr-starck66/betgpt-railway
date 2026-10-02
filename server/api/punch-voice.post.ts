@@ -44,7 +44,13 @@ export default defineEventHandler(async (event) => {
   const apiKey = process.env.ELEVENLABS_API_KEY?.trim();
   const voiceId = process.env.ELEVENLABS_VOICE_ID?.trim();
   if (!apiKey || !voiceId || process.env.BETGPT_TTS_ENABLED === "0") {
-    return Response.json({ error: "Voix premium non configurée." }, { status: 503 });
+    return new Response(null, {
+      status: 204,
+      headers: {
+        "cache-control": "no-store",
+        "x-betgpt-voice-provider": "browser-fallback",
+      },
+    });
   }
 
   const { day, month } = dateKey();
@@ -89,10 +95,13 @@ export default defineEventHandler(async (event) => {
     );
 
     if (!upstream.ok) {
-      return Response.json(
-        { error: "Voix premium indisponible." },
-        { status: upstream.status >= 500 ? 502 : 503 },
-      );
+      return new Response(null, {
+        status: 204,
+        headers: {
+          "cache-control": "no-store",
+          "x-betgpt-voice-provider": "browser-fallback",
+        },
+      });
     }
 
     const audio = await upstream.arrayBuffer();
@@ -105,7 +114,13 @@ export default defineEventHandler(async (event) => {
       },
     });
   } catch {
-    return Response.json({ error: "Voix premium indisponible." }, { status: 503 });
+    return new Response(null, {
+      status: 204,
+      headers: {
+        "cache-control": "no-store",
+        "x-betgpt-voice-provider": "browser-fallback",
+      },
+    });
   } finally {
     clearTimeout(timer);
   }

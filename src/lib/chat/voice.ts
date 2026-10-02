@@ -9,15 +9,42 @@ async function cacheKey(punchline: PunchlineMeta): Promise<string> {
     .join("");
 }
 
+function browserVoice(punchline: PunchlineMeta): "BROWSER" | "UNAVAILABLE" {
+  if (typeof window === "undefined" || !("speechSynthesis" in window) || typeof SpeechSynthesisUtterance === "undefined") {
+    return "UNAVAILABLE";
+  }
+
+  try {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(punchline.text);
+    const voices = window.speechSynthesis.getVoices();
+    const preferred =
+      voices.find((voice) => /^fr[-_]/i.test(voice.lang) && /google|microsoft|natural|premium|neural/i.test(voice.name)) ??
+      voices.find((voice) => /^fr[-_]/i.test(voice.lang)) ??
+      voices.find((voice) => /fr/i.test(voice.lang));
+
+    if (preferred) utterance.voice = preferred;
+    utterance.lang = preferred?.lang || "fr-FR";
+    utterance.volume = 1;
+    utterance.rate = punchline.style === "LAUGH_SHOUT" ? 1.18 : 1.12;
+    utterance.pitch = punchline.style === "ANGRY_SHOUT" ? 0.92 : 1.04;
+    window.speechSynthesis.speak(utterance);
+    return "BROWSER";
+  } catch {
+    return "UNAVAILABLE";
+  }
+}
+
 /**
- * Premium-only voice policy:
- * - ElevenLabs or silence.
- * - Never fall back to browser speech synthesis: robotic TTS would break the product tone.
- * - Cached clips may still replay without a new paid request.
+ * Voice policy:
+ * - Prefer ElevenLabs when configured.
+ * - Fall back to the browser's built-in French speech synthesis at zero cost.
+ * - Never surface a 5xx to the chat solely because premium TTS is unavailable.
+ * - Cached ElevenLabs clips still replay without a new paid request.
  */
 export async function playPunchline(
   punchline: PunchlineMeta,
-): Promise<"ELEVENLABS" | "UNAVAILABLE" | "BLOCKED"> {
+): Promise<"ELEVENLABS" | "BROWSER" | "UNAVAILABLE" | "BLOCKED"> {
   try {
     const key = await cacheKey(punchline);
     const cacheRequest = new Request(`/__betgpt_voice_cache__/${key}.mp3`);
@@ -32,7 +59,12 @@ export async function playPunchline(
           headers: { "content-type": "application/json" },
           body: JSON.stringify(punchline),
         });
-        if (!fresh.ok) return "UNAVAILABLE";
+
+        if (fresh.status === 204 || fresh.headers.get("x-betgpt-voice-provider") === "browser-fallback") {
+          return browserVoice(punchline);
+        }
+        if (!fresh.ok) return browserVoice(punchline);
+
         response = fresh.clone();
         await cache.put(cacheRequest, fresh.clone());
       }
@@ -42,11 +74,17 @@ export async function playPunchline(
         headers: { "content-type": "application/json" },
         body: JSON.stringify(punchline),
       });
-      if (!fresh.ok) return "UNAVAILABLE";
+
+      if (fresh.status === 204 || fresh.headers.get("x-betgpt-voice-provider") === "browser-fallback") {
+        return browserVoice(punchline);
+      }
+      if (!fresh.ok) return browserVoice(punchline);
       response = fresh;
     }
 
     const blob = await response.blob();
+    if (!blob.size) return browserVoice(punchline);
+
     const url = URL.createObjectURL(blob);
     const audio = new Audio(url);
     audio.volume = 1;
@@ -58,9 +96,10 @@ export async function playPunchline(
       return "ELEVENLABS";
     } catch {
       URL.revokeObjectURL(url);
-      return "BLOCKED";
+      const fallback = browserVoice(punchline);
+      return fallback === "BROWSER" ? "BROWSER" : "BLOCKED";
     }
   } catch {
-    return "UNAVAILABLE";
+    return browserVoice(punchline);
   }
 }

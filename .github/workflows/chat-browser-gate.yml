@@ -9,6 +9,8 @@ on:
       - "src/components/chat-diploma.tsx"
       - "src/lib/chat/reaction.ts"
       - "server/api/punch-gif.post.ts"
+      - "server/api/punch-voice.post.ts"
+      - "src/lib/chat/voice.ts"
       - "public/reactions/**"
       - "src/routes/chat.tsx"
       - "src/routes/__root.tsx"
@@ -72,6 +74,10 @@ jobs:
           if(!emojiText) throw new Error("REACTION_EMOJIS_NOT_RENDERED");
           console.log("REACTION_GIF_PASS="+gifSrc);
           console.log("REACTION_EMOJIS_PASS="+emojiText);
+          await page.waitForTimeout(500);
+          const punchVoice5xx=bad.filter(x=>/ 5\d\d https:\/\/betgpt\.live\/api\/punch-voice/.test(x));
+          if(punchVoice5xx.length) throw new Error("PUNCH_VOICE_5XX="+JSON.stringify(punchVoice5xx));
+          console.log("PUNCH_VOICE_DEGRADE_PASS");
           await box.fill("Mon combiné de 10 matchs est sûr à 100%, je mets tout.");
           await page.getByRole("button",{name:"Envoyer",exact:true}).click({timeout:10000});
           const enlarge=page.getByRole("button",{name:/Agrandir le diplôme/i}).first();
