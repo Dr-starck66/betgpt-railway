@@ -51,7 +51,7 @@ export const Route = createRootRoute({
     <html lang="fr" className="antialiased" suppressHydrationWarning>
       <head>
         <HeadContent />
-        <script defer src="https://astra-google-bootstrap-production.up.railway.app/astra-google.js" />
+        <script async src="https://astra-google-bootstrap-production.up.railway.app/astra-google.js" />
         {GA_MEASUREMENT_ID ? (
           <>
             <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`} />
