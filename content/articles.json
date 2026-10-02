@@ -1,0 +1,128 @@
+[
+  {
+    "slug": "how-to-compare-car-insurance-quotes",
+    "category": "Auto insurance",
+    "title": "How to compare car insurance quotes without comparing apples to oranges",
+    "description": "A practical checklist for matching limits, deductibles and optional coverages before judging price.",
+    "updated": "2026-10-02",
+    "sections": [
+      {
+        "heading": "Match liability limits first",
+        "text": "Two quotes are not comparable when one carries lower bodily injury or property damage limits. Put every quote on the same liability structure before comparing the premium."
+      },
+      {
+        "heading": "Normalize deductibles",
+        "text": "Collision and comprehensive deductibles can materially change price. Compare the same deductible whenever possible and note whether glass coverage or special deductibles differ."
+      },
+      {
+        "heading": "Check what is missing",
+        "text": "Uninsured motorist, rental reimbursement, roadside assistance, gap coverage and new-car replacement can change the value of a policy. A lower premium can simply mean fewer protections."
+      }
+    ]
+  },
+  {
+    "slug": "home-insurance-replacement-cost-guide",
+    "category": "Home insurance",
+    "title": "Replacement cost vs. market value: the home insurance distinction that changes your quote",
+    "description": "Why dwelling coverage should be compared on rebuilding cost rather than the price you could sell the property for.",
+    "updated": "2026-10-02",
+    "sections": [
+      {
+        "heading": "Market value is not rebuilding cost",
+        "text": "Land value, neighborhood demand and transaction prices do not equal the cost of rebuilding the structure after a covered loss."
+      },
+      {
+        "heading": "Review coverage assumptions",
+        "text": "Construction type, square footage, local labor and material costs, special features and code requirements can all affect a replacement-cost estimate."
+      },
+      {
+        "heading": "Watch percentage deductibles",
+        "text": "Some wind, hurricane or catastrophe deductibles are expressed as a percentage of insured value rather than a flat dollar amount. That can materially change out-of-pocket exposure."
+      }
+    ]
+  },
+  {
+    "slug": "term-life-insurance-quote-checklist",
+    "category": "Life insurance",
+    "title": "Term life insurance quote checklist: what to compare before price",
+    "description": "Term length, coverage amount, underwriting and policy features that matter before choosing the cheapest offer.",
+    "updated": "2026-10-02",
+    "sections": [
+      {
+        "heading": "Keep coverage amount and term identical",
+        "text": "A 20-year policy and a 30-year policy are different products. Compare quotes only when term length and death benefit match."
+      },
+      {
+        "heading": "Understand underwriting",
+        "text": "Accelerated, simplified and fully underwritten policies can price risk differently. The fastest application is not always the least expensive long-term option."
+      },
+      {
+        "heading": "Read conversion and rider provisions",
+        "text": "Conversion rights and optional riders can matter later. Compare them explicitly instead of treating every term policy as interchangeable."
+      }
+    ]
+  },
+  {
+    "slug": "renters-insurance-coverage-checklist",
+    "category": "Renters insurance",
+    "title": "Renters insurance: the 5 coverages worth checking before you buy",
+    "description": "Personal property, liability, loss of use and deductible details that make inexpensive renters policies meaningfully different.",
+    "updated": "2026-10-02",
+    "sections": [
+      {
+        "heading": "Personal property valuation",
+        "text": "Know whether damaged belongings are paid at replacement cost or actual cash value, which can deduct depreciation."
+      },
+      {
+        "heading": "Liability protection",
+        "text": "Liability limits can matter far more than the value of your furniture if someone is injured and you are legally responsible."
+      },
+      {
+        "heading": "Loss of use",
+        "text": "Temporary housing and additional living expense coverage can be crucial when a covered loss makes the rental uninhabitable."
+      }
+    ]
+  },
+  {
+    "slug": "small-business-insurance-starting-point",
+    "category": "Business insurance",
+    "title": "Small-business insurance: where to start before requesting quotes",
+    "description": "A coverage map for general liability, property, professional liability, cyber, workers compensation and commercial auto.",
+    "updated": "2026-10-02",
+    "sections": [
+      {
+        "heading": "Start from the actual risk",
+        "text": "A consultant, restaurant, contractor and ecommerce company have very different exposures. Coverage should follow operations rather than a generic bundle."
+      },
+      {
+        "heading": "Separate liability types",
+        "text": "General liability, professional liability and cyber liability address different categories of loss. One is not automatically a substitute for another."
+      },
+      {
+        "heading": "Confirm compulsory coverages",
+        "text": "Workers compensation, commercial auto and other requirements vary by jurisdiction. Verify obligations with the relevant regulator or licensed professional."
+      }
+    ]
+  },
+  {
+    "slug": "health-plan-total-cost-checklist",
+    "category": "Health insurance",
+    "title": "Health insurance: compare total cost, not just the monthly premium",
+    "description": "A framework for evaluating deductibles, copays, coinsurance, networks and out-of-pocket maximums.",
+    "updated": "2026-10-02",
+    "sections": [
+      {
+        "heading": "Premium is only one cost",
+        "text": "A plan with a low monthly premium can still expose you to a high deductible or out-of-pocket maximum."
+      },
+      {
+        "heading": "Check the network",
+        "text": "Doctors, hospitals and pharmacies may be treated differently in-network and out-of-network. Verify the providers that matter to you."
+      },
+      {
+        "heading": "Model likely use",
+        "text": "Consider regular prescriptions, specialist visits, planned procedures and worst-case annual exposure rather than optimizing one number."
+      }
+    ]
+  }
+]
