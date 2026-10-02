@@ -23,3 +23,11 @@ test("déduplique les diffuseurs dans un article", () => {
   const found = extractBroadcasters(["Sur beIN SPORTS 1.", "Aussi sur beIN SPORTS MAX 4 et TF1."]);
   assert.deepEqual(found.map((item) => item.key), ["bein-sports", "tf1"]);
 });
+
+test("priorise un diffuseur avec programme d'affiliation vérifié", () => {
+  const found = extractBroadcasters(["Diffusion : beIN SPORTS 1 et DAZN."]);
+  assert.deepEqual(found.map((item) => item.key), ["dazn", "bein-sports"]);
+  assert.equal(found[0]?.affiliateCapable, true);
+  assert.equal(found[0]?.affiliateNetwork, "Awin");
+  assert.equal(found[1]?.affiliateCapable, false);
+});

@@ -45,6 +45,8 @@ export function BroadcastLinks({ texts }: { texts: string[] }) {
               className="chip-pill font-semibold hover:border-sage/30 hover:text-link"
               data-broadcaster={broadcaster.key}
               data-affiliate-ready="true"
+              data-affiliate-capable={broadcaster.affiliateCapable ? "true" : "false"}
+              data-affiliate-network={broadcaster.affiliateNetwork}
             >
               {broadcaster.text} ↗
             </a>
