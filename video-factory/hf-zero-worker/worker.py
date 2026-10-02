@@ -19,8 +19,8 @@ HEADERS = {"x-worker-token": TOKEN, "content-type": "application/json"}
 NEGATIVE = "worst quality, low quality, blurry, jittery, distorted, malformed, identity drift, character redesign, morphing face, changing armor, extra limbs, extra fingers, duplicated body parts, melted geometry, watermark, subtitles, captions, text artifacts"
 
 PROVIDERS = [
+    ("wan22-fast-zero", "zerogpu-aoti/wan2-2-fp8da-aoti-faster"),
     ("ltx-zero", "Lightricks/ltx-video-distilled"),
-    ("cogvideox-zero", "kaidjuric/cogvideox-5b-text-to-video"),
 ]
 
 _clients = {}
@@ -68,6 +68,37 @@ def normalize_file(result):
                         f.write(chunk)
         return target
     raise RuntimeError(f"provider output is not a readable file: {result}")
+
+
+def generate_wan22(prompt, aspect, duration, seed, reference_image=None):
+    if not reference_image:
+        raise RuntimeError("wan22-fast-zero requires the locked BetGPT reference image")
+    c = client_for("zerogpu-aoti/wan2-2-fp8da-aoti-faster")
+    duration = max(0.5, min(float(duration), 5.0))
+    args = [
+        handle_file(str(reference_image)),
+        prompt,
+        4,
+        NEGATIVE,
+        duration,
+        1.0,
+        1.0,
+        int(seed) % 2147483647,
+        False,
+    ]
+    errors = []
+    for api_name in ("/generate_video", "/predict"):
+        try:
+            result = c.predict(*args, api_name=api_name)
+            return normalize_file(result)
+        except Exception as exc:
+            errors.append(f"{api_name}: {exc}")
+    try:
+        result = c.predict(*args, fn_index=0)
+        return normalize_file(result)
+    except Exception as exc:
+        errors.append(f"fn_index=0: {exc}")
+    raise RuntimeError("Wan 2.2 Fast call failed. " + " | ".join(errors))
 
 
 def generate_ltx(prompt, aspect, duration, seed, reference_image=None):
@@ -195,10 +226,12 @@ def process(payload):
         for provider, _space in PROVIDERS:
             try:
                 print(f"[job {job['id']}] trying {provider}", flush=True)
-                if provider == "ltx-zero":
+                if provider == "wan22-fast-zero":
+                    first_clip = generate_wan22(first["prompt"], aspect, first.get("duration", 4), seed, reference)
+                elif provider == "ltx-zero":
                     first_clip = generate_ltx(first["prompt"], aspect, first.get("duration", 4), seed, reference)
                 else:
-                    first_clip = generate_cog(first["prompt"], aspect, first.get("duration", 5), seed)
+                    raise RuntimeError(f"unsupported provider {provider}")
                 chosen = provider
                 break
             except Exception as exc:
@@ -214,10 +247,12 @@ def process(payload):
         clips.append(first_target)
 
         for idx, shot in enumerate(shots[1:], start=1):
-            if chosen == "ltx-zero":
+            if chosen == "wan22-fast-zero":
+                generated = generate_wan22(shot["prompt"], aspect, shot.get("duration", 4), seed + idx, reference)
+            elif chosen == "ltx-zero":
                 generated = generate_ltx(shot["prompt"], aspect, shot.get("duration", 4), seed + idx, reference)
             else:
-                generated = generate_cog(shot["prompt"], aspect, shot.get("duration", 5), seed + idx)
+                raise RuntimeError(f"unsupported provider {chosen}")
             target = work / f"shot-{idx:02d}.mp4"
             shutil.copy2(generated, target)
             clips.append(target)
@@ -236,7 +271,7 @@ def process(payload):
 def ensure_smoke_job():
     if not BOOTSTRAP_SMOKE:
         return
-    marker = os.environ.get("SMOKE_MARKER", "BETGPT_ZERO_GPU_SMOKE_OMEGA_V4_I2V")
+    marker = os.environ.get("SMOKE_MARKER", "BETGPT_ZERO_GPU_SMOKE_OMEGA_V6_WAN22_QUALITY")
     try:
         jobs = requests.get(ORCHESTRATOR + "/api/jobs", timeout=30).json().get("jobs", [])
         if any(marker in j.get("prompt", "") for j in jobs):
