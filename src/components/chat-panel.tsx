@@ -434,6 +434,7 @@ export function ChatPanel({
   const [mode, setMode] = useState<PersonalityMode>(parseMode(initialMode));
   const [placeholder] = useState("Un match, un pari, un feeling…");
   const [memory, setMemory] = useState<UserMemory>(EMPTY_MEMORY);
+  const [challengeAccepted, setChallengeAccepted] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const boxRef = useRef<HTMLTextAreaElement>(null);
   const seeded = useRef(false);
@@ -446,7 +447,8 @@ export function ChatPanel({
   useEffect(() => {
     if (!shareSource) return;
     track("chat_share_return", shareSource);
-  }, [shareSource]);
+    if (seed) track("chat_challenge_view", shareSource);
+  }, [seed, shareSource]);
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -462,6 +464,10 @@ export function ChatPanel({
     }
     setError(null);
     sending.current = true;
+    if (shareSource && seed && !challengeAccepted) {
+      setChallengeAccepted(true);
+      track("chat_challenge_accept", shareSource);
+    }
     const resolved = parseMode(nextMode);
     const mem = touchMemory(memory, content, resolved);
     setMemory(mem);
@@ -555,6 +561,34 @@ export function ChatPanel({
           {busy ? "Recherche…" : "À toi"}
         </span>
       </header>
+
+      {shareSource && seed && !challengeAccepted ? (
+        <section className="mx-3 mt-3 overflow-hidden rounded-2xl border border-sage/40 bg-[linear-gradient(135deg,rgba(124,194,58,0.18),rgba(15,23,42,0.04))] p-4 sm:mx-5" aria-label="Défi BetGPT reçu">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <p className="text-[11px] font-black uppercase tracking-[0.18em] text-sage">🔥 Défi reçu</p>
+            <span className="rounded-full border border-sage/30 bg-white/75 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-paper">
+              Sans filtre activé
+            </span>
+          </div>
+          <p className="mt-2 text-lg font-black tracking-tight text-paper">Un pote t’a envoyé ça. Tu assumes ? 😈</p>
+          <blockquote className="mt-3 rounded-xl border border-line bg-white/85 px-3 py-2.5 text-sm font-semibold leading-relaxed text-paper">
+            « {seed.slice(0, 260)} »
+          </blockquote>
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => void send(seed, "ROAST")}
+              className="inline-flex min-h-11 items-center rounded-full bg-sage px-5 text-sm font-black text-ink shadow-[0_8px_18px_rgba(124,194,58,0.22)] hover:brightness-95 disabled:opacity-40"
+            >
+              Accepte le défi
+            </button>
+            <span className="text-xs font-semibold text-muted">
+              BetGPT répond, puis ton résultat devient repartageable.
+            </span>
+          </div>
+        </section>
+      ) : null}
 
       <div
         ref={scrollRef}
