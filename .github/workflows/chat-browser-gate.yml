@@ -1,0 +1,48 @@
+name: ASTRA Chat Browser Gate
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/chat-browser-gate.yml"
+      - "src/components/chat-panel.tsx"
+      - "src/routes/chat.tsx"
+
+permissions:
+  contents: read
+
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npx playwright install --with-deps chromium
+      - name: Verify real mobile chat interaction
+        run: |
+          node --input-type=module <<'EOF'
+          import { chromium } from "playwright";
+          const browser=await chromium.launch({headless:true});
+          const page=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+          const errors=[]; const bad=[];
+          page.on("console",m=>{if(m.type()==="error")errors.push(m.text())});
+          page.on("pageerror",e=>errors.push(e.message));
+          page.on("response",r=>{if(r.status()>=400)bad.push(r.status()+" "+r.url())});
+          await page.goto("https://betgpt.live/chat",{waitUntil:"networkidle",timeout:60000});
+          const roast=page.getByRole("button",{name:"Sans filtre",exact:true});
+          await roast.click({timeout:10000});
+          if((await roast.getAttribute("aria-pressed"))!=="true") throw new Error("ROAST_BUTTON_NOT_INTERACTIVE");
+          const box=page.getByRole("textbox",{name:"Ton message à BetGPT"});
+          await box.fill("La France va perdre 25-0 son prochain match.");
+          await page.getByRole("button",{name:"Envoyer",exact:true}).click({timeout:10000});
+          await page.getByText(/calamar|asile|carton rouge|score pareil/i).first().waitFor({timeout:25000});
+          console.log("ASTRA_CHAT_BROWSER_PASS");
+          console.log("BROWSER_ERRORS="+JSON.stringify(errors));
+          console.log("HTTP_ERRORS="+JSON.stringify(bad));
+          await browser.close();
+          EOF
