@@ -16,7 +16,7 @@ import { affiliateConversionSnapshot } from "@/engine/affiliate-conversion";
 import { latestDigest } from "@/engine/email";
 import { completeChat } from "@/lib/chat/complete";
 import type { ChatRequestBody } from "@/lib/chat/types";
-import { enrichForumThreadWithAi, maybeRefreshIaDesk, readIaThread } from "@/engine/forum-ia";
+import { enrichForumThreadWithAi, maybeRefreshIaDesk, persistForumThread, readIaThread, readPersistedForumThread } from "@/engine/forum-ia";
 import { buildForum } from "@/engine/forum";
 import { legalIdentity, legalReady } from "@/lib/legal";
 import { stripMarkup } from "./plain";
@@ -837,7 +837,8 @@ function forumPreviewThread(t: ReturnType<typeof buildForum>[number]) {
   return {
     ...t,
     excerpt: t.excerpt.slice(0, 180),
-    posts: t.posts.slice(0, 6).map((p) => ({ ...p, body: p.body.slice(0, 260) })),
+    // Keep the global forum index light enough to expose every active thread.
+    posts: t.posts.slice(0, 3).map((p) => ({ ...p, body: p.body.slice(0, 220) })),
   };
 }
 
@@ -876,9 +877,15 @@ async function forumDesk() {
 export const getForum = createServerFn({ method: "GET" }).handler(async () => {
   const desk = await forumDesk();
   const ia = readIaThread();
-  const threads = buildForum(desk.matches, desk.predictions, ia ? [ia] : [])
-    .map(forumPreviewThread)
-    .slice(0, 40);
+  const fullThreads = buildForum(desk.matches, desk.predictions, ia ? [ia] : []);
+
+  // Seed durable storage for every match thread while serving the global index.
+  // No arbitrary 40-thread cutoff: if the desk knows the match, the forum exposes it.
+  for (const thread of fullThreads) {
+    if (thread.matchHref) void persistForumThread(thread).catch(() => undefined);
+  }
+
+  const threads = fullThreads.map(forumPreviewThread);
   return { threads, live: desk.matches.some((m) => m.status === "live") };
 });
 
@@ -891,6 +898,10 @@ export const getForumThread = createServerFn({ method: "GET" })
       .map(forumFullThread)
       .find((t) => t.id === data.id);
     if (liveThread) return enrichForumThreadWithAi(liveThread);
+
+    // A dense match forum persists independently from the short live desk.
+    const persistedThread = await readPersistedForumThread(data.id);
+    if (persistedThread) return enrichForumThreadWithAi(persistedThread);
 
     // The public desk can be a short window. A match page still resolves from
     // the engine or the archive — the forum URL must do the same.
