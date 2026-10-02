@@ -192,14 +192,35 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
           {article.related.length ? (
             <section className="surface-card p-5">
               <h2 className="text-base font-semibold text-paper">À lire aussi</h2>
-              <ul className="mt-4 space-y-3 text-sm leading-relaxed">
-                {article.related.map((item) => (
-                  <li key={item.href}>
-                    <a href={item.href} className="font-medium text-paper hover:text-link">
-                      {item.title}
-                    </a>
-                  </li>
-                ))}
+              <ul className="mt-4 space-y-4">
+                {article.related.map((item) => {
+                  const visual = item.image ?? article.image;
+                  return (
+                    <li key={item.href}>
+                      <a
+                        href={item.href}
+                        className="group block overflow-hidden rounded-2xl border border-line bg-panel/35 transition hover:border-sage/30"
+                      >
+                        <img
+                          src={visual.src}
+                          alt={visual.alt}
+                          width={visual.width}
+                          height={visual.height}
+                          loading="lazy"
+                          decoding="async"
+                          sizes="(min-width: 1024px) 268px, 100vw"
+                          className="aspect-video w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+                        />
+                        <div className="p-3.5">
+                          <p className="text-sm font-semibold leading-snug text-paper transition-colors group-hover:text-link">
+                            {item.title}
+                          </p>
+                          <p className="mt-2 text-xs font-semibold text-link">Lire l’article →</p>
+                        </div>
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
             </section>
           ) : null}
