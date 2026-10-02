@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { isPreviewSurface } from "@/lib/preview-embed";
+import { AGE_GATE_ACCEPTED_EVENT, AGE_GATE_KEY } from "@/components/age-gate";
 
 export const CONSENT_KEY = "betgpt-consent";
 const OPEN = "betgpt-open-consent";
@@ -22,19 +23,36 @@ export function ConsentAds() {
   const [choice, setChoice] = useState<"ads" | "essential" | null>(null);
   const [force, setForce] = useState(false);
   const [ready, setReady] = useState(false);
+  const [ageAccepted, setAgeAccepted] = useState(false);
   const [pub, setPub] = useState("");
 
   useEffect(() => {
     if (isPreviewSurface()) {
       setChoice("essential");
+      setAgeAccepted(true);
       setReady(true);
       return;
     }
+
+    const syncAge = () => {
+      try {
+        setAgeAccepted(localStorage.getItem(AGE_GATE_KEY) === "1");
+      } catch {
+        setAgeAccepted(true);
+      }
+    };
+
+    syncAge();
     setChoice(readConsent());
     setReady(true);
+
     const onOpen = () => setForce(true);
     window.addEventListener(OPEN, onOpen);
-    return () => window.removeEventListener(OPEN, onOpen);
+    window.addEventListener(AGE_GATE_ACCEPTED_EVENT, syncAge);
+    return () => {
+      window.removeEventListener(OPEN, onOpen);
+      window.removeEventListener(AGE_GATE_ACCEPTED_EVENT, syncAge);
+    };
   }, []);
 
   useEffect(() => {
@@ -68,7 +86,7 @@ export function ConsentAds() {
     setForce(false);
   }
 
-  if (!ready) return null;
+  if (!ready || !ageAccepted) return null;
   if (choice && !force) return null;
 
   return (
