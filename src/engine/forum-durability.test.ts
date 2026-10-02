@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { durableForumLeague } from "./forum-durability";
+import { MIN_POSTS, padToTen, type ForumPost } from "./forum";
 import { buildSitemapUrls } from "@/lib/sitemap-urls";
 
 test("durable forum league allowlist matches persisted archive coverage", () => {
@@ -42,4 +43,19 @@ test("sitemap never promises a forum leaf for a live-only league", () => {
   assert.equal(paths.has(`/match/${er}`), true);
   assert.equal(paths.has(`/forum/${er}`), false);
   assert.equal(paths.has(`/forum/${nl}`), true);
+});
+
+
+test("agent-first forum density gate requires a real conversation", () => {
+  assert.ok(MIN_POSTS >= 30, `expected dense thread, got MIN_POSTS=${MIN_POSTS}`);
+  const posts: ForumPost[] = [];
+  padToTen(posts, "proof", Date.now(), [
+    "Structure : argument de preuve distinct.",
+    "Pressing : réponse contradictoire distincte.",
+    "Avocat du diable : contre-argument distinct.",
+  ]);
+  assert.equal(posts.length, MIN_POSTS);
+  assert.ok(posts.filter((p) => p.replyTo).length >= MIN_POSTS - 1);
+  assert.ok(posts.some((p) => p.tone === "challenge"));
+  assert.ok(posts.some((p) => p.tone === "banter"));
 });
