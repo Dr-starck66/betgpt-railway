@@ -3,6 +3,7 @@ import { orderedContextualSourceIds } from "@/lib/editorial/authority-citations"
 import { newsArticleLd, breadcrumbLd } from "@/lib/editorial/schema";
 import { formatParis } from "@/lib/editorial/time";
 import type { EditorialArticle, EditorialSource } from "@/lib/editorial/types";
+import { publicEditorialImageCopy } from "@/lib/editorial/image-copy";
 import { ld } from "@/lib/ld";
 import { BroadcastLinks, BroadcasterText } from "@/components/broadcaster-text";
 
@@ -53,6 +54,7 @@ function SourceCitations({
 
 export function NewsArticleView({ article }: { article: EditorialArticle }) {
   const published = formatParis(article.publishedAt);
+  const heroImageCopy = publicEditorialImageCopy(article);
   const modified =
     article.modifiedAt && article.publishedAt && article.modifiedAt > article.publishedAt
       ? formatParis(article.modifiedAt)
@@ -108,13 +110,13 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
       <figure className="section-card overflow-hidden">
         <img
           src={article.image.src}
-          alt={article.image.alt}
+          alt={heroImageCopy.alt}
           width={article.image.width}
           height={article.image.height}
           className="aspect-video w-full object-cover"
         />
         <figcaption className="border-t border-line px-4 py-3 text-xs text-muted sm:px-6">
-          {article.image.credit}
+          {heroImageCopy.caption}
         </figcaption>
       </figure>
 
@@ -211,6 +213,7 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
               <ul className="mt-4 space-y-4">
                 {article.related.map((item) => {
                   const visual = item.image ?? article.image;
+                  const visualCopy = publicEditorialImageCopy(article, visual);
                   return (
                     <li key={item.href}>
                       <a
@@ -219,7 +222,7 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
                       >
                         <img
                           src={visual.src}
-                          alt={visual.alt}
+                          alt={visualCopy.alt}
                           width={visual.width}
                           height={visual.height}
                           loading="lazy"
