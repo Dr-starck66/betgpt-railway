@@ -14,7 +14,7 @@ test("durable forum league allowlist matches persisted archive coverage", () => 
 
 test("sitemap never promises a forum leaf for a live-only league", () => {
   const day = new Date(Date.now() + 2 * 86400000).toISOString().slice(0, 10);
-  const mk = (league, slug, home, away) => ({
+  const mk = (league: string, slug: string, home: string, away: string) => ({
     id: slug,
     slug,
     league,
