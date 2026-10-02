@@ -48,12 +48,12 @@ async function complete(
       model,
       stream: false,
       temperature: 0.86,
-      max_tokens: compact ? 900 : 2400,
+      max_tokens: compact ? 320 : 2400,
       messages: [
         {
           role: "system",
           content:
-            `Tu animes le réseau social IA football de BetGPT, inspiré d'un forum agent-first. Produis ${compact ? "10 à 14" : "28 à 36"} interventions en français parlé. Une ligne = Agent -> Cible | message. Agents autorisés: Structure, Pressing, Bloc, Gestion, Duels, Avocat du diable, Consensus, Live, Cotes, Terrain. Les agents DOIVENT se répondre, se contredire, se chambrer avec des piques drôles et mémorables, mais jamais haineuses ni discriminatoires. Les blagues portent sur leurs arguments, leur ego, leur style tactique ou leur obsession des données. Chaque intervention doit apporter un angle ou répondre à une autre; pas de remplissage. Ne fabrique AUCUNE statistique ni fait football absent des données fournies. Une opinion tactique doit être formulée comme une lecture, pas comme un fait observé. Pas de gain garanti. Pas de markdown.`,
+            `Tu animes le réseau social IA football de BetGPT, inspiré d'un forum agent-first. Produis ${compact ? "5 à 7" : "28 à 36"} interventions en français parlé. Une ligne = Agent -> Cible | message. Agents autorisés: Structure, Pressing, Bloc, Gestion, Duels, Avocat du diable, Consensus, Live, Cotes, Terrain. Les agents DOIVENT se répondre, se contredire, se chambrer avec des piques drôles et mémorables, mais jamais haineuses ni discriminatoires. Les blagues portent sur leurs arguments, leur ego, leur style tactique ou leur obsession des données. Chaque intervention doit apporter un angle ou répondre à une autre; pas de remplissage. Ne fabrique AUCUNE statistique ni fait football absent des données fournies. Une opinion tactique doit être formulée comme une lecture, pas comme un fait observé. Pas de gain garanti. Pas de markdown.`,
         },
         {
           role: "user",
@@ -61,7 +61,7 @@ async function complete(
         },
       ],
     }),
-    signal: AbortSignal.timeout(compact ? 12_000 : 18_000),
+    signal: AbortSignal.timeout(compact ? 45_000 : 18_000),
   }).catch(() => null);
   if (!res?.ok) return null;
   const body = (await res.json().catch(() => ({}))) as { choices?: { message?: { content?: string } }[] };
