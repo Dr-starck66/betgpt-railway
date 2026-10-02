@@ -69,6 +69,25 @@ const REACTION_LABEL: Record<string, string> = {
 
 type GifReaction = { url?: string; alt: string; provider?: string; scene?: string };
 
+const LOCAL_REACTION_GIFS: Record<PunchReaction["mood"], string> = {
+  ANIMAL_CHAOS: "/reactions/astra-animal.gif",
+  COSMIC_CHAOS: "/reactions/astra-shock.gif",
+  NUCLEAR_CHAOS: "/reactions/astra-shock.gif",
+  BETTING_DISASTER: "/reactions/astra-betting.gif",
+  SHOPPING_DISASTER: "/reactions/astra-betting.gif",
+  DIY_DISASTER: "/reactions/astra-betting.gif",
+  ABSURD_SHOCK: "/reactions/astra-fallback.gif",
+};
+
+function localGifForReaction(reaction: PunchReaction): GifReaction {
+  return {
+    url: LOCAL_REACTION_GIFS[reaction.mood],
+    alt: `Réaction GIF BetGPT — ${REACTION_LABEL[reaction.mood] ?? "chaos"}`,
+    provider: "local",
+    scene: reaction.mood,
+  };
+}
+
 
 function RichMessageText({ content }: { content: string }) {
   const parts = content.split(/(https?:\/\/[^\s]+)/g);
@@ -151,16 +170,11 @@ function NativeReaction({ reaction, punchline }: { reaction: PunchReaction; punc
 
 function PunchReactionCard({ reaction, punchline }: { reaction: PunchReaction; punchline?: string }) {
   const label = REACTION_LABEL[reaction.mood] ?? "chaos";
-  const [gif, setGif] = useState<GifReaction>({
-    alt: `Réaction animée BetGPT — ${label}`,
-    provider: "native",
-  });
+  const [gif, setGif] = useState<GifReaction>(() => localGifForReaction(reaction));
 
   useEffect(() => {
-    setGif({
-      alt: `Réaction animée BetGPT — ${REACTION_LABEL[reaction.mood] ?? "chaos"}`,
-      provider: "native",
-    });
+    const local = localGifForReaction(reaction);
+    setGif(local);
 
     const query = reaction.gifQuery.trim();
     if (!query) return;
@@ -179,12 +193,11 @@ function PunchReactionCard({ reaction, punchline }: { reaction: PunchReaction; p
         return (await response.json()) as GifReaction;
       })
       .then((value) => {
-        if (!active || !value) return;
-        if (value.provider === "tenor" && value.url) setGif(value);
-        else setGif({ ...value, provider: "native" });
+        if (!active || !value?.url) return;
+        setGif(value);
       })
       .catch(() => {
-        // Native reaction stays visible: no weak generic GIF fallback.
+        // Local GIF is already visible before the API request completes.
       });
 
     return () => {
@@ -193,7 +206,7 @@ function PunchReactionCard({ reaction, punchline }: { reaction: PunchReaction; p
     };
   }, [reaction.gifQuery, reaction.mood]);
 
-  if (gif.provider !== "tenor" || !gif.url) {
+  if (!gif.url) {
     return <NativeReaction reaction={reaction} punchline={punchline} />;
   }
 
@@ -202,20 +215,33 @@ function PunchReactionCard({ reaction, punchline }: { reaction: PunchReaction; p
       className="mt-3 overflow-hidden rounded-2xl border border-line bg-white/80 p-2"
       aria-label="Réaction GIF BetGPT"
     >
+      <div className="mb-2 flex items-center justify-between gap-2 rounded-xl bg-paper px-3 py-2 text-white">
+        <span className="text-[10px] font-black uppercase tracking-[0.18em] text-white/65">{label}</span>
+        <span
+          className="select-none text-3xl leading-none drop-shadow-sm"
+          aria-label="Émoticônes de réaction BetGPT"
+        >
+          {(reaction.emojis.length ? reaction.emojis : ["🤯", "😂", "💀"]).join(" ")}
+        </span>
+      </div>
       <img
         src={gif.url}
         alt={gif.alt}
         loading="eager"
         decoding="async"
         referrerPolicy="no-referrer"
-        onError={() => setGif({ alt: `Réaction animée BetGPT — ${label}`, provider: "native" })}
+        onError={() => {
+          const local = localGifForReaction(reaction);
+          if (gif.url !== local.url) setGif(local);
+          else setGif({ alt: local.alt, provider: "native" });
+        }}
         className="max-h-64 w-full max-w-[22rem] rounded-xl border border-line object-contain"
       />
       <figcaption className="mt-2 flex items-center justify-between gap-2">
-        <span className="text-[10px] font-black uppercase tracking-[0.18em] text-muted">{label}</span>
-        {reaction.emojis.length ? (
-          <span className="text-lg leading-none" aria-hidden="true">{reaction.emojis.join(" ")}</span>
-        ) : null}
+        <span className="text-[10px] font-black uppercase tracking-[0.18em] text-muted">
+          {gif.provider === "tenor" ? "GIF contextuel" : "GIF BetGPT intégré"}
+        </span>
+        <span className="text-[10px] font-semibold text-muted">GIF + emojis toujours actifs</span>
       </figcaption>
     </figure>
   );

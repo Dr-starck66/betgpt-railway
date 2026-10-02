@@ -28,13 +28,21 @@ function scoreResult(result: TenorResult, query: string): number {
 function localFallback(query: string) {
   const q = query.toLowerCase();
   let scene = "shock";
-  if (/pigeon|hamster|llama|alpaga|octopus|duck|goat|hedgehog|snail|penguin|chihuahua/.test(q)) scene = "animal";
-  else if (/bet|pari|ticket|bookmaker|shopping|spree|card|money/.test(q)) scene = "betting";
-  else if (/space|cosmic|explosion|nuclear|shocked|disbelief|confused/.test(q)) scene = "cosmic";
+  let url = "/reactions/astra-fallback.gif";
+  if (/pigeon|hamster|llama|alpaga|octopus|duck|goat|hedgehog|snail|penguin|chihuahua/.test(q)) {
+    scene = "animal";
+    url = "/reactions/astra-animal.gif";
+  } else if (/bet|pari|ticket|bookmaker|shopping|spree|card|money/.test(q)) {
+    scene = "betting";
+    url = "/reactions/astra-betting.gif";
+  } else if (/space|cosmic|explosion|nuclear|shocked|disbelief|confused/.test(q)) {
+    scene = "cosmic";
+    url = "/reactions/astra-shock.gif";
+  }
   return {
-    url: "",
-    alt: "Réaction animée BetGPT",
-    provider: "native",
+    url,
+    alt: "Réaction GIF BetGPT",
+    provider: "local",
     scene,
   };
 }
@@ -54,7 +62,9 @@ export default defineEventHandler(async (event) => {
   }
 
   if (!(await allowKeyed("chat:punch-gif", 30, 60_000))) {
-    return Response.json({ error: "Quota GIF temporairement atteint." }, { status: 429 });
+    return Response.json(localFallback(query), {
+      headers: { "cache-control": "public, max-age=3600" },
+    });
   }
 
   const clientKey = process.env.TENOR_CLIENT_KEY?.trim() || "betgpt";

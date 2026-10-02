@@ -7,6 +7,9 @@ on:
       - ".github/workflows/chat-browser-gate.yml"
       - "src/components/chat-panel.tsx"
       - "src/components/chat-diploma.tsx"
+      - "src/lib/chat/reaction.ts"
+      - "server/api/punch-gif.post.ts"
+      - "public/reactions/**"
       - "src/routes/chat.tsx"
       - "src/routes/__root.tsx"
 
@@ -59,6 +62,16 @@ jobs:
           await box.fill("La France va perdre 25-0 son prochain match.");
           await page.getByRole("button",{name:"Envoyer",exact:true}).click({timeout:10000});
           await page.getByText(/calamar|asile|carton rouge|score pareil/i).first().waitFor({timeout:25000});
+          const reactionGif=page.locator('figure[aria-label="Réaction GIF BetGPT"] img').first();
+          await reactionGif.waitFor({state:"visible",timeout:10000});
+          const gifSrc=await reactionGif.getAttribute("src");
+          if(!gifSrc || !/\.gif(?:\?|$)/i.test(gifSrc)) throw new Error("REACTION_GIF_NOT_RENDERED");
+          const emojiStrip=page.getByLabel("Émoticônes de réaction BetGPT").first();
+          await emojiStrip.waitFor({state:"visible",timeout:10000});
+          const emojiText=(await emojiStrip.textContent())?.trim()||"";
+          if(!emojiText) throw new Error("REACTION_EMOJIS_NOT_RENDERED");
+          console.log("REACTION_GIF_PASS="+gifSrc);
+          console.log("REACTION_EMOJIS_PASS="+emojiText);
           await box.fill("Mon combiné de 10 matchs est sûr à 100%, je mets tout.");
           await page.getByRole("button",{name:"Envoyer",exact:true}).click({timeout:10000});
           const enlarge=page.getByRole("button",{name:/Agrandir le diplôme/i}).first();
