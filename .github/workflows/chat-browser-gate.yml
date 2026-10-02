@@ -36,6 +36,8 @@ jobs:
           page.on("response",r=>{if(r.status()>=400)bad.push(r.status()+" "+r.url())});
           await page.goto("https://betgpt.live/chat",{waitUntil:"domcontentloaded",timeout:30000});
           await page.waitForTimeout(1500);
+          const overlays=await page.locator("div.fixed.inset-0").evaluateAll(nodes=>nodes.map(n=>({className:n.className,text:(n.innerText||"").slice(0,1200),buttons:Array.from(n.querySelectorAll("button,a")).map(x=>(x.innerText||x.getAttribute("aria-label")||"").trim()).filter(Boolean)})));
+          console.log("OVERLAYS="+JSON.stringify(overlays));
           const roast=page.getByRole("button",{name:"Sans filtre",exact:true});
           await roast.click({timeout:10000});
           if((await roast.getAttribute("aria-pressed"))!=="true") throw new Error("ROAST_BUTTON_NOT_INTERACTIVE");
