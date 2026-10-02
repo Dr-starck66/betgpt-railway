@@ -3,6 +3,32 @@ import type { EditorialArticle, EditorialImage } from "@/lib/editorial/types";
 const INTERNAL_IMAGE_COPY =
   /(?:libre de droits|unsplash|pexels|recadr(?:ée|e|é)?|bibliothèque betgpt|photo d[’']illustration|ce n[’']est pas une photo|n[’']illustre pas une (?:action|scène)|format discover\s*1200[×x]675)/i;
 
+const TEAM_FR: Record<string, string> = {
+  Italy: "Italie",
+  Germany: "Allemagne",
+  Netherlands: "Pays-Bas",
+  Denmark: "Danemark",
+  Greece: "Grèce",
+  Serbia: "Serbie",
+  Slovakia: "Slovaquie",
+  Wales: "Pays de Galles",
+  Norway: "Norvège",
+  Azerbaijan: "Azerbaïdjan",
+  "Faroe Islands": "Îles Féroé",
+};
+
+const COMPETITION_FR: Record<string, string> = {
+  "UEFA Nations League": "Ligue des nations de l’UEFA",
+};
+
+function publicTeamName(value: string): string {
+  return TEAM_FR[value] ?? value;
+}
+
+function publicCompetitionName(value: string): string {
+  return COMPETITION_FR[value] ?? value;
+}
+
 export function cleanPublicImageAlt(value: string): string {
   const cleaned = String(value || "")
     .replace(/,?\s*photo d[’']illustration(?: libre de droits)?/gi, "")
@@ -16,8 +42,8 @@ export function cleanPublicImageAlt(value: string): string {
 }
 
 export function editorialImageCaption(article: EditorialArticle): string {
-  const teams = article.teams.filter(Boolean).slice(0, 2);
-  const competition = String(article.competition || "").trim();
+  const teams = article.teams.filter(Boolean).slice(0, 2).map(publicTeamName);
+  const competition = publicCompetitionName(String(article.competition || "").trim());
 
   if (teams.length >= 2 && competition) {
     return `${teams[0]} – ${teams[1]} en ${competition} : informations, contexte et analyse du match.`;
@@ -40,10 +66,9 @@ export function publicEditorialImageCopy(
   image: EditorialImage = article.image,
 ): { alt: string; caption: string } {
   const alt = cleanPublicImageAlt(image.alt);
-  const rawCaption = String(image.credit || "").trim();
   return {
     alt,
-    caption: !rawCaption || INTERNAL_IMAGE_COPY.test(rawCaption) ? editorialImageCaption(article) : rawCaption,
+    caption: editorialImageCaption(article),
   };
 }
 
