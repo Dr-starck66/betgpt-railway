@@ -4,6 +4,7 @@ import subprocess
 import tempfile
 import time
 from pathlib import Path
+from PIL import Image, ImageFilter
 
 import imageio_ffmpeg
 import requests
