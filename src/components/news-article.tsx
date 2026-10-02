@@ -4,6 +4,20 @@ import { newsArticleLd, breadcrumbLd } from "@/lib/editorial/schema";
 import { formatParis } from "@/lib/editorial/time";
 import type { EditorialArticle, EditorialSource } from "@/lib/editorial/types";
 import { ld } from "@/lib/ld";
+import { BroadcastLinks, BroadcasterText } from "@/components/broadcaster-text";
+
+function articleBroadcastTexts(article: EditorialArticle): string[] {
+  return [
+    article.lead,
+    ...article.paragraphs.flatMap((part) => [
+      part.body,
+      ...(part.subsections ?? []).flatMap((subsection) => [
+        subsection.body,
+        ...(subsection.subsections ?? []).map((detail) => detail.body),
+      ]),
+    ]),
+  ];
+}
 
 function SourceCitations({
   sourceIds,
@@ -57,7 +71,7 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
               <span className="chip-pill">{article.competition}</span>
             </div>
             <h1 className="mt-5 font-display text-3xl tracking-tight sm:text-4xl lg:text-5xl">{article.h1}</h1>
-            <p className="mt-4 max-w-3xl text-base leading-relaxed text-mist sm:text-lg">{article.lead}</p>
+            <p className="mt-4 max-w-3xl text-base leading-relaxed text-mist sm:text-lg"><BroadcasterText text={article.lead} /></p>
 
             <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted">
               <span>Publié le {published} (Europe/Paris)</span>
@@ -107,13 +121,13 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
       <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start">
         <div className="min-w-0 space-y-6">
           <div className="surface-card p-5 sm:p-6">
-            <p className="readable-prose text-paper">{article.lead}</p>
+            <p className="readable-prose text-paper"><BroadcasterText text={article.lead} /></p>
           </div>
 
           {article.paragraphs.map((part) => (
             <section key={part.h2} className="surface-card space-y-4 p-5 sm:p-7">
               <h2 className="text-2xl font-semibold tracking-tight">{part.h2}</h2>
-              <p className="readable-prose">{part.body}</p>
+              <p className="readable-prose"><BroadcasterText text={part.body} /></p>
               <SourceCitations sourceIds={part.sourceIds} sources={article.sources} />
 
               {part.subsections?.length ? (
@@ -121,7 +135,7 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
                   {part.subsections.map((subsection) => (
                     <section key={subsection.h3} className="space-y-3">
                       <h3 className="text-xl font-semibold tracking-tight text-paper">{subsection.h3}</h3>
-                      <p className="readable-prose">{subsection.body}</p>
+                      <p className="readable-prose"><BroadcasterText text={subsection.body} /></p>
                       <SourceCitations sourceIds={subsection.sourceIds} sources={article.sources} />
 
                       {subsection.subsections?.length ? (
@@ -129,7 +143,7 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
                           {subsection.subsections.map((detail) => (
                             <section key={detail.h4} className="space-y-2">
                               <h4 className="text-base font-semibold text-paper">{detail.h4}</h4>
-                              <p className="readable-prose">{detail.body}</p>
+                              <p className="readable-prose"><BroadcasterText text={detail.body} /></p>
                               <SourceCitations sourceIds={detail.sourceIds} sources={article.sources} />
                             </section>
                           ))}
@@ -157,6 +171,8 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
         </div>
 
         <aside className="space-y-4 lg:sticky lg:top-28">
+          <BroadcastLinks texts={articleBroadcastTexts(article)} />
+
           <section className="surface-card p-5">
             <h2 className="text-base font-semibold text-paper">Sources</h2>
             <ul className="mt-4 space-y-3 text-sm leading-relaxed text-mist">
