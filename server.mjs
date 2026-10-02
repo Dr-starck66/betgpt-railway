@@ -6,9 +6,14 @@ import { fileURLToPath } from "node:url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const publicDir = path.join(__dirname, "public");
 const articles = JSON.parse(fs.readFileSync(path.join(__dirname, "content", "articles.json"), "utf8"));
+const legacy = JSON.parse(fs.readFileSync(path.join(__dirname, "config", "legacy-urls.json"), "utf8"));
+const adsense = JSON.parse(fs.readFileSync(path.join(__dirname, "config", "adsense-readiness.json"), "utf8"));
 const PORT = Number(process.env.PORT || 8080);
 const SITE_URL = (process.env.SITE_URL || "").replace(/\/$/, "");
 const INDEXABLE = process.env.INDEXABLE === "true";
+const ADSENSE_CLIENT = process.env.ADSENSE_CLIENT || "";
+const ADSENSE_APPROVED = process.env.ADSENSE_APPROVED === "true";
+const CMP_READY = process.env.CMP_READY === "true";
 const partnerCatalog = [
   {id:"insurify", name:"Insurify", products:["auto","home","renters","business","life"], status:process.env.INSURIFY_URL?"active":"pending", url:process.env.INSURIFY_URL||"", payoutModel:"negotiated"},
   {id:"smartfinancial", name:"SmartFinancial", products:["auto","home","business"], status:process.env.SMARTFINANCIAL_URL?"active":"pending", url:process.env.SMARTFINANCIAL_URL||"", payoutModel:"qualified-lead"},
@@ -21,13 +26,17 @@ function partnerFor(product){
 }
 
 const trustPages = {
-  "/about": ["About FindInsuranceQuotes.net", "We build plain-English insurance comparison tools and editorial guides. We are not an insurer, broker, or insurance producer. When approved partner programs are connected, we may earn compensation for qualified referrals."],
-  "/methodology": ["How our comparison methodology works", "We separate editorial scoring from monetization. Partner compensation never changes factual eligibility rules, coverage definitions, or our editorial explanations. Commercial placements are labeled and measured independently."],
-  "/editorial-policy": ["Editorial policy", "Our articles are designed to answer one insurance question clearly, cite authoritative sources where appropriate, distinguish facts from estimates, show update dates, and disclose commercial relationships."],
-  "/data-sources": ["Data sources", "We prioritize regulator, carrier, state insurance department, NAIC, government, and partner-provided quote data. We never invent premiums, discounts, approval odds, or commission amounts."],
-  "/affiliate-disclosure": ["Affiliate disclosure", "FindInsuranceQuotes.net may earn a fee when a visitor clicks, requests a quote, becomes a qualified lead, or buys through an approved partner. Compensation may vary by partner. Editorial content is kept separate from partner economics."],
-  "/privacy": ["Privacy", "We minimize data collection. Sensitive quote information should be sent directly to approved, licensed quote partners rather than stored on this site unless a future flow explicitly states otherwise."],
-  "/terms": ["Terms", "Information on this site is educational and comparison-oriented, not legal, tax, financial, or insurance advice. Coverage and availability vary by insurer, state, country, underwriting rules, and individual circumstances."]
+  "/about": ["About FindInsuranceQuotes.net", "FindInsuranceQuotes.net is an independent insurance education and comparison publisher. We explain coverage concepts, help consumers prepare for quote comparisons, and may connect visitors with approved insurance partners. We are not an insurer or insurance producer."],
+  "/methodology": ["How our comparison methodology works", "We separate editorial analysis from commercial monetization. Coverage explanations, eligibility notes and factual statements are not changed because one partner pays more. Commercial performance is measured separately through clicks, qualified leads, sales, reversals and observed EPC."],
+  "/editorial-policy": ["Editorial policy", "Every guide has a defined user question, a named update date and an editorial review requirement. We favor regulator, government and primary-source material. We do not republish third-party articles, invent premiums, fabricate quotes, manufacture reviews or present automated drafts as independently verified facts."],
+  "/data-sources": ["Data sources", "Primary sources include state insurance departments, NAIC, CMS, HealthCare.gov, FEMA, CISA, SBA, carrier policy materials and verified partner quote data. Estimates are labeled as estimates. Time-sensitive facts must be rechecked before publication."],
+  "/affiliate-disclosure": ["Affiliate disclosure", "FindInsuranceQuotes.net may earn compensation when a visitor clicks a sponsored link, submits a qualified quote request or completes a purchase through an approved partner. Compensation can differ by partner. Sponsored links are labeled and use appropriate sponsored relationship attributes."],
+  "/advertising-policy": ["Advertising policy", "Advertising is kept visually distinct from editorial content. We do not place ads so they imitate navigation, obstruct reading, create accidental clicks or overwhelm the publisher content. Pages without meaningful publisher content are excluded from advertising."],
+  "/privacy": ["Privacy policy", "We disclose the categories of data and technologies used on this site. If Google advertising products are enabled, Google and other vendors may use cookies, IP addresses, device identifiers or similar technologies to deliver, measure and personalize advertising where permitted. Users in regions requiring consent will be presented with the applicable consent controls before personalized advertising is requested."],
+  "/cookie-policy": ["Cookie and consent policy", "The site will not activate optional advertising or personalization storage in regions requiring consent until the applicable consent signal has been collected through a compliant consent-management process. Necessary technical storage may still be used where legally permitted."],
+  "/contact": ["Contact FindInsuranceQuotes.net", "Questions about our guides, corrections, advertising or commercial relationships can be sent through the contact channel that will be published with the production domain. We maintain a public correction path because insurance information can change."],
+  "/authors/editorial-team": ["Editorial team", "FindInsuranceQuotes.net articles are produced under a documented editorial process with source review, update dates and correction tracking. Author and reviewer profiles will identify real contributors; credentials will never be invented."],
+  "/terms": ["Terms of use", "Content is educational and comparison-oriented, not legal, tax, financial or insurance advice. Coverage, prices, eligibility and requirements vary by insurer, jurisdiction, underwriting rules and individual circumstances. Verify material decisions with the relevant insurer, regulator or licensed professional."]
 };
 
 function htmlEscape(s="") {
@@ -39,7 +48,7 @@ function baseUrl(req) {
   const proto = req.headers["x-forwarded-proto"] || (host.includes("localhost") ? "http" : "https");
   return proto + "://" + host;
 }
-function layout({title,description,body,canonical,noindex=false}) {
+function layout({title,description,body,canonical,noindex=false,allowAds=true}) {
   const robots = (noindex || !INDEXABLE) ? "noindex,follow" : "index,follow,max-image-preview:large";
   const schema = {
     "@context":"https://schema.org",
@@ -48,6 +57,8 @@ function layout({title,description,body,canonical,noindex=false}) {
     "url":canonical.split("/").slice(0,3).join("/"),
     "description":"Insurance comparison, quote education and editorial guides."
   };
+  const adsenseScript = ADSENSE_CLIENT && allowAds ? `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${htmlEscape(ADSENSE_CLIENT)}" crossorigin="anonymous"></script>` : "";
+  const adEligible = ADSENSE_APPROVED && ADSENSE_CLIENT && allowAds;
   return `<!doctype html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${htmlEscape(title)}</title>
@@ -56,7 +67,7 @@ function layout({title,description,body,canonical,noindex=false}) {
 <link rel="canonical" href="${htmlEscape(canonical)}">
 <meta property="og:type" content="website"><meta property="og:title" content="${htmlEscape(title)}">
 <meta property="og:description" content="${htmlEscape(description)}"><meta property="og:url" content="${htmlEscape(canonical)}">
-<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:card" content="summary_large_image">${adsenseScript}<meta name="adsense-eligible" content="${adEligible ? "true" : "false"}">
 <script type="application/ld+json">${JSON.stringify(schema)}</script>
 <link rel="stylesheet" href="/styles.css"></head><body>${body}<script src="/app.js" defer></script></body></html>`;
 }
@@ -66,7 +77,7 @@ function header() {
 }
 function footer() {
   return `<footer><div><strong>FindInsuranceQuotes.net</strong><p>Independent comparison guidance. Not an insurer or insurance producer.</p></div>
-  <div class="footerlinks"><a href="/about">About</a><a href="/editorial-policy">Editorial policy</a><a href="/data-sources">Data sources</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a></div></footer>`;
+  <div class="footerlinks"><a href="/about">About</a><a href="/authors/editorial-team">Editorial team</a><a href="/editorial-policy">Editorial policy</a><a href="/advertising-policy">Advertising</a><a href="/data-sources">Data sources</a><a href="/privacy">Privacy</a><a href="/cookie-policy">Cookies</a><a href="/contact">Contact</a><a href="/terms">Terms</a></div></footer>`;
 }
 function home(req) {
   const base=baseUrl(req);
@@ -104,6 +115,7 @@ function guidePage(req,a){
  const schema={"@context":"https://schema.org","@type":"Article","headline":a.title,"dateModified":a.updated,"mainEntityOfPage":canonical};
  const sections=a.sections.map(s=>`<section><h2>${htmlEscape(s.heading)}</h2><p>${htmlEscape(s.text)}</p></section>`).join("");
  const sources=(a.sources||[]).length?`<section class="sources"><h2>Sources and further reading</h2><ul>${a.sources.map(([name,url])=>`<li><a href="${htmlEscape(url)}" target="_blank" rel="noopener noreferrer">${htmlEscape(name)}</a></li>`).join("")}</ul></section>`:"";
+ const sources=(a.sources||[]).length?`<section class="sources"><h2>Sources and further reading</h2><ul>${a.sources.map(([name,url])=>`<li><a href="${htmlEscape(url)}" target="_blank" rel="noopener noreferrer">${htmlEscape(name)}</a></li>`).join("")}</ul></section>`:"";
  const body=header()+`<main class="article"><a class="back" href="/guides">← All guides</a><span class="eyebrow">${a.category}</span><h1>${htmlEscape(a.title)}</h1><p class="lede">${htmlEscape(a.description)}</p><div class="meta">Updated ${a.updated} · Editorial review required before material changes</div>${sections}${sources}
  <aside class="cta"><h2>Ready to compare?</h2><p>Approved quote partners will appear here only after the commercial relationship and tracking are verified.</p><a class="primary" href="/#compare">Start with your insurance type</a></aside>
  <script type="application/ld+json">${JSON.stringify(schema)}</script></main>`+footer();
@@ -111,7 +123,17 @@ function guidePage(req,a){
 }
 function trustPage(req,p){
  const [title,text]=trustPages[p]; const base=baseUrl(req);
- return layout({title:title+" | Find Insurance Quotes",description:text.slice(0,155),canonical:base+p,body:header()+`<main class="content narrow"><h1>${title}</h1><p class="lede">${text}</p></main>`+footer()});
+ const noAd = ["/privacy","/cookie-policy","/contact","/terms"].includes(p); return layout({title:title+" | Find Insurance Quotes",description:text.slice(0,155),canonical:base+p,allowAds:!noAd,body:header()+`<main class="content narrow"><h1>${title}</h1><p class="lede">${text}</p></main>`+footer()});
+}
+function stateGuide(req,slug,state){
+ const base=baseUrl(req), canonical=base+"/"+slug+"/";
+ const body=header()+`<main class="article"><a class="back" href="/guides">← Insurance guides</a><span class="eyebrow">Legacy state guide</span><h1>${htmlEscape(state)} car insurance: how to compare quotes and verify requirements</h1><p class="lede">This page restores a historically indexed FindInsuranceQuotes.net URL. It is being rebuilt as a useful state-specific insurance guide rather than redirected to an unrelated page.</p>
+ <section><h2>Compare identical coverage before comparing price</h2><p>For ${htmlEscape(state)} quotes, keep liability limits, physical-damage deductibles and optional protections consistent across carriers. A lower premium can simply reflect lower limits or fewer protections.</p></section>
+ <section><h2>Verify current ${htmlEscape(state)} requirements</h2><p>Insurance requirements and enforcement rules can change. Before buying, verify the current rules with the state insurance regulator and the insurer issuing the policy. We do not hard-code legal minimums here unless they have been freshly verified from an authoritative source.</p></section>
+ <section><h2>Check exclusions, deductibles and claim exposure</h2><p>Review the declarations page, deductible structure, uninsured or underinsured motorist options where applicable, rental or roadside options, and any exclusions that materially change the policy. Compare the policy, not only the monthly payment.</p></section>
+ <section class="sources"><h2>Authoritative starting points</h2><ul><li><a href="https://content.naic.org/state-insurance-departments" target="_blank" rel="noopener noreferrer">NAIC directory of state insurance departments</a></li><li><a href="/guides/how-to-compare-car-insurance-quotes">FindInsuranceQuotes.net comparison methodology</a></li></ul></section>
+ </main>`+footer();
+ return layout({title:state+" Car Insurance | Find Insurance Quotes",description:"How to compare "+state+" car insurance quotes and verify current state requirements.",canonical,body});
 }
 function send(res,status,type,body){res.writeHead(status,{"content-type":type,"cache-control":type.includes("text/html")?"public, max-age=60":"no-store"});res.end(body);}
 function staticFile(res,pathname){
@@ -136,9 +158,15 @@ const server=http.createServer(async(req,res)=>{
  if(req.method==="GET"&&p==="/api/health") return send(res,200,"application/json",JSON.stringify({ok:true,service:"findinsurancequotes",indexable:INDEXABLE,activePartners:partnerCatalog.filter(x=>x.status==="active").length}));
  if(req.method==="GET"&&p==="/api/partner"){const product=(url.searchParams.get("product")||"").toLowerCase();const partner=partnerFor(product);return send(res,200,"application/json",JSON.stringify(partner?{active:true,partner:{id:partner.id,name:partner.name,url:partner.url,payoutModel:partner.payoutModel}}:{active:false,reason:"No verified partner is active for this product yet."}));}
  if(req.method==="POST"&&p==="/api/chat"){const j=await readJson(req);return send(res,200,"application/json",JSON.stringify({reply:assistant(String(j.message||""))}));}
+ if(req.method==="GET"&&p==="/ads.txt"){if(!ADSENSE_CLIENT) return send(res,404,"text/plain; charset=utf-8",""); const pub=ADSENSE_CLIENT.replace(/^ca-/,""); return send(res,200,"text/plain; charset=utf-8",`google.com, ${pub}, DIRECT, f08c47fec0942fa0\n`);}
  if(req.method==="GET"&&p==="/robots.txt"){const base=baseUrl(req);return send(res,200,"text/plain; charset=utf-8",INDEXABLE?`User-agent: *\nAllow: /\nSitemap: ${base}/sitemap.xml\nSitemap: ${base}/news-sitemap.xml\n`:"User-agent: *\nDisallow: /\n");}
  if(req.method==="GET"&&p==="/sitemap.xml"){const base=baseUrl(req);const urls=["/","/guides",...Object.keys(trustPages),...articles.map(a=>"/guides/"+a.slug)];return send(res,200,"application/xml; charset=utf-8",`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map(x=>`<url><loc>${base+x}</loc></url>`).join("")}</urlset>`);}
  if(req.method==="GET"&&p==="/news-sitemap.xml"){const base=baseUrl(req);const fresh=articles.filter(a=>Date.now()-Date.parse(a.updated)<48*3600*1000);return send(res,200,"application/xml; charset=utf-8",`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${fresh.map(a=>`<url><loc>${base}/guides/${a.slug}</loc></url>`).join("")}</urlset>`);}
+ const decodedPath=decodeURI(p);
+ if(legacy.junkPatterns.some(x=>decodedPath.includes(x))) return send(res,410,"text/html; charset=utf-8",layout({title:"Gone | Find Insurance Quotes",description:"This historical URL is no longer part of the insurance publication.",canonical:baseUrl(req)+p,noindex:true,allowAds:false,body:header()+'<main class="content narrow"><h1>This historical page is gone</h1><p>It belonged to a later parking or technical phase and is intentionally not recycled into unrelated content.</p></main>'+footer()}));
+ if(legacy.aliases[p] || legacy.aliases[decodedPath]) { const to=legacy.aliases[p]||legacy.aliases[decodedPath]; res.writeHead(301,{location:to}); return res.end(); }
+ const legacyState=legacy.states.find(([slug])=>p==="/"+slug+"/"||p==="/"+slug);
+ if(legacyState) return send(res,200,"text/html; charset=utf-8",stateGuide(req,legacyState[0],legacyState[1]));
  if(req.method==="GET"&&p==="/") return send(res,200,"text/html; charset=utf-8",home(req));
  if(req.method==="GET"&&p==="/guides") return send(res,200,"text/html; charset=utf-8",guideIndex(req));
  if(req.method==="GET"&&p.startsWith("/category/")){
@@ -153,6 +181,6 @@ const server=http.createServer(async(req,res)=>{
  if(req.method==="GET"&&trustPages[p]) return send(res,200,"text/html; charset=utf-8",trustPage(req,p));
  if(req.method==="GET"&&p.startsWith("/guides/")){const slug=p.slice(8);const a=articles.find(x=>x.slug===slug);if(a)return send(res,200,"text/html; charset=utf-8",guidePage(req,a));}
  if(req.method==="GET"&&staticFile(res,p)) return;
- send(res,404,"text/html; charset=utf-8",layout({title:"Not found | Find Insurance Quotes",description:"Page not found.",canonical:baseUrl(req)+p,noindex:true,body:header()+'<main class="content narrow"><h1>Page not found</h1><p><a href="/">Return home</a></p></main>'+footer()}));
+ send(res,404,"text/html; charset=utf-8",layout({title:"Not found | Find Insurance Quotes",description:"Page not found.",canonical:baseUrl(req)+p,noindex:true,allowAds:false,body:header()+'<main class="content narrow"><h1>Page not found</h1><p><a href="/">Return home</a></p></main>'+footer()}));
 });
 server.listen(PORT,"0.0.0.0",()=>console.log(`findinsurancequotes listening on ${PORT}`));
