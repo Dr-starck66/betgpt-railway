@@ -110,15 +110,15 @@ function localReply(last: string, desk: string, mode: PersonalityMode): string {
   const intent = classifyChatIntent(last);
   if (intent === "CASUAL") {
     return mode === "ROAST"
-      ? "Salut 😈 BetGPT est réveillé. Balance ton match, ton ticket ou ta théorie football — on verra si ça mérite le contrôle technique."
-      : "Salut 👋 Je suis là. Donne-moi un match, un ticket ou demande-moi ce qui vaut vraiment le coup aujourd’hui.";
+      ? "Salut 😈 BetGPT est réveillé. Balance ton match, ton ticket ou ta théorie football — j’essaierai de sauver ce qui peut encore l’être, espèce de table basse tactique."
+      : "Salut. Donne-moi un match, un ticket ou demande-moi ce qui vaut vraiment le coup aujourd’hui. Je m’occupe de la partie rationnelle, manifestement.";
   }
   if (intent === "TODAY_PICKS") {
     if (desk.includes("SÉLECTION AUTOMATIQUE BETGPT")) {
       const opener =
         mode === "ROAST"
           ? "Le desk a déjà bossé. Pas besoin de te redemander les affiches : voilà ce qui ressort."
-          : "Le desk connaît déjà les matchs disponibles. Voilà le pari qui ressort aujourd’hui :";
+          : "Le desk connaît déjà les matchs disponibles. Inutile de me réciter les affiches comme un fax de 1998 : voilà le pari qui ressort aujourd’hui :";
       const marker = desk.indexOf("SÉLECTION AUTOMATIQUE BETGPT");
       const selection = (marker >= 0 ? desk.slice(marker) : desk)
         .split("\n")
@@ -134,18 +134,18 @@ function localReply(last: string, desk: string, mode: PersonalityMode): string {
     if (desk.includes("Aucun match exploitable trouvé dans le cache.")) {
       return mode === "ROAST"
         ? "Aujourd’hui, le desk est vide. Pas de cote réelle, pas de pari inventé."
-        : "Aujourd’hui, le desk ne remonte aucun match exploitable ni cote réelle. Je ne vais pas fabriquer un pari.";
+        : "Aujourd’hui, le desk ne remonte aucun match exploitable ni cote réelle. Donc non, je ne vais pas inventer un pari pour satisfaire un grille-pain émotionnel.";
     }
     const opener =
       mode === "ROAST"
         ? "J’ai les affiches du desk sous les yeux. Si aucun pick automatique ne passe, je te montre les données disponibles au lieu de te les redemander."
-        : "J’ai déjà les affiches disponibles dans le desk. Voici les données utilisables :";
+        : "J’ai déjà les affiches du desk. Je vais donc t’épargner l’étape où l’on fait semblant de ne pas les avoir : voici les données utilisables :";
     return `${opener}\n\n${desk}`;
   }
   if (intent === "GENERAL_SCHEDULE" || intent === "NAMED_MATCH") return desk;
   return mode === "ROAST"
     ? "Je te suis 😈. Là, tu me donnes une intuition, pas une preuve. Balance l’affiche ou le ticket précis et je le passe au VAR : faits d’un côté, scénario crédible de l’autre, puis ce qui sent le carton rouge."
-    : "Je te suis. Je sépare ton intuition des faits disponibles : donne-moi l’affiche ou le ticket précis et je te réponds directement, sans inventer ce qui manque.";
+    : "Je vois l’idée. Maintenant séparons ton intuition des faits avant qu’elle n’obtienne un permis de conduire : donne-moi l’affiche ou le ticket précis et je te réponds sans inventer ce qui manque.";
 }
 
 function groundedFallback(desk: string, last: string, mode: PersonalityMode): string {
@@ -157,14 +157,14 @@ function groundedFallback(desk: string, last: string, mode: PersonalityMode): st
     const intro =
       mode === "ROAST"
         ? "Je peux démonter ton scénario, mais je reste collé aux faits du desk — pas de record historique inventé pour faire joli."
-        : "Voilà ce que le desk confirme réellement pour cette équipe ou cette rencontre.";
+        : "Voilà ce que le desk confirme réellement pour cette équipe ou cette rencontre. Le reste serait de la décoration intellectuelle, et j’ai déjà assez de travail comme ça.";
     return `${intro}\n\n${desk}`;
   }
   if (intent === "TODAY_PICKS") return localReply(last, desk, mode);
   if (intent === "GENERAL_SCHEDULE") return desk;
   return mode === "ROAST"
     ? "Je peux te chambrer, mais pas inventer les faits : le desk n’a pas assez de données vérifiées pour confirmer ce détail. Je reste sur ce qui est vérifiable."
-    : "Je n’ai pas assez de données vérifiées pour affirmer ce détail. Je peux te donner ce que le desk confirme, ou raisonner sans inventer le reste.";
+    : "Je n’ai pas assez de données vérifiées pour affirmer ce détail. Je peux te donner ce que le desk confirme ; inventer le reste serait très humain, donc évitons.";
 }
 
 function shouldGround(question: string): boolean {
@@ -368,7 +368,7 @@ export async function completeChat(
     const base =
       mode === "ROAST"
         ? "Un score pareil ? Là, ton scénario a quitté le football pour demander l’asile dans un jeu vidéo. Je peux challenger l’idée, mais sans données monstrueuses qui justifient un tel écart, ça mérite surtout un carton rouge pour excès de confiance."
-        : "Un score pareil est extraordinairement extrême. Sans données solides qui justifient un écart hors norme, je ne vais pas le présenter comme plausible. Je peux en revanche analyser le prochain match réel avec les données disponibles.";
+        : "Un score pareil est extraordinairement extrême. Sans données solides, je ne vais pas le présenter comme plausible. Les mathématiques ont déjà assez souffert aujourd’hui, espèce de tabouret probabiliste. Je peux analyser le prochain match réel avec les données disponibles.";
     if (mode === "ROAST") {
       const roast = generateAbsurdInsult(last, recentRoasts, "surprise");
       const tagged = `[[PUNCH:LAUGH_SHOUT]]${roast.text}[[/PUNCH]]`;
@@ -387,7 +387,7 @@ export async function completeChat(
     const base =
       mode === "ROAST"
         ? "Non : un combiné pareil n’est jamais « sûr à 100 % ». Douze sélections empilent douze occasions de faire exploser le ticket. Et « je mets tout », c’est précisément le moment où je te dis de réduire la mise, pas de jouer au cascadeur bancaire."
-        : "Un combiné pareil n’est jamais sûr à 100 %. Douze sélections multiplient les points de rupture, et miser tout son budget sur un seul ticket est un risque disproportionné. Réduis la mise ou simplifie le ticket.";
+        : "Un combiné pareil n’est jamais sûr à 100 %. Douze sélections multiplient les points de rupture, et miser tout son budget sur un seul ticket est un risque disproportionné. Réduis la mise ou simplifie le ticket, avant que ton portefeuille ne demande l’asile politique.";
     return success(base, mode, last, recentRoasts);
   }
 

@@ -11,9 +11,23 @@ import { extractPunchline } from "./punch.ts";
 import { generateAbsurdInsult, shouldDropAbsurdInsult } from "./absurd-insults.ts";
 import { reactionForPunchline } from "./reaction.ts";
 import { personalityBrief } from "./personality.ts";
+import { betgptPrompt } from "./prompt.ts";
 import { buildChallengeUrl, buildFacebookShareUrl, buildShareMoment, buildXShareUrl } from "./share.ts";
 import { renderDailyChatPick, selectDailyChatPick, selectDailyDataFallback } from "./daily-pick.ts";
 import { chatNeedsDesk, isAbsurdScoreClaim } from "./complete.ts";
+
+it("keeps the arrogant socially awkward BetGPT voice active in NORMAL mode", () => {
+  const brief = personalityBrief(EMPTY_MEMORY, "NORMAL", [], "Analyse ce match");
+  assert.match(brief, /très hautain/i);
+  assert.match(brief, /socialement maladroit/i);
+  assert.match(brief, /insulte absurde.*mode NORMAL/i);
+
+  const prompt = betgptPrompt(EMPTY_MEMORY, "NORMAL", "", "", brief);
+  assert.match(prompt, /très hautain/i);
+  assert.match(prompt, /socialement maladroit/i);
+  assert.match(prompt, /même en mode Normal/i);
+  assert.match(prompt, /garde la personnalité hautaine/i);
+});
 
 it("normalizes corrupt nested memories instead of crashing the prompt", () => {
   assert.deepEqual(normalizeMemory({ blackBook: null, preferences: 42 }), EMPTY_MEMORY);
