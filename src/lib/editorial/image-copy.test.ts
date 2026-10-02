@@ -19,13 +19,13 @@ describe("ASTRA public image copy guard", () => {
   it("builds a contextual football caption instead of a production disclaimer", () => {
     const article = {
       h1: "France – Italie : les clés du match",
-      teams: ["France", "Italie"],
-      competition: "Ligue des nations",
+      teams: ["France", "Italy"],
+      competition: "UEFA Nations League",
     } as EditorialArticle;
     const caption = editorialImageCaption(article);
     assert.equal(
       caption,
-      "France – Italie en Ligue des nations : informations, contexte et analyse du match.",
+      "France – Italie en Ligue des nations de l’UEFA : informations, contexte et analyse du match.",
     );
     assert.equal(containsInternalImageCopy(caption), false);
   });
