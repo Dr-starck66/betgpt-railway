@@ -7,11 +7,11 @@ export const Route = createFileRoute("/pronostics-football/")({
   loader: () => getPublicDesk(),
   head: () => ({
     meta: [
-      { title: "Pronostics football : compétitions, aujourd’hui et demain | BetGPT" },
+      { title: "Pronostics football du jour : analyses 1N2 et cotes | BetGPT" },
       {
         name: "description",
         content:
-          "Hub des pronostics football BetGPT. Ligue 1, Premier League, Liga, Bundesliga, Serie A, Ligue des champions et Ligue Europa.",
+          "Pronostics football du jour BetGPT : estimation 1N2, probabilité, cote et décision claire. Résultats conservés et bilan vérifiable.",
       },
       { name: "robots", content: "index, follow" },
       { property: "og:url", content: `${SITE_URL}/pronostics-football` },
@@ -25,8 +25,8 @@ function Page() {
   const desk = Route.useLoaderData();
   return (
     <PronoSilo
-      h1="Pronostics football"
-      lead={`Pages par jour et par compétition. ${filterSiloMatches(desk, {}).length} matchs ont une estimation dans la fenêtre actuelle. Le bureau opérationnel reste sur Pronos football.`}
+      h1="Pronostics football du jour"
+      lead={`${filterSiloMatches(desk, {}).length} matchs ont une estimation dans la fenêtre actuelle. Chaque fiche sépare le pronostic principal 1N2, la probabilité du modèle, la cote disponible et la décision PARIER, ATTENDRE ou NE PAS PARIER.`}
       path="/pronostics-football"
       kind="football"
       desk={desk}
