@@ -454,31 +454,96 @@
     "slug": "health-plan-total-cost-checklist",
     "category": "Health insurance",
     "title": "Health Insurance: Compare Total Cost, Not Just the Monthly Premium",
-    "description": "A framework for comparing premiums, deductibles, copays, coinsurance, networks, prescriptions and out-of-pocket limits.",
+    "description": "A practical US health-insurance comparison framework covering premiums, deductibles, copays, coinsurance, out-of-pocket limits, provider networks, prescriptions and expected use.",
     "updated": "2026-10-02",
+    "heroImage": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1600&h=900&q=82",
+    "heroAlt": "A clinician reviewing paperwork, representing the costs and coverage details consumers compare in health insurance.",
+    "imageCredit": "Unsplash",
+    "imageCreditUrl": "https://unsplash.com/",
+    "keyTakeaways": [
+      "Premium is only one part of what you may spend on health care.",
+      "Compare deductible, copays, coinsurance and out-of-pocket maximum together.",
+      "Verify doctors, hospitals and prescriptions using the current plan network and formulary.",
+      "Model a low-use year, an expected-use year and a high-cost year.",
+      "Subsidies, employer contributions and HSA eligibility can change the household economics."
+    ],
     "sections": [
       {
-        "heading": "Premium is only one part of cost",
-        "text": "A plan with a low monthly premium may carry a higher deductible, coinsurance requirement or out-of-pocket maximum. Compare the premium together with the amount you could pay when using care, especially if you expect regular prescriptions, specialist visits or planned procedures."
+        "heading": "Why the lowest premium can be the wrong comparison",
+        "body": "The monthly premium is easy to compare because it is visible and predictable, but it is only the price of keeping the plan in force. When you use health care, you may also face deductibles, copays, coinsurance and other cost sharing. A plan with a low premium can therefore cost more over a year if you use enough care, while a higher-premium plan may reduce what you pay when services are needed.\n\nHealthCare.gov encourages consumers to consider total yearly costs rather than premium alone. That means looking at the premium you pay after any employer contribution or subsidy, then estimating the cost sharing under realistic use. The comparison should also include the provider network and covered-drug list because an apparently generous cost-sharing design may be a poor fit if your clinicians or prescriptions are not covered as expected.\n\nThere is no single plan that is cheapest for everyone. A healthy person expecting little care and a person managing a chronic condition can rationally value the same plans differently. The useful goal is to model the household's likely use and the consequences of a bad medical year instead of ranking plans by premium only."
       },
       {
-        "heading": "Verify the provider and drug networks",
-        "text": "A plan can be poor value if the doctors, hospitals or medicines you rely on are not covered as expected. Check network participation and the formulary directly with the plan before enrollment, because directories and covered-drug lists can change."
+        "heading": "Start with the premium you actually pay",
+        "body": "Use the household's net premium, not the plan's full sticker price, when comparing options. Employer plans can include substantial employer contributions. Marketplace plans may qualify for premium tax credits depending on eligibility and current law. The amount shown before those contributions can misrepresent your actual budget.\n\nConfirm whether the premium is deducted pre-tax or after tax through an employer plan, and ask a tax professional when needed. If comparing marketplace options, use the official Marketplace and current household information rather than an old article or generic subsidy calculator.\n\nAlso check whether the premium changes when dependents are added. One plan may be attractive for an employee alone but less attractive for family coverage. Compare the exact enrollment tier you need. Finally, remember that premiums generally do not count toward the plan's out-of-pocket maximum, so the premium remains a cost even in a year when medical spending reaches that maximum."
       },
       {
-        "heading": "Model likely and worst-case use",
-        "text": "It can help to compare at least two scenarios: a normal year based on your expected use and a high-cost year approaching the plan's out-of-pocket limit. This makes trade-offs between premium and cost sharing easier to see."
+        "heading": "The deductible tells you when some cost sharing changes, not your total annual cost",
+        "body": "A deductible is generally the amount you pay for covered services before the plan begins paying for certain benefits, subject to the plan. Some services can be covered before the deductible, and family plans can use individual and family deductibles in different ways. Do not assume every office visit or prescription is subject to the same deductible.\n\nWhen comparing plans, identify which services are subject to the deductible and which use copays or other cost sharing before it is met. A plan with a $2,000 deductible may still provide certain preventive services or fixed copays without requiring the full deductible first, depending on the contract and applicable law.\n\nFor family coverage, read whether the plan uses embedded individual deductibles or an aggregate family structure. That design can affect how quickly benefits begin for one family member with high expenses. The Summary of Benefits and Coverage is a useful standardized document for comparing these features."
+      },
+      {
+        "heading": "Copays and coinsurance behave differently",
+        "body": "A copay is a fixed amount for a covered service under the plan's terms, while coinsurance is a percentage of the allowed amount. A plan can use both. Primary-care visits may have a copay while hospital services use coinsurance after the deductible, for example.\n\nCoinsurance can be difficult to estimate because you may not know the plan's negotiated allowed amount in advance. Use plan cost-estimator tools when available and ask providers or the insurer for estimates for planned care. Do not calculate coinsurance from the provider's sticker price unless the plan confirms that is the relevant basis.\n\nCompare cost sharing for the services you actually expect: primary care, specialists, urgent care, emergency care, imaging, outpatient surgery, inpatient hospitalization, therapy and prescriptions. A plan can be excellent for one pattern of use and less attractive for another."
+      },
+      {
+        "heading": "The out-of-pocket maximum is a key high-cost-year number",
+        "body": "For covered in-network care under plans subject to federal limits, the out-of-pocket maximum caps certain eligible cost sharing during the plan year. Premiums do not count toward it, and spending on services that are not covered or not treated as in-network may not count. The plan documents define what accumulates.\n\nThis number is valuable for stress testing. Add the annual premium to the in-network out-of-pocket maximum to create a rough upper-bound planning figure for covered in-network medical cost sharing, while recognizing that excluded services and out-of-network costs can still sit outside it.\n\nDo not use the maximum as a prediction. Most people will not reach it every year. Use it as a high-cost scenario. Comparing that scenario across plans can reveal that a low-premium plan shifts much more risk to the household in a serious illness or injury."
+      },
+      {
+        "heading": "Provider networks can outweigh a premium difference",
+        "body": "Health plans contract with networks of doctors, hospitals, laboratories, pharmacies and other providers. Out-of-network care may cost more or may not be covered except in specific circumstances. The plan type—HMO, PPO, EPO or another structure—can influence those rules, but the actual network is more important than the acronym.\n\nBefore enrolling, search the insurer's current directory and then confirm directly with important providers. Ask the office whether it participates in the exact plan, not merely the insurer's brand. Provider networks can change, so verification should be close to enrollment.\n\nIf you are receiving ongoing treatment, check hospitals, specialists, therapists, labs and facilities involved in the care, not only the primary doctor. A network mismatch can create disruption that outweighs a modest premium saving."
+      },
+      {
+        "heading": "Prescription coverage needs its own comparison",
+        "body": "Every plan has a formulary or covered-drug list with tiers, utilization rules and preferred pharmacies. A medication can be covered on one plan and require prior authorization, step therapy or a higher tier on another. Generic, preferred brand, non-preferred brand and specialty drugs can have very different cost sharing.\n\nList the medications you expect to use, including dose and formulation. Search each plan's current formulary and check whether the pharmacy you use is preferred. If a drug is not covered, ask what alternatives or exception process exists rather than assuming the cash price will be manageable.\n\nFor expensive medications, specialty-pharmacy rules and coinsurance can materially change the annual cost. A plan with a slightly higher premium can be cheaper overall if it covers a necessary drug more favorably."
+      },
+      {
+        "heading": "Model three years: low use, expected use and high use",
+        "body": "Create three scenarios rather than trying to predict one precise total. In a low-use year, include annual premiums and the cost sharing for routine care you realistically expect. In an expected-use year, add regular prescriptions, specialist visits, therapy or planned procedures. In a high-use year, consider the plan's in-network out-of-pocket maximum plus premiums as a stress case.\n\nThis scenario method makes trade-offs visible. A high-deductible plan may win in the low-use year because of a lower premium, while a richer plan may become competitive if frequent services are expected. The high-use scenario shows the household's maximum planned exposure for covered in-network care.\n\nUse actual plan documents and estimator tools when possible. Do not invent national average usage. The value of the exercise is personalization through your own expected services, not a generic forecast."
+      },
+      {
+        "heading": "HSA eligibility and employer contributions can change the comparison",
+        "body": "Some high-deductible health plans are HSA-eligible under federal rules. An HSA can provide tax advantages and allow unused funds to roll over, but eligibility requirements and contribution limits are set by the IRS and can change. Do not assume every plan with a high deductible qualifies.\n\nIf an employer contributes to an HSA, include that contribution in the economic comparison. It can offset some deductible exposure. Also consider your ability to fund the account; the tax benefit does not eliminate the need for cash when care is required.\n\nCompare the insurance plan first and the savings account second. A plan should not be chosen solely because “HSA” sounds attractive if the network, prescription coverage or cost-sharing design is a poor fit."
+      },
+      {
+        "heading": "A final total-cost comparison checklist",
+        "body": "For each plan, record net annual premium, deductible, family deductible if applicable, primary and specialist copays, coinsurance, prescription tiers, in-network out-of-pocket maximum, out-of-network rules, key providers, hospitals, pharmacies and important medications.\n\nAdd employer or HSA contributions, then run the three usage scenarios. Mark any uncertain item and verify it with the insurer before enrollment. Keep the Summary of Benefits and Coverage and plan documents.\n\nThe best comparison is transparent enough that another person can see why one plan costs more in one scenario and less in another. Premium is the starting line, not the finish line."
+      }
+    ],
+    "faq": [
+      {
+        "q": "Is a lower health-insurance premium always better?",
+        "a": "No. Lower-premium plans can have higher deductibles or cost sharing. Compare expected total yearly costs and the high-cost-year exposure."
+      },
+      {
+        "q": "Does the out-of-pocket maximum include premiums?",
+        "a": "Generally no. Premiums are separate from the cost sharing that accumulates toward the plan's out-of-pocket maximum."
+      },
+      {
+        "q": "Should I trust the insurer's provider directory?",
+        "a": "Use it, but also confirm important providers directly because network participation can change. Verify the exact plan, not just the insurer name."
+      },
+      {
+        "q": "How do I compare prescription costs?",
+        "a": "Check each plan's current formulary, tier, prior-authorization rules and preferred pharmacies for the exact medications you use."
       }
     ],
     "sources": [
-      [
-        "HealthCare.gov — How to pick a plan",
-        "https://www.healthcare.gov/choose-a-plan/"
-      ],
-      [
-        "CMS",
-        "https://www.cms.gov/"
-      ]
+      {
+        "name": "HealthCare.gov — Your total costs for health care",
+        "url": "https://www.healthcare.gov/choose-a-plan/your-total-costs/"
+      },
+      {
+        "name": "HealthCare.gov — Plan types",
+        "url": "https://www.healthcare.gov/choose-a-plan/plan-types/"
+      },
+      {
+        "name": "CMS",
+        "url": "https://www.cms.gov/"
+      }
+    ],
+    "relatedSlugs": [
+      "health-insurance-deductible-vs-out-of-pocket-max",
+      "hmo-vs-ppo-vs-epo"
     ]
   },
   {
