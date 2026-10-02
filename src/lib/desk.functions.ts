@@ -852,6 +852,7 @@ function forumFullThread(t: ReturnType<typeof buildForum>[number]) {
 }
 
 async function forumDesk() {
+  await hydrateTickets().catch(() => undefined);
   LAST_DESK = deskMem.__betgptLastDesk ?? LAST_DESK;
   DESK_REFRESH = deskMem.__betgptDeskRefresh ?? DESK_REFRESH;
   if (LAST_DESK) {
