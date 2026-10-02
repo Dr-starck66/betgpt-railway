@@ -608,16 +608,39 @@ export function ChatPanel({
           return (
             <div key={msg.id} className={cn("flex items-end gap-2", mine ? "justify-end" : "justify-start")}>
               {!mine ? (
-                <img
-                  src="/betgpt-mascot-avatar.webp"
-                  alt=""
+                <div
+                  className={cn(
+                    "relative mb-0.5 h-10 w-10 shrink-0 overflow-visible rounded-xl",
+                    streaming && "animate-[bounce_0.7s_ease-in-out_infinite]",
+                  )}
                   aria-hidden="true"
-                  width={32}
-                  height={32}
-                  loading="lazy"
-                  decoding="async"
-                  className="mb-0.5 h-8 w-8 shrink-0 rounded-xl border border-sage/30 object-cover shadow-sm"
-                />
+                >
+                  <span
+                    className={cn(
+                      "pointer-events-none absolute -inset-1 rounded-2xl bg-sage/25 blur-md transition-opacity",
+                      streaming ? "animate-pulse opacity-100" : "opacity-0",
+                    )}
+                  />
+                  <img
+                    src="/betgpt-mascot-avatar.webp"
+                    alt=""
+                    width={40}
+                    height={40}
+                    loading="eager"
+                    decoding="async"
+                    className={cn(
+                      "relative h-10 w-10 rounded-xl border border-sage/30 object-cover shadow-sm transition-transform",
+                      streaming && "scale-105",
+                    )}
+                  />
+                  {streaming ? (
+                    <span className="absolute -bottom-1 -right-1 flex h-4 min-w-4 items-center justify-center gap-[2px] rounded-full border border-white bg-paper px-1 shadow-sm">
+                      <i className="h-1 w-1 animate-[bounce_0.55s_ease-in-out_infinite] rounded-full bg-sage" />
+                      <i className="h-1 w-1 animate-[bounce_0.55s_ease-in-out_0.12s_infinite] rounded-full bg-sage" />
+                      <i className="h-1 w-1 animate-[bounce_0.55s_ease-in-out_0.24s_infinite] rounded-full bg-sage" />
+                    </span>
+                  ) : null}
+                </div>
               ) : null}
               <div
                 className={cn(
@@ -651,7 +674,11 @@ export function ChatPanel({
                   </div>
                 ) : null}
                 {streaming && (
-                  <span className="ml-1 inline-block h-3 w-1.5 animate-pulse bg-sage align-middle" />
+                  <span className="ml-1 inline-flex items-center gap-1 align-middle" aria-label="BetGPT répond">
+                    <span className="h-1.5 w-1.5 animate-[bounce_0.6s_ease-in-out_infinite] rounded-full bg-sage" />
+                    <span className="h-1.5 w-1.5 animate-[bounce_0.6s_ease-in-out_0.12s_infinite] rounded-full bg-sage" />
+                    <span className="h-1.5 w-1.5 animate-[bounce_0.6s_ease-in-out_0.24s_infinite] rounded-full bg-sage" />
+                  </span>
                 )}
               </div>
             </div>
