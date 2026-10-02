@@ -237,7 +237,14 @@
     "related": [
       {
         "href": "/actualites/affaire-negreira-uefa-documents-real-madrid-barca-repond-2026-10-01",
-        "title": "Affaire Negreira : l’UEFA reçoit les documents du Real Madrid, le Barça répond point par point"
+        "title": "Affaire Negreira : l’UEFA reçoit les documents du Real Madrid, le Barça répond point par point",
+        "image": {
+          "src": "/blog/discover/inline-flags.jpg",
+          "alt": "Drapeaux et tribunes dans un stade de football, photo d’illustration",
+          "width": 1200,
+          "height": 675,
+          "credit": "Photo d’illustration libre de droits (Unsplash ou Pexels), recadrée par BetGPT en 1200×675. Elle n’illustre pas une scène précise de l’affaire Negreira."
+        }
       }
     ],
     "quality": {
@@ -402,19 +409,36 @@
     "related": [
       {
         "href": "/actualites/france-italie-ligue-des-nations-a-match-en-direct-le-02-10-2026-2026-10-02",
-        "title": "France - Italie, Ligue des nations A, match en direct le 02/10/2026"
-      },
-      {
-        "href": "/actualites/france-italie-ligue-des-nations-a-match-en-direct-le-02-10-2026-2026-10-02",
-        "title": "France - Italie, Ligue des nations A, match en direct le 02/10/2026"
+        "title": "France - Italie, Ligue des nations A, match en direct le 02/10/2026",
+        "image": {
+          "src": "/blog/discover/inline-night.jpg",
+          "alt": "Stade de football éclairé la nuit, photo d'illustration libre de droits",
+          "width": 1200,
+          "height": 675,
+          "credit": "Illustration libre de droits (Unsplash ou Pexels), recadrée par BetGPT en 1200×675. Ce n'est pas une photo du match cité."
+        }
       },
       {
         "href": "/actualites/france-italie-ligue-des-nations-2026-10-02",
-        "title": "France–Italie : horaire, forme, enjeu du groupe et ce qu’il faut savoir avant le choc"
+        "title": "France–Italie : horaire, forme, enjeu du groupe et ce qu’il faut savoir avant le choc",
+        "image": {
+          "src": "/blog/discover/inline-crowd.jpg",
+          "alt": "Tribunes pleines dans un stade de football avant une grande affiche internationale",
+          "width": 1200,
+          "height": 675,
+          "credit": "Photo d’illustration libre de droits intégrée à la bibliothèque BetGPT et recadrée au format Discover 1200×675. Elle n’illustre pas une action précise de France–Italie."
+        }
       },
       {
         "href": "/actualites/azerbaijan-liechtenstein-postmatch-2026-10-01",
-        "title": "Azerbaijan – Liechtenstein : 0–0, résultat et faits du match"
+        "title": "Azerbaijan – Liechtenstein : 0–0, résultat et faits du match",
+        "image": {
+          "src": "/blog/discover/inline-action.jpg",
+          "alt": "Joueurs de football en action, photo d'illustration libre de droits",
+          "width": 1200,
+          "height": 675,
+          "credit": "Illustration libre de droits (Unsplash ou Pexels), recadrée par BetGPT en 1200×675. Ce n'est pas une photo du match cité."
+        }
       }
     ],
     "discoverOpportunity": {
@@ -558,19 +582,36 @@
     "related": [
       {
         "href": "/actualites/france-italie-ligue-des-nations-a-match-en-direct-le-02-10-2026-2026-10-02",
-        "title": "France - Italie, Ligue des nations A, match en direct le 02/10/2026"
-      },
-      {
-        "href": "/actualites/france-italie-ligue-des-nations-a-match-en-direct-le-02-10-2026-2026-10-02",
-        "title": "France - Italie, Ligue des nations A, match en direct le 02/10/2026"
+        "title": "France - Italie, Ligue des nations A, match en direct le 02/10/2026",
+        "image": {
+          "src": "/blog/discover/inline-night.jpg",
+          "alt": "Stade de football éclairé la nuit, photo d'illustration libre de droits",
+          "width": 1200,
+          "height": 675,
+          "credit": "Illustration libre de droits (Unsplash ou Pexels), recadrée par BetGPT en 1200×675. Ce n'est pas une photo du match cité."
+        }
       },
       {
         "href": "/actualites/france-italie-ligue-des-nations-2026-10-02",
-        "title": "France–Italie : horaire, forme, enjeu du groupe et ce qu’il faut savoir avant le choc"
+        "title": "France–Italie : horaire, forme, enjeu du groupe et ce qu’il faut savoir avant le choc",
+        "image": {
+          "src": "/blog/discover/inline-crowd.jpg",
+          "alt": "Tribunes pleines dans un stade de football avant une grande affiche internationale",
+          "width": 1200,
+          "height": 675,
+          "credit": "Photo d’illustration libre de droits intégrée à la bibliothèque BetGPT et recadrée au format Discover 1200×675. Elle n’illustre pas une action précise de France–Italie."
+        }
       },
       {
         "href": "/actualites/equipe-de-france-dembele-est-il-le-leader-d-attaque-2026-10-01",
-        "title": "Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ?"
+        "title": "Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ?",
+        "image": {
+          "src": "/blog/discover/inline-live.jpg",
+          "alt": "Supporters pendant un match de football, photo d'illustration libre de droits",
+          "width": 1200,
+          "height": 675,
+          "credit": "Illustration libre de droits (Unsplash ou Pexels), recadrée par BetGPT en 1200×675. Ce n'est pas une photo du match cité."
+        }
       }
     ],
     "discoverOpportunity": {
@@ -795,7 +836,14 @@
     "related": [
       {
         "href": "/actualites/real-madrid-mbappe-recuperation-paris-2026-10-01",
-        "title": "Mbappé à Paris pendant sa récupération : ce que le Real Madrid a réellement autorisé"
+        "title": "Mbappé à Paris pendant sa récupération : ce que le Real Madrid a réellement autorisé",
+        "image": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Kylian_Mbappe_France_v_Spain_7.24.26-051.jpg",
+          "alt": "Kylian Mbappé avec l'équipe de France en 2026, photo d'illustration",
+          "width": 5000,
+          "height": 3333,
+          "credit": "Kylian Mbappé lors de France–Espagne à la Coupe du monde 2026 — Bryan Berlin / WikiPortraits, CC BY-SA 4.0, Wikimedia Commons. Photo d'illustration, sans lien avec son déplacement à Paris."
+        }
       }
     ],
     "quality": {
@@ -1006,19 +1054,36 @@
     "related": [
       {
         "href": "/actualites/france-italie-ligue-des-nations-a-match-en-direct-le-02-10-2026-2026-10-02",
-        "title": "France - Italie, Ligue des nations A, match en direct le 02/10/2026"
-      },
-      {
-        "href": "/actualites/france-italie-ligue-des-nations-a-match-en-direct-le-02-10-2026-2026-10-02",
-        "title": "France - Italie, Ligue des nations A, match en direct le 02/10/2026"
+        "title": "France - Italie, Ligue des nations A, match en direct le 02/10/2026",
+        "image": {
+          "src": "/blog/discover/inline-night.jpg",
+          "alt": "Stade de football éclairé la nuit, photo d'illustration libre de droits",
+          "width": 1200,
+          "height": 675,
+          "credit": "Illustration libre de droits (Unsplash ou Pexels), recadrée par BetGPT en 1200×675. Ce n'est pas une photo du match cité."
+        }
       },
       {
         "href": "/actualites/equipe-de-france-dembele-est-il-le-leader-d-attaque-2026-10-01",
-        "title": "Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ?"
+        "title": "Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ?",
+        "image": {
+          "src": "/blog/discover/inline-live.jpg",
+          "alt": "Supporters pendant un match de football, photo d'illustration libre de droits",
+          "width": 1200,
+          "height": 675,
+          "credit": "Illustration libre de droits (Unsplash ou Pexels), recadrée par BetGPT en 1200×675. Ce n'est pas une photo du match cité."
+        }
       },
       {
         "href": "/actualites/azerbaijan-liechtenstein-postmatch-2026-10-01",
-        "title": "Azerbaijan – Liechtenstein : 0–0, résultat et faits du match"
+        "title": "Azerbaijan – Liechtenstein : 0–0, résultat et faits du match",
+        "image": {
+          "src": "/blog/discover/inline-action.jpg",
+          "alt": "Joueurs de football en action, photo d'illustration libre de droits",
+          "width": 1200,
+          "height": 675,
+          "credit": "Illustration libre de droits (Unsplash ou Pexels), recadrée par BetGPT en 1200×675. Ce n'est pas une photo du match cité."
+        }
       }
     ],
     "quality": {
@@ -1201,15 +1266,36 @@
     "related": [
       {
         "href": "/actualites/france-italie-ligue-des-nations-2026-10-02",
-        "title": "France–Italie : horaire, forme, enjeu du groupe et ce qu’il faut savoir avant le choc"
+        "title": "France–Italie : horaire, forme, enjeu du groupe et ce qu’il faut savoir avant le choc",
+        "image": {
+          "src": "/blog/discover/inline-crowd.jpg",
+          "alt": "Tribunes pleines dans un stade de football avant une grande affiche internationale",
+          "width": 1200,
+          "height": 675,
+          "credit": "Photo d’illustration libre de droits intégrée à la bibliothèque BetGPT et recadrée au format Discover 1200×675. Elle n’illustre pas une action précise de France–Italie."
+        }
       },
       {
         "href": "/actualites/equipe-de-france-dembele-est-il-le-leader-d-attaque-2026-10-01",
-        "title": "Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ?"
+        "title": "Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ?",
+        "image": {
+          "src": "/blog/discover/inline-live.jpg",
+          "alt": "Supporters pendant un match de football, photo d'illustration libre de droits",
+          "width": 1200,
+          "height": 675,
+          "credit": "Illustration libre de droits (Unsplash ou Pexels), recadrée par BetGPT en 1200×675. Ce n'est pas une photo du match cité."
+        }
       },
       {
         "href": "/actualites/azerbaijan-liechtenstein-postmatch-2026-10-01",
-        "title": "Azerbaijan – Liechtenstein : 0–0, résultat et faits du match"
+        "title": "Azerbaijan – Liechtenstein : 0–0, résultat et faits du match",
+        "image": {
+          "src": "/blog/discover/inline-action.jpg",
+          "alt": "Joueurs de football en action, photo d'illustration libre de droits",
+          "width": 1200,
+          "height": 675,
+          "credit": "Illustration libre de droits (Unsplash ou Pexels), recadrée par BetGPT en 1200×675. Ce n'est pas une photo du match cité."
+        }
       }
     ],
     "discoverOpportunity": {
@@ -1402,15 +1488,36 @@
     "related": [
       {
         "href": "/actualites/france-italie-ligue-des-nations-2026-10-02",
-        "title": "France–Italie : horaire, forme, enjeu du groupe et ce qu’il faut savoir avant le choc"
+        "title": "France–Italie : horaire, forme, enjeu du groupe et ce qu’il faut savoir avant le choc",
+        "image": {
+          "src": "/blog/discover/inline-crowd.jpg",
+          "alt": "Tribunes pleines dans un stade de football avant une grande affiche internationale",
+          "width": 1200,
+          "height": 675,
+          "credit": "Photo d’illustration libre de droits intégrée à la bibliothèque BetGPT et recadrée au format Discover 1200×675. Elle n’illustre pas une action précise de France–Italie."
+        }
       },
       {
         "href": "/actualites/equipe-de-france-dembele-est-il-le-leader-d-attaque-2026-10-01",
-        "title": "Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ?"
+        "title": "Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ?",
+        "image": {
+          "src": "/blog/discover/inline-live.jpg",
+          "alt": "Supporters pendant un match de football, photo d'illustration libre de droits",
+          "width": 1200,
+          "height": 675,
+          "credit": "Illustration libre de droits (Unsplash ou Pexels), recadrée par BetGPT en 1200×675. Ce n'est pas une photo du match cité."
+        }
       },
       {
         "href": "/actualites/azerbaijan-liechtenstein-postmatch-2026-10-01",
-        "title": "Azerbaijan – Liechtenstein : 0–0, résultat et faits du match"
+        "title": "Azerbaijan – Liechtenstein : 0–0, résultat et faits du match",
+        "image": {
+          "src": "/blog/discover/inline-action.jpg",
+          "alt": "Joueurs de football en action, photo d'illustration libre de droits",
+          "width": 1200,
+          "height": 675,
+          "credit": "Illustration libre de droits (Unsplash ou Pexels), recadrée par BetGPT en 1200×675. Ce n'est pas une photo du match cité."
+        }
       }
     ],
     "discoverOpportunity": {
