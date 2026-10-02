@@ -1,9 +1,9 @@
 import type { LeagueId } from "./types";
 
 /**
- * A forum leaf may be advertised to search engines only when its league has
- * durable historical or persisted prediction coverage. Live-only leagues stay usable in the UI, but
- * are not promised as permanent indexable URLs.
+ * Every league supported by BetGPT may expose a durable agent-first forum.
+ * Forum leaves are persisted independently from the short live desk window,
+ * so indexability no longer depends on a small historical-league allowlist.
  */
 export const DURABLE_FORUM_LEAGUES = new Set<LeagueId>([
   "PL",
@@ -11,6 +11,10 @@ export const DURABLE_FORUM_LEAGUES = new Set<LeagueId>([
   "BL",
   "SA",
   "L1",
+  "ER",
+  "PT",
+  "SC",
+  "TR",
   "CL",
   "EL",
   "NL",
