@@ -84,6 +84,12 @@ async function deskNow(question: string): Promise<string> {
   }
 }
 
+export function isAbsurdScoreClaim(text: string): boolean {
+  const numeric = text.match(/\b(\d{2,3})\s*[-–—:àa]\s*0\b/i);
+  if (numeric && Number(numeric[1]) >= 10) return true;
+  return /\b(?:dix(?:[-\s](?:sept|huit|neuf))?|onze|douze|treize|quatorze|quinze|seize|vingt(?:[-\s](?:et[-\s])?(?:un|deux|trois|quatre|cinq|six|sept|huit|neuf))?|trente(?:[-\s](?:et[-\s])?(?:un|deux|trois|quatre|cinq|six|sept|huit|neuf))?|quarante(?:[-\s](?:et[-\s])?(?:un|deux|trois|quatre|cinq|six|sept|huit|neuf))?|cinquante(?:[-\s](?:et[-\s])?(?:un|deux|trois|quatre|cinq|six|sept|huit|neuf))?|soixante(?:[-\s](?:et[-\s])?(?:un|deux|trois|quatre|cinq|six|sept|huit|neuf))?|cent)\s*(?:[-–—:]|à|a)\s*z[eé]ro(?:s)?\b/i.test(text);
+}
+
 function localReply(last: string, desk: string, mode: PersonalityMode): string {
   const intent = classifyChatIntent(last);
   if (intent === "CASUAL") {
@@ -122,8 +128,8 @@ function localReply(last: string, desk: string, mode: PersonalityMode): string {
   }
   if (intent === "GENERAL_SCHEDULE" || intent === "NAMED_MATCH") return desk;
   return mode === "ROAST"
-    ? "Le moteur conversationnel est momentanément en secours local. Je peux toujours vérifier un match ou démonter un ticket, mais je ne vais pas broder pour remplir."
-    : "Le moteur conversationnel est momentanément en secours local. Je peux toujours vérifier un match ou un ticket à partir des données disponibles, sans inventer.";
+    ? "Je te suis 😈. Là, tu me donnes une intuition, pas une preuve. Balance l’affiche ou le ticket précis et je le passe au VAR : faits d’un côté, scénario crédible de l’autre, puis ce qui sent le carton rouge."
+    : "Je te suis. Je sépare ton intuition des faits disponibles : donne-moi l’affiche ou le ticket précis et je te réponds directement, sans inventer ce qui manque.";
 }
 
 function groundedFallback(desk: string, last: string, mode: PersonalityMode): string {
@@ -334,13 +340,12 @@ export async function completeChat(
   const system = betgptPrompt(memory, mode, desk, insultBrief, personality);
   const mustGround = shouldGround(last);
 
-  const absurdScoreClaim =
-    /\b(?:20\s*[-–àa]\s*0|vingt(?:s)?\s*(?:[-–àa]|[àa])\s*z[eé]ro(?:s)?|10\s*[-–àa]\s*0|dix\s*(?:[-–àa]|[àa])\s*z[eé]ro(?:s)?)\b/i.test(last);
+  const absurdScoreClaim = isAbsurdScoreClaim(last);
   if (absurdScoreClaim) {
     const base =
       mode === "ROAST"
-        ? "20-0 ? Là, ton scénario a quitté le football pour demander l’asile dans un jeu vidéo. Je peux challenger l’idée, mais je ne vais pas inventer un massacre pareil : sans données solides qui pointent vers un écart gigantesque, c’est du délire pur."
-        : "20-0 est un scénario extraordinairement extrême. Sans données solides qui justifient un écart hors norme, je ne vais pas le présenter comme plausible. Je peux en revanche analyser le prochain match réel de la France avec les données disponibles.";
+        ? "Un score pareil ? Là, ton scénario a quitté le football pour demander l’asile dans un jeu vidéo. Je peux challenger l’idée, mais sans données monstrueuses qui justifient un tel écart, ça mérite surtout un carton rouge pour excès de confiance."
+        : "Un score pareil est extraordinairement extrême. Sans données solides qui justifient un écart hors norme, je ne vais pas le présenter comme plausible. Je peux en revanche analyser le prochain match réel avec les données disponibles.";
     if (mode === "ROAST") {
       const roast = generateAbsurdInsult(last, recentRoasts, "surprise");
       const tagged = `[[PUNCH:LAUGH_SHOUT]]${roast.text}[[/PUNCH]]`;
