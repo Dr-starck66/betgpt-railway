@@ -82,7 +82,10 @@
     "test:no-repeat": "node scripts/astra-no-repeat-guard.mjs",
     "test:broadcast-affiliate": "node --experimental-strip-types --test src/lib/broadcaster-links.test.ts src/lib/match-broadcasts.test.ts && node scripts/astra-broadcast-affiliate-guard.mjs",
     "test:mobile-parity": "node scripts/astra-mobile-parity-guard.mjs",
-    "test:lineups": "node --experimental-strip-types --test src/engine/official-lineups.test.ts"
+    "test:lineups": "node --experimental-strip-types --test src/engine/official-lineups.test.ts",
+    "test:launch-video": "node --test scripts/astra-launch-video.test.mjs",
+    "launch:video": "node scripts/astra-launch-video.mjs",
+    "guard:launch-video": "node scripts/astra-launch-video-guard.mjs"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.4",
