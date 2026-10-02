@@ -225,12 +225,15 @@ def fail(url, error):
         print("[callback] fail callback error", exc, flush=True)
 
 
-def upload(url, path):
+def upload(url, path, provider=None):
     size = path.stat().st_size
+    headers = {"x-worker-token": TOKEN, "content-type": "video/mp4", "content-length": str(size)}
+    if provider:
+        headers["x-video-provider"] = provider
     with path.open("rb") as f:
         r = requests.put(
             url,
-            headers={"x-worker-token": TOKEN, "content-type": "video/mp4", "content-length": str(size)},
+            headers=headers,
             data=f,
             timeout=3600,
         )
@@ -253,11 +256,18 @@ def process(payload):
             reference = prepare_reference_for_aspect(raw_reference, aspect, work / "betgpt-reference-aspect.jpg")
             print(f"[job {job['id']}] reference image prepared for {aspect}: {reference}", flush=True)
 
-        # Pick a provider by actually generating the first shot.
+        # Honor an explicit model choice; AUTO benchmarks/fails over in quality order.
+        requested_model = job.get("model", "auto")
+        candidates = PROVIDERS
+        if requested_model == "wan22":
+            candidates = [p for p in PROVIDERS if p[0] == "wan22-fast-zero"]
+        elif requested_model == "ltx2":
+            candidates = [p for p in PROVIDERS if p[0] == "ltx-zero"]
+
         chosen = None
         first_clip = None
         first = shots[0]
-        for provider, _space in PROVIDERS:
+        for provider, _space in candidates:
             try:
                 print(f"[job {job['id']}] trying {provider}", flush=True)
                 if provider == "wan22-fast-zero":
@@ -293,7 +303,7 @@ def process(payload):
 
         final = work / "betgpt-final.mp4"
         concat_mp4(clips, final, aspect)
-        result = upload(payload["upload_url"], final)
+        result = upload(payload["upload_url"], final, chosen)
         print(f"[job {job['id']}] COMPLETED via {chosen}: {result}", flush=True)
     except Exception as exc:
         print(f"[job {job['id']}] FAILED: {exc}", flush=True)
