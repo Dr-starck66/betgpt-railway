@@ -3,6 +3,7 @@ import { getEditorialEdition } from "@/lib/editorial.functions";
 import { HUB_SECTIONS, SECTION_MIN, sectionArticles } from "@/lib/editorial/engine";
 import { formatParis } from "@/lib/editorial/time";
 import { isPublicArticle } from "@/lib/editorial/types";
+import { publicEditorialImageCopy } from "@/lib/editorial/image-copy";
 import { SITE_URL } from "@/lib/programmatic";
 
 export const Route = createFileRoute("/actualites/")({
@@ -89,7 +90,7 @@ function ActualitesPage() {
               <div className="min-h-[230px] bg-slate-100 lg:min-h-full">
                 <img
                   src={featured.image.src}
-                  alt={featured.image.alt}
+                  alt={publicEditorialImageCopy(featured).alt}
                   width={featured.image.width}
                   height={featured.image.height}
                   className="h-full w-full object-cover"
@@ -130,7 +131,7 @@ function ActualitesPage() {
               <Link to="/actualites/$slug" params={{ slug: article.slug }} className="surface-card block overflow-hidden h-full">
                 <img
                   src={article.image.src}
-                  alt={article.image.alt}
+                  alt={publicEditorialImageCopy(article).alt}
                   width={article.image.width}
                   height={article.image.height}
                   className="aspect-[16/10] w-full object-cover"
