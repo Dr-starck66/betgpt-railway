@@ -181,34 +181,86 @@
   },
   {
     "slug": "term-life-insurance-quote-checklist",
-    "category": "Life insurance",
-    "title": "Term Life Insurance Quote Checklist: What to Compare Before Price",
-    "description": "A term-life comparison checklist covering benefit amount, term length, underwriting, conversion provisions and policy features.",
-    "updated": "2026-10-02",
+    "title": "Term Life Insurance Quote Checklist: What to Compare Before You Apply",
+    "description": "A neutral, evidence-first checklist for comparing US term-life quotes, policy terms, underwriting questions, renewability, exclusions, beneficiaries and insurer strength.",
+    "keyTakeaways": [
+      "Start with the financial need and the years it lasts, not with a quoted premium.",
+      "Compare genuinely comparable policies: same death benefit, term, payment schedule, underwriting class and optional riders.",
+      "A low initial price is not the same as a low long-term cost; check renewal terms, conversion rights and what is guaranteed.",
+      "Answer the application accurately, verify the insurer is authorized in your state, and do not cancel existing coverage until replacement coverage is in force."
+    ],
     "sections": [
       {
-        "heading": "Keep the death benefit and term identical",
-        "text": "A 20-year policy and a 30-year policy are not equivalent products, even if the benefit amount is the same. Start by matching the death benefit and the policy term. This makes the premium comparison more meaningful and avoids choosing a cheaper quote that protects the family for a shorter period."
+        "heading": "1. Define the job the policy must do",
+        "body": "A quote is useful only after you can describe the risk you are transferring. Term life insurance pays the named beneficiaries if the insured dies during a stated term. Its usual purpose is time-limited protection: replacing income while children are dependent, supporting a household while a mortgage is outstanding, or covering a business obligation that is expected to end. NAIC describes term insurance as lower-cost coverage for a specific period, but the period and the cost are policy-specific.\n\nWrite down the people and obligations that would be affected by your death. Consider income you provide, unpaid household or caregiving work, debts, education funding, final expenses, and assets or continuing income available to survivors. Also list protection already in place, including employer coverage, savings and existing individual policies. This is not a formula that can produce a universally correct amount. It is a way to prevent a quote comparison from becoming a purchase of an arbitrary number.\n\nThen specify the time horizon. A policy needed only until a child is financially independent is a different assignment from one intended to cover a mortgage, a business loan or a partner’s retirement transition. If the need may continue beyond the selected term, ask before applying whether the policy can be renewed or converted and what those options cost. Do not assume that “term” means the same duration or features at every insurer."
       },
       {
-        "heading": "Understand the underwriting path",
-        "text": "Fully underwritten, simplified-issue and accelerated-underwriting policies can ask different questions and use different evidence. The fastest application is not automatically the least expensive option. Compare the underwriting route, any exam requirement and the conditions under which the quoted class can change."
+        "heading": "2. Make the quote comparison apples-to-apples",
+        "body": "Request written quotes using the same face amount, term length, premium frequency and requested effective date. Identify whether the quoted premium is level for the whole initial term, changes on a schedule, or is merely an initial or estimated figure. Ask whether the quote assumes a particular underwriting class and whether tobacco use, occupation, travel, medical history, medications or family history could change the offer after underwriting.\n\nRecord the insurer, policy form if available, death benefit, term, premium, payment frequency, policy fees, issue age, underwriting class and whether the quote includes riders. A monthly figure can obscure the annual cost or the fact that a mode surcharge applies. Compare the total scheduled premiums for the period you actually expect to keep the policy, while recognizing that future renewal premiums may differ. Do not compare a guaranteed level-premium policy with an annually renewable policy using only the first payment.\n\nAsk whether the policy is medically underwritten, what evidence may be requested, and whether an accelerated or simplified process can change the final price or coverage. “No exam” does not necessarily mean no health questions or no underwriting. A quote is not an approval and an application is not coverage. Ask when protection begins and what happens if the application is pending and death occurs; the answer is contractual and may vary."
       },
       {
-        "heading": "Review conversion rights and riders",
-        "text": "Term conversion provisions can matter if health changes later. Riders such as accelerated death benefit, waiver of premium or child coverage can also differ. Treat these features as part of the product rather than assuming every term policy is interchangeable."
+        "heading": "3. Check term-end, renewal and conversion provisions",
+        "body": "NAIC notes that some term policies allow renewal even if health has changed, but renewal premiums may be higher than the original premium and the right to renew may end at a stated age. Other policies are non-renewable, meaning a new application may be required at the end of the term. Put the exact rule in your comparison table: renewal availability, maximum renewal age, how the premium is determined, and whether a new medical exam is required.\n\nA conversion provision can matter if your health changes or your need becomes permanent. Ask whether conversion is available for all or only part of the death benefit, the deadline for using it, the destination policy types, and how the new premium is calculated. A conversion right is not a promise that permanent coverage will be affordable. Read the contract and illustration rather than relying on a label such as “convertible.”\n\nAsk what happens if you stop paying. Find the grace-period and reinstatement provisions, including whether evidence of insurability is required after a lapse. Confirm whether the benefit is reduced by loans or accelerated benefits if the policy has such features. These are not reasons to reject a policy; they are reasons to know what is being bought."
+      },
+      {
+        "heading": "4. Review exclusions, riders and beneficiary instructions",
+        "body": "Read the policy’s exclusions and limitations, including any suicide provision, misstatement or contestability language, aviation or hazardous-activity provisions, and exclusions tied to particular riders. The contract controls. Ask the agent or insurer to point to each provision rather than accepting a verbal summary.\n\nRiders modify coverage and usually increase the premium. NAIC describes examples such as waiver of premium, accidental death, guaranteed insurability, long-term-care and accelerated death benefits. For each rider, ask what event qualifies, how much is payable, whether benefits reduce the death benefit, whether waiting periods or activity-of-daily-living tests apply, and whether the rider is guaranteed or may be removed. An accidental-death rider is not a substitute for the base death benefit; it may pay extra only when the contract’s definition is met.\n\nName beneficiaries deliberately and keep designations current after marriage, divorce, births, deaths or major changes in family circumstances. You can generally name more than one beneficiary and specify percentages, but minor beneficiaries can create administration issues; NAIC advises considering a trust or estate because insurers may not pay benefits directly to minors. Ask the insurer how primary and contingent beneficiaries are recorded and retain confirmation with the policy."
+      },
+      {
+        "heading": "5. Verify the application and the company",
+        "body": "Answer every application question completely and accurately, including medical care, diagnoses, medications, tobacco or nicotine use, occupation and activities. Do not guess when the form asks for dates or amounts; ask how to obtain records. An inaccurate answer can create claim disputes under the policy’s terms. Keep a copy of the application, quote, illustration, medical authorization and correspondence.\n\nCheck that the insurer is authorized to do business in your state through the state insurance department. NAIC says consumers can use state insurance departments to verify licensed companies and agents, and can review the financial stability of a life insurer through reputable rating organizations. A rating is one input, not a guarantee of claim payment or a substitute for reading the contract. Confirm the legal name of the issuing insurer, especially when a brand, broker or online marketplace is involved.\n\nAsk who is paid and whether the person or platform is acting as an agent, broker or insurer. You may buy online or through an agent; NAIC cautions that internet access does not necessarily mean a lower premium. The meaningful comparison is the policy, insurer and service—not the sales channel."
+      },
+      {
+        "heading": "6. Before signing, buying or replacing",
+        "body": "Read the policy when delivered and compare it with the application and quote. Confirm names, dates, amount, term, premium, beneficiary designations, riders, renewal and conversion language. Save illustrations and booklets. If your state provides a free-look period, use the policy and state materials to understand its deadline and cancellation process; do not assume the period or refund is identical in every state.\n\nDo not cancel workplace or individual coverage merely because a new application has been submitted. Wait until the new policy is issued, delivered and in force, and make sure the first premium and any required conditions have been satisfied. NAIC and the California Department of Insurance warn that replacing a policy can restart costs, expose the new contract to a new contestability period, increase premiums because of age, change financial-strength or loan provisions, and create possible tax consequences. A replacement can be appropriate, but compare both policies first.\n\nFinally, set a review date. Income, debts, dependents, employment benefits and beneficiary choices change. A review is not an instruction to buy more coverage. It is a chance to check whether the policy still matches the need, whether premiums remain affordable, and whether the people who may need to claim can locate the contract and contact the insurer."
+      },
+      {
+        "heading": "7. A practical comparison worksheet",
+        "body": "Create one page for each quote and use the same headings on every page. Start with the insured person, owner, proposed beneficiary, insurer’s legal name, state of residence and date of the quote. Then record the requested face amount, term, premium payment mode, whether the premium is level, the underwriting class assumed, and the date the quote expires. This prevents a conversation about one policy from being remembered as if it applied to another.\n\nAdd a separate line for every optional feature. A rider can look inexpensive when viewed alone but can change the benefit, the payment obligation or the claim requirements. Record whether it is included automatically, optional, guaranteed, renewable, cancellable, or subject to a separate charge. Ask what happens to each rider when the term ends, when coverage is converted, or when the insured reaches a stated age.\n\nUse a question column, an answer column and a source-document column. Questions might include: What event makes coverage effective? What is the maximum renewal age? Is conversion available without evidence of insurability? What happens after a missed payment? Are there exclusions beyond the standard provisions? How are beneficiaries changed? Written answers are easier to verify than recollections of a sales discussion.\n\nFinally, label every number as guaranteed, current but non-guaranteed, estimated, or dependent on underwriting. This discipline is especially important when a quote or illustration contains future values. If an answer cannot be found in the policy, application, illustration or a written insurer communication, treat it as unresolved before buying. A careful checklist does not predict which application will be approved; it makes the comparison auditable and reduces avoidable surprises."
+      }
+    ],
+    "faq": [
+      {
+        "q": "Does the cheapest term-life quote usually represent the best value?",
+        "a": "Not by itself. Compare the same benefit, term, premium guarantee, underwriting class, renewal and conversion provisions, exclusions, riders and insurer. A low first premium can be followed by higher renewal payments or provide less useful flexibility."
+      },
+      {
+        "q": "Can I renew term life insurance after the initial term?",
+        "a": "Some policies permit renewal without new medical evidence, while others require a new application or do not renew. NAIC says renewal premiums may be higher and the right may end at a stated age. Read the policy’s exact provisions."
+      },
+      {
+        "q": "Should I replace an existing policy with a new quote?",
+        "a": "Do not cancel first. Compare benefits, guarantees, contestability, age-based cost, surrender or start-up charges, loans, tax issues and insurer strength. Keep existing coverage until replacement coverage is issued and in force if replacement is appropriate."
+      },
+      {
+        "q": "Is employer-provided life insurance enough?",
+        "a": "There is no universal answer. Compare the workplace benefit with the income, debts, dependents and other needs it would have to address, and check what happens if employment ends. NAIC recommends assessing your full financial situation."
       }
     ],
     "sources": [
-      [
-        "NAIC Consumer Insurance",
-        "https://content.naic.org/consumer"
-      ],
-      [
-        "Insurance Information Institute — Life insurance",
-        "https://www.iii.org/article/what-are-principal-types-life-insurance"
-      ]
-    ]
+      {
+        "name": "NAIC, Life Insurance",
+        "url": "https://content.naic.org/consumer/life-insurance.htm"
+      },
+      {
+        "name": "NAIC, Tips for Buying Life Insurance",
+        "url": "https://content.naic.org/article/consumer-insight-tips-buying-life-insurance"
+      },
+      {
+        "name": "California Department of Insurance, Life Insurance Guide",
+        "url": "https://www.insurance.ca.gov/01-consumers/105-type/95-guides/07-life/life-ins-guide.cfm"
+      }
+    ],
+    "relatedSlugs": [
+      "life-insurance-how-much-coverage",
+      "term-vs-whole-life-insurance"
+    ],
+    "category": "Life insurance",
+    "updated": "2026-10-02",
+    "heroImage": "https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=1600&h=900&q=82",
+    "heroAlt": "Life insurance planning illustration for Term Life Insurance Quote Checklist: What to Compare Before You Apply.",
+    "imageCredit": "Unsplash",
+    "imageCreditUrl": "https://unsplash.com/"
   },
   {
     "slug": "renters-insurance-coverage-checklist",
@@ -669,61 +721,177 @@
   },
   {
     "slug": "life-insurance-how-much-coverage",
-    "category": "Life insurance",
-    "title": "How Much Life Insurance Coverage Should You Compare?",
-    "description": "A needs-based framework for estimating a starting death-benefit range without pretending one formula fits every household.",
-    "updated": "2026-10-02",
+    "title": "How Much Life Insurance Coverage Do You Need? A Needs-Based US Guide",
+    "description": "A methodical guide to estimating life-insurance needs from income, services, obligations, resources and time horizon without relying on unsupported rules of thumb.",
+    "keyTakeaways": [
+      "Coverage is a needs analysis, not a universal multiple of income.",
+      "Count both financial contributions and services, then subtract reliable resources that survivors can actually use.",
+      "Separate one-time costs from ongoing income replacement and match the term to the duration of the need.",
+      "Revisit the estimate when family, debt, income, assets or employer benefits change."
+    ],
     "sections": [
       {
-        "heading": "Start with obligations, not a multiple alone",
-        "text": "Rules of thumb based on income can be a rough starting point, but a household may also need to account for mortgage or rent, other debts, childcare, education goals, final expenses and the period during which survivors would need income replacement."
+        "heading": "Start with the question the benefit must answer",
+        "body": "The right amount of life insurance depends on what survivors would need if the insured died and which resources would remain. NAIC and the California Department of Insurance both frame the decision around dependents, income, debts, assets, continuing income and the standard of living a household wants to protect. Neither source endorses a single income multiplier that works for everyone.\n\nBegin with a plain-language objective: “If I die, I want the surviving household to be able to….” Possible answers include maintaining housing, replacing some income while children are dependent, paying a debt, funding care, or preserving a business. A person with no dependents may still have a need—for example, a co-signed obligation or final expenses—but the amount and term may be different.\n\nMake two lists: needs and resources. Needs are amounts or services that would be lost or become payable. Resources are assets, insurance and income that would actually be available, subject to their own rules and uncertainty. Use current documents and conservative assumptions. Do not count an asset twice, and do not treat a benefit as guaranteed until you have checked its terms."
       },
       {
-        "heading": "Subtract resources that are truly available",
-        "text": "Savings, existing life insurance and other survivor resources may reduce the amount of new coverage needed. Be careful not to count assets that are illiquid, already earmarked for another purpose or uncertain."
+        "heading": "Measure income and the value of services",
+        "body": "List each income stream the insured provides and decide what portion survivors would need to replace. The goal is not necessarily to reproduce every dollar forever. A surviving adult may work more, reduce expenses or have independent income; children’s needs may change as they age. State assumptions clearly so the estimate can be updated rather than mistaken for a permanent answer.\n\nIncome is not the only contribution. A person may provide childcare, transportation, home maintenance, caregiving, administration or business work. Replacing those services can require paid help, schedule changes or a lower household income. NAIC specifically tells consumers to consider the value of services provided and expenses such as daycare, college tuition and retirement. Include the cost or lost earning capacity of those services for the years they matter.\n\nSeparate “income replacement” from “capital needs.” An ongoing need can be met by a death benefit that is spent over time, invested, or used to purchase another income source, but the policy does not promise a particular investment result. Avoid presenting a projected return as a fact. A practical worksheet can show an annual gap, the number of years, and a sensitivity case if the gap lasts longer or shorter than expected."
       },
       {
-        "heading": "Revisit the number after major changes",
-        "text": "Marriage, divorce, a new child, a home purchase, a major income change or a business obligation can alter the amount and duration of protection that makes sense. Life insurance is not necessarily a one-time calculation."
+        "heading": "Add debts, final costs and planned obligations",
+        "body": "Inventory debts that could burden survivors: a mortgage, private education debt, credit obligations, business debt, co-signed loans and other liabilities. Note whose name is on each debt and whether an asset is expected to be sold or retained. Do not assume that every debt is paid by life insurance or that a lender will automatically receive the policy proceeds; the beneficiary designation and applicable law control how proceeds are administered.\n\nAdd one-time costs that the household has chosen to cover, including medical expenses before death, burial or funeral costs and other final expenses. NAIC lists these among factors consumers may consider. Avoid inserting a made-up national average. Use a written estimate, existing plan or family preference, and label it as an estimate.\n\nThen include future obligations that are genuinely part of the plan, such as education support or a caregiving transition. A goal is not the same as a guaranteed expense. Note whether it is essential, adjustable or aspirational. Prioritizing the worksheet helps when the premium for the full amount is unaffordable: the decision can be made transparently rather than by choosing an arbitrary amount."
+      },
+      {
+        "heading": "Subtract resources—but test their reliability",
+        "body": "Resources may include savings, investments, existing individual life insurance, employer coverage, a spouse’s income, retirement benefits or Social Security survivor benefits. SSA says eligible spouses, divorced spouses, children and dependent parents of a worker who paid Social Security taxes may qualify for survivor benefits, and that eligibility and amounts depend on the work record and program rules. Treat a possible benefit as something to verify, not as an automatic replacement for insurance.\n\nEmployer life insurance deserves its own line. Check the actual benefit, eligibility, portability or conversion terms, cost and what happens when employment ends. A work benefit can be valuable and still leave a gap, especially if the household’s need continues after a job change. Do not count it as permanent unless the plan documents support that conclusion.\n\nSubtract only resources that are intended and realistically available for the stated need. A retirement account may be needed for the survivor’s own retirement. A home may be valuable but not liquid without selling or borrowing. An emergency fund may already have a job. Explain each subtraction and run a “resources unavailable” case. The result is a range for discussion, not personalized financial advice."
+      },
+      {
+        "heading": "Match amount, term and policy type",
+        "body": "Once the gap is estimated, match the term to the timeline. Income replacement for young children may have a different endpoint from a mortgage, a business obligation or a partner’s retirement. A longer term can address a longer need, but the price and eligibility depend on the applicant and policy. If needs have different endpoints, a household may compare separate policies or layered coverage, subject to insurer rules and affordability.\n\nTerm insurance pays if death occurs during the term and is designed for a specific period. Cash-value policies—whole life, universal life and variable life are examples—can be kept as long as needed and have savings or investment features, according to NAIC. The type should follow the need rather than the other way around. Permanent coverage may be relevant to a need intended to last for life, but its values, guarantees, fees and payment requirements must be read carefully.\n\nDo not convert an estimate into a promise about premiums. Obtain quotes for the same benefit and term, disclose health information accurately, and compare guaranteed and non-guaranteed elements. If the budget cannot support the full calculated gap, document which needs are prioritized and review alternatives with a licensed professional."
+      },
+      {
+        "heading": "Keep the worksheet current and usable",
+        "body": "Review the estimate after a marriage, divorce, birth, death, home purchase, refinancing, major debt change, job change, business change, income change or meaningful asset change. Review beneficiaries and contact information at the same time. A policy can be adequate in amount and still be hard to claim if nobody knows it exists or the beneficiary designation is outdated.\n\nStore the policy, application, illustration, premium notices and insurer contact information securely. Tell the intended beneficiaries where to find them. The IRS says death proceeds generally are not included in a beneficiary’s gross income, but interest paid on proceeds is taxable and transferred-policy situations can limit the exclusion. That is general federal tax information, not a complete estate or tax analysis; unusual ownership, transfer or estate circumstances should be checked with a qualified adviser.\n\nFinally, distinguish an estimate from a recommendation. This worksheet identifies questions and arithmetic to discuss. It cannot know a household’s tax position, investments, health, state law, benefit eligibility or future plans. Recalculate when facts change and use licensed, state-authorized professionals for advice about a particular policy."
+      },
+      {
+        "heading": "Use scenarios rather than one magic number",
+        "body": "A useful worksheet can present three scenarios. The first is a minimum case: essential final costs, debts that survivors cannot comfortably carry, and the most important short-term income or service gap. The second is a target case: the standard of living and goals the household deliberately wants to protect. The third is a stress case: a longer period of dependence, lower survivor income, loss of employer coverage, or resources that are not available when expected. The scenarios are not predictions; they show how assumptions drive the result.\n\nFor each scenario, show the timing of cash needs. A mortgage payoff at death is different from annual childcare for ten years, and both differ from a retirement transition. A single death benefit can be used in different ways, but the worksheet should not silently assume that a lump sum will earn a particular return. Showing timing also helps compare a long term with a shorter term and makes it easier to revisit the calculation after a life event.\n\nDocument the reason for each assumption. If the household expects a surviving parent to work more hours, note that this may require childcare or may be impossible because of caregiving. If an asset is counted, note whether selling it would undermine housing or retirement. If an employer benefit is counted, save the plan description and check eligibility. If a public benefit is counted, verify the agency’s current rules rather than relying on an informal estimate.\n\nThe final page should state what the calculation does not cover. It may not address estate planning, special-needs planning, business succession, taxes, public-benefit eligibility, investment risk or state-specific law. Those omissions do not make the worksheet useless; they identify where specialized advice is needed. Use the result to ask better questions of a licensed agent, financial planner, attorney or tax professional, not to imply that a general web guide has made a personal recommendation.\n\nKeep the arithmetic visible. A reviewer should be able to see the annual gap, the number of years, one-time obligations, resources deducted and the resulting range without relying on a hidden calculator. If a number is uncertain, show the range or write a note explaining why it is uncertain. Updating a transparent worksheet is safer than preserving a precise-looking figure whose assumptions have quietly become outdated."
+      }
+    ],
+    "faq": [
+      {
+        "q": "Is there a standard rule such as ten times income?",
+        "a": "A universal multiplier cannot reflect dependents, services, debts, assets, existing benefits or the years of need. A needs-based worksheet is more transparent: quantify needs, subtract dependable resources, and test different timelines."
+      },
+      {
+        "q": "Should Social Security survivor benefits be included?",
+        "a": "They may be relevant, but SSA eligibility and amounts depend on the deceased worker’s record and the survivor’s relationship and circumstances. Verify the benefit and document assumptions instead of treating it as guaranteed."
+      },
+      {
+        "q": "Do I need to insure unpaid household work?",
+        "a": "Consider the services survivors would need to replace, such as childcare, caregiving or home maintenance. The cost and duration are household-specific and should be identified separately from wage income."
+      },
+      {
+        "q": "Are life-insurance death benefits taxable?",
+        "a": "The IRS says proceeds generally are not includable in a beneficiary’s gross income, but interest is taxable and exceptions can apply, including certain transferred-policy situations. This is not a complete tax analysis."
       }
     ],
     "sources": [
-      [
-        "NAIC Consumer Insurance",
-        "https://content.naic.org/consumer"
-      ],
-      [
-        "Social Security Administration — Survivors",
-        "https://www.ssa.gov/survivor"
-      ]
-    ]
+      {
+        "name": "NAIC, Life Insurance",
+        "url": "https://content.naic.org/consumer/life-insurance.htm"
+      },
+      {
+        "name": "California Department of Insurance, Life Insurance Guide",
+        "url": "https://www.insurance.ca.gov/01-consumers/105-type/95-guides/07-life/life-ins-guide.cfm"
+      },
+      {
+        "name": "Social Security Administration, Survivor benefits",
+        "url": "https://www.ssa.gov/survivor"
+      },
+      {
+        "name": "IRS, Life insurance and disability insurance proceeds",
+        "url": "https://www.irs.gov/faqs/interest-dividends-other-types-of-income/life-insurance-disability-insurance-proceeds"
+      }
+    ],
+    "relatedSlugs": [
+      "term-life-insurance-quote-checklist",
+      "term-vs-whole-life-insurance"
+    ],
+    "category": "Life insurance",
+    "updated": "2026-10-02",
+    "heroImage": "https://images.unsplash.com/photo-1609220136736-443140cffec6?auto=format&fit=crop&w=1600&h=900&q=82",
+    "heroAlt": "Life insurance planning illustration for How Much Life Insurance Coverage Do You Need? A Needs-Based US Guide.",
+    "imageCredit": "Unsplash",
+    "imageCreditUrl": "https://unsplash.com/"
   },
   {
     "slug": "term-vs-whole-life-insurance",
-    "category": "Life insurance",
-    "title": "Term vs. Whole Life Insurance: What You Are Actually Comparing",
-    "description": "A neutral breakdown of temporary term protection versus permanent cash-value life insurance.",
-    "updated": "2026-10-02",
+    "title": "Term vs. Whole Life Insurance: How the Policies Differ",
+    "description": "A neutral comparison of term and whole life insurance, including duration, premiums, cash value, guarantees, flexibility, risks and questions to ask before choosing.",
+    "keyTakeaways": [
+      "Term insurance covers a stated period; whole life is a cash-value policy designed for lifetime coverage when required premiums and conditions are met.",
+      "Whole life is not simply term insurance plus a savings account: its contract, guarantees, charges, values and lapse consequences must be evaluated together.",
+      "Compare the policy’s guaranteed values separately from non-guaranteed illustration assumptions.",
+      "Choose based on the financial need, time horizon, budget and contract—not on a generic claim that one type is always better."
+    ],
     "sections": [
       {
-        "heading": "The coverage duration is different",
-        "text": "Term insurance is designed to provide protection for a stated period, while whole life is a form of permanent insurance intended to remain in force if required premiums are paid and policy conditions are met. That difference alone makes headline premiums difficult to compare."
+        "heading": "The basic distinction",
+        "body": "NAIC places life insurance broadly into term and cash-value categories. Term life insurance is purchased for a period and pays the named beneficiaries if the insured dies during that term. It is intended to provide lower-cost coverage for a specific period. Whole life is a cash-value policy; NAIC describes cash-value policies as capable of being kept as long as needed and having savings or investment features that may allow the owner to access money while alive.\n\nThose descriptions explain the design, not the result for every policy. “Whole life” policies can differ in premiums, dividends, guarantees, cash values, riders, surrender charges and loan provisions. A term policy can differ in level premiums, renewal, conversion, exclusions and maximum age. The policy contract and illustration—not a marketing category—determine the obligations and benefits.\n\nStart by naming the need. If the need is income replacement while children are dependent or while a debt is scheduled to be paid, time-limited coverage may fit the assignment. If a need is intended to continue for the insured’s entire life, a permanent policy may be considered. A person can have more than one need, and a combination of policies may be evaluated, but affordability and contract details remain central."
       },
       {
-        "heading": "Cash value changes the product economics",
-        "text": "Whole life policies generally include a cash-value component and guarantees defined by the contract. Term insurance usually focuses on death-benefit protection without the same savings element. Compare what each product is designed to do before comparing price."
+        "heading": "Term life: strengths and trade-offs",
+        "body": "The central strength of term insurance is alignment with a temporary need. A policy can provide a death benefit during a selected period without the cash-value features of permanent insurance. That can make the comparison easier: amount, term, premium guarantee, renewal and conversion, exclusions and riders. It is still not automatically inexpensive; age, health, tobacco use, benefit amount, term and policy design affect the quote.\n\nThe trade-off is that the initial term ends. NAIC says some policies can renew even if health has changed, but renewal premiums may be higher and renewal may end at a stated age. A non-renewable policy may require a new application. If the need outlasts the term, replacement coverage may be more expensive or unavailable because the insured is older or less healthy. A convertible policy can preserve an option, but ask about deadline, eligible products, amount, pricing and any conditions.\n\nTerm insurance generally does not build cash value. That is not a defect when the assignment is temporary protection, but it means the policy should not be evaluated as a source of accessible savings. Compare its protection over the years it is needed, and put a calendar reminder before the term ends. Never stop paying a policy while assuming another application will be approved."
       },
       {
-        "heading": "Suitability depends on the objective",
-        "text": "Someone protecting a temporary income-replacement need may evaluate products differently from someone considering permanent estate or legacy objectives. Complex permanent-policy decisions can warrant review with a properly licensed professional."
+        "heading": "Whole life: guarantees, values and obligations",
+        "body": "Whole life is a form of permanent, cash-value insurance. The intended benefit is lifetime coverage, subject to the policy remaining in force. The owner pays premiums under the contract, and the policy may accumulate cash value. The owner may have options involving surrender, loans or other values, but those actions can reduce benefits, create charges or affect whether coverage remains in force.\n\nAsk for a ledger that separates guaranteed values from non-guaranteed values. California’s insurance guide explains that illustrations may show guaranteed results and results based on non-guaranteed items continuing at their current level; actual results can be better or worse than non-guaranteed amounts, but not worse than the guarantees shown in that illustration. Do not treat a dividend, assumed interest rate or projected cash value as a promise unless the contract guarantees it.\n\nUnderstand the payment requirement and what happens if premiums stop. Ask about grace periods, nonforfeiture options, reduced paid-up insurance, extended term insurance, surrender charges, policy loans and interest. A loan is not free money: it can reduce the death benefit or cash value and can create lapse or tax consequences in particular situations. The exact answer is policy-specific, so obtain it in writing."
+      },
+      {
+        "heading": "Compare cost without oversimplifying",
+        "body": "Compare policies only after fixing the same death benefit, applicant assumptions, payment frequency and intended holding period. For term, record the guaranteed premium during the term and the renewal schedule. For whole life, record required premiums, guaranteed death benefit, guaranteed cash values, non-guaranteed values, dividends if applicable, charges, surrender values and the effect of loans. The first-year premium is not a sufficient comparison.\n\nA whole-life illustration can show how values might develop, but it cannot establish what will happen to non-guaranteed components. A term quote can look lower because it provides a different duration and no cash value. Conversely, a permanent policy may be considered because the need is lifetime, not because it is an investment substitute. Keep the insurance purpose separate from the question of how to save or invest money.\n\nNAIC recommends comparison shopping among similar policies and reading the policy carefully, including guarantees and surrender penalties. California’s guide notes that buyer’s guides and policy indexes can help compare similar policies. These tools do not eliminate the need to understand the contract or the effect of changing assumptions."
+      },
+      {
+        "heading": "Flexibility, riders and replacement risk",
+        "body": "Both types may offer riders, but the rider’s terms matter more than its name. NAIC describes waiver-of-premium, accidental-death, guaranteed-insurability, long-term-care and accelerated-death-benefit riders. Ask what qualifies, how long a waiting period applies, how much is payable, whether the base death benefit is reduced, and whether the rider is guaranteed. A living benefit can reduce what beneficiaries receive.\n\nWhole-life owners should be especially careful when an agent proposes replacing an older policy. The California Department of Insurance warns that replacement may restart start-up costs and contestability, increase premiums because of age, change insurer strength and loan provisions, and create tax consequences. Cash value used to fund a replacement may not support the new policy in future years. Do not surrender an existing policy until an independent comparison shows the consequences and replacement coverage is in force.\n\nTerm owners should also avoid a gap. A new policy can be delayed, rated differently or declined. Keep the current coverage until the new contract’s effective date and conditions are confirmed. Update beneficiaries independently of a replacement decision when that is all the situation requires."
+      },
+      {
+        "heading": "A decision framework that avoids slogans",
+        "body": "First, establish duration: temporary, uncertain or lifetime. Second, calculate the death-benefit need and identify what resources already exist. Third, set a sustainable premium budget without assuming future income increases or investment returns. Fourth, compare term and whole-life contracts that actually meet the duration, and inspect guarantees, exclusions, renewal, conversion, cash values, surrender, loans and riders. Fifth, verify the insurer and agent are authorized in your state and consider financial-strength information.\n\nTerm may be a logical comparison when a household needs a defined amount for a defined period and wants a straightforward death-benefit structure. Whole life may be worth examining when the need is intended to last for life and the owner understands and can maintain the policy’s premium and value structure. Neither statement is a recommendation for a particular consumer, and a whole-life policy should not be bought solely because an illustration shows attractive non-guaranteed values.\n\nReview the decision after major life changes. Keep the policy, application, illustration, beneficiary record and insurer contact information together. The IRS says life-insurance proceeds generally are not included in a beneficiary’s gross income, while interest is taxable and exceptions can apply; ownership and transfer arrangements can be complex. Tax treatment should not be assumed from the product label. Ask a qualified tax or financial professional about circumstances beyond the general rule."
+      },
+      {
+        "heading": "Questions that make an illustration meaningful",
+        "body": "When reviewing a whole-life illustration, ask the presenter to walk through the first year, a middle year and the final projected year using two columns: guaranteed and non-guaranteed. Ask which premiums must be paid, whether the policy can remain in force if premiums change or stop, and what cash surrender value is available at each point. Ask how a policy loan changes both columns and what happens if interest is not paid. These questions turn a persuasive projection into a contract review.\n\nFor term insurance, ask for the complete premium schedule rather than only the first payment. Identify the initial level period, renewal rates, maximum renewal age and any conversion deadline. Ask whether the death benefit is level, whether the policy can be reduced, and which provisions apply if the policy lapses and is reinstated. The answer may affect whether a policy remains suitable when the original need changes.\n\nFor either policy, ask who owns it, who may change beneficiaries, whether assignment is permitted, how claims are filed, and where notices will be sent. Ownership can matter to control and tax analysis. Beneficiary designations should be reviewed separately from the sales illustration, because a good policy can still produce an unintended result if the designation is outdated or incomplete.\n\nA neutral comparison also includes the possibility of doing nothing or using another form of protection. Existing savings, employer benefits, debt reduction, disability coverage and an emergency plan may address parts of the risk, although none should be assumed to substitute for life insurance without checking their limits. The purpose is not to make every option look equivalent. It is to expose the trade-offs so the chosen coverage corresponds to a documented need and an affordable, maintainable commitment.\n\nThe same standard applies to any comparison: ask what is guaranteed, what can change, what happens after a missed payment, and what the beneficiaries would receive under the relevant scenario. If the explanation depends on a chart rather than contract language, request the contract language before deciding."
+      }
+    ],
+    "faq": [
+      {
+        "q": "Is term life insurance always better because it costs less?",
+        "a": "No. Term is designed for a stated period and may fit a temporary need, but it can end or become more expensive to renew. Whole life addresses a potential lifetime need through a cash-value contract, but requires careful review of premiums, guarantees, values and lapse consequences."
+      },
+      {
+        "q": "Does whole life guarantee the illustrated cash value?",
+        "a": "Only the values and benefits identified as guaranteed in the contract or illustration are guaranteed. California’s regulator cautions that non-guaranteed amounts can be higher or lower than shown. Ask for separate guaranteed and non-guaranteed columns."
+      },
+      {
+        "q": "Can I borrow from a whole-life policy?",
+        "a": "Some policies permit loans, but the terms vary. Loans and interest can reduce cash value or death benefits and can affect whether the policy remains in force; ask the insurer for the exact consequences."
+      },
+      {
+        "q": "Can term insurance become permanent?",
+        "a": "Some term policies include a conversion right, but deadlines, eligible policies, amounts and pricing vary. Read the contract and ask the insurer before the conversion period expires."
       }
     ],
     "sources": [
-      [
-        "NAIC Consumer Insurance",
-        "https://content.naic.org/consumer"
-      ]
-    ]
+      {
+        "name": "NAIC, Life Insurance",
+        "url": "https://content.naic.org/consumer/life-insurance.htm"
+      },
+      {
+        "name": "NAIC, Tips for Buying Life Insurance",
+        "url": "https://content.naic.org/article/consumer-insight-tips-buying-life-insurance"
+      },
+      {
+        "name": "California Department of Insurance, Life Insurance Guide",
+        "url": "https://www.insurance.ca.gov/01-consumers/105-type/95-guides/07-life/life-ins-guide.cfm"
+      },
+      {
+        "name": "IRS, Life insurance and disability insurance proceeds",
+        "url": "https://www.irs.gov/faqs/interest-dividends-other-types-of-income/life-insurance-disability-insurance-proceeds"
+      }
+    ],
+    "relatedSlugs": [
+      "term-life-insurance-quote-checklist",
+      "life-insurance-how-much-coverage"
+    ],
+    "category": "Life insurance",
+    "updated": "2026-10-02",
+    "heroImage": "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1600&h=900&q=82",
+    "heroAlt": "Life insurance planning illustration for Term vs. Whole Life Insurance: How the Policies Differ.",
+    "imageCredit": "Unsplash",
+    "imageCreditUrl": "https://unsplash.com/"
   },
   {
     "slug": "renters-insurance-how-much-personal-property",
