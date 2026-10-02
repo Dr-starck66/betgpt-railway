@@ -3,6 +3,11 @@ export type BroadcasterSpec = {
   label: string;
   officialUrl: string;
   affiliateUrl?: string;
+  affiliateProgram?: {
+    network: string;
+    programUrl: string;
+    verifiedAt: string;
+  };
   patterns: string[];
 };
 
@@ -25,7 +30,7 @@ export type BroadcasterToken =
  */
 export const BROADCASTERS: BroadcasterSpec[] = [
   { key: "bein-sports", label: "beIN SPORTS", officialUrl: "https://www.beinsports.com/fr-fr", patterns: ["beIN\\s+SPORTS(?:\\s+(?:MAX\\s+)?\\d+)?"] },
-  { key: "dazn", label: "DAZN", officialUrl: "https://www.dazn.com/fr-FR/home", patterns: ["DAZN(?:\\s+\\d+)?"] },
+  { key: "dazn", label: "DAZN", officialUrl: "https://www.dazn.com/fr-FR/home", affiliateProgram: { network: "Awin", programUrl: "https://ui.awin.com/merchant-profile/126261", verifiedAt: "2026-10-02" }, patterns: ["DAZN(?:\\s+\\d+)?"] },
   { key: "canal-plus", label: "CANAL+", officialUrl: "https://www.canalplus.com/", patterns: ["CANAL\\+(?:\\s+(?:FOOT|SPORT(?:\\s+360)?|LIVE(?:\\s+\\d+)?))?"] },
   { key: "tf1", label: "TF1", officialUrl: "https://www.tf1.fr/", patterns: ["TF1(?:\\+)?"] },
   { key: "tmc", label: "TMC", officialUrl: "https://www.tf1.fr/tmc", patterns: ["TMC"] },
@@ -35,7 +40,7 @@ export const BROADCASTERS: BroadcasterSpec[] = [
   { key: "lequipe", label: "L'Équipe", officialUrl: "https://www.lequipe.fr/tv/", patterns: ["(?:la\\s+cha[iî]ne\\s+)?L[’']?Équipe(?:\\s+Live\\s+Foot)?"] },
   { key: "rmc-sport", label: "RMC Sport", officialUrl: "https://rmcsport.bfmtv.com/", patterns: ["RMC\\s+Sport(?:\\s+\\d+)?"] },
   { key: "eurosport", label: "Eurosport", officialUrl: "https://www.eurosport.fr/", patterns: ["Eurosport(?:\\s+[12])?"] },
-  { key: "prime-video", label: "Prime Video", officialUrl: "https://www.primevideo.com/", patterns: ["(?:Amazon\\s+)?Prime\\s+Video"] },
+  { key: "prime-video", label: "Prime Video", officialUrl: "https://www.primevideo.com/", affiliateProgram: { network: "Amazon Partenaires", programUrl: "https://partenaires.amazon.fr/promotion/piv", verifiedAt: "2026-10-02" }, patterns: ["(?:Amazon\\s+)?Prime\\s+Video"] },
   { key: "uefa-tv", label: "UEFA.tv", officialUrl: "https://www.uefa.tv/", patterns: ["UEFA\\.tv"] },
   { key: "fifa-plus", label: "FIFA+", officialUrl: "https://www.plus.fifa.com/", patterns: ["FIFA\\+"] },
 ];
