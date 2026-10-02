@@ -1,4 +1,4 @@
 gradio_client>=1.13.0,<2
 requests>=2.32.0
 imageio-ffmpeg>=0.6.0
-\nPillow>=11.3.0\n
+Pillow>=11.3.0
