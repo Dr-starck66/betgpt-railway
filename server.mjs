@@ -48,7 +48,7 @@ function baseUrl(req) {
   const proto = req.headers["x-forwarded-proto"] || (host.includes("localhost") ? "http" : "https");
   return proto + "://" + host;
 }
-function layout({title,description,body,canonical,noindex=false,allowAds=true}) {
+function layout({title,description,body,canonical,noindex=false,allowAds=true,image=""}) {
   const robots = (noindex || !INDEXABLE) ? "noindex,follow" : "index,follow,max-image-preview:large";
   const schema = {
     "@context":"https://schema.org",
@@ -66,8 +66,8 @@ function layout({title,description,body,canonical,noindex=false,allowAds=true}) 
 <meta name="robots" content="${robots}">
 <link rel="canonical" href="${htmlEscape(canonical)}">
 <meta property="og:type" content="website"><meta property="og:title" content="${htmlEscape(title)}">
-<meta property="og:description" content="${htmlEscape(description)}"><meta property="og:url" content="${htmlEscape(canonical)}">
-<meta name="twitter:card" content="summary_large_image">${adsenseScript}<meta name="adsense-eligible" content="${adEligible ? "true" : "false"}">
+<meta property="og:description" content="${htmlEscape(description)}"><meta property="og:url" content="${htmlEscape(canonical)}">${image?`<meta property="og:image" content="${htmlEscape(image)}">`:""}
+<meta name="twitter:card" content="summary_large_image">${image?`<meta name="twitter:image" content="${htmlEscape(image)}">`:""}${adsenseScript}<meta name="adsense-eligible" content="${adEligible ? "true" : "false"}">
 <script type="application/ld+json">${JSON.stringify(schema)}</script>
 <link rel="stylesheet" href="/styles.css"></head><body>${body}<script src="/app.js" defer></script></body></html>`;
 }
@@ -118,8 +118,8 @@ function guideIndex(req){
 }
 function guidePage(req,a){
  const base=baseUrl(req); const canonical=base+"/guides/"+a.slug;
- const schema={"@context":"https://schema.org","@type":"Article","headline":a.title,"dateModified":a.updated,"mainEntityOfPage":canonical};
- const sections=a.sections.map(s=>`<section><h2>${htmlEscape(s.heading)}</h2><p>${htmlEscape(s.text)}</p></section>`).join("");
+ const schema={"@context":"https://schema.org","@graph":[{"@type":"Article","headline":a.title,"description":a.description,"dateModified":a.updated,"mainEntityOfPage":canonical,"image":a.heroImage?[a.heroImage]:undefined,"author":{"@type":"Organization","name":"Find Insurance Quotes"},"publisher":{"@type":"Organization","name":"Find Insurance Quotes"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":base+"/"},{"@type":"ListItem","position":2,"name":"Insurance Guides","item":base+"/guides"},{"@type":"ListItem","position":3,"name":a.title,"item":canonical}]},...((a.faq||[]).length?[{"@type":"FAQPage","mainEntity":a.faq.map(x=>({"@type":"Question","name":x.q,"acceptedAnswer":{"@type":"Answer","text":x.a}}))}]:[])]};
+ const sections=a.sections.map(s=>`<section><h2>${htmlEscape(s.heading)}</h2>${String(s.body||s.text||"").split(/\n\n+/).filter(Boolean).map(p=>`<p>${htmlEscape(p)}</p>`).join("")}</section>`).join("");
  const sources=(a.sources||[]).length?`<section class="sources"><h2>Sources and further reading</h2><ul>${a.sources.map(src=>{const name=Array.isArray(src)?src[0]:src.name;const url=Array.isArray(src)?src[1]:src.url;return `<li><a href="${htmlEscape(url||"#")}" target="_blank" rel="noopener noreferrer">${htmlEscape(name||"Source")}</a></li>`}).join("")}</ul></section>`:"";
  const takeaways=(a.keyTakeaways||[]).length?`<aside class="takeaways"><span class="eyebrow">Key takeaways</span><ul>${a.keyTakeaways.map(x=>`<li>${htmlEscape(x)}</li>`).join("")}</ul></aside>`:"";
  const faq=(a.faq||[]).length?`<section class="faq"><h2>Frequently asked questions</h2>${a.faq.map(x=>`<details><summary>${htmlEscape(x.q)}</summary><p>${htmlEscape(x.a)}</p></details>`).join("")}</section>`:"";
@@ -128,8 +128,8 @@ function guidePage(req,a){
  const image=a.heroImage?`<figure class="heroFigure"><img src="${htmlEscape(a.heroImage)}" alt="${htmlEscape(a.heroAlt||a.title)}" width="1600" height="900" fetchpriority="high"><figcaption>${htmlEscape(a.imageCredit||"Illustration")}</figcaption></figure>`:"";
  const body=header()+`<main class="article"><a class="back" href="/guides">← All guides</a><span class="eyebrow">${a.category}</span><h1>${htmlEscape(a.title)}</h1><p class="lede">${htmlEscape(a.description)}</p><div class="meta">${articleWordCount(a).toLocaleString("en-US")} words · Updated ${a.updated} · Evidence-first editorial review</div>${image}${takeaways}${sections}${faq}${sources}${relatedHtml}
  <aside class="cta"><h2>Ready to compare?</h2><p>Approved quote partners will appear here only after the commercial relationship and tracking are verified.</p><a class="primary" href="/#compare">Start with your insurance type</a></aside>
- <script type="application/ld+json">${JSON.stringify({...schema,image:a.heroImage?[a.heroImage]:undefined})}</script></main>`+footer();
- return layout({title:a.title+" | Find Insurance Quotes",description:a.description,canonical,body});
+ <script type="application/ld+json">${JSON.stringify(schema)}</script></main>`+footer();
+ return layout({title:a.title+" | Find Insurance Quotes",description:a.description,canonical,body,image:a.heroImage||""});
 }
 function trustPage(req,p){
  const [title,text]=trustPages[p]; const base=baseUrl(req);
