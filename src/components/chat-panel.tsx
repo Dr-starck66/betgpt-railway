@@ -515,7 +515,6 @@ export function ChatPanel({
       setBrowserVoiceTestEnabled(false);
       setBrowserVoiceTest(false);
       setBrowserVoiceUnavailable(false);
-      track("chat_browser_voice_test_off");
       return;
     }
 
@@ -524,12 +523,10 @@ export function ChatPanel({
     if (result === "BROWSER") {
       setBrowserVoiceTest(true);
       setBrowserVoiceUnavailable(false);
-      track("chat_browser_voice_test_on");
     } else {
       setBrowserVoiceTestEnabled(false);
       setBrowserVoiceTest(false);
       setBrowserVoiceUnavailable(true);
-      track("chat_browser_voice_test_unavailable");
     }
   };
 
