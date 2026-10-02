@@ -9,7 +9,7 @@ const checks = [
   ["registry", "src/lib/broadcaster-links.ts", ["BROADCASTERS", "officialUrl", "affiliateUrl", "extractBroadcasters", "tokenizeBroadcasterText"]],
   ["link-component", "src/components/broadcaster-text.tsx", ["target=\"_blank\"", "data-affiliate-ready=\"true\"", "sponsored nofollow noopener noreferrer"]],
   ["news-global", "src/components/news-article.tsx", ["BroadcasterText", "BroadcastLinks", "articleBroadcastTexts"]],
-  ["match-global", "src/components/match-article.tsx", ["BroadcasterText", "BroadcastLinks"]],
+  ["match-global", "src/components/match-article.tsx", ["BroadcasterText", "BroadcastLinks"]],\n  ["match-tv-registry", "src/lib/match-broadcasts.ts", ["borussia-dortmund-werder-bremen-2026-10-09", "beIN SPORTS MAX 10", "sourceUrl"]],\n  ["match-tv-surface", "src/components/match-detail.tsx", ["matchBroadcast(match)", "<BroadcastLinks texts={[broadcast.label]} />", "Diffusion France vérifiée"]],
 ];
 
 const failures = [];
