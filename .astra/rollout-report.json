@@ -3,17 +3,17 @@
   "profile": "betgpt-v1",
   "command": "apply",
   "target": "/home/runner/work/betgpt-railway/betgpt-railway/target",
-  "generatedAt": "2026-10-02T00:34:43.741Z",
+  "generatedAt": "2026-10-02T10:29:35.954Z",
   "status": "PASS",
   "bricks": [
     {
       "id": "stream-resilience-guard",
       "version": "1.0.0",
-      "status": "UPDATED",
+      "status": "PASS",
       "injector": {
         "brick": "stream-resilience-guard",
         "version": "1.0.0",
-        "status": "ADOPTED",
+        "status": "ALREADY_COMPLIANT",
         "plan": {
           "files": [
             {
