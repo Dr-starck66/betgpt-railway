@@ -67,15 +67,23 @@ function buildShots(prompt, duration) {
 }
 
 function configuredProviders() {
-  const configured = providers.map((p) => ({
-    id: p.id,
-    label: p.label,
-    configured: Boolean(process.env[p.env]),
-    mode: p.mode,
-  }));
+  const configured = providers
+    .filter((p) => Boolean(process.env[p.env]))
+    .map((p) => ({
+      id: p.id,
+      label: p.label,
+      configured: true,
+      mode: p.mode,
+    }));
+  configured.push({
+    id: "wan22-fast-zero",
+    label: "Wan 2.2 14B Fast I2V · gratuit · PRIORITAIRE",
+    configured: Boolean(WORKER_TOKEN),
+    mode: "pull",
+  });
   configured.push({
     id: "ltx-zero",
-    label: "LTX Video ZeroGPU · gratuit",
+    label: "LTX Video I2V · gratuit · secours",
     configured: Boolean(WORKER_TOKEN),
     mode: "pull",
   });
@@ -281,7 +289,7 @@ button{width:100%;margin-top:16px;border:0;border-radius:14px;padding:14px 16px;
 </style>
 </head>
 <body><main class="wrap">
-<div class="top"><div class="brand"><div class="orb"></div><div><div class="eyebrow">BETGPT CREATIVE CLOUD</div><div class="title">Video Factory Ω</div></div></div><div class="sub">Génération de vraies séquences vidéo IA avec routage vers Wan 2.2, SkyReels V3 ou LTX-2. Railway orchestre les jobs; les GPU externes font l'inférence.</div></div>
+<div class="top"><div class="brand"><div class="orb"></div><div><div class="eyebrow">BETGPT CREATIVE CLOUD</div><div class="title">Video Factory Ω</div></div></div><div class="sub">Génération vidéo IA image-to-video. AUTO utilise Wan 2.2 14B Fast en priorité et bascule sur LTX si nécessaire. La mascotte BetGPT est injectée automatiquement.</div></div>
 <div class="grid">
 <section class="card">
 <h2>Créer une publicité BetGPT</h2>
@@ -291,7 +299,7 @@ button{width:100%;margin-top:16px;border:0;border-radius:14px;padding:14px 16px;
 <div class="row3">
 <div><label>Durée</label><select id="duration"><option>5</option><option>10</option><option selected>15</option><option>20</option><option>30</option></select></div>
 <div><label>Format</label><select id="aspect"><option selected>9:16</option><option>16:9</option><option>1:1</option></select></div>
-<div><label>Modèle</label><select id="model"><option value="auto">AUTO</option><option value="wan22">Wan 2.2</option><option value="skyreels-v3">SkyReels V3</option><option value="ltx2">LTX-2</option></select></div>
+<div><label>Modèle</label><select id="model"><option value="auto">AUTO · qualité</option><option value="wan22">Wan 2.2 14B Fast</option><option value="ltx2">LTX Video secours</option></select></div>
 </div>
 <label>Références supplémentaires (optionnel)</label>
 <input id="refs" placeholder="Produit, décor, stade… La mascotte BetGPT est déjà fournie automatiquement." />
@@ -472,6 +480,7 @@ const server = http.createServer(async (req, res) => {
         fs.renameSync(temp, target);
         job.status = "COMPLETED";
         job.progress = 100;
+        if (req.headers["x-video-provider"]) job.provider = String(req.headers["x-video-provider"]).slice(0, 80);
         job.video_url = baseUrl(req) + "/outputs/" + filename;
         job.updated_at = now();
         job.last_error = null;
