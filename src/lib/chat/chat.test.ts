@@ -602,6 +602,17 @@ it("detects absurd score claims beyond the old 10-0/20-0 special cases", () => {
   assert.equal(isAbsurdScoreClaim("Victoire 2-0"), false);
 });
 
+it("detects the exact spoken-style absurd score and never routes it as a daily pick", () => {
+  const phrase = "La France va perdre 25 zero ce soir";
+  assert.equal(isAbsurdScoreClaim(phrase), true);
+  assert.notEqual(classifyChatIntent(phrase), "TODAY_PICKS");
+});
+
+it("keeps explicit evening discovery requests in the daily-pick route", () => {
+  assert.equal(classifyChatIntent("Quels matchs intéressants ce soir ?"), "TODAY_PICKS");
+  assert.equal(classifyChatIntent("2-1 ce soir"), "TODAY_PICKS");
+});
+
 it("skips the live desk for pure conversation and tactics", () => {
   assert.equal(chatNeedsDesk("Pourquoi un 4-4-2 peut souffrir face à un 3-2-5 ?"), false);
   assert.equal(chatNeedsDesk("Salut, tu penses quoi du pressing haut ?"), false);
