@@ -52,6 +52,8 @@ const ACTIONS: { label: string; text: string; mode?: PersonalityMode }[] = [
 
 const MEMORY_KEY = "betgpt-chat-memory";
 const LEGACY_MEMORY_KEY = "calibre-betgpt-memory";
+const MASCOT_STATIC = "/betgpt-mascot-avatar.webp";
+const MASCOT_TALKING = "/betgpt-mascot-talking.gif";
 
 const REACTION_LABEL: Record<string, string> = {
   ANIMAL_CHAOS: "zoo intersidéral",
@@ -433,13 +435,30 @@ export function ChatPanel({
   const [placeholder] = useState("Un match, un pari, un feeling…");
   const [memory, setMemory] = useState<UserMemory>(EMPTY_MEMORY);
   const [challengeAccepted, setChallengeAccepted] = useState(false);
+  const [speakingMessageId, setSpeakingMessageId] = useState<string | null>(null);
+  const [reduceMotion, setReduceMotion] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const boxRef = useRef<HTMLTextAreaElement>(null);
   const seeded = useRef(false);
   const sending = useRef(false);
+  const speakingTimer = useRef<number | null>(null);
 
   useEffect(() => {
     setMemory(loadMemory());
+  }, []);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setReduceMotion(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (speakingTimer.current) window.clearTimeout(speakingTimer.current);
+    };
   }, []);
 
   useEffect(() => {
@@ -452,6 +471,16 @@ export function ChatPanel({
     const el = scrollRef.current;
     if (el) el.scrollTop = el.scrollHeight;
   }, [messages]);
+
+  const markSpeaking = (messageId: string, answer: string) => {
+    if (speakingTimer.current) window.clearTimeout(speakingTimer.current);
+    const duration = Math.min(5200, Math.max(1600, Math.round(answer.length * 10)));
+    setSpeakingMessageId(messageId);
+    speakingTimer.current = window.setTimeout(() => {
+      setSpeakingMessageId((current) => (current === messageId ? null : current));
+      speakingTimer.current = null;
+    }, duration);
+  };
 
   const send = async (text?: string, nextMode: PersonalityMode = mode) => {
     const content = (text ?? boxRef.current?.value ?? "").trim();
@@ -505,6 +534,7 @@ export function ChatPanel({
         userMemory: mem,
         requestedMode: resolved,
       });
+      markSpeaking(assistantId, out.text);
       const visualReaction =
         resolved === "ROAST"
           ? reactionForPunchline(out.punchline?.text ?? out.text, content)
@@ -525,6 +555,11 @@ export function ChatPanel({
             ? err.message
             : "Connexion coupée. Réessaie.";
       setError(msg);
+      if (speakingTimer.current) {
+        window.clearTimeout(speakingTimer.current);
+        speakingTimer.current = null;
+      }
+      setSpeakingMessageId(null);
       setMessages((prev) => prev.filter((m) => m.id !== assistantId && m.id !== userMsg.id));
       if (boxRef.current) boxRef.current.value = content;
     } finally {
@@ -546,7 +581,7 @@ export function ChatPanel({
           <div className="relative shrink-0">
             <div className="absolute -inset-1 rounded-2xl bg-sage/20 blur-md" aria-hidden="true" />
             <img
-              src="/betgpt-mascot-avatar.webp"
+              src={!reduceMotion && (busy || speakingMessageId) ? MASCOT_TALKING : MASCOT_STATIC}
               alt="Mascotte BetGPT, assistant football sans filtre"
               width={48}
               height={48}
@@ -561,7 +596,7 @@ export function ChatPanel({
           </div>
         </div>
         <span className="shrink-0 text-xs text-muted" role="status">
-          {busy ? "Recherche…" : "À toi"}
+          {busy ? "BetGPT réfléchit…" : speakingMessageId ? "BetGPT te répond…" : "À toi"}
         </span>
       </header>
 
@@ -604,6 +639,7 @@ export function ChatPanel({
         {messages.map((msg, i) => {
           const mine = msg.role === "user";
           const streaming = busy && i === messages.length - 1 && !mine;
+          const speaking = !mine && !reduceMotion && (streaming || speakingMessageId === msg.id);
           if (!msg.content && !streaming) return null;
           return (
             <div key={msg.id} className={cn("flex items-end gap-2", mine ? "justify-end" : "justify-start")}>
@@ -611,18 +647,18 @@ export function ChatPanel({
                 <div
                   className={cn(
                     "relative mb-0.5 h-10 w-10 shrink-0 overflow-visible rounded-xl",
-                    streaming && "animate-[bounce_0.7s_ease-in-out_infinite]",
+                    speaking && "ring-2 ring-sage/25 ring-offset-1 ring-offset-white",
                   )}
                   aria-hidden="true"
                 >
                   <span
                     className={cn(
                       "pointer-events-none absolute -inset-1 rounded-2xl bg-sage/25 blur-md transition-opacity",
-                      streaming ? "animate-pulse opacity-100" : "opacity-0",
+                      speaking ? "animate-pulse opacity-100" : "opacity-0",
                     )}
                   />
                   <img
-                    src="/betgpt-mascot-avatar.webp"
+                    src={speaking ? MASCOT_TALKING : MASCOT_STATIC}
                     alt=""
                     width={40}
                     height={40}
@@ -630,7 +666,7 @@ export function ChatPanel({
                     decoding="async"
                     className={cn(
                       "relative h-10 w-10 rounded-xl border border-sage/30 object-cover shadow-sm transition-transform",
-                      streaming && "scale-105",
+                      speaking && "scale-105",
                     )}
                   />
                   {streaming ? (
