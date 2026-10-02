@@ -10,6 +10,7 @@ export default defineEventHandler((event) => {
   setHeader(event, "x-astra-public-revision", revision);
 
   return {
+    ok: true,
     status: "ok",
     service: "betgpt",
     revision,
