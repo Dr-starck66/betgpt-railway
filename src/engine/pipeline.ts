@@ -1744,6 +1744,16 @@ function learnedNow(): Learned {
 }
 
 export function resolveStoredMatch(id: string): { match: MatchInput; prediction: PredictionRecord } | null {
+  // The sitemap is generated from the full live snapshot, while runEngine()
+  // intentionally filters that snapshot. Resolve against the unfiltered live
+  // snapshot first so any live-backed /match, /forum or /cotes URL emitted by
+  // the sitemap remains resolvable by the public route.
+  const current = (getUpcomingMatches() as MatchInput[]).find((match) => matchMatchesId(match, id));
+  if (current) {
+    const match = settleFromArchive(current);
+    return { match, prediction: predictMatch(match) };
+  }
+
   const hist = findArchiveMatch(id);
   if (hist) {
     const match = matchFromHistory(hist);
