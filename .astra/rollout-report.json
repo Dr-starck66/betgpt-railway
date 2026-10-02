@@ -1,0 +1,178 @@
+{
+  "schema": "astra-brick-rollout-report/v1",
+  "profile": "betgpt-v1",
+  "command": "apply",
+  "target": "/home/runner/work/betgpt-railway/betgpt-railway/target",
+  "generatedAt": "2026-10-02T00:34:43.741Z",
+  "status": "PASS",
+  "bricks": [
+    {
+      "id": "stream-resilience-guard",
+      "version": "1.0.0",
+      "status": "UPDATED",
+      "injector": {
+        "brick": "stream-resilience-guard",
+        "version": "1.0.0",
+        "status": "ADOPTED",
+        "plan": {
+          "files": [
+            {
+              "sourceRel": "lib/astra-stream-resilience.mjs",
+              "targetRel": "scripts/lib/astra-stream-resilience.mjs",
+              "status": "MATCH",
+              "expectedHash": "a587b3ef59cafb6a0af4ffc0d049985cf889fb7ebc3c688e7fdfc29089eaba3d",
+              "currentHash": "a587b3ef59cafb6a0af4ffc0d049985cf889fb7ebc3c688e7fdfc29089eaba3d"
+            },
+            {
+              "sourceRel": "astra-stream-resilience.test.mjs",
+              "targetRel": "scripts/astra-stream-resilience.test.mjs",
+              "status": "MATCH",
+              "expectedHash": "7c447d7671fc9ce5aa4b3b39f827beccd654798f707f7bdfdd97f4f305826175",
+              "currentHash": "7c447d7671fc9ce5aa4b3b39f827beccd654798f707f7bdfdd97f4f305826175"
+            },
+            {
+              "sourceRel": "astra-stream-resilience-guard.mjs",
+              "targetRel": "scripts/astra-stream-resilience-guard.mjs",
+              "status": "MATCH",
+              "expectedHash": "68dff81dba07d50900bf65743a550e2046655cb4510e13a2ab731931454f1636",
+              "currentHash": "68dff81dba07d50900bf65743a550e2046655cb4510e13a2ab731931454f1636"
+            },
+            {
+              "sourceRel": "policy.json",
+              "targetRel": "config/astra-stream-resilience.json",
+              "status": "MATCH",
+              "expectedHash": "ac83830d6b8197435b8ee79ce4a2562c2cb580b119b4a47ceb681d59ec17fae6",
+              "currentHash": "ac83830d6b8197435b8ee79ce4a2562c2cb580b119b4a47ceb681d59ec17fae6"
+            }
+          ],
+          "scripts": [
+            {
+              "name": "test:stream-resilience",
+              "command": "node --test scripts/astra-stream-resilience.test.mjs",
+              "current": "node --test scripts/astra-stream-resilience.test.mjs",
+              "status": "MATCH"
+            },
+            {
+              "name": "guard:stream-resilience",
+              "command": "node scripts/astra-stream-resilience-guard.mjs",
+              "current": "node scripts/astra-stream-resilience-guard.mjs",
+              "status": "MATCH"
+            }
+          ],
+          "jsonEnsures": [
+            {
+              "path": "config/astra-never-fail-build-guard.json",
+              "pointer": "/requiredChecks",
+              "value": {
+                "id": "stream-resilience",
+                "command": "npm run guard:stream-resilience"
+              },
+              "matchKey": "id",
+              "optional": true,
+              "status": "MATCH"
+            },
+            {
+              "path": "config/astra-release-gate.json",
+              "pointer": "/preflightCommands",
+              "value": "npm run guard:stream-resilience",
+              "optional": true,
+              "status": "MATCH"
+            },
+            {
+              "path": "config/astra-release-gate.json",
+              "pointer": "/pipelines/editorial/commands",
+              "value": "npm run guard:stream-resilience",
+              "optional": true,
+              "status": "MATCH"
+            }
+          ]
+        }
+      },
+      "verified": {
+        "status": "PASS",
+        "brick": "stream-resilience-guard",
+        "version": "1.0.0",
+        "plan": {
+          "files": [
+            {
+              "sourceRel": "lib/astra-stream-resilience.mjs",
+              "targetRel": "scripts/lib/astra-stream-resilience.mjs",
+              "status": "MATCH",
+              "expectedHash": "a587b3ef59cafb6a0af4ffc0d049985cf889fb7ebc3c688e7fdfc29089eaba3d",
+              "currentHash": "a587b3ef59cafb6a0af4ffc0d049985cf889fb7ebc3c688e7fdfc29089eaba3d"
+            },
+            {
+              "sourceRel": "astra-stream-resilience.test.mjs",
+              "targetRel": "scripts/astra-stream-resilience.test.mjs",
+              "status": "MATCH",
+              "expectedHash": "7c447d7671fc9ce5aa4b3b39f827beccd654798f707f7bdfdd97f4f305826175",
+              "currentHash": "7c447d7671fc9ce5aa4b3b39f827beccd654798f707f7bdfdd97f4f305826175"
+            },
+            {
+              "sourceRel": "astra-stream-resilience-guard.mjs",
+              "targetRel": "scripts/astra-stream-resilience-guard.mjs",
+              "status": "MATCH",
+              "expectedHash": "68dff81dba07d50900bf65743a550e2046655cb4510e13a2ab731931454f1636",
+              "currentHash": "68dff81dba07d50900bf65743a550e2046655cb4510e13a2ab731931454f1636"
+            },
+            {
+              "sourceRel": "policy.json",
+              "targetRel": "config/astra-stream-resilience.json",
+              "status": "MATCH",
+              "expectedHash": "ac83830d6b8197435b8ee79ce4a2562c2cb580b119b4a47ceb681d59ec17fae6",
+              "currentHash": "ac83830d6b8197435b8ee79ce4a2562c2cb580b119b4a47ceb681d59ec17fae6"
+            }
+          ],
+          "scripts": [
+            {
+              "name": "test:stream-resilience",
+              "command": "node --test scripts/astra-stream-resilience.test.mjs",
+              "current": "node --test scripts/astra-stream-resilience.test.mjs",
+              "status": "MATCH"
+            },
+            {
+              "name": "guard:stream-resilience",
+              "command": "node scripts/astra-stream-resilience-guard.mjs",
+              "current": "node scripts/astra-stream-resilience-guard.mjs",
+              "status": "MATCH"
+            }
+          ],
+          "jsonEnsures": [
+            {
+              "path": "config/astra-never-fail-build-guard.json",
+              "pointer": "/requiredChecks",
+              "value": {
+                "id": "stream-resilience",
+                "command": "npm run guard:stream-resilience"
+              },
+              "matchKey": "id",
+              "optional": true,
+              "status": "MATCH"
+            },
+            {
+              "path": "config/astra-release-gate.json",
+              "pointer": "/preflightCommands",
+              "value": "npm run guard:stream-resilience",
+              "optional": true,
+              "status": "MATCH"
+            },
+            {
+              "path": "config/astra-release-gate.json",
+              "pointer": "/pipelines/editorial/commands",
+              "value": "npm run guard:stream-resilience",
+              "optional": true,
+              "status": "MATCH"
+            }
+          ]
+        }
+      },
+      "guard": {
+        "status": "PASS",
+        "command": "npm run guard:stream-resilience",
+        "exitCode": 0,
+        "stdout": "\n> guard:stream-resilience\n> node scripts/astra-stream-resilience-guard.mjs\n\nASTRA_STREAM_RESILIENCE_GUARD_PASS status=RESUMED retry_recovered=true checkpoint=true fail_closed=true\n",
+        "stderr": ""
+      }
+    }
+  ]
+}

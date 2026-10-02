@@ -1,0 +1,23 @@
+{
+  "schema": "astra-brick-lock/v1",
+  "bricks": {
+    "stream-resilience-guard": {
+      "version": "1.0.0",
+      "installedAt": "2026-10-02T00:34:43.746Z",
+      "adopted": true,
+      "canonicalRepo": "Dr-starck66/zip-github",
+      "canonicalPath": "astra-bricks/stream-resilience-guard",
+      "files": {
+        "scripts/lib/astra-stream-resilience.mjs": "a587b3ef59cafb6a0af4ffc0d049985cf889fb7ebc3c688e7fdfc29089eaba3d",
+        "scripts/astra-stream-resilience.test.mjs": "7c447d7671fc9ce5aa4b3b39f827beccd654798f707f7bdfdd97f4f305826175",
+        "scripts/astra-stream-resilience-guard.mjs": "68dff81dba07d50900bf65743a550e2046655cb4510e13a2ab731931454f1636",
+        "config/astra-stream-resilience.json": "ac83830d6b8197435b8ee79ce4a2562c2cb580b119b4a47ceb681d59ec17fae6"
+      },
+      "scripts": {
+        "test:stream-resilience": "node --test scripts/astra-stream-resilience.test.mjs",
+        "guard:stream-resilience": "node scripts/astra-stream-resilience-guard.mjs"
+      },
+      "lastBackup": null
+    }
+  }
+}
