@@ -15,7 +15,8 @@ function normalizeBase(value: string): string {
 
 function chatEndpoint(base: string): string {
   const clean = normalizeBase(base);
-  return clean.endsWith("/v1") ? `${clean}/chat/completions` : `${clean}/v1/chat/completions`;
+  // Reuse the exact OpenAI-compatible path already used by BetGPT chat.
+  return `${clean}/chat/completions`;
 }
 
 function cleanAgent(value: string): string | null {
@@ -60,7 +61,7 @@ async function complete(
         },
       ],
     }),
-    signal: AbortSignal.timeout(18_000),
+    signal: AbortSignal.timeout(compact ? 12_000 : 18_000),
   }).catch(() => null);
   if (!res?.ok) return null;
   const body = (await res.json().catch(() => ({}))) as { choices?: { message?: { content?: string } }[] };
@@ -79,7 +80,7 @@ async function generateDiscussion(
       .split(",")
       .map((m) => m.trim())
       .filter(Boolean)
-      .slice(0, 4);
+      .slice(0, options.compact === true ? 1 : 4);
     const key =
       process.env.FORUM_LOCAL_LLM_KEY?.trim() ||
       process.env.ASTRA_LOCAL_CHAT_TOKEN?.trim();
