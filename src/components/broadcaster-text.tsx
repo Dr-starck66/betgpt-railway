@@ -33,7 +33,7 @@ export function BroadcastLinks({ texts }: { texts: string[] }) {
     <section className="surface-card p-5" aria-label="Diffusion du match">
       <h2 className="text-base font-semibold text-paper">Diffusion</h2>
       <p className="mt-2 text-xs leading-relaxed text-muted">
-        Accès externe vers le diffuseur cité dans l’article. Le lien est centralisé et prêt à être remplacé par une URL affiliée.
+        Accès externe vers le site du diffuseur cité dans l’article.
       </p>
       <ul className="mt-4 flex flex-wrap gap-2">
         {broadcasters.map((broadcaster) => (
