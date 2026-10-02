@@ -49,8 +49,9 @@ export const EMPTY_MEMORY: UserMemory = {
   preferences: { favoriteTeams: [], favoriteCompetitions: [] },
 };
 
-export function parseMode(raw: unknown): PersonalityMode {
-  return raw === "ROAST" || raw === "SARCASTIC" ? "ROAST" : "NORMAL";
+export function parseMode(_raw: unknown): PersonalityMode {
+  // BetGPT is intentionally single-mode: every chat turn uses the Sans filtre persona.
+  return "ROAST";
 }
 
 /** Storage and incoming requests are untrusted, including nested fields. */

@@ -14,7 +14,7 @@ export async function handleChatRequest(request: Request): Promise<Response> {
         { error: "Message invalide (1 à 4 000 caractères, 12 messages maximum)." },
         { status: 400 },
       );
-    body = parsed.data as ChatRequestBody;
+    body = { ...(parsed.data as ChatRequestBody), requestedMode: "ROAST" };
   } catch {
     return Response.json({ error: "Requête invalide." }, { status: 400 });
   }

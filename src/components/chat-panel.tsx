@@ -37,11 +37,6 @@ const WELCOME: ChatMessage = {
   timestamp: 0,
 };
 
-const MODES: { id: PersonalityMode; label: string }[] = [
-  { id: "NORMAL", label: "Normal" },
-  { id: "ROAST", label: "Sans filtre" },
-];
-
 const ACTIONS: { label: string; text: string; mode?: PersonalityMode }[] = [
   { label: "Le ticket du jour", text: "Qu'est-ce que tu mises aujourd'hui, et pourquoi ?" },
   {
@@ -454,17 +449,15 @@ function touchMemory(prev: UserMemory, content: string, mode: PersonalityMode): 
 
 export function ChatPanel({
   seed,
-  initialMode = "NORMAL",
   shareSource,
 }: {
   seed?: string;
-  initialMode?: PersonalityMode;
   shareSource?: string;
 }) {
   const [messages, setMessages] = useState<ChatMessage[]>([WELCOME]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [mode, setMode] = useState<PersonalityMode>(parseMode(initialMode));
+  const mode: PersonalityMode = "ROAST";
   const [placeholder] = useState("Un match, un pari, un feeling…");
   const [memory, setMemory] = useState<UserMemory>(EMPTY_MEMORY);
   const [challengeAccepted, setChallengeAccepted] = useState(false);
@@ -540,7 +533,7 @@ export function ChatPanel({
     }, duration);
   };
 
-  const send = async (text?: string, nextMode: PersonalityMode = mode) => {
+  const send = async (text?: string, _nextMode: PersonalityMode = mode) => {
     const content = (text ?? boxRef.current?.value ?? "").trim();
     if (!content || sending.current) return;
     if (content.length > 4000) {
@@ -553,11 +546,10 @@ export function ChatPanel({
       setChallengeAccepted(true);
       track("chat_challenge_accept", shareSource);
     }
-    const resolved = parseMode(nextMode);
+    const resolved: PersonalityMode = "ROAST";
     const mem = touchMemory(memory, content, resolved);
     setMemory(mem);
     saveMemory(mem);
-    setMode(resolved);
 
     const userMsg: ChatMessage = {
       id: `u-${Date.now()}`,
@@ -808,7 +800,6 @@ export function ChatPanel({
               type="button"
               disabled={busy}
               onClick={() => {
-                if (a.mode) setMode(a.mode);
                 if (a.text.endsWith(": ")) {
                   if (boxRef.current) {
                     boxRef.current.value = a.text;
@@ -825,22 +816,12 @@ export function ChatPanel({
           ))}
         </div>
         <div className="mb-2 flex flex-wrap gap-1">
-          {MODES.map((m) => (
-            <button
-              key={m.id}
-              type="button"
-              aria-pressed={mode === m.id}
-              onClick={() => setMode(m.id)}
-              className={cn(
-                "min-h-10 rounded-full px-4 text-sm font-semibold",
-                mode === m.id
-                  ? "bg-sage text-ink shadow-sm"
-                  : "border border-line bg-white text-muted hover:text-paper",
-              )}
-            >
-              {m.label}
-            </button>
-          ))}
+          <span
+            className="inline-flex min-h-10 items-center rounded-full bg-sage px-4 text-sm font-black text-ink shadow-sm"
+            aria-label="Mode Sans filtre permanent"
+          >
+            Sans filtre permanent 😈
+          </span>
           <button
             type="button"
             aria-pressed={browserVoiceTest}

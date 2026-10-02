@@ -1,6 +1,6 @@
 import { it } from "node:test";
 import assert from "node:assert/strict";
-import { EMPTY_MEMORY, normalizeMemory } from "./types.ts";
+import { EMPTY_MEMORY, normalizeMemory, parseMode } from "./types.ts";
 import { postChat } from "./transport.ts";
 import { classifyChatIntent, localMatchFacts } from "./local.ts";
 import { chatBodySchema } from "../schemas.ts";
@@ -15,6 +15,14 @@ import { betgptPrompt } from "./prompt.ts";
 import { buildChallengeUrl, buildFacebookShareUrl, buildShareMoment, buildXShareUrl } from "./share.ts";
 import { renderDailyChatPick, selectDailyChatPick, selectDailyDataFallback } from "./daily-pick.ts";
 import { chatNeedsDesk, isAbsurdScoreClaim } from "./complete.ts";
+
+it("forces every legacy or missing mode to Sans filtre", () => {
+  assert.equal(parseMode(undefined), "ROAST");
+  assert.equal(parseMode("NORMAL"), "ROAST");
+  assert.equal(parseMode("ROAST"), "ROAST");
+  assert.equal(parseMode("SARCASTIC"), "ROAST");
+  assert.equal(parseMode("anything-else"), "ROAST");
+});
 
 it("keeps the arrogant socially awkward BetGPT voice active in NORMAL mode", () => {
   const brief = personalityBrief(EMPTY_MEMORY, "NORMAL", [], "Analyse ce match");

@@ -36,7 +36,7 @@ function ChatPending() {
 }
 
 function ChatPage() {
-  const { q, roast, share_source } = Route.useSearch();
+  const { q, share_source } = Route.useSearch();
   return (
     <div className="space-y-6">
       <section className="hero-panel p-6 sm:p-8">
@@ -64,7 +64,7 @@ function ChatPage() {
         </div>
       </section>
       <section className="section-card overflow-hidden p-2 sm:p-3">
-        <ChatPanel seed={q} initialMode={roast ? "ROAST" : "NORMAL"} shareSource={share_source} />
+        <ChatPanel seed={q} shareSource={share_source} />
       </section>
     </div>
   );

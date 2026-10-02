@@ -57,9 +57,11 @@ jobs:
           }
           const overlays=await page.locator("div.fixed.inset-0").evaluateAll(nodes=>nodes.map(n=>({className:n.className,text:(n.innerText||"").slice(0,1200),buttons:Array.from(n.querySelectorAll("button,a")).map(x=>(x.innerText||x.getAttribute("aria-label")||"").trim()).filter(Boolean)})));
           console.log("OVERLAYS_AFTER_GATES="+JSON.stringify(overlays));
-          const roast=page.getByRole("button",{name:"Sans filtre",exact:true});
-          await roast.click({timeout:10000});
-          if((await roast.getAttribute("aria-pressed"))!=="true") throw new Error("ROAST_BUTTON_NOT_INTERACTIVE");
+          const normalButton=page.getByRole("button",{name:"Normal",exact:true});
+          if(await normalButton.count()) throw new Error("NORMAL_MODE_STILL_EXPOSED");
+          const roastBadge=page.getByLabel("Mode Sans filtre permanent");
+          await roastBadge.waitFor({state:"visible",timeout:10000});
+          console.log("ROAST_ONLY_UI_PASS");
           const box=page.getByRole("textbox",{name:"Ton message à BetGPT"});
           await box.fill("La France va perdre 25-0 son prochain match.");
           await page.getByRole("button",{name:"Envoyer",exact:true}).click({timeout:10000});
