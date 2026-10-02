@@ -17,6 +17,8 @@ export type BroadcasterLink = {
   text: string;
   href: string;
   sponsored: boolean;
+  affiliateCapable: boolean;
+  affiliateNetwork?: string;
 };
 
 export type BroadcasterToken =
@@ -65,6 +67,8 @@ export function resolveBroadcasterMention(value: string): BroadcasterLink | null
     text: value,
     href: affiliateUrl || spec.officialUrl,
     sponsored: Boolean(affiliateUrl),
+    affiliateCapable: Boolean(spec.affiliateProgram),
+    affiliateNetwork: spec.affiliateProgram?.network,
   };
 }
 
@@ -92,5 +96,5 @@ export function extractBroadcasters(texts: string[]): BroadcasterLink[] {
       if (token.kind === "link" && !found.has(token.key)) found.set(token.key, token);
     }
   }
-  return [...found.values()];
+  return [...found.values()].sort((a, b) => Number(b.affiliateCapable) - Number(a.affiliateCapable));
 }
