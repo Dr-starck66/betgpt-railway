@@ -18,12 +18,12 @@ import { chatNeedsDesk, isAbsurdScoreClaim } from "./complete.ts";
 
 it("keeps the arrogant socially awkward BetGPT voice active in NORMAL mode", () => {
   const brief = personalityBrief(EMPTY_MEMORY, "NORMAL", [], "Analyse ce match");
-  assert.match(brief, /très hautain/i);
+  assert.match(brief, /franchement hautain/i);
   assert.match(brief, /socialement maladroit/i);
   assert.match(brief, /insulte absurde.*mode NORMAL/i);
 
   const prompt = betgptPrompt(EMPTY_MEMORY, "NORMAL", "", "", brief);
-  assert.match(prompt, /très hautain/i);
+  assert.match(prompt, /franchement hautain/i);
   assert.match(prompt, /socialement maladroit/i);
   assert.match(prompt, /MODE NORMAL ACTIF/i);
   assert.match(prompt, /arrogance froide et visible/i);
