@@ -28,7 +28,7 @@ const WELCOME: ChatMessage = {
   id: "welcome",
   role: "assistant",
   content:
-    "Bienvenue sur BetGPT 👋\n\nParle-moi foot normalement : un match, un ticket, une cote, une intuition ou même une théorie complètement lunaire. Je te dirai ce qui tient debout — et ce qui mérite le carton rouge.",
+    "Bienvenue sur BetGPT 👋\n\nBalance un match, un ticket, une cote ou ton fameux « feeling ». Je m’occupe des probabilités ; toi, essaie simplement de ne pas confier ta bankroll à une boussole sous caféine. 😏 Si ton raisonnement tient debout, je le dirai. Sinon, il prendra le carton rouge avec une précision presque insultante.",
   timestamp: 0,
 };
 
