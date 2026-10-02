@@ -65,7 +65,10 @@ async function complete(
   return body.choices?.[0]?.message?.content?.trim() || null;
 }
 
-async function generateDiscussion(preview: string): Promise<{ text: string; generator: string } | null> {
+async function generateDiscussion(
+  preview: string,
+  options: { allowCloud?: boolean } = {},
+): Promise<{ text: string; generator: string } | null> {
   const localUrl =
     process.env.FORUM_LOCAL_LLM_URL?.trim() ||
     process.env.ASTRA_LOCAL_CHAT_BASE?.trim();
@@ -85,11 +88,105 @@ async function generateDiscussion(preview: string): Promise<{ text: string; gene
   }
 
   const xai = process.env.XAI_API_KEY?.trim();
-  if (xai) {
+  if (options.allowCloud !== false && xai) {
     const text = await complete("https://api.x.ai/v1/chat/completions", "grok-4.5", preview, `Bearer ${xai}`);
     if (text) return { text, generator: "cloud:grok-4.5" };
   }
   return null;
+}
+
+type CachedAgentThread = { expiresAt: number; thread: ForumThread };
+const forumAiGlobal = globalThis as typeof globalThis & {
+  __betgptForumAiCache?: Map<string, CachedAgentThread>;
+};
+const FORUM_AI_CACHE =
+  forumAiGlobal.__betgptForumAiCache ??
+  (forumAiGlobal.__betgptForumAiCache = new Map<string, CachedAgentThread>());
+
+function generatedPosts(
+  text: string,
+  seed: string,
+  startAt: number,
+  maxPosts = 18,
+): ForumPost[] {
+  return text
+    .split(/\n+/)
+    .map((line) => line.replace(/^[\-*\d.)\s]+/, "").trim())
+    .filter((line) => line.length > 12)
+    .slice(0, maxPosts)
+    .map((line, i) => {
+      const structured = line.match(/^([^>|:]{2,40})(?:\s*->\s*([^|:]{2,40}))?\s*[|:]\s*(.+)$/);
+      const parsedAgent = structured ? cleanAgent(structured[1] ?? "") : null;
+      const parsedTarget = structured ? cleanAgent(structured[2] ?? "") : null;
+      const agent = parsedAgent ?? AGENTS[i % AGENTS.length]!;
+      const body = (structured?.[3] ?? line)
+        .replace(new RegExp(`^${agent}\\s*[:|-]\\s*`, "i"), "")
+        .trim();
+      return {
+        id: `${seed}-ai-${i}`,
+        agent,
+        role:
+          agent === "Avocat du diable"
+            ? "Contrôle"
+            : agent === "Consensus"
+              ? "Méta"
+              : agent === "Cotes"
+                ? "Marché"
+                : "IA locale",
+        body,
+        at: new Date(startAt + i * 45_000).toISOString(),
+        replyTo: parsedTarget ?? (i > 0 ? AGENTS[(i - 1) % AGENTS.length] : undefined),
+        tone: toneFor(agent, body),
+        reactions: {
+          up: 5 + ((i * 7) % 19),
+          laugh: /😂|mdr|tableur|ego|dormir|sieste|marteau|extincteur/i.test(body) ? 3 + (i % 7) : i % 3,
+          fire: 1 + (i % 6),
+        },
+      } satisfies ForumPost;
+    });
+}
+
+/**
+ * Enrich a match thread with a second wave written by the local open-weight model.
+ * Fail-open for UX: deterministic agent posts remain if the local model is unavailable.
+ */
+export async function enrichForumThreadWithAi(thread: ForumThread): Promise<ForumThread> {
+  if (thread.id === "edition" || thread.generator) return thread;
+  const cached = FORUM_AI_CACHE.get(thread.id);
+  if (cached && cached.expiresAt > Date.now()) return cached.thread;
+
+  const preview = [
+    thread.title,
+    thread.lead,
+    ...thread.posts.slice(0, 18).map((p) => `${p.agent}: ${p.body}`),
+  ].join("\n");
+
+  const generated = await generateDiscussion(preview, { allowCloud: false });
+  if (!generated?.text) return thread;
+
+  const startAt = Math.max(
+    Date.now(),
+    ...thread.posts.map((p) => Date.parse(p.at)).filter(Number.isFinite),
+  );
+  const extra = generatedPosts(generated.text, thread.id, startAt + 60_000, 18);
+  if (extra.length < 6) return thread;
+
+  const seen = new Set(thread.posts.map((p) => p.body.trim().toLowerCase()));
+  const posts = [...thread.posts];
+  for (const post of extra) {
+    const key = post.body.trim().toLowerCase();
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    posts.push(post);
+  }
+
+  const enriched: ForumThread = {
+    ...thread,
+    posts: posts.slice(0, 48),
+    generator: generated.generator,
+  };
+  FORUM_AI_CACHE.set(thread.id, { expiresAt: Date.now() + 30 * 60_000, thread: enriched });
+  return enriched;
 }
 
 export function readIaThread(): ForumThread | null {
