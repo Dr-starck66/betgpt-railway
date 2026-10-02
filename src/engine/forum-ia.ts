@@ -7,7 +7,7 @@ import { kvGet, kvSet } from "@/lib/store";
 const IA_FILE = join(process.cwd(), "data", "forum-ia.json");
 const MAX_AGE_MS = 2 * 3600_000;
 const REFRESH_AGE_MS = 45 * 60_000;
-const FORUM_CONTENT_VERSION = "v2-diverse";
+const FORUM_CONTENT_VERSION = "v3-diverse";
 
 type StoredIaThread = ForumThread & { fetchedAt?: number; generator?: string };
 
@@ -113,14 +113,14 @@ async function generateDiscussion(
 }
 
 type CachedAgentThread = {
-  schema: "betgpt-forum-ai-cache/v2";
+  schema: "betgpt-forum-ai-cache/v3";
   cachedAt: number;
   expiresAt: number;
   thread: ForumThread;
 };
 
 type PersistedForumThread = {
-  schema: "betgpt-forum-thread/v2";
+  schema: "betgpt-forum-thread/v3";
   savedAt: number;
   thread: ForumThread;
 };
@@ -167,7 +167,7 @@ export async function persistForumThread(
   FORUM_THREAD_SAVED_AT.set(thread.id, now);
 
   const stored: PersistedForumThread = {
-    schema: "betgpt-forum-thread/v2",
+    schema: "betgpt-forum-thread/v3",
     savedAt: Date.now(),
     thread: {
       ...thread,
@@ -187,7 +187,7 @@ export async function readPersistedForumThread(id: string): Promise<ForumThread 
   try {
     const stored = await kvGet<PersistedForumThread>(`forum-thread:${FORUM_CONTENT_VERSION}:${id}`);
     if (
-      stored?.schema !== "betgpt-forum-thread/v2" ||
+      stored?.schema !== "betgpt-forum-thread/v3" ||
       !stored.thread?.matchHref ||
       (stored.thread.posts?.length ?? 0) < MIN_POSTS
     ) {
@@ -281,7 +281,7 @@ async function refreshMatchThreadAi(thread: ForumThread): Promise<void> {
       const enriched = mergeGenerated(thread, generated);
       if (!enriched) return;
       const cached: CachedAgentThread = {
-        schema: "betgpt-forum-ai-cache/v2",
+        schema: "betgpt-forum-ai-cache/v3",
         cachedAt: Date.now(),
         expiresAt: Date.now() + 6 * 3600_000,
         thread: enriched,
@@ -316,7 +316,7 @@ export async function enrichForumThreadWithAi(thread: ForumThread): Promise<Foru
       new Promise<null>((resolve) => setTimeout(() => resolve(null), 250)),
     ]);
     if (
-      durable?.schema === "betgpt-forum-ai-cache/v2" &&
+      durable?.schema === "betgpt-forum-ai-cache/v3" &&
       durable.expiresAt > Date.now() &&
       durable.thread?.posts?.length
     ) {
