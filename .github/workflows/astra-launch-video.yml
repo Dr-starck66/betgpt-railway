@@ -32,3 +32,4 @@ jobs:
       tagline: "Pronostics football : preuves avant promesses."
       duration_seconds: 18
       formats: "landscape,vertical,square"
+      capture_json: '{"preseedLocalStorage":{"betgpt-18":"1"},"forbiddenText":["As-tu 18 ans ou plus ?"],"requiredText":["Pronostics"]}'
