@@ -37,7 +37,8 @@ jobs:
           rm -f /tmp/runtime-learning-checkpoint.json
           for i in $(seq 1 60); do
             if curl -fsS --connect-timeout 8 --max-time 25               -H 'accept: application/json'               -H 'cache-control: no-cache'               https://betgpt.live/api/learning-checkpoint               -o /tmp/runtime-learning-checkpoint.json               && jq -e '
-                .schema == "astra-betgpt-runtime-checkpoint/v1" and
+                .schema == "astra-betgpt-runtime-checkpoint/v2" and
+                .refresh.status == "PASS" and
                 (.tickets | type == "array") and
                 (.learning.schema == "astra-betgpt-learning-memory/v1")
               ' /tmp/runtime-learning-checkpoint.json >/dev/null; then
@@ -55,7 +56,7 @@ jobs:
         run: |
           set -euo pipefail
           cp /tmp/runtime-learning-checkpoint.json runtime-learning-checkpoint.json
-          jq -e '.schema == "astra-betgpt-runtime-checkpoint/v1"' runtime-learning-checkpoint.json >/dev/null
+          jq -e '.schema == "astra-betgpt-runtime-checkpoint/v2" and .refresh.status == "PASS"' runtime-learning-checkpoint.json >/dev/null
           git config user.name "ASTRA Learning Memory"
           git config user.email "actions@users.noreply.github.com"
           git add runtime-learning-checkpoint.json
