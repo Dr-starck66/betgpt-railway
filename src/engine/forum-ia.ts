@@ -128,6 +128,7 @@ type PersistedForumThread = {
 const forumAiGlobal = globalThis as typeof globalThis & {
   __betgptForumAiCache?: Map<string, CachedAgentThread>;
   __betgptForumAiInflight?: Map<string, Promise<void>>;
+  __betgptForumAiRetryAfter?: number;
   __betgptForumThreadSavedAt?: Map<string, number>;
 };
 const FORUM_AI_CACHE =
@@ -268,9 +269,14 @@ function mergeGenerated(thread: ForumThread, generated: { text: string; generato
 }
 
 const FORUM_AI_MAX_CONCURRENT = 1;
+const FORUM_AI_RETRY_COOLDOWN_MS = 15_000;
 
-export function shouldShedForumAiRefresh(inflightCount: number): boolean {
-  return inflightCount >= FORUM_AI_MAX_CONCURRENT;
+export function shouldShedForumAiRefresh(
+  inflightCount: number,
+  retryAfter = 0,
+  now = Date.now(),
+): boolean {
+  return inflightCount >= FORUM_AI_MAX_CONCURRENT || retryAfter > now;
 }
 
 async function refreshMatchThreadAi(thread: ForumThread): Promise<void> {
@@ -279,8 +285,19 @@ async function refreshMatchThreadAi(thread: ForumThread): Promise<void> {
   // llama.cpp production exposes a single inference slot. Per-thread
   // single-flight is insufficient because a crawler can request many distinct
   // forum URLs at once. Fail open to the already complete deterministic thread
-  // instead of queueing unbounded model requests; a later GET can retry.
-  if (shouldShedForumAiRefresh(FORUM_AI_INFLIGHT.size)) return;
+  // instead of queueing unbounded model requests. A global cooldown also
+  // prevents a fast 502/model-warmup failure from becoming a retry storm.
+  const now = Date.now();
+  if (
+    shouldShedForumAiRefresh(
+      FORUM_AI_INFLIGHT.size,
+      forumAiGlobal.__betgptForumAiRetryAfter ?? 0,
+      now,
+    )
+  ) {
+    return;
+  }
+  forumAiGlobal.__betgptForumAiRetryAfter = now + FORUM_AI_RETRY_COOLDOWN_MS;
 
   const run = (async () => {
     try {

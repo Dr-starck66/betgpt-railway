@@ -63,7 +63,9 @@ test("agent-first forum density gate requires a real conversation", () => {
 
 
 test("forum AI load shedding keeps the one-slot local model bounded", () => {
-  assert.equal(shouldShedForumAiRefresh(0), false);
-  assert.equal(shouldShedForumAiRefresh(1), true);
-  assert.equal(shouldShedForumAiRefresh(8), true);
+  assert.equal(shouldShedForumAiRefresh(0, 0, 10_000), false);
+  assert.equal(shouldShedForumAiRefresh(1, 0, 10_000), true);
+  assert.equal(shouldShedForumAiRefresh(8, 0, 10_000), true);
+  assert.equal(shouldShedForumAiRefresh(0, 10_001, 10_000), true);
+  assert.equal(shouldShedForumAiRefresh(0, 10_000, 10_000), false);
 });
