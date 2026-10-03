@@ -112,7 +112,10 @@ export function extractInternalLinks(source = "", sourceRoute = "") {
   const tagRx = /<(?:a|Link)\b([^>]{0,1200})>([\s\S]{0,1200}?)<\/(?:a|Link)>/gi;
   for (const match of source.matchAll(tagRx)) {
     const attrs = match[1] || "";
-    const href = attrs.match(/(?:href|to)\s*=\s*["'`]([^"'`]+)["'`]/i)?.[1] || "";
+    const href =
+      attrs.match(/(?:href|to)\s*=\s*["'`]([^"'`]+)["'`]/i)?.[1] ||
+      attrs.match(/(?:href|to)\s*=\s*\{\s*`([^`]+)`\s*\}/i)?.[1] ||
+      "";
     if (!href.startsWith("/") || href.startsWith("//")) continue;
     const target = href.split(/[?#]/)[0].replace(/\/+$/, "") || "/";
     const anchor = normalizeText(stripTags(match[2] || ""));
@@ -128,6 +131,30 @@ export function extractInternalLinks(source = "", sourceRoute = "") {
   return links;
 }
 
+function routeSegments(route = "") {
+  return String(route).split("/").filter(Boolean);
+}
+
+function routePatternMatches(target = "", candidate = "") {
+  const targetSegments = routeSegments(target);
+  const candidateSegments = routeSegments(candidate);
+  if (targetSegments.length !== candidateSegments.length) return false;
+  return candidateSegments.every((segment, index) => {
+    const targetSegment = targetSegments[index] || "";
+    if (segment.startsWith(":")) return Boolean(targetSegment);
+    if (/^\$\{[^}]+\}$/.test(targetSegment) || targetSegment === ":dynamic") return true;
+    return normalizeText(segment) === normalizeText(targetSegment);
+  });
+}
+
+function resolveTargetRoute(target, pageByRoute) {
+  if (pageByRoute.has(target)) return target;
+  for (const candidate of pageByRoute.keys()) {
+    if (routePatternMatches(target, candidate)) return candidate;
+  }
+  return "";
+}
+
 export function analyzeSemanticFlow(pages = [], links = [], config = {}) {
   const cfg = {
     cannibalizationThreshold: 0.86,
@@ -135,8 +162,10 @@ export function analyzeSemanticFlow(pages = [], links = [], config = {}) {
     semanticJumpThreshold: 0.09,
     glideMin: 0.16,
     glideMax: 0.82,
+    recommendationIntentMin: 0.55,
     orphanMode: "partial",
     strategicRoutes: [],
+    parentHints: {},
     ...config,
   };
   const strategic = new Set(cfg.strategicRoutes || []);
@@ -145,7 +174,12 @@ export function analyzeSemanticFlow(pages = [], links = [], config = {}) {
   const edges = [];
   const inbound = new Map([...pageByRoute.keys()].map((route) => [route, 0]));
 
-  const validLinks = links.filter((link) => pageByRoute.has(link.targetRoute));
+  const validLinks = links
+    .map((link) => {
+      const resolved = resolveTargetRoute(link.targetRoute, pageByRoute);
+      return resolved ? { ...link, targetRoute: resolved } : null;
+    })
+    .filter(Boolean);
   for (const link of validLinks) {
     inbound.set(link.targetRoute, (inbound.get(link.targetRoute) || 0) + 1);
     const source = pageByRoute.get(link.sourceRoute);
@@ -216,19 +250,57 @@ export function analyzeSemanticFlow(pages = [], links = [], config = {}) {
   }
 
   const recommendations = [];
+  const hintedChildren = new Set();
+  for (const [childRoute, parentRoute] of Object.entries(cfg.parentHints || {})) {
+    const child = pageByRoute.get(childRoute);
+    const parent = pageByRoute.get(parentRoute);
+    if (!child || !parent || child.route === parent.route) continue;
+    hintedChildren.add(child.route);
+    recommendations.push({
+      parent: parent.route,
+      child: child.route,
+      similarity: semanticSimilarity(parent.tokens, child.tokens),
+      intentSimilarity: semanticSimilarity(parent.intentTokens, child.intentTokens),
+      reason: "configured-parent-hint",
+    });
+  }
+
   for (const child of indexable) {
-    if (child.route === "/") continue;
+    if (child.route === "/" || hintedChildren.has(child.route)) continue;
     const candidates = indexable
       .filter((parent) => parent.route !== child.route)
-      .map((parent) => ({
-        parent: parent.route,
-        child: child.route,
-        similarity: semanticSimilarity(parent.tokens, child.tokens),
-        intentSimilarity: semanticSimilarity(parent.intentTokens, child.intentTokens),
-      }))
-      .filter((item) => item.similarity >= cfg.glideMin && item.similarity <= cfg.glideMax)
-      .sort((a, b) => b.similarity - a.similarity || b.intentSimilarity - a.intentSimilarity);
-    if (candidates[0]) recommendations.push(candidates[0]);
+      .map((parent) => {
+        const structural = child.route.startsWith(parent.route.replace(/\/$/, "") + "/");
+        return {
+          parent: parent.route,
+          child: child.route,
+          similarity: semanticSimilarity(parent.tokens, child.tokens),
+          intentSimilarity: semanticSimilarity(parent.intentTokens, child.intentTokens),
+          structural,
+          broaderIntent: parent.intentTokens.length < child.intentTokens.length,
+        };
+      })
+      .filter((item) =>
+        item.structural ||
+        (
+          item.similarity >= cfg.glideMin &&
+          item.similarity <= cfg.glideMax &&
+          item.intentSimilarity >= cfg.recommendationIntentMin &&
+          item.broaderIntent
+        )
+      )
+      .sort((a, b) =>
+        Number(b.structural) - Number(a.structural) ||
+        b.intentSimilarity - a.intentSimilarity ||
+        b.similarity - a.similarity
+      );
+    if (candidates[0]) {
+      const { structural, broaderIntent, ...recommended } = candidates[0];
+      recommendations.push({
+        ...recommended,
+        reason: structural ? "route-hierarchy" : "semantic-broader-parent",
+      });
+    }
   }
 
   const fails = findings.filter((f) => f.status === "FAIL").length;
