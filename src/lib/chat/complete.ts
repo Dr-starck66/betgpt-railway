@@ -12,6 +12,7 @@ import { extractPunchline, type PunchlineMeta } from "./punch";
 import { absurdInsultCreativeBrief, generateAbsurdInsult } from "./absurd-insults";
 import { personalityBrief } from "./personality";
 import { renderDailyChatPick, selectDailyChatPick, selectDailyDataFallback } from "./daily-pick";
+import { callReliabilityGateway } from "@/lib/reliability/astra-reliability";
 
 async function ensureLiveForChat(timeoutMs = 3500) {
   const cached = getLiveSnapshot() ?? hydrateLiveFromDisk();
@@ -436,6 +437,30 @@ export async function completeChat(
   // never let a language model replace it with "donne-moi les affiches".
   if (classifyChatIntent(last) === "TODAY_PICKS" && desk.includes("SÉLECTION AUTOMATIQUE BETGPT")) {
     return success(localReply(last, desk, mode), mode, last, recentRoasts);
+  }
+
+  const reliabilityGatewayBase = process.env.ASTRA_LLM_GATEWAY_BASE?.trim();
+  if (reliabilityGatewayBase) {
+    try {
+      const out = await callReliabilityGateway(system, history, {
+        temperature: mode === "ROAST" ? 0.72 : 0.38,
+        maxTokens: 320,
+      });
+      if (out.ok) {
+        const text = stripMarkup(out.text).trim();
+        if (text) {
+          if (mustGround) {
+            const source = `${system}\n\n${history.map((m) => m.content).join("\n")}`;
+            if (hasUnsupportedGroundedClaim(text, source)) {
+              return success(groundedFallback(desk, last, mode), mode, last, recentRoasts);
+            }
+          }
+          return success(text, mode, last, recentRoasts);
+        }
+      }
+    } catch {
+      /* fail open to the existing local/router/cloud chain */
+    }
   }
 
   const localChatBase = process.env.ASTRA_LOCAL_CHAT_BASE?.trim();
