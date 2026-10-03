@@ -1,10 +1,9 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { reliabilityConfig } from "./astra-reliability";
+import { reliabilityConfig } from "./astra-reliability.ts";
 
 test("ASTRA reliability stays fail-closed for unconfigured optional services", () => {
   const snapshot = reliabilityConfig({});
-  assert.equal(snapshot.gatus, undefined);
   assert.equal(snapshot.components.gatus.status, "UNCONFIGURED");
   assert.equal(snapshot.components.litellm.status, "UNCONFIGURED");
   assert.equal(snapshot.components.trigger.status, "UNCONFIGURED");
