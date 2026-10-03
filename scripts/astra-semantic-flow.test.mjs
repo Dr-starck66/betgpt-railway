@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   analyzeSemanticFlow,
+  extractCatalogLinks,
   extractInternalLinks,
   extractPageSignals,
   semanticSimilarity,
@@ -175,4 +176,27 @@ test("parent recommendation refuses unrelated same-depth pages with weak intent 
     recommendationIntentMin: 0.55,
   });
   assert.ok(!report.recommendations.some((r) => r.parent === "/bundesliga" && r.child === "/cgu"));
+});
+
+
+test("custom JSX link components are counted as real internal links", () => {
+  const links = extractInternalLinks(
+    '<MenuLink to="/meilleur-site-pronostic" label="Guide des sites" />',
+    "@src/components/shell.tsx"
+  );
+  assert.equal(links.length, 1);
+  assert.equal(links[0].targetRoute, "/meilleur-site-pronostic");
+});
+
+test("configured link catalogs expose rendered route families without treating every path string as a link", () => {
+  const source = [
+    '{ league: "BL", path: "/bundesliga", title: "Bundesliga" }',
+    '{ slug: "ligue-1", scoresPath: "/scores-en-direct/ligue-1", resultsPath: "/resultats-football/ligue-1" }',
+    'const canonical = "/should-not-count";'
+  ].join("\n");
+  const links = extractCatalogLinks(source, "@catalog:test", ["path", "scoresPath", "resultsPath"]);
+  assert.deepEqual(
+    links.map((x) => x.targetRoute).sort(),
+    ["/bundesliga", "/resultats-football/ligue-1", "/scores-en-direct/ligue-1"].sort()
+  );
 });
