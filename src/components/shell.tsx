@@ -7,6 +7,7 @@ import { LEAGUE_HUBS } from "@/lib/programmatic";
 import { AgeGate } from "@/components/age-gate";
 import { ConsentAds, openCookieSettings } from "@/components/consent-ads";
 import { SeoImg } from "@/components/seo-img";
+import { SemanticFlowRepairLinks } from "@/components/semantic-flow-repair-links";
 import { cn } from "@/lib/utils";
 import { markVisit } from "@/lib/analytics";
 import { Home, Radar, Activity, MessageCircle, Menu, X, ShieldCheck, Sparkles } from "lucide-react";
@@ -265,6 +266,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <main id="contenu" className="mx-auto min-w-0 w-full max-w-[1480px] flex-1 px-4 py-6 sm:px-6 sm:py-8">
         {children}
+        <SemanticFlowRepairLinks pathname={pathname} />
       </main>
 
       <footer className="border-t border-line/80 bg-white/92 backdrop-blur">
