@@ -26,7 +26,6 @@ export function tokenize(value = "", stopwords = DEFAULT_STOPWORDS) {
   )];
 }
 
-/** @param {any[]} a @param {any[]} b */
 export function jaccard(a = [], b = []) {
   const A = new Set(a);
   const B = new Set(b);
@@ -36,7 +35,6 @@ export function jaccard(a = [], b = []) {
   return intersection / (A.size + B.size - intersection);
 }
 
-/** @param {any[]} a @param {any[]} b */
 export function overlapCoefficient(a = [], b = []) {
   const A = new Set(a);
   const B = new Set(b);
@@ -46,7 +44,6 @@ export function overlapCoefficient(a = [], b = []) {
   return intersection / Math.min(A.size, B.size);
 }
 
-/** @param {any[]} a @param {any[]} b */
 export function semanticSimilarity(a = [], b = []) {
   return Number((0.45 * jaccard(a, b) + 0.55 * overlapCoefficient(a, b)).toFixed(4));
 }
@@ -60,7 +57,6 @@ function stripTags(value = "") {
     .replace(/&[a-z]+;/gi, " ");
 }
 
-/** @param {string} source @param {RegExp[]} patterns */
 function firstMatch(source, patterns) {
   for (const pattern of patterns) {
     const match = source.match(pattern);
@@ -111,12 +107,9 @@ export function extractPageSignals(source = "", fallbackRoute = "") {
   };
 }
 
-/** @param {string} source @param {string} sourceRoute */
 export function extractInternalLinks(source = "", sourceRoute = "") {
-  /** @type {any[]} */
   const links = [];
   const seen = new Set();
-  /** @param {string} href @param {string} anchor */
   const add = (href, anchor = "") => {
     if (!href || !href.startsWith("/") || href.startsWith("//")) return;
     const target = href.split(/[?#]/)[0].replace(/\/+$/, "") || "/";
@@ -148,9 +141,7 @@ export function extractInternalLinks(source = "", sourceRoute = "") {
   return links;
 }
 
-/** @param {string} source @param {string} sourceRoute @param {string[]} properties */
 export function extractCatalogLinks(source = "", sourceRoute = "", properties = []) {
-  /** @type {any[]} */
   const links = [];
   const seen = new Set();
   for (const property of properties) {
@@ -168,6 +159,27 @@ export function extractCatalogLinks(source = "", sourceRoute = "", properties = 
   }
   return links;
 }
+export function extractAutoRepairLinks(source = "") {
+  const links = [];
+  for (const rawLine of String(source).split("\n")) {
+    const line = rawLine.trim().replace(/,$/, "");
+    if (!line.startsWith('{"source":')) continue;
+    try {
+      const row = JSON.parse(line);
+      if (!row?.source || !row?.href) continue;
+      links.push({
+        sourceRoute: row.source,
+        targetRoute: row.href,
+        anchor: normalizeText(row.anchor || ""),
+        autoRepair: true,
+      });
+    } catch {
+      // Ignore malformed non-data lines; generated registry syntax is tested separately.
+    }
+  }
+  return links;
+}
+
 function routeSegments(route = "") {
   return String(route).split("/").filter(Boolean);
 }
@@ -184,7 +196,6 @@ function routePatternMatches(target = "", candidate = "") {
   });
 }
 
-/** @param {string} target @param {Map<string, any>} pageByRoute */
 function resolveTargetRoute(target, pageByRoute) {
   if (pageByRoute.has(target)) return target;
   for (const candidate of pageByRoute.keys()) {
@@ -193,7 +204,6 @@ function resolveTargetRoute(target, pageByRoute) {
   return "";
 }
 
-/** @param {any[]} pages @param {any[]} links @param {Record<string, any>} config */
 export function analyzeSemanticFlow(pages = [], links = [], config = {}) {
   const cfg = {
     cannibalizationThreshold: 0.86,
@@ -207,12 +217,9 @@ export function analyzeSemanticFlow(pages = [], links = [], config = {}) {
     parentHints: {},
     ...config,
   };
-  /** @type {Set<string>} */
   const strategic = new Set(cfg.strategicRoutes || []);
   const pageByRoute = new Map(pages.filter((p) => p.indexable && p.route).map((p) => [p.route, p]));
-  /** @type {any[]} */
   const findings = [];
-  /** @type {any[]} */
   const edges = [];
   const inbound = new Map([...pageByRoute.keys()].map((route) => [route, 0]));
 
@@ -222,6 +229,11 @@ export function analyzeSemanticFlow(pages = [], links = [], config = {}) {
       return resolved ? { ...link, targetRoute: resolved } : null;
     })
     .filter(Boolean);
+  const descriptivePairs = new Set(
+    validLinks
+      .filter((link) => link.anchor && !GENERIC_ANCHORS.has(link.anchor))
+      .map((link) => link.sourceRoute + "|" + link.targetRoute)
+  );
   for (const link of validLinks) {
     inbound.set(link.targetRoute, (inbound.get(link.targetRoute) || 0) + 1);
     const source = pageByRoute.get(link.sourceRoute);
@@ -246,18 +258,21 @@ export function analyzeSemanticFlow(pages = [], links = [], config = {}) {
         message: `Lien potentiellement trop éloigné sémantiquement (score=${similarity}).`,
       });
     }
-    if (link.anchor && GENERIC_ANCHORS.has(link.anchor)) {
+    if (
+      link.anchor &&
+      GENERIC_ANCHORS.has(link.anchor) &&
+      !descriptivePairs.has(link.sourceRoute + "|" + link.targetRoute)
+    ) {
       findings.push({
         status: "PARTIAL",
         code: "GENERIC_ANCHOR",
         routes: [source.route, target.route],
-        message: `Ancre générique: "${link.anchor}".`,
+        message: `Ancre générique sans alternative descriptive: "${link.anchor}".`,
       });
     }
   }
 
   const indexable = [...pageByRoute.values()];
-  /** @type {any[]} */
   const pairScores = [];
   for (let i = 0; i < indexable.length; i++) {
     for (let j = i + 1; j < indexable.length; j++) {
@@ -292,9 +307,7 @@ export function analyzeSemanticFlow(pages = [], links = [], config = {}) {
     });
   }
 
-  /** @type {any[]} */
   const recommendations = [];
-  /** @type {Set<string>} */
   const hintedChildren = new Set();
   for (const [childRoute, parentRoute] of Object.entries(cfg.parentHints || {})) {
     const child = pageByRoute.get(childRoute);
