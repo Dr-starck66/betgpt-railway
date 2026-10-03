@@ -159,6 +159,27 @@ export function extractCatalogLinks(source = "", sourceRoute = "", properties = 
   }
   return links;
 }
+export function extractAutoRepairLinks(source = "") {
+  const links = [];
+  for (const rawLine of String(source).split("\n")) {
+    const line = rawLine.trim().replace(/,$/, "");
+    if (!line.startsWith('{"source":')) continue;
+    try {
+      const row = JSON.parse(line);
+      if (!row?.source || !row?.href) continue;
+      links.push({
+        sourceRoute: row.source,
+        targetRoute: row.href,
+        anchor: normalizeText(row.anchor || ""),
+        autoRepair: true,
+      });
+    } catch {
+      // Ignore malformed non-data lines; generated registry syntax is tested separately.
+    }
+  }
+  return links;
+}
+
 function routeSegments(route = "") {
   return String(route).split("/").filter(Boolean);
 }
@@ -208,6 +229,11 @@ export function analyzeSemanticFlow(pages = [], links = [], config = {}) {
       return resolved ? { ...link, targetRoute: resolved } : null;
     })
     .filter(Boolean);
+  const descriptivePairs = new Set(
+    validLinks
+      .filter((link) => link.anchor && !GENERIC_ANCHORS.has(link.anchor))
+      .map((link) => link.sourceRoute + "|" + link.targetRoute)
+  );
   for (const link of validLinks) {
     inbound.set(link.targetRoute, (inbound.get(link.targetRoute) || 0) + 1);
     const source = pageByRoute.get(link.sourceRoute);
@@ -232,12 +258,16 @@ export function analyzeSemanticFlow(pages = [], links = [], config = {}) {
         message: `Lien potentiellement trop éloigné sémantiquement (score=${similarity}).`,
       });
     }
-    if (link.anchor && GENERIC_ANCHORS.has(link.anchor)) {
+    if (
+      link.anchor &&
+      GENERIC_ANCHORS.has(link.anchor) &&
+      !descriptivePairs.has(link.sourceRoute + "|" + link.targetRoute)
+    ) {
       findings.push({
         status: "PARTIAL",
         code: "GENERIC_ANCHOR",
         routes: [source.route, target.route],
-        message: `Ancre générique: "${link.anchor}".`,
+        message: `Ancre générique sans alternative descriptive: "${link.anchor}".`,
       });
     }
   }
