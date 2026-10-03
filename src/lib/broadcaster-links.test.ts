@@ -31,3 +31,25 @@ test("priorise un diffuseur avec programme d'affiliation vérifié", () => {
   assert.equal(found[0]?.affiliateNetwork, "Awin");
   assert.equal(found[1]?.affiliateCapable, false);
 });
+
+
+test("ne confond pas un média cité comme source avec un diffuseur", () => {
+  const found = extractBroadcasters([
+    "L'Équipe rapporte que Dayot Upamecano a quitté le rassemblement.",
+    "RMC Sport confirme la nouvelle dans son article.",
+    "Eurosport publie également un papier sur le sujet.",
+  ]);
+  assert.deepEqual(found, []);
+  for (const text of [
+    "L'Équipe rapporte que Dayot Upamecano a quitté le rassemblement.",
+    "RMC Sport confirme la nouvelle dans son article.",
+  ]) {
+    assert.equal(tokenizeBroadcasterText(text).some((token) => token.kind === "link"), false);
+  }
+});
+
+test("garde L'Équipe comme diffuseur quand le contexte TV est explicite", () => {
+  const found = extractBroadcasters(["Diffusion TV : le match est à suivre sur la chaîne L'Équipe Live Foot."]);
+  assert.equal(found.length, 1);
+  assert.equal(found[0]?.key, "lequipe");
+});
