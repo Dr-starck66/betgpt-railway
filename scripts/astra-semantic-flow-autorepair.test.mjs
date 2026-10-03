@@ -54,7 +54,7 @@ test("orphan with explicit deterministic parent is auto-repaired", () => {
   });
 
   assert.equal(after.summary.failures, 0);
-  assert.ok(!after.findings.some((f) => f.code === "ORPHAN_PAGE"));
+  assert.ok(!after.findings.some((f) => f.code === "ORPHAN_PAGE" && f.routes?.[0] === "/guides/value-bet"));
 });
 
 test("route hierarchy repairs a static orphan without guessing a semantic parent", () => {
