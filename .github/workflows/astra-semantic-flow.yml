@@ -1,6 +1,8 @@
 name: ASTRA Semantic Flow Guard Ω
 
 on:
+  push:
+    branches: [main]
   pull_request:
     branches: [main]
     paths:
