@@ -9,6 +9,7 @@ export type BroadcasterSpec = {
     verifiedAt: string;
   };
   patterns: string[];
+  requiresBroadcastContext?: boolean;
 };
 
 export type BroadcasterLink = {
@@ -39,9 +40,9 @@ export const BROADCASTERS: BroadcasterSpec[] = [
   { key: "m6", label: "M6", officialUrl: "https://www.m6.fr/", patterns: ["M6(?:\\+)?"] },
   { key: "w9", label: "W9", officialUrl: "https://www.6play.fr/w9", patterns: ["W9"] },
   { key: "france-tv", label: "France Télévisions", officialUrl: "https://www.france.tv/", patterns: ["France\\s+(?:2|3|4|5)", "france\\.tv"] },
-  { key: "lequipe", label: "L'Équipe", officialUrl: "https://www.lequipe.fr/tv/", patterns: ["(?:la\\s+cha[iî]ne\\s+)?L[’']?Équipe(?:\\s+Live\\s+Foot)?"] },
-  { key: "rmc-sport", label: "RMC Sport", officialUrl: "https://rmcsport.bfmtv.com/", patterns: ["RMC\\s+Sport(?:\\s+\\d+)?"] },
-  { key: "eurosport", label: "Eurosport", officialUrl: "https://www.eurosport.fr/", patterns: ["Eurosport(?:\\s+[12])?"] },
+  { key: "lequipe", label: "L'Équipe", officialUrl: "https://www.lequipe.fr/tv/", patterns: ["(?:la\\s+cha[iî]ne\\s+)?L[’']?Équipe(?:\\s+Live\\s+Foot)?"], requiresBroadcastContext: true },
+  { key: "rmc-sport", label: "RMC Sport", officialUrl: "https://rmcsport.bfmtv.com/", patterns: ["RMC\\s+Sport(?:\\s+\\d+)?"], requiresBroadcastContext: true },
+  { key: "eurosport", label: "Eurosport", officialUrl: "https://www.eurosport.fr/", patterns: ["Eurosport(?:\\s+[12])?"], requiresBroadcastContext: true },
   { key: "prime-video", label: "Prime Video", officialUrl: "https://www.primevideo.com/", affiliateProgram: { network: "Amazon Partenaires", programUrl: "https://partenaires.amazon.fr/promotion/piv", verifiedAt: "2026-10-02" }, patterns: ["(?:Amazon\\s+)?Prime\\s+Video"] },
   { key: "uefa-tv", label: "UEFA.tv", officialUrl: "https://www.uefa.tv/", patterns: ["UEFA\\.tv"] },
   { key: "fifa-plus", label: "FIFA+", officialUrl: "https://www.plus.fifa.com/", patterns: ["FIFA\\+"] },
@@ -72,6 +73,13 @@ export function resolveBroadcasterMention(value: string): BroadcasterLink | null
   };
 }
 
+function hasBroadcastContext(text: string, index: number, length: number): boolean {
+  const before = text.slice(Math.max(0, index - 90), index);
+  const after = text.slice(index + length, Math.min(text.length, index + length + 90));
+  const context = before + " " + after;
+  return /(?:diffusion|diffus[ée]e?|diffusé(?:e)?\s+sur|retransmis(?:e)?|retransmission|cha[iî]ne|t[eé]l[eé]vision|\bTV\b|streaming|en clair|à voir|regarder|à suivre\s+sur)/i.test(context);
+}
+
 export function tokenizeBroadcasterText(text: string): BroadcasterToken[] {
   if (!text) return [{ kind: "text", text }];
   const out: BroadcasterToken[] = [];
@@ -81,7 +89,9 @@ export function tokenizeBroadcasterText(text: string): BroadcasterToken[] {
     const index = match.index ?? 0;
     if (index > last) out.push({ kind: "text", text: text.slice(last, index) });
     const raw = match[0] ?? "";
-    const link = resolveBroadcasterMention(raw);
+    const spec = specFor(raw);
+    const contextAllowsLink = !spec?.requiresBroadcastContext || hasBroadcastContext(text, index, raw.length);
+    const link = contextAllowsLink ? resolveBroadcasterMention(raw) : null;
     out.push(link ? { kind: "link", ...link } : { kind: "text", text: raw });
     last = index + raw.length;
   }
