@@ -31,7 +31,7 @@ export function reliabilityConfig(env: NodeJS.ProcessEnv = process.env) {
   return {
     schema: "astra-reliability/v1",
     service: "betgpt",
-    status: configuredCount === 5 ? "PASS" : configuredCount > 0 ? "PARTIAL" : "UNVERIFIED",
+    status: configuredCount > 0 ? "PARTIAL" : "UNVERIFIED",
     components,
     timestamp: new Date().toISOString(),
   };
