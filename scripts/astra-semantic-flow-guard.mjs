@@ -13,6 +13,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import {
   analyzeSemanticFlow,
+  extractAutoRepairLinks,
   extractCatalogLinks,
   extractInternalLinks,
   extractPageSignals,
@@ -65,6 +66,7 @@ for (const dir of cfg.routeDirs || ["src/routes"]) {
 
 const extensions = cfg.extensions || [".tsx", ".ts", ".jsx", ".js"];
 const ignored = new Set((cfg.ignoreFiles || []).map(norm));
+const registryRel = norm(cfg.autoRepairRegistry || "src/lib/seo/semantic-auto-links.generated.ts");
 const pages = [];
 const routeByFile = new Map();
 
@@ -87,6 +89,7 @@ const links = [];
 for (const file of corpusFiles) {
   const rel = norm(path.relative(root, file));
   if (!extensions.some((ext) => rel.endsWith(ext)) && !rel.endsWith(".mjs")) continue;
+  if (rel === registryRel) continue;
   const source = await fs.readFile(file, "utf8");
   const sourceRoute = routeByFile.get(rel) || `@${rel}`;
   links.push(...extractInternalLinks(source, sourceRoute));
@@ -108,6 +111,13 @@ for (const catalog of cfg.linkCatalogs || []) {
       catalog.properties || []
     )
   );
+}
+
+try {
+  const registrySource = await fs.readFile(path.join(root, registryRel), "utf8");
+  links.push(...extractAutoRepairLinks(registrySource));
+} catch {
+  // Missing registry means there are no persisted auto-repairs yet.
 }
 
 const report = analyzeSemanticFlow(pages, links, cfg);
