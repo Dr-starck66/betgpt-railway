@@ -124,7 +124,7 @@
     ],
     "createdAt": "2026-10-01T15:18:00.000Z",
     "publishedAt": "2026-10-01T15:18:00.000Z",
-    "modifiedAt": "2026-10-01T20:58:00.000Z",
+    "modifiedAt": "2026-10-03T17:50:00.000Z",
     "parisDate": "2026-10-01",
     "scheduledTime": "17:18",
     "category": "Actualité football",
@@ -169,14 +169,14 @@
         "id": "ladepeche-mbappe-paris-2026-10-01",
         "label": "La Dépêche",
         "status": "HIGH_CONFIDENCE",
-        "note": "La Dépêche documente les images parisiennes et la polémique qu'elles ont déclenchée dans plusieurs médias espagnols.",
+        "note": "La Dépêche documente les images de Kylian Mbappé à Paris et la polémique déclenchée par sa présence dans la capitale pendant sa récupération.",
         "url": "https://www.ladepeche.fr/2026/10/01/kylian-mbappe-blesse-le-capitaine-des-bleus-filme-a-lentree-dune-boite-de-nuit-parisienne-la-presse-espagnole-lance-la-rumeur-dune-fausse-blessure-13578564.php"
       },
       {
         "id": "realfrance-mbappe-paris-2026-10-01",
         "label": "Real-France",
         "status": "CORROBORATED",
-        "note": "Real-France relaie également l'autorisation donnée au joueur et la logique de repos actif attribuée au staff madrilène.",
+        "note": "Real-France rapporte que Kylian Mbappé avait l'autorisation du Real Madrid pour son déplacement à Paris et relaie la logique de repos actif du staff madrilène.",
         "url": "https://real-france.fr/mbappe-en-soiree-a-paris-la-reponse-du-real-madrid/"
       }
     ],
@@ -261,9 +261,13 @@
       {
         "at": "2026-10-01T20:28:00.000Z",
         "note": "Ajout de citations externes contextuelles par passage, retrait du nofollow systématique sur les sources éditoriales fiables et ajout du communiqué médical officiel du Real Madrid."
+      },
+      {
+        "at": "2026-10-03T17:50:00.000Z",
+        "note": "Métadonnées de source précisées afin que chaque attribution nomme explicitement Kylian Mbappé et le fait documenté."
       }
     ],
-    "factHash": "manual-mbappe-paris-2026-10-01-v4",
+    "factHash": "source-integrity-mbappe-paris-2026-10-03-v5",
     "keywords": "Kylian Mbappé, Real Madrid, Paris, blessure Mbappé, récupération Mbappé, La Liga"
   },
   {
