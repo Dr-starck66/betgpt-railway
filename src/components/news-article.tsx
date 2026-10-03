@@ -122,10 +122,6 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
 
       <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start">
         <div className="min-w-0 space-y-6">
-          <div className="surface-card p-5 sm:p-6">
-            <p className="readable-prose text-paper"><BroadcasterText text={article.lead} /></p>
-          </div>
-
           {article.paragraphs.map((part) => (
             <section key={part.h2} className="surface-card space-y-4 p-5 sm:p-7">
               <h2 className="text-2xl font-semibold tracking-tight">{part.h2}</h2>
