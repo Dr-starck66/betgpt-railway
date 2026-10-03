@@ -910,14 +910,37 @@ export const getForumThread = createServerFn({ method: "GET" })
 
     // The public desk can be a short window. A match page still resolves from
     // the engine or the archive — the forum URL must do the same.
-    const stored = getPrediction(data.id) ?? resolveStoredMatch(data.id);
+    let stored = getPrediction(data.id) ?? resolveStoredMatch(data.id);
+
+    // Historical human slugs (including NL / internationals) can fall out of
+    // both the short live desk and the seeded archive. Rehydrate them directly
+    // from the dated ESPN scoreboards before ever returning a dead forum URL.
+    if (!stored) {
+      try {
+        const espn = await Promise.race([
+          fetchEspnEvent(data.id),
+          new Promise<null>((resolve) => setTimeout(() => resolve(null), MATCH_ROUTE_EVENT_BUDGET_MS)),
+        ]);
+        if (espn) {
+          const match = espn as MatchInput;
+          stored = { match, prediction: predictMatch(match) };
+        }
+      } catch {
+        /* provider unavailable: fail closed below */
+      }
+    }
+
     if (!stored) return null;
     const matchId = stored.match.slug ?? stored.match.id;
     if (skipEuropeFrenchProno(stored.match)) return { redirectMatchId: matchId };
     const thread = buildForum([stored.match], [stored.prediction])
       .map(forumFullThread)
       .find((t) => t.matchHref);
-    return thread ? enrichForumThreadWithAi(thread) : { redirectMatchId: matchId };
+    if (thread) {
+      void persistForumThread(thread, { force: true }).catch(() => undefined);
+      return enrichForumThreadWithAi(thread);
+    }
+    return { redirectMatchId: matchId };
   });
 
 function sistersFor(match: MatchInput): MatchInput[] {
