@@ -1,4 +1,5 @@
 import { contextualAuthorityGate } from "../src/lib/editorial/authority-citations.ts";
+import { sourceIntegrityGate } from "../src/lib/editorial/source-integrity.ts";
 import { discoverLaunchpadStaticAudit, recentDiscoverCandidates } from "../src/lib/editorial/discover-launchpad.ts";
 import { editionFromDesk } from "../src/lib/editorial/run.server.ts";
 import { isPublicArticle } from "../src/lib/editorial/types.ts";
@@ -8,6 +9,17 @@ import { syncPublishedArticlesToSocial } from "../src/lib/social/run.server.ts";
 const now = new Date();
 const { edition } = await editionFromDesk(now);
 const published = edition.articles.filter(isPublicArticle);
+const integrityFailures = published
+  .map((article) => ({ article, gate: sourceIntegrityGate(article) }))
+  .filter(({ gate }) => !gate.pass);
+
+if (integrityFailures.length) {
+  for (const { article, gate } of integrityFailures) {
+    console.error(`ASTRA_NEWS_SOURCE_INTEGRITY_FAIL ${article.slug}: ${gate.reasons.join(" | ")}`);
+  }
+  process.exit(2);
+}
+
 const authorityFailures = published
   .map((article) => ({ article, gate: contextualAuthorityGate(article) }))
   .filter(({ gate }) => !gate.pass);
