@@ -88,11 +88,12 @@
     "test:launch-video": "node --test scripts/astra-launch-video.test.mjs",
     "launch:video": "node scripts/astra-launch-video.mjs",
     "guard:launch-video": "node scripts/astra-launch-video-guard.mjs",
-    "seo:semantic-flow:verify": "npm run test:semantic-flow && npm run test:semantic-autorepair && npm run seo:semantic-autorepair && npm run seo:semantic-flow",
+    "seo:semantic-flow:verify": "npm run test:semantic-types && npm run test:semantic-flow && npm run test:semantic-autorepair && npm run seo:semantic-autorepair && npm run seo:semantic-flow",
     "seo:semantic-autorepair": "node scripts/astra-semantic-flow-autorepair.mjs --apply --strict",
     "seo:semantic-autorepair:diagnose": "node scripts/astra-semantic-flow-autorepair.mjs",
     "test:semantic-autorepair": "node --test scripts/astra-semantic-flow-autorepair.test.mjs",
-    "seo:semantic-autorepair:verify": "npm run test:semantic-autorepair && node scripts/astra-semantic-flow-autorepair.mjs --apply --strict && npm run seo:semantic-flow"
+    "seo:semantic-autorepair:verify": "npm run test:semantic-autorepair && node scripts/astra-semantic-flow-autorepair.mjs --apply --strict && npm run seo:semantic-flow",
+    "test:semantic-types": "tsc --noEmit"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.4",
