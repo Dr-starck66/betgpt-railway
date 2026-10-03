@@ -109,28 +109,56 @@ export function extractPageSignals(source = "", fallbackRoute = "") {
 
 export function extractInternalLinks(source = "", sourceRoute = "") {
   const links = [];
+  const seen = new Set();
+  const add = (href, anchor = "") => {
+    if (!href || !href.startsWith("/") || href.startsWith("//")) return;
+    const target = href.split(/[?#]/)[0].replace(/\/+$/, "") || "/";
+    const key = sourceRoute + "|" + target + "|" + normalizeText(anchor);
+    if (seen.has(key)) return;
+    seen.add(key);
+    links.push({ sourceRoute, targetRoute: target, anchor: normalizeText(anchor) });
+  };
+
   const tagRx = /<(?:a|Link)\b([^>]{0,1200})>([\s\S]{0,1200}?)<\/(?:a|Link)>/gi;
   for (const match of source.matchAll(tagRx)) {
     const attrs = match[1] || "";
     const href =
-      attrs.match(/(?:href|to)\s*=\s*["'`]([^"'`]+)["'`]/i)?.[1] ||
+      attrs.match(/(?:href|to)\s*=\s*["\'`]([^"\'`]+)["\'`]/i)?.[1] ||
       attrs.match(/(?:href|to)\s*=\s*\{\s*`([^`]+)`\s*\}/i)?.[1] ||
       "";
-    if (!href.startsWith("/") || href.startsWith("//")) continue;
-    const target = href.split(/[?#]/)[0].replace(/\/+$/, "") || "/";
-    const anchor = normalizeText(stripTags(match[2] || ""));
-    links.push({ sourceRoute, targetRoute: target, anchor });
+    add(href, stripTags(match[2] || ""));
   }
-  const objectRx = /(?:href|to)\s*:\s*["'`]([^"'`]+)["'`]/gi;
-  for (const match of source.matchAll(objectRx)) {
-    const href = match[1] || "";
-    if (!href.startsWith("/") || href.startsWith("//")) continue;
-    const target = href.split(/[?#]/)[0].replace(/\/+$/, "") || "/";
-    links.push({ sourceRoute, targetRoute: target, anchor: "" });
-  }
+
+  const jsxAttrRx = /(?:href|to)\s*=\s*["\'`]([^"\'`]+)["\'`]/gi;
+  for (const match of source.matchAll(jsxAttrRx)) add(match[1] || "");
+
+  const jsxTemplateRx = /(?:href|to)\s*=\s*\{\s*`([^`]+)`\s*\}/gi;
+  for (const match of source.matchAll(jsxTemplateRx)) add(match[1] || "");
+
+  const objectRx = /(?:href|to)\s*:\s*["\'`]([^"\'`]+)["\'`]/gi;
+  for (const match of source.matchAll(objectRx)) add(match[1] || "");
+
   return links;
 }
 
+export function extractCatalogLinks(source = "", sourceRoute = "", properties = []) {
+  const links = [];
+  const seen = new Set();
+  for (const property of properties) {
+    if (!/^[A-Za-z0-9_]+$/.test(String(property))) continue;
+    const pattern = new RegExp("\\b" + property + "\\s*:\\s*[\\\"\'`]([^\\\"\'`]+)[\\\"\'`]", "gi");
+    for (const match of source.matchAll(pattern)) {
+      const href = match[1] || "";
+      if (!href.startsWith("/") || href.startsWith("//")) continue;
+      const target = href.split(/[?#]/)[0].replace(/\/+$/, "") || "/";
+      const key = sourceRoute + "|" + target + "|" + property;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      links.push({ sourceRoute, targetRoute: target, anchor: normalizeText(property) });
+    }
+  }
+  return links;
+}
 function routeSegments(route = "") {
   return String(route).split("/").filter(Boolean);
 }
