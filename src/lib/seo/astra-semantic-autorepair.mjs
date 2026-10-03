@@ -7,6 +7,7 @@ function cleanLabel(value = "") {
     .trim();
 }
 
+/** @param {any} page */
 export function descriptiveAnchor(page = {}) {
   const raw = cleanLabel(page.h1 || page.title || "");
   if (raw && normalizeText(raw).length >= 4) return raw;
@@ -22,6 +23,7 @@ export function isStaticRoute(route = "") {
   return Boolean(route) && !String(route).includes(":") && !String(route).includes("$" + "{");
 }
 
+/** @param {string} route @param {Map<string, any>} pageByRoute */
 function parentFromHierarchy(route, pageByRoute) {
   if (!isStaticRoute(route) || route === "/") return "";
   const parts = route.split("/").filter(Boolean);
@@ -33,22 +35,29 @@ function parentFromHierarchy(route, pageByRoute) {
   return "";
 }
 
+/** @param {any} action */
 function actionKey(action) {
   return [action.type, action.source, action.target, normalizeText(action.anchor)].join("|");
 }
 
+/** @param {any} report @param {any[]} pages @param {any} config */
 export function planSemanticRepairs(report, pages = [], config = {}) {
+  /** @type {any} */
   const cfg = {
     semanticJumpThreshold: 0.09,
     parentHints: {},
     autoRepairGenericAnchors: true,
     ...config,
   };
+  /** @type {Map<string, any>} */
   const pageByRoute = new Map(
     pages.filter((page) => page?.indexable && page?.route).map((page) => [page.route, page])
   );
+  /** @type {any[]} */
   const actions = [];
+  /** @type {any[]} */
   const suggestions = [];
+  /** @type {any[]} */
   const blocked = [];
 
   for (const finding of report?.findings || []) {
@@ -151,7 +160,9 @@ export function planSemanticRepairs(report, pages = [], config = {}) {
     }
   }
 
+  /** @type {any[]} */
   const deduped = [];
+  /** @type {Set<string>} */
   const seen = new Set();
   for (const action of actions) {
     const key = actionKey(action);
@@ -173,6 +184,7 @@ export function planSemanticRepairs(report, pages = [], config = {}) {
   };
 }
 
+/** @param {any[]} actions */
 export function renderSemanticAutoLinks(actions = []) {
   const rows = [...actions]
     .sort((a, b) =>
