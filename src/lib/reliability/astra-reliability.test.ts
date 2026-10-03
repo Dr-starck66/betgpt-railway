@@ -24,5 +24,5 @@ test("ASTRA reliability reports configured components without inventing runtime 
   assert.equal(snapshot.components.gatus.status, "CONFIGURED");
   assert.equal(snapshot.components.litellm.status, "CONFIGURED");
   assert.equal(snapshot.components.railwayTracing.status, "CONFIGURED");
-  assert.equal(snapshot.status, "PASS");
+  assert.equal(snapshot.status, "PARTIAL");
 });
