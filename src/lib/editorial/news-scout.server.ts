@@ -130,6 +130,7 @@ function decodeXml(value: string): string {
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
     .replace(/&quot;/g, '"')
+    .replace(/&nbsp;|&#160;/gi, " ")
     .replace(/&#39;|&apos;/g, "'")
     .replace(/&#(\d+);/g, (_, n: string) => String.fromCharCode(Number(n)));
 }
