@@ -274,18 +274,18 @@
     "status": "PUBLISHED",
     "title": "Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ? | BetGPT",
     "h1": "Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ?",
-    "lead": "Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ?. RMC Sport a publié cette information jeudi 1 octobre 2026 à 21:09. Le dossier est repris par 2 sources distinctes. Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ? &nbsp;&nbsp; RMC Sport",
+    "lead": "Ousmane Dembélé est au centre des interrogations offensives avant France–Italie. RMC Sport analyse son rôle dans l'attaque des Bleus, tandis qu'Ouest-France évoque son retour parmi les options offensives avec Michael Olise.",
     "paragraphs": [
       {
         "h2": "Le fait nouveau qui fait basculer le dossier",
-        "body": "RMC Sport rapporte Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ?. L'information devient pertinente parce qu'elle précise un dossier déjà suivi, sans transformer une hypothèse en certitude. Au total, 2 rédactions ou sources distinctes alimentent ce cluster d'actualité. Les détails complémentaires sont attribués séparément dans la section suivante afin d'éviter de transformer une reprise en confirmation indépendante.",
+        "body": "RMC Sport s'interroge sur le rôle d'Ousmane Dembélé comme leader offensif de l'équipe de France. Ouest-France traite également de son retour parmi les options offensives avant France–Italie. Les deux publications sont conservées comme sources journalistiques distinctes ; le calendrier FFF sert uniquement de repère pour le match.",
         "sourceIds": [
           "news-2c68563d"
         ]
       },
       {
         "h2": "Ce que disent précisément les différentes sources",
-        "body": "RMC Sport, jeudi 1 octobre 2026 à 21:09 : Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ? &nbsp;&nbsp; RMC Sport Ouest-France, jeudi 1 octobre 2026 à 20:42 : France - Italie. Les compositions probables avec les retours de Dembélé et Olise en attaque ? &nbsp;&nbsp; Ouest-France Cette présentation reste volontairement attribuée source par source : lorsque deux médias racontent le même épisode avec des détails différents, BetGPT ne fusionne pas automatiquement ces détails en un fait unique. Une information n'est élevée au rang de fait établi que si son niveau de source le justifie ou si plusieurs références indépendantes convergent réellement.",
+        "body": "RMC Sport traite directement du rôle offensif de Dembélé avec les Bleus. Ouest-France aborde France–Italie et les retours de Dembélé et Olise dans les options d'attaque. Les détails propres à chaque média restent attribués et ne sont pas fusionnés automatiquement.",
         "sourceIds": [
           "news-2c68563d",
           "news-b113527b"
@@ -308,7 +308,7 @@
       },
       {
         "h2": "Ce qui est établi, corroboré ou encore fragile",
-        "body": "Le cluster contient 0 source officielle, 2 sources de premier niveau journalistique et 0 autre source. Aucune déclaration officielle n'est ajoutée artificiellement si elle n'existe pas dans le flux. Les points communs entre plusieurs sources sont présentés comme corroborés ; les détails isolés restent attribués.",
+        "body": "Deux sources journalistiques fortes et distinctes portent sur le rôle ou le retour offensif de Dembélé. La FFF confirme uniquement le cadre France–Italie et n'est pas comptée comme deuxième corroboration du propos éditorial.",
         "sourceIds": [
           "news-2c68563d",
           "news-b113527b"
@@ -325,7 +325,7 @@
     ],
     "createdAt": "2026-10-01T20:06:39.555Z",
     "publishedAt": "2026-10-01T20:06:39.555Z",
-    "modifiedAt": "2026-10-01T20:06:39.555Z",
+    "modifiedAt": "2026-10-03T17:45:00.000Z",
     "parisDate": "2026-10-01",
     "scheduledTime": "08:00",
     "category": "Actualité football",
@@ -390,14 +390,19 @@
         "label": "BetGPT Editorial"
       }
     ],
-    "corrections": [],
+    "corrections": [
+      {
+        "at": "2026-10-03T17:45:00.000Z",
+        "note": "Nettoyage des artefacts HTML et séparation explicite entre corroboration journalistique et source calendrier."
+      }
+    ],
     "sourceChanges": [
       {
         "at": "2026-10-01T21:38:00.000Z",
         "note": "Backfill ASTRA Editorial Authority Guard : ajout des sources contextuelles par section et d'une source officielle FFF pour le repère France–Italie."
       }
     ],
-    "factHash": "490252ff",
+    "factHash": "source-integrity-dembele-2026-10-03-v2",
     "keywords": "France, Ligue des nations de l'UEFA, actualité football",
     "image": {
       "src": "/blog/discover/inline-live.jpg",
@@ -1163,260 +1168,6 @@
     "keywords": "France Italie, Ligue des nations, UEFA Nations League, Bleus, équipe de France, Stade de France, Italie football"
   },
   {
-    "id": "ed-2026-10-02-morning",
-    "slug": "france-italie-ligue-des-nations-a-match-en-direct-le-02-10-2026-2026-10-02",
-    "slot": "morning",
-    "articleType": "news",
-    "status": "PUBLISHED",
-    "title": "France - Italie, Ligue des nations A, match en direct le 02/10/2026 | BetGPT",
-    "h1": "France - Italie, Ligue des nations A, match en direct le 02/10/2026",
-    "lead": "France - Italie, Ligue des nations A, match en direct le 02/10/2026. L'Équipe a publié cette information vendredi 2 octobre 2026 à 12:16. Le dossier est repris par 5 sources distinctes. France - Italie, Ligue des nations A, match en direct le 02/10/2026 &nbsp;&nbsp; L'Équipe",
-    "paragraphs": [
-      {
-        "h2": "Le fait nouveau qui fait basculer le dossier",
-        "body": "L'Équipe rapporte France - Italie, Ligue des nations A, match en direct le 02/10/2026. L'information devient pertinente parce qu'elle précise un dossier déjà suivi, sans transformer une hypothèse en certitude. Au total, 5 rédactions ou sources distinctes alimentent ce cluster d'actualité. Les détails complémentaires sont attribués séparément dans la section suivante afin d'éviter de transformer une reprise en confirmation indépendante.",
-        "sourceIds": [
-          "news-36aac6ab"
-        ]
-      },
-      {
-        "h2": "Ce que disent précisément les différentes sources",
-        "body": "L'Équipe, vendredi 2 octobre 2026 à 12:16 : France - Italie, Ligue des nations A, match en direct le 02/10/2026 &nbsp;&nbsp; L'Équipe Foot Mercato, vendredi 2 octobre 2026 à 12:03 : France - Italie : les compositions probables &nbsp;&nbsp; Foot Mercato franceinfo, vendredi 2 octobre 2026 à 09:50 : Zinédine Zidane foule la pelouse du Stade de France pour la première fois en tant que sélectionneur &nbsp;&nbsp; franceinfo Les Titis du PSG, vendredi 2 octobre 2026 à 11:55 : [News-Sélections] EdF A : Ousmane Dembélé souligne les similitudes entre le PSG et l’équipe de France de Zidane &nbsp;&nbsp; Les Titis du PSG Foot01, vendredi 2 octobre 2026 à 10:00 : France-Italie : La compo de Zidane, l'ère Deschamps est bien finie &nbsp;&nbsp; Foot01 Cette présentation reste volontairement attribuée source par source : lorsque deux médias racontent le même épisode avec des détails différents, BetGPT ne fusionne pas automatiquement ces détails en un fait unique. Une information n'est élevée au rang de fait établi que si son niveau de source le justifie ou si plusieurs références indépendantes convergent réellement.",
-        "sourceIds": [
-          "news-36aac6ab",
-          "news-8b59747d",
-          "news-23823e53",
-          "news-70747259",
-          "news-10cf1b15"
-        ]
-      },
-      {
-        "h2": "La chronologie des publications",
-        "body": "vendredi 2 octobre 2026 à 09:50 — franceinfo publie « Zinédine Zidane foule la pelouse du Stade de France pour la première fois en tant que sélectionneur ». vendredi 2 octobre 2026 à 10:00 — Foot01 publie « France-Italie : La compo de Zidane, l'ère Deschamps est bien finie ». vendredi 2 octobre 2026 à 11:55 — Les Titis du PSG publie « [News-Sélections] EdF A : Ousmane Dembélé souligne les similitudes entre le PSG et l’équipe de France de Zidane ». vendredi 2 octobre 2026 à 12:03 — Foot Mercato publie « France - Italie : les compositions probables ». vendredi 2 octobre 2026 à 12:16 — L'Équipe publie « France - Italie, Ligue des nations A, match en direct le 02/10/2026 ». Cette chronologie permet de distinguer le fait initial, les reprises et les éventuelles confirmations plus tardives. Elle évite surtout de présenter comme simultanées des informations qui ont pu évoluer au fil de la journée.",
-        "sourceIds": [
-          "news-36aac6ab",
-          "news-8b59747d",
-          "news-23823e53",
-          "news-70747259",
-          "news-10cf1b15"
-        ]
-      },
-      {
-        "h2": "Le repère sportif concret autour de cette information",
-        "body": "Le calendrier BetGPT rattache ce sujet à France – Italy, en Ligue des nations, avec un coup d'envoi vendredi 2 octobre 2026 à 20:45. Ce match fournit un repère sportif concret pour mesurer les conséquences de l'information sans inventer de date de retour, de composition ou de disponibilité. Les entités explicitement détectées dans les sources sont : France, PSG.",
-        "sourceIds": [
-          "cal-espn-401861103",
-          "news-36aac6ab"
-        ]
-      },
-      {
-        "h2": "Ce qui est établi, corroboré ou encore fragile",
-        "body": "Le cluster contient 0 source officielle, 3 sources de premier niveau journalistique et 2 autres sources. Aucune déclaration officielle n'est ajoutée artificiellement si elle n'existe pas dans le flux. Les points communs entre plusieurs sources sont présentés comme corroborés ; les détails isolés restent attribués.",
-        "sourceIds": [
-          "news-36aac6ab",
-          "news-8b59747d",
-          "news-23823e53",
-          "news-70747259",
-          "news-10cf1b15"
-        ]
-      },
-      {
-        "h2": "Le prochain élément qui permettra de mettre l'article à jour",
-        "body": "Pour France, PSG, la suite utile dépend d'un fait supplémentaire attribuable : déclaration, décision, résultat, liste officielle ou nouvelle donnée de match. Sans élément nouveau, aucune dépêche supplémentaire n'est créée. BetGPT ne republie pas une nouvelle dépêche pour répéter le même état de fait : une mise à jour exige un changement matériel, une confirmation nouvelle ou une donnée sportive directement vérifiable.",
-        "sourceIds": [
-          "news-36aac6ab",
-          "news-8b59747d"
-        ]
-      }
-    ],
-    "createdAt": "2026-10-02T10:56:57.235Z",
-    "publishedAt": "2026-10-02T10:56:57.235Z",
-    "modifiedAt": "2026-10-02T10:56:57.235Z",
-    "parisDate": "2026-10-02",
-    "scheduledTime": "08:00",
-    "category": "Actualité football",
-    "section": "football",
-    "league": "NL",
-    "teams": [
-      "France",
-      "PSG"
-    ],
-    "matchId": "espn-401861103",
-    "competition": "Ligue des nations",
-    "sources": [
-      {
-        "id": "news-36aac6ab",
-        "label": "L'Équipe",
-        "status": "CORROBORATED",
-        "note": "France - Italie, Ligue des nations A, match en direct le 02/10/2026 · publié vendredi 2 octobre 2026 à 12:16.",
-        "url": "https://news.google.com/rss/articles/CBMimwFBVV95cUxPUnB3UVprYkp2Z3BQd1ZxendkT3N4VVZ1TW56RjRUbVhYM3VQak10THRxU1pmdWhhWFMwT1NCUkdfTFJhUHBnZVE1XzFhZ0RoQXVaS0Exb2tTaU9tYnJZS1lCUXdGeW51UGVlckVLOFF0TU9qUWd4TlNlRzRXWlZjZW80eWVseDVIampZT3NPLUJ0WmgtUFhOZHF5aw?oc=5"
-      },
-      {
-        "id": "news-8b59747d",
-        "label": "Foot Mercato",
-        "status": "CORROBORATED",
-        "note": "France - Italie : les compositions probables · publié vendredi 2 octobre 2026 à 12:03.",
-        "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxQTVVjdGk5WWRjN1ZuUS1EV3ZGeVloSjlsQmZRbVMxeG1jRGRKZWZCZVhzUVhrSUw2eEhDZWlyd0xnTGMzUnd2MnlZd09BZHVKakU4UkpTV3FpXzJweGdQNmhUZEJfY2t6QVpWanFYZUpDTW9maGtldWduaHBUd0NTaDl5WVAxLWZ0UU12WW44SW5CZmM?oc=5"
-      },
-      {
-        "id": "news-23823e53",
-        "label": "franceinfo",
-        "status": "CORROBORATED",
-        "note": "Zinédine Zidane foule la pelouse du Stade de France pour la première fois en tant que sélectionneur · publié vendredi 2 octobre 2026 à 09:50.",
-        "url": "https://news.google.com/rss/articles/CBMi-wFBVV95cUxOMXpzTEg5Z1dfa09iTmJ2OU9GNVJyNmJDMmE1MTVWZDI2d1czdUZJRjhBSWo1aDBjR2lFYmxhSEhVTElPbC1hTlc4X3g2MnUya1haOHhORWRJY2MwVFNVUHpqM01vNlZlanRzN2U4UWlZV0JYUWQ5THBYNzZYWDRDOU4xYXB6blIwdHpVb0hqOUdFVWRRbW1xTkRhWFhyYlNGdC04djktRFZhQVItelVObFdQSVlHSE1ldzR4Q001dUhfdVI3LUpnbnJXNVRPVDRQM3liTUEwSThQTXBKTmdweFpRbU5sYk1NOHQzT2IxbnhqcXJzM3pmMGZ0UQ?oc=5"
-      },
-      {
-        "id": "news-70747259",
-        "label": "Les Titis du PSG",
-        "status": "UNCONFIRMED",
-        "note": "[News-Sélections] EdF A : Ousmane Dembélé souligne les similitudes entre le PSG et l’équipe de France de Zidane · publié vendredi 2 octobre 2026 à 11:55.",
-        "url": "https://news.google.com/rss/articles/CBMi_wFBVV95cUxNUmJicERFNW04YU85cEhiQ1ZLWWYxZEpWVkN1UzRNWEFoMlpzbTdSVV9oaXk4UG1VMWg1UUx6cEZhcWZkNE9JTEZTckQ4ZVNxbGJJcjRjNHlhYWVLRTNtTjlKN1J3YnMtNjRLWHFvQUZ2QXo1QjBqaVBRT2FxX2VWLV9BbTIwbVV0NVprU3lKdF9jQ3FTOXh0RXNrQnNqbHp5bVRDaTN5NVFjZWZaQ0xnRXZmYVh6N2pLQlRUVFdTdnRZaFZGMTlHcUhHT0dUSVhfZldTT2ctdEhYU2xvT3pHVThEMkgwaWhxNHNOS2F1eE5DSzFSczk3NGU5aFp2VkU?oc=5"
-      },
-      {
-        "id": "news-10cf1b15",
-        "label": "Foot01",
-        "status": "UNCONFIRMED",
-        "note": "France-Italie : La compo de Zidane, l'ère Deschamps est bien finie · publié vendredi 2 octobre 2026 à 10:00.",
-        "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQS2hIdWZqVzZnUzBmNi1mbVFkUmJNcXV1c3NqR0FJTUtoby1BcFZUYzhvMGpfSmdPRkNFdWZaLTBDZlZCbEVjeFZOWTRRQ0hDNHZZaFFyYllUQ0hMQnNmTHJUZjdvQWx2V21ub21udFBXVzktRUtCV2pjTkMtWnhrRUZOcVVxcmV5X0xhd0lSZUtsR0lBS3N2Ykc1VDhlVjFVRWpWUQ?oc=5"
-      },
-      {
-        "id": "cal-espn-401861103",
-        "label": "ESPN",
-        "status": "CORROBORATED",
-        "note": "France – Italy, Ligue des nations, coup d'envoi 2026-10-02T18:45Z. Données match attribuées au fournisseur ESPN.",
-        "url": "https://www.espn.com/soccer/match/_/gameId/401861103"
-      }
-    ],
-    "newsworthiness": 96,
-    "links": [
-      {
-        "href": "/match/france-italy-2026-10-02",
-        "label": "France – Italy"
-      },
-      {
-        "href": "/equipe/france",
-        "label": "France"
-      },
-      {
-        "href": "/equipe/italy",
-        "label": "Italy"
-      },
-      {
-        "href": "/calendrier/ligue-des-nations",
-        "label": "Ligue des nations"
-      },
-      {
-        "href": "/scores-en-direct",
-        "label": "Scores en direct"
-      },
-      {
-        "href": "/methodology",
-        "label": "Méthode BetGPT"
-      },
-      {
-        "href": "/auteurs/betgpt-editorial",
-        "label": "BetGPT Editorial"
-      }
-    ],
-    "corrections": [],
-    "sourceChanges": [],
-    "factHash": "3cd9ad90",
-    "keywords": "France, PSG, Ligue des nations, actualité football",
-    "image": {
-      "src": "/blog/discover/inline-flags.jpg",
-      "alt": "Public et drapeaux dans un stade",
-      "width": 1200,
-      "height": 675,
-      "credit": "France – PSG en Ligue des nations : informations, contexte et analyse du match."
-    },
-    "related": [
-      {
-        "href": "/actualites/france-espoirs-luxembourg-espoirs-en-direct-2026-10-03",
-        "title": "France Espoirs - Luxembourg Espoirs EN DIRECT",
-        "image": {
-          "src": "/blog/discover/inline-night.jpg",
-          "alt": "Stade de football éclairé la nuit",
-          "width": 1200,
-          "height": 675,
-          "credit": "Football : actualités, contexte et analyse sur BetGPT."
-        }
-      },
-      {
-        "href": "/actualites/j-etais-forcement-touche-ravi-zinedine-zidane-a-fait-son-grand-retour-au-stade-de-france-2",
-        "title": "\"J'étais forcément touché, ravi\", : Zinédine Zidane a fait son grand retour au Stade de France",
-        "image": {
-          "src": "/blog/discover/inline-shot.jpg",
-          "alt": "Frappe au but pendant un match",
-          "width": 1200,
-          "height": 675,
-          "credit": "Football : actualités, contexte et analyse sur BetGPT."
-        }
-      },
-      {
-        "href": "/actualites/suspendu-pour-la-reception-de-la-belgique-dayot-upamecano-quitte-le-groupe-de-l-equipe-de",
-        "title": "Suspendu pour la réception de la Belgique, Dayot Upamecano quitte le groupe de l'équipe de France et rentre à Munich",
-        "image": {
-          "src": "/blog/discover/inline-flags.jpg",
-          "alt": "Public et drapeaux dans un stade",
-          "width": 1200,
-          "height": 675,
-          "credit": "Football : actualités, contexte et analyse sur BetGPT."
-        }
-      },
-      {
-        "href": "/actualites/france-italie-ligue-des-nations-2026-10-02",
-        "title": "France–Italie : horaire, forme, enjeu du groupe et ce qu’il faut savoir avant le choc",
-        "image": {
-          "src": "/blog/discover/inline-crowd.jpg",
-          "alt": "Tribunes pleines dans un stade de football avant une grande affiche internationale",
-          "width": 1200,
-          "height": 675,
-          "credit": "France – Italie en Ligue des nations : actualités, contexte et analyse du match."
-        }
-      },
-      {
-        "href": "/actualites/equipe-de-france-dembele-est-il-le-leader-d-attaque-2026-10-01",
-        "title": "Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ?",
-        "image": {
-          "src": "/blog/discover/inline-live.jpg",
-          "alt": "Supporters pendant un match de football",
-          "width": 1200,
-          "height": 675,
-          "credit": "France en Ligue des nations de l'UEFA : actualités, contexte et analyse football."
-        }
-      }
-    ],
-    "discoverOpportunity": {
-      "freshness": 19,
-      "frenchInterest": 19,
-      "entityStrength": 15,
-      "novelty": 15,
-      "visual": 10,
-      "sourceQuality": 10,
-      "editorialAngle": 8,
-      "total": 96,
-      "decision": "PUBLISH",
-      "reasons": []
-    },
-    "quality": {
-      "pass": true,
-      "reasons": []
-    },
-    "duplicateScore": 0.10416666666666667,
-    "discoverChecks": {
-      "INDEXABLE": true,
-      "LARGE_IMAGE": true,
-      "IMAGE_GE_1200": true,
-      "MAX_IMAGE_PREVIEW_LARGE": true,
-      "HELPFUL_CONTENT": true,
-      "NON_CLICKBAIT_TITLE": true,
-      "ORIGINAL_VALUE": true,
-      "MOBILE_TEMPLATE": true
-    },
-    "discoverReadiness": 100,
-    "topStories": "TOP_STORIES_ELIGIBILITY_READY"
-  },
-  {
     "id": "ed-2026-10-02-noon",
     "slug": "france-italie-ligue-des-nations-a-match-en-direct-le-02-10-2026-2026-10-02",
     "slot": "noon",
@@ -1424,56 +1175,54 @@
     "status": "PUBLISHED",
     "title": "France - Italie, Ligue des nations A, match en direct le 02/10/2026 | BetGPT",
     "h1": "France - Italie, Ligue des nations A, match en direct le 02/10/2026",
-    "lead": "France - Italie, Ligue des nations A, match en direct le 02/10/2026. L'Équipe a publié cette information vendredi 2 octobre 2026 à 13:06. Le dossier est repris par 4 sources distinctes. France - Italie, Ligue des nations A, match en direct le 02/10/2026 &nbsp;&nbsp; L'Équipe",
+    "lead": "France–Italie, en Ligue des nations, a été suivi en direct par L'Équipe. Foot Mercato et Foot01 ont consacré leurs publications d'avant-match aux compositions et aux choix de Zinédine Zidane. Les données ESPN restent un repère de calendrier et ne comptent pas comme corroboration journalistique.",
     "paragraphs": [
       {
-        "h2": "Le fait nouveau qui fait basculer le dossier",
-        "body": "L'Équipe rapporte France - Italie, Ligue des nations A, match en direct le 02/10/2026. L'information devient pertinente parce qu'elle précise un dossier déjà suivi, sans transformer une hypothèse en certitude. Au total, 4 rédactions ou sources distinctes alimentent ce cluster d'actualité. Les détails complémentaires sont attribués séparément dans la section suivante afin d'éviter de transformer une reprise en confirmation indépendante.",
+        "h2": "France–Italie : le même match, des sources aux rôles différents",
+        "body": "L'Équipe suit directement France–Italie en Ligue des nations. Foot Mercato traite des compositions probables et Foot01 des choix de Zinédine Zidane. Ces sources sont liées au même match, mais leurs informations restent attribuées selon leur objet.",
         "sourceIds": [
+          "news-1f667fca",
+          "news-8b59747d",
+          "news-10cf1b15"
+        ]
+      },
+      {
+        "h2": "Ce que les médias apportent réellement",
+        "body": "L'Équipe fournit le suivi du match. Foot Mercato apporte un éclairage d'avant-match sur les compositions probables. Foot01 traite de la composition française. BetGPT n'utilise plus des articles périphériques sur d'autres sujets de l'équipe de France pour gonfler artificiellement ce cluster.",
+        "sourceIds": [
+          "news-1f667fca",
+          "news-8b59747d",
+          "news-10cf1b15"
+        ]
+      },
+      {
+        "h2": "La chronologie utile",
+        "body": "Foot01 publie son article sur la composition française à 10:00, Foot Mercato sa présentation des compositions probables à 12:03, puis L'Équipe son suivi France–Italie à 13:06 le vendredi 2 octobre 2026. Cette chronologie ne vaut pas confirmation croisée d'un détail précis si les publications ne portent pas sur le même fait.",
+        "sourceIds": [
+          "news-10cf1b15",
+          "news-8b59747d",
           "news-1f667fca"
         ]
       },
       {
-        "h2": "Ce que disent précisément les différentes sources",
-        "body": "L'Équipe, vendredi 2 octobre 2026 à 13:06 : France - Italie, Ligue des nations A, match en direct le 02/10/2026 &nbsp;&nbsp; L'Équipe Foot Mercato, vendredi 2 octobre 2026 à 12:03 : France - Italie : les compositions probables &nbsp;&nbsp; Foot Mercato Les Titis du PSG, vendredi 2 octobre 2026 à 11:55 : [News-Sélections] EdF A : Ousmane Dembélé souligne les similitudes entre le PSG et l’équipe de France de Zidane &nbsp;&nbsp; Les Titis du PSG Foot01, vendredi 2 octobre 2026 à 10:00 : France-Italie : La compo de Zidane, l'ère Deschamps est bien finie &nbsp;&nbsp; Foot01 Cette présentation reste volontairement attribuée source par source : lorsque deux médias racontent le même épisode avec des détails différents, BetGPT ne fusionne pas automatiquement ces détails en un fait unique. Une information n'est élevée au rang de fait établi que si son niveau de source le justifie ou si plusieurs références indépendantes convergent réellement.",
+        "h2": "Le calendrier reste une donnée de contexte",
+        "body": "ESPN rattache France–Italie à la Ligue des nations et fournit le repère de coup d'envoi. Cette donnée est classée comme source calendrier : elle n'est pas comptabilisée comme une rédaction supplémentaire et ne sert pas à corroborer une information journalistique.",
+        "sourceIds": [
+          "cal-espn-401861103"
+        ]
+      },
+      {
+        "h2": "Ce qui est corroboré et ce qui reste attribué",
+        "body": "L'existence et le contexte du match sont établis. Les informations de composition restent attribuées aux médias qui les publient. Le système ne mélange plus suivi en direct, composition probable et articles périphériques comme s'il s'agissait d'un seul fait corroboré.",
         "sourceIds": [
           "news-1f667fca",
           "news-8b59747d",
-          "news-70747259",
           "news-10cf1b15"
         ]
       },
       {
-        "h2": "La chronologie des publications",
-        "body": "vendredi 2 octobre 2026 à 10:00 — Foot01 publie « France-Italie : La compo de Zidane, l'ère Deschamps est bien finie ». vendredi 2 octobre 2026 à 11:55 — Les Titis du PSG publie « [News-Sélections] EdF A : Ousmane Dembélé souligne les similitudes entre le PSG et l’équipe de France de Zidane ». vendredi 2 octobre 2026 à 12:03 — Foot Mercato publie « France - Italie : les compositions probables ». vendredi 2 octobre 2026 à 13:06 — L'Équipe publie « France - Italie, Ligue des nations A, match en direct le 02/10/2026 ». Cette chronologie permet de distinguer le fait initial, les reprises et les éventuelles confirmations plus tardives. Elle évite surtout de présenter comme simultanées des informations qui ont pu évoluer au fil de la journée.",
-        "sourceIds": [
-          "news-1f667fca",
-          "news-8b59747d",
-          "news-70747259",
-          "news-10cf1b15"
-        ]
-      },
-      {
-        "h2": "Le repère sportif concret autour de cette information",
-        "body": "Le calendrier BetGPT rattache ce sujet à France – Italy, en Ligue des nations, avec un coup d'envoi vendredi 2 octobre 2026 à 20:45. Ce match fournit un repère sportif concret pour mesurer les conséquences de l'information sans inventer de date de retour, de composition ou de disponibilité. Les entités explicitement détectées dans les sources sont : France, PSG.",
-        "sourceIds": [
-          "cal-espn-401861103",
-          "news-1f667fca"
-        ]
-      },
-      {
-        "h2": "Ce qui est établi, corroboré ou encore fragile",
-        "body": "Le cluster contient 0 source officielle, 2 sources de premier niveau journalistique et 2 autres sources. Aucune déclaration officielle n'est ajoutée artificiellement si elle n'existe pas dans le flux. Les points communs entre plusieurs sources sont présentés comme corroborés ; les détails isolés restent attribués.",
-        "sourceIds": [
-          "news-1f667fca",
-          "news-8b59747d",
-          "news-70747259",
-          "news-10cf1b15"
-        ]
-      },
-      {
-        "h2": "Le prochain élément qui permettra de mettre l'article à jour",
-        "body": "Pour France, PSG, la suite utile dépend d'un fait supplémentaire attribuable : déclaration, décision, résultat, liste officielle ou nouvelle donnée de match. Sans élément nouveau, aucune dépêche supplémentaire n'est créée. BetGPT ne republie pas une nouvelle dépêche pour répéter le même état de fait : une mise à jour exige un changement matériel, une confirmation nouvelle ou une donnée sportive directement vérifiable.",
+        "h2": "Règle de mise à jour",
+        "body": "Une mise à jour de cette URL doit correspondre à un changement matériel du match ou à une information vérifiable directement liée à France–Italie. Un article simplement lié à l'équipe de France ne peut plus être injecté dans ce dossier.",
         "sourceIds": [
           "news-1f667fca",
           "news-8b59747d"
@@ -1482,7 +1231,7 @@
     ],
     "createdAt": "2026-10-02T11:07:25.537Z",
     "publishedAt": "2026-10-02T11:07:25.537Z",
-    "modifiedAt": "2026-10-02T11:07:25.537Z",
+    "modifiedAt": "2026-10-03T17:45:00.000Z",
     "parisDate": "2026-10-02",
     "scheduledTime": "13:00",
     "category": "Actualité football",
@@ -1506,21 +1255,14 @@
         "id": "news-8b59747d",
         "label": "Foot Mercato",
         "status": "CORROBORATED",
-        "note": "France - Italie : les compositions probables · publié vendredi 2 octobre 2026 à 12:03.",
+        "note": "France–Italie en Ligue des nations : Foot Mercato présente les compositions probables avant le match.",
         "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxQTVVjdGk5WWRjN1ZuUS1EV3ZGeVloSjlsQmZRbVMxeG1jRGRKZWZCZVhzUVhrSUw2eEhDZWlyd0xnTGMzUnd2MnlZd09BZHVKakU4UkpTV3FpXzJweGdQNmhUZEJfY2t6QVpWanFYZUpDTW9maGtldWduaHBUd0NTaDl5WVAxLWZ0UU12WW44SW5CZmM?oc=5"
-      },
-      {
-        "id": "news-70747259",
-        "label": "Les Titis du PSG",
-        "status": "UNCONFIRMED",
-        "note": "[News-Sélections] EdF A : Ousmane Dembélé souligne les similitudes entre le PSG et l’équipe de France de Zidane · publié vendredi 2 octobre 2026 à 11:55.",
-        "url": "https://news.google.com/rss/articles/CBMi_wFBVV95cUxNUmJicERFNW04YU85cEhiQ1ZLWWYxZEpWVkN1UzRNWEFoMlpzbTdSVV9oaXk4UG1VMWg1UUx6cEZhcWZkNE9JTEZTckQ4ZVNxbGJJcjRjNHlhYWVLRTNtTjlKN1J3YnMtNjRLWHFvQUZ2QXo1QjBqaVBRT2FxX2VWLV9BbTIwbVV0NVprU3lKdF9jQ3FTOXh0RXNrQnNqbHp5bVRDaTN5NVFjZWZaQ0xnRXZmYVh6N2pLQlRUVFdTdnRZaFZGMTlHcUhHT0dUSVhfZldTT2ctdEhYU2xvT3pHVThEMkgwaWhxNHNOS2F1eE5DSzFSczk3NGU5aFp2VkU?oc=5"
       },
       {
         "id": "news-10cf1b15",
         "label": "Foot01",
         "status": "UNCONFIRMED",
-        "note": "France-Italie : La compo de Zidane, l'ère Deschamps est bien finie · publié vendredi 2 octobre 2026 à 10:00.",
+        "note": "France–Italie : Foot01 traite de la composition choisie par Zinédine Zidane pour cette rencontre.",
         "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxQS2hIdWZqVzZnUzBmNi1mbVFkUmJNcXV1c3NqR0FJTUtoby1BcFZUYzhvMGpfSmdPRkNFdWZaLTBDZlZCbEVjeFZOWTRRQ0hDNHZZaFFyYllUQ0hMQnNmTHJUZjdvQWx2V21ub21udFBXVzktRUtCV2pjTkMtWnhrRUZOcVVxcmV5X0xhd0lSZUtsR0lBS3N2Ykc1VDhlVjFVRWpWUQ?oc=5"
       },
       {
@@ -1562,9 +1304,19 @@
         "label": "BetGPT Editorial"
       }
     ],
-    "corrections": [],
-    "sourceChanges": [],
-    "factHash": "c119dfb6",
+    "corrections": [
+      {
+        "at": "2026-10-03T17:45:00.000Z",
+        "note": "Déduplication du slug et retrait des sources périphériques non directement liées au dossier France–Italie."
+      }
+    ],
+    "sourceChanges": [
+      {
+        "at": "2026-10-03T17:45:00.000Z",
+        "note": "Sources conservées : L'Équipe, Foot Mercato, Foot01 ; ESPN conservé uniquement comme calendrier."
+      }
+    ],
+    "factHash": "source-integrity-france-italie-live-2026-10-03-v2",
     "keywords": "France, PSG, Ligue des nations, actualité football",
     "image": {
       "src": "/blog/discover/inline-night.jpg",
@@ -1910,62 +1662,62 @@
     "status": "PUBLISHED",
     "title": "\"J'étais forcément touché, ravi\", : Zinédine Zidane a fait son grand retour au Stade de France | BetGPT",
     "h1": "\"J'étais forcément touché, ravi\", : Zinédine Zidane a fait son grand retour au Stade de France",
-    "lead": "\"J'étais forcément touché, ravi\", : Zinédine Zidane a fait son grand retour au Stade de France. franceinfo a publié cette information samedi 3 octobre 2026 à 16:34. Le dossier est repris par 3 sources distinctes. \"J'étais forcément touché, ravi\", : Zinédine Zidane a fait son grand retour au Stade de France &nbsp;&nbsp; franceinfo",
+    "lead": "Zinédine Zidane a retrouvé le Stade de France comme sélectionneur lors de France–Italie. Franceinfo, L'Équipe et Le Parisien documentent ce retour ; après la rencontre, Zidane a expliqué avoir été touché et ravi de retrouver l'enceinte de Saint-Denis.",
     "paragraphs": [
       {
-        "h2": "Le fait nouveau qui fait basculer le dossier",
-        "body": "franceinfo rapporte \"J'étais forcément touché, ravi\", : Zinédine Zidane a fait son grand retour au Stade de France. L'information devient pertinente parce qu'elle précise un dossier déjà suivi, sans transformer une hypothèse en certitude. Au total, 3 rédactions ou sources distinctes alimentent ce cluster d'actualité. Les détails complémentaires sont attribués séparément dans la section suivante afin d'éviter de transformer une reprise en confirmation indépendante.",
+        "h2": "Zidane retrouve le Stade de France dans un nouveau rôle",
+        "body": "Le retour de Zinédine Zidane au Stade de France n'est plus un simple récit périphérique : Franceinfo et Le Parisien consacrent leurs publications à ce moment, cette fois dans son rôle de sélectionneur de l'équipe de France.",
         "sourceIds": [
+          "news-d22246bb",
+          "leparisien-zidane-stade-france-2026-10-02"
+        ]
+      },
+      {
+        "h2": "« Touché, ravi » : une réaction rapportée après France–Italie",
+        "body": "L'Équipe rapporte qu'après France–Italie, Zinédine Zidane s'est dit touché et ravi de retrouver le Stade de France. Franceinfo rapporte également cette réaction dans son traitement du retour du sélectionneur.",
+        "sourceIds": [
+          "lequipe-zidane-stade-france-2026-10-03",
           "news-d22246bb"
         ]
       },
       {
-        "h2": "Ce que disent précisément les différentes sources",
-        "body": "franceinfo, samedi 3 octobre 2026 à 16:34 : \"J'étais forcément touché, ravi\", : Zinédine Zidane a fait son grand retour au Stade de France &nbsp;&nbsp; franceinfo L'Équipe, samedi 3 octobre 2026 à 14:54 : Lourde défaite de l'équipe de France U20 en match amical face à l'Italie &nbsp;&nbsp; L'Équipe Goal.com, samedi 3 octobre 2026 à 14:03 : Dayot Upamecano quitte le rassemblement de l’équipe de France et retourne au Bayern Munich après son carton rouge contre l’Italie &nbsp;&nbsp; Goal.com Cette présentation reste volontairement attribuée source par source : lorsque deux médias racontent le même épisode avec des détails différents, BetGPT ne fusionne pas automatiquement ces détails en un fait unique. Une information n'est élevée au rang de fait établi que si son niveau de source le justifie ou si plusieurs références indépendantes convergent réellement.",
+        "h2": "Trois sources qui parlent bien du même événement",
+        "body": "Franceinfo traite du grand retour de Zidane au Stade de France, L'Équipe rapporte sa réaction après la rencontre et Le Parisien documente ce retour dans son nouveau rôle de sélectionneur. Les anciens articles sur les U20 et Dayot Upamecano ont été retirés : ils concernaient l'équipe de France au sens large, mais pas ce fait précis.",
         "sourceIds": [
           "news-d22246bb",
-          "news-cb5a1a6e",
-          "news-b1b43995"
+          "lequipe-zidane-stade-france-2026-10-03",
+          "leparisien-zidane-stade-france-2026-10-02"
         ]
       },
       {
-        "h2": "La chronologie des publications",
-        "body": "samedi 3 octobre 2026 à 14:03 — Goal.com publie « Dayot Upamecano quitte le rassemblement de l’équipe de France et retourne au Bayern Munich après son carton rouge contre l’Italie ». samedi 3 octobre 2026 à 14:54 — L'Équipe publie « Lourde défaite de l'équipe de France U20 en match amical face à l'Italie ». samedi 3 octobre 2026 à 16:34 — franceinfo publie « \"J'étais forcément touché, ravi\", : Zinédine Zidane a fait son grand retour au Stade de France ». Cette chronologie permet de distinguer le fait initial, les reprises et les éventuelles confirmations plus tardives. Elle évite surtout de présenter comme simultanées des informations qui ont pu évoluer au fil de la journée.",
+        "h2": "Pourquoi ce retour est distinct des autres actualités des Bleus",
+        "body": "Le critère retenu est désormais l'événement lui-même, pas seulement l'entité « équipe de France ». Une publication sur une autre sélection, un autre joueur ou un autre incident ne peut plus être utilisée comme corroboration du retour de Zidane au Stade de France.",
         "sourceIds": [
           "news-d22246bb",
-          "news-cb5a1a6e",
-          "news-b1b43995"
+          "leparisien-zidane-stade-france-2026-10-02"
         ]
       },
       {
-        "h2": "Le repère sportif concret autour de cette information",
-        "body": "Le calendrier BetGPT rattache ce sujet à France – Belgique, en Ligue des nations de l'UEFA, avec un coup d'envoi lundi 5 octobre 2026 à 20:45. Ce match fournit un repère sportif concret pour mesurer les conséquences de l'information sans inventer de date de retour, de composition ou de disponibilité. Les entités explicitement détectées dans les sources sont : France, Bayern Munich.",
+        "h2": "Ce qui est établi",
+        "body": "Le retour de Zidane au Stade de France dans son rôle de sélectionneur et sa réaction après France–Italie sont appuyés par plusieurs publications directement pertinentes. Les interprétations plus larges sur sa méthode ou la suite sportive restent séparées de ce fait.",
         "sourceIds": [
-          "cal-ub-france|belgique-2026-10-05",
-          "news-d22246bb"
+          "news-d22246bb",
+          "lequipe-zidane-stade-france-2026-10-03",
+          "leparisien-zidane-stade-france-2026-10-02"
         ]
       },
       {
-        "h2": "Ce qui est établi, corroboré ou encore fragile",
-        "body": "Le cluster contient 0 source officielle, 2 sources de premier niveau journalistique et 1 autre source. Aucune déclaration officielle n'est ajoutée artificiellement si elle n'existe pas dans le flux. Les points communs entre plusieurs sources sont présentés comme corroborés ; les détails isolés restent attribués.",
+        "h2": "Règle de mise à jour",
+        "body": "Cette page ne sera mise à jour qu'avec un nouvel élément directement lié à Zidane, au Stade de France ou à ses déclarations sur ce retour. Une actualité seulement voisine de l'équipe de France ne sera plus agrégée automatiquement.",
         "sourceIds": [
-          "news-d22246bb",
-          "news-cb5a1a6e",
-          "news-b1b43995"
-        ]
-      },
-      {
-        "h2": "Le prochain élément qui permettra de mettre l'article à jour",
-        "body": "Pour France, Bayern Munich, la suite utile dépend d'un fait supplémentaire attribuable : déclaration, décision, résultat, liste officielle ou nouvelle donnée de match. Sans élément nouveau, aucune dépêche supplémentaire n'est créée. BetGPT ne republie pas une nouvelle dépêche pour répéter le même état de fait : une mise à jour exige un changement matériel, une confirmation nouvelle ou une donnée sportive directement vérifiable.",
-        "sourceIds": [
-          "news-d22246bb",
-          "news-cb5a1a6e"
+          "lequipe-zidane-stade-france-2026-10-03",
+          "leparisien-zidane-stade-france-2026-10-02"
         ]
       }
     ],
     "createdAt": "2026-10-03T14:56:10.185Z",
     "publishedAt": "2026-10-03T14:56:10.185Z",
-    "modifiedAt": "2026-10-03T14:56:10.185Z",
+    "modifiedAt": "2026-10-03T17:45:00.000Z",
     "parisDate": "2026-10-03",
     "scheduledTime": "13:00",
     "category": "Actualité football",
@@ -1982,28 +1734,22 @@
         "id": "news-d22246bb",
         "label": "franceinfo",
         "status": "CORROBORATED",
-        "note": "\"J'étais forcément touché, ravi\", : Zinédine Zidane a fait son grand retour au Stade de France · publié samedi 3 octobre 2026 à 16:34.",
+        "note": "Franceinfo rapporte le retour de Zinédine Zidane au Stade de France et sa réaction : « J'étais forcément touché, ravi ».",
         "url": "https://news.google.com/rss/articles/CBMi2AFBVV95cUxQaXhYamw1ZVo3ZHIya2JCbUJIWC1tOXZ5SERUYVdLQUZtbXk2V0dnUUQybGNudHM1amRTNjBzdzhra2VhRVUzNlA3ZVpvNGpaQVhjcUNka3dEM0V0N0JXenRla3NGNXJLdXdqbmpwcURfcmtCcDEtV2dISmE4dUpBMEhYS1lhWHMxeUthMFJJYk1tUzVfdWJadUpPaWVhWFVHOVJERjNGYjZ4Zl9QT195SV9Kd2dUNTBzeV9uOG5LZUV1ZS1zUW1Sa0xJQVpxeVFlVWNxVy11V1c?oc=5"
       },
       {
-        "id": "news-cb5a1a6e",
+        "id": "lequipe-zidane-stade-france-2026-10-03",
         "label": "L'Équipe",
         "status": "CORROBORATED",
-        "note": "Lourde défaite de l'équipe de France U20 en match amical face à l'Italie · publié samedi 3 octobre 2026 à 14:54.",
-        "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxOQnZzZkx5T1dGQU5sUEh2YTlxbER1UC1YVV9PWWZWOC1ZRXZCQlV0QzBPUThCaTZEQ1ctMDVXYXhZaGtMNVluR2ZhRGhWQjhtcEhnakw3TmRidHJNb0NjaG9ocmk2T2JqLXBHakY0YnZNLWFfWG9yS1ZNTG1TYnlhU1M5U25PN3NEWEJfZHZFS1RteHhjR0JwdGFrd2JHd3MxTktyUExCVnlWNzNMRVE?oc=5"
+        "note": "Après France–Italie, L'Équipe rapporte que Zinédine Zidane s'est dit touché et ravi de retrouver le Stade de France.",
+        "url": "https://www.lequipe.fr/Football/Actualites/Zinedine-zidane-apres-le-match-nul-des-bleus-face-a-l-italie-je-sais-qu-on-va-s-ameliorer/1723011"
       },
       {
-        "id": "news-b1b43995",
-        "label": "Goal.com",
-        "status": "UNCONFIRMED",
-        "note": "Dayot Upamecano quitte le rassemblement de l’équipe de France et retourne au Bayern Munich après son carton rouge contre l’Italie · publié samedi 3 octobre 2026 à 14:03.",
-        "url": "https://news.google.com/rss/articles/CBMijAJBVV95cUxONXNtaGE2enA3My1XdGk5dmJtTDV5V054aEF4YkU0V21HSXFBVlY3aXByVkRBWWJYZndwQ1ZKRGo3S2M2SEN5NlFpQldfdDVuOFpYaVYyeW1wVnFQekJfYzNMWHFqTWJ3WVhyLTR1YVdlTmVYN2M1Sjd2VWVaZUFxcGJlalE1cFFacU84UmxpQTNaREFBd3pTVlZQNUg3Ylo2V0dHQzdaZnBjVjNGSW02QmJqTjFpZHFYeDdyaGIwdXFoejlhU0NmNm5JMmU4dTlLbU90WnZHcTQ0Y2lzVG5HOGEyVi1ITi12SklSOEE3dUVCZVcwVUpnNGlfMWxkTnhzTWxfOVdNM0pVWjVW?oc=5"
-      },
-      {
-        "id": "cal-ub-france|belgique-2026-10-05",
-        "label": "Calendrier desk BetGPT",
-        "status": "HIGH_CONFIDENCE",
-        "note": "France – Belgique, Ligue des nations de l'UEFA, coup d'envoi 2026-10-05T18:45:00Z."
+        "id": "leparisien-zidane-stade-france-2026-10-02",
+        "label": "Le Parisien",
+        "status": "CORROBORATED",
+        "note": "Le Parisien consacre un article au retour de Zinédine Zidane au Stade de France comme sélectionneur pour France–Italie.",
+        "url": "https://www.leparisien.fr/sports/football/equipe-de-france/france-italie-au-stade-de-france-zinedine-zidane-retrouve-son-bureau-de-la-legende-02-10-2026-POG227DJTNE3RJP47WOXNC74TQ.php"
       }
     ],
     "newsworthiness": 96,
@@ -2037,9 +1783,19 @@
         "label": "BetGPT Editorial"
       }
     ],
-    "corrections": [],
-    "sourceChanges": [],
-    "factHash": "4e960c7e",
+    "corrections": [
+      {
+        "at": "2026-10-03T17:45:00.000Z",
+        "note": "Retrait de deux sources hors sujet et remplacement par des sources directement consacrées au retour de Zinédine Zidane au Stade de France."
+      }
+    ],
+    "sourceChanges": [
+      {
+        "at": "2026-10-03T17:45:00.000Z",
+        "note": "L'Équipe U20, Goal/Upamecano et le calendrier France–Belgique ont été retirés du cluster Zidane."
+      }
+    ],
+    "factHash": "source-integrity-zidane-stade-france-2026-10-03-v2",
     "keywords": "France, Bayern Munich, Ligue des nations de l'UEFA, actualité football",
     "image": {
       "src": "/blog/discover/inline-shot.jpg",
@@ -2143,58 +1899,58 @@
     "status": "PUBLISHED",
     "title": "France Espoirs - Luxembourg Espoirs EN DIRECT | BetGPT",
     "h1": "France Espoirs - Luxembourg Espoirs EN DIRECT",
-    "lead": "France Espoirs - Luxembourg Espoirs EN DIRECT. Eurosport a publié cette information samedi 3 octobre 2026 à 18:45. Le dossier est repris par 5 sources distinctes. France Espoirs - Luxembourg Espoirs EN DIRECT &nbsp;&nbsp; Eurosport",
+    "lead": "France Espoirs–Luxembourg Espoirs est suivi en direct par Eurosport. MadeInFoot, MadeInMonegasque et Foot National publient également des informations directement liées aux compositions et titulaires de cette rencontre U21.",
     "paragraphs": [
       {
-        "h2": "Le fait nouveau qui fait basculer le dossier",
-        "body": "Eurosport rapporte France Espoirs - Luxembourg Espoirs EN DIRECT. L'information devient pertinente parce qu'elle précise un dossier déjà suivi, sans transformer une hypothèse en certitude. Au total, 5 rédactions ou sources distinctes alimentent ce cluster d'actualité. Les détails complémentaires sont attribués séparément dans la section suivante afin d'éviter de transformer une reprise en confirmation indépendante.",
-        "sourceIds": [
-          "news-a46e53ce"
-        ]
-      },
-      {
-        "h2": "Ce que disent précisément les différentes sources",
-        "body": "madeinfoot.ouest-france.fr, samedi 3 octobre 2026 à 18:45 : Equipe de France Espoirs - La compo officielle des Bleuets pour le match face au Luxembourg U21 &nbsp;&nbsp; madeinfoot.ouest-france.fr madeinmonegasque.ouest-france.fr, samedi 3 octobre 2026 à 18:45 : Equipe de France Espoirs - Christian Mawissa est titulaire avec les Bleuets face au Luxembourg U21 &nbsp;&nbsp; madeinmonegasque.ouest-france.fr Foot National, samedi 3 octobre 2026 à 18:09 : France-Luxembourg Espoirs : les compos officielles &nbsp;&nbsp; Foot National Sud Ouest, samedi 3 octobre 2026 à 15:20 : La première de Zidane sélectionneur en France. « Avant le match, il y a toujours un peu de tension » : de l’énoncé de son nom à la Marseillaise, une ambiance sinusoïdale &nbsp;&nbsp; Sud Ouest Cette présentation reste volontairement attribuée source par source : lorsque deux médias racontent le même épisode avec des détails différents, BetGPT ne fusionne pas automatiquement ces détails en un fait unique. Une information n'est élevée au rang de fait établi que si son niveau de source le justifie ou si plusieurs références indépendantes convergent réellement.",
-        "sourceIds": [
-          "news-66f5060f",
-          "news-85dfa8b8",
-          "news-32d368b0",
-          "news-c5c01f43"
-        ]
-      },
-      {
-        "h2": "La chronologie des publications",
-        "body": "samedi 3 octobre 2026 à 15:20 — Sud Ouest publie « La première de Zidane sélectionneur en France. « Avant le match, il y a toujours un peu de tension » : de l’énoncé de son nom à la Marseillaise, une ambiance sinusoïdale ». samedi 3 octobre 2026 à 18:09 — Foot National publie « France-Luxembourg Espoirs : les compos officielles ». samedi 3 octobre 2026 à 18:45 — Eurosport publie « France Espoirs - Luxembourg Espoirs EN DIRECT ». samedi 3 octobre 2026 à 18:45 — madeinfoot.ouest-france.fr publie « Equipe de France Espoirs - La compo officielle des Bleuets pour le match face au Luxembourg U21 ». samedi 3 octobre 2026 à 18:45 — madeinmonegasque.ouest-france.fr publie « Equipe de France Espoirs - Christian Mawissa est titulaire avec les Bleuets face au Luxembourg U21 ». Cette chronologie permet de distinguer le fait initial, les reprises et les éventuelles confirmations plus tardives. Elle évite surtout de présenter comme simultanées des informations qui ont pu évoluer au fil de la journée.",
+        "h2": "France Espoirs–Luxembourg Espoirs : les sources portent bien sur la même rencontre",
+        "body": "Eurosport suit France Espoirs–Luxembourg Espoirs en direct. MadeInFoot traite de la composition officielle des Bleuets, MadeInMonegasque de la titularisation de Christian Mawissa et Foot National des compositions officielles.",
         "sourceIds": [
           "news-a46e53ce",
           "news-66f5060f",
           "news-85dfa8b8",
-          "news-32d368b0",
-          "news-c5c01f43"
+          "news-32d368b0"
         ]
       },
       {
-        "h2": "Le repère sportif concret autour de cette information",
-        "body": "Le calendrier BetGPT rattache ce sujet à Estonia – Luxembourg, en Ligue des nations, avec un coup d'envoi samedi 3 octobre 2026 à 18:00. Ce match fournit un repère sportif concret pour mesurer les conséquences de l'information sans inventer de date de retour, de composition ou de disponibilité. Les entités explicitement détectées dans les sources sont : France.",
+        "h2": "Les compositions constituent l'information commune vérifiable",
+        "body": "MadeInFoot et Foot National publient des informations consacrées aux compositions de France–Luxembourg Espoirs. MadeInMonegasque précise la titularisation de Christian Mawissa. Ces éléments appartiennent au même dossier sportif et sont distingués du simple suivi en direct d'Eurosport.",
         "sourceIds": [
-          "cal-espn-401861115",
-          "news-a46e53ce"
+          "news-66f5060f",
+          "news-85dfa8b8",
+          "news-32d368b0"
         ]
       },
       {
-        "h2": "Ce qui est établi, corroboré ou encore fragile",
-        "body": "Le cluster contient 0 source officielle, 3 sources de premier niveau journalistique et 2 autres sources. Aucune déclaration officielle n'est ajoutée artificiellement si elle n'existe pas dans le flux. Les points communs entre plusieurs sources sont présentés comme corroborés ; les détails isolés restent attribués.",
+        "h2": "La chronologie ne mélange plus les sélections",
+        "body": "Foot National publie sur les compositions à 18:09 ; Eurosport, MadeInFoot et MadeInMonegasque publient ensuite autour de 18:45. L'ancien article Sud Ouest sur Zidane et l'équipe de France A a été retiré, car il ne concernait pas les Espoirs.",
+        "sourceIds": [
+          "news-32d368b0",
+          "news-a46e53ce",
+          "news-66f5060f",
+          "news-85dfa8b8"
+        ]
+      },
+      {
+        "h2": "Le mauvais repère Estonia–Luxembourg a été supprimé",
+        "body": "La précédente version rattachait à tort ce dossier U21 à un match Estonia–Luxembourg de Ligue des nations via une donnée ESPN. Ce repère concernait une autre rencontre et a été supprimé plutôt que conservé comme contexte approximatif.",
+        "sourceIds": [
+          "news-a46e53ce",
+          "news-66f5060f"
+        ]
+      },
+      {
+        "h2": "Ce qui est établi et ce qui reste attribué",
+        "body": "La rencontre France Espoirs–Luxembourg Espoirs et les informations de composition sont appuyées par plusieurs publications directement pertinentes. Chaque détail de titulaire reste attribué à la source qui le publie lorsqu'il n'est pas corroboré indépendamment.",
         "sourceIds": [
           "news-a46e53ce",
           "news-66f5060f",
           "news-85dfa8b8",
-          "news-32d368b0",
-          "news-c5c01f43"
+          "news-32d368b0"
         ]
       },
       {
-        "h2": "Le prochain élément qui permettra de mettre l'article à jour",
-        "body": "Pour France, la suite utile dépend d'un fait supplémentaire attribuable : déclaration, décision, résultat, liste officielle ou nouvelle donnée de match. Sans élément nouveau, aucune dépêche supplémentaire n'est créée. BetGPT ne republie pas une nouvelle dépêche pour répéter le même état de fait : une mise à jour exige un changement matériel, une confirmation nouvelle ou une donnée sportive directement vérifiable.",
+        "h2": "Règle de mise à jour",
+        "body": "Cette URL ne pourra être enrichie qu'avec des données portant réellement sur France Espoirs–Luxembourg Espoirs : score, événements du match, feuille officielle ou déclarations associées. Les contenus sur la France A ou sur un autre Luxembourg ne seront plus agrégés.",
         "sourceIds": [
           "news-a46e53ce",
           "news-66f5060f"
@@ -2203,7 +1959,7 @@
     ],
     "createdAt": "2026-10-03T17:00:40.390Z",
     "publishedAt": "2026-10-03T17:00:40.390Z",
-    "modifiedAt": "2026-10-03T17:00:40.390Z",
+    "modifiedAt": "2026-10-03T17:45:00.000Z",
     "parisDate": "2026-10-03",
     "scheduledTime": "19:00",
     "category": "Actualité football",
@@ -2242,20 +1998,6 @@
         "status": "UNCONFIRMED",
         "note": "France-Luxembourg Espoirs : les compos officielles · publié samedi 3 octobre 2026 à 18:09.",
         "url": "https://news.google.com/rss/articles/CBMimAFBVV95cUxOSEZha3dGNFFaaVN5TnlBVk9xcmNyVl9XNGYycHBybXRodUFVZldFN29pbUw4RFNTSEZQWUgxMnBXd1BMSkpkb2toalVYT3lVUHR1RFlTU2FubEJTQ3F1dWFKbWQ3SE1PTWxvU1BBZkwyRzdER0I3d1FGdUlJNnR4QlBsakhycjRrVTRGMXBVWFY2a0lsbjZVdg?oc=5"
-      },
-      {
-        "id": "news-c5c01f43",
-        "label": "Sud Ouest",
-        "status": "UNCONFIRMED",
-        "note": "La première de Zidane sélectionneur en France. « Avant le match, il y a toujours un peu de tension » : de l’énoncé de son nom à la Marseillaise, une ambiance sinusoïdale · publié samedi 3 octobre 2026 à 15:20.",
-        "url": "https://news.google.com/rss/articles/CBMizgJBVV95cUxQN255WVRxX1lwUVVldF82cFJQek9kX1F5WjBxQUt0eG5OYjNLU3FWYmYzXzlIaC1yNldGTDZGQ1ZwR0V6VkxFY1JLOF9IWGpHTVBKNWF2YUQxMFFjdlphbUJrR09tLWZDX1c3T2ZCZFp2d1lVZkpIWnJ6REhLamkzM3VUakozSktsVUlNR3p6ajBPa1FQYk1vZms5NjVtM3ZIa1VkYmZGdExFZWlvU21OUFdmaVgxZVFvdS1JeGttZVBDdUxQdGVmTl9DV3JBeVJqS3VQMTZwcjU1Z29BZjRpVXl4N3BNTnVuQWhWQ0ZGSEdmelhDb2JPTkhSNTZwdnVua3hXQllzV0RjUmlra0ptMGM1THZNSU1uMVhHSUx4S3dCcUVwSHo1OExwV0pDcG9hVjNzdThQTFJxYjFYRFpXVmVMMHpnREx3bWpoUXlR?oc=5"
-      },
-      {
-        "id": "cal-espn-401861115",
-        "label": "ESPN",
-        "status": "CORROBORATED",
-        "note": "Estonia – Luxembourg, Ligue des nations, coup d'envoi 2026-10-03T16:00Z. Données match attribuées au fournisseur ESPN.",
-        "url": "https://www.espn.com/soccer/match/_/gameId/401861115"
       }
     ],
     "newsworthiness": 96,
@@ -2289,9 +2031,19 @@
         "label": "BetGPT Editorial"
       }
     ],
-    "corrections": [],
-    "sourceChanges": [],
-    "factHash": "58d4b428",
+    "corrections": [
+      {
+        "at": "2026-10-03T17:45:00.000Z",
+        "note": "Suppression d'une source France A hors sujet et d'un mauvais repère calendrier Estonia–Luxembourg."
+      }
+    ],
+    "sourceChanges": [
+      {
+        "at": "2026-10-03T17:45:00.000Z",
+        "note": "Cluster limité aux sources directement liées à France Espoirs–Luxembourg Espoirs."
+      }
+    ],
+    "factHash": "source-integrity-france-u21-luxembourg-2026-10-03-v2",
     "keywords": "France, Ligue des nations, actualité football",
     "image": {
       "src": "/blog/discover/inline-night.jpg",
