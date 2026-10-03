@@ -113,7 +113,7 @@ export function extractInternalLinks(source = "", sourceRoute = "") {
   const add = (href, anchor = "") => {
     if (!href || !href.startsWith("/") || href.startsWith("//")) return;
     const target = href.split(/[?#]/)[0].replace(/\/+$/, "") || "/";
-    const key = sourceRoute + "|" + target + "|" + normalizeText(anchor);
+    const key = sourceRoute + "|" + target;
     if (seen.has(key)) return;
     seen.add(key);
     links.push({ sourceRoute, targetRoute: target, anchor: normalizeText(anchor) });
