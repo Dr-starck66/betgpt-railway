@@ -26,6 +26,7 @@ export function tokenize(value = "", stopwords = DEFAULT_STOPWORDS) {
   )];
 }
 
+/** @param {string[]} a @param {string[]} b */
 export function jaccard(a = [], b = []) {
   const A = new Set(a);
   const B = new Set(b);
@@ -35,6 +36,7 @@ export function jaccard(a = [], b = []) {
   return intersection / (A.size + B.size - intersection);
 }
 
+/** @param {string[]} a @param {string[]} b */
 export function overlapCoefficient(a = [], b = []) {
   const A = new Set(a);
   const B = new Set(b);
@@ -44,6 +46,7 @@ export function overlapCoefficient(a = [], b = []) {
   return intersection / Math.min(A.size, B.size);
 }
 
+/** @param {string[]} a @param {string[]} b */
 export function semanticSimilarity(a = [], b = []) {
   return Number((0.45 * jaccard(a, b) + 0.55 * overlapCoefficient(a, b)).toFixed(4));
 }
@@ -57,6 +60,7 @@ function stripTags(value = "") {
     .replace(/&[a-z]+;/gi, " ");
 }
 
+/** @param {string} source @param {RegExp[]} patterns */
 function firstMatch(source, patterns) {
   for (const pattern of patterns) {
     const match = source.match(pattern);
@@ -108,8 +112,11 @@ export function extractPageSignals(source = "", fallbackRoute = "") {
 }
 
 export function extractInternalLinks(source = "", sourceRoute = "") {
+  /** @type {any[]} */
   const links = [];
+  /** @type {Set<string>} */
   const seen = new Set();
+  /** @param {string} href @param {string} [anchor] */
   const add = (href, anchor = "") => {
     if (!href || !href.startsWith("/") || href.startsWith("//")) return;
     const target = href.split(/[?#]/)[0].replace(/\/+$/, "") || "/";
@@ -141,8 +148,11 @@ export function extractInternalLinks(source = "", sourceRoute = "") {
   return links;
 }
 
+/** @param {string} source @param {string} sourceRoute @param {string[]} properties */
 export function extractCatalogLinks(source = "", sourceRoute = "", properties = []) {
+  /** @type {any[]} */
   const links = [];
+  /** @type {Set<string>} */
   const seen = new Set();
   for (const property of properties) {
     if (!/^[A-Za-z0-9_]+$/.test(String(property))) continue;
@@ -160,6 +170,7 @@ export function extractCatalogLinks(source = "", sourceRoute = "", properties = 
   return links;
 }
 export function extractAutoRepairLinks(source = "") {
+  /** @type {any[]} */
   const links = [];
   for (const rawLine of String(source).split("\n")) {
     const line = rawLine.trim().replace(/,$/, "");
@@ -196,6 +207,7 @@ function routePatternMatches(target = "", candidate = "") {
   });
 }
 
+/** @param {string} target @param {Map<string, any>} pageByRoute */
 function resolveTargetRoute(target, pageByRoute) {
   if (pageByRoute.has(target)) return target;
   for (const candidate of pageByRoute.keys()) {
@@ -204,7 +216,9 @@ function resolveTargetRoute(target, pageByRoute) {
   return "";
 }
 
+/** @param {any[]} pages @param {any[]} links @param {any} config */
 export function analyzeSemanticFlow(pages = [], links = [], config = {}) {
+  /** @type {any} */
   const cfg = {
     cannibalizationThreshold: 0.86,
     intentCannibalizationThreshold: 0.82,
@@ -219,7 +233,9 @@ export function analyzeSemanticFlow(pages = [], links = [], config = {}) {
   };
   const strategic = new Set(cfg.strategicRoutes || []);
   const pageByRoute = new Map(pages.filter((p) => p.indexable && p.route).map((p) => [p.route, p]));
+  /** @type {any[]} */
   const findings = [];
+  /** @type {any[]} */
   const edges = [];
   const inbound = new Map([...pageByRoute.keys()].map((route) => [route, 0]));
 
@@ -273,6 +289,7 @@ export function analyzeSemanticFlow(pages = [], links = [], config = {}) {
   }
 
   const indexable = [...pageByRoute.values()];
+  /** @type {any[]} */
   const pairScores = [];
   for (let i = 0; i < indexable.length; i++) {
     for (let j = i + 1; j < indexable.length; j++) {
@@ -307,7 +324,9 @@ export function analyzeSemanticFlow(pages = [], links = [], config = {}) {
     });
   }
 
+  /** @type {any[]} */
   const recommendations = [];
+  /** @type {Set<string>} */
   const hintedChildren = new Set();
   for (const [childRoute, parentRoute] of Object.entries(cfg.parentHints || {})) {
     const child = pageByRoute.get(childRoute);
