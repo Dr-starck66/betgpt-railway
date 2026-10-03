@@ -1,0 +1,58 @@
+{
+  "version": "ASTRA-SEMANTIC-FLOW-1",
+  "routeDirs": [
+    "src/routes"
+  ],
+  "corpusDirs": [
+    "src"
+  ],
+  "extensions": [
+    ".tsx",
+    ".ts",
+    ".jsx",
+    ".js"
+  ],
+  "ignoreFiles": [
+    "src/routeTree.gen.ts"
+  ],
+  "cannibalizationThreshold": 0.94,
+  "intentCannibalizationThreshold": 0.9,
+  "semanticJumpThreshold": 0.05,
+  "glideMin": 0.12,
+  "glideMax": 0.84,
+  "orphanMode": "partial",
+  "strategicRoutes": [
+    "/scores-en-direct",
+    "/resultats-football",
+    "/comparer-cotes",
+    "/pronostics-sportifs",
+    "/ledger",
+    "/rapports/precision"
+  ],
+  "reportPath": "artifacts/seo/semantic-flow.json",
+  "maxPrintedRecommendations": 25,
+  "recommendationIntentMin": 0.55,
+  "parentHints": {
+    "/scores-en-direct/:league": "/scores-en-direct",
+    "/resultats-football/:league": "/resultats-football",
+    "/pronostics-football/:league": "/pronostics-football",
+    "/comparer-cotes": "/pronostics-sportifs",
+    "/ledger": "/pronostics-sportifs",
+    "/rapports/precision": "/ledger"
+  },
+  "linkCatalogs": [
+    {
+      "file": "src/lib/programmatic.ts",
+      "properties": [
+        "path"
+      ]
+    },
+    {
+      "file": "src/lib/serp/leagues.ts",
+      "properties": [
+        "scoresPath",
+        "resultsPath"
+      ]
+    }
+  ]
+}

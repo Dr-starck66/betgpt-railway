@@ -332,6 +332,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <a href="/jeu-responsable" className="hover:text-paper">Jeu responsable</a>
               <a href="/politique-publicite" className="hover:text-paper">Publicité</a>
               <a href="/contact" className="hover:text-paper">Contact</a>
+              <a href="/sitemap" className="hover:text-paper">Plan du site</a>
             </div>
           </div>
         </div>
