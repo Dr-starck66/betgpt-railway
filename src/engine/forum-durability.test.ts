@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { durableForumLeague } from "./forum-durability";
 import { MIN_POSTS, padToTen, type ForumPost } from "./forum";
 import { buildSitemapUrls } from "@/lib/sitemap-urls";
+import { shouldShedForumAiRefresh } from "./forum-ia";
 
 test("every supported BetGPT league gets a durable forum", () => {
   for (const league of ["PL", "LL", "BL", "SA", "L1", "ER", "PT", "SC", "TR", "CL", "EL", "NL"]) {
@@ -58,4 +59,11 @@ test("agent-first forum density gate requires a real conversation", () => {
   assert.ok(posts.filter((p) => p.replyTo).length >= MIN_POSTS - 1);
   assert.ok(posts.some((p) => p.tone === "challenge"));
   assert.ok(posts.some((p) => p.tone === "banter"));
+});
+
+
+test("forum AI load shedding keeps the one-slot local model bounded", () => {
+  assert.equal(shouldShedForumAiRefresh(0), false);
+  assert.equal(shouldShedForumAiRefresh(1), true);
+  assert.equal(shouldShedForumAiRefresh(8), true);
 });
