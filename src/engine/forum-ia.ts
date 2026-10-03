@@ -267,8 +267,21 @@ function mergeGenerated(thread: ForumThread, generated: { text: string; generato
   };
 }
 
+const FORUM_AI_MAX_CONCURRENT = 1;
+
+export function shouldShedForumAiRefresh(inflightCount: number): boolean {
+  return inflightCount >= FORUM_AI_MAX_CONCURRENT;
+}
+
 async function refreshMatchThreadAi(thread: ForumThread): Promise<void> {
   if (FORUM_AI_INFLIGHT.has(thread.id)) return FORUM_AI_INFLIGHT.get(thread.id);
+
+  // llama.cpp production exposes a single inference slot. Per-thread
+  // single-flight is insufficient because a crawler can request many distinct
+  // forum URLs at once. Fail open to the already complete deterministic thread
+  // instead of queueing unbounded model requests; a later GET can retry.
+  if (shouldShedForumAiRefresh(FORUM_AI_INFLIGHT.size)) return;
+
   const run = (async () => {
     try {
       const preview = [
