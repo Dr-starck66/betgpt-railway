@@ -1668,32 +1668,30 @@
     "status": "PUBLISHED",
     "title": "Suspendu pour la réception de la Belgique, Dayot Upamecano quitte le groupe de l'équipe de France et rentre à Munich | BetGPT",
     "h1": "Suspendu pour la réception de la Belgique, Dayot Upamecano quitte le groupe de l'équipe de France et rentre à Munich",
-    "lead": "Suspendu pour la réception de la Belgique, Dayot Upamecano quitte le groupe de l'équipe de France et rentre à Munich. L'Équipe a publié cette information samedi 3 octobre 2026 à 10:41. Le dossier est repris par 4 sources distinctes. Suspendu pour la réception de la Belgique, Dayot Upamecano quitte le groupe de l'équipe de France et rentre à Munich &nbsp;&nbsp; L'Équipe",
+    "lead": "Suspendu pour la réception de la Belgique, Dayot Upamecano a quitté le rassemblement de l'équipe de France et est rentré à Munich. L'Équipe, Le Parisien et Le Figaro convergent sur ce départ avant France–Belgique.",
     "paragraphs": [
       {
         "h2": "Le fait nouveau qui fait basculer le dossier",
-        "body": "L'Équipe rapporte Suspendu pour la réception de la Belgique, Dayot Upamecano quitte le groupe de l'équipe de France et rentre à Munich. Ce nouvel élément modifie l'état du dossier par rapport aux informations qui circulaient auparavant. Au total, 4 rédactions ou sources distinctes alimentent ce cluster d'actualité. Les détails complémentaires sont attribués séparément dans la section suivante afin d'éviter de transformer une reprise en confirmation indépendante.",
+        "body": "L'Équipe rapporte que Dayot Upamecano, suspendu pour la réception de la Belgique, a quitté le rassemblement des Bleus et est rentré à Munich. Le Parisien et Le Figaro rapportent également son départ. Ces trois sources convergent sur le fait principal ; les détails qui ne sont pas communs à plusieurs sources restent attribués séparément.",
         "sourceIds": [
           "news-7128ecb8"
         ]
       },
       {
         "h2": "Ce que disent précisément les différentes sources",
-        "body": "L'Équipe, samedi 3 octobre 2026 à 10:41 : Suspendu pour la réception de la Belgique, Dayot Upamecano quitte le groupe de l'équipe de France et rentre à Munich &nbsp;&nbsp; L'Équipe Le Parisien, samedi 3 octobre 2026 à 09:54 : Équipe de France : suspendu face à la Belgique, Dayot Upamecano quitte le rassemblement des Bleus &nbsp;&nbsp; Le Parisien Le Télégramme, samedi 3 octobre 2026 à 10:45 : « Je ne me mets pas de pression » : à 21 ans et après deux premières sélections réussies, Jérémy Jacquet déjà comme chez lui en équipe de France &nbsp;&nbsp; Le Télégramme Le Figaro, samedi 3 octobre 2026 à 09:32 : Équipe de France : Dayot Upamecano quitte les Bleus et rentre à Munich &nbsp;&nbsp; Le Figaro Cette présentation reste volontairement attribuée source par source : lorsque deux médias racontent le même épisode avec des détails différents, BetGPT ne fusionne pas automatiquement ces détails en un fait unique. Une information n'est élevée au rang de fait établi que si son niveau de source le justifie ou si plusieurs références indépendantes convergent réellement.",
+        "body": "L'Équipe indique que Dayot Upamecano quitte le groupe de l'équipe de France et rentre à Munich. Le Parisien rapporte qu'il quitte le rassemblement alors qu'il est suspendu face à la Belgique. Le Figaro rapporte également son départ des Bleus et son retour à Munich. Ces trois publications portent bien sur le même événement et sont conservées comme références journalistiques du dossier.",
         "sourceIds": [
           "news-7128ecb8",
           "news-12ff686a",
-          "news-fdb1e640",
           "news-1166ad6b"
         ]
       },
       {
         "h2": "La chronologie des publications",
-        "body": "samedi 3 octobre 2026 à 09:32 — Le Figaro publie « Équipe de France : Dayot Upamecano quitte les Bleus et rentre à Munich ». samedi 3 octobre 2026 à 09:54 — Le Parisien publie « Équipe de France : suspendu face à la Belgique, Dayot Upamecano quitte le rassemblement des Bleus ». samedi 3 octobre 2026 à 10:41 — L'Équipe publie « Suspendu pour la réception de la Belgique, Dayot Upamecano quitte le groupe de l'équipe de France et rentre à Munich ». samedi 3 octobre 2026 à 10:45 — Le Télégramme publie « « Je ne me mets pas de pression » : à 21 ans et après deux premières sélections réussies, Jérémy Jacquet déjà comme chez lui en équipe de France ». Cette chronologie permet de distinguer le fait initial, les reprises et les éventuelles confirmations plus tardives. Elle évite surtout de présenter comme simultanées des informations qui ont pu évoluer au fil de la journée.",
+        "body": "Le Figaro publie l'information à 09:32, Le Parisien à 09:54 puis L'Équipe à 10:41 le samedi 3 octobre 2026. Cette chronologie ne transforme pas une simple reprise en source indépendante : la corroboration repose uniquement sur des publications qui décrivent le même événement et dont la pertinence sémantique a été validée.",
         "sourceIds": [
           "news-7128ecb8",
           "news-12ff686a",
-          "news-fdb1e640",
           "news-1166ad6b"
         ]
       },
@@ -1707,11 +1705,10 @@
       },
       {
         "h2": "Ce qui est établi, corroboré ou encore fragile",
-        "body": "Le cluster contient 0 source officielle, 2 sources de premier niveau journalistique et 2 autres sources. Aucune déclaration officielle n'est ajoutée artificiellement si elle n'existe pas dans le flux. Les points communs entre plusieurs sources sont présentés comme corroborés ; les détails isolés restent attribués.",
+        "body": "Le dossier contient 0 source officielle et 3 sources journalistiques portant sur le même événement. L'Équipe et Le Parisien constituent les deux corroborations fortes retenues par le gate ; Le Figaro reste une source complémentaire attribuée. Le repère calendrier France–Belgique est conservé comme donnée de contexte et n'est plus compté comme corroboration journalistique.",
         "sourceIds": [
           "news-7128ecb8",
           "news-12ff686a",
-          "news-fdb1e640",
           "news-1166ad6b"
         ]
       },
@@ -1726,7 +1723,7 @@
     ],
     "createdAt": "2026-10-03T10:25:39.581Z",
     "publishedAt": "2026-10-03T10:25:39.581Z",
-    "modifiedAt": "2026-10-03T10:25:39.581Z",
+    "modifiedAt": "2026-10-03T16:58:00.000Z",
     "parisDate": "2026-10-03",
     "scheduledTime": "08:00",
     "category": "Actualité football",
@@ -1751,13 +1748,6 @@
         "status": "CORROBORATED",
         "note": "Équipe de France : suspendu face à la Belgique, Dayot Upamecano quitte le rassemblement des Bleus · publié samedi 3 octobre 2026 à 09:54.",
         "url": "https://news.google.com/rss/articles/CBMioAJBVV95cUxQNVlCWVN5WVVsbUllQUJqMGt4V2I4WFdhSE5odUR1dE1LSG44Z0ZmR0hIQ1g5eFllaml1MGlsazlmbzBmRGhkR3RoTldleHpBMFFJY19xT2N2RWNzUXE0bWpSbzRWYVEyVlpDcEhKbGYtX1NjRktNVFhBM0F0cEJ6VTNMcEhmbnlBLVZyYkdndVVNMFIteEVoUmlHV21tZ1FuVzBnV2JUaDFHb2VoaTlGeUhVeEkyN2hMbGl0Z1p3azUwTG10YnFjb3pPb0l4T1ZUQ2MxbUhLNDVVTXYxSjQ4NHBxWnhDa0xpWUNhdExJUmR3ODdybDJ6M0w3dFk3UU9Ua2pubUZmMHVpalNPVDFkS3RLSGllWUIzd1V6LVVTc2s?oc=5"
-      },
-      {
-        "id": "news-fdb1e640",
-        "label": "Le Télégramme",
-        "status": "UNCONFIRMED",
-        "note": "« Je ne me mets pas de pression » : à 21 ans et après deux premières sélections réussies, Jérémy Jacquet déjà comme chez lui en équipe de France · publié samedi 3 octobre 2026 à 10:45.",
-        "url": "https://news.google.com/rss/articles/CBMitgJBVV95cUxOV0Vaa1VnUkxYRU5QVmR6TlUtN2RpQkExek5OcDd0S1NYTHVYeURnYUxCY1BlazR1dWxtVnRnYUxlOUFfS2JGaHNyX2lnb216anVSX05DNXlXMlYxOVZ0NDJoRjVjRG9qaVg5VU5fQjJURTFEbmFtNUxTcXF2UWE4ck9Ic0RJcXZSMFp5b3hoMFZHcFo2UTBGaW1lNFpObHBSM0hYYzRMZllUazJnRDJsY001dkJkZWgzeEhSS2hkbk5sT2k3UkdwWHhxaG5OMUdUYnRiRVJjVGNZLWFkOFNpMl9ha2w5RTN5Zkc4TTVxUkJvVnFfZnM3LUROV19nblV3V3lkVGxhLWt5dVllYkhCOUF5RW1lOTEzdUs3bGZ0SFIycDk5RE1rTXFmMEtfOWMzdmpzNFdR?oc=5"
       },
       {
         "id": "news-1166ad6b",
@@ -1804,9 +1794,19 @@
         "label": "BetGPT Editorial"
       }
     ],
-    "corrections": [],
-    "sourceChanges": [],
-    "factHash": "4d43e500",
+    "corrections": [
+      {
+        "at": "2026-10-03T16:58:00.000Z",
+        "note": "Correction ASTRA : retrait d'une source hors sujet, nettoyage des artefacts HTML et séparation entre sources journalistiques et repère calendrier."
+      }
+    ],
+    "sourceChanges": [
+      {
+        "at": "2026-10-03T16:58:00.000Z",
+        "note": "Le Télégramme/Jérémy Jacquet retiré du cluster Upamecano car hors sujet."
+      }
+    ],
+    "factHash": "source-integrity-upamecano-2026-10-03-v2",
     "keywords": "France, Ligue des nations de l'UEFA, actualité football",
     "image": {
       "src": "/blog/discover/inline-flags.jpg",
