@@ -18,6 +18,17 @@ for (const article of readLedger()) byId.set(article.id, article);
 for (const article of manualEditorialArticles()) byId.set(article.id, article);
 
 const published = [...byId.values()].filter(isPublicArticle);
+
+const slugCounts = new Map<string, number>();
+for (const article of published) slugCounts.set(article.slug, (slugCounts.get(article.slug) ?? 0) + 1);
+const duplicateSlugs = [...slugCounts.entries()].filter(([, count]) => count > 1);
+if (duplicateSlugs.length) {
+  for (const [slug, count] of duplicateSlugs) {
+    console.error(`ASTRA_EDITORIAL_DUPLICATE_SLUG_FAIL ${slug}: count=${count}`);
+  }
+  process.exit(1);
+}
+
 const integrityFailures = published
   .map((article) => ({ article, gate: sourceIntegrityGate(article) }))
   .filter(({ gate }) => !gate.pass);
