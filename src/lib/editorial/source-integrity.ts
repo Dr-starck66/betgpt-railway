@@ -80,8 +80,14 @@ export function classifyEditorialSource(source: EditorialSource): EditorialSourc
   if (source.status === "OFFICIAL") return "OFFICIAL_SOURCE";
   if (
     hostMatches(host, MEDIA_HOSTS) ||
-    /\b(l equipe|le parisien|le figaro|le telegramme|rmc sport|eurosport|reuters|bbc|foot mercato|so foot)\b/.test(text)
+    /\b(l equipe|le parisien|le figaro|le telegramme|rmc sport|eurosport|reuters|bbc|foot mercato|so foot|ouest france|franceinfo|goal|foot national|sud ouest|madeinfoot|madeinmonegasque|foot01)\b/.test(text)
   ) {
+    return "NEWS_SOURCE";
+  }
+  // Google News rewrites article URLs, so hostname alone cannot identify every publisher.
+  // A source explicitly marked as corroborated/high-confidence is treated as editorial
+  // only after schedule/broadcast/official roles have already been excluded above.
+  if (source.status === "CORROBORATED" || source.status === "HIGH_CONFIDENCE") {
     return "NEWS_SOURCE";
   }
   return "CONTEXT_ONLY";
