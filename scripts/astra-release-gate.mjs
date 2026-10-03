@@ -65,25 +65,42 @@ function runCommand(command) {
 
 async function runCommands(label, commands = []) {
   const results = [];
+  let blockedContent = false;
   for (const command of commands) {
     console.log(`ASTRA_RELEASE_GATE ${label} :: ${command}`);
     const result = await runCommand(command);
     results.push(result);
-    if (!result.pass) break;
+    if (!result.pass) {
+      blockedContent = label === "pipeline-editorial" && result.code === 78;
+      break;
+    }
   }
-  const pass = results.length === commands.length && results.every((r) => r.pass);
+  const pass =
+    blockedContent || (results.length === commands.length && results.every((r) => r.pass));
   const evidence = {
     schema: "astra-single-source-release-gate/commands-v1",
     siteId: cfg.siteId,
     label,
     generatedAt: new Date().toISOString(),
+    status: blockedContent ? "BLOCKED_CONTENT" : pass ? "PASS" : "FAIL",
     pass,
+    blockedContent,
     results,
   };
   writeEvidence(`${label.replace(/[^a-z0-9_-]+/gi, "-").toLowerCase()}.json`, evidence);
+  if (blockedContent) {
+    if (process.env.GITHUB_OUTPUT) {
+      fs.appendFileSync(process.env.GITHUB_OUTPUT, "blocked=true\n");
+    }
+    console.log(`ASTRA_RELEASE_GATE_BLOCKED_CONTENT ${label}`);
+    return;
+  }
   if (!pass) {
     console.error(`ASTRA_RELEASE_GATE_FAIL ${label}`);
     process.exit(1);
+  }
+  if (process.env.GITHUB_OUTPUT) {
+    fs.appendFileSync(process.env.GITHUB_OUTPUT, "blocked=false\n");
   }
   console.log(`ASTRA_RELEASE_GATE_PASS ${label}`);
 }

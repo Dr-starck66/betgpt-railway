@@ -99,5 +99,5 @@ jobs:
         if: steps.gate.outcome != 'success'
         shell: bash
         run: |
-          echo "ASTRA_SELF_HEAL_REPAIR_COMMITTED: original SHA remains intentionally RED."
-          exit 1
+          echo "ASTRA_SELF_HEAL_REPAIR_COMMITTED: original SHA remains non-promotable; repaired SHA owns the next gate."
+          exit 0

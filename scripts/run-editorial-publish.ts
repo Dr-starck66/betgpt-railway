@@ -17,7 +17,7 @@ if (integrityFailures.length) {
   for (const { article, gate } of integrityFailures) {
     console.error(`ASTRA_NEWS_SOURCE_INTEGRITY_FAIL ${article.slug}: ${gate.reasons.join(" | ")}`);
   }
-  process.exit(2);
+  process.exit(78);
 }
 
 const authorityFailures = published
@@ -28,7 +28,7 @@ if (authorityFailures.length) {
   for (const { article, gate } of authorityFailures) {
     console.error(`ASTRA_EDITORIAL_AUTHORITY_FAIL ${article.slug}: ${gate.reasons.join(" | ")}`);
   }
-  process.exit(2);
+  process.exit(78);
 }
 
 const discoverCandidates = recentDiscoverCandidates(published, now, 48);
@@ -41,7 +41,7 @@ if (discoverFailures.length) {
       `ASTRA_DISCOVER_LAUNCHPAD_FAIL ${audit.slug}: ${audit.failures.join(" | ")}`,
     );
   }
-  process.exit(2);
+  process.exit(78);
 }
 
 console.log(

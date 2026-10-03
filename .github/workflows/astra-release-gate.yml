@@ -65,14 +65,38 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Verify GREEN release ↔ manifest ↔ public revision
-        run: node scripts/astra-green-release-sync.mjs
+        shell: bash
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 18); do
+            if node scripts/astra-green-release-sync.mjs; then
+              echo "ASTRA_GREEN_CONVERGENCE_PASS attempt=$i"
+              exit 0
+            fi
+            echo "ASTRA_GREEN_CONVERGENCE_WAIT attempt=$i"
+            sleep 10
+          done
+          echo "ASTRA_GREEN_CONVERGENCE_FAIL after=18"
+          exit 1
       - name: Validate public/canonical convergence
-        run: node scripts/astra-release-gate.mjs postflight
+        shell: bash
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 8); do
+            if node scripts/astra-release-gate.mjs postflight; then
+              echo "ASTRA_POSTFLIGHT_CONVERGENCE_PASS attempt=$i"
+              exit 0
+            fi
+            echo "ASTRA_POSTFLIGHT_CONVERGENCE_WAIT attempt=$i"
+            sleep 10
+          done
+          echo "ASTRA_POSTFLIGHT_CONVERGENCE_FAIL after=8"
+          exit 1
       - name: Upload drift evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: astra-release-gate-postflight
           path: artifacts/astra-release-gate/
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 30

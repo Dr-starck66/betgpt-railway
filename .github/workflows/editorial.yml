@@ -61,11 +61,12 @@ jobs:
         run: npm run release:preflight
 
       - name: Transactional editorial publication gate
+        id: editorial_gate
         if: github.event_name != 'pull_request'
         run: npm run release:pipeline:editorial
 
       - name: Persist editorial and social ledgers safely
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && steps.editorial_gate.outputs.blocked != 'true'
         run: >-
           node scripts/astra-safe-push.mjs
           --branch main
