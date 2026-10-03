@@ -128,3 +128,51 @@ test("semantic jump and generic anchor remain PARTIAL, not false hard failures",
   assert.equal(report.summary.verdict, "PARTIAL");
   assert.ok(report.findings.some((f) => f.code === "GENERIC_ANCHOR"));
 });
+
+
+test("dynamic template links satisfy inbound links for dynamic route families", () => {
+  const hub = page(
+    "/scores-en-direct",
+    "Scores en direct",
+    "Scores football en direct",
+    "Scores live",
+    "football scores direct live matchs resultats equipes"
+  );
+  const league = page(
+    "/scores-en-direct/:league",
+    "Scores Ligue",
+    "Scores par championnat",
+    "Scores live par championnat",
+    "football scores direct ligue championnat matchs resultats"
+  );
+  const links = extractInternalLinks(
+    '<Link to={\`/scores-en-direct/\${league.slug}\`}>Voir le championnat</Link>',
+    "/scores-en-direct"
+  );
+  const report = analyzeSemanticFlow([hub, league], links, {
+    strategicRoutes: ["/scores-en-direct/:league"],
+  });
+  assert.equal(report.summary.failures, 0);
+  assert.equal(report.inbound["/scores-en-direct/:league"], 1);
+});
+
+test("parent recommendation refuses unrelated same-depth pages with weak intent overlap", () => {
+  const bundesliga = page(
+    "/bundesliga",
+    "Bundesliga",
+    "Bundesliga",
+    "Championnat allemand",
+    "football bundesliga allemagne matchs equipes classement buts"
+  );
+  const legal = page(
+    "/cgu",
+    "Conditions générales",
+    "Conditions générales d'utilisation",
+    "Règles juridiques",
+    "editeur droit responsabilite donnees utilisateur service"
+  );
+  const report = analyzeSemanticFlow([bundesliga, legal], [], {
+    recommendationIntentMin: 0.55,
+  });
+  assert.ok(!report.recommendations.some((r) => r.parent === "/bundesliga" && r.child === "/cgu"));
+});
