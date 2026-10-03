@@ -54,5 +54,8 @@
         "resultsPath"
       ]
     }
-  ]
+  ],
+  "autoRepairRegistry": "src/lib/seo/semantic-auto-links.generated.ts",
+  "autoRepairReportPath": "artifacts/seo/semantic-autorepair.json",
+  "autoRepairGenericAnchors": true
 }
