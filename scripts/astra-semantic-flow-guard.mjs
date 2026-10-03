@@ -13,6 +13,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import {
   analyzeSemanticFlow,
+  extractCatalogLinks,
   extractInternalLinks,
   extractPageSignals,
 } from "../src/lib/seo/astra-semantic-flow.mjs";
@@ -89,6 +90,24 @@ for (const file of corpusFiles) {
   const source = await fs.readFile(file, "utf8");
   const sourceRoute = routeByFile.get(rel) || `@${rel}`;
   links.push(...extractInternalLinks(source, sourceRoute));
+}
+
+
+for (const catalog of cfg.linkCatalogs || []) {
+  const file = path.join(root, catalog.file);
+  let source = "";
+  try {
+    source = await fs.readFile(file, "utf8");
+  } catch {
+    continue;
+  }
+  links.push(
+    ...extractCatalogLinks(
+      source,
+      `@catalog:${norm(catalog.file)}`,
+      catalog.properties || []
+    )
+  );
 }
 
 const report = analyzeSemanticFlow(pages, links, cfg);
