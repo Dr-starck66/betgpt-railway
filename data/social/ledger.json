@@ -170,5 +170,28 @@
     "remotePostUrl": null,
     "error": null,
     "retryCount": 0
+  },
+  {
+    "id": "x:ed-2026-10-03-evening:v1",
+    "articleId": "ed-2026-10-03-evening",
+    "articleSlug": "france-espoirs-luxembourg-espoirs-en-direct-2026-10-03",
+    "articleTitle": "France Espoirs - Luxembourg Espoirs EN DIRECT",
+    "articleUrl": "https://betgpt.live/actualites/france-espoirs-luxembourg-espoirs-en-direct-2026-10-03",
+    "trackedUrl": "https://betgpt.live/actualites/france-espoirs-luxembourg-espoirs-en-direct-2026-10-03?utm_source=x&utm_medium=social&utm_campaign=editorial_auto&utm_content=france-espoirs-luxembourg-espoirs-en-direct-2026-10-03",
+    "network": "x",
+    "text": "🔴 France Espoirs - Luxembourg Espo…\n\nÀ lire sur BetGPT 👇\n\nhttps://betgpt.live/actualites/france-espoirs-luxembourg-espoirs-en-direct-2026-10-03?utm_source=x&utm_medium=social&utm_campaign=editorial_auto&utm_content=france-espoirs-luxembourg-espoirs-en-direct-2026-10-03\n\n#France",
+    "hashtags": [
+      "#France"
+    ],
+    "imageUrl": "https://betgpt.live/blog/discover/inline-night.jpg",
+    "createdAt": "2026-10-03T17:00:40.390Z",
+    "scheduledAt": "2026-10-03T17:00:40.390Z",
+    "attemptedAt": null,
+    "publishedAt": null,
+    "status": "READY_TO_X",
+    "remotePostId": null,
+    "remotePostUrl": null,
+    "error": null,
+    "retryCount": 0
   }
 ]
