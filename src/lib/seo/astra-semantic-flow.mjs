@@ -95,7 +95,7 @@ export function extractPageSignals(source = "", fallbackRoute = "") {
   const text = stripTags(source)
     .replace(/\b(import|export|const|let|function|return|className|component|createFileRoute|head|meta|links)\b/g, " ");
   const topicText = [route.replace(/[\/:_-]+/g, " "), title, h1, description, text.slice(0, 9000)].join(" ");
-  const intentText = [route.replace(/[\/:_-]+/g, " "), title, h1].join(" ");
+  const intentText = [title, h1].filter(Boolean).join(" ") || route.replace(/[\/:_-]+/g, " ");
   return {
     route,
     title,
