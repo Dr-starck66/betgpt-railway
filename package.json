@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "node scripts/with-app-env.mjs vite dev --host 0.0.0.0 --port 8080",
     "build": "node scripts/with-app-env.mjs vite build && npm run db:migrate",
-    "prebuild": "node scripts/clean-build.mjs && node scripts/astra-no-repeat-guard.mjs && node scripts/astra-mobile-parity-guard.mjs && npm run test:broadcast-affiliate && npm run test:lineups && node scripts/astra-match-route-resilience-guard.mjs && npm run test:forum-durability && node scripts/astra-zero-cost-guard.mjs && node scripts/astra-resume-guard.mjs && node scripts/astra-flag-guard.mjs && node scripts/astra-model-max-guard.mjs && node scripts/astra-visual-entity-guard.mjs && node scripts/astra-zero-weak-page-guard.mjs --strict && node scripts/astra-semantic-flow-guard.mjs --strict && node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-heading-architecture-guard.mjs --strict && npm run test:editorial-authority && npm run test:news-source-integrity && node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-editorial-authority-gate.ts && npm run editorial:corpus-audit",
+    "prebuild": "node scripts/clean-build.mjs && node scripts/astra-no-repeat-guard.mjs && npm run test:reliability && node scripts/astra-mobile-parity-guard.mjs && npm run test:broadcast-affiliate && npm run test:lineups && node scripts/astra-match-route-resilience-guard.mjs && npm run test:forum-durability && node scripts/astra-zero-cost-guard.mjs && node scripts/astra-resume-guard.mjs && node scripts/astra-flag-guard.mjs && node scripts/astra-model-max-guard.mjs && node scripts/astra-visual-entity-guard.mjs && node scripts/astra-zero-weak-page-guard.mjs --strict && node scripts/astra-semantic-flow-guard.mjs --strict && node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-heading-architecture-guard.mjs --strict && npm run test:editorial-authority && npm run test:news-source-integrity && node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-editorial-authority-gate.ts && npm run editorial:corpus-audit",
     "prebuild:dev": "node scripts/clean-build.mjs",
     "db:migrate": "node scripts/migrate.mjs",
     "build:dev": "node scripts/with-app-env.mjs vite build --mode development",
@@ -89,7 +89,8 @@
     "launch:video": "node scripts/astra-launch-video.mjs",
     "guard:launch-video": "node scripts/astra-launch-video-guard.mjs",
     "seo:semantic-flow:verify": "npm run test:semantic-flow && npm run seo:semantic-flow",
-    "test:news-source-integrity": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/editorial/source-integrity.test.ts"
+    "test:news-source-integrity": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/editorial/source-integrity.test.ts",
+    "test:reliability": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/reliability/astra-reliability.test.ts"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.4",
