@@ -128,5 +128,26 @@
     "remotePostUrl": null,
     "error": null,
     "retryCount": 0
+  },
+  {
+    "id": "x:ed-2026-10-03-morning:v1",
+    "articleId": "ed-2026-10-03-morning",
+    "articleSlug": "suspendu-pour-la-reception-de-la-belgique-dayot-upamecano-quitte-le-groupe-de-l-equipe-de",
+    "articleTitle": "Suspendu pour la réception de la Belgique, Dayot Upamecano quitte le groupe de l'équipe de France et rentre à Munich",
+    "articleUrl": "https://betgpt.live/actualites/suspendu-pour-la-reception-de-la-belgique-dayot-upamecano-quitte-le-groupe-de-l-equipe-de",
+    "trackedUrl": "https://betgpt.live/actualites/suspendu-pour-la-reception-de-la-belgique-dayot-upamecano-quitte-le-groupe-de-l-equipe-de?utm_source=x&utm_medium=social&utm_campaign=editorial_auto&utm_content=suspendu-pour-la-reception-de-la-belgique-dayot-upamecano-quitte-le-groupe-de-l-equipe-de",
+    "network": "x",
+    "text": "🔴 Suspendu pour la réception de la Belgique, Dayot Upamecano quitte le groupe de l'équipe de…\n\nÀ lire sur BetGPT 👇\n\nhttps://betgpt.live/actualites/suspendu-pour-la-reception-de-la-belgique-dayot-upamecano-quitte-le-groupe-de-l-equipe-de?utm_source=x&utm_medium=social&utm_campai",
+    "hashtags": [],
+    "imageUrl": "https://betgpt.live/blog/discover/inline-flags.jpg",
+    "createdAt": "2026-10-03T10:25:39.581Z",
+    "scheduledAt": "2026-10-03T10:25:39.581Z",
+    "attemptedAt": null,
+    "publishedAt": null,
+    "status": "READY_TO_X",
+    "remotePostId": null,
+    "remotePostUrl": null,
+    "error": null,
+    "retryCount": 0
   }
 ]
