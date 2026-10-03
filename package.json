@@ -87,7 +87,8 @@
     "test:lineups": "node --experimental-strip-types --test src/engine/official-lineups.test.ts",
     "test:launch-video": "node --test scripts/astra-launch-video.test.mjs",
     "launch:video": "node scripts/astra-launch-video.mjs",
-    "guard:launch-video": "node scripts/astra-launch-video-guard.mjs"
+    "guard:launch-video": "node scripts/astra-launch-video-guard.mjs",
+    "seo:semantic-flow:verify": "npm run test:semantic-flow && npm run seo:semantic-flow"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.4",
