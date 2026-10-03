@@ -39,5 +39,20 @@
     "/comparer-cotes": "/pronostics-sportifs",
     "/ledger": "/pronostics-sportifs",
     "/rapports/precision": "/ledger"
-  }
+  },
+  "linkCatalogs": [
+    {
+      "file": "src/lib/programmatic.ts",
+      "properties": [
+        "path"
+      ]
+    },
+    {
+      "file": "src/lib/serp/leagues.ts",
+      "properties": [
+        "scoresPath",
+        "resultsPath"
+      ]
+    }
+  ]
 }
