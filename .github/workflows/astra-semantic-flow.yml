@@ -1,0 +1,42 @@
+name: ASTRA Semantic Flow Guard Ω
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "scripts/astra-semantic-flow*"
+      - "config/astra-semantic-flow.json"
+      - "package.json"
+      - ".github/workflows/astra-semantic-flow.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  semantic-flow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Prove guard catches injected failures
+        run: node --test scripts/astra-semantic-flow.test.mjs
+
+      - name: Audit BetGPT semantic graph
+        run: node scripts/astra-semantic-flow-guard.mjs --strict
+
+      - name: Upload semantic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: astra-semantic-flow-evidence
+          path: artifacts/seo/semantic-flow.json
+          if-no-files-found: warn
