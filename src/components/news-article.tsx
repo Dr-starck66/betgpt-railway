@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { orderedContextualSourceIds } from "@/lib/editorial/authority-citations";
+import { classifyEditorialSource } from "@/lib/editorial/source-integrity";
 import { newsArticleLd, breadcrumbLd } from "@/lib/editorial/schema";
 import { formatParis } from "@/lib/editorial/time";
 import type { EditorialArticle, EditorialSource } from "@/lib/editorial/types";
@@ -54,6 +55,10 @@ function SourceCitations({
 
 export function NewsArticleView({ article }: { article: EditorialArticle }) {
   const published = formatParis(article.publishedAt);
+  const editorialSources = article.sources.filter((source) => {
+    const role = classifyEditorialSource(source);
+    return role === "NEWS_SOURCE" || role === "OFFICIAL_SOURCE";
+  });
   const heroImageCopy = publicEditorialImageCopy(article);
   const modified =
     article.modifiedAt && article.publishedAt && article.modifiedAt > article.publishedAt
@@ -95,8 +100,8 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
                 <dd className="mt-1 text-paper">{article.competition}</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase tracking-wide text-muted">Sources affichées</dt>
-                <dd className="mt-1 text-paper">{article.sources.length}</dd>
+                <dt className="text-xs uppercase tracking-wide text-muted">Sources éditoriales</dt>
+                <dd className="mt-1 text-paper">{editorialSources.length}</dd>
               </div>
               <div>
                 <dt className="text-xs uppercase tracking-wide text-muted">Publication</dt>
@@ -174,7 +179,7 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
           <section className="surface-card p-5">
             <h2 className="text-base font-semibold text-paper">Sources</h2>
             <ul className="mt-4 space-y-3 text-sm leading-relaxed text-mist">
-              {article.sources.map((source) => (
+              {editorialSources.map((source) => (
                 <li key={source.id}>
                   {source.url ? (
                     <a href={source.url} className="font-semibold text-link hover:underline">
