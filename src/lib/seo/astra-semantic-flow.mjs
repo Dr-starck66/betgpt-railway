@@ -207,6 +207,7 @@ export function analyzeSemanticFlow(pages = [], links = [], config = {}) {
     parentHints: {},
     ...config,
   };
+  /** @type {Set<string>} */
   const strategic = new Set(cfg.strategicRoutes || []);
   const pageByRoute = new Map(pages.filter((p) => p.indexable && p.route).map((p) => [p.route, p]));
   /** @type {any[]} */
@@ -293,6 +294,7 @@ export function analyzeSemanticFlow(pages = [], links = [], config = {}) {
 
   /** @type {any[]} */
   const recommendations = [];
+  /** @type {Set<string>} */
   const hintedChildren = new Set();
   for (const [childRoute, parentRoute] of Object.entries(cfg.parentHints || {})) {
     const child = pageByRoute.get(childRoute);
