@@ -129,7 +129,7 @@ export function ScoresHub({
                     <tr key={m.id} className="border-t border-line transition-colors hover:bg-slate-50/70">
                       <td className="px-4 py-4 tabular text-mist">{parisTime(m.kickoff) || "—"}</td>
                       <td className="px-4 py-4">
-                        <Link to="/match/$matchId" params={{ matchId: m.slug ?? m.id }} className="block font-semibold text-paper hover:text-link">
+                        <a href={matchPath(m)} className="block font-semibold text-paper hover:text-link">
                           <TeamLine
                             home={m.home}
                             away={m.away}
@@ -138,7 +138,7 @@ export function ScoresHub({
                             size={24}
                             names="auto"
                           />
-                        </Link>
+                        </a>
                         <span className="mt-1 block text-xs text-muted">{m.competition}</span>
                       </td>
                       <td className="px-4 py-4 text-xl font-bold tabular tracking-tight text-paper">{showScore ? `${m.scoreHome}–${m.scoreAway}` : "—"}</td>
@@ -173,7 +173,7 @@ export function ScoresHub({
                     <Crest name={m.home.name} short={m.home.short} logo={m.home.logo} color={m.home.color} id={m.home.id} size={34} />
                     <div className="min-w-0">
                       <h3 className="text-base font-semibold text-paper sm:text-lg">
-                        <Link to="/match/$matchId" params={{ matchId: m.slug ?? m.id }} className="hover:text-link">
+                        <a href={matchPath(m)} className="hover:text-link">
                           {m.status === "live"
                             ? liveStale
                               ? `${m.home.name} – ${m.away.name} : dernier score connu`
@@ -181,7 +181,7 @@ export function ScoresHub({
                             : m.status === "finished"
                               ? `Résultat ${m.home.name} – ${m.away.name}`
                               : `${m.home.name} – ${m.away.name}`}
-                        </Link>
+                        </a>
                       </h3>
                       <p className="mt-1 text-xs text-muted">{m.competition}</p>
                     </div>
