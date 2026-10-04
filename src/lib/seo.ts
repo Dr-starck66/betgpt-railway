@@ -29,8 +29,44 @@ export function matchSlug(match: { home: { name: string }; away: { name: string 
   return `${slugify(match.home.name)}-${slugify(match.away.name)}-${day}`;
 }
 
-export function matchPath(match: { slug?: string; id: string }): string {
-  return `/match/${match.slug ?? match.id}`;
+type MatchRouteSource = {
+  slug?: string | null;
+  id?: string | null;
+  home?: { name?: string | null } | string | null;
+  away?: { name?: string | null } | string | null;
+  kickoff?: string | null;
+};
+
+const INVALID_MATCH_ROUTE_IDS = new Set(["null", "undefined", "nan"]);
+
+function cleanMatchRouteSegment(value: unknown): string {
+  const segment = String(value ?? "").trim();
+  if (!segment || INVALID_MATCH_ROUTE_IDS.has(segment.toLowerCase())) return "";
+  return segment;
+}
+
+function routeTeamName(value: MatchRouteSource["home"]): string {
+  if (typeof value === "string") return value;
+  return String(value?.name ?? "");
+}
+
+export function matchRouteId(match: MatchRouteSource): string | null {
+  const slug = cleanMatchRouteSegment(match.slug);
+  if (slug) return slug;
+
+  const id = cleanMatchRouteSegment(match.id);
+  if (id) return id;
+
+  const home = slugify(routeTeamName(match.home));
+  const away = slugify(routeTeamName(match.away));
+  const day = /^(\\d{4}-\\d{2}-\\d{2})/.exec(String(match.kickoff ?? ""))?.[1] ?? "";
+  const derived = [home, away, day].filter(Boolean).join("-");
+  return derived || null;
+}
+
+export function matchPath(match: MatchRouteSource): string {
+  const routeId = matchRouteId(match);
+  return routeId ? `/match/${routeId}` : "/scores-en-direct";
 }
 
 export function scoreLine(match: MatchInput): string | null {
