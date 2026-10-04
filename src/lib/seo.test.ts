@@ -2,7 +2,7 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { robotsTxt } from "./robots.ts";
 import { sitemapDate } from "./sitemap-metadata.ts";
-import { jsonLd, matchTitle, articleDates, matchHead } from "./seo.ts";
+import { jsonLd, matchTitle, articleDates, matchHead, matchPath, matchRouteId } from "./seo.ts";
 import type { MatchInput, PredictionRecord, TeamProfile } from "../engine/types.ts";
 
 function team(name: string, id: string): TeamProfile {
@@ -38,6 +38,31 @@ function team(name: string, id: string): TeamProfile {
 function point<T>(value: T) {
   return { value, source: "t", timestamp: "2026-09-14T10:00:00.000Z", confidence: 0.5, freshnessHours: 2 };
 }
+
+describe("match route fail-closed", () => {
+  it("derives a safe route when runtime data contains null ids", () => {
+    const broken = {
+      id: null,
+      slug: null,
+      home: { name: "Fulham" },
+      away: { name: "Manchester United" },
+      kickoff: "2026-09-20T15:00:00.000Z",
+    } as const;
+    assert.equal(matchRouteId(broken), "fulham-manchester-united-2026-09-20");
+    assert.equal(matchPath(broken), "/match/fulham-manchester-united-2026-09-20");
+  });
+
+  it("never emits /match/null or /match/undefined", () => {
+    assert.equal(matchPath({ id: "null" }), "/scores-en-direct");
+    assert.equal(matchPath({ id: "undefined" }), "/scores-en-direct");
+    assert.doesNotMatch(matchPath({ id: "null" }), /\\/match\\/(null|undefined)$/i);
+  });
+
+  it("prefers a valid slug, then a valid id", () => {
+    assert.equal(matchRouteId({ slug: "a-b-2026-10-04", id: "42" }), "a-b-2026-10-04");
+    assert.equal(matchRouteId({ slug: null, id: "42" }), "42");
+  });
+});
 
 describe("robots.txt contract", () => {
   it("omits unknown, malformed and future sitemap modification dates", () => {
