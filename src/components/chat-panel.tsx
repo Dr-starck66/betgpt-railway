@@ -69,26 +69,13 @@ const REACTION_LABEL: Record<string, string> = {
 
 type GifReaction = { url?: string; alt: string; provider?: string; scene?: string };
 
-const LOCAL_REACTION_GIFS: Record<PunchReaction["mood"], string> = {
-  ANIMAL_CHAOS: "/reactions/astra-animal.gif",
-  COSMIC_CHAOS: "/reactions/astra-shock.gif",
-  NUCLEAR_CHAOS: "/reactions/astra-shock.gif",
-  BETTING_DISASTER: "/reactions/astra-betting.gif",
-  SHOPPING_DISASTER: "/reactions/astra-betting.gif",
-  DIY_DISASTER: "/reactions/astra-betting.gif",
-  ABSURD_SHOCK: "/reactions/astra-fallback.gif",
-};
-
-function localGifForReaction(reaction: PunchReaction): GifReaction {
+function nativeReactionFallback(reaction: PunchReaction): GifReaction {
   return {
-    url: LOCAL_REACTION_GIFS[reaction.mood],
-    alt: `Réaction GIF BetGPT — ${REACTION_LABEL[reaction.mood] ?? "chaos"}`,
-    provider: "local",
+    alt: `Réaction animée BetGPT — ${REACTION_LABEL[reaction.mood] ?? "chaos"}`,
+    provider: "native",
     scene: reaction.mood,
   };
 }
-
-
 
 const BOOKMAKER_HOST_RE =
   /(?:^|\.)(?:unibet|betclic|netbet|winamax|bet365|bwin|pmu|zebet|vbet|parionssport|fdj)\./i;
@@ -196,10 +183,10 @@ function NativeReaction({ reaction, punchline }: { reaction: PunchReaction; punc
 
 function PunchReactionCard({ reaction, punchline }: { reaction: PunchReaction; punchline?: string }) {
   const label = REACTION_LABEL[reaction.mood] ?? "chaos";
-  const [gif, setGif] = useState<GifReaction>(() => localGifForReaction(reaction));
+  const [gif, setGif] = useState<GifReaction>(() => nativeReactionFallback(reaction));
 
   useEffect(() => {
-    const local = localGifForReaction(reaction);
+    const local = nativeReactionFallback(reaction);
     setGif(local);
 
     const query = reaction.gifQuery.trim();
@@ -223,7 +210,7 @@ function PunchReactionCard({ reaction, punchline }: { reaction: PunchReaction; p
         setGif(value);
       })
       .catch(() => {
-        // Local GIF is already visible before the API request completes.
+        // Native reaction is already visible before the API request completes.
       });
 
     return () => {
@@ -257,9 +244,7 @@ function PunchReactionCard({ reaction, punchline }: { reaction: PunchReaction; p
         decoding="async"
         referrerPolicy="no-referrer"
         onError={() => {
-          const local = localGifForReaction(reaction);
-          if (gif.url !== local.url) setGif(local);
-          else setGif({ alt: local.alt, provider: "native" });
+          setGif(nativeReactionFallback(reaction));
         }}
         className="max-h-64 w-full max-w-[22rem] rounded-xl border border-line object-contain"
       />
