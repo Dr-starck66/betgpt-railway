@@ -3,6 +3,7 @@ import { SERP_COMPETITIONS } from "@/lib/serp/leagues";
 import { parisTime } from "@/lib/serp/answer";
 import type { ResultRow } from "@/lib/serp/results";
 import { TeamLine } from "@/components/crest";
+import { matchPath } from "@/lib/seo";
 
 const MONTHS = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
 
@@ -25,9 +26,8 @@ function ResultCards({ rows, label }: { rows: ResultRow[]; label: string }) {
     <ol aria-label={label} className="grid gap-3 lg:grid-cols-2">
       {rows.map((row) => (
         <li key={row.slug}>
-          <Link
-            to="/match/$matchId"
-            params={{ matchId: row.slug }}
+          <a
+            href={matchPath(row)}
             className="surface-card group block p-4 transition hover:-translate-y-0.5 hover:border-sage/25 sm:p-5"
           >
             <div className="flex items-center justify-between gap-3 text-xs text-muted">
@@ -54,7 +54,7 @@ function ResultCards({ rows, label }: { rows: ResultRow[]; label: string }) {
               <span className="chip-pill min-h-0 py-1">Terminé</span>
               <span className="text-xs font-semibold text-link opacity-80 transition group-hover:opacity-100">Fiche du match →</span>
             </div>
-          </Link>
+          </a>
         </li>
       ))}
     </ol>
