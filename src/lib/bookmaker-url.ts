@@ -1,23 +1,49 @@
 import { BETCLIC_LEAGUE, NETBET_LEAGUE, UNIBET_LEAGUE } from "@/engine/book-pages";
 import type { LeagueId } from "@/engine/types";
 
-export function bookmakerDestination(book: string, league: LeagueId, direct?: string): string | null {
-  const cleanDirect = String(direct ?? "").trim();
-  if (/^https:\/\//i.test(cleanDirect)) return cleanDirect;
+const GENERIC_BOOKMAKER_URLS = new Set(
+  [
+    ...Object.values(UNIBET_LEAGUE),
+    ...Object.values(BETCLIC_LEAGUE),
+    ...Object.values(NETBET_LEAGUE),
+    "https://www.unibet.fr/paris-football",
+    "https://www.betclic.fr/football-sfootball",
+    "https://www.netbet.fr/football",
+    "https://www.winamax.fr/paris-sportifs",
+    "https://paris-sportifs.pmu.fr/",
+    "https://sports.bwin.fr/fr/sports/football-4",
+    "https://www.zebet.fr/fr/competition/football",
+    "https://www.vbet.fr/fr/sports/football",
+    "https://enligne.parionssport.fdj.fr/",
+    "https://www.bet365.fr/",
+  ].filter((x): x is string => Boolean(x)),
+);
 
-  const n = String(book ?? "").trim().toLowerCase();
-  if (!n) return null;
+function normalizedUrl(raw: string): string | null {
+  try {
+    const u = new URL(raw);
+    if (u.protocol !== "https:") return null;
+    u.hash = "";
+    return u.toString().replace(/\/$/, "");
+  } catch {
+    return null;
+  }
+}
 
-  if (n.includes("unibet")) return UNIBET_LEAGUE[league] ?? "https://www.unibet.fr/paris-football";
-  if (n.includes("betclic")) return BETCLIC_LEAGUE[league] ?? "https://www.betclic.fr/football-sfootball";
-  if (n.includes("netbet")) return NETBET_LEAGUE[league] ?? "https://www.netbet.fr/football";
-  if (n.includes("winamax")) return "https://www.winamax.fr/paris-sportifs";
-  if (n.includes("pmu")) return "https://paris-sportifs.pmu.fr/";
-  if (n.includes("bwin")) return "https://sports.bwin.fr/fr/sports/football-4";
-  if (n.includes("zebet")) return "https://www.zebet.fr/fr/competition/football";
-  if (n.includes("vbet")) return "https://www.vbet.fr/fr/sports/football";
-  if (n.includes("parions")) return "https://enligne.parionssport.fdj.fr/";
-  if (n.includes("bet365")) return "https://www.bet365.fr/";
+const GENERIC_NORMALIZED = new Set(
+  [...GENERIC_BOOKMAKER_URLS].map((u) => normalizedUrl(u)).filter((u): u is string => Boolean(u)),
+);
 
-  return null;
+export function isExactBookmakerMatchUrl(raw?: string): boolean {
+  const clean = normalizedUrl(String(raw ?? "").trim());
+  if (!clean || GENERIC_NORMALIZED.has(clean)) return false;
+  const u = new URL(clean);
+  if (u.pathname === "/" || u.pathname.split("/").filter(Boolean).length < 2) return false;
+  return true;
+}
+
+export function bookmakerDestination(_book: string, _league: LeagueId, direct?: string): string | null {
+  const clean = normalizedUrl(String(direct ?? "").trim());
+  if (!clean || !isExactBookmakerMatchUrl(clean)) return null;
+  return clean;
 }

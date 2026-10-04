@@ -123,7 +123,7 @@ const EVENT_LEAGUES = [...LEAGUES, ...EVENT_ONLY_LEAGUES];
 const TTL_MS = 6e5;
 const SCORE_TTL_MS = 2e4;
 const STALE_MS = 432e5;
-const SCHEMA = 39;
+const SCHEMA = 40;
 const SNAP_FILE = join(process.cwd(), "data", "live-snapshot.json");
 const SNAP_FILE_ABS = "/workspace/data/live-snapshot.json";
 const SNAP_FILE_TMP = "/tmp/betgpt-data/live-snapshot.json";
@@ -821,34 +821,17 @@ async function loadSnapshot() {
 			if (extra.cs11) m.cs11Odds = extra.cs11;
 			if (extra.cs) m.cs11Odds = extra.cs["1-1"] ?? m.cs11Odds;
 		}
+		// Book pages are URL discovery only. Never infer 1X2 prices from arbitrary
+		// HTML numbers: quotes must come from a provider payload with observedAt.
 		const frBooks = lookupBookPages(pages, m.home.name, m.away.name);
 		for (const p of frBooks) {
 			const i = m.current.findIndex((b) => b.book.toLowerCase() === p.book.toLowerCase());
-			if (i >= 0) {
-				const cur = m.current[i];
-				cur.url = p.url;
-				cur.homeUrl = p.url;
-				cur.drawUrl = p.url;
-				cur.awayUrl = p.url;
-				if (open && FR_BOOK_RE.test(p.book) && p.homeOdds && p.drawOdds && p.awayOdds && !/unibet/i.test(p.book)) {
-					cur.home = p.homeOdds;
-					cur.draw = p.drawOdds;
-					cur.away = p.awayOdds;
-				}
-				continue;
-			}
-			if (!open || !p.homeOdds || !p.drawOdds || !p.awayOdds) continue;
-			m.current.push({
-				book: p.book,
-				home: p.homeOdds,
-				draw: p.drawOdds,
-				away: p.awayOdds,
-				...EMPTY_TOTALS,
-				url: p.url,
-				homeUrl: p.url,
-				drawUrl: p.url,
-				awayUrl: p.url
-			});
+			if (i < 0) continue;
+			const cur = m.current[i];
+			cur.url = p.url;
+			cur.homeUrl = p.url;
+			cur.drawUrl = p.url;
+			cur.awayUrl = p.url;
 		}
 		if (!open) {
 			const frozen = freezeListed(m, diskKeep);
@@ -857,7 +840,13 @@ async function loadSnapshot() {
 				if (frozen.opening) m.opening = frozen.opening;
 			} else m.current = [];
 		}
-		m.current = m.current.filter((b) => FR_BOOK_RE.test(b.book) && !isUsOnlyBook(b.book) && b.home >= 1.05 && b.draw >= 1.05 && b.away >= 1.05);
+		m.current = m.current.filter((b) => {
+			if (!FR_BOOK_RE.test(b.book) || isUsOnlyBook(b.book)) return false;
+			if (!(b.home >= 1.05 && b.draw >= 1.05 && b.away >= 1.05)) return false;
+			if (!open) return true;
+			const observed = Date.parse(String(b.observedAt ?? ""));
+			return Number.isFinite(observed) && Date.now() - observed >= -60_000 && Date.now() - observed <= 5 * 60_000;
+		});
 		const names = [...new Set(m.current.map((b) => b.book))];
 		m.oddsSource = names.join(" / ");
 		m.listedTotal = m.current.some((b) => b.over25 >= 1.05) ? 2.5 : undefined;

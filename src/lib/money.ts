@@ -1,21 +1,30 @@
 import type { BookOdds, MatchInput } from "@/engine/types";
+import { bestFreshMainQuote, freshBookSnapshots, DEFAULT_MAX_QUOTE_AGE_MS } from "@/engine/best-odds-engine";
 
-export type BestLine = { side: "1" | "N" | "2"; odds: number; book: string; url?: string };
+export type BestLine = {
+  side: "1" | "N" | "2";
+  odds: number;
+  book: string;
+  url?: string;
+  observedAt?: string;
+};
+
+const LIVE_QUOTE_MAX_AGE_MS = DEFAULT_MAX_QUOTE_AGE_MS;
 
 export function bestThreeWay(match: MatchInput): { home: BestLine; draw: BestLine; away: BestLine } | null {
-  const books = match.current.filter((b) => b.home >= 1.05 && b.draw >= 1.05 && b.away >= 1.05);
-  if (!books.length) return null;
-  const pick = (key: "home" | "draw" | "away", side: BestLine["side"]): BestLine => {
-    const b = books.reduce((a, c) => (c[key] > a[key] ? c : a));
-    const direct = key === "home" ? b.homeUrl ?? b.url : key === "draw" ? b.drawUrl ?? b.url : b.awayUrl ?? b.url;
-    const bookName = b.book.toLowerCase().replace(/[^a-z0-9]/g, "");
-    const fallback = (match.ticketLinks ?? []).find((l) => {
-      const candidate = l.book.toLowerCase().replace(/[^a-z0-9]/g, "");
-      return candidate.includes(bookName) || bookName.includes(candidate);
-    })?.url;
-    return { side, odds: b[key], book: b.book, url: direct ?? fallback };
+  const opts = {
+    maxAgeMs: LIVE_QUOTE_MAX_AGE_MS,
+    requireTimestamp: true,
   };
-  return { home: pick("home", "1"), draw: pick("draw", "N"), away: pick("away", "2") };
+  const home = bestFreshMainQuote(match.current, "1X2_H", opts);
+  const draw = bestFreshMainQuote(match.current, "1X2_D", opts);
+  const away = bestFreshMainQuote(match.current, "1X2_A", opts);
+  if (!home || !draw || !away) return null;
+  return {
+    home: { side: "1", odds: home.odds, book: home.book, url: home.url, observedAt: home.observedAt },
+    draw: { side: "N", odds: draw.odds, book: draw.book, url: draw.url, observedAt: draw.observedAt },
+    away: { side: "2", odds: away.odds, book: away.book, url: away.url, observedAt: away.observedAt },
+  };
 }
 
 export function kellyFraction(p: number, odds: number): number {
@@ -26,5 +35,6 @@ export function kellyFraction(p: number, odds: number): number {
 }
 
 export function booksSorted(match: MatchInput): BookOdds[] {
-  return [...match.current].sort((a, b) => Math.max(b.home, b.draw, b.away) - Math.max(a.home, a.draw, a.away));
+  const fresh = freshBookSnapshots(match.current, Date.now(), LIVE_QUOTE_MAX_AGE_MS, true);
+  return [...fresh].sort((a, b) => Math.max(b.home, b.draw, b.away) - Math.max(a.home, a.draw, a.away));
 }
