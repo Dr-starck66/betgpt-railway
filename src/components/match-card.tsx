@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router";
 import type { MatchInput } from "@/engine/types";
 import type { PredictionRecord } from "@/engine/types";
 import { betMarket, oddsPlayable } from "@/lib/markets";
@@ -7,6 +6,7 @@ import { BookLinks, PrimaryParier } from "./book-links";
 import { CoverBet } from "./cover-bet";
 import { DecisionBadge, PremiumBadge, VerdictBadge } from "./ui/badge";
 import { settlePick } from "@/lib/news";
+import { matchPath } from "@/lib/seo";
 import { MatchBoard, matchHeadline, notrePronoLabel, kickoffLong } from "./match-board";
 
 export function MatchCard({
@@ -24,7 +24,7 @@ export function MatchCard({
 
   return (
     <article className="fade-up surface-card min-w-0 overflow-hidden p-5 sm:p-6">
-      <Link to="/match/$matchId" params={{ matchId: match.slug ?? match.id }} className="block">
+      <a href={matchPath(match)} className="block">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap gap-2">
@@ -61,7 +61,7 @@ export function MatchCard({
         <div className="mt-5 rounded-[1.35rem] border border-line/80 bg-slate-50/70 p-4 sm:p-5">
           <MatchBoard match={match} prediction={prediction} size="md" />
         </div>
-      </Link>
+      </a>
 
       {mute ? (
         <p className="mt-5 rounded-[1rem] border border-line bg-slate-50 px-4 py-3 text-sm text-mist">
