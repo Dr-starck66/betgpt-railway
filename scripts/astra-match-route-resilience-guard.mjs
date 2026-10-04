@@ -25,7 +25,7 @@ const checks = [
     [
       "export function matchRouteId",
       "INVALID_MATCH_ROUTE_IDS",
-      "return routeId ? \`/match/\${routeId}\` : \\"/scores-en-direct\\";",
+      'return routeId ? \`/match/${routeId}\` : "/scores-en-direct";',
     ],
   ],
   [
