@@ -52,7 +52,7 @@
     },
     {
       "id": "production-bundle",
-      "command": "node scripts/with-app-env.mjs vite build"
+      "command": "npm run build"
     }
   ],
   "extendedChecks": [

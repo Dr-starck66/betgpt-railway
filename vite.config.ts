@@ -126,7 +126,29 @@ function pgliteVercelAssetsPlugin(): Plugin {
         const source = join(root, "data", name);
         if (existsSync(source)) copyFileSync(source, join(dataDir, name));
       }
-      console.log(`[app-builder] copied PGlite runtime assets to ${targetDir} and ${nodeServerTargetDir}`);
+      const migrationsSourceDir = join(root, "migrations");
+      const migrationNames = readdirSync(migrationsSourceDir, { withFileTypes: true })
+        .filter((entry) => entry.isFile() && isMigrationFile(entry.name))
+        .map((entry) => entry.name)
+        .sort((a, b) => a.localeCompare(b));
+      if (!migrationNames.length) {
+        throw new Error("[app-builder] no top-level PGlite migrations found to package");
+      }
+
+      const migrationTargets = [
+        join(root, ".output", "migrations"),
+        join(root, ".vercel", "output", "functions", "__server.func", "migrations"),
+      ];
+      for (const dir of migrationTargets) {
+        mkdirSync(dir, { recursive: true });
+        for (const name of migrationNames) {
+          copyFileSync(join(migrationsSourceDir, name), join(dir, name));
+        }
+      }
+
+      console.log(
+        `[app-builder] copied PGlite runtime assets and ${migrationNames.length} migrations to runtime outputs`,
+      );
     },
   };
 }
