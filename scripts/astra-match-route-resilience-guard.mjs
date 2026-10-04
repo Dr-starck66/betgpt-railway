@@ -21,6 +21,26 @@ const checks = [
     ],
   ],
   [
+    "src/lib/seo.ts",
+    [
+      "export function matchRouteId",
+      "INVALID_MATCH_ROUTE_IDS",
+      "return routeId ? \`/match/\${routeId}\` : \\"/scores-en-direct\\";",
+    ],
+  ],
+  [
+    "src/components/match-card.tsx",
+    ["href={matchPath(match)}"],
+  ],
+  [
+    "src/components/scores-hub.tsx",
+    ["href={matchPath(m)}"],
+  ],
+  [
+    "src/components/results-board.tsx",
+    ["href={matchPath(row)}"],
+  ],
+  [
     "src/engine/official-lineups.ts",
     [
       "home?.starters.length === 11",
