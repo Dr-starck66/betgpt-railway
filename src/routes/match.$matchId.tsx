@@ -4,14 +4,22 @@ import { MatchHunter } from "@/components/match-hunter";
 import { MatchLineups } from "@/components/match-lineups";
 import { MatchMissing } from "@/components/match-missing";
 import { getMatchDesk } from "@/lib/desk.functions";
-import { matchHead, datesFromVersions } from "@/lib/seo";
+import { matchHead, datesFromVersions, matchRouteId } from "@/lib/seo";
 import { scoreFreshness, strictStatus } from "@/lib/serp/status";
 import { track } from "@/lib/analytics";
 import { useEffect } from "react";
 
 export const Route = createFileRoute("/match/$matchId")({
   loader: async ({ params }) => {
-    const data = await getMatchDesk({ data: { id: params.matchId } });
+    const requested = matchRouteId({ id: params.matchId });
+    if (!requested) {
+      throw redirect({
+        to: "/scores-en-direct",
+        statusCode: 301,
+        replace: true,
+      });
+    }
+    const data = await getMatchDesk({ data: { id: requested } });
     if (!data) throw notFound();
     const canonical = data.match.slug ?? data.match.id;
     if (canonical && canonical !== params.matchId) {
