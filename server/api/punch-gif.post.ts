@@ -25,24 +25,20 @@ function scoreResult(result: TenorResult, query: string): number {
   return score;
 }
 
-function localFallback(query: string) {
+function nativeFallback(query: string) {
   const q = query.toLowerCase();
   let scene = "shock";
-  let url = "/reactions/astra-fallback.gif";
   if (/pigeon|hamster|llama|alpaga|octopus|duck|goat|hedgehog|snail|penguin|chihuahua/.test(q)) {
     scene = "animal";
-    url = "/reactions/astra-animal.gif";
   } else if (/bet|pari|ticket|bookmaker|shopping|spree|card|money/.test(q)) {
     scene = "betting";
-    url = "/reactions/astra-betting.gif";
   } else if (/space|cosmic|explosion|nuclear|shocked|disbelief|confused/.test(q)) {
     scene = "cosmic";
-    url = "/reactions/astra-shock.gif";
   }
   return {
-    url,
-    alt: "Réaction GIF BetGPT",
-    provider: "local",
+    url: "",
+    alt: "Réaction animée native BetGPT",
+    provider: "native",
     scene,
   };
 }
@@ -56,13 +52,13 @@ export default defineEventHandler(async (event) => {
 
   const apiKey = process.env.TENOR_API_KEY?.trim();
   if (!apiKey || process.env.BETGPT_GIF_ENABLED === "0") {
-    return Response.json(localFallback(query), {
+    return Response.json(nativeFallback(query), {
       headers: { "cache-control": "public, max-age=3600" },
     });
   }
 
   if (!(await allowKeyed("chat:punch-gif", 30, 60_000))) {
-    return Response.json(localFallback(query), {
+    return Response.json(nativeFallback(query), {
       headers: { "cache-control": "public, max-age=3600" },
     });
   }
@@ -81,7 +77,7 @@ export default defineEventHandler(async (event) => {
   try {
     const upstream = await fetch(url, { signal: controller.signal });
     if (!upstream.ok) {
-      return Response.json(localFallback(query), {
+      return Response.json(nativeFallback(query), {
         headers: { "cache-control": "public, max-age=3600" },
       });
     }
@@ -94,7 +90,7 @@ export default defineEventHandler(async (event) => {
 
     const best = ranked[0];
     if (!best) {
-      return Response.json(localFallback(query), {
+      return Response.json(nativeFallback(query), {
         headers: { "cache-control": "public, max-age=3600" },
       });
     }
@@ -113,7 +109,7 @@ export default defineEventHandler(async (event) => {
       { headers: { "cache-control": "private, max-age=3600" } },
     );
   } catch {
-    return Response.json(localFallback(query), {
+    return Response.json(nativeFallback(query), {
       headers: { "cache-control": "public, max-age=3600" },
     });
   } finally {
