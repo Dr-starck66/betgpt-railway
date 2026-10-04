@@ -1,5 +1,5 @@
 import { CITE_LEAGUES } from "@/engine/cite-public";
-import { ensureLive } from "@/engine/live";
+import { hydrateLiveFromDisk } from "@/engine/live";
 import { archiveSlug, loadArchiveHistory } from "@/engine/archive";
 import { loadTickets, stablePublicEvidenceTickets } from "@/engine/ticket-log";
 import { HUNTER_SCENARIOS } from "@/engine/hunter";
@@ -15,12 +15,11 @@ import { fixtureIndexable, sitemapAllowed } from "@/lib/geo/quality";
 import { skipEuropeFrenchProno } from "@/engine/french-clubs";
 import { durableForumLeague } from "@/engine/forum-durability";
 import { SERP_COMPETITIONS } from "@/lib/serp/leagues";
-import { loadResultsBoardData } from "@/lib/serp/results.functions";
 import { bucketResults } from "@/lib/serp/results";
 import { parisDay, parisOffsetDay } from "@/lib/seo/money-map";
 import type { MatchInput } from "@/engine/types";
 import { buildEdition } from "@/lib/editorial/engine";
-import { readLedgerDurable } from "@/lib/editorial/ledger-store";
+import { readLedger } from "@/lib/editorial/ledger-store";
 import { classicNewsPaths, renderNewsSitemap } from "@/lib/editorial/feed";
 import { ASTRA_SELF_HEAL_SITEMAP_ROUTES } from "@/lib/seo/astra-self-heal-sitemap";
 
@@ -53,7 +52,10 @@ function crestImg(name: string, competition?: string): SitemapImage | null {
 }
 
 export async function loadSitemapUrls(): Promise<SitemapUrl[]> {
-  const live = await ensureLive().catch(() => null);
+  // Sitemaps are crawl infrastructure, not live-data pages. Never make their
+  // response time depend on football providers, databases or remote ledgers.
+  // Use the last local snapshot and fail open to the static URL inventory.
+  const live = hydrateLiveFromDisk();
   const liveMatches = live?.matches ?? [];
   const seen = new Set(liveMatches.map((m: { id: string }) => m.id));
   const tickets = loadTickets();
@@ -77,22 +79,27 @@ export async function loadSitemapUrls(): Promise<SitemapUrl[]> {
     standingsAsOf: sitemapDate(live?.fetchedAt),
   });
 
-  // Result leaf pages must use the exact same evidence as their public loaders.
-  // If that evidence is unavailable or empty, fail closed by omitting the leaf
-  // from the sitemap rather than publishing a sitemap URL that renders noindex.
+  // Result leaf pages must be backed by durable/local evidence. Never call
+  // external score providers from a sitemap request.
+  const localHistory = loadArchiveHistory();
   const resultLeafPaths = new Set<string>();
-  try {
-    const resultBoard = await loadResultsBoardData();
-    for (const comp of SERP_COMPETITIONS) {
-      if (resultBoard.rows.some((row) => row.league === comp.league)) {
-        resultLeafPaths.add(comp.resultsPath);
-      }
+  const localResultRows = [
+    ...liveMatches.filter((m: MatchInput) => m.status === "finished"),
+    ...localHistory,
+  ];
+  for (const comp of SERP_COMPETITIONS) {
+    if (localResultRows.some((row: any) => row.league === comp.league)) {
+      resultLeafPaths.add(comp.resultsPath);
     }
-    const buckets = bucketResults(resultBoard.rows);
-    if (buckets.today.length) resultLeafPaths.add("/resultats-football/aujourdhui");
-    if (buckets.yesterday.length) resultLeafPaths.add("/resultats-football/hier");
-  } catch {
-    // Fail closed: only the result hub remains in the sitemap.
+  }
+  const todayKey = parisOffsetDay(0);
+  const yesterdayKey = parisOffsetDay(-1);
+  const resultDay = (row: any) => parisDay(String(row.kickoff ?? ""));
+  if (localResultRows.some((row: any) => resultDay(row) === todayKey)) {
+    resultLeafPaths.add("/resultats-football/aujourdhui");
+  }
+  if (localResultRows.some((row: any) => resultDay(row) === yesterdayKey)) {
+    resultLeafPaths.add("/resultats-football/hier");
   }
   urls = urls.filter(
     (url) =>
@@ -100,7 +107,7 @@ export async function loadSitemapUrls(): Promise<SitemapUrl[]> {
       !url.path.startsWith("/resultats-football/") ||
       resultLeafPaths.has(url.path),
   );
-  const edition = buildEdition({ now: new Date(), matches: liveMatches as MatchInput[], frozen: await readLedgerDurable() });
+  const edition = buildEdition({ now: new Date(), matches: liveMatches as MatchInput[], frozen: readLedger() });
   for (const row of stablePublicEvidenceTickets(tickets)) {
     if (!row.id || !row.home || !row.away || !row.recordedAt) continue;
     const encoded = encodeURIComponent(row.id);
