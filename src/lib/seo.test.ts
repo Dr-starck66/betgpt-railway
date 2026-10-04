@@ -55,7 +55,7 @@ describe("match route fail-closed", () => {
   it("never emits /match/null or /match/undefined", () => {
     assert.equal(matchPath({ id: "null" }), "/scores-en-direct");
     assert.equal(matchPath({ id: "undefined" }), "/scores-en-direct");
-    assert.doesNotMatch(matchPath({ id: "null" }), /\\/match\\/(null|undefined)$/i);
+    assert.doesNotMatch(matchPath({ id: "null" }), /\/match\/(null|undefined)$/i);
   });
 
   it("prefers a valid slug, then a valid id", () => {
