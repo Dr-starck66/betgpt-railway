@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
 import { NewsArticleView } from "@/components/news-article";
 import { getEditorialEdition } from "@/lib/editorial.functions";
 import { HUB_SECTIONS, SECTION_MIN, articleUrl, sectionArticles } from "@/lib/editorial/engine";
@@ -9,8 +9,22 @@ import { publicEditorialImageCopy } from "@/lib/editorial/image-copy";
 import { SITE_URL } from "@/lib/programmatic";
 import { manualEditorialArticleBySlug } from "@/lib/editorial/manual-articles";
 
+const LEGACY_NEWS_MATCH_REDIRECTS: Record<string, string> = {
+  "portugal-norway-preview-2026-10-04": "portugal-norway-2026-10-04",
+};
+
 export const Route = createFileRoute("/actualites/$slug")({
   loader: async ({ params }) => {
+    const legacyMatchId = LEGACY_NEWS_MATCH_REDIRECTS[params.slug];
+    if (legacyMatchId) {
+      throw redirect({
+        to: "/match/$matchId",
+        params: { matchId: legacyMatchId },
+        statusCode: 301,
+        replace: true,
+      });
+    }
+
     const edition = await getEditorialEdition();
     const section = HUB_SECTIONS.find((item) => item.slug === params.slug);
     if (section) {
