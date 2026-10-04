@@ -15,6 +15,8 @@ const checks = [
     "src/routes/match.$matchId.tsx",
     [
       "MatchLineups",
+      "matchRouteId({ id: params.matchId })",
+      'to: "/scores-en-direct"',
       "matchId={data.match.slug ?? data.match.id}",
       "homeName={data.match.home.name}",
       "awayName={data.match.away.name}",
