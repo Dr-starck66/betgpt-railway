@@ -121,20 +121,39 @@ async function loadPgliteMigrations(): Promise<Record<string, string>> {
     import("node:fs/promises"),
     import("node:path"),
   ]);
-  const dir = resolve(process.cwd(), "migrations");
-  const entries = await readdir(dir, { withFileTypes: true });
-  const names = entries
-    .filter((entry) => entry.isFile() && entry.name.endsWith(".sql"))
-    .map((entry) => entry.name)
-    .sort((a, b) => a.localeCompare(b));
+  const candidates = [
+    resolve(process.cwd(), "migrations"),
+    resolve(process.cwd(), ".output", "migrations"),
+  ];
 
-  return Object.fromEntries(
-    await Promise.all(
-      names.map(async (name) => [
-        `/migrations/${name}`,
-        await readFile(resolve(dir, name), "utf8"),
-      ]),
-    ),
+  for (const dir of candidates) {
+    try {
+      const entries = await readdir(dir, { withFileTypes: true });
+      const names = entries
+        .filter((entry) => entry.isFile() && entry.name.endsWith(".sql"))
+        .map((entry) => entry.name)
+        .sort((a, b) => a.localeCompare(b));
+      if (!names.length) continue;
+
+      return Object.fromEntries(
+        await Promise.all(
+          names.map(async (name) => [
+            `/migrations/${name}`,
+            await readFile(resolve(dir, name), "utf8"),
+          ]),
+        ),
+      );
+    } catch (err) {
+      const code =
+        typeof err === "object" && err !== null && "code" in err
+          ? String((err as { code?: unknown }).code ?? "")
+          : "";
+      if (code !== "ENOENT") throw err;
+    }
+  }
+
+  throw new Error(
+    `PGLite migrations missing at runtime; checked: ${candidates.join(", ")}`,
   );
 }
 
