@@ -89,25 +89,51 @@ function localGifForReaction(reaction: PunchReaction): GifReaction {
 }
 
 
+
+const BOOKMAKER_HOST_RE =
+  /(?:^|\.)(?:unibet|betclic|netbet|winamax|bet365|bwin|pmu|zebet|vbet|parionssport|fdj)\./i;
+
+function bookmakerLinkMeta(raw: string): { bookmaker: boolean; label: string } {
+  try {
+    const url = new URL(raw);
+    if ((url.pathname === "/api/go" || url.pathname === "/go") && url.searchParams.get("b")) {
+      const book = url.searchParams.get("b")!.trim();
+      return { bookmaker: true, label: `Voir la meilleure cote chez ${book} →` };
+    }
+    if (BOOKMAKER_HOST_RE.test(url.hostname)) {
+      const host = url.hostname.replace(/^www\./i, "").split(".")[0] || "bookmaker";
+      const label = host.charAt(0).toUpperCase() + host.slice(1);
+      return { bookmaker: true, label: `Voir les cotes chez ${label} →` };
+    }
+  } catch {
+    /* keep generic link rendering */
+  }
+  return { bookmaker: false, label: raw };
+}
+
 function RichMessageText({ content }: { content: string }) {
   const parts = content.split(/(https?:\/\/[^\s]+)/g);
   return (
     <>
-      {parts.map((part, index) =>
-        /^https?:\/\//.test(part) ? (
+      {parts.map((part, index) => {
+        if (!/^https?:\/\//.test(part)) return part;
+        const meta = bookmakerLinkMeta(part);
+        return (
           <a
             key={`url-${index}`}
             href={part}
             target="_blank"
-            rel="nofollow sponsored noopener noreferrer"
-            className="font-semibold text-sage underline decoration-sage/40 underline-offset-2 hover:decoration-sage"
+            rel="noopener noreferrer"
+            className={
+              meta.bookmaker
+                ? "my-2 inline-flex min-h-11 items-center justify-center rounded-xl border border-sage/70 bg-sage px-4 py-2 text-sm font-black text-ink no-underline shadow-[0_8px_18px_rgba(124,194,58,0.2)] transition hover:-translate-y-0.5 hover:brightness-95"
+                : "font-semibold text-sage underline decoration-sage/40 underline-offset-2 hover:decoration-sage"
+            }
           >
-            {part}
+            {meta.label}
           </a>
-        ) : (
-          part
-        ),
-      )}
+        );
+      })}
     </>
   );
 }

@@ -23,17 +23,22 @@ export function PrimaryParier({
   const hit =
     ok.find((l) => want && l.book.toLowerCase().includes(want.replace(/\s·\s.*$/, "").trim())) ?? ok[0]!;
   const oddsTxt = odds && odds > 1 ? ` ${fmtOdds(odds)}` : "";
-  const text = label ?? (pick ? `Parier ${pick}${oddsTxt}` : `Parier${oddsTxt}`);
+  const text =
+    label ??
+    (pick
+      ? `Voir la cote ${pick}${oddsTxt} chez ${hit.book} →`
+      : `Voir la meilleure cote${oddsTxt} chez ${hit.book} →`);
   return (
     <a
       href={trackedUrl(hit.book, hit.url, matchId)}
-      rel="noopener noreferrer sponsored"
+      rel="noopener noreferrer"
       target="_blank"
       onClick={(e) => e.stopPropagation()}
-      title="Lien sponsorisé · 18+"
+      title={`Ouvrir ${hit.book} · 18+`}
+      aria-label={`Voir les cotes chez ${hit.book}`}
       className={cn(
-        "inline-flex min-h-12 items-center justify-center rounded-md bg-sage px-5 font-semibold text-ink hover:opacity-90",
-        label ? "text-sm uppercase tracking-wide" : "text-base",
+        "inline-flex min-h-12 items-center justify-center rounded-xl border border-sage/70 bg-sage px-5 font-black text-ink shadow-[0_10px_24px_rgba(124,194,58,0.22)] transition hover:-translate-y-0.5 hover:brightness-95",
+        label ? "text-sm uppercase tracking-wide" : "text-sm sm:text-base",
       )}
     >
       {text}
@@ -59,15 +64,19 @@ export function BookLinks({
         <a
           key={l.book}
           href={trackedUrl(l.book, l.url, matchId)}
-          rel="noopener noreferrer sponsored"
+          rel="noopener noreferrer"
           onClick={(e) => e.stopPropagation()}
           className={cn(
-            "inline-flex items-center rounded-md border border-line bg-surface font-semibold text-paper hover:border-sage hover:bg-sage hover:text-ink",
-            compact ? "min-h-9 px-2.5 text-xs" : "min-h-11 px-3 text-sm",
+            "inline-flex items-center justify-center rounded-xl border border-sage/60 font-black transition hover:-translate-y-0.5 hover:brightness-95",
+            compact
+              ? "min-h-10 bg-sage/15 px-3 text-xs text-paper hover:bg-sage hover:text-ink"
+              : "min-h-12 bg-sage px-4 text-sm text-ink shadow-[0_8px_18px_rgba(124,194,58,0.18)]",
           )}
           target="_blank"
+          title={`Ouvrir ${l.book} · 18+`}
+          aria-label={`Voir les cotes chez ${l.book}`}
         >
-          Parier · {l.book}
+          Voir les cotes chez {l.book} →
         </a>
       ))}
     </div>

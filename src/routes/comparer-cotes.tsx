@@ -4,23 +4,9 @@ import { getPublicDesk } from "@/lib/desk.functions";
 import { bestThreeWay } from "@/lib/money";
 import { SITE_URL } from "@/lib/programmatic";
 import { fmtOdds } from "@/lib/utils";
-import { BETCLIC_LEAGUE, NETBET_LEAGUE, UNIBET_LEAGUE } from "@/engine/book-pages";
-import type { LeagueId, MatchInput } from "@/engine/types";
+import { bookmakerDestination } from "@/lib/bookmaker-url";
+import type { MatchInput } from "@/engine/types";
 
-
-function bookmakerDestination(book: string, league: LeagueId, direct?: string): string | null {
-  if (direct && /^https:\/\//i.test(direct)) return direct;
-  const n = book.toLowerCase();
-  if (n.includes("unibet")) return UNIBET_LEAGUE[league] ?? "https://www.unibet.fr/paris-football";
-  if (n.includes("betclic")) return BETCLIC_LEAGUE[league] ?? "https://www.betclic.fr/football-sfootball";
-  if (n.includes("netbet")) return NETBET_LEAGUE[league] ?? "https://www.netbet.fr/football";
-  if (n.includes("winamax")) return "https://www.winamax.fr/paris-sportifs";
-  if (n.includes("pmu")) return "https://paris-sportifs.pmu.fr/";
-  if (n.includes("bwin")) return "https://sports.bwin.fr/fr/sports/football-4";
-  if (n.includes("zebet")) return "https://www.zebet.fr/fr/competition/football";
-  if (n.includes("vbet")) return "https://www.vbet.fr/fr/sports/football";
-  return null;
-}
 
 function OddsCell({
   line,
@@ -42,12 +28,14 @@ function OddsCell({
     <a
       href={href}
       target="_blank"
-      rel="noopener noreferrer sponsored"
-      className="group inline-flex min-h-11 w-full min-w-0 max-w-[8.25rem] flex-col justify-center rounded-md border border-line px-2 py-1.5 hover:border-sage hover:bg-sage/10"
-      aria-label={`Parier chez ${line.book}, cote ${fmtOdds(line.odds)}`}
+      rel="noopener noreferrer"
+      className="group inline-flex min-h-[4.25rem] w-full min-w-0 max-w-[9rem] flex-col items-center justify-center rounded-xl border border-sage/70 bg-sage px-2 py-2 text-center text-ink shadow-[0_8px_20px_rgba(124,194,58,0.22)] transition hover:-translate-y-0.5 hover:brightness-95"
+      aria-label={`Voir la meilleure cote chez ${line.book}, cote ${fmtOdds(line.odds)}`}
+      title={`Ouvrir ${line.book} · cote ${fmtOdds(line.odds)} · 18+`}
     >
-      <strong className="tabular text-paper group-hover:text-sage">{fmtOdds(line.odds)}</strong>
-      <span className="max-w-full truncate text-xs text-muted group-hover:text-paper">{line.book} ↗</span>
+      <strong className="tabular text-base font-black leading-none">{fmtOdds(line.odds)}</strong>
+      <span className="mt-1 max-w-full truncate text-[11px] font-bold">{line.book}</span>
+      <span className="mt-1 text-[9px] font-black uppercase tracking-[0.08em]">Voir la cote →</span>
     </a>
   );
 }

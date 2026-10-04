@@ -8,6 +8,40 @@ import { bestThreeWay } from "@/lib/money";
 import { SITE_URL } from "@/lib/programmatic";
 import { fmtOdds } from "@/lib/utils";
 import { ld } from "@/lib/ld";
+import { bookmakerDestination } from "@/lib/bookmaker-url";
+import type { MatchInput } from "@/engine/types";
+
+function BestOddsCta({
+  line,
+  match,
+}: {
+  line: { odds: number; book: string; url?: string };
+  match: MatchInput;
+}) {
+  const href = bookmakerDestination(line.book, match.league, line.url);
+  if (!href) {
+    return (
+      <div className="inline-flex min-h-14 min-w-[7.5rem] flex-col items-center justify-center rounded-xl border border-line px-3 py-2">
+        <strong className="tabular text-paper">{fmtOdds(line.odds)}</strong>
+        <span className="text-xs text-muted">{line.book}</span>
+      </div>
+    );
+  }
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Voir la meilleure cote chez ${line.book}, cote ${fmtOdds(line.odds)}`}
+      title={`Ouvrir ${line.book} · cote ${fmtOdds(line.odds)} · 18+`}
+      className="group inline-flex min-h-14 min-w-[7.5rem] flex-col items-center justify-center rounded-xl border border-sage/70 bg-sage px-3 py-2 text-center text-ink shadow-[0_8px_20px_rgba(124,194,58,0.2)] transition hover:-translate-y-0.5 hover:brightness-95"
+    >
+      <strong className="tabular text-base font-black leading-none">{fmtOdds(line.odds)}</strong>
+      <span className="mt-1 text-xs font-bold">{line.book}</span>
+      <span className="mt-1 text-[9px] font-black uppercase tracking-[0.08em]">Voir la cote →</span>
+    </a>
+  );
+}
 
 export const Route = createFileRoute("/meilleures-cotes")({
   loader: () => getPublicDesk(),
@@ -84,15 +118,9 @@ function BestOdds() {
                       <TeamLine home={m.home} away={m.away} size={22} names="short" competition={m.competition} />
                     </Link>
                   </td>
-                  <td className="px-3 py-2 tabular">
-                    {fmtOdds(best.home.odds)} <span className="text-muted">{best.home.book}</span>
-                  </td>
-                  <td className="px-3 py-2 tabular">
-                    {fmtOdds(best.draw.odds)} <span className="text-muted">{best.draw.book}</span>
-                  </td>
-                  <td className="px-3 py-2 tabular">
-                    {fmtOdds(best.away.odds)} <span className="text-muted">{best.away.book}</span>
-                  </td>
+                  <td className="px-3 py-2"><BestOddsCta line={best.home} match={m} /></td>
+                  <td className="px-3 py-2"><BestOddsCta line={best.draw} match={m} /></td>
+                  <td className="px-3 py-2"><BestOddsCta line={best.away} match={m} /></td>
                   <td className="px-3 py-2">{p ? <BookLinks links={p.bookLinks} compact matchId={m.id} /> : null}</td>
                 </tr>
               );
