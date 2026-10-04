@@ -53,6 +53,8 @@ describe("match route fail-closed", () => {
   });
 
   it("never emits /match/null or /match/undefined", () => {
+    assert.equal(matchRouteId({ id: "null" }), null);
+    assert.equal(matchRouteId({ id: "undefined" }), null);
     assert.equal(matchPath({ id: "null" }), "/scores-en-direct");
     assert.equal(matchPath({ id: "undefined" }), "/scores-en-direct");
     assert.doesNotMatch(matchPath({ id: "null" }), /\/match\/(null|undefined)$/i);
