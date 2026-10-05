@@ -124,7 +124,7 @@
     ],
     "createdAt": "2026-10-01T15:18:00.000Z",
     "publishedAt": "2026-10-01T15:18:00.000Z",
-    "modifiedAt": "2026-10-03T17:50:00.000Z",
+    "modifiedAt": "2026-10-01T20:58:00.000Z",
     "parisDate": "2026-10-01",
     "scheduledTime": "17:18",
     "category": "Actualité football",
@@ -261,13 +261,9 @@
       {
         "at": "2026-10-01T20:28:00.000Z",
         "note": "Ajout de citations externes contextuelles par passage, retrait du nofollow systématique sur les sources éditoriales fiables et ajout du communiqué médical officiel du Real Madrid."
-      },
-      {
-        "at": "2026-10-03T17:50:00.000Z",
-        "note": "Métadonnées de source précisées afin que chaque attribution nomme explicitement Kylian Mbappé et le fait documenté."
       }
     ],
-    "factHash": "source-integrity-mbappe-paris-2026-10-03-v5",
+    "factHash": "manual-mbappe-paris-2026-10-01-v4",
     "keywords": "Kylian Mbappé, Real Madrid, Paris, blessure Mbappé, récupération Mbappé, La Liga"
   },
   {
@@ -439,36 +435,36 @@
         }
       },
       {
-        "href": "/actualites/france-espoirs-luxembourg-espoirs-en-direct-2026-10-03",
-        "title": "France Espoirs - Luxembourg Espoirs EN DIRECT",
+        "href": "/actualites/transfiguree-par-ses-remplacants-l-equipe-de-france-renverse-la-belgique-en-ligue-des-nati",
+        "title": "Transfigurée par ses remplaçants, l'équipe de France renverse la Belgique en Ligue des nations",
         "image": {
-          "src": "/blog/discover/inline-night.jpg",
-          "alt": "Stade de football éclairé la nuit",
+          "src": "/blog/discover/inline-flags.jpg",
+          "alt": "Public et drapeaux dans un stade",
           "width": 1200,
           "height": 675,
           "credit": "Football : actualités, contexte et analyse sur BetGPT."
         }
       },
       {
-        "href": "/actualites/france-italie-ligue-des-nations-a-match-en-direct-le-02-10-2026-2026-10-02",
-        "title": "France - Italie, Ligue des nations A, match en direct le 02/10/2026",
+        "href": "/actualites/aime-jacquet-present-au-stade-de-france-pour-le-match-des-bleus-contre-la-belgique-2026-10",
+        "title": "Aimé Jacquet présent au Stade de France pour le match des Bleus contre la Belgique",
         "image": {
-          "src": "/blog/discover/inline-night.jpg",
-          "alt": "Stade de football éclairé la nuit",
+          "src": "/blog/discover/inline-pitch.jpg",
+          "alt": "Ballon sur une pelouse de football",
           "width": 1200,
           "height": 675,
-          "credit": "France – PSG en Ligue des nations : informations, contexte et analyse du match."
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
         }
       },
       {
-        "href": "/actualites/france-italie-ligue-des-nations-2026-10-02",
-        "title": "France–Italie : horaire, forme, enjeu du groupe et ce qu’il faut savoir avant le choc",
+        "href": "/actualites/olise-cherki-doue-les-entrants-ont-tout-change-les-notes-de-france-belgique-2026-10-05",
+        "title": "Olise-Cherki-Doué, les entrants ont tout changé : les notes de France-Belgique",
         "image": {
-          "src": "/blog/discover/inline-crowd.jpg",
-          "alt": "Tribunes pleines dans un stade de football avant une grande affiche internationale",
+          "src": "/blog/discover/inline-action.jpg",
+          "alt": "Joueurs de football en action",
           "width": 1200,
           "height": 675,
-          "credit": "France – Italie en Ligue des nations : actualités, contexte et analyse du match."
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
         }
       }
     ],
@@ -612,6 +608,39 @@
     },
     "related": [
       {
+        "href": "/actualites/transfiguree-par-ses-remplacants-l-equipe-de-france-renverse-la-belgique-en-ligue-des-nati",
+        "title": "Transfigurée par ses remplaçants, l'équipe de France renverse la Belgique en Ligue des nations",
+        "image": {
+          "src": "/blog/discover/inline-flags.jpg",
+          "alt": "Public et drapeaux dans un stade",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/aime-jacquet-present-au-stade-de-france-pour-le-match-des-bleus-contre-la-belgique-2026-10",
+        "title": "Aimé Jacquet présent au Stade de France pour le match des Bleus contre la Belgique",
+        "image": {
+          "src": "/blog/discover/inline-pitch.jpg",
+          "alt": "Ballon sur une pelouse de football",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/olise-cherki-doue-les-entrants-ont-tout-change-les-notes-de-france-belgique-2026-10-05",
+        "title": "Olise-Cherki-Doué, les entrants ont tout changé : les notes de France-Belgique",
+        "image": {
+          "src": "/blog/discover/inline-action.jpg",
+          "alt": "Joueurs de football en action",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
         "href": "/actualites/france-espoirs-luxembourg-espoirs-en-direct-2026-10-03",
         "title": "France Espoirs - Luxembourg Espoirs EN DIRECT",
         "image": {
@@ -631,39 +660,6 @@
           "width": 1200,
           "height": 675,
           "credit": "France – PSG en Ligue des nations : informations, contexte et analyse du match."
-        }
-      },
-      {
-        "href": "/actualites/j-etais-forcement-touche-ravi-zinedine-zidane-a-fait-son-grand-retour-au-stade-de-france-2",
-        "title": "\"J'étais forcément touché, ravi\", : Zinédine Zidane a fait son grand retour au Stade de France",
-        "image": {
-          "src": "/blog/discover/inline-shot.jpg",
-          "alt": "Frappe au but pendant un match",
-          "width": 1200,
-          "height": 675,
-          "credit": "Football : actualités, contexte et analyse sur BetGPT."
-        }
-      },
-      {
-        "href": "/actualites/suspendu-pour-la-reception-de-la-belgique-dayot-upamecano-quitte-le-groupe-de-l-equipe-de",
-        "title": "Suspendu pour la réception de la Belgique, Dayot Upamecano quitte le groupe de l'équipe de France et rentre à Munich",
-        "image": {
-          "src": "/blog/discover/inline-flags.jpg",
-          "alt": "Public et drapeaux dans un stade",
-          "width": 1200,
-          "height": 675,
-          "credit": "Football : actualités, contexte et analyse sur BetGPT."
-        }
-      },
-      {
-        "href": "/actualites/france-italie-ligue-des-nations-2026-10-02",
-        "title": "France–Italie : horaire, forme, enjeu du groupe et ce qu’il faut savoir avant le choc",
-        "image": {
-          "src": "/blog/discover/inline-crowd.jpg",
-          "alt": "Tribunes pleines dans un stade de football avant une grande affiche internationale",
-          "width": 1200,
-          "height": 675,
-          "credit": "France – Italie en Ligue des nations : actualités, contexte et analyse du match."
         }
       }
     ],
@@ -1106,6 +1102,39 @@
     ],
     "related": [
       {
+        "href": "/actualites/transfiguree-par-ses-remplacants-l-equipe-de-france-renverse-la-belgique-en-ligue-des-nati",
+        "title": "Transfigurée par ses remplaçants, l'équipe de France renverse la Belgique en Ligue des nations",
+        "image": {
+          "src": "/blog/discover/inline-flags.jpg",
+          "alt": "Public et drapeaux dans un stade",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/aime-jacquet-present-au-stade-de-france-pour-le-match-des-bleus-contre-la-belgique-2026-10",
+        "title": "Aimé Jacquet présent au Stade de France pour le match des Bleus contre la Belgique",
+        "image": {
+          "src": "/blog/discover/inline-pitch.jpg",
+          "alt": "Ballon sur une pelouse de football",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/olise-cherki-doue-les-entrants-ont-tout-change-les-notes-de-france-belgique-2026-10-05",
+        "title": "Olise-Cherki-Doué, les entrants ont tout changé : les notes de France-Belgique",
+        "image": {
+          "src": "/blog/discover/inline-action.jpg",
+          "alt": "Joueurs de football en action",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
         "href": "/actualites/france-espoirs-luxembourg-espoirs-en-direct-2026-10-03",
         "title": "France Espoirs - Luxembourg Espoirs EN DIRECT",
         "image": {
@@ -1125,39 +1154,6 @@
           "width": 1200,
           "height": 675,
           "credit": "Football : actualités, contexte et analyse sur BetGPT."
-        }
-      },
-      {
-        "href": "/actualites/suspendu-pour-la-reception-de-la-belgique-dayot-upamecano-quitte-le-groupe-de-l-equipe-de",
-        "title": "Suspendu pour la réception de la Belgique, Dayot Upamecano quitte le groupe de l'équipe de France et rentre à Munich",
-        "image": {
-          "src": "/blog/discover/inline-flags.jpg",
-          "alt": "Public et drapeaux dans un stade",
-          "width": 1200,
-          "height": 675,
-          "credit": "Football : actualités, contexte et analyse sur BetGPT."
-        }
-      },
-      {
-        "href": "/actualites/france-italie-ligue-des-nations-a-match-en-direct-le-02-10-2026-2026-10-02",
-        "title": "France - Italie, Ligue des nations A, match en direct le 02/10/2026",
-        "image": {
-          "src": "/blog/discover/inline-night.jpg",
-          "alt": "Stade de football éclairé la nuit",
-          "width": 1200,
-          "height": 675,
-          "credit": "France – PSG en Ligue des nations : informations, contexte et analyse du match."
-        }
-      },
-      {
-        "href": "/actualites/equipe-de-france-dembele-est-il-le-leader-d-attaque-2026-10-01",
-        "title": "Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ?",
-        "image": {
-          "src": "/blog/discover/inline-live.jpg",
-          "alt": "Supporters pendant un match de football",
-          "width": 1200,
-          "height": 675,
-          "credit": "France en Ligue des nations de l'UEFA : actualités, contexte et analyse football."
         }
       }
     ],
@@ -1331,6 +1327,39 @@
     },
     "related": [
       {
+        "href": "/actualites/transfiguree-par-ses-remplacants-l-equipe-de-france-renverse-la-belgique-en-ligue-des-nati",
+        "title": "Transfigurée par ses remplaçants, l'équipe de France renverse la Belgique en Ligue des nations",
+        "image": {
+          "src": "/blog/discover/inline-flags.jpg",
+          "alt": "Public et drapeaux dans un stade",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/aime-jacquet-present-au-stade-de-france-pour-le-match-des-bleus-contre-la-belgique-2026-10",
+        "title": "Aimé Jacquet présent au Stade de France pour le match des Bleus contre la Belgique",
+        "image": {
+          "src": "/blog/discover/inline-pitch.jpg",
+          "alt": "Ballon sur une pelouse de football",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/olise-cherki-doue-les-entrants-ont-tout-change-les-notes-de-france-belgique-2026-10-05",
+        "title": "Olise-Cherki-Doué, les entrants ont tout changé : les notes de France-Belgique",
+        "image": {
+          "src": "/blog/discover/inline-action.jpg",
+          "alt": "Joueurs de football en action",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
         "href": "/actualites/france-espoirs-luxembourg-espoirs-en-direct-2026-10-03",
         "title": "France Espoirs - Luxembourg Espoirs EN DIRECT",
         "image": {
@@ -1350,39 +1379,6 @@
           "width": 1200,
           "height": 675,
           "credit": "Football : actualités, contexte et analyse sur BetGPT."
-        }
-      },
-      {
-        "href": "/actualites/suspendu-pour-la-reception-de-la-belgique-dayot-upamecano-quitte-le-groupe-de-l-equipe-de",
-        "title": "Suspendu pour la réception de la Belgique, Dayot Upamecano quitte le groupe de l'équipe de France et rentre à Munich",
-        "image": {
-          "src": "/blog/discover/inline-flags.jpg",
-          "alt": "Public et drapeaux dans un stade",
-          "width": 1200,
-          "height": 675,
-          "credit": "Football : actualités, contexte et analyse sur BetGPT."
-        }
-      },
-      {
-        "href": "/actualites/france-italie-ligue-des-nations-2026-10-02",
-        "title": "France–Italie : horaire, forme, enjeu du groupe et ce qu’il faut savoir avant le choc",
-        "image": {
-          "src": "/blog/discover/inline-crowd.jpg",
-          "alt": "Tribunes pleines dans un stade de football avant une grande affiche internationale",
-          "width": 1200,
-          "height": 675,
-          "credit": "France – Italie en Ligue des nations : actualités, contexte et analyse du match."
-        }
-      },
-      {
-        "href": "/actualites/equipe-de-france-dembele-est-il-le-leader-d-attaque-2026-10-01",
-        "title": "Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ?",
-        "image": {
-          "src": "/blog/discover/inline-live.jpg",
-          "alt": "Supporters pendant un match de football",
-          "width": 1200,
-          "height": 675,
-          "credit": "France en Ligue des nations de l'UEFA : actualités, contexte et analyse football."
         }
       }
     ],
@@ -1595,36 +1591,36 @@
         }
       },
       {
-        "href": "/actualites/france-espoirs-luxembourg-espoirs-en-direct-2026-10-03",
-        "title": "France Espoirs - Luxembourg Espoirs EN DIRECT",
+        "href": "/actualites/transfiguree-par-ses-remplacants-l-equipe-de-france-renverse-la-belgique-en-ligue-des-nati",
+        "title": "Transfigurée par ses remplaçants, l'équipe de France renverse la Belgique en Ligue des nations",
         "image": {
-          "src": "/blog/discover/inline-night.jpg",
-          "alt": "Stade de football éclairé la nuit",
+          "src": "/blog/discover/inline-flags.jpg",
+          "alt": "Public et drapeaux dans un stade",
           "width": 1200,
           "height": 675,
           "credit": "Football : actualités, contexte et analyse sur BetGPT."
         }
       },
       {
-        "href": "/actualites/france-italie-ligue-des-nations-a-match-en-direct-le-02-10-2026-2026-10-02",
-        "title": "France - Italie, Ligue des nations A, match en direct le 02/10/2026",
+        "href": "/actualites/aime-jacquet-present-au-stade-de-france-pour-le-match-des-bleus-contre-la-belgique-2026-10",
+        "title": "Aimé Jacquet présent au Stade de France pour le match des Bleus contre la Belgique",
         "image": {
-          "src": "/blog/discover/inline-night.jpg",
-          "alt": "Stade de football éclairé la nuit",
+          "src": "/blog/discover/inline-pitch.jpg",
+          "alt": "Ballon sur une pelouse de football",
           "width": 1200,
           "height": 675,
-          "credit": "France – PSG en Ligue des nations : informations, contexte et analyse du match."
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
         }
       },
       {
-        "href": "/actualites/france-italie-ligue-des-nations-2026-10-02",
-        "title": "France–Italie : horaire, forme, enjeu du groupe et ce qu’il faut savoir avant le choc",
+        "href": "/actualites/olise-cherki-doue-les-entrants-ont-tout-change-les-notes-de-france-belgique-2026-10-05",
+        "title": "Olise-Cherki-Doué, les entrants ont tout changé : les notes de France-Belgique",
         "image": {
-          "src": "/blog/discover/inline-crowd.jpg",
-          "alt": "Tribunes pleines dans un stade de football avant une grande affiche internationale",
+          "src": "/blog/discover/inline-action.jpg",
+          "alt": "Joueurs de football en action",
           "width": 1200,
           "height": 675,
-          "credit": "France – Italie en Ligue des nations : actualités, contexte et analyse du match."
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
         }
       }
     ],
@@ -1832,36 +1828,36 @@
         }
       },
       {
-        "href": "/actualites/france-espoirs-luxembourg-espoirs-en-direct-2026-10-03",
-        "title": "France Espoirs - Luxembourg Espoirs EN DIRECT",
+        "href": "/actualites/transfiguree-par-ses-remplacants-l-equipe-de-france-renverse-la-belgique-en-ligue-des-nati",
+        "title": "Transfigurée par ses remplaçants, l'équipe de France renverse la Belgique en Ligue des nations",
         "image": {
-          "src": "/blog/discover/inline-night.jpg",
-          "alt": "Stade de football éclairé la nuit",
+          "src": "/blog/discover/inline-flags.jpg",
+          "alt": "Public et drapeaux dans un stade",
           "width": 1200,
           "height": 675,
           "credit": "Football : actualités, contexte et analyse sur BetGPT."
         }
       },
       {
-        "href": "/actualites/france-italie-ligue-des-nations-a-match-en-direct-le-02-10-2026-2026-10-02",
-        "title": "France - Italie, Ligue des nations A, match en direct le 02/10/2026",
+        "href": "/actualites/aime-jacquet-present-au-stade-de-france-pour-le-match-des-bleus-contre-la-belgique-2026-10",
+        "title": "Aimé Jacquet présent au Stade de France pour le match des Bleus contre la Belgique",
         "image": {
-          "src": "/blog/discover/inline-night.jpg",
-          "alt": "Stade de football éclairé la nuit",
+          "src": "/blog/discover/inline-pitch.jpg",
+          "alt": "Ballon sur une pelouse de football",
           "width": 1200,
           "height": 675,
-          "credit": "France – PSG en Ligue des nations : informations, contexte et analyse du match."
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
         }
       },
       {
-        "href": "/actualites/france-italie-ligue-des-nations-2026-10-02",
-        "title": "France–Italie : horaire, forme, enjeu du groupe et ce qu’il faut savoir avant le choc",
+        "href": "/actualites/olise-cherki-doue-les-entrants-ont-tout-change-les-notes-de-france-belgique-2026-10-05",
+        "title": "Olise-Cherki-Doué, les entrants ont tout changé : les notes de France-Belgique",
         "image": {
-          "src": "/blog/discover/inline-crowd.jpg",
-          "alt": "Tribunes pleines dans un stade de football avant une grande affiche internationale",
+          "src": "/blog/discover/inline-action.jpg",
+          "alt": "Joueurs de football en action",
           "width": 1200,
           "height": 675,
-          "credit": "France – Italie en Ligue des nations : actualités, contexte et analyse du match."
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
         }
       }
     ],
@@ -2058,6 +2054,39 @@
     },
     "related": [
       {
+        "href": "/actualites/transfiguree-par-ses-remplacants-l-equipe-de-france-renverse-la-belgique-en-ligue-des-nati",
+        "title": "Transfigurée par ses remplaçants, l'équipe de France renverse la Belgique en Ligue des nations",
+        "image": {
+          "src": "/blog/discover/inline-flags.jpg",
+          "alt": "Public et drapeaux dans un stade",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/aime-jacquet-present-au-stade-de-france-pour-le-match-des-bleus-contre-la-belgique-2026-10",
+        "title": "Aimé Jacquet présent au Stade de France pour le match des Bleus contre la Belgique",
+        "image": {
+          "src": "/blog/discover/inline-pitch.jpg",
+          "alt": "Ballon sur une pelouse de football",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/olise-cherki-doue-les-entrants-ont-tout-change-les-notes-de-france-belgique-2026-10-05",
+        "title": "Olise-Cherki-Doué, les entrants ont tout changé : les notes de France-Belgique",
+        "image": {
+          "src": "/blog/discover/inline-action.jpg",
+          "alt": "Joueurs de football en action",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
         "href": "/actualites/france-italie-ligue-des-nations-a-match-en-direct-le-02-10-2026-2026-10-02",
         "title": "France - Italie, Ligue des nations A, match en direct le 02/10/2026",
         "image": {
@@ -2078,10 +2107,480 @@
           "height": 675,
           "credit": "Football : actualités, contexte et analyse sur BetGPT."
         }
+      }
+    ],
+    "discoverOpportunity": {
+      "freshness": 19,
+      "frenchInterest": 19,
+      "entityStrength": 15,
+      "novelty": 10,
+      "visual": 10,
+      "sourceQuality": 10,
+      "editorialAngle": 8,
+      "total": 91,
+      "decision": "PUBLISH",
+      "reasons": []
+    },
+    "quality": {
+      "pass": true,
+      "reasons": []
+    },
+    "duplicateScore": 0.4090909090909091,
+    "discoverChecks": {
+      "INDEXABLE": true,
+      "LARGE_IMAGE": true,
+      "IMAGE_GE_1200": true,
+      "MAX_IMAGE_PREVIEW_LARGE": true,
+      "HELPFUL_CONTENT": true,
+      "NON_CLICKBAIT_TITLE": true,
+      "ORIGINAL_VALUE": true,
+      "MOBILE_TEMPLATE": true
+    },
+    "discoverReadiness": 100,
+    "topStories": "TOP_STORIES_ELIGIBILITY_READY"
+  },
+  {
+    "id": "ed-2026-10-05-morning",
+    "slug": "transfiguree-par-ses-remplacants-l-equipe-de-france-renverse-la-belgique-en-ligue-des-nati",
+    "slot": "morning",
+    "articleType": "news",
+    "status": "PUBLISHED",
+    "title": "Transfigurée par ses remplaçants, l'équipe de France renverse la Belgique en Ligue des nations | BetGPT",
+    "h1": "Transfigurée par ses remplaçants, l'équipe de France renverse la Belgique en Ligue des nations",
+    "lead": "Transfigurée par ses remplaçants, l'équipe de France renverse la Belgique en Ligue des nations. franceinfo a publié cette information lundi 5 octobre 2026 à 22:39. Le dossier est repris par 7 sources distinctes. Transfigurée par ses remplaçants, l'équipe de France renverse la Belgique en Ligue des nations franceinfo",
+    "paragraphs": [
+      {
+        "h2": "Le fait nouveau qui fait basculer le dossier",
+        "body": "franceinfo rapporte Transfigurée par ses remplaçants, l'équipe de France renverse la Belgique en Ligue des nations. L'information devient pertinente parce qu'elle précise un dossier déjà suivi, sans transformer une hypothèse en certitude. Au total, 7 rédactions ou sources distinctes alimentent ce cluster d'actualité. Les détails complémentaires sont attribués séparément dans la section suivante afin d'éviter de transformer une reprise en confirmation indépendante.",
+        "sourceIds": [
+          "news-39e36463"
+        ]
       },
       {
-        "href": "/actualites/suspendu-pour-la-reception-de-la-belgique-dayot-upamecano-quitte-le-groupe-de-l-equipe-de",
-        "title": "Suspendu pour la réception de la Belgique, Dayot Upamecano quitte le groupe de l'équipe de France et rentre à Munich",
+        "h2": "Ce que disent précisément les différentes sources",
+        "body": "franceinfo, lundi 5 octobre 2026 à 22:39 : Transfigurée par ses remplaçants, l'équipe de France renverse la Belgique en Ligue des nations franceinfo Foot Mercato, lundi 5 octobre 2026 à 22:37 : Ligue des Nations : l’Équipe de France étrille la Belgique en 14 minutes Foot Mercato Ouest-France, lundi 5 octobre 2026 à 21:20 : Golden Boy. La liste des nommés pour succéder à Désiré Doué avec trois Français Ouest-France Foot Mercato, lundi 5 octobre 2026 à 20:38 : Équipe de France, FC Barcelone : Jules Koundé lance un avertissement à la concurrence Foot Mercato RFI, lundi 5 octobre 2026 à 22:47 : Ligue des nations: la France renverse la Belgique et valide les premières promesses de l’ère Zidane RFI Cette présentation reste volontairement attribuée source par source : lorsque deux médias racontent le même épisode avec des détails différents, BetGPT ne fusionne pas automatiquement ces détails en un fait unique. Une information n'est élevée au rang de fait établi que si son niveau de source le justifie ou si plusieurs références indépendantes convergent réellement.",
+        "sourceIds": [
+          "news-39e36463",
+          "news-37c43f72",
+          "news-5122c695",
+          "news-339e82fb",
+          "news-bbb09061"
+        ]
+      },
+      {
+        "h2": "La chronologie des publications",
+        "body": "lundi 5 octobre 2026 à 20:38 — Foot Mercato publie « Équipe de France, FC Barcelone : Jules Koundé lance un avertissement à la concurrence ». lundi 5 octobre 2026 à 21:20 — Ouest-France publie « Golden Boy. La liste des nommés pour succéder à Désiré Doué avec trois Français ». lundi 5 octobre 2026 à 22:37 — Foot Mercato publie « Ligue des Nations : l’Équipe de France étrille la Belgique en 14 minutes ». lundi 5 octobre 2026 à 22:37 — cnews.fr publie « Ligue des nations : l’équipe de France renverse la Belgique (4-1), coaching gagnant pour Zinédine Zidane ». lundi 5 octobre 2026 à 22:39 — franceinfo publie « Transfigurée par ses remplaçants, l'équipe de France renverse la Belgique en Ligue des nations ». lundi 5 octobre 2026 à 22:47 — RFI publie « Ligue des nations: la France renverse la Belgique et valide les premières promesses de l’ère Zidane ». Cette chronologie permet de distinguer le fait initial, les reprises et les éventuelles confirmations plus tardives. Elle évite surtout de présenter comme simultanées des informations qui ont pu évoluer au fil de la journée.",
+        "sourceIds": [
+          "news-39e36463",
+          "news-37c43f72",
+          "news-5122c695",
+          "news-339e82fb",
+          "news-bbb09061",
+          "news-7c3f766b"
+        ]
+      },
+      {
+        "h2": "Le repère sportif concret autour de cette information",
+        "body": "Le calendrier BetGPT rattache ce sujet à France – Belgium, en Ligue des nations, avec un coup d'envoi lundi 5 octobre 2026 à 20:45. Ce match fournit un repère sportif concret pour mesurer les conséquences de l'information sans inventer de date de retour, de composition ou de disponibilité. Les entités explicitement détectées dans les sources sont : France, Barcelone.",
+        "sourceIds": [
+          "cal-espn-401861129",
+          "news-39e36463"
+        ]
+      },
+      {
+        "h2": "Ce qui est établi, corroboré ou encore fragile",
+        "body": "Le cluster contient 0 source officielle, 4 sources de premier niveau journalistique et 2 autres sources. Aucune déclaration officielle n'est ajoutée artificiellement si elle n'existe pas dans le flux. Les points communs entre plusieurs sources sont présentés comme corroborés ; les détails isolés restent attribués.",
+        "sourceIds": [
+          "news-39e36463",
+          "news-37c43f72",
+          "news-5122c695",
+          "news-339e82fb",
+          "news-bbb09061",
+          "news-7c3f766b"
+        ]
+      },
+      {
+        "h2": "Le prochain élément qui permettra de mettre l'article à jour",
+        "body": "Pour France, Barcelone, la suite utile dépend d'un fait supplémentaire attribuable : déclaration, décision, résultat, liste officielle ou nouvelle donnée de match. Sans élément nouveau, aucune dépêche supplémentaire n'est créée. BetGPT ne republie pas une nouvelle dépêche pour répéter le même état de fait : une mise à jour exige un changement matériel, une confirmation nouvelle ou une donnée sportive directement vérifiable.",
+        "sourceIds": [
+          "news-39e36463",
+          "news-37c43f72"
+        ]
+      }
+    ],
+    "createdAt": "2026-10-05T20:53:26.352Z",
+    "publishedAt": "2026-10-05T20:53:26.352Z",
+    "modifiedAt": "2026-10-05T20:53:26.352Z",
+    "parisDate": "2026-10-05",
+    "scheduledTime": "08:00",
+    "category": "Actualité football",
+    "section": "football",
+    "league": "NL",
+    "teams": [
+      "France",
+      "Barcelone"
+    ],
+    "matchId": "espn-401861129",
+    "competition": "Ligue des nations",
+    "sources": [
+      {
+        "id": "news-39e36463",
+        "label": "franceinfo",
+        "status": "CORROBORATED",
+        "note": "Transfigurée par ses remplaçants, l'équipe de France renverse la Belgique en Ligue des nations · publié lundi 5 octobre 2026 à 22:39.",
+        "url": "https://news.google.com/rss/articles/CBMi8wFBVV95cUxQcHdhRUZmdUl4ZHUyTEFFSXYyTThUT0E4aUVMWEFuVEZDYmVGWldHbURiOUhIN1ZzcjltbF9yNWNFUlVELUI3VUhsM2w2VXdPclp6Rkc0V09XZEc5QUZPcTMwS28tOVJiT0s0LVJnaDZ6dWJUeVpuNnJEZVowa0hWS0xsaHcxVV9xM2Rwc0NHYnVoakRRalQwZXo1bFRlRmVZM3RyTkZVcUhaZGMzZGVLQmhtdEphVmp0dE1aV282eXBqRzk0NERpZFMyOGJqeHdZd2lnMnB0VmVYN3MtaFFkU21MYVVmVXlFY1RfTEM1XzJsQmM?oc=5"
+      },
+      {
+        "id": "news-37c43f72",
+        "label": "Foot Mercato",
+        "status": "CORROBORATED",
+        "note": "Ligue des Nations : l’Équipe de France étrille la Belgique en 14 minutes · publié lundi 5 octobre 2026 à 22:37.",
+        "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxPS2VTZGloanFtSHQySjFnLUdRX2syelhodFJua0lZcVU2a2dBRHJEN1QySGtKX3hxZ3V5Ym9FQlBVRTBoQVN6Rm55WjdJZFN3WktDSElmSXpMTzRjNW9TczJOM1FBcGMwRm1ZVVg0UjB2eFJHeExaeWFDV3lfa3ZOalVjY2gzNWJHVTAyNVJ6MG9yblhqc21raWt4ZVFJRmc3Tm5ha19hQXdMNWlSTF9nUndOMi1XR2pjUHc?oc=5"
+      },
+      {
+        "id": "news-5122c695",
+        "label": "Ouest-France",
+        "status": "CORROBORATED",
+        "note": "Golden Boy. La liste des nommés pour succéder à Désiré Doué avec trois Français · publié lundi 5 octobre 2026 à 21:20.",
+        "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxNcmh5TTVxMXRQTXNHSlBlS25KS3ExSDdwOUV1dFlTUmt0XzVSMFhUM0ZvY0xkelpRYWZjRkxGVmJkOXZZc2JiSzYyV3NPcmNPQ2JNWk9UWGw2WkREQmpaSkNxemszM21mVVVXTk1ZWUlFdjd3a1hnZTN4R3RkSERwd1g4aUgzZFRReTlWUm1JdTlnTFpTU3gtei1JZlJPT3o5S2J5OVEzaVFGSHQ3MzlJRTRlR1F2UE9kUWxDYzhWY3JReG1lSVdIaEpaMVlyR1NEN21NOGtodlNZa0x3aEFublpwNHJ6Ym8wTGRrMEcyWQ?oc=5"
+      },
+      {
+        "id": "news-339e82fb",
+        "label": "Foot Mercato",
+        "status": "CORROBORATED",
+        "note": "Équipe de France, FC Barcelone : Jules Koundé lance un avertissement à la concurrence · publié lundi 5 octobre 2026 à 20:38.",
+        "url": "https://news.google.com/rss/articles/CBMiywFBVV95cUxOU3JQa1BSaWlNLWUyYVJwc1VwbmctcTZGcEhkQ1JyclAyUUNZTE5KTkRkdlRZeHpib0VJSW5uejVuSXA1cXdEQUI2SkFoM0V3RlRwcmlVTTY2MFlIWmpyWXA0RGRrbUZtTHVfTEdLTG5KaWl2Z3hVZl95d21vT3VKOTM2YTFVWlN0b2JjZGVDQklrU3FWNTM1dEp1MWpxTEdjaGYzRWJCdzNyci1FamR6WkhyVjVhUWk2aVk0VThsUEIzUjhhNk9fRE9Gdw?oc=5"
+      },
+      {
+        "id": "news-bbb09061",
+        "label": "RFI",
+        "status": "UNCONFIRMED",
+        "note": "Ligue des nations: la France renverse la Belgique et valide les premières promesses de l’ère Zidane · publié lundi 5 octobre 2026 à 22:47.",
+        "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxQcnZnT2o2UGxCR3ZTU3VLTlRub0RVazZGRmdIS1Z5c3ZYc0ZJQjR4YWNGVHVrY2ZMb3hVMFZhM3Qxd0RwT1ZRTTBpNlJiQnNqenhsYUFTQzJERDV0RGZ6LS1XYUdtbWtoTlJ2TFRHZHVjUk9LQ2x6RU9ZMU9LSjRZRkRHcXNmTHI0NklGQ3cwUWVQYmFnNDVjN04tQmxVTG91dU1tMFJKZjdTUVZxVS1UNVFQX3N1SFV5U09vTnRIUGFhaVRtUmNERXVFelRDd2pwMXVGb1JNNDR3dw?oc=5"
+      },
+      {
+        "id": "news-7c3f766b",
+        "label": "cnews.fr",
+        "status": "UNCONFIRMED",
+        "note": "Ligue des nations : l’équipe de France renverse la Belgique (4-1), coaching gagnant pour Zinédine Zidane · publié lundi 5 octobre 2026 à 22:37.",
+        "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxPZkp6aGVsRGtyX1p1QmNSOVk1V2xYMy1MbzFmRThRVEktbVctRXJOWkVlV0pUX25XRS14clZlRDQzOEhsUVR6SXJCUWFHTlU3dHlUZG15bXBvTWQwdEdYRm5iaDA4U0lvOGhIdFdocURjRFNDTDQ1a2w1Vk1QTm1oZmNzMFhSZkJUaGlTQXNOYmlscGxWeDgtT1hsMUdLWElrbkNhRkp3LWg1bEFCVl8wRjVHaUM4YU1lSFFybtIBwgFBVV95cUxOeUdRVDlMRmJEVDZlTDV5ZC1ZZmkxbVV3T3NWdjY5VWFSNWV0dnJZTWE0LXhCUGVxSVEwN3dfdmxVamR5YXY0NHJISXBoVHl5cVl5bjdGd3lFMl9ZZm16bWFRSGQyaWhkaGJHOFdxY0o4aGgtMkJDMDlMRzFWVTkzTXpfd0RQa213eWRMUXNvS0lVZXJUSlJZSEJXOTA4cG1lM3BSQ29NaWZHMUZFcUh3ZVgxVUVvU0FBOG4tMmdyeUpLZw?oc=5"
+      },
+      {
+        "id": "cal-espn-401861129",
+        "label": "ESPN",
+        "status": "CORROBORATED",
+        "note": "France – Belgium, Ligue des nations, coup d'envoi 2026-10-05T18:45Z. Données match attribuées au fournisseur ESPN.",
+        "url": "https://www.espn.com/soccer/match/_/gameId/401861129"
+      }
+    ],
+    "newsworthiness": 96,
+    "links": [
+      {
+        "href": "/match/france-belgium-2026-10-05",
+        "label": "France – Belgium"
+      },
+      {
+        "href": "/equipe/france",
+        "label": "France"
+      },
+      {
+        "href": "/equipe/belgium",
+        "label": "Belgium"
+      },
+      {
+        "href": "/calendrier/ligue-des-nations",
+        "label": "Ligue des nations"
+      },
+      {
+        "href": "/resultats-football",
+        "label": "Résultats football"
+      },
+      {
+        "href": "/methodology",
+        "label": "Méthode BetGPT"
+      },
+      {
+        "href": "/auteurs/betgpt-editorial",
+        "label": "BetGPT Editorial"
+      }
+    ],
+    "corrections": [],
+    "sourceChanges": [],
+    "factHash": "8e22d7c0",
+    "keywords": "France, Barcelone, Ligue des nations, actualité football",
+    "image": {
+      "src": "/blog/discover/inline-flags.jpg",
+      "alt": "Public et drapeaux dans un stade",
+      "width": 1200,
+      "height": 675,
+      "credit": "Football : actualités, contexte et analyse sur BetGPT."
+    },
+    "related": [
+      {
+        "href": "/actualites/aime-jacquet-present-au-stade-de-france-pour-le-match-des-bleus-contre-la-belgique-2026-10",
+        "title": "Aimé Jacquet présent au Stade de France pour le match des Bleus contre la Belgique",
+        "image": {
+          "src": "/blog/discover/inline-pitch.jpg",
+          "alt": "Ballon sur une pelouse de football",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/olise-cherki-doue-les-entrants-ont-tout-change-les-notes-de-france-belgique-2026-10-05",
+        "title": "Olise-Cherki-Doué, les entrants ont tout changé : les notes de France-Belgique",
+        "image": {
+          "src": "/blog/discover/inline-action.jpg",
+          "alt": "Joueurs de football en action",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/france-espoirs-luxembourg-espoirs-en-direct-2026-10-03",
+        "title": "France Espoirs - Luxembourg Espoirs EN DIRECT",
+        "image": {
+          "src": "/blog/discover/inline-night.jpg",
+          "alt": "Stade de football éclairé la nuit",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/france-italie-ligue-des-nations-a-match-en-direct-le-02-10-2026-2026-10-02",
+        "title": "France - Italie, Ligue des nations A, match en direct le 02/10/2026",
+        "image": {
+          "src": "/blog/discover/inline-night.jpg",
+          "alt": "Stade de football éclairé la nuit",
+          "width": 1200,
+          "height": 675,
+          "credit": "France – PSG en Ligue des nations : informations, contexte et analyse du match."
+        }
+      },
+      {
+        "href": "/actualites/j-etais-forcement-touche-ravi-zinedine-zidane-a-fait-son-grand-retour-au-stade-de-france-2",
+        "title": "\"J'étais forcément touché, ravi\", : Zinédine Zidane a fait son grand retour au Stade de France",
+        "image": {
+          "src": "/blog/discover/inline-shot.jpg",
+          "alt": "Frappe au but pendant un match",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      }
+    ],
+    "discoverOpportunity": {
+      "freshness": 19,
+      "frenchInterest": 19,
+      "entityStrength": 15,
+      "novelty": 15,
+      "visual": 10,
+      "sourceQuality": 10,
+      "editorialAngle": 8,
+      "total": 96,
+      "decision": "PUBLISH",
+      "reasons": []
+    },
+    "quality": {
+      "pass": true,
+      "reasons": []
+    },
+    "duplicateScore": 0,
+    "discoverChecks": {
+      "INDEXABLE": true,
+      "LARGE_IMAGE": true,
+      "IMAGE_GE_1200": true,
+      "MAX_IMAGE_PREVIEW_LARGE": true,
+      "HELPFUL_CONTENT": true,
+      "NON_CLICKBAIT_TITLE": true,
+      "ORIGINAL_VALUE": true,
+      "MOBILE_TEMPLATE": true
+    },
+    "discoverReadiness": 100,
+    "topStories": "TOP_STORIES_ELIGIBILITY_READY"
+  },
+  {
+    "id": "ed-2026-10-05-noon",
+    "slug": "aime-jacquet-present-au-stade-de-france-pour-le-match-des-bleus-contre-la-belgique-2026-10",
+    "slot": "noon",
+    "articleType": "news",
+    "status": "PUBLISHED",
+    "title": "Aimé Jacquet présent au Stade de France pour le match des Bleus contre la Belgique | BetGPT",
+    "h1": "Aimé Jacquet présent au Stade de France pour le match des Bleus contre la Belgique",
+    "lead": "Aimé Jacquet présent au Stade de France pour le match des Bleus contre la Belgique. L'Équipe a publié cette information lundi 5 octobre 2026 à 21:52. Le dossier est repris par 3 sources distinctes. Aimé Jacquet présent au Stade de France pour le match des Bleus contre la Belgique L'Équipe",
+    "paragraphs": [
+      {
+        "h2": "Le fait nouveau qui fait basculer le dossier",
+        "body": "L'Équipe rapporte Aimé Jacquet présent au Stade de France pour le match des Bleus contre la Belgique. L'information devient pertinente parce qu'elle précise un dossier déjà suivi, sans transformer une hypothèse en certitude. Au total, 3 rédactions ou sources distinctes alimentent ce cluster d'actualité. Les détails complémentaires sont attribués séparément dans la section suivante afin d'éviter de transformer une reprise en confirmation indépendante.",
+        "sourceIds": [
+          "news-7eaccb21"
+        ]
+      },
+      {
+        "h2": "Ce que disent précisément les différentes sources",
+        "body": "L'Équipe, lundi 5 octobre 2026 à 21:52 : Aimé Jacquet présent au Stade de France pour le match des Bleus contre la Belgique L'Équipe Le Parisien, lundi 5 octobre 2026 à 21:41 : France-Belgique : entouré de nombreux de ses anciens joueurs, Aimé Jacquet est présent au Stade de France Le Parisien L'Équipe, lundi 5 octobre 2026 à 20:06 : La compo de la Belgique au Stade de France : Romelu Lukaku titulaire contre la France L'Équipe Le Figaro, lundi 5 octobre 2026 à 22:37 : Renversants, les Bleus de Zidane punissent la Belgique au Stade de France Le Figaro Le Figaro, lundi 5 octobre 2026 à 22:13 : France-Belgique : Guillaume Restes, plus jeune portier des Bleus depuis plus de 50 ans Le Figaro Cette présentation reste volontairement attribuée source par source : lorsque deux médias racontent le même épisode avec des détails différents, BetGPT ne fusionne pas automatiquement ces détails en un fait unique. Une information n'est élevée au rang de fait établi que si son niveau de source le justifie ou si plusieurs références indépendantes convergent réellement.",
+        "sourceIds": [
+          "news-7eaccb21",
+          "news-1eb15021",
+          "news-c48b13b9",
+          "news-669cbdc5",
+          "news-545b6f67"
+        ]
+      },
+      {
+        "h2": "La chronologie des publications",
+        "body": "lundi 5 octobre 2026 à 20:06 — L'Équipe publie « La compo de la Belgique au Stade de France : Romelu Lukaku titulaire contre la France ». lundi 5 octobre 2026 à 21:30 — Le Figaro publie « France-Belgique : en vidéo, le contre imparable et l’ouverture du score qui refroidit le Stade de France ». lundi 5 octobre 2026 à 21:41 — Le Parisien publie « France-Belgique : entouré de nombreux de ses anciens joueurs, Aimé Jacquet est présent au Stade de France ». lundi 5 octobre 2026 à 21:52 — L'Équipe publie « Aimé Jacquet présent au Stade de France pour le match des Bleus contre la Belgique ». lundi 5 octobre 2026 à 22:13 — Le Figaro publie « France-Belgique : Guillaume Restes, plus jeune portier des Bleus depuis plus de 50 ans ». lundi 5 octobre 2026 à 22:37 — Le Figaro publie « Renversants, les Bleus de Zidane punissent la Belgique au Stade de France ». Cette chronologie permet de distinguer le fait initial, les reprises et les éventuelles confirmations plus tardives. Elle évite surtout de présenter comme simultanées des informations qui ont pu évoluer au fil de la journée.",
+        "sourceIds": [
+          "news-7eaccb21",
+          "news-1eb15021",
+          "news-c48b13b9",
+          "news-669cbdc5",
+          "news-545b6f67",
+          "news-3bb6cf7e"
+        ]
+      },
+      {
+        "h2": "Le repère sportif concret autour de cette information",
+        "body": "Le calendrier BetGPT rattache ce sujet à France – Belgium, en Ligue des nations, avec un coup d'envoi lundi 5 octobre 2026 à 20:45. Ce match fournit un repère sportif concret pour mesurer les conséquences de l'information sans inventer de date de retour, de composition ou de disponibilité. Les entités explicitement détectées dans les sources sont : France.",
+        "sourceIds": [
+          "cal-espn-401861129",
+          "news-7eaccb21"
+        ]
+      },
+      {
+        "h2": "Ce qui est établi, corroboré ou encore fragile",
+        "body": "Le cluster contient 0 source officielle, 3 sources de premier niveau journalistique et 3 autres sources. Aucune déclaration officielle n'est ajoutée artificiellement si elle n'existe pas dans le flux. Les points communs entre plusieurs sources sont présentés comme corroborés ; les détails isolés restent attribués.",
+        "sourceIds": [
+          "news-7eaccb21",
+          "news-1eb15021",
+          "news-c48b13b9",
+          "news-669cbdc5",
+          "news-545b6f67",
+          "news-3bb6cf7e"
+        ]
+      },
+      {
+        "h2": "Le prochain élément qui permettra de mettre l'article à jour",
+        "body": "Pour France, la suite utile dépend d'un fait supplémentaire attribuable : déclaration, décision, résultat, liste officielle ou nouvelle donnée de match. Sans élément nouveau, aucune dépêche supplémentaire n'est créée. BetGPT ne republie pas une nouvelle dépêche pour répéter le même état de fait : une mise à jour exige un changement matériel, une confirmation nouvelle ou une donnée sportive directement vérifiable.",
+        "sourceIds": [
+          "news-7eaccb21",
+          "news-1eb15021"
+        ]
+      }
+    ],
+    "createdAt": "2026-10-05T20:53:26.352Z",
+    "publishedAt": "2026-10-05T20:53:26.352Z",
+    "modifiedAt": "2026-10-05T20:53:26.352Z",
+    "parisDate": "2026-10-05",
+    "scheduledTime": "13:00",
+    "category": "Actualité football",
+    "section": "football",
+    "league": "NL",
+    "teams": [
+      "France"
+    ],
+    "matchId": "espn-401861129",
+    "competition": "Ligue des nations",
+    "sources": [
+      {
+        "id": "news-7eaccb21",
+        "label": "L'Équipe",
+        "status": "CORROBORATED",
+        "note": "Aimé Jacquet présent au Stade de France pour le match des Bleus contre la Belgique · publié lundi 5 octobre 2026 à 21:52.",
+        "url": "https://news.google.com/rss/articles/CBMi6AFBVV95cUxQdXMtTkZCR3ZUU3Y5UmstV29wclV4cllINlpFUUxnMjN0WkItVGJyQjFXVXNzNVE4bTRTNkNRdWpOTDdoU0Y4MzBENWNJZ2JVZW1IWkx3aTJEa2dISjBLb0ZXNVpiVE45Z3BuWEhPTWl6MjNNV190LW54VDFaZlBRUVd2ZzJwSFIzN1VrVmEzV3pxa3N4MmFjV3VJWU9ldWlUMy10Q29wWXhoaXdTbkkwaDVRZ1dNZ2pLZ2dRZml4YjFjd25WdDVkQ2IxeFpERjhUSW45d2tXUG5tejFVSl85RG44VmJHdEZn?oc=5"
+      },
+      {
+        "id": "news-1eb15021",
+        "label": "Le Parisien",
+        "status": "CORROBORATED",
+        "note": "France-Belgique : entouré de nombreux de ses anciens joueurs, Aimé Jacquet est présent au Stade de France · publié lundi 5 octobre 2026 à 21:41.",
+        "url": "https://news.google.com/rss/articles/CBMiqwJBVV95cUxOQWk2VEZNZW1lUFVhYUl3U1RFSVJ3d2toTkNjUk96RVMtZ2Rwb3ZyS0drVnp4ODZHM1FMY3l3cnp5b2RQblpoaFBLWDM4c0QwVkpRSWpQM1VZMGpGQUNwYmJZS2xISkxXbnFWcU82N2xiZVFiTU5leE9UMEsxZzdqdzVvZGFsV1ZDQzJiWTlXdmtZM1RabmRtclFtOHgxVW96YmRfVE1lSEN6OTNGNm9LUGlzOHp3cWRUX01LTEF3OGJIbHdpWVJfU3dzOW9Kb0duMUFyRjhPWlNZSlEtRERDTVplZlh2NzlEM1dxd1FjdE1UNk1XTEJ6bU5LdmZCQjAtUDNDZVAyTWRrcTdoeVVVRy1SVWZrSDE3QmRFamJkeWp5dDNUYy1GWV9lMA?oc=5"
+      },
+      {
+        "id": "news-c48b13b9",
+        "label": "L'Équipe",
+        "status": "CORROBORATED",
+        "note": "La compo de la Belgique au Stade de France : Romelu Lukaku titulaire contre la France · publié lundi 5 octobre 2026 à 20:06.",
+        "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxQV2lPU1libDRzRGpveHVsLU94NTFMbFJxbUV5SXlpUkZTck81TnNteGxBRlJyZ0RTdjZmbmRRcU5zZTQ0RHliUkdXNy1WOWFUdFRzMDJEQkNPQTBjV2pIeXlxS2lJZ0JtZVp5TVBYM21wWDI2Yk5ETkRVVTZiSENyYTVOSWVTU1hfYmM3REstMEZzWV9rY09ZTjc0a1BQLVFaMllLRlZ2b2RRaFJ6cUprOGNIUVJpTDFnMTd0ZDNlRDJlN2oxYjRoeA?oc=5"
+      },
+      {
+        "id": "news-669cbdc5",
+        "label": "Le Figaro",
+        "status": "UNCONFIRMED",
+        "note": "Renversants, les Bleus de Zidane punissent la Belgique au Stade de France · publié lundi 5 octobre 2026 à 22:37.",
+        "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxPUWF6alpwQ2dXd1ZIdklFRGVRN0FEdXJEOXlRVWxUUHFLNEdEN1FfS2YwWXJzRnJLY2xiRmFvcVp1alMxQ2RlTjlVVGZBREctX0dEclhLWjFFTllmS1FDdnlGWHhnQ1U1S2V4Y1JjdjRWbXJNTDUyT3dIcFRmTWlDRFJ5MElrM3ZfRE1uaks0aGxKM0tzQzVzUHVRNXVObl9Xc19WTW9FaS1XUjc2VElvWHFqeW1vaWotSk1tUjJjUnR5VFpiVWxTUy1aSWJ1WV9DckNxTG5R?oc=5"
+      },
+      {
+        "id": "news-545b6f67",
+        "label": "Le Figaro",
+        "status": "UNCONFIRMED",
+        "note": "France-Belgique : Guillaume Restes, plus jeune portier des Bleus depuis plus de 50 ans · publié lundi 5 octobre 2026 à 22:13.",
+        "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxPLUNkTmNNbWY0dDVQOHhORW9lc0NXbGRqVDIwd0ExVnBVNmdnYUp4NzV0LVUtNXNNekVBMHBmcnhfTWFqSUZieUlEMnZhM0pnQTJoTjRCOHl2ZFA3dzM1T0VlVHpxenhqdlBfQWZBcWxZXzRsTE5SOXlpclhIdmxPdmttVXlfVXVNc09Lck43cTF1VFc1a3Ytb2thNllDNlVPa0piVXpsWjJFQkloU3lDaG1XakJRby1BVjdvRGRWY0RfQlV2alVUaC1jOGs?oc=5"
+      },
+      {
+        "id": "news-3bb6cf7e",
+        "label": "Le Figaro",
+        "status": "UNCONFIRMED",
+        "note": "France-Belgique : en vidéo, le contre imparable et l’ouverture du score qui refroidit le Stade de France · publié lundi 5 octobre 2026 à 21:30.",
+        "url": "https://news.google.com/rss/articles/CBMi_AFBVV95cUxQbWJvOVR0RUljN3dLRk83T2xVVDllNndlYS1BRG9Wa1pHTmF3eDRBYy1zN1lneHVPMkRneHN0WU1kZkFFMWtGbmRUTWVGZVF3NXBDSkxFbkQ2TTBLaEp5TktrWU5tNTBIcm5senc3bDBmMFpOcXE1NWM0LWExYXA5LW1BTS1tVFRsemVITURjVG5LNHpJNDZvNVZEQ1Q0Rkg4X2pHWDNlRzRLZU40SmtZZ1NJMVhxb3hORUc5Uzg5eUYyTmJ6NWlfWFR6UC10NE1GalRlRG5XcDh3d2FJemEycGRYUGdfZk45NDFTQkptNmFlOGlxS01TM1ZqbmU?oc=5"
+      },
+      {
+        "id": "cal-espn-401861129",
+        "label": "ESPN",
+        "status": "CORROBORATED",
+        "note": "France – Belgium, Ligue des nations, coup d'envoi 2026-10-05T18:45Z. Données match attribuées au fournisseur ESPN.",
+        "url": "https://www.espn.com/soccer/match/_/gameId/401861129"
+      }
+    ],
+    "newsworthiness": 96,
+    "links": [
+      {
+        "href": "/match/france-belgium-2026-10-05",
+        "label": "France – Belgium"
+      },
+      {
+        "href": "/equipe/france",
+        "label": "France"
+      },
+      {
+        "href": "/equipe/belgium",
+        "label": "Belgium"
+      },
+      {
+        "href": "/calendrier/ligue-des-nations",
+        "label": "Ligue des nations"
+      },
+      {
+        "href": "/resultats-football",
+        "label": "Résultats football"
+      },
+      {
+        "href": "/methodology",
+        "label": "Méthode BetGPT"
+      },
+      {
+        "href": "/auteurs/betgpt-editorial",
+        "label": "BetGPT Editorial"
+      }
+    ],
+    "corrections": [],
+    "sourceChanges": [],
+    "factHash": "4f9f4e4d",
+    "keywords": "France, Ligue des nations, actualité football",
+    "image": {
+      "src": "/blog/discover/inline-pitch.jpg",
+      "alt": "Ballon sur une pelouse de football",
+      "width": 1200,
+      "height": 675,
+      "credit": "Football : actualités, contexte et analyse sur BetGPT."
+    },
+    "related": [
+      {
+        "href": "/actualites/transfiguree-par-ses-remplacants-l-equipe-de-france-renverse-la-belgique-en-ligue-des-nati",
+        "title": "Transfigurée par ses remplaçants, l'équipe de France renverse la Belgique en Ligue des nations",
         "image": {
           "src": "/blog/discover/inline-flags.jpg",
           "alt": "Public et drapeaux dans un stade",
@@ -2091,25 +2590,47 @@
         }
       },
       {
-        "href": "/actualites/france-italie-ligue-des-nations-2026-10-02",
-        "title": "France–Italie : horaire, forme, enjeu du groupe et ce qu’il faut savoir avant le choc",
+        "href": "/actualites/olise-cherki-doue-les-entrants-ont-tout-change-les-notes-de-france-belgique-2026-10-05",
+        "title": "Olise-Cherki-Doué, les entrants ont tout changé : les notes de France-Belgique",
         "image": {
-          "src": "/blog/discover/inline-crowd.jpg",
-          "alt": "Tribunes pleines dans un stade de football avant une grande affiche internationale",
+          "src": "/blog/discover/inline-action.jpg",
+          "alt": "Joueurs de football en action",
           "width": 1200,
           "height": 675,
-          "credit": "France – Italie en Ligue des nations : actualités, contexte et analyse du match."
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
         }
       },
       {
-        "href": "/actualites/equipe-de-france-dembele-est-il-le-leader-d-attaque-2026-10-01",
-        "title": "Équipe de France : DEMBÉLÉ est-il le LEADER d'attaque ?",
+        "href": "/actualites/france-espoirs-luxembourg-espoirs-en-direct-2026-10-03",
+        "title": "France Espoirs - Luxembourg Espoirs EN DIRECT",
         "image": {
-          "src": "/blog/discover/inline-live.jpg",
-          "alt": "Supporters pendant un match de football",
+          "src": "/blog/discover/inline-night.jpg",
+          "alt": "Stade de football éclairé la nuit",
           "width": 1200,
           "height": 675,
-          "credit": "France en Ligue des nations de l'UEFA : actualités, contexte et analyse football."
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/france-italie-ligue-des-nations-a-match-en-direct-le-02-10-2026-2026-10-02",
+        "title": "France - Italie, Ligue des nations A, match en direct le 02/10/2026",
+        "image": {
+          "src": "/blog/discover/inline-night.jpg",
+          "alt": "Stade de football éclairé la nuit",
+          "width": 1200,
+          "height": 675,
+          "credit": "France – PSG en Ligue des nations : informations, contexte et analyse du match."
+        }
+      },
+      {
+        "href": "/actualites/j-etais-forcement-touche-ravi-zinedine-zidane-a-fait-son-grand-retour-au-stade-de-france-2",
+        "title": "\"J'étais forcément touché, ravi\", : Zinédine Zidane a fait son grand retour au Stade de France",
+        "image": {
+          "src": "/blog/discover/inline-shot.jpg",
+          "alt": "Frappe au but pendant un match",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
         }
       }
     ],
@@ -2122,6 +2643,229 @@
       "sourceQuality": 10,
       "editorialAngle": 8,
       "total": 91,
+      "decision": "PUBLISH",
+      "reasons": []
+    },
+    "quality": {
+      "pass": true,
+      "reasons": []
+    },
+    "duplicateScore": 0.45,
+    "discoverChecks": {
+      "INDEXABLE": true,
+      "LARGE_IMAGE": true,
+      "IMAGE_GE_1200": true,
+      "MAX_IMAGE_PREVIEW_LARGE": true,
+      "HELPFUL_CONTENT": true,
+      "NON_CLICKBAIT_TITLE": true,
+      "ORIGINAL_VALUE": true,
+      "MOBILE_TEMPLATE": true
+    },
+    "discoverReadiness": 100,
+    "topStories": "TOP_STORIES_ELIGIBILITY_READY"
+  },
+  {
+    "id": "ed-2026-10-05-evening",
+    "slug": "olise-cherki-doue-les-entrants-ont-tout-change-les-notes-de-france-belgique-2026-10-05",
+    "slot": "evening",
+    "articleType": "news",
+    "status": "PUBLISHED",
+    "title": "Olise-Cherki-Doué, les entrants ont tout changé : les notes de France-Belgique | BetGPT",
+    "h1": "Olise-Cherki-Doué, les entrants ont tout changé : les notes de France-Belgique",
+    "lead": "Olise-Cherki-Doué, les entrants ont tout changé : les notes de France-Belgique. Ouest-France a publié cette information lundi 5 octobre 2026 à 22:41. Le dossier est repris par 2 sources distinctes. Olise-Cherki-Doué, les entrants ont tout changé : les notes de France-Belgique Ouest-France",
+    "paragraphs": [
+      {
+        "h2": "Le fait nouveau qui fait basculer le dossier",
+        "body": "Ouest-France rapporte Olise-Cherki-Doué, les entrants ont tout changé : les notes de France-Belgique. L'information devient pertinente parce qu'elle précise un dossier déjà suivi, sans transformer une hypothèse en certitude. Au total, 2 rédactions ou sources distinctes alimentent ce cluster d'actualité. Les détails complémentaires sont attribués séparément dans la section suivante afin d'éviter de transformer une reprise en confirmation indépendante.",
+        "sourceIds": [
+          "news-22371816"
+        ]
+      },
+      {
+        "h2": "Ce que disent précisément les différentes sources",
+        "body": "Ouest-France, lundi 5 octobre 2026 à 22:41 : Olise-Cherki-Doué, les entrants ont tout changé : les notes de France-Belgique Ouest-France Foot Mercato, lundi 5 octobre 2026 à 21:30 : Équipe de France : Michael Olise n’est pas du tout fan de Rayan Cherki Foot Mercato Cette présentation reste volontairement attribuée source par source : lorsque deux médias racontent le même épisode avec des détails différents, BetGPT ne fusionne pas automatiquement ces détails en un fait unique. Une information n'est élevée au rang de fait établi que si son niveau de source le justifie ou si plusieurs références indépendantes convergent réellement.",
+        "sourceIds": [
+          "news-22371816",
+          "news-9ea369a7"
+        ]
+      },
+      {
+        "h2": "La chronologie des publications",
+        "body": "lundi 5 octobre 2026 à 21:30 — Foot Mercato publie « Équipe de France : Michael Olise n’est pas du tout fan de Rayan Cherki ». lundi 5 octobre 2026 à 22:41 — Ouest-France publie « Olise-Cherki-Doué, les entrants ont tout changé : les notes de France-Belgique ». Cette chronologie permet de distinguer le fait initial, les reprises et les éventuelles confirmations plus tardives. Elle évite surtout de présenter comme simultanées des informations qui ont pu évoluer au fil de la journée.",
+        "sourceIds": [
+          "news-22371816",
+          "news-9ea369a7"
+        ]
+      },
+      {
+        "h2": "Le repère sportif concret autour de cette information",
+        "body": "Le calendrier BetGPT rattache ce sujet à France – Belgium, en Ligue des nations, avec un coup d'envoi lundi 5 octobre 2026 à 20:45. Ce match fournit un repère sportif concret pour mesurer les conséquences de l'information sans inventer de date de retour, de composition ou de disponibilité. Les entités explicitement détectées dans les sources sont : France.",
+        "sourceIds": [
+          "cal-espn-401861129",
+          "news-22371816"
+        ]
+      },
+      {
+        "h2": "Ce qui est établi, corroboré ou encore fragile",
+        "body": "Le cluster contient 0 source officielle, 2 sources de premier niveau journalistique et 0 autre source. Aucune déclaration officielle n'est ajoutée artificiellement si elle n'existe pas dans le flux. Les points communs entre plusieurs sources sont présentés comme corroborés ; les détails isolés restent attribués.",
+        "sourceIds": [
+          "news-22371816",
+          "news-9ea369a7"
+        ]
+      },
+      {
+        "h2": "Le prochain élément qui permettra de mettre l'article à jour",
+        "body": "Pour France, la suite utile dépend d'un fait supplémentaire attribuable : déclaration, décision, résultat, liste officielle ou nouvelle donnée de match. Sans élément nouveau, aucune dépêche supplémentaire n'est créée. BetGPT ne republie pas une nouvelle dépêche pour répéter le même état de fait : une mise à jour exige un changement matériel, une confirmation nouvelle ou une donnée sportive directement vérifiable.",
+        "sourceIds": [
+          "news-22371816",
+          "news-9ea369a7"
+        ]
+      }
+    ],
+    "createdAt": "2026-10-05T20:53:26.352Z",
+    "publishedAt": "2026-10-05T20:53:26.352Z",
+    "modifiedAt": "2026-10-05T20:53:26.352Z",
+    "parisDate": "2026-10-05",
+    "scheduledTime": "19:00",
+    "category": "Actualité football",
+    "section": "football",
+    "league": "NL",
+    "teams": [
+      "France"
+    ],
+    "matchId": "espn-401861129",
+    "competition": "Ligue des nations",
+    "sources": [
+      {
+        "id": "news-22371816",
+        "label": "Ouest-France",
+        "status": "CORROBORATED",
+        "note": "Olise-Cherki-Doué, les entrants ont tout changé : les notes de France-Belgique · publié lundi 5 octobre 2026 à 22:41.",
+        "url": "https://news.google.com/rss/articles/CBMiggJBVV95cUxNQ0RNVElQbkhLNFoxT2RUYnhmUXNDZ3BWbEV4QnhaZDNfOXlGeVNtQks2dTBjZS15cmZkN2psd0Jod09zaDhDOS1VTkFnU3A1a3ljZXNzWFlfZTdrMklWOFBXa1lpaFRUUWRJY2RlOU1nc3dOZlNndkNRMi1MT3Q4ajFvMG5uVEdxWEFmeEM2bU4wX3dlSk5LcnhuNWx3Mk5uNWxJSVNYdURkSW5pV3hkX3Q4QnhTclBlX3h5Y0xQN1phOFVfVDhuczF0YVhRMUlSMzM1ZHVBandEb29jcUpXQnNEeTN6VGVkVWt1ejV2WDk5TEtHVzIzdkNJRWI1cm9DVlE?oc=5"
+      },
+      {
+        "id": "news-9ea369a7",
+        "label": "Foot Mercato",
+        "status": "CORROBORATED",
+        "note": "Équipe de France : Michael Olise n’est pas du tout fan de Rayan Cherki · publié lundi 5 octobre 2026 à 21:30.",
+        "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxOd01PTjFLblFFcmIwc0ZfWldlbE92d00wczRMNkVkTE1NN0JXTWxJODhHeGYyelRBdDZ4Mm1UT3U3Wi1sZTVsdmxzOTJDMllPN1pCOEhqQklnVTlmMUFOS1NjT0w1dWhqZk5qeXJGbDJTTlVObHVBQkZQRjdkZjRYQXdtUGRTQlBuLWYyZ2h6RFc5MURXNFRQcTlVNmVYX19YbkVuR2FXcU52OXA1UVVTX1docVk4U0U?oc=5"
+      },
+      {
+        "id": "cal-espn-401861129",
+        "label": "ESPN",
+        "status": "CORROBORATED",
+        "note": "France – Belgium, Ligue des nations, coup d'envoi 2026-10-05T18:45Z. Données match attribuées au fournisseur ESPN.",
+        "url": "https://www.espn.com/soccer/match/_/gameId/401861129"
+      }
+    ],
+    "newsworthiness": 92,
+    "links": [
+      {
+        "href": "/match/france-belgium-2026-10-05",
+        "label": "France – Belgium"
+      },
+      {
+        "href": "/equipe/france",
+        "label": "France"
+      },
+      {
+        "href": "/equipe/belgium",
+        "label": "Belgium"
+      },
+      {
+        "href": "/calendrier/ligue-des-nations",
+        "label": "Ligue des nations"
+      },
+      {
+        "href": "/resultats-football",
+        "label": "Résultats football"
+      },
+      {
+        "href": "/methodology",
+        "label": "Méthode BetGPT"
+      },
+      {
+        "href": "/auteurs/betgpt-editorial",
+        "label": "BetGPT Editorial"
+      }
+    ],
+    "corrections": [],
+    "sourceChanges": [],
+    "factHash": "3896fe86",
+    "keywords": "France, Ligue des nations, actualité football",
+    "image": {
+      "src": "/blog/discover/inline-action.jpg",
+      "alt": "Joueurs de football en action",
+      "width": 1200,
+      "height": 675,
+      "credit": "Football : actualités, contexte et analyse sur BetGPT."
+    },
+    "related": [
+      {
+        "href": "/actualites/transfiguree-par-ses-remplacants-l-equipe-de-france-renverse-la-belgique-en-ligue-des-nati",
+        "title": "Transfigurée par ses remplaçants, l'équipe de France renverse la Belgique en Ligue des nations",
+        "image": {
+          "src": "/blog/discover/inline-flags.jpg",
+          "alt": "Public et drapeaux dans un stade",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/aime-jacquet-present-au-stade-de-france-pour-le-match-des-bleus-contre-la-belgique-2026-10",
+        "title": "Aimé Jacquet présent au Stade de France pour le match des Bleus contre la Belgique",
+        "image": {
+          "src": "/blog/discover/inline-pitch.jpg",
+          "alt": "Ballon sur une pelouse de football",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/france-espoirs-luxembourg-espoirs-en-direct-2026-10-03",
+        "title": "France Espoirs - Luxembourg Espoirs EN DIRECT",
+        "image": {
+          "src": "/blog/discover/inline-night.jpg",
+          "alt": "Stade de football éclairé la nuit",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/france-italie-ligue-des-nations-a-match-en-direct-le-02-10-2026-2026-10-02",
+        "title": "France - Italie, Ligue des nations A, match en direct le 02/10/2026",
+        "image": {
+          "src": "/blog/discover/inline-night.jpg",
+          "alt": "Stade de football éclairé la nuit",
+          "width": 1200,
+          "height": 675,
+          "credit": "France – PSG en Ligue des nations : informations, contexte et analyse du match."
+        }
+      },
+      {
+        "href": "/actualites/j-etais-forcement-touche-ravi-zinedine-zidane-a-fait-son-grand-retour-au-stade-de-france-2",
+        "title": "\"J'étais forcément touché, ravi\", : Zinédine Zidane a fait son grand retour au Stade de France",
+        "image": {
+          "src": "/blog/discover/inline-shot.jpg",
+          "alt": "Frappe au but pendant un match",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      }
+    ],
+    "discoverOpportunity": {
+      "freshness": 18,
+      "frenchInterest": 18,
+      "entityStrength": 15,
+      "novelty": 10,
+      "visual": 10,
+      "sourceQuality": 10,
+      "editorialAngle": 8,
+      "total": 89,
       "decision": "PUBLISH",
       "reasons": []
     },
