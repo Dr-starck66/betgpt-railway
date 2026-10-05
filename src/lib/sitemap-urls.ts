@@ -108,7 +108,7 @@ export async function loadSitemapUrls(): Promise<SitemapUrl[]> {
       resultLeafPaths.has(url.path),
   );
   const edition = buildEdition({ now: new Date(), matches: liveMatches as MatchInput[], frozen: readLedger() });
-  for (const row of stablePublicEvidenceTickets(tickets)) {
+  for (const row of stablePublicEvidenceTickets()) {
     if (!row.id || !row.home || !row.away || !row.recordedAt) continue;
     const encoded = encodeURIComponent(row.id);
     const path = `/prediction/${encoded}`;
