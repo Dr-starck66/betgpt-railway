@@ -150,7 +150,8 @@ export function loadTickets(): TicketRow[] {
   return MEM;
 }
 
-const STABLE_PUBLIC_EVIDENCE_IDS = new Set(parseRows(seedTickets).map((row) => row.id));
+const STABLE_PUBLIC_EVIDENCE = compactTickets(parseRows(seedTickets)).filter((row) => row.kind === "prono");
+const STABLE_PUBLIC_EVIDENCE_IDS = new Set(STABLE_PUBLIC_EVIDENCE.map((row) => row.id));
 
 /**
  * Sitemap-safe evidence rows only.
@@ -160,8 +161,12 @@ const STABLE_PUBLIC_EVIDENCE_IDS = new Set(parseRows(seedTickets).map((row) => r
  * part of the immutable seed corpus. This prevents a redeploy from turning a
  * previously emitted sitemap URL into a 404.
  */
-export function stablePublicEvidenceTickets(rows: TicketRow[] = loadTickets()): TicketRow[] {
-  return rows.filter((row) => row.kind === "prono" && STABLE_PUBLIC_EVIDENCE_IDS.has(row.id));
+export function stablePublicEvidenceTickets(rows?: TicketRow[]): TicketRow[] {
+  if (rows) {
+    return rows.filter((row) => row.kind === "prono" && STABLE_PUBLIC_EVIDENCE_IDS.has(row.id));
+  }
+  const currentById = new Map(loadTickets().map((row) => [row.id, row]));
+  return STABLE_PUBLIC_EVIDENCE.map((seed) => currentById.get(seed.id) ?? { ...seed });
 }
 
 let ticketsHydrated = false;
@@ -1053,5 +1058,7 @@ export function reviewOf(rows: TicketRow[]): {
 
 export function getTicket(id: string): TicketRow | undefined {
   const rows = loadTickets();
-  return rows.find((r) => r.id === id || r.id === `${id}:1X2` || r.matchId === id);
+  const current = rows.find((r) => r.id === id || r.id === `${id}:1X2` || r.matchId === id);
+  if (current) return current;
+  return STABLE_PUBLIC_EVIDENCE.find((r) => r.id === id || r.id === `${id}:1X2` || r.matchId === id);
 }
