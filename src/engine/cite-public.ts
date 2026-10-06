@@ -38,7 +38,8 @@ export const CITE_LEAGUES: { league: LeagueId; slug: string; espn: string; title
 ];
 
 export function citeBySlug(slug: string) {
-  return CITE_LEAGUES.find((l) => l.slug === slug);
+  const key = String(slug ?? "").trim().toLowerCase();
+  return CITE_LEAGUES.find((l) => l.slug === key) ?? CITE_LEAGUES.find((l) => l.league.toLowerCase() === key);
 }
 
 export function classementAnswer(title: string, rows: CiteRow[]): string {
