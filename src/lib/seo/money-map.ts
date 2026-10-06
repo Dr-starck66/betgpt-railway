@@ -23,7 +23,7 @@ export type KeywordRow = {
 
 export type PronoLeagueMeta = {
   slug: string;
-  league: "L1" | "PL" | "LL" | "BL" | "SA" | "CL" | "EL";
+  league: "L1" | "PL" | "LL" | "BL" | "SA" | "CL" | "EL" | "NL";
   title: string;
 };
 
@@ -35,6 +35,7 @@ export const PRONO_LEAGUES: PronoLeagueMeta[] = [
   { slug: "serie-a", league: "SA", title: "Serie A" },
   { slug: "champions-league", league: "CL", title: "Ligue des champions" },
   { slug: "ligue-europa", league: "EL", title: "Ligue Europa" },
+  { slug: "ligue-des-nations", league: "NL", title: "Ligue des nations" },
 ];
 
 export const PRONO_LEAGUE_ALIASES: Record<string, string> = {
@@ -52,6 +53,8 @@ export const PRONO_LEAGUE_ALIASES: Record<string, string> = {
   "ligue-des-champions": "champions-league",
   el: "ligue-europa",
   "europa-league": "ligue-europa",
+  nl: "ligue-des-nations",
+  "nations-league": "ligue-des-nations",
 };
 
 export function pronoLeagueBySlug(slug: string):
