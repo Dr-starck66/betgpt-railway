@@ -1,0 +1,78 @@
+name: ASTRA Authority Citation Engine Ω
+
+on:
+  schedule:
+    - cron: "23 7 * * 1"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/astra-authority-citation-engine.mjs"
+      - ".github/workflows/astra-authority-citation-engine.yml"
+      - "package.json"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: astra-authority-citation-engine
+  cancel-in-progress: false
+
+jobs:
+  authority-pack:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Wait for public BetGPT
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsS --connect-timeout 8 --max-time 20 https://betgpt.live/evidence.json >/dev/null
+          curl -fsS --connect-timeout 8 --max-time 20 https://betgpt.live/evidence.csv >/dev/null
+          echo "ASTRA_AUTHORITY_PUBLIC_EVIDENCE_PASS"
+
+      - name: Build authority evidence pack and radar
+        run: node scripts/astra-authority-citation-engine.mjs
+
+      - name: Persist authority artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "ASTRA Authority Citation Engine"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/authority
+          if git diff --cached --quiet; then
+            echo "ASTRA_AUTHORITY_NO_CHANGES"
+            exit 0
+          fi
+          git commit -m "authority: refresh BetGPT citation evidence pack"
+          git pull --rebase origin main
+          git push
+
+  zenodo:
+    needs: authority-pack
+    if: ${{ vars.ZENODO_AUTOPUBLISH == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Require Zenodo token
+        shell: bash
+        env:
+          ZENODO_TOKEN: ${{ secrets.ZENODO_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$ZENODO_TOKEN"
+          echo "ASTRA_AUTHORITY_ZENODO_TOKEN_PRESENT"
+      - name: Publish evidence snapshot to Zenodo
+        env:
+          ZENODO_TOKEN: ${{ secrets.ZENODO_TOKEN }}
+        run: node scripts/astra-authority-citation-engine.mjs --zenodo
