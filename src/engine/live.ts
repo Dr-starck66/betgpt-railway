@@ -1124,42 +1124,31 @@ export function resultRecoveryLeagueSlugs(league?: LeagueId): string[] {
  */
 export async function recoverEspnResults(targets: ResultRecoveryTarget[]): Promise<MatchInput[]> {
   const now = Date.now();
-  const byGroup = new Map<string, { date: string; league?: LeagueId; ids: Set<string> }>();
-
+  const unique = new Map<string, ResultRecoveryTarget>();
   for (const target of targets) {
     if (!/^espn-\d{5,12}$/i.test(target.matchId)) continue;
     const kickoffMs = Date.parse(target.kickoff);
     if (!Number.isFinite(kickoffMs) || kickoffMs > now - 90 * 60_000 || now - kickoffMs > 8 * 864e5) continue;
-    const date = new Date(kickoffMs).toISOString().slice(0, 10).replaceAll("-", "");
-    const key = `${target.league ?? "ALL"}|${date}`;
-    const group = byGroup.get(key) ?? { date, league: target.league, ids: new Set<string>() };
-    group.ids.add(target.matchId);
-    byGroup.set(key, group);
+    unique.set(target.matchId, target);
   }
 
-  const recovered = new Map<string, MatchInput>();
-  await mapPool([...byGroup.values()], 4, async (group) => {
-    const slugs = resultRecoveryLeagueSlugs(group.league);
-    await mapPool(slugs, 4, async (slug) => {
-      const spec = EVENT_LEAGUES.find((row) => row.slug === slug);
-      if (!spec) return;
-      const board = await fetchBoard(slug, [group.date]);
-      for (const event of board.events ?? []) {
-        const id = `espn-${event?.id ?? ""}`;
-        if (!group.ids.has(id) || recovered.has(id)) continue;
-        const parsed = parseEvents({ events: [event] }, spec.id, spec.name, new Map(), {}, "single");
-        const match = parsed.matches[0];
-        if (!match || (match.status !== "finished" && match.status !== "cancelled")) continue;
-        recovered.set(id, match);
-      }
-    });
+  // Resolve only a bounded batch per checkpoint call. Direct event summaries are
+  // much cheaper than scanning every competition scoreboard for the fixture date.
+  const batch = [...unique.values()]
+    .sort((a, b) => String(b.kickoff).localeCompare(String(a.kickoff)))
+    .slice(0, 4);
+
+  const hits = await mapPool(batch, 2, async (target) => {
+    const match = await fetchEspnEvent(target.matchId, target.league);
+    if (!match || (match.status !== "finished" && match.status !== "cancelled")) return null;
+    return match;
   });
 
-  return [...recovered.values()];
+  return hits.filter((match): match is MatchInput => Boolean(match));
 }
 
 /** Fetch a single ESPN soccer event even after it left the live window. */
-export async function fetchEspnEvent(id) {
+export async function fetchEspnEvent(id, leagueHint?: LeagueId) {
 	const rawId = String(id ?? "");
 	const eid = rawId.replace(/^espn-/i, "");
 	if (!/^\d{5,12}$/.test(eid)) {
@@ -1188,7 +1177,8 @@ export async function fetchEspnEvent(id) {
 		Referer: "https://www.espn.co.uk/",
 		Origin: "https://www.espn.co.uk"
 	};
-	const hits = await Promise.all(EVENT_LEAGUES.map(async (l) => {
+	const candidateLeagues = leagueHint ? EVENT_LEAGUES.filter((l) => l.id === leagueHint) : EVENT_LEAGUES;
+	const hits = await Promise.all(candidateLeagues.map(async (l) => {
 		try {
 			const res = await fetch(`https://site.web.api.espn.com/apis/site/v2/sports/soccer/${l.slug}/summary?event=${eid}`, {
 				signal: AbortSignal.timeout(4000),
