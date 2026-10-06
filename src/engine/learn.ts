@@ -5,6 +5,16 @@ import type { LeagueId } from "./types";
 import type { TicketRow } from "./ticket-log";
 import { isShortPricedWinner } from "./ticket-log";
 
+export type LearningScope = "CLUB" | "INTERNATIONAL";
+
+export function learningScopeOfLeague(league?: LeagueId): LearningScope {
+  return league === "NL" ? "INTERNATIONAL" : "CLUB";
+}
+
+export function rowsForLearningScope(rows: TicketRow[], scope: LearningScope): TicketRow[] {
+  return rows.filter((row) => learningScopeOfLeague(row.league) === scope);
+}
+
 export type ErrorLearn = {
   n: number;
   nWrong: number;

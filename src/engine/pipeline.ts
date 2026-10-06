@@ -26,7 +26,7 @@ import { clamp, logit, mean, normalize3, sigmoid } from "./math";
 import { FRENCH_EUROPE_NO_PRONO, skipEuropeFrenchProno } from "./french-clubs";
 import { loadAdmin } from "./admin";
 import { logoFor } from "@/lib/crests";
-import { applyErrorLearn, EMPTY_LEARN, learnFromErrors, type ErrorLearn } from "./learn";
+import { applyErrorLearn, EMPTY_LEARN, learnFromErrors, rowsForLearningScope, type ErrorLearn } from "./learn";
 import { pickCurrentMethod, prettyPickLabel } from "./pick";
 import { tightenFromLearn } from "./quality-pick";
 import { enforceBetSafety } from "./bet-safety";
@@ -80,6 +80,7 @@ export type Learned = {
   agentWeights: Record<CoachAgentId, number>;
   championship: ChampionshipBoard;
   errorLearn: ErrorLearn;
+  internationalErrorLearn: ErrorLearn;
 };
 
 export type EngineRun = {
@@ -448,9 +449,11 @@ const MARKET_META: Record<
   BTTS_N: { label: "Les deux équipes marquent — Non", group: "BTTS", selection: "Non" },
 };
 
-function thresholds() {
+function thresholds(league?: LeagueId) {
   const a = loadAdmin();
-  const extra = LEARNED?.errorLearn?.extraMinEv ?? selfLearn(loadTickets()).extraMinEv;
+  const scopedLearn = league === "NL" ? LEARNED?.internationalErrorLearn : LEARNED?.errorLearn;
+  const fallbackRows = rowsForLearningScope(loadTickets(), league === "NL" ? "INTERNATIONAL" : "CLUB");
+  const extra = scopedLearn?.extraMinEv ?? selfLearn(fallbackRows).extraMinEv;
   return {
     minEv: a.minEv + extra,
     minEdge: a.minEdge,
@@ -458,8 +461,8 @@ function thresholds() {
     maxStake: a.maxStake,
     maxBook: a.maxBook,
     leagues: a.leagues,
-    maxOdds1x2: LEARNED?.errorLearn?.maxOdds1x2 ?? 4.2,
-    banDrawBet: LEARNED?.errorLearn?.banDrawBet ?? false,
+    maxOdds1x2: scopedLearn?.maxOdds1x2 ?? 4.2,
+    banDrawBet: scopedLearn?.banDrawBet ?? false,
   };
 }
 
@@ -472,8 +475,9 @@ function decide(
   devil: number,
   agreement: number,
   kind: MarketKind,
+  league: LeagueId,
 ): { decision: Decision; rejectionReason?: string } {
-  const t = thresholds();
+  const t = thresholds(league);
   if (t.freeze) {
     return { decision: "WATCH", rejectionReason: "Mises gelées depuis les réglages." };
   }
@@ -501,7 +505,7 @@ function decide(
       rejectionReason: "Les nuls trop souvent pris ont perdu de l'argent sur 5 ans. On n'y touche que si la cote est vraiment trop généreuse.",
     };
   }
-  const tLearn = thresholds();
+  const tLearn = t;
   if (tLearn.banDrawBet && kind === "1X2_D") {
     return { decision: "WATCH", rejectionReason: "Le desk a perdu sur des nuls récents. Plus de mise sur le X." };
   }
@@ -587,6 +591,7 @@ function sizedStake(
   ev: number,
   intel: Intelligence,
   premium: boolean,
+  league?: LeagueId,
 ): number {
   const b = odds - 1;
   if (b <= 0 || ev <= 0) return 0;
@@ -595,7 +600,7 @@ function sizedStake(
   const chance = 0.5 + p;
   const conf = 0.7 + 0.55 * intel.confidenceScore;
   const floor = premium ? 0.018 : 0.008;
-  return clamp(raw * chance * conf, floor, thresholds().maxStake);
+  return clamp(raw * chance * conf, floor, thresholds(league).maxStake);
 }
 
 function opportunityScore(input: {
@@ -643,7 +648,7 @@ function valueMarkets(
     let decision: Decision = "NO_BET";
     let rejectionReason: string | undefined = listed ? undefined : "Cote non listée chez un book FR. On n'invente pas.";
     if (listed) {
-      const d = decide(ev, edge, odds, intel, conflict, devil, agreement, kind);
+      const d = decide(ev, edge, odds, intel, conflict, devil, agreement, kind, match.league);
       decision = d.decision;
       rejectionReason = d.rejectionReason;
     }
@@ -695,7 +700,7 @@ function valueMarkets(
       implied,
       edge,
       ev,
-      stakePct: decision === "BET" ? sizedStake(modelProb, odds, ev, intel, premium) : 0,
+      stakePct: decision === "BET" ? sizedStake(modelProb, odds, ev, intel, premium, match.league) : 0,
       listed,
       premium,
       opportunityScore: decision === "NO_BET" ? score * 0.35 : score,
@@ -784,7 +789,7 @@ function applyEuropeDesk(quotes: MarketQuote[], match: MatchInput, intel: Intell
       ev,
       score: q.opportunityScore,
     });
-    q.stakePct = sizedStake(q.modelProb, q.bestOdds, ev, intel, q.premium);
+    q.stakePct = sizedStake(q.modelProb, q.bestOdds, ev, intel, q.premium, match.league);
   }
 }
 
@@ -933,7 +938,11 @@ export function buildPrediction(match: MatchInput, learned: Learned, roi5Policy:
   const devil = runDevilsAdvocate(match, consensus, ensemble, coaches);
   const meta = tacticalMeta(calibratedStat, consensus, learned.tacticalReliability);
   const blended = anchorToListedFavorite(
-    applyErrorLearn(meta.blended, match.league, learned.errorLearn ?? EMPTY_LEARN),
+    applyErrorLearn(
+      meta.blended,
+      match.league,
+      match.league === "NL" ? learned.internationalErrorLearn ?? EMPTY_LEARN : learned.errorLearn ?? EMPTY_LEARN,
+    ),
     market,
   );
   const cal: CalibratedProbs = {
@@ -1134,6 +1143,7 @@ export function learnFromHistory(history: HistoricalMatch[] = generateHistory())
       tacticalReliability: 0.16,
       agentWeights: { ...DEFAULT_AGENT_WEIGHTS },
       errorLearn: EMPTY_LEARN,
+      internationalErrorLearn: EMPTY_LEARN,
       championship: {
         models: [],
         coaches: [],
@@ -1333,6 +1343,7 @@ export function learnFromHistory(history: HistoricalMatch[] = generateHistory())
     tacticalReliability,
     agentWeights: learnedWeights,
     errorLearn: EMPTY_LEARN,
+    internationalErrorLearn: EMPTY_LEARN,
     championship: {
       models: modelMetrics,
       coaches: coachMetrics,
@@ -1575,7 +1586,9 @@ function runEngineUncached(): EngineRun {
     a.kickoff.localeCompare(b.kickoff),
   );
   const archive = ensureArchiveBacktest(archiveHist.length >= 200 ? archiveHist : history);
-  const adaptiveLearning = buildAdaptiveLearningReport(actualTickets, archive?.tickets ?? []);
+  const clubActualTickets = rowsForLearningScope(actualTickets, "CLUB");
+  const clubArchiveTickets = rowsForLearningScope(archive?.tickets ?? [], "CLUB");
+  const adaptiveLearning = buildAdaptiveLearningReport(clubActualTickets, clubArchiveTickets);
   const learnSlice = history.slice(-450);
   const learnedBase = learnFromHistory(learnSlice.length >= 12 ? learnSlice : history);
   const historyPicks = [];
@@ -1589,7 +1602,7 @@ function runEngineUncached(): EngineRun {
     const adj = applyErrorLearn(
       { home: ensemble.home, draw: ensemble.draw, away: ensemble.away },
       h.league,
-      walkLearn,
+      h.league === "NL" ? EMPTY_LEARN : walkLearn,
     );
     const closeH = h.closingHome >= 1.2 ? h.closingHome : 1 / Math.max(adj.home, 0.08);
     const closeD = h.closingDraw >= 1.2 ? h.closingDraw : 1 / Math.max(adj.draw, 0.08);
@@ -1641,8 +1654,9 @@ function runEngineUncached(): EngineRun {
       dailyBest: false,
       book: "clôture",
     });
-    if (rolling.length >= 12 && rolling.length % 6 === 0) {
-      walkLearn = learnFromErrors(rolling);
+    const clubRolling = rowsForLearningScope(rolling, "CLUB");
+    if (clubRolling.length >= 12 && clubRolling.length % 6 === 0) {
+      walkLearn = learnFromErrors(clubRolling);
     }
   }
   try {
@@ -1650,8 +1664,10 @@ function runEngineUncached(): EngineRun {
   } catch {
     /* ignore */
   }
-  const errorLearn = learnFromErrors([...(archive?.tickets ?? []), ...rolling, ...actualTickets]);
-  const learned = { ...learnedBase, errorLearn };
+  const allLearningRows = [...(archive?.tickets ?? []), ...rolling, ...actualTickets];
+  const errorLearn = learnFromErrors(rowsForLearningScope(allLearningRows, "CLUB"));
+  const internationalErrorLearn = learnFromErrors(rowsForLearningScope(allLearningRows, "INTERNATIONAL"));
+  const learned = { ...learnedBase, errorLearn, internationalErrorLearn };
   LEARNED = learned;
   const matches = (getUpcomingMatches() as MatchInput[])
     .filter((m: MatchInput) => admin.leagues[m.league] !== false)
@@ -1663,7 +1679,9 @@ function runEngineUncached(): EngineRun {
       const rec = attachLiveIntel(m, buildPrediction(m, learned, DEFAULT_ROI5_DOMINANCE_POLICY));
       const asOfMs = Date.parse(live?.meta?.asOf ?? "");
       enforceBetSafety(rec.markets, m, Boolean(live?.meta?.stale) || !Number.isFinite(asOfMs) || Date.now() - asOfMs > 30 * 60_000 || asOfMs > Date.now() + 60_000);
-      applyAdaptiveLearningGate(rec, m, actualTickets, archive?.tickets ?? [], adaptiveLearning);
+      if (m.league !== "NL") {
+        applyAdaptiveLearningGate(rec, m, clubActualTickets, clubArchiveTickets, adaptiveLearning);
+      }
       try {
         const v = recordPredictionVersion(m, rec);
         const series = versionsFor(m.id);
