@@ -16,13 +16,20 @@ export const SERP_COMPETITIONS: SerpCompetition[] = [
   { slug: "serie-a", league: "SA", title: "Serie A", scoresPath: "/scores-en-direct/serie-a", resultsPath: "/resultats-football/serie-a" },
   { slug: "champions-league", league: "CL", title: "Ligue des champions", scoresPath: "/scores-en-direct/champions-league", resultsPath: "/resultats-football/champions-league" },
   { slug: "ligue-europa", league: "EL", title: "Ligue Europa", scoresPath: "/scores-en-direct/ligue-europa", resultsPath: "/resultats-football/ligue-europa" },
+  { slug: "ligue-des-nations", league: "NL", title: "Ligue des nations", scoresPath: "/scores-en-direct/ligue-des-nations", resultsPath: "/resultats-football/ligue-des-nations" },
 ];
 
 const BY_SLUG = new Map(SERP_COMPETITIONS.map((c) => [c.slug, c]));
+const SLUG_ALIASES: Record<string, string> = {
+  l1: "ligue-1", pl: "premier-league", ll: "la-liga", bl: "bundesliga", sa: "serie-a",
+  cl: "champions-league", el: "ligue-europa", nl: "ligue-des-nations",
+  "ligue-des-champions": "champions-league", "nations-league": "ligue-des-nations",
+};
 const BY_LEAGUE = new Map(SERP_COMPETITIONS.map((c) => [c.league, c]));
 
 export function competitionBySlug(slug: string): SerpCompetition | null {
-  return BY_SLUG.get(slug) ?? null;
+  const key = String(slug ?? "").trim().toLowerCase();
+  return BY_SLUG.get(SLUG_ALIASES[key] ?? key) ?? null;
 }
 
 export function competitionByLeague(league: LeagueId): SerpCompetition | null {
