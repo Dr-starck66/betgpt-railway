@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use the BetGPT public prediction evidence dataset, please cite it using this metadata."
+title: "BetGPT Public Football Prediction Evidence Dataset"
+type: dataset
+authors:
+  - family-names: "Starck"
+    affiliation: "BetGPT"
+abstract: "Public, auditable football prediction evidence from BetGPT, including pre-kickoff publication records, outcomes, and machine-readable exports. Historical simulations are distinguished from actually published predictions."
+url: "https://betgpt.live/ledger"
+repository-code: "https://github.com/Dr-starck66/betgpt-railway"
+date-released: 2026-10-06
+keywords:
+  - football
+  - sports predictions
+  - probability
+  - prediction audit
+  - Brier score
+  - drawdown
