@@ -233,7 +233,10 @@ export function buildLearningMemory(
       pnlUnits: row.result === "win" ? row.odds - 1 : -1,
       kind: row.kind,
       decision: row.decision,
-      evidence: row.kind === "mise" && row.decision === "BET" ? "ACTUAL_BET" : "OBSERVATIONAL_PREDICTION",
+      evidence:
+        row.kind === "mise" && row.decision === "BET"
+          ? ("ACTUAL_BET" as const)
+          : ("OBSERVATIONAL_PREDICTION" as const),
       factors: factorsOf(row),
     }));
 
