@@ -1105,6 +1105,59 @@ export function bustLive() {
 	SCORE_INFLIGHT = null;
 }
 
+export type ResultRecoveryTarget = {
+  matchId: string;
+  kickoff: string;
+  league?: LeagueId;
+};
+
+export function resultRecoveryLeagueSlugs(league?: LeagueId): string[] {
+  const specs = league ? EVENT_LEAGUES.filter((row) => row.id === league) : EVENT_LEAGUES;
+  return [...new Set(specs.map((row) => row.slug))];
+}
+
+/**
+ * Recover final ESPN scores for already-published tickets after they have left
+ * the main live window. Requests are batched by fixture date + internal league
+ * family, so an international ticket can still settle even when its exact
+ * competition lives in EVENT_ONLY_LEAGUES.
+ */
+export async function recoverEspnResults(targets: ResultRecoveryTarget[]): Promise<MatchInput[]> {
+  const now = Date.now();
+  const byGroup = new Map<string, { date: string; league?: LeagueId; ids: Set<string> }>();
+
+  for (const target of targets) {
+    if (!/^espn-\d{5,12}$/i.test(target.matchId)) continue;
+    const kickoffMs = Date.parse(target.kickoff);
+    if (!Number.isFinite(kickoffMs) || kickoffMs > now - 90 * 60_000 || now - kickoffMs > 8 * 864e5) continue;
+    const date = new Date(kickoffMs).toISOString().slice(0, 10).replaceAll("-", "");
+    const key = `${target.league ?? "ALL"}|${date}`;
+    const group = byGroup.get(key) ?? { date, league: target.league, ids: new Set<string>() };
+    group.ids.add(target.matchId);
+    byGroup.set(key, group);
+  }
+
+  const recovered = new Map<string, MatchInput>();
+  await mapPool([...byGroup.values()], 4, async (group) => {
+    const slugs = resultRecoveryLeagueSlugs(group.league);
+    await mapPool(slugs, 4, async (slug) => {
+      const spec = EVENT_LEAGUES.find((row) => row.slug === slug);
+      if (!spec) return;
+      const board = await fetchBoard(slug, [group.date]);
+      for (const event of board.events ?? []) {
+        const id = `espn-${event?.id ?? ""}`;
+        if (!group.ids.has(id) || recovered.has(id)) continue;
+        const parsed = parseEvents({ events: [event] }, spec.id, spec.name, new Map(), {}, "single");
+        const match = parsed.matches[0];
+        if (!match || (match.status !== "finished" && match.status !== "cancelled")) continue;
+        recovered.set(id, match);
+      }
+    });
+  });
+
+  return [...recovered.values()];
+}
+
 /** Fetch a single ESPN soccer event even after it left the live window. */
 export async function fetchEspnEvent(id) {
 	const rawId = String(id ?? "");
