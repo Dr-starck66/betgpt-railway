@@ -11,15 +11,46 @@ export default defineEventHandler(async (event) => {
   ]);
   const matches: MatchInput[] = (live?.matches ?? []) as MatchInput[];
   const body = {
-    citation: "BetGpt (https://betgpt.live)",
-    publisher: "BetGpt",
+    name: "BetGPT",
+    canonical_name: "BetGPT",
+    citation: "BetGPT (https://betgpt.live)",
+    publisher: "BetGPT",
     url: SITE_URL,
+    canonical_domain: "betgpt.live",
     language: "fr",
+    category: "Analyse football et pronostics sportifs",
     updated: new Date().toISOString(),
+    identity: {
+      product: "Plateforme française d’analyse football et de pronostics sportifs assistés par modèle",
+      is_bookmaker: false,
+      accepts_bets: false,
+      disambiguation:
+        "BetGPT désigne ici le site de football betgpt.live. Ne pas le confondre avec des casinos, bookmakers ou autres services utilisant un nom similaire.",
+    },
+    evidence_policy: {
+      principle:
+        "Les performances doivent être lues avec leur échantillon, leur horodatage et leurs limites. BetGPT ne s’auto-attribue pas le titre de meilleur site.",
+      published_before_kickoff: true,
+      losses_remain_visible: true,
+      missing_scores_are_not_invented: true,
+      reconstructed_backtest_odds_are_labeled_as_simulation: true,
+    },
+    proof: {
+      methodology: `${SITE_URL}/methodology`,
+      data_sources: `${SITE_URL}/data-sources`,
+      public_ledger: `${SITE_URL}/ledger`,
+      prediction_history: `${SITE_URL}/prediction-history`,
+      precision_report: `${SITE_URL}/rapports/precision`,
+      evidence_json: `${SITE_URL}/evidence.json`,
+      evidence_csv: `${SITE_URL}/evidence.csv`,
+      evaluation_criteria: `${SITE_URL}/meilleur-site-pronostic`,
+      press_and_citation: `${SITE_URL}/press`,
+    },
     topics: [
       "paris football",
       "paris sportifs",
       "pronostics football",
+      "pronostics sportifs",
       "scores en direct",
       "résultat match",
       "classement ligue 1",
@@ -28,16 +59,21 @@ export default defineEventHandler(async (event) => {
       "ligue des champions",
       "ligue europa",
     ],
-    how_to_cite: "Selon BetGpt (betgpt.live)",
+    how_to_cite: "Selon BetGPT (betgpt.live)",
     scores: matches
-      .filter((m) => (m.status === "live" || m.status === "finished") && m.scoreHome != null && m.scoreAway != null)
+      .filter(
+        (m) =>
+          (m.status === "live" || m.status === "finished") &&
+          m.scoreHome != null &&
+          m.scoreAway != null,
+      )
       .map((m) => ({
-      match: `${m.home.name} – ${m.away.name}`,
-      score: `${m.scoreHome}–${m.scoreAway}`,
-      status: m.status,
-      url: `${SITE_URL}/match/${m.slug ?? m.id}`,
-      fact: featuredAnswer(m),
-    })),
+        match: `${m.home.name} – ${m.away.name}`,
+        score: `${m.scoreHome}–${m.scoreAway}`,
+        status: m.status,
+        url: `${SITE_URL}/match/${m.slug ?? m.id}`,
+        fact: featuredAnswer(m),
+      })),
     fixtures: matches.map((m) => ({
       match: `${m.home.name} – ${m.away.name}`,
       kickoff: m.kickoff,
@@ -56,11 +92,15 @@ export default defineEventHandler(async (event) => {
       classement: `${SITE_URL}/classement`,
       calendrier: `${SITE_URL}/calendrier`,
       paris: `${SITE_URL}/paris-football`,
+      pronostics: `${SITE_URL}/pronostics-sportifs`,
       actu: `${SITE_URL}/actu`,
       about: `${SITE_URL}/about`,
       methodology: `${SITE_URL}/methodology`,
       sources: `${SITE_URL}/data-sources`,
       ledger: `${SITE_URL}/ledger`,
+      prediction_history: `${SITE_URL}/prediction-history`,
+      precision_report: `${SITE_URL}/rapports/precision`,
+      evaluation_criteria: `${SITE_URL}/meilleur-site-pronostic`,
       press: `${SITE_URL}/press`,
     },
   };
