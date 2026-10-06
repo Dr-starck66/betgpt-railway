@@ -1,6 +1,6 @@
 # BetGPT public prediction evidence pack
 
-Generated: 2026-10-06T16:19:21.578Z
+Generated: 2026-10-06T16:25:15.082Z
 
 Canonical site: https://betgpt.live
 
