@@ -52,11 +52,12 @@ async function gdeltRadar() {
     '("football prediction" OR "sports betting prediction") AND (AI OR model OR data)',
   ];
   const all = [];
+  let sourceFailures = 0;
   for (const query of queries) {
     const u = new URL("https://api.gdeltproject.org/api/v2/doc/doc");
     u.searchParams.set("query", query);
     u.searchParams.set("mode", "artlist");
-    u.searchParams.set("maxrecords", "50");
+    u.searchParams.set("maxrecords", "25");
     u.searchParams.set("timespan", "7d");
     u.searchParams.set("sort", "datedesc");
     u.searchParams.set("format", "json");
@@ -64,12 +65,100 @@ async function gdeltRadar() {
       const raw = await fetchText(u.toString());
       const data = JSON.parse(raw);
       const rows = Array.isArray(data.articles) ? data.articles : Array.isArray(data.items) ? data.items : [];
-      all.push(...rows);
+      all.push(...rows.map((row) => ({ ...row, discoverySource: "GDELT DOC 2.0" })));
     } catch (error) {
+      sourceFailures += 1;
       console.warn("ASTRA_AUTHORITY_RADAR_SOURCE_PARTIAL", query, String(error));
     }
   }
-  return normalizeRadar(all);
+
+  const gdelt = normalizeRadar(all).map((x) => ({ ...x, discoverySource: "GDELT DOC 2.0" }));
+  if (gdelt.length > 0) return gdelt;
+
+  const rss = await rssRadar();
+  if (rss.length > 0) {
+    console.log("ASTRA_AUTHORITY_RADAR_FALLBACK_PASS", JSON.stringify({ sourceFailures, items: rss.length }));
+    return rss;
+  }
+
+  console.warn("ASTRA_AUTHORITY_RADAR_EMPTY", JSON.stringify({ sourceFailures }));
+  return [];
+}
+
+
+function decodeXml(value) {
+  return String(value || "")
+    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1")
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&apos;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .trim();
+}
+
+function rssTag(block, tag) {
+  const m = block.match(new RegExp("<" + tag + "(?:\\s[^>]*)?>([\\s\\S]*?)<\\/" + tag + ">", "i"));
+  return m ? decodeXml(m[1]) : "";
+}
+
+function googleNewsItems(xml) {
+  return [...String(xml).matchAll(/<item>([\s\S]*?)<\/item>/gi)].map((m) => {
+    const block = m[1];
+    const sourceMatch = block.match(/<source(?:\s+url="([^"]+)")?[^>]*>([\s\S]*?)<\/source>/i);
+    const sourceUrl = sourceMatch?.[1] ? decodeXml(sourceMatch[1]) : "";
+    const sourceName = sourceMatch?.[2] ? decodeXml(sourceMatch[2]) : "";
+    return {
+      title: rssTag(block, "title"),
+      url: rssTag(block, "link"),
+      date: rssTag(block, "pubDate"),
+      sourceUrl,
+      sourceName,
+      language: "fr",
+      sourcecountry: "FR",
+    };
+  });
+}
+
+async function rssRadar() {
+  const queries = [
+    "pronostics football",
+    "site de pronostics football",
+    "paris sportifs intelligence artificielle football",
+    "football prediction AI data",
+  ];
+  const all = [];
+  for (const query of queries) {
+    const u = new URL("https://news.google.com/rss/search");
+    u.searchParams.set("q", query);
+    u.searchParams.set("hl", "fr");
+    u.searchParams.set("gl", "FR");
+    u.searchParams.set("ceid", "FR:fr");
+    try {
+      const xml = await fetchText(u.toString());
+      all.push(...googleNewsItems(xml));
+    } catch (error) {
+      console.warn("ASTRA_AUTHORITY_RSS_SOURCE_PARTIAL", query, String(error));
+    }
+  }
+
+  const normalized = normalizeRadar(
+    all.map((x) => ({
+      ...x,
+      sourcecountry: x.sourcecountry,
+      publisherDomain: domainOf(x.sourceUrl),
+    })),
+  );
+
+  return normalized.map((x) => {
+    const original = all.find((a) => String(a.url).trim() === x.url);
+    return {
+      ...x,
+      sourceName: original?.sourceName || "",
+      publisherDomain: domainOf(original?.sourceUrl || "") || x.domain,
+      discoverySource: "Google News RSS",
+    };
+  });
 }
 
 function buildReadme(summary, hashes) {
