@@ -22,6 +22,8 @@ export type ResultRow = {
   scoreAway: number;
   kickoff: string;
   day: string;
+  /** True only when the match dossier is backed by BetGPT local/live durable data. */
+  detailAvailable: boolean;
 };
 
 export function rowFromMatch(match: MatchInput): ResultRow | null {
@@ -45,6 +47,7 @@ export function rowFromMatch(match: MatchInput): ResultRow | null {
     scoreAway: match.scoreAway as number,
     kickoff: match.kickoff,
     day,
+    detailAvailable: true,
   };
 }
 
@@ -73,6 +76,7 @@ export function rowFromHistory(h: HistoricalMatch): ResultRow | null {
     scoreAway: h.goalsAway,
     kickoff: h.kickoff,
     day,
+    detailAvailable: true,
   };
 }
 
