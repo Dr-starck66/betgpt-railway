@@ -1,0 +1,115 @@
+name: BetGPT IndexNow Proof Discovery
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "src/routes/meilleur-site-pronostic.tsx"
+      - "src/routes/ledger.tsx"
+      - "src/routes/prediction-history.tsx"
+      - "src/routes/methodology.tsx"
+      - "src/routes/data-sources.tsx"
+      - "src/routes/rapports/precision.tsx"
+      - "src/routes/press.tsx"
+      - "server/routes/evidence.json.ts"
+      - "server/routes/evidence.csv.ts"
+      - "server/routes/ai.json.ts"
+      - "src/lib/geo/llms.ts"
+      - "public/4c39650b08e0d15b79bea5d209ca19af.txt"
+      - ".github/workflows/indexnow-proof-discovery.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: betgpt-indexnow-proof-discovery
+  cancel-in-progress: true
+
+jobs:
+  submit-after-green-production:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout source commit
+        uses: actions/checkout@v4
+
+      - name: Wait until this source revision is public
+        shell: bash
+        env:
+          SOURCE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 150); do
+            body="$(curl -fsS --connect-timeout 5 --max-time 10 https://betgpt.live/astra-revision.json 2>/dev/null || true)"
+            got="$(printf '%s' "$body" | jq -r '.sourceSha // empty' 2>/dev/null || true)"
+            echo "INDEXNOW_PUBLIC_REVISION attempt=$i expected=$SOURCE_SHA got=$got"
+            if [ "$got" = "$SOURCE_SHA" ]; then
+              echo "ASTRA_INDEXNOW_PUBLIC_REVISION_PASS $got"
+              exit 0
+            fi
+
+            head="$(curl -fsSL --connect-timeout 5 --max-time 10 https://api.github.com/repos/Dr-starck66/betgpt-railway/commits/main 2>/dev/null | jq -r '.sha // empty' 2>/dev/null || true)"
+            if [ -n "$head" ] && [ "$head" != "$SOURCE_SHA" ]; then
+              echo "ASTRA_INDEXNOW_SUPERSEDED source=$SOURCE_SHA head=$head"
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "ASTRA_INDEXNOW_PUBLIC_REVISION_FAIL expected=$SOURCE_SHA" >&2
+          exit 1
+
+      - name: Verify IndexNow ownership key is public
+        shell: bash
+        run: |
+          set -euo pipefail
+          key="4c39650b08e0d15b79bea5d209ca19af"
+          got="$(curl -fsS --connect-timeout 5 --max-time 10 "https://betgpt.live/$key.txt" | tr -d '\r\n')"
+          test "$got" = "$key"
+          echo "ASTRA_INDEXNOW_KEY_PASS https://betgpt.live/$key.txt"
+
+      - name: Submit proof surfaces to IndexNow
+        shell: bash
+        run: |
+          set -euo pipefail
+          key="4c39650b08e0d15b79bea5d209ca19af"
+          payload="$(jq -n \
+            --arg host "betgpt.live" \
+            --arg key "$key" \
+            --arg keyLocation "https://betgpt.live/$key.txt" \
+            --argjson urls '[
+              "https://betgpt.live/",
+              "https://betgpt.live/meilleur-site-pronostic",
+              "https://betgpt.live/ledger",
+              "https://betgpt.live/prediction-history",
+              "https://betgpt.live/methodology",
+              "https://betgpt.live/data-sources",
+              "https://betgpt.live/rapports/precision",
+              "https://betgpt.live/press",
+              "https://betgpt.live/evidence.json",
+              "https://betgpt.live/evidence.csv",
+              "https://betgpt.live/ai.json",
+              "https://betgpt.live/llms.txt",
+              "https://betgpt.live/pronostics-sportifs",
+              "https://betgpt.live/pronostics-football"
+            ]' \
+            '{host:$host,key:$key,keyLocation:$keyLocation,urlList:$urls}')"
+
+          code="$(curl -sS -o /tmp/indexnow-response.txt -w '%{http_code}' \
+            --connect-timeout 10 --max-time 30 \
+            -H 'Content-Type: application/json; charset=utf-8' \
+            -X POST https://api.indexnow.org/indexnow \
+            --data "$payload")"
+
+          echo "INDEXNOW_HTTP_STATUS=$code"
+          cat /tmp/indexnow-response.txt || true
+          echo
+          case "$code" in
+            200|202)
+              echo "ASTRA_INDEXNOW_SUBMISSION_PASS status=$code urls=14"
+              ;;
+            *)
+              echo "ASTRA_INDEXNOW_SUBMISSION_FAIL status=$code" >&2
+              exit 1
+              ;;
+          esac
