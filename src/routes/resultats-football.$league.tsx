@@ -24,6 +24,7 @@ export const Route = createFileRoute("/resultats-football/$league")({
     const comp = loaderData?.comp ?? competitionBySlug(params.league);
     if (!comp) return { meta: [{ title: "Résultats | BetGPT" }, { name: "robots", content: "noindex, follow" }] };
     const n = loaderData?.rows.length ?? 0;
+    const durableN = loaderData?.rows.filter((row) => row.detailAvailable).length ?? 0;
     const title = `Résultats ${comp.title}`;
     const description = pageDescription(comp.title, n);
     const url = `${SITE_URL}${comp.resultsPath}`;
@@ -31,7 +32,7 @@ export const Route = createFileRoute("/resultats-football/$league")({
       meta: [
         { title: `${title} | BetGPT` },
         { name: "description", content: description },
-        { name: "robots", content: n ? "index, follow, max-snippet:-1, max-image-preview:large" : "noindex, follow" },
+        { name: "robots", content: durableN ? "index, follow, max-snippet:-1, max-image-preview:large" : "noindex, follow" },
         { property: "og:title", content: `${title} | BetGPT` },
         { property: "og:description", content: description },
         { property: "og:url", content: url },
@@ -48,7 +49,7 @@ function LeagueResults() {
   const title = `Résultats ${data.comp.title}`;
   const url = `${SITE_URL}${data.comp.resultsPath}`;
   const description = pageDescription(data.comp.title, data.rows.length);
-  const list = data.rows.slice(0, 50).map((row) => ({
+  const list = data.rows.filter((row) => row.detailAvailable).slice(0, 50).map((row) => ({
     name: `${row.home} ${row.scoreHome}–${row.scoreAway} ${row.away} — ${row.competition}`,
     url: `${SITE_URL}/match/${row.slug}`,
   }));
