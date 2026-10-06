@@ -50,6 +50,7 @@ import { liveSuperBet } from "./live-super";
 import { pushNewPredictions } from "./prediction-hook";
 import { MIN_BET_ODDS, MAX_BET_ODDS, oddsPlayable } from "@/lib/markets";
 import { adaptiveAllows, adaptiveSafetyBlock, buildAdaptiveLearningReport, scoreProspectiveTrust, type AdaptiveLearningReport } from "./adaptive-learning";
+import { internationalCompetitionKeyOf, internationalCompetitionKeysOf, rowsForInternationalCompetition } from "./competition-scope";
 import { bestThree, estimateRho, runStatisticalStack, anchorToListedFavorite } from "./models";
 import type {
   AblationRow,
@@ -80,7 +81,7 @@ export type Learned = {
   agentWeights: Record<CoachAgentId, number>;
   championship: ChampionshipBoard;
   errorLearn: ErrorLearn;
-  internationalErrorLearn: ErrorLearn;
+  internationalErrorLearnByCompetition: Record<string, ErrorLearn>;
 };
 
 export type EngineRun = {
@@ -263,7 +264,8 @@ function historicalInput(h: HistoricalMatch): MatchInput | null {
   return {
     id: h.id,
     league: h.league,
-    competition: h.league,
+    competition: h.competition ?? h.league,
+    competitionKey: h.competitionKey,
     kickoff: h.kickoff,
     venue: "n/a",
     home,
@@ -449,10 +451,21 @@ const MARKET_META: Record<
   BTTS_N: { label: "Les deux équipes marquent — Non", group: "BTTS", selection: "Non" },
 };
 
-function thresholds(league?: LeagueId) {
+function thresholds(scope?: Pick<MatchInput, "league" | "competition" | "competitionKey">) {
   const a = loadAdmin();
-  const scopedLearn = league === "NL" ? LEARNED?.internationalErrorLearn : LEARNED?.errorLearn;
-  const fallbackRows = rowsForLearningScope(loadTickets(), league === "NL" ? "INTERNATIONAL" : "CLUB");
+  const league = scope?.league;
+  const competitionKey = league === "NL" ? internationalCompetitionKeyOf(scope ?? {}) : null;
+  const scopedLearn =
+    league === "NL"
+      ? competitionKey
+        ? LEARNED?.internationalErrorLearnByCompetition?.[competitionKey]
+        : undefined
+      : LEARNED?.errorLearn;
+  const allRows = loadTickets();
+  const fallbackRows =
+    league === "NL" && competitionKey
+      ? rowsForInternationalCompetition(rowsForLearningScope(allRows, "INTERNATIONAL"), competitionKey)
+      : rowsForLearningScope(allRows, "CLUB");
   const extra = scopedLearn?.extraMinEv ?? selfLearn(fallbackRows).extraMinEv;
   return {
     minEv: a.minEv + extra,
@@ -475,9 +488,9 @@ function decide(
   devil: number,
   agreement: number,
   kind: MarketKind,
-  league: LeagueId,
+  match: Pick<MatchInput, "league" | "competition" | "competitionKey">,
 ): { decision: Decision; rejectionReason?: string } {
-  const t = thresholds(league);
+  const t = thresholds(match);
   if (t.freeze) {
     return { decision: "WATCH", rejectionReason: "Mises gelées depuis les réglages." };
   }
@@ -591,7 +604,7 @@ function sizedStake(
   ev: number,
   intel: Intelligence,
   premium: boolean,
-  league?: LeagueId,
+  match?: Pick<MatchInput, "league" | "competition" | "competitionKey">,
 ): number {
   const b = odds - 1;
   if (b <= 0 || ev <= 0) return 0;
@@ -600,7 +613,7 @@ function sizedStake(
   const chance = 0.5 + p;
   const conf = 0.7 + 0.55 * intel.confidenceScore;
   const floor = premium ? 0.018 : 0.008;
-  return clamp(raw * chance * conf, floor, thresholds(league).maxStake);
+  return clamp(raw * chance * conf, floor, thresholds(match).maxStake);
 }
 
 function opportunityScore(input: {
@@ -648,7 +661,7 @@ function valueMarkets(
     let decision: Decision = "NO_BET";
     let rejectionReason: string | undefined = listed ? undefined : "Cote non listée chez un book FR. On n'invente pas.";
     if (listed) {
-      const d = decide(ev, edge, odds, intel, conflict, devil, agreement, kind, match.league);
+      const d = decide(ev, edge, odds, intel, conflict, devil, agreement, kind, match);
       decision = d.decision;
       rejectionReason = d.rejectionReason;
     }
@@ -700,7 +713,7 @@ function valueMarkets(
       implied,
       edge,
       ev,
-      stakePct: decision === "BET" ? sizedStake(modelProb, odds, ev, intel, premium, match.league) : 0,
+      stakePct: decision === "BET" ? sizedStake(modelProb, odds, ev, intel, premium, match) : 0,
       listed,
       premium,
       opportunityScore: decision === "NO_BET" ? score * 0.35 : score,
@@ -789,7 +802,7 @@ function applyEuropeDesk(quotes: MarketQuote[], match: MatchInput, intel: Intell
       ev,
       score: q.opportunityScore,
     });
-    q.stakePct = sizedStake(q.modelProb, q.bestOdds, ev, intel, q.premium, match.league);
+    q.stakePct = sizedStake(q.modelProb, q.bestOdds, ev, intel, q.premium, match);
   }
 }
 
@@ -941,7 +954,9 @@ export function buildPrediction(match: MatchInput, learned: Learned, roi5Policy:
     applyErrorLearn(
       meta.blended,
       match.league,
-      match.league === "NL" ? learned.internationalErrorLearn ?? EMPTY_LEARN : learned.errorLearn ?? EMPTY_LEARN,
+      match.league === "NL"
+        ? learned.internationalErrorLearnByCompetition?.[internationalCompetitionKeyOf(match) ?? "international.unknown"] ?? EMPTY_LEARN
+        : learned.errorLearn ?? EMPTY_LEARN,
     ),
     market,
   );
@@ -995,6 +1010,7 @@ export function buildPrediction(match: MatchInput, learned: Learned, roi5Policy:
     kickoff: match.kickoff,
     league: match.league,
     competition: match.competition,
+    competitionKey: match.competitionKey,
     venue: match.venue,
     home: {
       id: match.home.id,
@@ -1143,7 +1159,7 @@ export function learnFromHistory(history: HistoricalMatch[] = generateHistory())
       tacticalReliability: 0.16,
       agentWeights: { ...DEFAULT_AGENT_WEIGHTS },
       errorLearn: EMPTY_LEARN,
-      internationalErrorLearn: EMPTY_LEARN,
+      internationalErrorLearnByCompetition: {},
       championship: {
         models: [],
         coaches: [],
@@ -1343,7 +1359,7 @@ export function learnFromHistory(history: HistoricalMatch[] = generateHistory())
     tacticalReliability,
     agentWeights: learnedWeights,
     errorLearn: EMPTY_LEARN,
-    internationalErrorLearn: EMPTY_LEARN,
+    internationalErrorLearnByCompetition: {},
     championship: {
       models: modelMetrics,
       coaches: coachMetrics,
@@ -1493,6 +1509,7 @@ function pickDailyBest(
 let CACHE: EngineRun | null = null;
 let CACHE_KEY = "";
 let LEARNED: Learned | null = null;
+let INTERNATIONAL_LEARNED_BY_COMPETITION: Record<string, Learned> = {};
 
 function settleFromArchive(m: MatchInput): MatchInput {
   const hist = officialResult({ id: m.id, homeName: m.home.name, awayName: m.away.name, kickoff: m.kickoff });
@@ -1555,6 +1572,8 @@ function applyAdaptiveLearningGate(
       kind: "mise",
       decision: q.decision,
       league: match.league,
+      competition: match.competition,
+      competitionKey: match.competitionKey,
       recordedAt: new Date().toISOString(),
     };
     const trust = scoreProspectiveTrust(pseudo, actualTickets, archiveTickets);
@@ -1588,9 +1607,21 @@ function runEngineUncached(): EngineRun {
   const archive = ensureArchiveBacktest(archiveHist.length >= 200 ? archiveHist : history);
   const clubActualTickets = rowsForLearningScope(actualTickets, "CLUB");
   const clubArchiveTickets = rowsForLearningScope(archive?.tickets ?? [], "CLUB");
+  const internationalActualTickets = rowsForLearningScope(actualTickets, "INTERNATIONAL");
+  const internationalArchiveTickets = rowsForLearningScope(archive?.tickets ?? [], "INTERNATIONAL");
   const adaptiveLearning = buildAdaptiveLearningReport(clubActualTickets, clubArchiveTickets);
-  const learnSlice = history.slice(-450);
-  const learnedBase = learnFromHistory(learnSlice.length >= 12 ? learnSlice : history);
+  const internationalAdaptiveLearningByCompetition = Object.fromEntries(
+    internationalCompetitionKeysOf([...internationalArchiveTickets, ...internationalActualTickets]).map((competitionKey) => [
+      competitionKey,
+      buildAdaptiveLearningReport(
+        rowsForInternationalCompetition(internationalActualTickets, competitionKey),
+        rowsForInternationalCompetition(internationalArchiveTickets, competitionKey),
+      ),
+    ]),
+  ) as Record<string, AdaptiveLearningReport>;
+  const clubHistory = history.filter((h) => h.league !== "NL");
+  const learnSlice = clubHistory.slice(-450);
+  const learnedBase = learnFromHistory(learnSlice.length >= 12 ? learnSlice : clubHistory);
   const historyPicks = [];
   const rolling: TicketRow[] = [];
   let walkLearn: ErrorLearn = EMPTY_LEARN;
@@ -1634,6 +1665,8 @@ function runEngineUncached(): EngineRun {
       book: "clôture",
       modelProb: pick.modelProb,
       league: h.league,
+      competition: h.competition,
+      competitionKey: h.competitionKey,
       pHome: adj.home,
       pDraw: adj.draw,
       pAway: adj.away,
@@ -1666,9 +1699,35 @@ function runEngineUncached(): EngineRun {
   }
   const allLearningRows = [...(archive?.tickets ?? []), ...rolling, ...actualTickets];
   const errorLearn = learnFromErrors(rowsForLearningScope(allLearningRows, "CLUB"));
-  const internationalErrorLearn = learnFromErrors(rowsForLearningScope(allLearningRows, "INTERNATIONAL"));
-  const learned = { ...learnedBase, errorLearn, internationalErrorLearn };
+  const internationalRows = rowsForLearningScope(allLearningRows, "INTERNATIONAL");
+  const internationalErrorLearnByCompetition = Object.fromEntries(
+    internationalCompetitionKeysOf(internationalRows).map((competitionKey) => [
+      competitionKey,
+      learnFromErrors(rowsForInternationalCompetition(internationalRows, competitionKey)),
+    ]),
+  ) as Record<string, ErrorLearn>;
+  const learned = { ...learnedBase, errorLearn, internationalErrorLearnByCompetition };
+  const internationalHistory = history.filter((h) => h.league === "NL");
+  const internationalHistoryKeys = new Set([
+    ...internationalCompetitionKeysOf(internationalHistory),
+    ...internationalCompetitionKeysOf(internationalRows),
+  ]);
+  const internationalLearnedByCompetition = Object.fromEntries(
+    [...internationalHistoryKeys].map((competitionKey) => {
+      const scopedHistory = rowsForInternationalCompetition(internationalHistory, competitionKey).slice(-450);
+      const base = learnFromHistory(scopedHistory);
+      return [
+        competitionKey,
+        {
+          ...base,
+          errorLearn: EMPTY_LEARN,
+          internationalErrorLearnByCompetition,
+        } satisfies Learned,
+      ];
+    }),
+  ) as Record<string, Learned>;
   LEARNED = learned;
+  INTERNATIONAL_LEARNED_BY_COMPETITION = internationalLearnedByCompetition;
   const matches = (getUpcomingMatches() as MatchInput[])
     .filter((m: MatchInput) => admin.leagues[m.league] !== false)
     .map(settleFromArchive);
@@ -1676,11 +1735,32 @@ function runEngineUncached(): EngineRun {
   const kept: MatchInput[] = [];
   for (const m of matches) {
     try {
-      const rec = attachLiveIntel(m, buildPrediction(m, learned, DEFAULT_ROI5_DOMINANCE_POLICY));
+      const competitionKey = m.league === "NL" ? internationalCompetitionKeyOf(m) : null;
+      const scopedLearned =
+        m.league === "NL" && competitionKey
+          ? internationalLearnedByCompetition[competitionKey] ?? {
+              ...learnFromHistory([]),
+              errorLearn: EMPTY_LEARN,
+              internationalErrorLearnByCompetition,
+            }
+          : learned;
+      const rec = attachLiveIntel(m, buildPrediction(m, scopedLearned, DEFAULT_ROI5_DOMINANCE_POLICY));
       const asOfMs = Date.parse(live?.meta?.asOf ?? "");
       enforceBetSafety(rec.markets, m, Boolean(live?.meta?.stale) || !Number.isFinite(asOfMs) || Date.now() - asOfMs > 30 * 60_000 || asOfMs > Date.now() + 60_000);
       if (m.league !== "NL") {
         applyAdaptiveLearningGate(rec, m, clubActualTickets, clubArchiveTickets, adaptiveLearning);
+      } else {
+        const competitionKey = internationalCompetitionKeyOf(m);
+        const competitionLearning = competitionKey ? internationalAdaptiveLearningByCompetition[competitionKey] : undefined;
+        if (competitionKey && competitionLearning) {
+          applyAdaptiveLearningGate(
+            rec,
+            m,
+            rowsForInternationalCompetition(internationalActualTickets, competitionKey),
+            rowsForInternationalCompetition(internationalArchiveTickets, competitionKey),
+            competitionLearning,
+          );
+        }
       }
       try {
         const v = recordPredictionVersion(m, rec);
@@ -1751,12 +1831,32 @@ function runEngineUncached(): EngineRun {
   return CACHE;
 }
 
-function learnedNow(): Learned {
-  if (LEARNED) return LEARNED;
+function learnedNow(match?: MatchInput): Learned {
+  const competitionKey = match?.league === "NL" ? internationalCompetitionKeyOf(match) : null;
+  if (competitionKey && INTERNATIONAL_LEARNED_BY_COMPETITION[competitionKey]) {
+    return INTERNATIONAL_LEARNED_BY_COMPETITION[competitionKey]!;
+  }
+  if (LEARNED && match?.league !== "NL") return LEARNED;
   try {
-    return runEngine().learned;
+    const run = runEngine();
+    if (competitionKey && INTERNATIONAL_LEARNED_BY_COMPETITION[competitionKey]) {
+      return INTERNATIONAL_LEARNED_BY_COMPETITION[competitionKey]!;
+    }
+    return run.learned;
   } catch {
-    LEARNED = learnFromHistory(loadArchiveHistory().slice(-120));
+    const clubArchive = loadArchiveHistory().filter((h) => h.league !== "NL").slice(-120);
+    LEARNED = {
+      ...learnFromHistory(clubArchive),
+      errorLearn: EMPTY_LEARN,
+      internationalErrorLearnByCompetition: {},
+    };
+    if (match?.league === "NL") {
+      return {
+        ...learnFromHistory([]),
+        errorLearn: EMPTY_LEARN,
+        internationalErrorLearnByCompetition: LEARNED.internationalErrorLearnByCompetition,
+      };
+    }
     return LEARNED;
   }
 }
@@ -1797,7 +1897,7 @@ export function getPrediction(id: string): { match: MatchInput; prediction: Pred
 }
 
 export function predictMatch(match: MatchInput): PredictionRecord {
-  const rec = attachLiveIntel(match, buildPrediction(match, learnedNow(), DEFAULT_ROI5_DOMINANCE_POLICY));
+  const rec = attachLiveIntel(match, buildPrediction(match, learnedNow(match), DEFAULT_ROI5_DOMINANCE_POLICY));
   try {
     const v = recordPredictionVersion(match, rec);
     const series = versionsFor(match.id);

@@ -6,6 +6,7 @@ import { oddsPlayable } from "@/lib/markets";
 import { writePersist } from "@/lib/persist";
 import { kvSet } from "@/lib/store";
 import type { TicketRow } from "./ticket-log.ts";
+import { internationalCompetitionKeyOf, internationalCompetitionKeysOf, rowsForInternationalCompetition } from "./competition-scope.ts";
 
 export const LEARNING_MEMORY_KEY = "betgpt:learning-memory:v1";
 
@@ -47,10 +48,24 @@ export type LearningMemorySnapshot = {
     status: "FRESH" | "STALE" | "EMPTY";
   };
   contextualFactorPerformance: FactorPerformance[];
+  internationalCompetitionPerformance: Array<{
+    competitionKey: string;
+    competition: string;
+    n: number;
+    wins: number;
+    losses: number;
+    hitRate: number;
+    roi: number;
+    profitUnits: number;
+    latestSettledKickoff: string | null;
+  }>;
+  internationalAdaptiveByCompetition: Record<string, ReturnType<typeof buildAdaptiveLearningReport>>;
   latestContextSettled: Array<{
     id: string;
     kickoff: string;
     league: string;
+    competition?: string;
+    competitionKey?: string;
     market: string;
     odds: number;
     result: "win" | "lose";
@@ -69,6 +84,8 @@ export type LearningMemorySnapshot = {
     id: string;
     kickoff: string;
     league: string;
+    competition?: string;
+    competitionKey?: string;
     market: string;
     odds: number;
     result: "win" | "lose";
@@ -179,6 +196,7 @@ export function factorsOf(row: TicketRow): string[] {
   const factors = [
     `market:${row.market}`,
     `league:${row.league ?? "UNKNOWN"}`,
+    ...(row.league === "NL" ? [`competition:${internationalCompetitionKeyOf(row) ?? "international.unknown"}`] : []),
     `odds:${oddsBucket(row.odds)}`,
     `prob:${probBucket(row.modelProb)}`,
     `ev:${evBucket(row.ev)}`,
@@ -242,7 +260,15 @@ export function buildLearningMemory(
   const contextualFactorPerformance = aggregateFactors(contextualRows);
   const ledger = calculateLedgerStats(rows);
   const roi5 = learnContinuousRoi5Policy(rows, generatedAt);
-  const adaptive = buildAdaptiveLearningReport(learningRows, []);
+  const clubLearningRows = learningRows.filter((row) => row.league !== "NL");
+  const internationalLearningRows = learningRows.filter((row) => row.league === "NL");
+  const adaptive = buildAdaptiveLearningReport(clubLearningRows, []);
+  const internationalAdaptiveByCompetition = Object.fromEntries(
+    internationalCompetitionKeysOf(internationalLearningRows).map((competitionKey) => [
+      competitionKey,
+      buildAdaptiveLearningReport(rowsForInternationalCompetition(internationalLearningRows, competitionKey), []),
+    ]),
+  ) as Record<string, ReturnType<typeof buildAdaptiveLearningReport>>;
 
   const returned = canonical.reduce((sum, row) => sum + (row.result === "win" ? row.odds : 0), 0);
   const canonicalRoi = canonical.length ? (returned - canonical.length) / canonical.length : null;
@@ -273,6 +299,26 @@ export function buildLearningMemory(
   const learningFreshness = freshnessOf(learningRows);
   const contextualFreshness = freshnessOf(contextualRows);
   const contextualWins = contextualRows.filter((row) => row.result === "win").length;
+  const internationalContextRows = contextualRows.filter((row) => row.league === "NL");
+  const internationalCompetitionPerformance = internationalCompetitionKeysOf(internationalContextRows)
+    .map((competitionKey) => {
+      const xs = rowsForInternationalCompetition(internationalContextRows, competitionKey);
+      const wins = xs.filter((row) => row.result === "win").length;
+      const returned = xs.reduce((sum, row) => sum + (row.result === "win" ? row.odds : 0), 0);
+      const latestSettledKickoff = xs.length ? xs[xs.length - 1]!.kickoff : null;
+      return {
+        competitionKey,
+        competition: xs.find((row) => row.competition)?.competition ?? competitionKey,
+        n: xs.length,
+        wins,
+        losses: xs.length - wins,
+        hitRate: xs.length ? wins / xs.length : 0,
+        roi: xs.length ? (returned - xs.length) / xs.length : 0,
+        profitUnits: returned - xs.length,
+        latestSettledKickoff,
+      };
+    })
+    .sort((a, b) => b.n - a.n || b.roi - a.roi);
 
   const mature = factorPerformance.filter((f) => f.n >= 3);
   const harmfulFactors = [...mature].sort((a, b) => a.roi - b.roi || b.n - a.n).slice(0, 12);
@@ -284,6 +330,8 @@ export function buildLearningMemory(
       id: row.id,
       kickoff: row.kickoff,
       league: row.league ?? "UNKNOWN",
+      competition: row.competition,
+      competitionKey: row.competitionKey ?? internationalCompetitionKeyOf(row) ?? undefined,
       market: row.market,
       odds: row.odds,
       result: row.result,
@@ -304,6 +352,8 @@ export function buildLearningMemory(
       id: row.id,
       kickoff: row.kickoff,
       league: row.league ?? "UNKNOWN",
+      competition: row.competition,
+      competitionKey: row.competitionKey ?? internationalCompetitionKeyOf(row) ?? undefined,
       market: row.market,
       odds: row.odds,
       result: row.result,
@@ -334,6 +384,8 @@ export function buildLearningMemory(
     contextualLosses: contextualRows.length - contextualWins,
     contextualFreshness,
     contextualFactorPerformance,
+    internationalCompetitionPerformance,
+    internationalAdaptiveByCompetition,
     latestContextSettled,
     ledger,
     roi5,

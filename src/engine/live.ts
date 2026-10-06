@@ -10,6 +10,7 @@ import { matchSlug } from "@/lib/seo";
 import { logoFor } from "@/lib/crests";
 import { recordScoreDiff } from "@/lib/serp/corrections";
 import { hydrateMatchForm } from "./team-form-live";
+import { internationalCompetitionKeyOf } from "./competition-scope";
 import type {
   BookOdds,
   HistoricalMatch,
@@ -552,7 +553,7 @@ function parseIncidents(details, homeId, awayId) {
 	}
 	return out;
 }
-function parseEvents(payload, league, competition, standings, teams, mode) {
+function parseEvents(payload, league, competition, standings, teams, mode, competitionKey) {
 	const matches = [];
 	const history = [];
 	const events = payload.events ?? [];
@@ -586,6 +587,8 @@ function parseEvents(payload, league, competition, standings, teams, mode) {
 			history.push({
 				id: `espn-${e.id}`,
 				league,
+				competition,
+				competitionKey,
 				kickoff,
 				homeId: home.id,
 				awayId: away.id,
@@ -618,6 +621,7 @@ function parseEvents(payload, league, competition, standings, teams, mode) {
 			id: `espn-${e.id}`,
 			league,
 			competition,
+			competitionKey,
 			kickoff,
 			venue: comp.venue?.fullName ?? e.venue?.fullName ?? "Stade",
 			home,
@@ -680,8 +684,8 @@ async function fetchLeague(league) {
 		]);
 		const standings = standingMap(table);
 		const teams = {};
-		const up = parseEvents(board, league.id, league.name, standings, teams, "upcoming");
-		const hi = parseEvents(past, league.id, league.name, standings, teams, "history");
+		const up = parseEvents(board, league.id, league.name, standings, teams, "upcoming", league.slug);
+		const hi = parseEvents(past, league.id, league.name, standings, teams, "history", league.slug);
 		return {
 			matches: up.matches,
 			history: hi.history,
@@ -718,6 +722,7 @@ function matchFromUnibet(f, teams) {
 		id,
 		league: f.league,
 		competition: leagueName,
+		competitionKey: internationalCompetitionKeyOf({ league: f.league, competition: leagueName }) ?? undefined,
 		kickoff,
 		venue: "Stade",
 		home,
@@ -770,7 +775,7 @@ async function loadSnapshot() {
 		const today = ymd(new Date());
 		for (const league of LEAGUES) {
 			const board = await fetchBoard(league.slug, eachYmd(today, today));
-			const parsed = parseEvents(board, league.id, league.name, new Map(), teams, "upcoming");
+			const parsed = parseEvents(board, league.id, league.name, new Map(), teams, "upcoming", league.slug);
 			for (const m of parsed.matches) {
 				const i = matches.findIndex((x) => x.id === m.id || (findSame([x], m.home.name, m.away.name, m.kickoff) && true));
 				if (i >= 0) {
@@ -1162,7 +1167,7 @@ export async function fetchEspnEvent(id, leagueHint?: LeagueId) {
 			EVENT_LEAGUES.map(async (l) => {
 				try {
 					const board = await fetchBoard(l.slug, [date]);
-					const parsed = parseEvents(board, l.id, l.name, new Map(), {}, "single");
+					const parsed = parseEvents(board, l.id, l.name, new Map(), {}, "single", l.slug);
 					return parsed.matches.find((m) => m.slug === rawId) ?? null;
 				} catch {
 					return null;
@@ -1199,6 +1204,6 @@ export async function fetchEspnEvent(id, leagueHint?: LeagueId) {
 	if (venue && header.competitions?.[0] && !header.competitions[0].venue) {
 		header.competitions = [{ ...header.competitions[0], venue }];
 	}
-	const parsed = parseEvents({ events: [header] }, hit.l.id, hit.l.name, new Map(), {}, "single");
+	const parsed = parseEvents({ events: [header] }, hit.l.id, hit.l.name, new Map(), {}, "single", hit.l.slug);
 	return parsed.matches[0] ?? null;
 }

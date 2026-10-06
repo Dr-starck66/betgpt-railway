@@ -60,6 +60,8 @@ export type TicketRow = {
   kind: TicketKind;
   decision: Decision;
   league?: LeagueId;
+  competition?: string;
+  competitionKey?: string;
   pHome?: number;
   pDraw?: number;
   pAway?: number;
@@ -486,6 +488,8 @@ export function syncTickets(
         kind: "prono",
         decision: head.decision,
         league: p.league,
+        competition: p.competition,
+        competitionKey: p.competitionKey,
         pHome: p.calibrated.home,
         pDraw: p.calibrated.draw,
         pAway: p.calibrated.away,
@@ -537,6 +541,8 @@ export function syncTickets(
       existingProno.ev = head.ev;
       existingProno.decision = head.decision;
       existingProno.dailyBest = p.matchId === dailyMatchId;
+      existingProno.competition = p.competition ?? existingProno.competition;
+      existingProno.competitionKey = p.competitionKey ?? existingProno.competitionKey;
       existingProno.pHome = p.calibrated.home;
       existingProno.pDraw = p.calibrated.draw;
       existingProno.pAway = p.calibrated.away;
@@ -568,6 +574,8 @@ export function syncTickets(
           kind: "mise",
           decision: "BET",
           league: p.league,
+          competition: p.competition,
+          competitionKey: p.competitionKey,
           pHome: p.calibrated.home,
           pDraw: p.calibrated.draw,
           pAway: p.calibrated.away,
@@ -595,6 +603,8 @@ export function syncTickets(
         existing.modelProb = m.modelProb;
         existing.ev = m.ev;
         existing.stakePct = m.stakePct;
+        existing.competition = p.competition ?? existing.competition;
+        existing.competitionKey = p.competitionKey ?? existing.competitionKey;
         existing.engineVersion = ENGINE_VERSION;
         existing.learningContext = learningContextOf(p, match, m.market, m.bestOdds);
         attachCover(existing, m.cover);
@@ -617,8 +627,13 @@ export function syncTickets(
 
   const scores = scoreIndex(history, matches);
   for (const row of kept) {
+    const match = matchById.get(row.matchId);
+    if (match) {
+      row.competition = match.competition ?? row.competition;
+      row.competitionKey = match.competitionKey ?? row.competitionKey;
+    }
     if (kickoffPassed(row.kickoff)) stampLock(row);
-    settleRow(row, scores, matchById.get(row.matchId));
+    settleRow(row, scores, match);
   }
   const compact = compactTickets(kept);
   save(compact);
@@ -645,6 +660,8 @@ export function upsertHistoryPronos(
     result: "win" | "lose" | "void";
     recordedAt: string;
     league?: LeagueId;
+    competition?: string;
+    competitionKey?: string;
     pHome?: number;
     pDraw?: number;
     pAway?: number;
@@ -680,6 +697,8 @@ export function upsertHistoryPronos(
       existing.goalsHome = p.goalsHome;
       existing.goalsAway = p.goalsAway;
       existing.league = p.league ?? existing.league;
+      existing.competition = p.competition ?? existing.competition;
+      existing.competitionKey = p.competitionKey ?? existing.competitionKey;
       existing.pHome = p.pHome;
       existing.pDraw = p.pDraw;
       existing.pAway = p.pAway;
@@ -713,6 +732,8 @@ export function upsertHistoryPronos(
       goalsAway: p.goalsAway,
       result: p.result,
       league: p.league,
+      competition: p.competition,
+      competitionKey: p.competitionKey,
       pHome: p.pHome,
       pDraw: p.pDraw,
       pAway: p.pAway,
