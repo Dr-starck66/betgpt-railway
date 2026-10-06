@@ -162,3 +162,44 @@ test("secondary market result teaches contextual memory but never canonical ROI"
   assert.equal(report.contextualFreshness.status, "FRESH");
   assert.equal(report.latestContextSettled[0]?.market, "BTTS_Y");
 });
+
+
+test("international competition performance is split instead of pooled", () => {
+  const nations = {
+    ...row(30, "win", 2.0),
+    id: "nations",
+    matchId: "nations",
+    league: "NL" as const,
+    competition: "Ligue des nations",
+    competitionKey: "uefa.nations",
+  };
+  const afconq = {
+    ...row(31, "lose", 2.0),
+    id: "afconq",
+    matchId: "afconq",
+    league: "NL" as const,
+    competition: "Qualifications Coupe d'Afrique des Nations",
+    competitionKey: "caf.nations_qual",
+  };
+  const wcaf = {
+    ...row(32, "lose", 2.0),
+    id: "wcaf",
+    matchId: "wcaf",
+    league: "NL" as const,
+    competition: "Qualifications Coupe du monde - CAF",
+    competitionKey: "fifa.worldq.caf",
+  };
+  const report = buildLearningMemory([nations, afconq, wcaf], "2026-10-07T00:00:00.000Z");
+
+  const byKey = new Map(report.internationalCompetitionPerformance.map((x) => [x.competitionKey, x]));
+  assert.equal(byKey.get("uefa.nations")?.n, 1);
+  assert.equal(byKey.get("uefa.nations")?.wins, 1);
+  assert.equal(byKey.get("caf.nations_qual")?.n, 1);
+  assert.equal(byKey.get("caf.nations_qual")?.losses, 1);
+  assert.equal(byKey.get("fifa.worldq.caf")?.n, 1);
+  assert.equal(byKey.get("fifa.worldq.caf")?.losses, 1);
+
+  const nationsFactors = report.latestContextSettled.find((x) => x.id === "nations")?.factors ?? [];
+  assert.ok(nationsFactors.includes("competition:uefa.nations"));
+  assert.ok(!nationsFactors.includes("competition:caf.nations_qual"));
+});
