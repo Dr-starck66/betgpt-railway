@@ -94,7 +94,9 @@
     "test:semantic-autorepair": "node --test scripts/astra-semantic-flow-autorepair.test.mjs",
     "seo:semantic-autorepair:verify": "npm run test:semantic-autorepair && node scripts/astra-semantic-flow-autorepair.mjs --apply --strict && npm run seo:semantic-flow",
     "test:semantic-types": "tsc --noEmit",
-    "test:odds-truth": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/bookmaker-truth.test.ts && node scripts/astra-odds-truth-guard.mjs"
+    "test:odds-truth": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/bookmaker-truth.test.ts && node scripts/astra-odds-truth-guard.mjs",
+    "authority:build": "node scripts/astra-authority-citation-engine.mjs",
+    "authority:zenodo": "node scripts/astra-authority-citation-engine.mjs --zenodo"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.4",
