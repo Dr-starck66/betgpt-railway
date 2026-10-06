@@ -48,6 +48,48 @@ function LedgerPage() {
     ? format(new Date(data.liveAsOf), "d MMM · HH:mm", { locale: fr })
     : "";
   const ev = data.evidence;
+  const datasetJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    "@id": `${SITE_URL}/ledger#prediction-dataset`,
+    name: "Registre public des pronostics football BetGPT",
+    description:
+      "Registre public BetGPT des pronostics football publiés, avec horodatage avant coup d’envoi, marché, probabilité, cote lorsqu’elle est disponible, version du moteur et résultat après règlement. Les pertes restent visibles et les simulations historiques sont distinguées des pronostics réellement publiés.",
+    url: `${SITE_URL}/ledger`,
+    identifier: `${SITE_URL}/ledger#prediction-dataset`,
+    creator: {
+      "@type": "Organization",
+      name: "BetGPT",
+      url: SITE_URL,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "BetGPT",
+      url: SITE_URL,
+    },
+    isAccessibleForFree: true,
+    keywords: [
+      "pronostics football",
+      "pronostics sportifs",
+      "historique pronostics",
+      "ROI paris sportifs",
+      "drawdown",
+      "Brier score",
+      "probabilités football",
+    ],
+    distribution: [
+      {
+        "@type": "DataDownload",
+        encodingFormat: "application/json",
+        contentUrl: `${SITE_URL}/evidence.json`,
+      },
+      {
+        "@type": "DataDownload",
+        encodingFormat: "text/csv",
+        contentUrl: `${SITE_URL}/evidence.csv`,
+      },
+    ],
+  };
   const engineN = data.historyN ?? 0;
   const engineReady = engineN >= 30 && Boolean(best && best.brier > 0);
 
@@ -58,7 +100,14 @@ function LedgerPage() {
   }, [r.rows, tab]);
 
   return (
-    <AstraSidewings
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(datasetJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
+      <AstraSidewings
       ariaLabel="Navigation contextuelle du bilan BetGPT"
       left={{
         eyebrow: "Comprendre le bilan",
@@ -661,7 +710,8 @@ function LedgerPage() {
         </div>
       )}
       </div>
-    </AstraSidewings>
+      </AstraSidewings>
+    </>
   );
 }
 
