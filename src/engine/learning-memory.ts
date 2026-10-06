@@ -1,6 +1,6 @@
 import { buildAdaptiveLearningReport } from "./adaptive-learning.ts";
 import { calculateLedgerStats } from "./ledger-stats.ts";
-import { isCanonicalRoi5Selection } from "./ledger-pick.ts";
+import { fixtureKey, isCanonicalRoi5Selection } from "./ledger-pick.ts";
 import { learnContinuousRoi5Policy } from "./roi5-continuous-learning.ts";
 import { oddsPlayable } from "@/lib/markets";
 import { writePersist } from "@/lib/persist";
@@ -75,7 +75,7 @@ function honestSettledBet(row: TicketRow): row is TicketRow & { result: "win" | 
 function learningRowsOf(rows: TicketRow[]): Array<TicketRow & { result: "win" | "lose" }> {
   const byFixtureMarket = new Map<string, TicketRow & { result: "win" | "lose" }>();
   for (const row of rows.filter(honestSettledObservation).sort((a, b) => a.kickoff.localeCompare(b.kickoff))) {
-    const key = `${row.matchId}|${row.market}`;
+    const key = `${fixtureKey(row.home, row.away, row.kickoff)}|${row.market}`;
     const prev = byFixtureMarket.get(key);
     if (!prev) {
       byFixtureMarket.set(key, row);
