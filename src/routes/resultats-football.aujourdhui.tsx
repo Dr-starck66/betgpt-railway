@@ -19,13 +19,15 @@ function pageDescription(n: number) {
 export const Route = createFileRoute("/resultats-football/aujourdhui")({
   loader: () => getResultsBoard(),
   head: ({ loaderData }) => {
-    const n = loaderData ? bucketResults(loaderData.rows).today.length : 0;
+    const dayRows = loaderData ? bucketResults(loaderData.rows).today : [];
+    const n = dayRows.length;
+    const durableN = dayRows.filter((row) => row.detailAvailable).length;
     const description = pageDescription(n);
     return {
       meta: [
         { title: "Résultats football aujourd’hui : scores finaux du jour | BetGPT" },
         { name: "description", content: description },
-        { name: "robots", content: n ? "index, follow, max-snippet:-1, max-image-preview:large" : "noindex, follow" },
+        { name: "robots", content: durableN ? "index, follow, max-snippet:-1, max-image-preview:large" : "noindex, follow" },
         { property: "og:title", content: `${TITLE} | BetGPT` },
         { property: "og:description", content: description },
         { property: "og:url", content: URL },
@@ -41,7 +43,7 @@ function TodayResults() {
   const data = Route.useLoaderData();
   const rows = bucketResults(data.rows).today;
   const description = pageDescription(rows.length);
-  const list = rows.slice(0, 50).map((row) => ({
+  const list = rows.filter((row) => row.detailAvailable).slice(0, 50).map((row) => ({
     name: `${row.home} ${row.scoreHome}–${row.scoreAway} ${row.away} — ${row.competition}`,
     url: `${SITE_URL}/match/${row.slug}`,
   }));
