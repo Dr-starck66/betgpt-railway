@@ -170,6 +170,7 @@ function fotMobRows(payload: unknown): ResultRow[] {
         scoreAway,
         kickoff,
         day,
+        detailAvailable: false,
       });
     }
   }
@@ -227,6 +228,7 @@ function espnRows(payload: unknown, competition: EspnCompetition): ResultRow[] {
       scoreAway,
       kickoff,
       day,
+      detailAvailable: false,
     });
   }
   return rows;
@@ -310,7 +312,8 @@ export async function loadResultsBoardData(): Promise<{ asOf: string; rows: Resu
     .filter((h) => Date.parse(h.kickoff) >= cutoff)
     .map(rowFromHistory)
     .filter((r): r is ResultRow => !!r);
-  const mergedExternal = mergeResults(fotmob, fromArchive);
+  // If a provider-only score matches our durable archive, keep the durable row so the dossier link is real.
+  const mergedExternal = mergeResults(fromArchive, fotmob);
   const rows = recentResults(mergeResults(fromDesk, mergedExternal));
   return { asOf: fotmob.length ? new Date().toISOString() : desk.liveAsOf, rows };
 }
