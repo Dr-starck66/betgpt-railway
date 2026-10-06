@@ -1,7 +1,7 @@
 import { CITE_LEAGUES } from "@/engine/cite-public";
 import { hydrateLiveFromDisk } from "@/engine/live";
 import { archiveSlug, loadArchiveHistory } from "@/engine/archive";
-import { loadTickets, stablePublicEvidenceTickets } from "@/engine/ticket-log";
+import { stablePublicEvidenceTickets } from "@/engine/ticket-log";
 import { HUNTER_SCENARIOS } from "@/engine/hunter";
 import { LEAGUE_FR, LEAGUE_SLUG } from "@/engine/stats";
 import { BLOG } from "@/lib/blog";
@@ -22,6 +22,7 @@ import { buildEdition } from "@/lib/editorial/engine";
 import { readLedger } from "@/lib/editorial/ledger-store";
 import { classicNewsPaths, renderNewsSitemap } from "@/lib/editorial/feed";
 import { ASTRA_SELF_HEAL_SITEMAP_ROUTES } from "@/lib/seo/astra-self-heal-sitemap";
+import { readIaThread } from "@/engine/forum-ia";
 
 export type SitemapImage = { loc: string; title?: string; caption?: string };
 export type SitemapUrl = {
@@ -58,10 +59,10 @@ export async function loadSitemapUrls(): Promise<SitemapUrl[]> {
   const live = hydrateLiveFromDisk();
   const liveMatches = live?.matches ?? [];
   const seen = new Set(liveMatches.map((m: { id: string }) => m.id));
-  const tickets = loadTickets();
-  const ticketIds = new Set(tickets.map((t) => t.matchId));
+  // Every durable archive match that can resolve to a public dossier belongs in the sitemap.
+  // Restricting this to betting-ticket IDs left hundreds of valid historical pages undiscoverable.
   const extra = loadArchiveHistory()
-    .filter((h) => ticketIds.has(h.id) && !seen.has(h.id))
+    .filter((h) => !seen.has(h.id))
     .map((h) => ({
       id: h.id,
       slug: archiveSlug(h),
@@ -87,18 +88,20 @@ export async function loadSitemapUrls(): Promise<SitemapUrl[]> {
     ...liveMatches.filter((m: MatchInput) => m.status === "finished"),
     ...localHistory,
   ];
+  const recentCutoffDay = parisOffsetDay(-21);
+  const recentLocalResultRows = localResultRows.filter((row: any) => parisDay(String(row.kickoff ?? "")) >= recentCutoffDay);
   for (const comp of SERP_COMPETITIONS) {
-    if (localResultRows.some((row: any) => row.league === comp.league)) {
+    if (recentLocalResultRows.some((row: any) => row.league === comp.league)) {
       resultLeafPaths.add(comp.resultsPath);
     }
   }
   const todayKey = parisOffsetDay(0);
   const yesterdayKey = parisOffsetDay(-1);
   const resultDay = (row: any) => parisDay(String(row.kickoff ?? ""));
-  if (localResultRows.some((row: any) => resultDay(row) === todayKey)) {
+  if (recentLocalResultRows.some((row: any) => resultDay(row) === todayKey)) {
     resultLeafPaths.add("/resultats-football/aujourdhui");
   }
-  if (localResultRows.some((row: any) => resultDay(row) === yesterdayKey)) {
+  if (recentLocalResultRows.some((row: any) => resultDay(row) === yesterdayKey)) {
     resultLeafPaths.add("/resultats-football/hier");
   }
   urls = urls.filter(
@@ -107,6 +110,43 @@ export async function loadSitemapUrls(): Promise<SitemapUrl[]> {
       !url.path.startsWith("/resultats-football/") ||
       resultLeafPaths.has(url.path),
   );
+  // Forum round pages are emitted by the current desk and are indexable while exposed.
+  // Mirror those exact deterministic IDs in the sitemap instead of leaving crawler-only URLs.
+  const roundPaths = new Set<string>();
+  for (const m of liveMatches as MatchInput[]) {
+    if (skipEuropeFrenchProno(m) || !durableForumLeague(m.league)) continue;
+    const phase =
+      m.league === "CL" || m.league === "EL"
+        ? String(m.phaseLabel ?? "phase").slice(0, 48)
+        : String(m.kickoff ?? "").slice(0, 10);
+    const id = `journee-${m.league}-${phase}`.toLowerCase().replace(/[^a-z0-9-]+/g, "-");
+    if (id && phase) roundPaths.add(`/forum/${id}`);
+  }
+  for (const path of roundPaths) {
+    if (!sitemapAllowed(path) || urls.some((url) => url.path === path)) continue;
+    urls.push({
+      loc: `${SITE_URL}${path}`,
+      path,
+      title: "Table ronde football BetGPT",
+      group: "Forum",
+      lastmod: sitemapDate(live?.fetchedAt),
+      changefreq: "hourly",
+      priority: "0.65",
+    });
+  }
+  const iaThread = readIaThread();
+  if (iaThread && iaThread.indexable !== false && iaThread.href && sitemapAllowed(iaThread.href) && !urls.some((url) => url.path === iaThread.href)) {
+    urls.push({
+      loc: `${SITE_URL}${iaThread.href}`,
+      path: iaThread.href,
+      title: iaThread.title,
+      group: "Forum",
+      lastmod: sitemapDate(iaThread.published),
+      changefreq: "hourly",
+      priority: "0.65",
+    });
+  }
+
   const edition = buildEdition({ now: new Date(), matches: liveMatches as MatchInput[], frozen: readLedger() });
   for (const row of stablePublicEvidenceTickets()) {
     if (!row.id || !row.home || !row.away || !row.recordedAt) continue;
