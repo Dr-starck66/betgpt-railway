@@ -81,13 +81,20 @@ function scaleFromHit(hit: number, n: number, base = 1): number {
 export function learnFromErrors(rows: TicketRow[]): ErrorLearn {
   const settled = rows
     .filter((r) => (r.result === "win" || r.result === "lose") && r.modelProb > 0.05)
-    .filter((r) => !isShortPricedWinner(r))
     .sort((a, b) => a.kickoff.localeCompare(b.kickoff));
-  const pronos = settled.filter((r) => r.kind !== "mise");
-  const mises = settled.filter((r) => r.kind === "mise");
-  if (pronos.length < 8 && mises.length < 3) return { ...EMPTY_LEARN, n: settled.length };
+  // Calibration learns from every settled pre-match 1X2 observation, including
+  // short-priced favorites. Betting KPI/safety remains isolated: short-priced
+  // rows are still excluded from the actual-mise performance channel.
+  const pronos = settled.filter(
+    (r) =>
+      r.kind !== "mise" &&
+      (r.market === "1X2_H" || r.market === "1X2_D" || r.market === "1X2_A"),
+  );
+  const mises = settled.filter((r) => r.kind === "mise" && !isShortPricedWinner(r));
+  const eligibleSettled = [...pronos, ...mises].sort((a, b) => a.kickoff.localeCompare(b.kickoff));
+  if (pronos.length < 8 && mises.length < 3) return { ...EMPTY_LEARN, n: eligibleSettled.length };
 
-  const train = pronos.length >= 8 ? pronos : settled;
+  const train = pronos.length >= 8 ? pronos : eligibleSettled;
   const recentCut = train.length - 25;
   const pairs = train.map((r, i) => {
     const wrong = r.result === "lose";
