@@ -1,0 +1,49 @@
+name: ASTRA BetGPT Learning Proof Gate Ω
+
+on:
+  pull_request:
+    paths:
+      - "src/engine/ticket-log.ts"
+      - "src/engine/ticket-log.test.ts"
+      - "src/engine/learning-memory.ts"
+      - "src/engine/learning-memory.test.ts"
+      - "src/engine/adaptive-learning.ts"
+      - "src/engine/roi5-continuous-learning.ts"
+      - "server/api/learning-checkpoint.get.ts"
+      - ".github/workflows/astra-learning-proof.yml"
+  push:
+    branches: [main]
+    paths:
+      - "src/engine/ticket-log.ts"
+      - "src/engine/ticket-log.test.ts"
+      - "src/engine/learning-memory.ts"
+      - "src/engine/learning-memory.test.ts"
+      - "src/engine/adaptive-learning.ts"
+      - "src/engine/roi5-continuous-learning.ts"
+      - "server/api/learning-checkpoint.get.ts"
+      - ".github/workflows/astra-learning-proof.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  learning-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Check learning regression tests
+        run: >
+          node --experimental-strip-types --import ./scripts/ts-alias.mjs --test
+          src/engine/ticket-log.test.ts
+          src/engine/learning-memory.test.ts
+          src/engine/roi5-continuous-learning.test.ts
+          src/engine/adaptive-learning.test.ts
+      - name: Typecheck
+        run: npm run typecheck

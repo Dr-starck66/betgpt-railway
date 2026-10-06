@@ -173,20 +173,33 @@ let ticketsHydrated = false;
 const RUNTIME_CHECKPOINT_URL =
   "https://raw.githubusercontent.com/Dr-starck66/betgpt-railway/runtime-memory/runtime-learning-checkpoint.json";
 
+export function parseRuntimeCheckpointPayload(payload: unknown): TicketRow[] {
+  if (!payload || typeof payload !== "object") return [];
+  const p = payload as {
+    schema?: unknown;
+    tickets?: unknown;
+    refresh?: { status?: unknown } | null;
+  };
+  const supported =
+    p.schema === "astra-betgpt-runtime-checkpoint/v1" ||
+    p.schema === "astra-betgpt-runtime-checkpoint/v2";
+  if (!supported || !Array.isArray(p.tickets)) return [];
+  if (p.schema === "astra-betgpt-runtime-checkpoint/v2" && p.refresh?.status !== "PASS") return [];
+  return parseRows(p.tickets);
+}
+
 async function loadRuntimeCheckpoint(): Promise<TicketRow[]> {
   try {
     const res = await fetch(RUNTIME_CHECKPOINT_URL, {
       headers: {
         accept: "application/json",
         "cache-control": "no-cache",
-        "user-agent": "BetGPT-Learning-Failover/1.0",
+        "user-agent": "BetGPT-Learning-Failover/2.0",
       },
       cache: "no-store",
     });
     if (!res.ok) return [];
-    const payload = (await res.json()) as { schema?: string; tickets?: unknown };
-    if (payload.schema !== "astra-betgpt-runtime-checkpoint/v1" || !Array.isArray(payload.tickets)) return [];
-    return parseRows(payload.tickets);
+    return parseRuntimeCheckpointPayload(await res.json());
   } catch {
     return [];
   }
@@ -716,6 +729,9 @@ export function upsertHistoryPronos(
     rows.push(row);
   }
   save(rows);
+  void import("./learning-memory")
+    .then((m) => m.persistLearningMemory(rows))
+    .catch(() => undefined);
   return rows;
 }
 

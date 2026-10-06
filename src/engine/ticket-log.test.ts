@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { stablePublicEvidenceTickets, type TicketRow } from "./ticket-log.ts";
+import { parseRuntimeCheckpointPayload, stablePublicEvidenceTickets, type TicketRow } from "./ticket-log.ts";
 import {
   compactTickets,
   fixtureKey,
@@ -160,5 +160,53 @@ describe("public prediction evidence durability", () => {
 
     const rows = stablePublicEvidenceTickets([stable, ephemeral]);
     assert.deepEqual(rows.map((row) => row.id), ["espn-401879291:1X2"]);
+  });
+});
+
+
+describe("runtime learning checkpoint compatibility", () => {
+  it("hydrates the current v2 checkpoint when refresh proof passed", () => {
+    const rows = parseRuntimeCheckpointPayload({
+      schema: "astra-betgpt-runtime-checkpoint/v2",
+      refresh: { status: "PASS" },
+      tickets: [
+        {
+          ...(t({ id: "runtime-v2", matchId: "runtime-v2" }) as TicketRow),
+          label: "Home",
+          stakePct: 0,
+          modelProb: 0.5,
+          ev: 0,
+          dailyBest: false,
+        },
+      ],
+    });
+    assert.equal(rows.length, 1);
+    assert.equal(rows[0]!.id, "runtime-v2");
+  });
+
+  it("fails closed on a v2 checkpoint whose live refresh failed", () => {
+    const rows = parseRuntimeCheckpointPayload({
+      schema: "astra-betgpt-runtime-checkpoint/v2",
+      refresh: { status: "FAIL" },
+      tickets: [t({ id: "bad-v2" })],
+    });
+    assert.equal(rows.length, 0);
+  });
+
+  it("keeps backward compatibility with v1 checkpoints", () => {
+    const rows = parseRuntimeCheckpointPayload({
+      schema: "astra-betgpt-runtime-checkpoint/v1",
+      tickets: [
+        {
+          ...(t({ id: "runtime-v1", matchId: "runtime-v1" }) as TicketRow),
+          label: "Home",
+          stakePct: 0,
+          modelProb: 0.5,
+          ev: 0,
+          dailyBest: false,
+        },
+      ],
+    });
+    assert.equal(rows.length, 1);
   });
 });

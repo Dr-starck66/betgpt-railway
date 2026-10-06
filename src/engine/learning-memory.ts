@@ -1,7 +1,8 @@
 import { buildAdaptiveLearningReport } from "./adaptive-learning.ts";
 import { calculateLedgerStats } from "./ledger-stats.ts";
-import { isCanonicalRoi5Selection } from "./ledger-pick.ts";
+import { fixtureKey, isCanonicalRoi5Selection } from "./ledger-pick.ts";
 import { learnContinuousRoi5Policy } from "./roi5-continuous-learning.ts";
+import { oddsPlayable } from "@/lib/markets";
 import { writePersist } from "@/lib/persist";
 import { kvSet } from "@/lib/store";
 import type { TicketRow } from "./ticket-log.ts";
@@ -26,6 +27,16 @@ export type LearningMemorySnapshot = {
   canonicalWins: number;
   canonicalLosses: number;
   canonicalRoi: number | null;
+  learningSettledN: number;
+  learningWins: number;
+  learningLosses: number;
+  learningSimulatedRoi: number | null;
+  learningFreshness: {
+    latestSettledKickoff: string | null;
+    settledLast24h: number;
+    settledLast7d: number;
+    status: "FRESH" | "STALE" | "EMPTY";
+  };
   ledger: ReturnType<typeof calculateLedgerStats>;
   roi5: ReturnType<typeof learnContinuousRoi5Policy>;
   adaptive: ReturnType<typeof buildAdaptiveLearningReport>;
@@ -40,18 +51,42 @@ export type LearningMemorySnapshot = {
     odds: number;
     result: "win" | "lose";
     pnlUnits: number;
+    kind: "mise" | "prono";
+    decision: string;
+    evidence: "ACTUAL_BET" | "OBSERVATIONAL_PREDICTION";
     factors: string[];
   }>;
 };
 
-function honestSettled(row: TicketRow): row is TicketRow & { result: "win" | "lose" } {
+function honestSettledObservation(row: TicketRow): row is TicketRow & { result: "win" | "lose" } {
   if (row.result !== "win" && row.result !== "lose") return false;
-  if (!isCanonicalRoi5Selection(row)) return false;
-  if (row.kind !== "mise") return false;
+  if (row.market !== "1X2_H" && row.market !== "1X2_A") return false;
+  if (!oddsPlayable(row.odds)) return false;
   if (/cl[oô]ture|d[eé]riv[eé]|archive/i.test(row.book || "")) return false;
   const recorded = Date.parse(row.recordedAt);
   const kickoff = Date.parse(row.kickoff);
   return Number.isFinite(recorded) && Number.isFinite(kickoff) && recorded < kickoff;
+}
+
+function honestSettledBet(row: TicketRow): row is TicketRow & { result: "win" | "lose" } {
+  return honestSettledObservation(row) && row.kind === "mise" && isCanonicalRoi5Selection(row);
+}
+
+function learningRowsOf(rows: TicketRow[]): Array<TicketRow & { result: "win" | "lose" }> {
+  const byFixtureMarket = new Map<string, TicketRow & { result: "win" | "lose" }>();
+  for (const row of rows.filter(honestSettledObservation).sort((a, b) => a.kickoff.localeCompare(b.kickoff))) {
+    const key = `${fixtureKey(row.home, row.away, row.kickoff)}|${row.market}`;
+    const prev = byFixtureMarket.get(key);
+    if (!prev) {
+      byFixtureMarket.set(key, row);
+      continue;
+    }
+    const preferMise = prev.kind !== "mise" && row.kind === "mise";
+    const sameKindLater =
+      prev.kind === row.kind && Date.parse(row.recordedAt) > Date.parse(prev.recordedAt);
+    if (preferMise || sameKindLater) byFixtureMarket.set(key, row);
+  }
+  return [...byFixtureMarket.values()].sort((a, b) => a.kickoff.localeCompare(b.kickoff));
 }
 
 function bucket(value: number, cuts: number[], labels: string[]): string {
@@ -150,20 +185,42 @@ export function buildLearningMemory(
   rows: TicketRow[],
   generatedAt = new Date().toISOString(),
 ): LearningMemorySnapshot {
-  const canonical = rows.filter(honestSettled);
-  const factorPerformance = aggregateFactors(canonical);
+  const learningRows = learningRowsOf(rows);
+  const canonical = learningRows.filter(honestSettledBet);
+  const factorPerformance = aggregateFactors(learningRows);
   const ledger = calculateLedgerStats(rows);
   const roi5 = learnContinuousRoi5Policy(rows, generatedAt);
-  const adaptive = buildAdaptiveLearningReport(rows, []);
+  const adaptive = buildAdaptiveLearningReport(learningRows, []);
 
   const returned = canonical.reduce((sum, row) => sum + (row.result === "win" ? row.odds : 0), 0);
   const canonicalRoi = canonical.length ? (returned - canonical.length) / canonical.length : null;
   const canonicalWins = canonical.filter((row) => row.result === "win").length;
+  const learningReturned = learningRows.reduce((sum, row) => sum + (row.result === "win" ? row.odds : 0), 0);
+  const learningWins = learningRows.filter((row) => row.result === "win").length;
+  const learningSimulatedRoi = learningRows.length
+    ? (learningReturned - learningRows.length) / learningRows.length
+    : null;
+  const generatedMs = Date.parse(generatedAt);
+  const nowMs = Number.isFinite(generatedMs) ? generatedMs : Date.now();
+  const settledLast24h = learningRows.filter((row) => nowMs - Date.parse(row.kickoff) <= 24 * 3600_000).length;
+  const settledLast7d = learningRows.filter((row) => nowMs - Date.parse(row.kickoff) <= 7 * 24 * 3600_000).length;
+  const latestSettledKickoff = learningRows.length ? learningRows[learningRows.length - 1]!.kickoff : null;
+  const latestMs = latestSettledKickoff ? Date.parse(latestSettledKickoff) : NaN;
+  const learningFreshness = {
+    latestSettledKickoff,
+    settledLast24h,
+    settledLast7d,
+    status: !latestSettledKickoff
+      ? ("EMPTY" as const)
+      : Number.isFinite(latestMs) && nowMs - latestMs <= 7 * 24 * 3600_000
+        ? ("FRESH" as const)
+        : ("STALE" as const),
+  };
 
   const mature = factorPerformance.filter((f) => f.n >= 3);
   const harmfulFactors = [...mature].sort((a, b) => a.roi - b.roi || b.n - a.n).slice(0, 12);
   const helpfulFactors = [...mature].sort((a, b) => b.roi - a.roi || b.n - a.n).slice(0, 12);
-  const latestSettled = [...canonical]
+  const latestSettled = [...learningRows]
     .sort((a, b) => b.kickoff.localeCompare(a.kickoff))
     .slice(0, 25)
     .map((row) => ({
@@ -174,6 +231,9 @@ export function buildLearningMemory(
       odds: row.odds,
       result: row.result,
       pnlUnits: row.result === "win" ? row.odds - 1 : -1,
+      kind: row.kind,
+      decision: row.decision,
+      evidence: row.kind === "mise" && row.decision === "BET" ? "ACTUAL_BET" : "OBSERVATIONAL_PREDICTION",
       factors: factorsOf(row),
     }));
 
@@ -185,6 +245,11 @@ export function buildLearningMemory(
     canonicalWins,
     canonicalLosses: canonical.length - canonicalWins,
     canonicalRoi,
+    learningSettledN: learningRows.length,
+    learningWins,
+    learningLosses: learningRows.length - learningWins,
+    learningSimulatedRoi,
+    learningFreshness,
     ledger,
     roi5,
     adaptive,

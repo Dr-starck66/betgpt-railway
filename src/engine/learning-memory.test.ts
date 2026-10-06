@@ -77,6 +77,41 @@ test("pre-match causal factors survive settlement and are attributable", () => {
   assert.ok(factors.includes("infoCoverage:HIGH"));
 });
 
+
+test("honest pre-match 1X2 observations teach the learner even when no canonical bet was placed", () => {
+  const observed = {
+    ...row(6, "win", 2.15),
+    kind: "prono" as const,
+    decision: "WATCH" as const,
+    stakePct: 0,
+  };
+  const report = buildLearningMemory([observed], "2026-10-02T00:00:00.000Z");
+  assert.equal(report.canonicalSettledN, 0);
+  assert.equal(report.canonicalRoi, null);
+  assert.equal(report.learningSettledN, 1);
+  assert.equal(report.learningWins, 1);
+  assert.equal(report.learningLosses, 0);
+  assert.ok((report.learningSimulatedRoi ?? 0) > 1);
+  assert.equal(report.latestSettled[0]?.evidence, "OBSERVATIONAL_PREDICTION");
+  assert.ok(report.factorPerformance.some((f) => f.factor === "market:1X2_H" && f.n === 1));
+});
+
+test("learning memory deduplicates prono and mise copies of the same canonical selection", () => {
+  const mise = row(7, "lose", 2.2);
+  const prono = {
+    ...mise,
+    id: "t7:prono",
+    kind: "prono" as const,
+    decision: "BET" as const,
+    stakePct: 0,
+    recordedAt: new Date(Date.parse(mise.recordedAt) - 1000).toISOString(),
+  };
+  const report = buildLearningMemory([prono, mise], "2026-10-02T00:00:00.000Z");
+  assert.equal(report.learningSettledN, 1);
+  assert.equal(report.canonicalSettledN, 1);
+  assert.equal(report.latestSettled[0]?.evidence, "ACTUAL_BET");
+});
+
 test("secondary markets never contaminate canonical learning ROI", () => {
   const canonical = row(4, "win", 2.0);
   const secondary = {
