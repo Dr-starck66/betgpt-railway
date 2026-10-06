@@ -26,10 +26,7 @@ function ResultCards({ rows, label }: { rows: ResultRow[]; label: string }) {
     <ol aria-label={label} className="grid gap-3 lg:grid-cols-2">
       {rows.map((row) => (
         <li key={row.slug}>
-          <a
-            href={matchPath(row)}
-            className="surface-card group block p-4 transition hover:-translate-y-0.5 hover:border-sage/25 sm:p-5"
-          >
+          <article className="surface-card block p-4 sm:p-5">
             <div className="flex items-center justify-between gap-3 text-xs text-muted">
               <span className="font-semibold uppercase tracking-[0.12em]">{row.competition}</span>
               <span className="tabular">{parisTime(row.kickoff) || "—"}</span>
@@ -52,9 +49,15 @@ function ResultCards({ rows, label }: { rows: ResultRow[]; label: string }) {
 
             <div className="mt-4 flex items-center justify-between gap-3">
               <span className="chip-pill min-h-0 py-1">Terminé</span>
-              <span className="text-xs font-semibold text-link opacity-80 transition group-hover:opacity-100">Fiche du match →</span>
+              {row.detailAvailable ? (
+                <a href={matchPath(row)} className="text-xs font-semibold text-link hover:underline">
+                  Fiche du match →
+                </a>
+              ) : (
+                <span className="text-xs font-medium text-muted">Score fournisseur · dossier non archivé</span>
+              )}
             </div>
-          </a>
+          </article>
         </li>
       ))}
     </ol>
