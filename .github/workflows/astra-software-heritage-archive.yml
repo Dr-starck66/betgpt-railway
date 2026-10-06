@@ -1,0 +1,47 @@
+name: ASTRA Software Heritage Archive Ω
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "CITATION.cff"
+      - "codemeta.json"
+      - "data/authority/**"
+      - "scripts/astra-software-heritage-archive.mjs"
+      - ".github/workflows/astra-software-heritage-archive.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: astra-software-heritage-archive
+  cancel-in-progress: false
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Request independent archival and persistent SWHID
+        run: node scripts/astra-software-heritage-archive.mjs
+
+      - name: Persist third-party archival proof
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "ASTRA Authority Citation Engine"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/authority/software-heritage.json
+          if git diff --cached --quiet; then
+            echo "ASTRA_SWH_NO_CHANGE"
+            exit 0
+          fi
+          git commit -m "authority: record Software Heritage SWHID"
+          git pull --rebase origin main
+          git push
