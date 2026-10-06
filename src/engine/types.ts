@@ -116,6 +116,7 @@ export type MatchInput = {
   id: string;
   league: LeagueId;
   competition: string;
+  competitionKey?: string;
   kickoff: string;
   venue: string;
   referee?: DataPoint<string>;
@@ -332,6 +333,7 @@ export type PredictionRecord = {
   kickoff: string;
   league: LeagueId;
   competition: string;
+  competitionKey?: string;
   venue: string;
   home: { id: string; name: string; short: string; formation: string; logo?: string; color?: string };
   away: { id: string; name: string; short: string; formation: string; logo?: string; color?: string };
@@ -385,6 +387,8 @@ export type DataSourceKind = "official-history" | "live-provider" | "market" | "
 export type HistoricalMatch = {
   id: string;
   league: LeagueId;
+  competition?: string;
+  competitionKey?: string;
   kickoff: string;
   homeId: string;
   awayId: string;
