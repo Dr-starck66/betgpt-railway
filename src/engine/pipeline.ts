@@ -1143,6 +1143,7 @@ export function learnFromHistory(history: HistoricalMatch[] = generateHistory())
       tacticalReliability: 0.16,
       agentWeights: { ...DEFAULT_AGENT_WEIGHTS },
       errorLearn: EMPTY_LEARN,
+      internationalErrorLearn: EMPTY_LEARN,
       championship: {
         models: [],
         coaches: [],
@@ -1342,6 +1343,7 @@ export function learnFromHistory(history: HistoricalMatch[] = generateHistory())
     tacticalReliability,
     agentWeights: learnedWeights,
     errorLearn: EMPTY_LEARN,
+    internationalErrorLearn: EMPTY_LEARN,
     championship: {
       models: modelMetrics,
       coaches: coachMetrics,
