@@ -1,0 +1,17 @@
+{
+  "title": "BetGPT Public Football Prediction Evidence Dataset",
+  "upload_type": "dataset",
+  "description": "Public snapshot of BetGPT football predictions and audit metadata, with timestamped evidence exports and links to methodology and ledger.",
+  "creators": [
+    {
+      "name": "BetGPT",
+      "affiliation": "betgpt.live"
+    }
+  ],
+  "keywords": [
+    "football",
+    "sports predictions",
+    "probability",
+    "prediction audit"
+  ]
+}
