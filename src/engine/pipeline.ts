@@ -1509,6 +1509,7 @@ function pickDailyBest(
 let CACHE: EngineRun | null = null;
 let CACHE_KEY = "";
 let LEARNED: Learned | null = null;
+let INTERNATIONAL_LEARNED_BY_COMPETITION: Record<string, Learned> = {};
 
 function settleFromArchive(m: MatchInput): MatchInput {
   const hist = officialResult({ id: m.id, homeName: m.home.name, awayName: m.away.name, kickoff: m.kickoff });
@@ -1618,8 +1619,9 @@ function runEngineUncached(): EngineRun {
       ),
     ]),
   ) as Record<string, AdaptiveLearningReport>;
-  const learnSlice = history.slice(-450);
-  const learnedBase = learnFromHistory(learnSlice.length >= 12 ? learnSlice : history);
+  const clubHistory = history.filter((h) => h.league !== "NL");
+  const learnSlice = clubHistory.slice(-450);
+  const learnedBase = learnFromHistory(learnSlice.length >= 12 ? learnSlice : clubHistory);
   const historyPicks = [];
   const rolling: TicketRow[] = [];
   let walkLearn: ErrorLearn = EMPTY_LEARN;
@@ -1705,7 +1707,27 @@ function runEngineUncached(): EngineRun {
     ]),
   ) as Record<string, ErrorLearn>;
   const learned = { ...learnedBase, errorLearn, internationalErrorLearnByCompetition };
+  const internationalHistory = history.filter((h) => h.league === "NL");
+  const internationalHistoryKeys = new Set([
+    ...internationalCompetitionKeysOf(internationalHistory),
+    ...internationalCompetitionKeysOf(internationalRows),
+  ]);
+  const internationalLearnedByCompetition = Object.fromEntries(
+    [...internationalHistoryKeys].map((competitionKey) => {
+      const scopedHistory = rowsForInternationalCompetition(internationalHistory, competitionKey).slice(-450);
+      const base = learnFromHistory(scopedHistory);
+      return [
+        competitionKey,
+        {
+          ...base,
+          errorLearn: EMPTY_LEARN,
+          internationalErrorLearnByCompetition,
+        } satisfies Learned,
+      ];
+    }),
+  ) as Record<string, Learned>;
   LEARNED = learned;
+  INTERNATIONAL_LEARNED_BY_COMPETITION = internationalLearnedByCompetition;
   const matches = (getUpcomingMatches() as MatchInput[])
     .filter((m: MatchInput) => admin.leagues[m.league] !== false)
     .map(settleFromArchive);
@@ -1713,7 +1735,16 @@ function runEngineUncached(): EngineRun {
   const kept: MatchInput[] = [];
   for (const m of matches) {
     try {
-      const rec = attachLiveIntel(m, buildPrediction(m, learned, DEFAULT_ROI5_DOMINANCE_POLICY));
+      const competitionKey = m.league === "NL" ? internationalCompetitionKeyOf(m) : null;
+      const scopedLearned =
+        m.league === "NL" && competitionKey
+          ? internationalLearnedByCompetition[competitionKey] ?? {
+              ...learnFromHistory([]),
+              errorLearn: EMPTY_LEARN,
+              internationalErrorLearnByCompetition,
+            }
+          : learned;
+      const rec = attachLiveIntel(m, buildPrediction(m, scopedLearned, DEFAULT_ROI5_DOMINANCE_POLICY));
       const asOfMs = Date.parse(live?.meta?.asOf ?? "");
       enforceBetSafety(rec.markets, m, Boolean(live?.meta?.stale) || !Number.isFinite(asOfMs) || Date.now() - asOfMs > 30 * 60_000 || asOfMs > Date.now() + 60_000);
       if (m.league !== "NL") {
@@ -1800,12 +1831,32 @@ function runEngineUncached(): EngineRun {
   return CACHE;
 }
 
-function learnedNow(): Learned {
-  if (LEARNED) return LEARNED;
+function learnedNow(match?: MatchInput): Learned {
+  const competitionKey = match?.league === "NL" ? internationalCompetitionKeyOf(match) : null;
+  if (competitionKey && INTERNATIONAL_LEARNED_BY_COMPETITION[competitionKey]) {
+    return INTERNATIONAL_LEARNED_BY_COMPETITION[competitionKey]!;
+  }
+  if (LEARNED && match?.league !== "NL") return LEARNED;
   try {
-    return runEngine().learned;
+    const run = runEngine();
+    if (competitionKey && INTERNATIONAL_LEARNED_BY_COMPETITION[competitionKey]) {
+      return INTERNATIONAL_LEARNED_BY_COMPETITION[competitionKey]!;
+    }
+    return run.learned;
   } catch {
-    LEARNED = learnFromHistory(loadArchiveHistory().slice(-120));
+    const clubArchive = loadArchiveHistory().filter((h) => h.league !== "NL").slice(-120);
+    LEARNED = {
+      ...learnFromHistory(clubArchive),
+      errorLearn: EMPTY_LEARN,
+      internationalErrorLearnByCompetition: {},
+    };
+    if (match?.league === "NL") {
+      return {
+        ...learnFromHistory([]),
+        errorLearn: EMPTY_LEARN,
+        internationalErrorLearnByCompetition: LEARNED.internationalErrorLearnByCompetition,
+      };
+    }
     return LEARNED;
   }
 }
@@ -1846,7 +1897,7 @@ export function getPrediction(id: string): { match: MatchInput; prediction: Pred
 }
 
 export function predictMatch(match: MatchInput): PredictionRecord {
-  const rec = attachLiveIntel(match, buildPrediction(match, learnedNow(), DEFAULT_ROI5_DOMINANCE_POLICY));
+  const rec = attachLiveIntel(match, buildPrediction(match, learnedNow(match), DEFAULT_ROI5_DOMINANCE_POLICY));
   try {
     const v = recordPredictionVersion(match, rec);
     const series = versionsFor(match.id);
