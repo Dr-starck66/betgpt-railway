@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as BetgptLiveRouteImport } from './routes/betgpt-live'
 import { Route as ActuRouteImport } from './routes/actu'
 import { Route as ActualitesRouteImport } from './routes/actualites'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -125,6 +126,11 @@ const AProposRoute = AProposRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BetgptLiveRoute = BetgptLiveRouteImport.update({
+  id: '/betgpt-live',
+  path: '/betgpt-live',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ActuRoute = ActuRouteImport.update({
@@ -635,6 +641,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
   '/about': typeof AboutRoute
+  '/betgpt-live': typeof BetgptLiveRoute
   '/actu': typeof ActuRouteWithChildren
   '/actualites': typeof ActualitesRouteWithChildren
   '/admin': typeof AdminRoute
@@ -739,6 +746,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
   '/about': typeof AboutRoute
+  '/betgpt-live': typeof BetgptLiveRoute
   '/admin': typeof AdminRoute
   '/bundesliga': typeof BundesligaRoute
   '/calculateur-mise': typeof CalculateurMiseRoute
@@ -831,6 +839,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
   '/about': typeof AboutRoute
+  '/betgpt-live': typeof BetgptLiveRoute
   '/actu': typeof ActuRouteWithChildren
   '/actualites': typeof ActualitesRouteWithChildren
   '/admin': typeof AdminRoute
@@ -937,6 +946,7 @@ export interface FileRouteTypes {
     | '/'
     | '/a-propos'
     | '/about'
+    | '/betgpt-live'
     | '/actu'
     | '/actualites'
     | '/admin'
@@ -1040,6 +1050,7 @@ export interface FileRouteTypes {
     | '/'
     | '/a-propos'
     | '/about'
+    | '/betgpt-live'
     | '/admin'
     | '/bundesliga'
     | '/calculateur-mise'
@@ -1130,6 +1141,7 @@ export interface FileRouteTypes {
     | '/'
     | '/a-propos'
     | '/about'
+    | '/betgpt-live'
     | '/actu'
     | '/actualites'
     | '/admin'
@@ -1234,6 +1246,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AProposRoute: typeof AProposRoute
   AboutRoute: typeof AboutRoute
+  BetgptLiveRoute: typeof BetgptLiveRoute
   ActuRoute: typeof ActuRouteWithChildren
   ActualitesRoute: typeof ActualitesRouteWithChildren
   AdminRoute: typeof AdminRoute
@@ -1323,6 +1336,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/betgpt-live': {
+      id: '/betgpt-live'
+      path: '/betgpt-live'
+      fullPath: '/betgpt-live'
+      preLoaderRoute: typeof BetgptLiveRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/actu': {
@@ -2211,6 +2231,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AProposRoute: AProposRoute,
   AboutRoute: AboutRoute,
+  BetgptLiveRoute: BetgptLiveRoute,
   ActuRoute: ActuRouteWithChildren,
   ActualitesRoute: ActualitesRouteWithChildren,
   AdminRoute: AdminRoute,
