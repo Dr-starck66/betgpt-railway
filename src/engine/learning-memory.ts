@@ -37,6 +37,28 @@ export type LearningMemorySnapshot = {
     settledLast7d: number;
     status: "FRESH" | "STALE" | "EMPTY";
   };
+  contextualSettledN: number;
+  contextualWins: number;
+  contextualLosses: number;
+  contextualFreshness: {
+    latestSettledKickoff: string | null;
+    settledLast24h: number;
+    settledLast7d: number;
+    status: "FRESH" | "STALE" | "EMPTY";
+  };
+  contextualFactorPerformance: FactorPerformance[];
+  latestContextSettled: Array<{
+    id: string;
+    kickoff: string;
+    league: string;
+    market: string;
+    odds: number;
+    result: "win" | "lose";
+    kind: "mise" | "prono";
+    decision: string;
+    evidence: "ACTUAL_BET" | "OBSERVATIONAL_PREDICTION";
+    factors: string[];
+  }>;
   ledger: ReturnType<typeof calculateLedgerStats>;
   roi5: ReturnType<typeof learnContinuousRoi5Policy>;
   adaptive: ReturnType<typeof buildAdaptiveLearningReport>;
@@ -72,6 +94,32 @@ function honestSettledBet(row: TicketRow): row is TicketRow & { result: "win" | 
   return honestSettledObservation(row) && row.kind === "mise" && isCanonicalRoi5Selection(row);
 }
 
+function honestSettledContext(row: TicketRow): row is TicketRow & { result: "win" | "lose" } {
+  if (row.result !== "win" && row.result !== "lose") return false;
+  if (!Number.isFinite(row.odds) || row.odds <= 1.01 || !Number.isFinite(row.modelProb)) return false;
+  if (/cl[oô]ture|d[eé]riv[eé]|archive/i.test(row.book || "")) return false;
+  const recorded = Date.parse(row.recordedAt);
+  const kickoff = Date.parse(row.kickoff);
+  return Number.isFinite(recorded) && Number.isFinite(kickoff) && recorded < kickoff;
+}
+
+function contextualRowsOf(rows: TicketRow[]): Array<TicketRow & { result: "win" | "lose" }> {
+  const byFixtureMarket = new Map<string, TicketRow & { result: "win" | "lose" }>();
+  for (const row of rows.filter(honestSettledContext).sort((a, b) => a.kickoff.localeCompare(b.kickoff))) {
+    const key = `${fixtureKey(row.home, row.away, row.kickoff)}|${row.market}`;
+    const prev = byFixtureMarket.get(key);
+    if (!prev) {
+      byFixtureMarket.set(key, row);
+      continue;
+    }
+    const preferMise = prev.kind !== "mise" && row.kind === "mise";
+    const sameKindLater =
+      prev.kind === row.kind && Date.parse(row.recordedAt) > Date.parse(prev.recordedAt);
+    if (preferMise || sameKindLater) byFixtureMarket.set(key, row);
+  }
+  return [...byFixtureMarket.values()].sort((a, b) => a.kickoff.localeCompare(b.kickoff));
+}
+
 function learningRowsOf(rows: TicketRow[]): Array<TicketRow & { result: "win" | "lose" }> {
   const byFixtureMarket = new Map<string, TicketRow & { result: "win" | "lose" }>();
   for (const row of rows.filter(honestSettledObservation).sort((a, b) => a.kickoff.localeCompare(b.kickoff))) {
@@ -97,7 +145,9 @@ function bucket(value: number, cuts: number[], labels: string[]): string {
 }
 
 function oddsBucket(odds: number): string {
-  return bucket(odds, [2.1, 2.4, 2.7], ["1.80-2.09", "2.10-2.39", "2.40-2.69", "2.70-3.00"]);
+  if (odds < 1.8) return "<1.80";
+  if (odds <= 3) return bucket(odds, [2.1, 2.4, 2.7], ["1.80-2.09", "2.10-2.39", "2.40-2.69", "2.70-3.00"]);
+  return "3.01+";
 }
 
 function probBucket(prob: number): string {
@@ -186,8 +236,10 @@ export function buildLearningMemory(
   generatedAt = new Date().toISOString(),
 ): LearningMemorySnapshot {
   const learningRows = learningRowsOf(rows);
+  const contextualRows = contextualRowsOf(rows);
   const canonical = learningRows.filter(honestSettledBet);
   const factorPerformance = aggregateFactors(learningRows);
+  const contextualFactorPerformance = aggregateFactors(contextualRows);
   const ledger = calculateLedgerStats(rows);
   const roi5 = learnContinuousRoi5Policy(rows, generatedAt);
   const adaptive = buildAdaptiveLearningReport(learningRows, []);
@@ -202,20 +254,25 @@ export function buildLearningMemory(
     : null;
   const generatedMs = Date.parse(generatedAt);
   const nowMs = Number.isFinite(generatedMs) ? generatedMs : Date.now();
-  const settledLast24h = learningRows.filter((row) => nowMs - Date.parse(row.kickoff) <= 24 * 3600_000).length;
-  const settledLast7d = learningRows.filter((row) => nowMs - Date.parse(row.kickoff) <= 7 * 24 * 3600_000).length;
-  const latestSettledKickoff = learningRows.length ? learningRows[learningRows.length - 1]!.kickoff : null;
-  const latestMs = latestSettledKickoff ? Date.parse(latestSettledKickoff) : NaN;
-  const learningFreshness = {
-    latestSettledKickoff,
-    settledLast24h,
-    settledLast7d,
-    status: !latestSettledKickoff
-      ? ("EMPTY" as const)
-      : Number.isFinite(latestMs) && nowMs - latestMs <= 7 * 24 * 3600_000
-        ? ("FRESH" as const)
-        : ("STALE" as const),
+  const freshnessOf = (xs: Array<TicketRow & { result: "win" | "lose" }>) => {
+    const settledLast24h = xs.filter((row) => nowMs - Date.parse(row.kickoff) <= 24 * 3600_000).length;
+    const settledLast7d = xs.filter((row) => nowMs - Date.parse(row.kickoff) <= 7 * 24 * 3600_000).length;
+    const latestSettledKickoff = xs.length ? xs[xs.length - 1]!.kickoff : null;
+    const latestMs = latestSettledKickoff ? Date.parse(latestSettledKickoff) : NaN;
+    return {
+      latestSettledKickoff,
+      settledLast24h,
+      settledLast7d,
+      status: !latestSettledKickoff
+        ? ("EMPTY" as const)
+        : Number.isFinite(latestMs) && nowMs - latestMs <= 7 * 24 * 3600_000
+          ? ("FRESH" as const)
+          : ("STALE" as const),
+    };
   };
+  const learningFreshness = freshnessOf(learningRows);
+  const contextualFreshness = freshnessOf(contextualRows);
+  const contextualWins = contextualRows.filter((row) => row.result === "win").length;
 
   const mature = factorPerformance.filter((f) => f.n >= 3);
   const harmfulFactors = [...mature].sort((a, b) => a.roi - b.roi || b.n - a.n).slice(0, 12);
@@ -240,6 +297,25 @@ export function buildLearningMemory(
       factors: factorsOf(row),
     }));
 
+  const latestContextSettled = [...contextualRows]
+    .sort((a, b) => b.kickoff.localeCompare(a.kickoff))
+    .slice(0, 25)
+    .map((row) => ({
+      id: row.id,
+      kickoff: row.kickoff,
+      league: row.league ?? "UNKNOWN",
+      market: row.market,
+      odds: row.odds,
+      result: row.result,
+      kind: row.kind,
+      decision: row.decision,
+      evidence:
+        row.kind === "mise" && row.decision === "BET"
+          ? ("ACTUAL_BET" as const)
+          : ("OBSERVATIONAL_PREDICTION" as const),
+      factors: factorsOf(row),
+    }));
+
   return {
     schema: "astra-betgpt-learning-memory/v1",
     generatedAt,
@@ -253,6 +329,12 @@ export function buildLearningMemory(
     learningLosses: learningRows.length - learningWins,
     learningSimulatedRoi,
     learningFreshness,
+    contextualSettledN: contextualRows.length,
+    contextualWins,
+    contextualLosses: contextualRows.length - contextualWins,
+    contextualFreshness,
+    contextualFactorPerformance,
+    latestContextSettled,
     ledger,
     roi5,
     adaptive,
