@@ -2886,5 +2886,397 @@
     },
     "discoverReadiness": 100,
     "topStories": "TOP_STORIES_ELIGIBILITY_READY"
+  },
+  {
+    "id": "ed-2026-10-06-morning",
+    "slug": "portugal-cristiano-ronaldo-ne-reviendra-en-selection-qu-a-une-condition-2026-10-06",
+    "slot": "morning",
+    "articleType": "news",
+    "status": "PUBLISHED",
+    "title": "Portugal : Cristiano Ronaldo ne reviendra en sélection qu’à une condition | BetGPT",
+    "h1": "Portugal : Cristiano Ronaldo ne reviendra en sélection qu’à une condition",
+    "lead": "Portugal : Cristiano Ronaldo ne reviendra en sélection qu’à une condition. Foot Mercato a publié cette information mardi 6 octobre 2026 à 12:45. Le dossier est repris par 4 sources distinctes. Portugal : Cristiano Ronaldo ne reviendra en sélection qu’à une condition Foot Mercato",
+    "paragraphs": [
+      {
+        "h2": "Le fait nouveau qui fait basculer le dossier",
+        "body": "Foot Mercato rapporte Portugal : Cristiano Ronaldo ne reviendra en sélection qu’à une condition. L'information devient pertinente parce qu'elle précise un dossier déjà suivi, sans transformer une hypothèse en certitude. Au total, 4 rédactions ou sources distinctes alimentent ce cluster d'actualité. Les détails complémentaires sont attribués séparément dans la section suivante afin d'éviter de transformer une reprise en confirmation indépendante.",
+        "sourceIds": [
+          "news-6768e622"
+        ]
+      },
+      {
+        "h2": "Ce que disent précisément les différentes sources",
+        "body": "Foot Mercato, mardi 6 octobre 2026 à 12:45 : Portugal : Cristiano Ronaldo ne reviendra en sélection qu’à une condition Foot Mercato RMC Sport, mardi 6 octobre 2026 à 11:58 : Portugal: la condition imposée par Cristiano Ronaldo pour un retour en sélection RMC Sport L'essentiel, mardi 6 octobre 2026 à 13:21 : Cristiano Ronaldo pose ses conditions pour revenir en sélection L'essentiel Football.fr, mardi 6 octobre 2026 à 12:43 : Portugal: Cristiano Ronaldo se dit prêt à revenir, mais à une condition Football.fr Cette présentation reste volontairement attribuée source par source : lorsque deux médias racontent le même épisode avec des détails différents, BetGPT ne fusionne pas automatiquement ces détails en un fait unique. Une information n'est élevée au rang de fait établi que si son niveau de source le justifie ou si plusieurs références indépendantes convergent réellement.",
+        "sourceIds": [
+          "news-6768e622",
+          "news-7ef5794d",
+          "news-29e0f9fa",
+          "news-c0b58128"
+        ]
+      },
+      {
+        "h2": "La chronologie des publications",
+        "body": "mardi 6 octobre 2026 à 11:58 — RMC Sport publie « Portugal: la condition imposée par Cristiano Ronaldo pour un retour en sélection ». mardi 6 octobre 2026 à 12:43 — Football.fr publie « Portugal: Cristiano Ronaldo se dit prêt à revenir, mais à une condition ». mardi 6 octobre 2026 à 12:45 — Foot Mercato publie « Portugal : Cristiano Ronaldo ne reviendra en sélection qu’à une condition ». mardi 6 octobre 2026 à 13:21 — L'essentiel publie « Cristiano Ronaldo pose ses conditions pour revenir en sélection ». Cette chronologie permet de distinguer le fait initial, les reprises et les éventuelles confirmations plus tardives. Elle évite surtout de présenter comme simultanées des informations qui ont pu évoluer au fil de la journée.",
+        "sourceIds": [
+          "news-6768e622",
+          "news-7ef5794d",
+          "news-29e0f9fa",
+          "news-c0b58128"
+        ]
+      },
+      {
+        "h2": "Pourquoi BetGPT ne force pas un contexte de match",
+        "body": "Aucune rencontre précise du calendrier BetGPT n'est suffisamment reliée à ce sujet pour servir de prétexte à une projection sportive. L'article reste donc centré sur les faits publiés par les sources, sans fabriquer de prochain match ni de calendrier de retour. Les entités explicitement détectées dans les sources sont : Cristiano Ronaldo, Portugal.",
+        "sourceIds": [
+          "news-6768e622"
+        ]
+      },
+      {
+        "h2": "Ce qui est établi, corroboré ou encore fragile",
+        "body": "Le cluster contient 0 source officielle, 2 sources de premier niveau journalistique et 2 autres sources. Aucune déclaration officielle n'est ajoutée artificiellement si elle n'existe pas dans le flux. Les points communs entre plusieurs sources sont présentés comme corroborés ; les détails isolés restent attribués.",
+        "sourceIds": [
+          "news-6768e622",
+          "news-7ef5794d",
+          "news-29e0f9fa",
+          "news-c0b58128"
+        ]
+      },
+      {
+        "h2": "Le prochain élément qui permettra de mettre l'article à jour",
+        "body": "Pour Cristiano Ronaldo, Portugal, la prochaine preuve forte serait un communiqué de club, une signature enregistrée ou un changement contractuel attribuable. Une rumeur, même reprise, ne devient pas un transfert acquis. BetGPT ne republie pas une nouvelle dépêche pour répéter le même état de fait : une mise à jour exige un changement matériel, une confirmation nouvelle ou une donnée sportive directement vérifiable.",
+        "sourceIds": [
+          "news-6768e622",
+          "news-7ef5794d"
+        ]
+      }
+    ],
+    "createdAt": "2026-10-06T12:02:33.893Z",
+    "publishedAt": "2026-10-06T12:02:33.893Z",
+    "modifiedAt": "2026-10-06T12:02:33.893Z",
+    "parisDate": "2026-10-06",
+    "scheduledTime": "08:00",
+    "category": "Actualité football",
+    "section": "football",
+    "league": null,
+    "teams": [
+      "Cristiano Ronaldo",
+      "Portugal"
+    ],
+    "matchId": null,
+    "competition": "Football",
+    "sources": [
+      {
+        "id": "news-6768e622",
+        "label": "Foot Mercato",
+        "status": "CORROBORATED",
+        "note": "Portugal : Cristiano Ronaldo ne reviendra en sélection qu’à une condition · publié mardi 6 octobre 2026 à 12:45.",
+        "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxPU0ZSOXYzUTJEUlBDdTMyOS16S0NxNUxXa0s1bGdOVXpST284R2FfUEtuQ29JNWZJWnVYWWNjbTlCVEJYM3JJLVFpQ0cxaGQwM2s2VDVta1FmWkg4VnJBLVNlSGJpampMMnYtd2VhZG9FN09HelR3UVloZ1RtMVlpLXk2ZUUxS25mWGNSZzFTUGpfUG94SUhBcmVnenZfZUFOeU9IZFhmVTU0a3RFU3E0c3FyMmJ3ckJJSjg0?oc=5"
+      },
+      {
+        "id": "news-7ef5794d",
+        "label": "RMC Sport",
+        "status": "CORROBORATED",
+        "note": "Portugal: la condition imposée par Cristiano Ronaldo pour un retour en sélection · publié mardi 6 octobre 2026 à 11:58.",
+        "url": "https://news.google.com/rss/articles/CBMi5wFBVV95cUxQT21KS2htUGxKNHJELTQzNHQtWTVNdHFGT00tQzJnbmRJTEVfWTc3dUItOFN3VVJCTGgyZ3BDbjRBTGpJYTFLMmppSG5aU2pzU1lMMkNqNHFNODFQQjcwazlwSVBURDhPMjE0Z0FKYUVUN1ZFdWxiaFY1bHFueG5xOFBzTXNlb0JCZ2dCTWJ0Q2x0eWxTX2drTmxXZTRCY2JPZGVmS1F6MzV2cEpMdk5nMkl3Njgxb01IV01iMTBGNlJveUVPVUhKdDBxM25FcVpmYVBiaHpUUnJuQzl4UjExMVlnbWJjdFU?oc=5"
+      },
+      {
+        "id": "news-29e0f9fa",
+        "label": "L'essentiel",
+        "status": "UNCONFIRMED",
+        "note": "Cristiano Ronaldo pose ses conditions pour revenir en sélection · publié mardi 6 octobre 2026 à 13:21.",
+        "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxQcXFFSHgxMV9RazV3aTRnYUVLYndlSmZoM1BhLXVKcEM2LVBRRWFaT094cTNsQ3U3Q0JETk92LTQ3bFVJMDNhd3llaEUyNzZibkVCR2hnZGZUaE5nTzVKZXlSV2VjUVRVbGFqLW9uUmpVR2syMlc1YWdWcUdEUjMzQk9ETGFIdDd3bnJXSTVwbmJ6SldJWnJXVEdaOURQWnBDbFNvUUM5Wk1rXzczZEY5LS0zQ09EdFpI?oc=5"
+      },
+      {
+        "id": "news-c0b58128",
+        "label": "Football.fr",
+        "status": "UNCONFIRMED",
+        "note": "Portugal: Cristiano Ronaldo se dit prêt à revenir, mais à une condition · publié mardi 6 octobre 2026 à 12:43.",
+        "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQTExpVWR3RjFpeV9iSFVZTkx5OXoxSUJ1NEJoMVFlWG9GalBIMS1rRnRjT3ZnVVZvYk90M0V5a0ktbEM2UUJIU0tkRnBLODAtU1dSSEtoT3pwcEF6Vi1SSWRiRk1XWjVuSk9UTUNaczAtWFRoakJpZW0yeWRweE5Xb1ViUEpIampFdkZZSUZWYmdUcGFyc2NBQWxSeFJuWFNxbHdvZV9kOGJwU1oteGVvMUNDbENuNDR1eTlr?oc=5"
+      }
+    ],
+    "newsworthiness": 96,
+    "links": [
+      {
+        "href": "/scores-en-direct",
+        "label": "Scores en direct"
+      },
+      {
+        "href": "/pronostics-sportifs",
+        "label": "Pronostics sportifs"
+      },
+      {
+        "href": "/methodology",
+        "label": "Méthode BetGPT"
+      },
+      {
+        "href": "/auteurs/betgpt-editorial",
+        "label": "BetGPT Editorial"
+      }
+    ],
+    "corrections": [],
+    "sourceChanges": [],
+    "factHash": "96576251",
+    "keywords": "Cristiano Ronaldo, Portugal, football, actualité football",
+    "image": {
+      "src": "/blog/discover/inline-pitch.jpg",
+      "alt": "Ballon sur une pelouse de football",
+      "width": 1200,
+      "height": 675,
+      "credit": "Football : actualités, contexte et analyse sur BetGPT."
+    },
+    "related": [
+      {
+        "href": "/actualites/6-33-millions-de-telespectateurs-devant-france-belgique-sur-tf1-2026-10-06",
+        "title": "6,33 millions de téléspectateurs devant France-Belgique sur TF1",
+        "image": {
+          "src": "/blog/discover/inline-shot.jpg",
+          "alt": "Frappe au but pendant un match",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      }
+    ],
+    "discoverOpportunity": {
+      "freshness": 19,
+      "frenchInterest": 19,
+      "entityStrength": 15,
+      "novelty": 15,
+      "visual": 10,
+      "sourceQuality": 10,
+      "editorialAngle": 8,
+      "total": 96,
+      "decision": "PUBLISH",
+      "reasons": []
+    },
+    "quality": {
+      "pass": true,
+      "reasons": []
+    },
+    "duplicateScore": 0,
+    "discoverChecks": {
+      "INDEXABLE": true,
+      "LARGE_IMAGE": true,
+      "IMAGE_GE_1200": true,
+      "MAX_IMAGE_PREVIEW_LARGE": true,
+      "HELPFUL_CONTENT": true,
+      "NON_CLICKBAIT_TITLE": true,
+      "ORIGINAL_VALUE": true,
+      "MOBILE_TEMPLATE": true
+    },
+    "discoverReadiness": 100,
+    "topStories": "TOP_STORIES_ELIGIBILITY_READY"
+  },
+  {
+    "id": "ed-2026-10-06-noon",
+    "slug": "6-33-millions-de-telespectateurs-devant-france-belgique-sur-tf1-2026-10-06",
+    "slot": "noon",
+    "articleType": "news",
+    "status": "PUBLISHED",
+    "title": "6,33 millions de téléspectateurs devant France-Belgique sur TF1 | BetGPT",
+    "h1": "6,33 millions de téléspectateurs devant France-Belgique sur TF1",
+    "lead": "6,33 millions de téléspectateurs devant France-Belgique sur TF1. L'Équipe a publié cette information mardi 6 octobre 2026 à 13:29. Le dossier est repris par 2 sources distinctes. 6,33 millions de téléspectateurs devant France-Belgique sur TF1 L'Équipe",
+    "paragraphs": [
+      {
+        "h2": "Le fait nouveau qui fait basculer le dossier",
+        "body": "L'Équipe rapporte 6,33 millions de téléspectateurs devant France-Belgique sur TF1. L'information devient pertinente parce qu'elle précise un dossier déjà suivi, sans transformer une hypothèse en certitude. Au total, 2 rédactions ou sources distinctes alimentent ce cluster d'actualité. Les détails complémentaires sont attribués séparément dans la section suivante afin d'éviter de transformer une reprise en confirmation indépendante.",
+        "sourceIds": [
+          "news-3536c1f1"
+        ]
+      },
+      {
+        "h2": "Ce que disent précisément les différentes sources",
+        "body": "L'Équipe, mardi 6 octobre 2026 à 13:29 : 6,33 millions de téléspectateurs devant France-Belgique sur TF1 L'Équipe Foot Mercato, mardi 6 octobre 2026 à 11:40 : Équipe de France : Adrien Rabiot a agacé le staff de Zinedine Zidane Foot Mercato Cette présentation reste volontairement attribuée source par source : lorsque deux médias racontent le même épisode avec des détails différents, BetGPT ne fusionne pas automatiquement ces détails en un fait unique. Une information n'est élevée au rang de fait établi que si son niveau de source le justifie ou si plusieurs références indépendantes convergent réellement.",
+        "sourceIds": [
+          "news-3536c1f1",
+          "news-cf8e6613"
+        ]
+      },
+      {
+        "h2": "La chronologie des publications",
+        "body": "mardi 6 octobre 2026 à 11:40 — Foot Mercato publie « Équipe de France : Adrien Rabiot a agacé le staff de Zinedine Zidane ». mardi 6 octobre 2026 à 13:29 — Foot Mercato publie « France - Belgique : les notes du match ». mardi 6 octobre 2026 à 13:29 — L'Équipe publie « 6,33 millions de téléspectateurs devant France-Belgique sur TF1 ». Cette chronologie permet de distinguer le fait initial, les reprises et les éventuelles confirmations plus tardives. Elle évite surtout de présenter comme simultanées des informations qui ont pu évoluer au fil de la journée.",
+        "sourceIds": [
+          "news-3536c1f1",
+          "news-211e471",
+          "news-cf8e6613"
+        ]
+      },
+      {
+        "h2": "Pourquoi BetGPT ne force pas un contexte de match",
+        "body": "Aucune rencontre précise du calendrier BetGPT n'est suffisamment reliée à ce sujet pour servir de prétexte à une projection sportive. L'article reste donc centré sur les faits publiés par les sources, sans fabriquer de prochain match ni de calendrier de retour. Les entités explicitement détectées dans les sources sont : France.",
+        "sourceIds": [
+          "news-3536c1f1"
+        ]
+      },
+      {
+        "h2": "Ce qui est établi, corroboré ou encore fragile",
+        "body": "Le cluster contient 0 source officielle, 3 sources de premier niveau journalistique et 0 autre source. Aucune déclaration officielle n'est ajoutée artificiellement si elle n'existe pas dans le flux. Les points communs entre plusieurs sources sont présentés comme corroborés ; les détails isolés restent attribués.",
+        "sourceIds": [
+          "news-3536c1f1",
+          "news-211e471",
+          "news-cf8e6613"
+        ]
+      },
+      {
+        "h2": "Le prochain élément qui permettra de mettre l'article à jour",
+        "body": "Pour France, la suite utile dépend d'un fait supplémentaire attribuable : déclaration, décision, résultat, liste officielle ou nouvelle donnée de match. Sans élément nouveau, aucune dépêche supplémentaire n'est créée. BetGPT ne republie pas une nouvelle dépêche pour répéter le même état de fait : une mise à jour exige un changement matériel, une confirmation nouvelle ou une donnée sportive directement vérifiable.",
+        "sourceIds": [
+          "news-3536c1f1",
+          "news-211e471"
+        ]
+      }
+    ],
+    "createdAt": "2026-10-06T12:02:33.893Z",
+    "publishedAt": "2026-10-06T12:02:33.893Z",
+    "modifiedAt": "2026-10-06T12:02:33.893Z",
+    "parisDate": "2026-10-06",
+    "scheduledTime": "13:00",
+    "category": "Actualité football",
+    "section": "football",
+    "league": null,
+    "teams": [
+      "France"
+    ],
+    "matchId": null,
+    "competition": "Football",
+    "sources": [
+      {
+        "id": "news-3536c1f1",
+        "label": "L'Équipe",
+        "status": "CORROBORATED",
+        "note": "6,33 millions de téléspectateurs devant France-Belgique sur TF1 · publié mardi 6 octobre 2026 à 13:29.",
+        "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOMFVZRXQ5bnl5NTlZV0RrQlRBUFlKNmNlV0tocFlWZE9uS2p5dHZHN2dBeVp5VVNRUHJHN1RPWU01aTBwVEI5WGlRRFhCRS1MS01sMS1QazZNbElKcjAySXFmZkFwVUxYOWQwSjJYZTRhRS1LWXZUOEpWTUs0Wk8taVVkQW5CQUwyS1Y2VnpCZmtweWJkUU5GY3hpZnZrSkpSTGV1RnlvS3hjYVNCNG5lNlN3?oc=5"
+      },
+      {
+        "id": "news-211e471",
+        "label": "Foot Mercato",
+        "status": "CORROBORATED",
+        "note": "France - Belgique : les notes du match · publié mardi 6 octobre 2026 à 13:29.",
+        "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxNdnFaNkhkRlBRNzZYWno5RUxLZkNSNFFVUjRpaTcyQmJ2NzRCS3drQTJXbll5ZF92SlJKLTNqSGU0aGNXLUFfNUhfVk03ek9NUzRMMkIxVGhIVnY4bU11SnFObUFveG5pbWdKU3NMcUU5VDh3cGlRZDZlUXVmTUppaDhfdnNseldTRjlZ?oc=5"
+      },
+      {
+        "id": "news-cf8e6613",
+        "label": "Foot Mercato",
+        "status": "CORROBORATED",
+        "note": "Équipe de France : Adrien Rabiot a agacé le staff de Zinedine Zidane · publié mardi 6 octobre 2026 à 11:40.",
+        "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQTnNGcURYTnV0TnpzMzNyaFBQcUZ6N050U294Q1dvNHczSUo4dnR0LVU4M2dwVHVYQVAzd1FneWRoR3FQamZvZ0swcy1ndnN4R18zRXRRNXBMN1lDa3lYMXI4NS1RbDZyQ0dwRVVLY0JpY1k2aTBsR0Ewa1RvWEpRZkZBdFg5akRSU1FUcDN5bl9lOWN4UjQ3bHhWLUo2VURZWmZvVXl0MmhBTnhkTXNGZUFhSEw?oc=5"
+      }
+    ],
+    "newsworthiness": 92,
+    "links": [
+      {
+        "href": "/scores-en-direct",
+        "label": "Scores en direct"
+      },
+      {
+        "href": "/pronostics-sportifs",
+        "label": "Pronostics sportifs"
+      },
+      {
+        "href": "/methodology",
+        "label": "Méthode BetGPT"
+      },
+      {
+        "href": "/auteurs/betgpt-editorial",
+        "label": "BetGPT Editorial"
+      }
+    ],
+    "corrections": [],
+    "sourceChanges": [],
+    "factHash": "8d8b564",
+    "keywords": "France, football, actualité football",
+    "image": {
+      "src": "/blog/discover/inline-shot.jpg",
+      "alt": "Frappe au but pendant un match",
+      "width": 1200,
+      "height": 675,
+      "credit": "Football : actualités, contexte et analyse sur BetGPT."
+    },
+    "related": [
+      {
+        "href": "/actualites/transfiguree-par-ses-remplacants-l-equipe-de-france-renverse-la-belgique-en-ligue-des-nati",
+        "title": "Transfigurée par ses remplaçants, l'équipe de France renverse la Belgique en Ligue des nations",
+        "image": {
+          "src": "/blog/discover/inline-flags.jpg",
+          "alt": "Public et drapeaux dans un stade",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/aime-jacquet-present-au-stade-de-france-pour-le-match-des-bleus-contre-la-belgique-2026-10",
+        "title": "Aimé Jacquet présent au Stade de France pour le match des Bleus contre la Belgique",
+        "image": {
+          "src": "/blog/discover/inline-pitch.jpg",
+          "alt": "Ballon sur une pelouse de football",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/olise-cherki-doue-les-entrants-ont-tout-change-les-notes-de-france-belgique-2026-10-05",
+        "title": "Olise-Cherki-Doué, les entrants ont tout changé : les notes de France-Belgique",
+        "image": {
+          "src": "/blog/discover/inline-action.jpg",
+          "alt": "Joueurs de football en action",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/france-espoirs-luxembourg-espoirs-en-direct-2026-10-03",
+        "title": "France Espoirs - Luxembourg Espoirs EN DIRECT",
+        "image": {
+          "src": "/blog/discover/inline-night.jpg",
+          "alt": "Stade de football éclairé la nuit",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/j-etais-forcement-touche-ravi-zinedine-zidane-a-fait-son-grand-retour-au-stade-de-france-2",
+        "title": "\"J'étais forcément touché, ravi\", : Zinédine Zidane a fait son grand retour au Stade de France",
+        "image": {
+          "src": "/blog/discover/inline-shot.jpg",
+          "alt": "Frappe au but pendant un match",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      }
+    ],
+    "discoverOpportunity": {
+      "freshness": 18,
+      "frenchInterest": 18,
+      "entityStrength": 15,
+      "novelty": 10,
+      "visual": 10,
+      "sourceQuality": 10,
+      "editorialAngle": 8,
+      "total": 89,
+      "decision": "PUBLISH",
+      "reasons": []
+    },
+    "quality": {
+      "pass": true,
+      "reasons": []
+    },
+    "duplicateScore": 0.35,
+    "discoverChecks": {
+      "INDEXABLE": true,
+      "LARGE_IMAGE": true,
+      "IMAGE_GE_1200": true,
+      "MAX_IMAGE_PREVIEW_LARGE": true,
+      "HELPFUL_CONTENT": true,
+      "NON_CLICKBAIT_TITLE": true,
+      "ORIGINAL_VALUE": true,
+      "MOBILE_TEMPLATE": true
+    },
+    "discoverReadiness": 100,
+    "topStories": "TOP_STORIES_ELIGIBILITY_READY"
   }
 ]
