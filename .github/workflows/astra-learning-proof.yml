@@ -7,6 +7,10 @@ on:
       - "src/engine/ticket-log.test.ts"
       - "src/engine/learning-memory.ts"
       - "src/engine/learning-memory.test.ts"
+      - "src/engine/live.ts"
+      - "src/engine/live-result-recovery.test.ts"
+      - "src/engine/live.ts"
+      - "src/engine/live-result-recovery.test.ts"
       - "src/engine/adaptive-learning.ts"
       - "src/engine/roi5-continuous-learning.ts"
       - "server/api/learning-checkpoint.get.ts"
@@ -43,6 +47,7 @@ jobs:
           node --experimental-strip-types --import ./scripts/ts-alias.mjs --test
           src/engine/ticket-log.test.ts
           src/engine/learning-memory.test.ts
+          src/engine/live-result-recovery.test.ts
           src/engine/roi5-continuous-learning.test.ts
           src/engine/adaptive-learning.test.ts
       - name: Typecheck
