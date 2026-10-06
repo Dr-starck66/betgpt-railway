@@ -125,3 +125,40 @@ test("secondary markets never contaminate canonical learning ROI", () => {
   assert.equal(report.canonicalWins, 1);
   assert.equal(report.canonicalRoi, 1);
 });
+
+
+test("short-priced recent 1X2 settles into contextual learning without contaminating canonical ROI", () => {
+  const observed = {
+    ...row(20, "win", 1.38),
+    kind: "prono" as const,
+    decision: "NO_BET" as const,
+    stakePct: 0,
+    kickoff: "2026-10-06T19:00:00.000Z",
+    recordedAt: "2026-10-06T18:00:00.000Z",
+  };
+  const report = buildLearningMemory([observed], "2026-10-06T21:30:00.000Z");
+  assert.equal(report.canonicalSettledN, 0);
+  assert.equal(report.learningSettledN, 0);
+  assert.equal(report.contextualSettledN, 1);
+  assert.equal(report.contextualWins, 1);
+  assert.equal(report.contextualFreshness.status, "FRESH");
+  assert.equal(report.contextualFreshness.settledLast24h, 1);
+  assert.equal(report.latestContextSettled[0]?.market, "1X2_H");
+  assert.ok(report.latestContextSettled[0]?.factors.includes("odds:<1.80"));
+});
+
+test("secondary market result teaches contextual memory but never canonical ROI", () => {
+  const secondary = {
+    ...row(21, "lose", 2.65),
+    market: "BTTS_Y" as const,
+    kickoff: "2026-10-06T19:00:00.000Z",
+    recordedAt: "2026-10-06T18:00:00.000Z",
+  };
+  const report = buildLearningMemory([secondary], "2026-10-06T21:30:00.000Z");
+  assert.equal(report.canonicalSettledN, 0);
+  assert.equal(report.learningSettledN, 0);
+  assert.equal(report.contextualSettledN, 1);
+  assert.equal(report.contextualLosses, 1);
+  assert.equal(report.contextualFreshness.status, "FRESH");
+  assert.equal(report.latestContextSettled[0]?.market, "BTTS_Y");
+});
