@@ -10,7 +10,7 @@ export const Route = createFileRoute("/classement/$slug")({
     const meta = citeBySlug(params.slug);
     if (!meta) throw notFound();
     const data = await loadCite();
-    const league = data.leagues.find((l) => l.slug === params.slug);
+    const league = data.leagues.find((l) => l.slug === meta.slug);
     if (!league) throw notFound();
     return league;
   },
