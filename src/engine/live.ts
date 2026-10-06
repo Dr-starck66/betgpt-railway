@@ -587,6 +587,8 @@ function parseEvents(payload, league, competition, standings, teams, mode, compe
 			history.push({
 				id: `espn-${e.id}`,
 				league,
+				competition,
+				competitionKey,
 				kickoff,
 				homeId: home.id,
 				awayId: away.id,
