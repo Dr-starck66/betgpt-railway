@@ -3,12 +3,13 @@ import { hydrateTickets, loadTickets, syncTickets } from "../../src/engine/ticke
 import { buildLearningMemory } from "../../src/engine/learning-memory";
 import { ensureLive, getLiveSnapshot, recoverEspnResults } from "../../src/engine/live";
 import { runEngine } from "../../src/engine/pipeline";
+import type { MatchInput } from "../../src/engine/types";
 
 const REFRESH_TIMEOUT_MS = 18_000;
 
 function internationalFeedProof(tickets: ReturnType<typeof loadTickets>, live: ReturnType<typeof getLiveSnapshot>) {
   const now = Date.now();
-  const upcoming = (live?.matches ?? []).filter((match) => {
+  const upcoming = (live?.matches ?? []).filter((match: MatchInput) => {
     if (match.league !== "NL" || !match.competitionKey) return false;
     const kickoff = Date.parse(match.kickoff);
     return Number.isFinite(kickoff) && kickoff > now && match.status !== "cancelled" && match.status !== "finished";
