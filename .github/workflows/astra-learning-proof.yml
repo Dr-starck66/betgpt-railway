@@ -19,6 +19,7 @@ on:
       - "src/engine/adaptive-learning.ts"
       - "src/engine/roi5-continuous-learning.ts"
       - "server/api/learning-checkpoint.get.ts"
+      - "src/lib/editorial/run.server.ts"
       - ".github/workflows/astra-learning-proof.yml"
   push:
     branches: [main]
