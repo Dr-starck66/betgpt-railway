@@ -132,7 +132,7 @@ export function internationalAutoFeedSpecs() {
 const TTL_MS = 6e5;
 const SCORE_TTL_MS = 2e4;
 const STALE_MS = 432e5;
-const SCHEMA = 41;
+const SCHEMA = 40;
 const SNAP_FILE = join(process.cwd(), "data", "live-snapshot.json");
 const SNAP_FILE_ABS = "/workspace/data/live-snapshot.json";
 const SNAP_FILE_TMP = "/tmp/betgpt-data/live-snapshot.json";
@@ -977,6 +977,7 @@ async function loadSnapshot() {
 			nMatches: matches.length,
 			nHistory: hist.length,
 			internationalFeed: {
+				version: 1,
 				fetchedAt: internationalFeed.fetchedAt || null,
 				intervalMinutes: INTERNATIONAL_AUTO_FEED_MINUTES,
 				lookaheadDays: INTERNATIONAL_AUTO_FEED_LOOKAHEAD_DAYS,
@@ -1165,7 +1166,8 @@ export async function ensureLive() {
 	if (SNAPSHOT && SNAPSHOT.schema !== SCHEMA) SNAPSHOT = null;
 	const young = SNAPSHOT && now - SNAPSHOT.fetchedAt < cacheTtl(SNAPSHOT);
 	const broad = (SNAPSHOT?.matches ?? []).some((m) => m.league === "L1" || m.league === "PL" || m.league === "LL" || m.league === "BL" || m.league === "SA");
-	if (young && hasSoon(SNAPSHOT, now) && broad) return SNAPSHOT;
+	const internationalFeedReady = SNAPSHOT?.meta?.internationalFeed?.version === 1;
+	if (young && hasSoon(SNAPSHOT, now) && broad && internationalFeedReady) return SNAPSHOT;
 	try {
 		return await refreshInFlight();
 	} catch {
