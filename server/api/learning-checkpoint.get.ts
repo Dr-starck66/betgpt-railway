@@ -6,6 +6,63 @@ import { runEngine } from "../../src/engine/pipeline";
 
 const REFRESH_TIMEOUT_MS = 18_000;
 
+function internationalFeedProof(tickets: ReturnType<typeof loadTickets>, live: ReturnType<typeof getLiveSnapshot>) {
+  const now = Date.now();
+  const upcoming = (live?.matches ?? []).filter((match) => {
+    if (match.league !== "NL" || !match.competitionKey) return false;
+    const kickoff = Date.parse(match.kickoff);
+    return Number.isFinite(kickoff) && kickoff > now && match.status !== "cancelled" && match.status !== "finished";
+  });
+  const byCompetition = new Map<string, {
+    competitionKey: string;
+    competition: string;
+    upcomingMatches: number;
+    preMatchTickets: number;
+    unresolvedTickets: number;
+    nextKickoff: string | null;
+  }>();
+
+  for (const match of upcoming) {
+    const row = byCompetition.get(match.competitionKey!) ?? {
+      competitionKey: match.competitionKey!,
+      competition: match.competition,
+      upcomingMatches: 0,
+      preMatchTickets: 0,
+      unresolvedTickets: 0,
+      nextKickoff: null,
+    };
+    row.upcomingMatches += 1;
+    if (!row.nextKickoff || match.kickoff < row.nextKickoff) row.nextKickoff = match.kickoff;
+    byCompetition.set(match.competitionKey!, row);
+  }
+
+  for (const ticket of tickets) {
+    if (ticket.league !== "NL" || !ticket.competitionKey) continue;
+    const recorded = Date.parse(ticket.recordedAt);
+    const kickoff = Date.parse(ticket.kickoff);
+    if (!Number.isFinite(recorded) || !Number.isFinite(kickoff) || recorded >= kickoff) continue;
+    const row = byCompetition.get(ticket.competitionKey) ?? {
+      competitionKey: ticket.competitionKey,
+      competition: ticket.competition ?? ticket.competitionKey,
+      upcomingMatches: 0,
+      preMatchTickets: 0,
+      unresolvedTickets: 0,
+      nextKickoff: null,
+    };
+    row.preMatchTickets += 1;
+    if (!ticket.result) row.unresolvedTickets += 1;
+    byCompetition.set(ticket.competitionKey, row);
+  }
+
+  return {
+    scheduler: live?.meta?.internationalFeed ?? null,
+    upcomingMatches: upcoming.length,
+    competitions: [...byCompetition.values()].sort(
+      (a, b) => b.upcomingMatches - a.upcomingMatches || b.preMatchTickets - a.preMatchTickets || a.competitionKey.localeCompare(b.competitionKey),
+    ),
+  };
+}
+
 function timeout<T>(promise: Promise<T>, ms: number, code: string): Promise<T> {
   return Promise.race([
     promise,
@@ -77,6 +134,7 @@ export default defineEventHandler(async (event) => {
   const tickets = loadTickets();
   const learning = buildLearningMemory(tickets);
   const live = getLiveSnapshot();
+  const feed = internationalFeedProof(tickets, live);
 
   setHeader(event, "cache-control", "no-store, no-cache, must-revalidate, max-age=0");
   setHeader(event, "x-astra-checkpoint", "astra-betgpt-runtime-checkpoint/v2");
@@ -90,6 +148,7 @@ export default defineEventHandler(async (event) => {
       liveAsOf: live?.meta?.asOf ?? null,
     },
     recovery,
+    feed,
     tickets,
     learning,
   };
