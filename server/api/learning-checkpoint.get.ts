@@ -108,6 +108,7 @@ export default defineEventHandler(async (event) => {
     capture: {
       upcomingPredictions: upcomingPredictions.length,
       upcomingByCompetition,
+      internationalFeed: live?.meta?.internationalFeed ?? null,
     },
     tickets,
     learning,
