@@ -120,11 +120,19 @@ const EVENT_ONLY_LEAGUES = [
 ] as const;
 
 const EVENT_LEAGUES = [...LEAGUES, ...EVENT_ONLY_LEAGUES];
+const INTERNATIONAL_AUTO_FEED_LEAGUES = EVENT_ONLY_LEAGUES.filter((row) => row.id === "NL");
+export const INTERNATIONAL_AUTO_FEED_MINUTES = 45;
+export const INTERNATIONAL_AUTO_FEED_LOOKAHEAD_DAYS = 21;
+export const INTERNATIONAL_AUTO_FEED_MAX_DATES_PER_COMPETITION = 4;
+
+export function internationalAutoFeedSpecs() {
+  return INTERNATIONAL_AUTO_FEED_LEAGUES.map((row) => ({ ...row }));
+}
 
 const TTL_MS = 6e5;
 const SCORE_TTL_MS = 2e4;
 const STALE_MS = 432e5;
-const SCHEMA = 40;
+const SCHEMA = 41;
 const SNAP_FILE = join(process.cwd(), "data", "live-snapshot.json");
 const SNAP_FILE_ABS = "/workspace/data/live-snapshot.json";
 const SNAP_FILE_TMP = "/tmp/betgpt-data/live-snapshot.json";
@@ -132,6 +140,7 @@ const FETCH_MS = 12e3;
 let SNAPSHOT = null;
 let INFLIGHT = null;
 let SCORE_INFLIGHT = null;
+let INTERNATIONAL_FEED_CACHE = null;
 const STYLE = {};
 for (const t of TEAMS) {
 	STYLE[norm(t.name)] = t;
@@ -667,6 +676,65 @@ function rankImportance(rh, ra) {
 	const b = ra ?? 10;
 	return clamp(.45 + (21 - Math.min(a, b)) * .02 + (Math.abs(a - b) < 4 ? .12 : 0), .35, .98);
 }
+async function fetchInternationalAutoFeed() {
+  const now = Date.now();
+  if (
+    INTERNATIONAL_FEED_CACHE &&
+    now - INTERNATIONAL_FEED_CACHE.fetchedAt < INTERNATIONAL_AUTO_FEED_MINUTES * 60_000
+  ) {
+    return INTERNATIONAL_FEED_CACHE;
+  }
+
+  const today = ymd(new Date(now));
+  const max = ymd(new Date(now + INTERNATIONAL_AUTO_FEED_LOOKAHEAD_DAYS * 864e5));
+  const fallbackMax = ymd(new Date(now + 2 * 864e5));
+  const parts = await mapPool(INTERNATIONAL_AUTO_FEED_LEAGUES, 3, async (league) => {
+    try {
+      const calendar = await calendarDays(league.slug);
+      let dates = calendar
+        .filter((day) => day >= today && day <= max)
+        .slice(0, INTERNATIONAL_AUTO_FEED_MAX_DATES_PER_COMPETITION);
+      if (!dates.length) dates = eachYmd(today, fallbackMax);
+      const board = await fetchBoard(league.slug, dates);
+      const teams = {};
+      const parsed = parseEvents(board, league.id, league.name, new Map(), teams, "upcoming", league.slug);
+      return {
+        league,
+        dates,
+        matches: parsed.matches.filter((match) => listedOpen(match)),
+        teams,
+      };
+    } catch {
+      return { league, dates: [], matches: [], teams: {} };
+    }
+  });
+
+  const matches = [];
+  const teams = {};
+  const coverage = [];
+  for (const part of parts) {
+    Object.assign(teams, part.teams);
+    coverage.push({
+      competitionKey: part.league.slug,
+      competition: part.league.name,
+      datesChecked: part.dates.length,
+      upcomingMatches: part.matches.length,
+    });
+    for (const match of part.matches) {
+      if (matches.some((existing) => existing.id === match.id || findSame([existing], match.home.name, match.away.name, match.kickoff))) continue;
+      matches.push(match);
+    }
+  }
+
+  INTERNATIONAL_FEED_CACHE = {
+    fetchedAt: now,
+    matches,
+    teams,
+    coverage,
+  };
+  return INTERNATIONAL_FEED_CACHE;
+}
+
 async function fetchLeague(league) {
 	try {
 		const days = await calendarDays(league.slug);
@@ -755,8 +823,9 @@ function matchFromUnibet(f, teams) {
 }
 async function loadSnapshot() {
 	const up = windowRange(2, 24);
-	const [parts, unibet, pages] = await Promise.all([
+	const [parts, internationalFeed, unibet, pages] = await Promise.all([
 		Promise.all(LEAGUES.map((l) => fetchLeague(l))),
+		fetchInternationalAutoFeed().catch(() => ({ fetchedAt: 0, matches: [], teams: {}, coverage: [] })),
 		fetchUnibetBooks().catch(() => ({
 			books: new Map(),
 			fixtures: []
@@ -770,6 +839,11 @@ async function loadSnapshot() {
 		Object.assign(teams, p.teams);
 		matches.push(...p.matches);
 		hist.push(...p.history);
+	}
+	Object.assign(teams, internationalFeed.teams ?? {});
+	for (const m of internationalFeed.matches ?? []) {
+		if (matches.some((existing) => existing.id === m.id || findSame([existing], m.home.name, m.away.name, m.kickoff))) continue;
+		matches.push(m);
 	}
 	if (!matches.some((m) => m.status === "live")) {
 		const today = ymd(new Date());
@@ -901,7 +975,13 @@ async function loadSnapshot() {
 			source: `Calendrier officiel · cotes ${booksUsed.join(" / ") || "UE"}`,
 			stale: false,
 			nMatches: matches.length,
-			nHistory: hist.length
+			nHistory: hist.length,
+			internationalFeed: {
+				fetchedAt: internationalFeed.fetchedAt || null,
+				intervalMinutes: INTERNATIONAL_AUTO_FEED_MINUTES,
+				lookaheadDays: INTERNATIONAL_AUTO_FEED_LOOKAHEAD_DAYS,
+				coverage: internationalFeed.coverage ?? []
+			}
 		}
 	};
 }
@@ -1108,6 +1188,7 @@ export function bustLive() {
 	SNAPSHOT = null;
 	INFLIGHT = null;
 	SCORE_INFLIGHT = null;
+	INTERNATIONAL_FEED_CACHE = null;
 }
 
 export type ResultRecoveryTarget = {
