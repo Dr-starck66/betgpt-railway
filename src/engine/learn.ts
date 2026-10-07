@@ -7,6 +7,10 @@ import { isShortPricedWinner } from "./ticket-log";
 
 export type LearningScope = "CLUB" | "INTERNATIONAL";
 
+export function isOneXTwoMarket(market?: string): boolean {
+  return market === "1X2_H" || market === "1X2_D" || market === "1X2_A";
+}
+
 export function learningScopeOfLeague(league?: LeagueId): LearningScope {
   return league === "NL" ? "INTERNATIONAL" : "CLUB";
 }
@@ -95,12 +99,12 @@ export function learnFromErrors(rows: TicketRow[]): ErrorLearn {
   // Calibration learns from every settled pre-match 1X2 observation, including
   // short-priced favorites. Betting KPI/safety remains isolated: short-priced
   // rows are still excluded from the actual-mise performance channel.
-  const pronos = settled.filter(
-    (r) =>
-      r.kind !== "mise" &&
-      (r.market === "1X2_H" || r.market === "1X2_D" || r.market === "1X2_A"),
+  const pronos = settled.filter((r) => r.kind !== "mise" && isOneXTwoMarket(r.market));
+  // Canonical 1X2 safety/calibration must never be tightened by BTTS/OU results.
+  // Secondary markets still live in contextual memory, but remain shadow-only here.
+  const mises = settled.filter(
+    (r) => r.kind === "mise" && isOneXTwoMarket(r.market) && !isShortPricedWinner(r),
   );
-  const mises = settled.filter((r) => r.kind === "mise" && !isShortPricedWinner(r));
   const eligibleSettled = [...pronos, ...mises].sort((a, b) => a.kickoff.localeCompare(b.kickoff));
   if (pronos.length < 8 && mises.length < 3) return { ...EMPTY_LEARN, n: eligibleSettled.length };
 
