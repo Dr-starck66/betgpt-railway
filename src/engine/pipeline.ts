@@ -26,7 +26,7 @@ import { clamp, logit, mean, normalize3, sigmoid } from "./math";
 import { FRENCH_EUROPE_NO_PRONO, skipEuropeFrenchProno } from "./french-clubs";
 import { loadAdmin } from "./admin";
 import { logoFor } from "@/lib/crests";
-import { applyErrorLearn, EMPTY_LEARN, learnFromErrors, rowsForLearningScope, type ErrorLearn } from "./learn";
+import { applyErrorLearn, EMPTY_LEARN, isOneXTwoMarket, learnFromErrors, rowsForLearningScope, type ErrorLearn } from "./learn";
 import { pickCurrentMethod, prettyPickLabel } from "./pick";
 import { tightenFromLearn } from "./quality-pick";
 import { enforceBetSafety } from "./bet-safety";
@@ -1546,6 +1546,7 @@ function applyAdaptiveLearningGate(
   learning: AdaptiveLearningReport,
 ): void {
   for (const q of rec.markets) {
+    if (!isOneXTwoMarket(q.market)) continue;
     if (q.decision !== "BET") continue;
     const safetyBlock = adaptiveSafetyBlock({ market: q.market, odds: q.bestOdds, league: match.league }, learning);
     if (safetyBlock) {
@@ -1605,10 +1606,10 @@ function runEngineUncached(): EngineRun {
     a.kickoff.localeCompare(b.kickoff),
   );
   const archive = ensureArchiveBacktest(archiveHist.length >= 200 ? archiveHist : history);
-  const clubActualTickets = rowsForLearningScope(actualTickets, "CLUB");
-  const clubArchiveTickets = rowsForLearningScope(archive?.tickets ?? [], "CLUB");
-  const internationalActualTickets = rowsForLearningScope(actualTickets, "INTERNATIONAL");
-  const internationalArchiveTickets = rowsForLearningScope(archive?.tickets ?? [], "INTERNATIONAL");
+  const clubActualTickets = rowsForLearningScope(actualTickets, "CLUB").filter((row) => isOneXTwoMarket(row.market));
+  const clubArchiveTickets = rowsForLearningScope(archive?.tickets ?? [], "CLUB").filter((row) => isOneXTwoMarket(row.market));
+  const internationalActualTickets = rowsForLearningScope(actualTickets, "INTERNATIONAL").filter((row) => isOneXTwoMarket(row.market));
+  const internationalArchiveTickets = rowsForLearningScope(archive?.tickets ?? [], "INTERNATIONAL").filter((row) => isOneXTwoMarket(row.market));
   const adaptiveLearning = buildAdaptiveLearningReport(clubActualTickets, clubArchiveTickets);
   const internationalAdaptiveLearningByCompetition = Object.fromEntries(
     internationalCompetitionKeysOf([...internationalArchiveTickets, ...internationalActualTickets]).map((competitionKey) => [

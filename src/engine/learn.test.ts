@@ -64,3 +64,39 @@ test("international rows are isolated from club learning", () => {
   assert.equal(clubLearn.hitRate, 0.25);
   assert.equal(internationalLearn.hitRate, 0.625);
 });
+
+
+test("secondary-market losses never tighten canonical 1X2 controls", () => {
+  const oneXTwo = Array.from({ length: 8 }, (_, i) => ({
+    ...lowOddsProno(100 + i, "win" as const),
+    league: "PL" as const,
+    odds: 2.0,
+    modelProb: 0.55,
+    ev: 0.1,
+  }));
+  const secondaryLosses: TicketRow[] = Array.from({ length: 6 }, (_, i) => {
+    const base = lowOddsProno(200 + i, "lose");
+    return {
+      ...base,
+      id: `secondary-${i}`,
+      matchId: `secondary-m-${i}`,
+      league: "PL",
+      market: "BTTS_Y",
+      odds: 5.2,
+      modelProb: 0.4,
+      ev: 0.2,
+      kind: "mise",
+      decision: "BET",
+      stakePct: 0.02,
+    };
+  });
+
+  const baseline = learnFromErrors(oneXTwo);
+  const mixed = learnFromErrors([...oneXTwo, ...secondaryLosses]);
+
+  assert.equal(mixed.recentMiseN, baseline.recentMiseN);
+  assert.equal(mixed.extraMinEv, baseline.extraMinEv);
+  assert.equal(mixed.maxOdds1x2, baseline.maxOdds1x2);
+  assert.equal(mixed.banDrawBet, baseline.banDrawBet);
+  assert.equal(mixed.hitRate, baseline.hitRate);
+});

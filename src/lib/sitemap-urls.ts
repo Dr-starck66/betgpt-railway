@@ -59,6 +59,15 @@ export async function loadSitemapUrls(): Promise<SitemapUrl[]> {
   const live = hydrateLiveFromDisk();
   const liveMatches = live?.matches ?? [];
   const seen = new Set(liveMatches.map((m: { id: string }) => m.id));
+  // Finished events in the live snapshot are not durable by themselves: the
+  // provider can retain stale IDs after its event endpoint expires. Publish
+  // only finished fixtures that are also present in the local archive, while
+  // keeping scheduled/live fixtures discoverable.
+  const archiveHistory = loadArchiveHistory();
+  const durableFinishedIds = new Set(archiveHistory.map((h) => h.id));
+  const sitemapLiveMatches = liveMatches.filter(
+    (m: MatchInput) => m.status !== "finished" || durableFinishedIds.has(m.id),
+  );
   // Every durable archive match that can resolve to a public dossier belongs in the sitemap.
   // Restricting this to betting-ticket IDs left hundreds of valid historical pages undiscoverable.
   const extra = loadArchiveHistory()
@@ -75,14 +84,14 @@ export async function loadSitemapUrls(): Promise<SitemapUrl[]> {
       scoreAway: h.goalsAway,
     }));
   let urls = buildSitemapUrls({
-    matches: [...liveMatches, ...extra],
+    matches: [...sitemapLiveMatches, ...extra],
     asOf: sitemapDate(live?.fetchedAt),
     standingsAsOf: sitemapDate(live?.fetchedAt),
   });
 
   // Result leaf pages must be backed by durable/local evidence. Never call
   // external score providers from a sitemap request.
-  const localHistory = loadArchiveHistory();
+  const localHistory = archiveHistory;
   const resultLeafPaths = new Set<string>();
   const localResultRows = [
     ...liveMatches.filter((m: MatchInput) => m.status === "finished"),
