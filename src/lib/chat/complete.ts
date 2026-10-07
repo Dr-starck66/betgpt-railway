@@ -133,9 +133,18 @@ function localReply(last: string, desk: string, mode: PersonalityMode): string {
       return `${opener}\n\n${selection}`;
     }
     if (desk.includes("Aucun match exploitable trouvé dans le cache.")) {
-      return mode === "ROAST"
-        ? "Le desk est vide. Je pourrais inventer une cote pour te divertir, mais contrairement à certaines intuitions humaines, j’ai encore une réputation intellectuelle à conserver."
-        : "Aujourd’hui, le desk ne remonte aucun match exploitable ni cote réelle. Donc non, je ne vais pas inventer un pari pour satisfaire un grille-pain émotionnel.";
+      const verdict =
+        mode === "ROAST"
+          ? "Le desk est vide. Je pourrais inventer une cote pour te divertir, mais contrairement à certaines intuitions humaines, j’ai encore une réputation intellectuelle à conserver."
+          : "Aujourd’hui, le desk ne remonte aucun match exploitable ni cote réelle. Donc non, je ne vais pas inventer un pari.";
+      return [
+        verdict,
+        "",
+        "Niveau : INDISPONIBLE — aucune sélection vérifiable",
+        "Pari à prendre : aucun — fail-closed",
+        "Meilleure cote trouvée : indisponible",
+        "Raison : aucun match exploitable ni cote réelle dans le desk actuel.",
+      ].join("\n");
     }
     const opener =
       mode === "ROAST"
@@ -429,22 +438,34 @@ export async function completeChat(
 
   const mustGround = shouldGround(last);
   const desk = chatNeedsDesk(last) ? await deskNow(last) : "";
+
+  // Daily-pick answers are deterministic and fail-closed. Never spend local-model
+  // memory on a request whose answer is already fully determined by the live desk,
+  // including the honest "no verified pick" case.
+  if (classifyChatIntent(last) === "TODAY_PICKS") {
+    return success(localReply(last, desk, mode), mode, last, recentRoasts);
+  }
+
   const insultBrief = mode === "ROAST" ? absurdInsultCreativeBrief(last, recentRoasts) : "";
   const personality = personalityBrief(memory, mode, history, last);
   const system = betgptPrompt(memory, mode, desk, insultBrief, personality);
 
-  // Daily-pick questions are deterministic when the desk has a real selection:
-  // never let a language model replace it with "donne-moi les affiches".
-  if (classifyChatIntent(last) === "TODAY_PICKS" && desk.includes("SÉLECTION AUTOMATIQUE BETGPT")) {
-    return success(localReply(last, desk, mode), mode, last, recentRoasts);
-  }
+  // The Railway llama.cpp service has a 2k-token context. Keep local/gateway
+  // requests comfortably below that ceiling instead of letting oversized prompts
+  // become 400s and repeated allocations that push the process into OOM restarts.
+  const compactSystem =
+    system.length <= 3300 ? system : `${system.slice(0, 1800)}\n\n${system.slice(-1500)}`;
+  const compactHistory = history.slice(-3).map((message) => ({
+    ...message,
+    content: message.content.slice(0, 300),
+  }));
 
   const reliabilityGatewayBase = process.env.ASTRA_LLM_GATEWAY_BASE?.trim();
   if (reliabilityGatewayBase) {
     try {
-      const out = await callReliabilityGateway(system, history, {
+      const out = await callReliabilityGateway(compactSystem, compactHistory, {
         temperature: mode === "ROAST" ? 0.72 : 0.38,
-        maxTokens: 320,
+        maxTokens: 220,
       });
       if (out.ok) {
         const text = stripMarkup(out.text).trim();
@@ -466,7 +487,7 @@ export async function completeChat(
   const localChatBase = process.env.ASTRA_LOCAL_CHAT_BASE?.trim();
   if (localChatBase) {
     try {
-      const out = await callLocalChat(localChatBase, system, history, mode);
+      const out = await callLocalChat(localChatBase, compactSystem, compactHistory, mode);
       if (out.ok) {
         if (mustGround) {
           const source = `${system}\n\n${history.map((m) => m.content).join("\n")}`;
@@ -485,7 +506,7 @@ export async function completeChat(
   const routerToken = process.env.ASTRA_ROUTER_TOKEN?.trim();
   if (routerBase && routerToken) {
     try {
-      const out = await callAstraRouter(routerBase, routerToken, system, history, mode);
+      const out = await callAstraRouter(routerBase, routerToken, compactSystem, compactHistory, mode);
       if (out.ok) {
         if (mustGround) {
           const source = `${system}\n\n${history.map((m) => m.content).join("\n")}`;
