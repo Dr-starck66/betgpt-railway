@@ -60,6 +60,14 @@ export type LearningMemorySnapshot = {
     latestSettledKickoff: string | null;
   }>;
   internationalAdaptiveByCompetition: Record<string, ReturnType<typeof buildAdaptiveLearningReport>>;
+  internationalMaturityByCompetition: Array<{
+    competitionKey: string;
+    settledN: number;
+    status: "COLLECTING" | "SHADOW_READY" | "PROMOTED";
+    minForShadow: number;
+    policyStatus: "PROMOTED" | "SHADOW";
+    reason: string;
+  }>;
   latestContextSettled: Array<{
     id: string;
     kickoff: string;
@@ -298,6 +306,28 @@ export function buildLearningMemory(
   };
   const learningFreshness = freshnessOf(learningRows);
   const contextualFreshness = freshnessOf(contextualRows);
+  const internationalMaturityByCompetition = Object.entries(internationalAdaptiveByCompetition)
+    .map(([competitionKey, report]) => {
+      const settledN = report.honestWalkForwardN;
+      const status =
+        report.policy.status === "PROMOTED"
+          ? ("PROMOTED" as const)
+          : settledN >= 28
+            ? ("SHADOW_READY" as const)
+            : ("COLLECTING" as const);
+      return {
+        competitionKey,
+        settledN,
+        status,
+        minForShadow: 28,
+        policyStatus: report.policy.status,
+        reason:
+          status === "COLLECTING"
+            ? `Collecte ${settledN}/28 résultats honnêtes avant évaluation train/holdout.`
+            : report.policy.reason,
+      };
+    })
+    .sort((a, b) => b.settledN - a.settledN);
   const contextualWins = contextualRows.filter((row) => row.result === "win").length;
   const internationalContextRows = contextualRows.filter((row) => row.league === "NL");
   const internationalCompetitionPerformance = internationalCompetitionKeysOf(internationalContextRows)
@@ -386,6 +416,7 @@ export function buildLearningMemory(
     contextualFactorPerformance,
     internationalCompetitionPerformance,
     internationalAdaptiveByCompetition,
+    internationalMaturityByCompetition,
     latestContextSettled,
     ledger,
     roi5,
