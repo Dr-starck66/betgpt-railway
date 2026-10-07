@@ -6,7 +6,7 @@ import { readLedgerDurable, writeLedgerDurable } from "@/lib/editorial/ledger-st
 import { isPublicArticle, type EditorialEdition } from "@/lib/editorial/types";
 import { manualEditorialArticles } from "@/lib/editorial/manual-articles";
 
-type EditionResult = { edition: EditorialEdition; durable: boolean };
+export interface EditionResult { edition: EditorialEdition; durable: boolean }
 const EDITION_CACHE_TTL_MS = 5 * 60 * 1000;
 let editionCache: { at: number; value: EditionResult } | null = null;
 let editionInflight: Promise<EditionResult> | null = null;
