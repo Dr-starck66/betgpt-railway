@@ -202,4 +202,10 @@ test("international competition performance is split instead of pooled", () => {
   const nationsFactors = report.latestContextSettled.find((x) => x.id === "nations")?.factors ?? [];
   assert.ok(nationsFactors.includes("competition:uefa.nations"));
   assert.ok(!nationsFactors.includes("competition:caf.nations_qual"));
+
+  const readiness = new Map(report.internationalPromotionReadiness.map((x) => [x.competitionKey, x]));
+  assert.equal(readiness.get("uefa.nations")?.honestWalkForwardN, 1);
+  assert.equal(readiness.get("uefa.nations")?.minRequired, 28);
+  assert.equal(readiness.get("uefa.nations")?.remaining, 27);
+  assert.equal(readiness.get("uefa.nations")?.status, "SHADOW");
 });
