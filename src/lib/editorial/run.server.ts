@@ -3,10 +3,10 @@ import type { MatchInput } from "@/engine/types";
 import { buildEdition } from "@/lib/editorial/engine";
 import { collectFootballNewsSignals } from "@/lib/editorial/news-scout.server";
 import { readLedgerDurable, writeLedgerDurable } from "@/lib/editorial/ledger-store";
-import { isPublicArticle } from "@/lib/editorial/types";
+import { isPublicArticle, type EditorialEdition } from "@/lib/editorial/types";
 import { manualEditorialArticles } from "@/lib/editorial/manual-articles";
 
-type EditionResult = Awaited<ReturnType<typeof editionFromDeskUncached>>;
+type EditionResult = { edition: EditorialEdition; durable: boolean };
 const EDITION_CACHE_TTL_MS = 5 * 60 * 1000;
 let editionCache: { at: number; value: EditionResult } | null = null;
 let editionInflight: Promise<EditionResult> | null = null;
