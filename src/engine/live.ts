@@ -1114,6 +1114,10 @@ export type ResultRecoveryTarget = {
   matchId: string;
   kickoff: string;
   league?: LeagueId;
+  home?: string;
+  away?: string;
+  competition?: string;
+  competitionKey?: string;
 };
 
 export function resultRecoveryLeagueSlugs(league?: LeagueId): string[] {
@@ -1150,6 +1154,57 @@ export async function recoverEspnResults(targets: ResultRecoveryTarget[]): Promi
   });
 
   return hits.filter((match): match is MatchInput => Boolean(match));
+}
+
+export async function recoverFixtureResults(targets: ResultRecoveryTarget[]): Promise<MatchInput[]> {
+  const now = Date.now();
+  const eligible = targets
+    .filter((target) => {
+      const kickoffMs = Date.parse(target.kickoff);
+      return Number.isFinite(kickoffMs) && kickoffMs <= now - 90 * 60_000 && now - kickoffMs <= 8 * 864e5;
+    })
+    .sort((a, b) => String(b.kickoff).localeCompare(String(a.kickoff)))
+    .slice(0, 8);
+
+  const direct = await recoverEspnResults(eligible);
+  const foundIds = new Set(direct.map((match) => match.id));
+  const unresolved = eligible.filter((target) => !/^espn-\d{5,12}$/i.test(target.matchId) || !foundIds.has(target.matchId));
+  if (!unresolved.length) return direct;
+
+  const recovered = await mapPool(unresolved, 2, async (target) => {
+    if (!target.home || !target.away) return null;
+    const date = String(target.kickoff).slice(0, 10).replaceAll("-", "");
+    if (!/^\d{8}$/.test(date)) return null;
+    const specs = target.league ? EVENT_LEAGUES.filter((row) => row.id === target.league) : EVENT_LEAGUES;
+    const preferred = target.competitionKey
+      ? [...specs.filter((row) => row.slug === target.competitionKey), ...specs.filter((row) => row.slug !== target.competitionKey)]
+      : specs;
+    for (const spec of preferred) {
+      try {
+        const board = await fetchBoard(spec.slug, date);
+        const events = Array.isArray(board?.events) ? board.events : [];
+        const event = events.find((candidate) => {
+          const comp = candidate?.competitions?.[0];
+          const home = comp?.competitors?.find((x) => x?.homeAway === "home")?.team?.displayName ?? "";
+          const away = comp?.competitors?.find((x) => x?.homeAway === "away")?.team?.displayName ?? "";
+          return Boolean(findSame([{ home: { name: home }, away: { name: away }, kickoff: candidate?.date }], target.home!, target.away!, target.kickoff));
+        });
+        if (!event) continue;
+        const parsed = parseEvents({ events: [event] }, spec.id, spec.name, new Map(), {}, "single", spec.slug);
+        const match = parsed.matches[0];
+        if (match && (match.status === "finished" || match.status === "cancelled")) return match;
+      } catch {
+        // Try the next competition surface.
+      }
+    }
+    return null;
+  });
+
+  const byFixture = new Map<string, MatchInput>();
+  for (const match of [...direct, ...recovered.filter((x): x is MatchInput => Boolean(x))]) {
+    byFixture.set(match.id, match);
+  }
+  return [...byFixture.values()];
 }
 
 /** Fetch a single ESPN soccer event even after it left the live window. */
