@@ -15,7 +15,7 @@ test("international auto-feed is bounded and zero-cost friendly", () => {
 
 test("international auto-feed covers event-only national competitions without mixing club cups", () => {
   const specs = internationalAutoFeedSpecs();
-  const keys = specs.map((row) => row.slug);
+  const keys: string[] = specs.map((row) => row.slug);
 
   assert.ok(specs.length >= 10);
   assert.ok(specs.every((row) => row.id === "NL"));
