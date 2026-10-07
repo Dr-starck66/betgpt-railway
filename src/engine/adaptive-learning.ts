@@ -1,6 +1,8 @@
 import type { LeagueId, MarketKind } from "./types.ts";
 import type { TicketRow } from "./ticket-log.ts";
 
+export const ADAPTIVE_MIN_WALK_FORWARD = 28;
+
 export const ADAPTIVE_CONFIG = Object.freeze({
   archiveWeight: 0.12,
   actualWeight: 1,
@@ -328,7 +330,7 @@ function scoreCandidate(train: WalkForwardPoint[], c: AdaptiveCandidate): { scor
 }
 
 export function chooseAdaptivePolicy(points: WalkForwardPoint[]): AdaptivePolicy {
-  if (points.length < 28) {
+  if (points.length < ADAPTIVE_MIN_WALK_FORWARD) {
     const baselineHoldout = adaptiveMetrics(points);
     return {
       minTrust: 0.5,
