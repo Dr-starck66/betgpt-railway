@@ -1,4 +1,4 @@
-import { buildAdaptiveLearningReport } from "./adaptive-learning.ts";
+import { ADAPTIVE_MIN_WALK_FORWARD, buildAdaptiveLearningReport } from "./adaptive-learning.ts";
 import { calculateLedgerStats } from "./ledger-stats.ts";
 import { fixtureKey, isCanonicalRoi5Selection } from "./ledger-pick.ts";
 import { learnContinuousRoi5Policy } from "./roi5-continuous-learning.ts";
@@ -60,6 +60,14 @@ export type LearningMemorySnapshot = {
     latestSettledKickoff: string | null;
   }>;
   internationalAdaptiveByCompetition: Record<string, ReturnType<typeof buildAdaptiveLearningReport>>;
+  internationalPromotionReadiness: Array<{
+    competitionKey: string;
+    honestWalkForwardN: number;
+    minRequired: number;
+    remaining: number;
+    status: "SHADOW" | "PROMOTED";
+    reason: string;
+  }>;
   latestContextSettled: Array<{
     id: string;
     kickoff: string;
@@ -320,6 +328,28 @@ export function buildLearningMemory(
     })
     .sort((a, b) => b.n - a.n || b.roi - a.roi);
 
+  const readinessKeys = [...new Set([
+    ...internationalCompetitionPerformance.map((row) => row.competitionKey),
+    ...Object.keys(internationalAdaptiveByCompetition),
+  ])];
+  const internationalPromotionReadiness = readinessKeys
+    .map((competitionKey) => {
+      const adaptiveReport = internationalAdaptiveByCompetition[competitionKey];
+      const honestWalkForwardN = adaptiveReport?.honestWalkForwardN ?? 0;
+      const status = adaptiveReport?.policy.status ?? ("SHADOW" as const);
+      return {
+        competitionKey,
+        honestWalkForwardN,
+        minRequired: ADAPTIVE_MIN_WALK_FORWARD,
+        remaining: Math.max(0, ADAPTIVE_MIN_WALK_FORWARD - honestWalkForwardN),
+        status,
+        reason:
+          adaptiveReport?.policy.reason ??
+          `SHADOW : ${honestWalkForwardN}/${ADAPTIVE_MIN_WALK_FORWARD} observations walk-forward honnêtes disponibles.`,
+      };
+    })
+    .sort((a, b) => b.honestWalkForwardN - a.honestWalkForwardN || a.competitionKey.localeCompare(b.competitionKey));
+
   const mature = factorPerformance.filter((f) => f.n >= 3);
   const harmfulFactors = [...mature].sort((a, b) => a.roi - b.roi || b.n - a.n).slice(0, 12);
   const helpfulFactors = [...mature].sort((a, b) => b.roi - a.roi || b.n - a.n).slice(0, 12);
@@ -386,6 +416,7 @@ export function buildLearningMemory(
     contextualFactorPerformance,
     internationalCompetitionPerformance,
     internationalAdaptiveByCompetition,
+    internationalPromotionReadiness,
     latestContextSettled,
     ledger,
     roi5,
