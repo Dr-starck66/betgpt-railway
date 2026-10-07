@@ -203,3 +203,21 @@ test("international competition performance is split instead of pooled", () => {
   assert.ok(nationsFactors.includes("competition:uefa.nations"));
   assert.ok(!nationsFactors.includes("competition:caf.nations_qual"));
 });
+
+
+test("international challenger remains collecting below honest sample gate", () => {
+  const rows = Array.from({ length: 2 }, (_, i) => ({
+    ...row(60 + i, "win", 2.0),
+    id: `afconq-${i}`,
+    matchId: `afconq-${i}`,
+    league: "NL" as const,
+    competition: "Qualifications Coupe d'Afrique des Nations",
+    competitionKey: "caf.nations_qual",
+  }));
+  const report = buildLearningMemory(rows, "2026-10-07T00:00:00.000Z");
+  const maturity = report.internationalMaturityByCompetition.find((x) => x.competitionKey === "caf.nations_qual");
+  assert.equal(maturity?.settledN, 2);
+  assert.equal(maturity?.status, "COLLECTING");
+  assert.equal(maturity?.minForShadow, 28);
+  assert.equal(maturity?.policyStatus, "SHADOW");
+});
