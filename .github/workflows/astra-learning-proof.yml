@@ -11,6 +11,7 @@ on:
       - "src/engine/learn.test.ts"
       - "src/engine/competition-scope.ts"
       - "src/engine/competition-scope.test.ts"
+      - "src/engine/international-auto-feed.test.ts"
       - "src/engine/pipeline.ts"
       - "src/engine/types.ts"
       - "src/engine/live.ts"
@@ -30,6 +31,7 @@ on:
       - "src/engine/learn.test.ts"
       - "src/engine/competition-scope.ts"
       - "src/engine/competition-scope.test.ts"
+      - "src/engine/international-auto-feed.test.ts"
       - "src/engine/pipeline.ts"
       - "src/engine/types.ts"
       - "src/engine/live.ts"
@@ -59,6 +61,7 @@ jobs:
           node --experimental-strip-types --import ./scripts/ts-alias.mjs --test
           src/engine/ticket-log.test.ts
           src/engine/competition-scope.test.ts
+          src/engine/international-auto-feed.test.ts
           src/engine/learning-memory.test.ts
           src/engine/learn.test.ts
           src/engine/live-result-recovery.test.ts
