@@ -619,3 +619,24 @@ describe("editorial engine", () => {
   });
 
 });
+import { editorialLiveWithinBudget } from "./live-budget.ts";
+
+it("editorial live enrichment releases a stalled shared refresh without inventing matches", async () => {
+  const result = await editorialLiveWithinBudget(() => new Promise(() => {}), 10);
+  assert.deepEqual(result, { value: null, status: "TIMEOUT" });
+});
+
+it("editorial live enrichment preserves available data and reports unavailable providers", async () => {
+  const snapshot = { matches: [{ id: "observed-match" }] };
+  assert.deepEqual(await editorialLiveWithinBudget(async () => snapshot, 100), { value: snapshot, status: "AVAILABLE" });
+  assert.deepEqual(await editorialLiveWithinBudget(async () => null, 100), { value: null, status: "UNAVAILABLE" });
+  assert.deepEqual(await editorialLiveWithinBudget(async () => { throw new Error("provider unavailable"); }, 100), { value: null, status: "UNAVAILABLE" });
+});
+
+it("late live provider failures stay handled after the editorial deadline", async () => {
+  let reject: (error: Error) => void = () => {};
+  const pending = new Promise<null>((_resolve, rejectPromise) => { reject = rejectPromise; });
+  assert.equal((await editorialLiveWithinBudget(() => pending, 10)).status, "TIMEOUT");
+  reject(new Error("late provider failure"));
+  await new Promise((resolve) => setImmediate(resolve));
+});
