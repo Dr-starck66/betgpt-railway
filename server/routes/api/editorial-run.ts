@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
     return { ok: false, error: "unauthorized" };
   }
   try {
-    const { edition, durable } = await editionFromDesk(new Date());
+    const { edition, durable, liveDataStatus } = await editionFromDesk(new Date());
     const published = edition.articles.filter(
       (article) => article.status === "PUBLISHED" || article.status === "UPDATED",
     );
@@ -17,6 +17,7 @@ export default defineEventHandler(async (event) => {
       ok: true,
       parisDate: edition.parisDate,
       durable,
+      liveDataStatus,
       targetPerDay: 3,
       plannedCount: edition.plannedCount,
       targetStatus: edition.targetStatus,
