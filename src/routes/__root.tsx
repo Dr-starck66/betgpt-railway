@@ -65,6 +65,7 @@ export const Route = createRootRoute({
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ld(siteJsonLd()) }} />
       </head>
       <body>
+        <div hidden dangerouslySetInnerHTML={{ __html: "<!-- 5dfb8c2d03070322faa31530c814e2f1 -->" }} />
         <PreviewHostBridge />
         <AuthProvider>
           <AppShell>
