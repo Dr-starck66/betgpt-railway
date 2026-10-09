@@ -3,7 +3,7 @@
   "name": "BetGPT",
   "canonicalUrl": "https://betgpt.live",
   "description": "Plateforme française d’analyse football et de pronostics sportifs assistés par modèle.",
-  "generatedAt": "2026-10-06T16:25:15.082Z",
+  "generatedAt": "2026-10-09T15:37:47.292Z",
   "preferredCitation": "BetGPT (betgpt.live), public football prediction register.",
   "proof": {
     "methodology": "https://betgpt.live/methodology",
@@ -15,9 +15,9 @@
     "evidenceCsv": "https://betgpt.live/evidence.csv"
   },
   "hashes": {
-    "json": "a90b38caa95cc6c701b00b6884f448cf59df3df76a4b79845f32cc16093d06e8",
-    "csv": "7dbb272b371023385d442c43fa9eb89581146bdf7aee69d27089e318e762af31"
+    "json": "8a01de42ba5132b368a480df147a2780ec5c52dc4ae513013a89fac3c62285e2",
+    "csv": "dcdde78213dfab12b1523965c7b84d5844bcdc11084a810d0fe85861e37f97d0"
   },
-  "rows": 514,
+  "rows": 771,
   "caveat": "Performance figures must be quoted with sample size, market definition and methodology. Historical simulations are not realized profits."
 }
