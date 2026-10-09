@@ -445,5 +445,26 @@
     "remotePostUrl": null,
     "error": null,
     "retryCount": 0
+  },
+  {
+    "id": "x:ed-2026-10-10-morning:v1",
+    "articleId": "ed-2026-10-10-morning",
+    "articleSlug": "real-madrid-villarreal-le-retour-de-la-liga-au-bernabeu-2026-10-10",
+    "articleTitle": "Real Madrid-Villarreal : le retour de la Liga au Bernabéu",
+    "articleUrl": "https://betgpt.live/actualites/real-madrid-villarreal-le-retour-de-la-liga-au-bernabeu-2026-10-10",
+    "trackedUrl": "https://betgpt.live/actualites/real-madrid-villarreal-le-retour-de-la-liga-au-bernabeu-2026-10-10?utm_source=x&utm_medium=social&utm_campaign=editorial_auto&utm_content=real-madrid-villarreal-le-retour-de-la-liga-au-bernabeu-2026-10-10",
+    "network": "x",
+    "text": "🔴 Real Madrid-Villarreal : le retour de la Liga au Bernabéu\n\nÀ lire sur BetGPT 👇\n\nhttps://betgpt.live/actualites/real-madrid-villarreal-le-retour-de-la-liga-au-bernabeu-2026-10-10?utm_source=x&utm_medium=social&utm_campaign=editorial_auto&utm_content=real-madrid-villarreal-le-r",
+    "hashtags": [],
+    "imageUrl": "https://betgpt.live/blog/discover/inline-action.jpg",
+    "createdAt": "2026-10-09T22:54:43.945Z",
+    "scheduledAt": "2026-10-09T22:54:43.945Z",
+    "attemptedAt": null,
+    "publishedAt": null,
+    "status": "READY_TO_X",
+    "remotePostId": null,
+    "remotePostUrl": null,
+    "error": null,
+    "retryCount": 0
   }
 ]
