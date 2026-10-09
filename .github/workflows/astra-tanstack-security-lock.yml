@@ -1,0 +1,49 @@
+name: ASTRA TanStack security lockfile
+on:
+  push:
+    branches: [main]
+    paths:
+      - package.json
+      - .github/workflows/astra-tanstack-security-lock.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fix-lock:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Resolve patched dependencies into lockfile
+        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+      - name: Fail closed on vulnerable TanStack versions
+        run: |
+          node - <<'NODE'
+          const lock = require('./package-lock.json');
+          const v = (name) => lock.packages['node_modules/' + name]?.version;
+          const ok = (actual, min) => {
+            if (!actual) return false;
+            const a = actual.split('.').map(Number), b = min.split('.').map(Number);
+            for (let i=0;i<3;i++) { if (a[i] > b[i]) return true; if (a[i] < b[i]) return false; }
+            return true;
+          };
+          for (const [name, min] of [['@tanstack/react-start','1.168.60'],['@tanstack/start-server-core','1.169.39']]) {
+            const actual = v(name);
+            if (!ok(actual,min)) { console.error('SECURITY_GATE_FAIL',name,actual,'minimum',min); process.exitCode=1; }
+            else console.log('SECURITY_GATE_PASS',name,actual);
+          }
+          NODE
+      - name: Commit lockfile update
+        run: |
+          if git diff --quiet -- package-lock.json; then
+            echo 'LOCKFILE_ALREADY_CURRENT'
+          else
+            git config user.name 'astra-security-bot'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add package-lock.json
+            git commit -m 'security: lock patched TanStack Start and server core'
+            git push origin HEAD:main
+          fi
