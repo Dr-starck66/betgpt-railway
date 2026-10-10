@@ -3958,6 +3958,17 @@
     },
     "related": [
       {
+        "href": "/actualites/fc-barcelone-getafe-les-compositions-officielles-sont-connues-2026-10-10",
+        "title": "FC Barcelone – Getafe : les compositions officielles sont connues",
+        "image": {
+          "src": "/blog/discover/inline-shot.jpg",
+          "alt": "Frappe au but pendant un match",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
         "href": "/actualites/real-madrid-villarreal-le-retour-de-la-liga-au-bernabeu-2026-10-10",
         "title": "Real Madrid-Villarreal : le retour de la Liga au Bernabéu",
         "image": {
@@ -3996,17 +4007,6 @@
         "image": {
           "src": "/blog/discover/inline-action.jpg",
           "alt": "Joueurs de football en action",
-          "width": 1200,
-          "height": 675,
-          "credit": "Football : actualités, contexte et analyse sur BetGPT."
-        }
-      },
-      {
-        "href": "/actualites/real-madrid-avec-kylian-mbappe-contre-villarreal-2026-10-08",
-        "title": "Real Madrid : Avec Kylian Mbappé contre Villarreal ?",
-        "image": {
-          "src": "/blog/discover/inline-pitch.jpg",
-          "alt": "Ballon sur une pelouse de football",
           "width": 1200,
           "height": 675,
           "credit": "Football : actualités, contexte et analyse sur BetGPT."
@@ -5457,6 +5457,248 @@
       "reasons": []
     },
     "duplicateScore": 0.3888888888888889,
+    "discoverChecks": {
+      "INDEXABLE": true,
+      "LARGE_IMAGE": true,
+      "IMAGE_GE_1200": true,
+      "MAX_IMAGE_PREVIEW_LARGE": true,
+      "HELPFUL_CONTENT": true,
+      "NON_CLICKBAIT_TITLE": true,
+      "ORIGINAL_VALUE": true,
+      "MOBILE_TEMPLATE": true
+    },
+    "discoverReadiness": 100,
+    "topStories": "TOP_STORIES_ELIGIBILITY_READY"
+  },
+  {
+    "id": "ed-2026-10-10-evening",
+    "slug": "fc-barcelone-getafe-les-compositions-officielles-sont-connues-2026-10-10",
+    "slot": "evening",
+    "articleType": "news",
+    "status": "PUBLISHED",
+    "title": "FC Barcelone – Getafe : les compositions officielles sont connues | BetGPT",
+    "h1": "FC Barcelone – Getafe : les compositions officielles sont connues",
+    "lead": "FC Barcelone – Getafe : les compositions officielles sont connues. AfricaFootUnited a publié cette information samedi 10 octobre 2026 à 17:55. Le dossier est repris par 2 sources distinctes. FC Barcelone – Getafe : les compositions officielles sont connues AfricaFootUnited",
+    "paragraphs": [
+      {
+        "h2": "Le fait nouveau qui fait basculer le dossier",
+        "body": "AfricaFootUnited rapporte FC Barcelone – Getafe : les compositions officielles sont connues. L'information devient pertinente parce qu'elle précise un dossier déjà suivi, sans transformer une hypothèse en certitude. Au total, 2 rédactions ou sources distinctes alimentent ce cluster d'actualité. Les détails complémentaires sont attribués séparément dans la section suivante afin d'éviter de transformer une reprise en confirmation indépendante.",
+        "sourceIds": [
+          "news-6f7fc038"
+        ]
+      },
+      {
+        "h2": "Ce que disent précisément les différentes sources",
+        "body": "AfricaFootUnited, samedi 10 octobre 2026 à 17:55 : FC Barcelone – Getafe : les compositions officielles sont connues AfricaFootUnited AfricaFootUnited, samedi 10 octobre 2026 à 17:24 : FC Barcelone – Getafe : sur quelle chaîne TV suivre le match en direct ? AfricaFootUnited Foot-Africa.com, samedi 10 octobre 2026 à 17:45 : FC Barcelone - Getafe : les compositions officielles sont connues ! Foot-Africa.com Foot-Africa.com, samedi 10 octobre 2026 à 16:00 : FC Barcelone : le groupe contre Getafe avec un grand absent ! Foot-Africa.com Cette présentation reste volontairement attribuée source par source : lorsque deux médias racontent le même épisode avec des détails différents, BetGPT ne fusionne pas automatiquement ces détails en un fait unique. Une information n'est élevée au rang de fait établi que si son niveau de source le justifie ou si plusieurs références indépendantes convergent réellement.",
+        "sourceIds": [
+          "news-6f7fc038",
+          "news-3abf2fe",
+          "news-f8a17350",
+          "news-f7291515"
+        ]
+      },
+      {
+        "h2": "La chronologie des publications",
+        "body": "samedi 10 octobre 2026 à 16:00 — Foot-Africa.com publie « FC Barcelone : le groupe contre Getafe avec un grand absent ! ». samedi 10 octobre 2026 à 17:24 — AfricaFootUnited publie « FC Barcelone – Getafe : sur quelle chaîne TV suivre le match en direct ? ». samedi 10 octobre 2026 à 17:45 — Foot-Africa.com publie « FC Barcelone - Getafe : les compositions officielles sont connues ! ». samedi 10 octobre 2026 à 17:55 — AfricaFootUnited publie « FC Barcelone – Getafe : les compositions officielles sont connues ». Cette chronologie permet de distinguer le fait initial, les reprises et les éventuelles confirmations plus tardives. Elle évite surtout de présenter comme simultanées des informations qui ont pu évoluer au fil de la journée.",
+        "sourceIds": [
+          "news-6f7fc038",
+          "news-3abf2fe",
+          "news-f8a17350",
+          "news-f7291515"
+        ]
+      },
+      {
+        "h2": "Le repère sportif concret autour de cette information",
+        "body": "Le calendrier BetGPT rattache ce sujet à FC Barcelone – Getafe, en La Liga, avec un coup d'envoi samedi 10 octobre 2026 à 18:30. Ce match fournit un repère sportif concret pour mesurer les conséquences de l'information sans inventer de date de retour, de composition ou de disponibilité. Les entités explicitement détectées dans les sources sont : Barcelone.",
+        "sourceIds": [
+          "cal-ub-barcelone|getafe-2026-10-10",
+          "news-6f7fc038"
+        ]
+      },
+      {
+        "h2": "Ce qui est établi, corroboré ou encore fragile",
+        "body": "Le cluster contient 2 sources officielles, 0 source de premier niveau journalistique et 2 autres sources. Les éléments issus d'une source officielle sont distingués des reprises de presse. Les points communs entre plusieurs sources sont présentés comme corroborés ; les détails isolés restent attribués.",
+        "sourceIds": [
+          "news-6f7fc038",
+          "news-3abf2fe",
+          "news-f8a17350",
+          "news-f7291515"
+        ]
+      },
+      {
+        "h2": "Le prochain élément qui permettra de mettre l'article à jour",
+        "body": "Pour Barcelone, le contrôle suivant porte sur la liste officielle, la feuille de match et les changements de dernière minute. Aucun joueur n'est présenté comme titulaire sans confirmation exploitable. BetGPT ne republie pas une nouvelle dépêche pour répéter le même état de fait : une mise à jour exige un changement matériel, une confirmation nouvelle ou une donnée sportive directement vérifiable.",
+        "sourceIds": [
+          "news-6f7fc038",
+          "news-3abf2fe"
+        ]
+      }
+    ],
+    "createdAt": "2026-10-10T16:14:39.229Z",
+    "publishedAt": "2026-10-10T16:14:39.229Z",
+    "modifiedAt": "2026-10-10T16:14:39.229Z",
+    "parisDate": "2026-10-10",
+    "scheduledTime": "19:00",
+    "category": "Actualité football",
+    "section": "la-liga",
+    "league": "LL",
+    "teams": [
+      "Barcelone"
+    ],
+    "matchId": "ub-barcelone|getafe-2026-10-10",
+    "competition": "La Liga",
+    "sources": [
+      {
+        "id": "news-6f7fc038",
+        "label": "AfricaFootUnited",
+        "status": "OFFICIAL",
+        "note": "FC Barcelone – Getafe : les compositions officielles sont connues · publié samedi 10 octobre 2026 à 17:55.",
+        "url": "https://news.google.com/rss/articles/CBMilgFBVV95cUxQY3REVm5HQ19pTUVQRjJuT2VKcl9CNUppMlFwUktFT1NDRFdPQ2NuNWxaSGhBYlpUdU52R0Y1VlB1MUo0X2UxR2xqNjlWak81UmdTVG11TnZRVkRPV0tZRndmTU9Rc2QzT3g5NDUwWGplY20ySnAxd3cwcVpkeHQ5NzhLcmljWHN4dEZETHE1R0ZGYko2TUE?oc=5"
+      },
+      {
+        "id": "news-3abf2fe",
+        "label": "AfricaFootUnited",
+        "status": "OFFICIAL",
+        "note": "FC Barcelone – Getafe : sur quelle chaîne TV suivre le match en direct ? · publié samedi 10 octobre 2026 à 17:24.",
+        "url": "https://news.google.com/rss/articles/CBMinAFBVV95cUxPOVlKMUdoWVZrckR6TWxpcmR6ekFQdURIOU9uR2N6MGlUakpUcmwzM0NXR3ZyVDFhZ295NXc1MV9PYmdjdk1IQ0ZPVW5rQjZJTWlVcUt2OXRYRWJBQlE2enZRWUd0SnIwSGNkN2ZvVGpleWxsTVV4QkhIOXR6dWJSS2pYTDN5cEppendYdkJvdGNyWklUbkFUWHNCX1I?oc=5"
+      },
+      {
+        "id": "news-f8a17350",
+        "label": "Foot-Africa.com",
+        "status": "UNCONFIRMED",
+        "note": "FC Barcelone - Getafe : les compositions officielles sont connues ! · publié samedi 10 octobre 2026 à 17:45.",
+        "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxOckp3QlF1TGltaVhIcnhNZW12WVl6bE90QUxkNHltajJZalpac2F4WEdnWXA4RkF5VWhvUlpYeE5pVDRWMkgwTXdTbHVCTjhYRF9zb0hBc1BURklsckxQR0xNU01kbmxpUFJ4N3ZNU2d3Z2dFRExIUmZreGVFQUtaNFdfQ1RGOTE1SWFxdXp6d01MSzhKLXlyM0R4by1jd3JSb3pUT0h3blA?oc=5"
+      },
+      {
+        "id": "news-f7291515",
+        "label": "Foot-Africa.com",
+        "status": "UNCONFIRMED",
+        "note": "FC Barcelone : le groupe contre Getafe avec un grand absent ! · publié samedi 10 octobre 2026 à 16:00.",
+        "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNR05tbEt3bmlJREYwODY3ZXF1ZWVwY0wwQzlzZVNtejRTQTNCYTh1c2pwcTA2dWRsSnBKd2hTWWhaT0xVQ3E1VGRzSV9obmt4UUp1OGdTZTRZQWdTaFlGMUFleEZUSFZDSV80cWw1bTJTRjlHWnBOc1EySFlfVWxraDhjRXVFZGlRTnRsNWNFdXB0VU1kQ214OHBPS2VCeUxEdm5R?oc=5"
+      },
+      {
+        "id": "cal-ub-barcelone|getafe-2026-10-10",
+        "label": "Calendrier desk BetGPT",
+        "status": "HIGH_CONFIDENCE",
+        "note": "FC Barcelone – Getafe, La Liga, coup d'envoi 2026-10-10T16:30:00Z."
+      }
+    ],
+    "newsworthiness": 98,
+    "links": [
+      {
+        "href": "/match/fc-barcelone-getafe-2026-10-10",
+        "label": "FC Barcelone – Getafe"
+      },
+      {
+        "href": "/equipe/fc-barcelone",
+        "label": "FC Barcelone"
+      },
+      {
+        "href": "/equipe/getafe",
+        "label": "Getafe"
+      },
+      {
+        "href": "/la-liga",
+        "label": "La Liga"
+      },
+      {
+        "href": "/scores-en-direct",
+        "label": "Scores en direct"
+      },
+      {
+        "href": "/methodology",
+        "label": "Méthode BetGPT"
+      },
+      {
+        "href": "/auteurs/betgpt-editorial",
+        "label": "BetGPT Editorial"
+      }
+    ],
+    "corrections": [],
+    "sourceChanges": [],
+    "factHash": "5534220b",
+    "keywords": "Barcelone, La Liga, actualité football",
+    "image": {
+      "src": "/blog/discover/inline-shot.jpg",
+      "alt": "Frappe au but pendant un match",
+      "width": 1200,
+      "height": 675,
+      "credit": "Football : actualités, contexte et analyse sur BetGPT."
+    },
+    "related": [
+      {
+        "href": "/actualites/fc-barcelone-getafe-les-compos-probables-avant-le-choc-2026-10-08",
+        "title": "FC Barcelone – Getafe : les compos probables avant le choc",
+        "image": {
+          "src": "/blog/discover/inline-action.jpg",
+          "alt": "Joueurs de football en action",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/real-madrid-villarreal-le-retour-de-la-liga-au-bernabeu-2026-10-10",
+        "title": "Real Madrid-Villarreal : le retour de la Liga au Bernabéu",
+        "image": {
+          "src": "/blog/discover/inline-action.jpg",
+          "alt": "Joueurs de football en action",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/real-madrid-ferland-mendy-entrevoit-le-bout-du-tunnel-2026-10-09",
+        "title": "Real Madrid : Ferland Mendy entrevoit le bout du tunnel",
+        "image": {
+          "src": "/blog/discover/inline-shot.jpg",
+          "alt": "Frappe au but pendant un match",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/real-madrid-mourinho-prend-la-defense-de-mbappe-2026-10-09",
+        "title": "Real Madrid : Mourinho prend la défense de Mbappé",
+        "image": {
+          "src": "/blog/discover/inline-aerial.jpg",
+          "alt": "Pelouse de stade vue du dessus",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/pronostic-real-madrid-villarreal-la-cote-de-3-4-pour-un-match-de-liga-2026-10-09",
+        "title": "Pronostic Real Madrid – Villarreal : la cote de 3,4 pour un match de Liga",
+        "image": {
+          "src": "/blog/discover/inline-action.jpg",
+          "alt": "Joueurs de football en action",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      }
+    ],
+    "discoverOpportunity": {
+      "freshness": 20,
+      "frenchInterest": 20,
+      "entityStrength": 15,
+      "novelty": 10,
+      "visual": 10,
+      "sourceQuality": 10,
+      "editorialAngle": 8,
+      "total": 93,
+      "decision": "PUBLISH",
+      "reasons": []
+    },
+    "quality": {
+      "pass": true,
+      "reasons": []
+    },
+    "duplicateScore": 0.4117647058823529,
     "discoverChecks": {
       "INDEXABLE": true,
       "LARGE_IMAGE": true,
