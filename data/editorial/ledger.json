@@ -3769,6 +3769,17 @@
     },
     "related": [
       {
+        "href": "/actualites/psg-le-mans-les-compositions-probables-2026-10-10",
+        "title": "PSG - Le Mans : les compositions probables",
+        "image": {
+          "src": "/blog/discover/inline-crowd.jpg",
+          "alt": "Tribunes d'un stade de football",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
         "href": "/actualites/portugal-cristiano-ronaldo-ne-reviendra-en-selection-qu-a-une-condition-2026-10-06",
         "title": "Portugal : Cristiano Ronaldo ne reviendra en sélection qu’à une condition",
         "image": {
@@ -5248,6 +5259,204 @@
       "reasons": []
     },
     "duplicateScore": 0,
+    "discoverChecks": {
+      "INDEXABLE": true,
+      "LARGE_IMAGE": true,
+      "IMAGE_GE_1200": true,
+      "MAX_IMAGE_PREVIEW_LARGE": true,
+      "HELPFUL_CONTENT": true,
+      "NON_CLICKBAIT_TITLE": true,
+      "ORIGINAL_VALUE": true,
+      "MOBILE_TEMPLATE": true
+    },
+    "discoverReadiness": 100,
+    "topStories": "TOP_STORIES_ELIGIBILITY_READY"
+  },
+  {
+    "id": "ed-2026-10-10-noon",
+    "slug": "psg-le-mans-les-compositions-probables-2026-10-10",
+    "slot": "noon",
+    "articleType": "news",
+    "status": "PUBLISHED",
+    "title": "PSG - Le Mans : les compositions probables | BetGPT",
+    "h1": "PSG - Le Mans : les compositions probables",
+    "lead": "PSG - Le Mans : les compositions probables. Foot Mercato a publié cette information samedi 10 octobre 2026 à 11:55. Le dossier est repris par 3 sources distinctes. PSG - Le Mans : les compositions probables Foot Mercato",
+    "paragraphs": [
+      {
+        "h2": "Le fait nouveau qui fait basculer le dossier",
+        "body": "Foot Mercato rapporte PSG - Le Mans : les compositions probables. L'information devient pertinente parce qu'elle précise un dossier déjà suivi, sans transformer une hypothèse en certitude. Au total, 3 rédactions ou sources distinctes alimentent ce cluster d'actualité. Les détails complémentaires sont attribués séparément dans la section suivante afin d'éviter de transformer une reprise en confirmation indépendante.",
+        "sourceIds": [
+          "news-57834c59"
+        ]
+      },
+      {
+        "h2": "Ce que disent précisément les différentes sources",
+        "body": "Le Parisien, samedi 10 octobre 2026 à 11:52 : PSG-Le Mans : le groupe des 21 joueurs parisiens sans Dembélé ni Nuno Mendes Le Parisien MadeInFOOT, samedi 10 octobre 2026 à 11:40 : PSG - Trois absences majeures et un nouveau dans le groupe parisien pour affronter Le Mans FC MadeInFOOT Cette présentation reste volontairement attribuée source par source : lorsque deux médias racontent le même épisode avec des détails différents, BetGPT ne fusionne pas automatiquement ces détails en un fait unique. Une information n'est élevée au rang de fait établi que si son niveau de source le justifie ou si plusieurs références indépendantes convergent réellement.",
+        "sourceIds": [
+          "news-20d3096e",
+          "news-264a81c"
+        ]
+      },
+      {
+        "h2": "La chronologie des publications",
+        "body": "samedi 10 octobre 2026 à 11:40 — MadeInFOOT publie « PSG - Trois absences majeures et un nouveau dans le groupe parisien pour affronter Le Mans FC ». samedi 10 octobre 2026 à 11:52 — Le Parisien publie « PSG-Le Mans : le groupe des 21 joueurs parisiens sans Dembélé ni Nuno Mendes ». samedi 10 octobre 2026 à 11:55 — Foot Mercato publie « PSG - Le Mans : les compositions probables ». Cette chronologie permet de distinguer le fait initial, les reprises et les éventuelles confirmations plus tardives. Elle évite surtout de présenter comme simultanées des informations qui ont pu évoluer au fil de la journée.",
+        "sourceIds": [
+          "news-57834c59",
+          "news-20d3096e",
+          "news-264a81c"
+        ]
+      },
+      {
+        "h2": "Le repère sportif concret autour de cette information",
+        "body": "Le calendrier BetGPT rattache ce sujet à PSG – Le Mans, en Ligue 1, avec un coup d'envoi samedi 10 octobre 2026 à 20:45. Ce match fournit un repère sportif concret pour mesurer les conséquences de l'information sans inventer de date de retour, de composition ou de disponibilité. Les entités explicitement détectées dans les sources sont : PSG.",
+        "sourceIds": [
+          "cal-ub-psg|lemans-2026-10-10",
+          "news-57834c59"
+        ]
+      },
+      {
+        "h2": "Ce qui est établi, corroboré ou encore fragile",
+        "body": "Le cluster contient 0 source officielle, 3 sources de premier niveau journalistique et 0 autre source. Aucune déclaration officielle n'est ajoutée artificiellement si elle n'existe pas dans le flux. Les points communs entre plusieurs sources sont présentés comme corroborés ; les détails isolés restent attribués.",
+        "sourceIds": [
+          "news-57834c59",
+          "news-20d3096e",
+          "news-264a81c"
+        ]
+      },
+      {
+        "h2": "Le prochain élément qui permettra de mettre l'article à jour",
+        "body": "Pour PSG, la prochaine preuve forte serait un communiqué de club, une signature enregistrée ou un changement contractuel attribuable. Une rumeur, même reprise, ne devient pas un transfert acquis. BetGPT ne republie pas une nouvelle dépêche pour répéter le même état de fait : une mise à jour exige un changement matériel, une confirmation nouvelle ou une donnée sportive directement vérifiable.",
+        "sourceIds": [
+          "news-57834c59",
+          "news-20d3096e"
+        ]
+      }
+    ],
+    "createdAt": "2026-10-10T11:11:28.409Z",
+    "publishedAt": "2026-10-10T11:11:28.409Z",
+    "modifiedAt": "2026-10-10T11:11:28.409Z",
+    "parisDate": "2026-10-10",
+    "scheduledTime": "13:00",
+    "category": "Actualité football",
+    "section": "ligue-1",
+    "league": "L1",
+    "teams": [
+      "PSG"
+    ],
+    "matchId": "ub-psg|lemans-2026-10-10",
+    "competition": "Ligue 1",
+    "sources": [
+      {
+        "id": "news-57834c59",
+        "label": "Foot Mercato",
+        "status": "CORROBORATED",
+        "note": "PSG - Le Mans : les compositions probables · publié samedi 10 octobre 2026 à 11:55.",
+        "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxOcHN6U1VTU3ZYUkJpNURxUlFCZEdLN09VcHJ0VTJJU3dhSl9uLWVfZTNQQV9CLUJSMnJ1NWllUWxJQnVVUWoyWm8tYUlhSHdjZUhaX1UwZVoxa3RQSzFEVUZsLUlhNENnSjlfS1N0ajBYbEJVNncwNjBQSUN5VXhnaURHeGpOeDJSb2lubVNRbmk?oc=5"
+      },
+      {
+        "id": "news-20d3096e",
+        "label": "Le Parisien",
+        "status": "CORROBORATED",
+        "note": "PSG-Le Mans : le groupe des 21 joueurs parisiens sans Dembélé ni Nuno Mendes · publié samedi 10 octobre 2026 à 11:52.",
+        "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxQVE1QWE1iY21sRmNqbGx4elpVNHJBcTBVbnVTbG1fOGVLWFhySVVNTW9sYVEyRmxfa3NfTHZnT1ZhZ2c1cjJxZkRRemVua0t5YXVINEk0XzRNZjVDMUx6N3BYc1BxZjBNS0R5QmZNazFoZC1VakhSNEFUUWdGVk1ESGo4Z3pNaHVvV21CdUNrb2pEZnV0X21GMUkzRXFFZ2VSVkV1RFpnWHowNnBGRVAtR2R6eDNOVHB5MGNpSndRUUZaZVZzTG1ZU1ZlT2tWYndOS2k3c0k2dEVRazlYQlhLaFVPZ3ZrNHEwU21Bd0pxOA?oc=5"
+      },
+      {
+        "id": "news-264a81c",
+        "label": "MadeInFOOT",
+        "status": "CORROBORATED",
+        "note": "PSG - Trois absences majeures et un nouveau dans le groupe parisien pour affronter Le Mans FC · publié samedi 10 octobre 2026 à 11:40.",
+        "url": "https://news.google.com/rss/articles/CBMi5wFBVV95cUxQdERsYjJvOGdDNzlWQ2JRcTNyeEE2WHpZMVZwRi1GX1ZwLW5rT0RCNUlIOGRiQ3FjWWJBVTFnek5laDdQb2xFSHVrQ1N5a0NUN2lSdGI5SlpoMFdSeEhuWUZvQXdIQkxjVXdUNGtINGFwY0dJTkw2Q3h4NmdRbVJ4Z1EtQjA1alRlejFpV3pYaHhDa0ZaOFRoN2FrTVQwS0hfZTNUaEpIVktYMXVsWXE0ekdiWUlqTGZpcjhhMHUxWXZMenZZOXphUnJTZkVyX2k0U2tNdWg1WjlmRzVzUmJPTGk5MlpuQzQ?oc=5"
+      },
+      {
+        "id": "cal-ub-psg|lemans-2026-10-10",
+        "label": "Calendrier desk BetGPT",
+        "status": "HIGH_CONFIDENCE",
+        "note": "PSG – Le Mans, Ligue 1, coup d'envoi 2026-10-10T18:45:00Z."
+      }
+    ],
+    "newsworthiness": 96,
+    "links": [
+      {
+        "href": "/match/psg-le-mans-2026-10-10",
+        "label": "PSG – Le Mans"
+      },
+      {
+        "href": "/equipe/psg",
+        "label": "PSG"
+      },
+      {
+        "href": "/equipe/le-mans",
+        "label": "Le Mans"
+      },
+      {
+        "href": "/ligue-1",
+        "label": "Ligue 1"
+      },
+      {
+        "href": "/scores-en-direct",
+        "label": "Scores en direct"
+      },
+      {
+        "href": "/methodology",
+        "label": "Méthode BetGPT"
+      },
+      {
+        "href": "/auteurs/betgpt-editorial",
+        "label": "BetGPT Editorial"
+      }
+    ],
+    "corrections": [],
+    "sourceChanges": [],
+    "factHash": "ed96651c",
+    "keywords": "PSG, Ligue 1, actualité football",
+    "image": {
+      "src": "/blog/discover/inline-crowd.jpg",
+      "alt": "Tribunes d'un stade de football",
+      "width": 1200,
+      "height": 675,
+      "credit": "Football : actualités, contexte et analyse sur BetGPT."
+    },
+    "related": [
+      {
+        "href": "/actualites/je-t-embrasse-cristiano-ronaldo-rend-finalement-hommage-a-lionel-messi-au-lendemain-de-sa",
+        "title": "« Je t’embrasse » : Cristiano Ronaldo rend finalement hommage à Lionel Messi, au lendemain de sa retraite internationale",
+        "image": {
+          "src": "/blog/discover/score-en-direct-ligue-1.jpg",
+          "alt": "Ambiance de match de football",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/france-italie-ligue-des-nations-a-match-en-direct-le-02-10-2026-2026-10-02",
+        "title": "France - Italie, Ligue des nations A, match en direct le 02/10/2026",
+        "image": {
+          "src": "/blog/discover/inline-night.jpg",
+          "alt": "Stade de football éclairé la nuit",
+          "width": 1200,
+          "height": 675,
+          "credit": "France – PSG en Ligue des nations : informations, contexte et analyse du match."
+        }
+      }
+    ],
+    "discoverOpportunity": {
+      "freshness": 19,
+      "frenchInterest": 19,
+      "entityStrength": 15,
+      "novelty": 10,
+      "visual": 10,
+      "sourceQuality": 10,
+      "editorialAngle": 8,
+      "total": 91,
+      "decision": "PUBLISH",
+      "reasons": []
+    },
+    "quality": {
+      "pass": true,
+      "reasons": []
+    },
+    "duplicateScore": 0.3888888888888889,
     "discoverChecks": {
       "INDEXABLE": true,
       "LARGE_IMAGE": true,
