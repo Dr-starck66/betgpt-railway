@@ -510,5 +510,26 @@
     "remotePostUrl": null,
     "error": null,
     "retryCount": 0
+  },
+  {
+    "id": "x:ed-2026-10-11-morning:v1",
+    "articleId": "ed-2026-10-11-morning",
+    "articleSlug": "coupe-de-france-un-match-du-5eme-tour-arrete-apres-des-tirs-de-mortier-2026-10-11",
+    "articleTitle": "Coupe de France. Un match du 5ème tour arrêté après des tirs de mortier",
+    "articleUrl": "https://betgpt.live/actualites/coupe-de-france-un-match-du-5eme-tour-arrete-apres-des-tirs-de-mortier-2026-10-11",
+    "trackedUrl": "https://betgpt.live/actualites/coupe-de-france-un-match-du-5eme-tour-arrete-apres-des-tirs-de-mortier-2026-10-11?utm_source=x&utm_medium=social&utm_campaign=editorial_auto&utm_content=coupe-de-france-un-match-du-5eme-tour-arrete-apres-des-tirs-de-mortier-2026-10-11",
+    "network": "x",
+    "text": "🔴 Coupe de France. Un match du 5ème tour arrêté après des tirs de mortier\n\nÀ lire sur BetGPT 👇\n\nhttps://betgpt.live/actualites/coupe-de-france-un-match-du-5eme-tour-arrete-apres-des-tirs-de-mortier-2026-10-11?utm_source=x&utm_medium=social&utm_campaign=editorial_auto&utm_conten",
+    "hashtags": [],
+    "imageUrl": "https://betgpt.live/blog/discover/inline-shot.jpg",
+    "createdAt": "2026-10-11T18:39:27.078Z",
+    "scheduledAt": "2026-10-11T18:39:27.078Z",
+    "attemptedAt": null,
+    "publishedAt": null,
+    "status": "READY_TO_X",
+    "remotePostId": null,
+    "remotePostUrl": null,
+    "error": null,
+    "retryCount": 0
   }
 ]
