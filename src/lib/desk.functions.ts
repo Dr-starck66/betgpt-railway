@@ -222,7 +222,13 @@ export const getDesk = createServerFn({ method: "GET" }).handler(async (): Promi
     void flushBroadcast().catch(() => undefined);
     return LAST_DESK;
   }
-  void ensureArchiveHistory().catch(() => undefined);
+  // Web requests must not silently start a multi-year ESPN archive backfill.
+  // The bundled archive remains readable; refreshes need an explicit, budgeted job.
+  if (process.env.BETGPT_ARCHIVE_REFRESH_ON_REQUEST === "1") {
+    void ensureArchiveHistory().catch((error) => {
+      console.error("[archive-refresh]", error);
+    });
+  }
   try {
     const e = runEngine();
     setLastDesk(deskFromEngine(e));
