@@ -5,7 +5,7 @@ export function AppErrorComponent({ error }: ErrorComponentProps) {
     <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-pitch px-6 text-center text-paper">
       <h1 className="text-2xl font-semibold tracking-tight">Le desk a buté</h1>
       <p className="max-w-md text-sm break-words text-mist">
-        {error.message || "Une erreur inattendue s'est produite."}
+        {error instanceof Error && error.message ? error.message : "Une erreur inattendue s'est produite."}
       </p>
       <button
         type="button"
