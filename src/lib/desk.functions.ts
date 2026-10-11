@@ -404,7 +404,12 @@ export const getTeamDesk = createServerFn({ method: "GET" })
       // engine can legitimately filter fixtures that are still present in the
       // provider snapshot; those teams must not become sitemap 404s.
       try {
-        await ensureLive();
+        // A slow provider must not hold a public team URL open for minutes.
+        // Keep using the in-process/live snapshot while the refresh settles.
+        await Promise.race([
+          ensureLive(),
+          new Promise((resolve) => setTimeout(resolve, 2_500)),
+        ]);
       } catch {
         /* use the latest in-process snapshot if refresh is unavailable */
       }
