@@ -13,7 +13,9 @@ let editionCache: { at: number; value: EditionResult } | null = null;
 let editionInflight: Promise<EditionResult> | null = null;
 
 async function editionFromDeskUncached(now: Date): Promise<EditionResult> {
-  const liveResult = await editorialLiveWithinBudget(ensureLive);
+  // News pages must serve cached/sourced articles even when the live sports
+  // provider stalls. The optional match enrichment has a short public budget.
+  const liveResult = await editorialLiveWithinBudget(ensureLive, 3_500);
   const live = liveResult.value;
   console.info("EDITORIAL_LIVE_STAGE", liveResult.status);
   const matches = (live?.matches ?? []) as MatchInput[];
