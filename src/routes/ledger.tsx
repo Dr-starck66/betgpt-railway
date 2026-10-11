@@ -19,7 +19,7 @@ export const Route = createFileRoute("/ledger")({
       {
         name: "description",
         content:
-          "Bilan transparent des pronostics BetGPT : paris publiés, gagnants et perdants, simulations historiques et détail match par match.",
+          "Bilan BetGPT : ROI historique calculé à partir des statistiques des matchs, méthode et résultats des pronostics réellement publiés, match par match.",
       },
       { name: "robots", content: "index, follow" },
       { property: "og:title", content: "Bilan des pronostics BetGPT" },
@@ -148,6 +148,17 @@ function LedgerPage() {
               en euros avec une mise de référence de 100 €. Les pertes restent visibles : aucun historique n’est nettoyé après coup.
               {asOf ? ` Scores à ${asOf}.` : ""}
             </p>
+            <div className="mt-6 rounded-2xl border border-sage/50 bg-sage/10 p-5 sm:p-6" role="group" aria-label="ROI historique calculé de BetGPT">
+              <p className="text-sm font-semibold uppercase tracking-wide text-sage">ROI historique calculé · Méthode BetGPT</p>
+              <p className="mt-2 font-display text-5xl font-bold tabular-nums text-sage sm:text-6xl" data-testid="historical-roi-value">
+                {fmtSignedPct(canonical.summary.roi)}
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-mist">
+                Rendement calculé sur {canonical.summary.n} sélections historiques, protections incluses,
+                à partir de nos statistiques. Les cotes historiques ont été reconstruites ; les résultats
+                des pronostics publiés en direct sont présentés séparément plus bas.
+              </p>
+            </div>
             <div className="mt-5 flex flex-wrap gap-2">
               <span className="chip-pill">💶 Mise repère : 100 €</span>
               <span className="chip-pill">🟢 Gagnant = vert</span>
@@ -173,15 +184,15 @@ function LedgerPage() {
             <h2 className="mt-1 font-display text-2xl">Ce que le test historique a réellement donné</h2>
             <p className="mt-2 max-w-3xl text-sm leading-relaxed text-mist">
               Nous avons rejoué la méthode actuelle match après match, sans utiliser le résultat final
-              à l’avance. Sur cet historique, elle affiche {fmtSignedPct(canonical.summary.roi)} de
-              rendement simulé. Ce n’est ni un bénéfice réellement encaissé, ni une promesse pour les
-              prochains paris.
+              à l’avance. Sur cet historique, les statistiques donnent {fmtSignedPct(canonical.summary.roi)}
+              de ROI calculé, protections incluses. Les cotes de l’étude sont reconstruites : ce calcul
+              historique ne doit pas être confondu avec le ROI des pronostics réellement publiés.
             </p>
           </div>
           <span className="chip-pill">Méthode utilisée aujourd’hui</span>
         </div>
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Kpi label="Rendement du test" value={fmtSignedPct(canonical.summary.roi)} />
+          <Kpi label="ROI historique calculé" value={fmtSignedPct(canonical.summary.roi)} />
           <Kpi label="Test final" value={fmtSignedPct(canonical.summary.validationRoi)} />
           <Kpi label="Paris testés" value={String(canonical.summary.n)} />
           <Kpi label="Pire recul" value={`${canonical.summary.maxDrawdown.toFixed(2)} mises`} />
