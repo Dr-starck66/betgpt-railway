@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync, appendFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
+import { credentialMap } from "./astra-social-oauth-vault.mjs";
 const CONFIG="config/astra-social-sites.json", STATE="data/social/amplifier-state.json";
 const hash=s=>createHash("sha256").update(s).digest("hex").slice(0,18);
 const now=()=>new Date().toISOString();
@@ -104,10 +105,7 @@ async function plan(state,sites){
   console.log(JSON.stringify({site:site.id,status:p.bootstrapping?"BASELINED":"PLANNED",verifiedSources:found.verified,newArticles:p.fresh.length,jobsCreated:jobs,errors:found.errors.slice(0,2)}));
  }
 }
-function accounts(){
- try{const a=JSON.parse(process.env.ASTRA_SOCIAL_META_ACCOUNTS_JSON||"{}");if(typeof a!=="object"||!a)throw Error();return a;}
- catch{throw Error("ASTRA_SOCIAL_META_ACCOUNTS_JSON is not valid JSON");}
-}
+function accounts(){ return credentialMap(process.env); }
 function claim(state,sites){
  const auth=accounts(),run=process.env.GITHUB_RUN_ID||"manual";let count=0;
  for(const j of Object.values(state.jobs)){
@@ -125,7 +123,8 @@ async function api(url,options){
  return body;
 }
 async function instagram(j,a){
- const root="https://graph.facebook.com/v24.0/",token=a.accessToken,ig=encodeURIComponent(a.accountId);
+ const root=a.authMode==="instagram_login"?"https://graph.instagram.com/v24.0/":"https://graph.facebook.com/v24.0/";
+ const token=a.accessToken,ig=encodeURIComponent(a.accountId);
  const container=await api(root+ig+"/media",{method:"POST",body:new URLSearchParams({image_url:j.imageUrl,caption:j.text,access_token:token})});
  if(!container.id)throw Error("META_NO_MEDIA_CONTAINER");
  let ready=false;
