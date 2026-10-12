@@ -1,5 +1,62 @@
 {
   "schema": 1,
-  "sites": {},
+  "sites": {
+    "betgpt": {
+      "bootstrapped": true,
+      "lastCheckedAt": "2026-10-12T15:09:16.204Z",
+      "seen": {
+        "f60130248d48db11bc": {
+          "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
+          "date": "2026-10-12T05:48:00.000Z",
+          "seenAt": "2026-10-12T15:09:16.204Z"
+        },
+        "b88e92438ec7501adc": {
+          "url": "https://betgpt.live/actualites/liverpool-manchester-city-postmatch-2026-10-11",
+          "date": "2026-10-12T05:42:00.000Z",
+          "seenAt": "2026-10-12T15:09:16.204Z"
+        },
+        "fa558a6f09fb9623e2": {
+          "url": "https://betgpt.live/actualites/fc-barcelone-getafe-les-compositions-officielles-sont-connues-2026-10-10",
+          "date": "2026-10-10T16:14:39.229Z",
+          "seenAt": "2026-10-12T15:09:16.204Z"
+        },
+        "8e0415fc45d5049adc": {
+          "url": "https://betgpt.live/actualites/coupe-de-france-un-match-du-5eme-tour-arrete-apres-des-tirs-de-mortier-2026-10-11",
+          "date": "2026-10-11T18:39:27.078Z",
+          "seenAt": "2026-10-12T15:09:16.204Z"
+        },
+        "bd94c65a8c64fa9524": {
+          "url": "https://betgpt.live/actualites/football",
+          "date": "2026-10-12T15:09:14.449Z",
+          "seenAt": "2026-10-12T15:09:16.204Z"
+        },
+        "65649a6cbfdd3a2954": {
+          "url": "https://betgpt.live/actualites/real-madrid-villarreal-le-retour-de-la-liga-au-bernabeu-2026-10-10",
+          "date": "2026-10-09T22:54:43.945Z",
+          "seenAt": "2026-10-12T15:09:16.204Z"
+        },
+        "1df7e20da13c3ce11e": {
+          "url": "https://betgpt.live/actualites/psg-le-mans-les-compositions-probables-2026-10-10",
+          "date": "2026-10-10T11:11:28.409Z",
+          "seenAt": "2026-10-12T15:09:16.204Z"
+        }
+      }
+    },
+    "gamicnews": {
+      "bootstrapped": true,
+      "lastCheckedAt": "2026-10-12T15:09:16.541Z",
+      "seen": {}
+    },
+    "bizarre": {
+      "bootstrapped": true,
+      "lastCheckedAt": "2026-10-12T15:09:58.912Z",
+      "seen": {}
+    },
+    "freehotels": {
+      "bootstrapped": true,
+      "lastCheckedAt": "2026-10-12T15:09:59.534Z",
+      "seen": {}
+    }
+  },
   "jobs": {}
 }
