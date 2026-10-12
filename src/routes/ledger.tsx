@@ -20,7 +20,7 @@ export const Route = createFileRoute("/ledger")({
       {
         name: "description",
         content:
-          "Bilan BetGPT : ROI historique calculé à partir des statistiques des matchs, méthode et résultats des pronostics réellement publiés, match par match.",
+          "Bilan BetGPT : ROI calculé sur un replay chronologique historique, méthode 1N2, protections, courbe de gains et pertes et détail des matchs du test. Les performances réelles restent distinctes.",
       },
       { name: "robots", content: "index, follow" },
       { property: "og:title", content: "Bilan des pronostics BetGPT" },
@@ -128,7 +128,7 @@ function LedgerPage() {
         stats: [
           { label: "Mise repère", value: "100 €", detail: "Conversion UX commune pour comparer gains et pertes." },
           { label: "Historique testé", value: String(canonical.summary.n), detail: "Paris du replay historique affiché sur cette page." },
-          { label: "Pronostics publiés", value: String(ev?.published ?? 0), detail: "Décisions enregistrées dans le registre public." },
+          { label: "Audit public", value: "JSON / CSV", detail: "Exports des décisions réellement publiées accessibles sans modification." },
         ],
         links: [
           { href: "/data-sources", label: "Sources des données", description: "Origine et limites des données utilisées." },
@@ -163,13 +163,14 @@ function LedgerPage() {
               Voici le rendement obtenu en rejouant chronologiquement notre méthode sur des résultats d'archives,
               avec le marché 1N2 comme pari principal et des protections ponctuelles sur score exact.
               <strong className="font-semibold text-white"> C'est un résultat de backtest calculé, pas une promesse et pas le rendement des paris publiés en direct.</strong>
+              Les performances observées des pronostics publiés restent consultables dans les exports publics ; elles ne sont pas équivalentes au ROI du test historique.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <a href="#historique-paris" className="inline-flex min-h-11 items-center rounded-xl bg-emerald-300 px-5 text-sm font-bold text-[#092d24] shadow-sm transition hover:bg-emerald-200">
                 Auditer les {canonical.summary.n} paris
               </a>
-              <a href="#pronostics-publics" className="inline-flex min-h-11 items-center rounded-xl border border-white/30 px-5 text-sm font-semibold text-white transition hover:bg-white/10">
-                Voir les pronostics publiés
+              <a href="/evidence.json" className="inline-flex min-h-11 items-center rounded-xl border border-white/30 px-5 text-sm font-semibold text-white transition hover:bg-white/10">
+                Vérifier les résultats publics (JSON)
               </a>
             </div>
           </div>
@@ -420,154 +421,7 @@ function LedgerPage() {
         </div>
       </section>
 
-      {ev ? (
-        <section id="pronostics-publics" className="section-card scroll-mt-20 p-5 sm:p-6">
-          <h2 className="font-display text-xl">Résultats des pronostics réellement publiés</h2>
-          <p className="mt-1 text-sm text-mist">
-            Ici, on compte seulement les paris 1-N-2 que BetGPT a réellement publiés avant le coup
-            d’envoi. Les simples idées à surveiller, les matchs écartés et les anciennes versions
-            ne gonflent pas le bilan. {ev.sampleLabel}.
-          </p>
-          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <Kpi label="Paris publiés" value={String(ev.published)} />
-            <Kpi label="Publiés avant le match" value={String(ev.beforeKickoff)} />
-            <Kpi label="Paris terminés" value={String(ev.settled)} />
-            <Kpi
-              label="Rendement simulé"
-              value={ev.roi == null ? "Non vérifié" : fmtSignedPct(ev.roi)}
-            />
-          </div>
-          <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <Kpi
-              label="Taux de réussite"
-              value={ev.winRate == null ? "Non vérifié" : `${Math.round(ev.winRate * 100)} %`}
-            />
-            <Kpi
-              label="Score de fiabilité"
-              value={ev.brier == null ? "Non vérifié" : ev.brier.toFixed(3)}
-            />
-            <Kpi label="Paris perdants" value={String(ev.losses)} />
-            <Kpi label="Publiés trop tard · exclus" value={String(ev.afterKickoff)} />
-          </div>
-          <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <Kpi
-              label="Victoires prévues / réelles"
-              value={
-                ev.settled && ev.expectedHits != null
-                  ? `${ev.expectedHits.toFixed(1)} → ${ev.observedHits}`
-                  : "Non vérifié"
-              }
-            />
-            <Kpi
-              label="Évolution face au marché"
-              value={ev.clv == null ? "Indisponible" : fmtSignedPct(ev.clv)}
-            />
-            <Kpi
-              label="Plus forte baisse"
-              value={ev.maxDrawdown == null ? "Non vérifié" : ev.maxDrawdown.toFixed(2)}
-            />
-            <Kpi label="Plus longue série G / P" value={`${ev.longestWin} / ${ev.longestLose}`} />
-          </div>
-          <p className="mt-3 text-xs text-muted">
-            Le rendement est calculé comme si chaque pari retenu valait 1 unité. Aucun argent réel
-            n’est supposé avoir été misé. Les matchs seulement surveillés ou écartés ne sont pas
-            comptés. Le score de fiabilité mesure l’écart entre les probabilités annoncées et les résultats : plus il est bas, mieux c’est.
-            {ev.unavailable.length ? ` Données indisponibles : ${ev.unavailable.join(", ")}.` : ""}
-          </p>
-          {ev.calibration.some((b) => b.n > 0) ? (
-            <div className="mt-4 overflow-x-auto">
-              <table className="w-full min-w-[480px] text-sm">
-                <thead className="text-left text-[11px] font-semibold uppercase tracking-wider text-muted">
-                  <tr className="border-b border-line">
-                    <th className="py-2 pr-3 font-medium">Prob. annoncée</th>
-                    <th className="py-2 pr-3 font-medium">Matchs</th>
-                    <th className="py-2 pr-3 font-medium">Réussite réelle</th>
-                    <th className="py-2 pr-3 font-medium">Volume de données</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {ev.calibration.map((b) => (
-                    <tr key={b.label} className="border-b border-line/50">
-                      <td className="py-2 pr-3 text-paper">{b.label}</td>
-                      <td className="py-2 pr-3 tabular">{b.n}</td>
-                      <td className="py-2 pr-3 tabular">
-                        {b.n === 0 ? "—" : `${Math.round(b.observed * 100)} %`}
-                      </td>
-                      <td className="py-2 pr-3 text-mist">
-                        {b.n === 0 ? "Indisponible" : b.band === "early" ? "Précoce" : b.band === "limited" ? "Limité" : "Significatif"}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <p className="mt-3 text-sm text-mist">Calibration : échantillon insuffisant.</p>
-          )}
-          {ev.models.length ? (
-            <div className="mt-4 overflow-x-auto">
-              <table className="w-full min-w-[480px] text-sm">
-                <thead className="text-left text-[11px] font-semibold uppercase tracking-wider text-muted">
-                  <tr className="border-b border-line">
-                    <th className="py-2 pr-3 font-medium">Méthode</th>
-                    <th className="py-2 pr-3 font-medium">Matchs</th>
-                    <th className="py-2 pr-3 font-medium">Score de fiabilité*</th>
-                    <th className="py-2 pr-3 font-medium">Rendement simulé</th>
-                    <th className="py-2 pr-3 font-medium">Réussite</th>
-                    <th className="py-2 pr-3 font-medium">Volume de données</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {ev.models.map((m, index) => (
-                    <tr key={m.engine} className="border-b border-line/50">
-                      <td className="py-2 pr-3 text-paper">{publicMethodName(m.engine, index)}</td>
-                      <td className="py-2 pr-3 tabular">{m.n}</td>
-                      <td className="py-2 pr-3 tabular">{m.brier == null ? "Non vérifié" : m.brier.toFixed(3)}</td>
-                      <td className="py-2 pr-3 tabular">{m.roi == null ? "Non vérifié" : fmtSignedPct(m.roi)}</td>
-                      <td className="py-2 pr-3 tabular">{m.winRate == null ? "Non vérifié" : `${Math.round(m.winRate * 100)} %`}</td>
-                      <td className="py-2 pr-3 text-mist">
-                        {m.band === "unverified"
-                          ? "Insuffisant"
-                          : m.band === "early"
-                            ? "Précoce"
-                            : m.band === "limited"
-                              ? "Limité"
-                              : "Significatif"}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <p className="mt-3 text-sm text-mist">Comparaison des méthodes : pas encore assez de données publiques.</p>
-          )}
-        </section>
-      ) : null}
-
       {r.clNight ? <CupNight night={r.clNight} /> : null}
-
-      <details className="section-card p-5 sm:p-6">
-        <summary className="cursor-pointer text-lg font-bold text-paper">
-          Simulation complémentaire des pronostics publics (hors ROI historique)
-        </summary>
-        <p className="mt-4 text-sm leading-6 text-mist">
-          Cette simulation séparée utilise les pronostics enregistrés publiquement ; elle ne s'ajoute
-          jamais au +{(canonical.summary.roi * 100).toFixed(2).replace(".", ",")} % du replay historique.
-          Un bénéfice fictif n'est pas assimilé à un gain réellement encaissé.
-        </p>
-        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Kpi label="Paris concernés" value={String(r.sim.n)} />
-          <Kpi label="Mise / retours simulés" value={`${fmtEur(r.sim.mainStaked)} / ${fmtEur(r.sim.mainReturned)}`} />
-          <Kpi label="Protections utilisées" value={String(r.sim.covered)} />
-          <Kpi label="Résultat net simulé" value={fmtEur(r.sim.profit, true)} />
-        </div>
-        <p className="mt-4 text-xs leading-6 text-muted">
-          Pari principal : {fmtEur(r.sim.mainStaked)} engagé, {fmtEur(r.sim.mainReturned)} retourné.
-          Couvertures : {fmtEur(r.sim.coverStaked)} engagés, {fmtEur(r.sim.coverReturned)} retournés.
-          Rendement simulé distinct : {r.sim.n ? fmtSignedPct(r.sim.roi) : "non calculé"}.
-        </p>
-      </details>
 
       <section className="section-card p-5 sm:p-6">
         <h2 className="font-display text-xl">Quelle méthode prédit le mieux ?</h2>
