@@ -142,9 +142,40 @@ async function main() {
   const astraScripts=existsSync(scriptsDir)?readdirSync(scriptsDir,{withFileTypes:true})
     .filter(d=>d.isFile() && /^astra-.+\.(?:mjs|js|ts)$/.test(d.name) && !/\.test\./.test(d.name))
     .map(d=>"scripts/"+d.name):[];
+  // Per-script risk evidence must come from a fresh, actual isolated execution,
+  // with exact SHA-256 for every source. A filename in a config string is NOT proof.
+  let riskContract={status:"UNVERIFIED",verified:[],operationalUnverified:[],reasons:[]};
+  let riskPaths=new Set();
+  if(config.riskContractProof){
+    try{
+      const manifest=json(safePath(config.riskContractProof.manifest));
+      const items=manifest.scripts;
+      if(manifest.schema!=="astra-risk-scripts/v1"||!Array.isArray(items)||!items.length||
+         new Set(items.map(x=>x.path)).size!==items.length)throw Error("invalid-risk-manifest");
+      riskPaths=new Set(items.map(x=>x.path));
+      const file=safePath(config.riskContractProof.report);
+      if(!existsSync(file)||statSync(file).mtimeMs<Date.parse(startedAt)-2000)throw Error("missing-or-stale-contract-evidence");
+      const report=json(file);
+      if(report.schema!=="astra-risk-contract-proof/v1"||report.status!=="PASS"||
+         report.operationalStatus!=="UNVERIFIED"||report.items?.length!==items.length)throw Error("invalid-contract-report");
+      const map=new Map(report.items.map(x=>[x.path,x]));
+      if(map.size!==items.length)throw Error("duplicate-evidence-path");
+      for(const item of items){
+        const row=map.get(item.path),abs=safePath(item.path);
+        if(!row||!existsSync(abs)||row.risk!==item.risk||row.status!=="PASS"||
+           row.operationalStatus!=="UNVERIFIED"||row.safetyContract!=="DENY_OPERATION_IN_AUDIT_MODE"||
+           row.exitCode!==78||row.guardRefused!==true||row.workspaceClean!==true||
+           row.forbiddenAttempt!==false||row.codeSha256!==sha256(readFileSync(abs)))
+           throw Error("script-contract-unproven:"+item.path);
+      }
+      riskContract={status:"PASS_SAFETY_ONLY",verified:items.map(x=>x.path),
+        operationalUnverified:items.map(x=>x.path),reportSha256:sha256(readFileSync(file)),reasons:[]};
+    }catch(e){riskContract.reasons.push(e.message);}
+  }
   const evidenceBindings=JSON.stringify(config.checks);
   const untrackedScripts=astraScripts.filter(file=>{
     if(file==="scripts/astra-master-gate.mjs" || file==="scripts/astra-onboard-site.mjs") return false;
+    if(riskPaths.has(file))return !riskContract.verified.includes(file);
     if(evidenceBindings.includes(file)) return false;
     return !(typeof exemptions[file]==="string" && exemptions[file].trim().length>=24);
   });
@@ -158,8 +189,9 @@ async function main() {
     siteConfigSha256:sha256(readFileSync(configFile,"utf8")),
     effectiveCapabilities:[...capabilities],inferredCapabilities,
     summary:{pass:results.filter(x=>x.status==="PASS").length,na:results.filter(x=>x.status==="N/A").length,
-      fail:failures.length,unverified:unverified.length,unknownBindings:unknownBindings.length,untrackedScripts:untrackedScripts.length,invalidExemptions:invalidExemptions.length},
-    status:failures.length||unverified.length||unknownBindings.length||untrackedScripts.length||invalidExemptions.length?"FAIL":"PASS",unknownBindings,untrackedScripts,invalidExemptions,results};
+      fail:failures.length,unverified:unverified.length,unknownBindings:unknownBindings.length,untrackedScripts:untrackedScripts.length,invalidExemptions:invalidExemptions.length,
+      riskContractsVerified:riskContract.verified.length,riskOperationsUnverified:riskContract.operationalUnverified.length},
+    status:failures.length||unverified.length||unknownBindings.length||untrackedScripts.length||invalidExemptions.length||riskContract.reasons.length?"FAIL":"PASS",unknownBindings,untrackedScripts,invalidExemptions,riskContract,results};
   writeReport(report);
   console.log("ASTRA_MASTER_GATE",JSON.stringify({siteId:report.siteId,task,status:report.status,summary:report.summary,report:relative(root,reportFile)}));
   for (const r of [...failures,...unverified]) console.error("ASTRA_UNPROVEN_BRICK",r.id,r.status,r.reason||"check-failed");
@@ -167,6 +199,8 @@ async function main() {
   if (unknownBindings.length) console.error("ASTRA_UNKNOWN_BINDINGS",unknownBindings.join(","));
   if (untrackedScripts.length) console.error("ASTRA_UNTRACKED_SCRIPTS",untrackedScripts.join(","));
   if (invalidExemptions.length) console.error("ASTRA_INVALID_EXEMPTIONS",invalidExemptions.join(","));
+  if(riskContract.reasons.length) console.error("ASTRA_RISK_CONTRACT_UNVERIFIED",riskContract.reasons.join(";"));
+  if(riskContract.operationalUnverified.length)console.log("ASTRA_RISK_ACTIVE_OPERATIONS_UNVERIFIED",riskContract.operationalUnverified.length);
   if (strict&&report.status!=="PASS") process.exitCode=1;
 }
 main().catch(e=>{
