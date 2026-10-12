@@ -2,6 +2,7 @@ import { hubByLeague, SITE_URL, teamPath } from "@/lib/programmatic";
 import { imageFor } from "@/lib/editorial/images";
 import { autoPublishableCluster, clusterSignals, isMaterialDevelopment, type NewsCluster } from "@/lib/editorial/news-cluster";
 import { discoverChecks, factHash, qualityGate, readinessScore, sourceQualityScore } from "@/lib/editorial/quality";
+import { editorialGoldStandardGate } from "@/lib/editorial/gold-standard";
 import { DEFAULT_TIMES, dayLabel, formatParis, instantParisDate, optimizeTimes, parisDate, slotInstant } from "@/lib/editorial/time";
 import type {
   ArticleType,
@@ -734,16 +735,19 @@ function finalize(
 ): EditorialArticle {
   const image = imageFor(draft.articleType, draft.league, draft.slug, usedImages);
   const gate = qualityGate({ ...draft, image }, prior);
+  // Only newly composed articles must clear the permanent user-approved newsroom standard.
+  // Legacy public articles retain their existing evidence and URLs; no retroactive rewrite.
+  const gold = editorialGoldStandardGate({ ...draft, image });
   const opportunity = discoverOpportunity(draft, score, image.width, gate.duplicateScore);
   const opportunityPass = opportunity.total >= 70 && opportunity.decision !== "REJECT";
-  const combinedReasons = [...gate.reasons, ...opportunity.reasons];
+  const combinedReasons = [...gate.reasons, ...gold.reasons, ...opportunity.reasons];
   const article: EditorialArticle = {
     ...draft,
     image,
     related: [],
     newsworthiness: score,
     discoverOpportunity: opportunity,
-    quality: { pass: gate.pass && opportunityPass, reasons: combinedReasons },
+    quality: { pass: gate.pass && gold.pass && opportunityPass, reasons: combinedReasons },
     duplicateScore: gate.duplicateScore,
     discoverChecks: {
       INDEXABLE: false,
