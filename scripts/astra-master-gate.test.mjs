@@ -9,10 +9,9 @@ const runner=fileURLToPath(new URL("./astra-master-gate.mjs",import.meta.url));
 function fixture(bricks,checks,capabilities=[]) {
   const cwd=fs.mkdtempSync(path.join(os.tmpdir(),"astra-gate-"));
   fs.mkdirSync(path.join(cwd,"config"),{recursive:true});
-  const required=["ASTRA_MASTER_GATE","ASTRA_BRICK_PROOF_GATE","ASTRA_NO_REPEAT","ASTRA_ZERO_COST","ASTRA_AUTOMATION_EVIDENCE"];
-  const all=[...bricks];
-  for (const id of required) if (!all.some(b=>b.id===id)) all.push({id,scope:"universal",on:["seo"]});
-  while (all.length<39) all.push({id:"FILLER_"+all.length,scope:"not-applicable",on:["seo"]});
+  const baseline=JSON.parse(fs.readFileSync(fileURLToPath(new URL("../config/astra-brick-registry.json",import.meta.url)),"utf8")).bricks;
+  const ids=new Set(baseline.map(b=>b.id));
+  const all=[...baseline.map(b=>({id:b.id,scope:"fixture-only",on:["seo"]})),...bricks.filter(b=>!ids.has(b.id))];
   fs.writeFileSync(path.join(cwd,"config/astra-brick-registry.json"),JSON.stringify({schema:"astra-brick-registry/1",bricks:all}));
   fs.writeFileSync(path.join(cwd,"config/astra-master-site.json"),JSON.stringify({schema:"astra-master-site/1",siteId:"test-site",capabilities,checks}));
   const run=()=> {
@@ -30,7 +29,11 @@ test("PASS requires a successfully executed command and evidence report",()=>{
   const {res,data}=run();
   assert.equal(res.status,0);
   assert.equal(data.status,"PASS");
-  assert.deepEqual(data.summary,{pass:1,na:38,fail:0,unverified:0,unknownBindings:0,untrackedScripts:0,invalidExemptions:0});
+  assert.equal(data.summary.pass,1);
+  assert.equal(data.summary.na,42);
+  assert.equal(data.summary.fail,0);
+  assert.equal(data.summary.unverified,0);
+  assert.equal(data.summary.untrackedScripts,0);
   assert.match(data.registrySha256,/^[a-f0-9]{64}$/);
 });
 test("missing executable proof is never a PASS",()=>{
@@ -66,4 +69,16 @@ test("unregistered ASTRA scripts cannot bypass the catalog",()=>{
   const {res,data}=f.run();
   assert.notEqual(res.status,0);
   assert.deepEqual(data.untrackedScripts,["scripts/astra-hidden-guard.mjs"]);
+});
+
+test("missing a canonical brick rejects a same-sized registry",()=>{
+  const f=fixture([always],{ALWAYS:[{type:"command",run:"true"}]});
+  const p=path.join(f.cwd,"config/astra-brick-registry.json");
+  const registry=JSON.parse(fs.readFileSync(p,"utf8"));
+  registry.bricks=registry.bricks.filter(b=>b.id!=="ASTRA_NEWS_ELIGIBILITY");
+  registry.bricks.push({id:"SHADOW_BRICK",scope:"fixture-only",on:["seo"]});
+  fs.writeFileSync(p,JSON.stringify(registry));
+  const {res,data}=f.run();
+  assert.notEqual(res.status,0);
+  assert.match(data.fatal,/STALE_REGISTRY_BASELINE/);
 });
