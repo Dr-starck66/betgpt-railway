@@ -1,6 +1,8 @@
+import { liverpoolManchesterCityPostmatch } from "@/lib/editorial/manual-postmatch-liverpool-city";
 import type { EditorialArticle } from "@/lib/editorial/types";
 
 const ARTICLES: EditorialArticle[] = [
+  liverpoolManchesterCityPostmatch,
   {
     id: "manual-2026-10-01-real-madrid-mbappe-paris",
     slug: "real-madrid-mbappe-recuperation-paris-2026-10-01",
