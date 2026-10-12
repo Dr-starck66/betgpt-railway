@@ -2,6 +2,13 @@ import { SITE_URL } from "@/lib/programmatic";
 import { absImg } from "@/lib/image-seo";
 import type { EditorialArticle, EditorialEdition } from "@/lib/editorial/types";
 import { isPublicArticle } from "@/lib/editorial/types";
+import { qualityGate } from "@/lib/editorial/quality";
+
+/** Keep sitemaps, RSS and robots aligned with the live editorial integrity check. */
+export function isEditorialIndexable(article: EditorialArticle): boolean {
+  return isPublicArticle(article) && article.quality.pass &&
+    (article.articleType !== "postmatch" || qualityGate(article, []).pass);
+}
 
 function articleUrl(slug: string): string {
   return `${SITE_URL}/actualites/${slug}`;
@@ -18,7 +25,7 @@ export type NewsSitemapEntry = {
 
 export function newsEntries(edition: EditorialEdition, now = Date.now()): NewsSitemapEntry[] {
   const cutoff = now - 2 * 24 * 60 * 60 * 1000;
-  return edition.articles.filter(isPublicArticle).flatMap((article) => {
+  return edition.articles.filter(isEditorialIndexable).flatMap((article) => {
     const published = Date.parse(article.publishedAt ?? "");
     if (!Number.isFinite(published) || published < cutoff || published > now + 60_000) return [];
     return [
@@ -35,14 +42,14 @@ export function newsEntries(edition: EditorialEdition, now = Date.now()): NewsSi
 }
 
 export function classicNewsPaths(edition: EditorialEdition): { path: string; title: string; lastmod: string; image?: string }[] {
-  const articles = edition.articles.filter(isPublicArticle).map((article) => ({
+  const articles = edition.articles.filter(isEditorialIndexable).map((article) => ({
     path: `/actualites/${article.slug}`,
     title: article.h1,
     lastmod: article.modifiedAt ?? article.publishedAt ?? "",
     image: absImg(article.image.src),
   }));
   const hubs = [{ path: "/actualites", title: "Actualités football", lastmod: edition.generatedAt }];
-  const football = edition.articles.filter(isPublicArticle);
+  const football = edition.articles.filter(isEditorialIndexable);
   if (football.length >= 3) hubs.push({ path: "/actualites/football", title: "Actualités football", lastmod: edition.generatedAt });
   return [...hubs, ...articles];
 }
@@ -83,7 +90,7 @@ function esc(value: string): string {
 }
 
 export function actualitesRss(articles: EditorialArticle[]): string {
-  const items = articles.filter(isPublicArticle).slice(0, 20).map((article) => {
+  const items = articles.filter(isEditorialIndexable).slice(0, 20).map((article) => {
     const loc = articleUrl(article.slug);
     return `  <item>
     <title>${esc(article.h1)}</title>
