@@ -224,6 +224,29 @@ export function qualityGate(
   reasons.push(...headingArchitectureReasons(article.paragraphs));
   if (article.paragraphs.some((p) => p.body.trim().length < 140)) reasons.push("partie trop mince");
   if (article.articleType === "news" && body.trim().length < 2400) reasons.push("actualité trop courte pour apporter une vraie valeur éditoriale");
+  // A match ended: never turn the pre-match data skeleton into an indexed news report.
+  // Real recaps require sourced in-game developments, not just a final score.
+  if (article.articleType === "postmatch") {
+    const preMatchLeak = /avant le match|avant le coup d.envoi|juste avant le coup d.envoi|cotes, absences et signaux|ce qui peut encore évoluer|aucune cote 1N2|compositions, forfaits, changements d.horaire|aucune probabilité chiffrée/i;
+    const independentSources = new Set(
+      article.sources
+        .filter((source) => source.url && sourceStrength(source) >= 6)
+        .map((source) => { try { return new URL(source.url!).hostname.replace(/^www\./, ""); } catch { return ""; } })
+        .filter(Boolean),
+    );
+    const hasOfficialMatchSource = article.sources.some(
+      (source) => source.status === "OFFICIAL" && Boolean(source.url),
+    );
+    if (article.paragraphs.length < 5 || body.trim().length < 2400)
+      reasons.push("après-match sans analyse substantielle : au moins cinq sections et des faits sourcés requis");
+    if (independentSources.size < 2 || !hasOfficialMatchSource)
+      reasons.push("après-match sans deux sources indépendantes dont une officielle");
+    if (preMatchLeak.test(body))
+      reasons.push("après-match contaminé par un modèle avant-match");
+    const matchDetail = /\b(?:buteur|buteurs|a ouvert le score|a doublé la mise|a inscrit|expuls|carton rouge|xG|possession|tirs cadrés|décisif|à la \d{1,2}e minute)\b/i;
+    if (!matchDetail.test(body))
+      reasons.push("après-match sans fait de jeu ou donnée chiffrée expliquant le résultat");
+  }
   if (!article.sources.length) reasons.push("aucune source");
   if (sourceQualityScore(article.sources) < 4) reasons.push("sources trop faibles");
   if (article.articleType === "news") {
