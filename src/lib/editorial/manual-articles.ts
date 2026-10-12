@@ -1,7 +1,9 @@
+import { cityVerdict20261012 } from "@/lib/editorial/manual-city-verdict-2026-10-12";
 import { liverpoolManchesterCityPostmatch } from "@/lib/editorial/manual-postmatch-liverpool-city";
 import type { EditorialArticle } from "@/lib/editorial/types";
 
 const ARTICLES: EditorialArticle[] = [
+  cityVerdict20261012,
   liverpoolManchesterCityPostmatch,
   {
     id: "manual-2026-10-01-real-madrid-mbappe-paris",
