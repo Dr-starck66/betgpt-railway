@@ -19,6 +19,8 @@ jobs:
           cache: npm
       - name: Install exact dependencies without running lifecycle scripts
         run: npm ci --ignore-scripts
+      - name: Run ASTRA core regression tests
+        run: node --test scripts/astra-master-gate.test.mjs
       - name: Central proof gate - source changes
         run: node scripts/astra-master-gate.mjs --task=code --strict
       - name: Central proof gate - all other site scopes
