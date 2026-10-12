@@ -1,0 +1,25 @@
+name: ASTRA BetGPT anti-boilerplate editorial negative proof
+on:
+  push:
+    branches: [astra-content-omega-betgpt, main]
+    paths:
+      - "src/lib/editorial/quality.ts"
+      - "src/lib/editorial/gold-standard.ts"
+      - "scripts/astra-content-omega-proof.mjs"
+      - ".github/workflows/astra-content-omega-proof.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Adversarial BetGPT editorial content proof
+        run: node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-content-omega-proof.mjs
