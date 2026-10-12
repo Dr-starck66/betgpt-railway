@@ -57,3 +57,12 @@ test("unregistered binding cannot be silently accepted",()=>{
   assert.notEqual(res.status,0);
   assert.deepEqual(data.unknownBindings,["UNLISTED"]);
 });
+
+test("unregistered ASTRA scripts cannot bypass the catalog",()=>{
+  const f=fixture([always],{ALWAYS:[{type:"command",run:"true"}]});
+  fs.mkdirSync(path.join(f.cwd,"scripts"),{recursive:true});
+  fs.writeFileSync(path.join(f.cwd,"scripts/astra-hidden-guard.mjs"),"console.log('hidden')");
+  const {res,data}=f.run();
+  assert.notEqual(res.status,0);
+  assert.deepEqual(data.untrackedScripts,["scripts/astra-hidden-guard.mjs"]);
+});
