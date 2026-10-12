@@ -227,6 +227,27 @@
         "run": "npm run affiliate:guard",
         "timeoutMs": 90000
       }
+    ],
+    "ASTRA_NEWS_SOURCE_INTEGRITY": [
+      {
+        "type": "command",
+        "run": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/editorial/source-integrity.test.ts",
+        "timeoutMs": 120000
+      }
+    ],
+    "ASTRA_DISCOVER_NEWS": [
+      {
+        "type": "command",
+        "run": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/editorial/discover-launchpad.test.ts",
+        "timeoutMs": 120000
+      }
+    ],
+    "ASTRA_BACKLINK_INTEGRITY": [
+      {
+        "type": "command",
+        "run": "npm run test:semantic-flow",
+        "timeoutMs": 120000
+      }
     ]
   }
 }
