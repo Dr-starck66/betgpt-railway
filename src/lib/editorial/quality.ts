@@ -11,7 +11,7 @@ const TIPSTER = /mise conseillée|à jouer|pronostic sûr|gain garanti|certitude
 const INTERNAL_JARGON = /desk BetGPT|score interne|créneau ouvert|créneau pas encore ouvert|pas un pronostic inventé|signal desk|déjà ingéré|pipeline|dans ce cluster|le moteur classe|le moteur conserve|source officielle n['’]est pas ajoutée artificiellement/i;
 const SPANISH_PUBLIC_COPY = /\b(horario|alineaciones?|resultado|dónde ver|clasificación)\b/i;
 const GENERIC_EDITORIAL_FILLER =
-  /voici ce qui est confirmé par les sources disponibles|ce que cela peut changer|les prochains éléments à surveiller|la prochaine étape est une confirmation ou une précision|ce rendez-vous donne un contexte immédiat au sujet|les éléments ci-dessous restent limités à ce qui est effectivement annoncé|\brequête\b[^.]{0,80}\b(?:pronostic|seo|mot[- ]?clé)\b/i;
+  /voici ce qui est confirmé par les sources disponibles|ce que cela peut changer|les prochains éléments à surveiller|la prochaine étape est une confirmation ou une précision|ce rendez-vous donne un contexte immédiat au sujet|les éléments ci-dessous restent limités à ce qui est effectivement annoncé|\brequête\b[^.]{0,80}\b(?:pronostic|seo|mot[- ]?clé)\b|reconstruction seo|intention de recherche|densit[eé] de mots.cl[eé]s|comment nous v[eé]rifions les projets|quelles informations changent et lesquelles doivent rester constantes|comment utiliser ce guide comme point de d[eé]part|r[eé]partition de l.autorit[eé] entre les contenus/i;
 
 const STOP = new Set([
   "betgpt",
