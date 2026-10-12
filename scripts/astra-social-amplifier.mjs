@@ -45,7 +45,7 @@ const getMeta=(html,key)=>{
  return "";
 };
 async function load(url){
- const r=await fetch(url,{headers:{"user-agent":"AstraSocialAmplifier/1.0"},signal:AbortSignal.timeout(12000)});
+ const r=await fetch(url,{headers:{"user-agent":"AstraSocialAmplifier/1.0"},signal:AbortSignal.timeout(6500)});
  if(!r.ok)throw Error("HTTP "+r.status);return {url:r.url,type:r.headers.get("content-type")||"",body:await r.text()};
 }
 async function articleData(url,site){
@@ -88,11 +88,11 @@ export function planItems(state,site,items,stamp=now()){
 async function plan(state,sites){
  for(const site of sites){
   const found=await discover(site);
-  if(!found.verified){console.log(JSON.stringify({site:site.id,status:"BLOCKED_SOURCE",errors:found.errors.slice(0,2)}));continue;}
-  const p=planItems(state,site,found.items);let jobs=0;
+  if(!found.verified){state.sites[site.id]={bootstrapped:!!state.sites[site.id]?.bootstrapped,lastCheckedAt:now(),sourceStatus:"BLOCKED_SOURCE",seen:state.sites[site.id]?.seen||{}};console.log(JSON.stringify({site:site.id,status:"BLOCKED_SOURCE",errors:found.errors.slice(0,2)}));continue;}
+  const p=planItems(state,site,found.items);state.sites[site.id].sourceStatus="VERIFIED";let jobs=0;
   for(const candidate of p.fresh){
    let article;try{article=await articleData(candidate.url,site);}
-   catch(e){console.log(JSON.stringify({site:site.id,status:"BLOCKED_ARTICLE",url:candidate.url,error:String(e.message||e)}));continue;}
+   catch(e){delete state.sites[site.id].seen[hash(candidate.url)];console.log(JSON.stringify({site:site.id,status:"BLOCKED_ARTICLE",url:candidate.url,error:String(e.message||e)}));continue;}
    for(const network of ["instagram","x"]){
     const id=network+":"+hash(candidate.url);if(state.jobs[id])continue;
     state.jobs[id]={id,siteId:site.id,network,articleUrl:article.url,
@@ -165,7 +165,7 @@ async function main(){
  if(step==="deliver")await deliver(state);
  writeFileSync(STATE,JSON.stringify(state,null,2)+"\n");
  const counts={};for(const j of Object.values(state.jobs))counts[j.status]=(counts[j.status]||0)+1;
- const report="### ASTRA SOCIAL "+step+"\n"+JSON.stringify(counts)+"\n\nPublishing on Google Discover is not inferred.\n";
+ const sources=Object.entries(state.sites).map(([id,site])=>({id,status:site.sourceStatus||"UNVERIFIED",seen:Object.keys(site.seen||{}).length}));const report="### ASTRA SOCIAL "+step+"\nJobs: "+JSON.stringify(counts)+"\nSources: "+JSON.stringify(sources)+"\n\nPublishing on Google Discover is not inferred.\n";
  console.log(report);if(process.env.GITHUB_STEP_SUMMARY)appendFileSync(process.env.GITHUB_STEP_SUMMARY,report);
 }
 if(process.argv[1]===fileURLToPath(import.meta.url))main().catch(e=>{console.error("ASTRA_SOCIAL_FAIL",String(e.message||e));process.exitCode=1;});
