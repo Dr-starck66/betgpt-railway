@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-12T15:16:52.181Z",
+      "lastCheckedAt": "2026-10-12T15:29:49.002Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -45,37 +45,37 @@
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-12T15:16:52.775Z",
+      "lastCheckedAt": "2026-10-12T15:29:49.669Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-12T15:17:19.664Z",
+      "lastCheckedAt": "2026-10-12T15:30:16.807Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-12T15:17:20.182Z",
+      "lastCheckedAt": "2026-10-12T15:30:17.498Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-12T15:17:46.600Z",
+      "lastCheckedAt": "2026-10-12T15:30:44.190Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": false,
-      "lastCheckedAt": "2026-10-12T15:17:18.779Z",
+      "lastCheckedAt": "2026-10-12T15:30:15.671Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {}
     },
     "andaluztarija": {
       "bootstrapped": false,
-      "lastCheckedAt": "2026-10-12T15:17:46.184Z",
+      "lastCheckedAt": "2026-10-12T15:30:43.500Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {}
     }
