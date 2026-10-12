@@ -55,6 +55,26 @@ function checkDefinition(c) {
     const result={type:"command",command:c.run,status:run.status===0&&!run.error?"PASS":"FAIL",
       exitCode:run.status,durationMs:Date.now()-t,outputSha256:sha256((run.stdout||"")+(run.stderr||""))};
     if (run.error) result.error=run.error.code || run.error.message;
+    // Some commands prove only that the engine ran, not that its real-world objective
+    // was met. A fresh, on-disk outcome report is mandatory before these can PASS.
+    if(c.resultReport){
+      const file=safePath(c.resultReport);
+      try{
+        if(!existsSync(file) || statSync(file).mtimeMs < t-2000)throw Error("missing-or-stale-outcome-report");
+        const bytes=readFileSync(file);
+        const outcome=JSON.parse(bytes.toString("utf8"));
+        result.outcomeStatus=String(outcome.status||"UNVERIFIED");
+        result.outcomeSha256=sha256(bytes);
+        if(run.status===0&&!run.error){
+          result.status=result.outcomeStatus==="PASS"?"PASS":
+            result.outcomeStatus==="FAIL"?"FAIL":"UNVERIFIED";
+        }
+      }catch(error){
+        result.status=run.status===0&&!run.error?"UNVERIFIED":"FAIL";
+        result.outcomeStatus="UNVERIFIED";
+        result.reportReason=error.message;
+      }
+    }
     return result;
   }
   if (c.type === "http") return {type:"http",status:"PENDING",url:c.url};
