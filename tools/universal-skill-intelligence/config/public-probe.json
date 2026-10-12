@@ -1,0 +1,6 @@
+{
+  "schema": "universal-skill-intelligence/projects-v1",
+  "projects": [
+    {"id":"public-smoke","label":"Generic public smoke test only","kind":"testing","queries":["react best practices","find-skills"]}
+  ]
+}
