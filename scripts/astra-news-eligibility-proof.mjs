@@ -34,7 +34,19 @@ export function inspectNewsSitemap(xml,origin,now=Date.now()) {
   const entries=[...xml.matchAll(/<url>([\s\S]*?)<\/url>/gi)].map(m=>m[1]);
   const fresh=[],failures=[];
   if(!/<urlset\b/.test(xml))failures.push("missing-news-urlset");
+  if(entries.length && !xml.includes("http://www.google.com/schemas/sitemap-news/0.9"))failures.push("missing-news-namespace");
+  if(entries.length>1000)failures.push("news-sitemap-over-1000-entries");
   for(const entry of entries){
+    const newsBlocks=[...entry.matchAll(/<news:news>([\\s\\S]*?)<\\/news:news>/gi)].map(x=>x[1]);
+    if(newsBlocks.length!==1){failures.push("invalid-news-block-count");continue;}
+    const news=newsBlocks[0];
+    const publicationBlocks=[...news.matchAll(/<news:publication>([\\s\\S]*?)<\\/news:publication>/gi)].map(x=>x[1]);
+    if(publicationBlocks.length!==1)failures.push("invalid-news-publication-count");
+    const pub=publicationBlocks[0]||"";
+    if(!xmlValues(pub,"news:name")[0])failures.push("missing-news-name");
+    if(!/^[a-z]{2,3}$|^zh-(?:cn|tw)$/i.test(xmlValues(pub,"news:language")[0]||""))failures.push("invalid-news-language");
+    if(!xmlValues(news,"news:title")[0])failures.push("missing-news-title");
+    if(xmlValues(news,"news:publication_date").length!==1)failures.push("invalid-publication-date-count");
     const link=xmlValues(entry,"loc")[0]||"";
     const dates=xmlValues(entry,"news:publication_date");
     const publication=dates[0]||"";
