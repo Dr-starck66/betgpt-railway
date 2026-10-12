@@ -11,11 +11,15 @@ on:
     branches: [main]
     paths:
       - "scripts/astra-social-amplifier*"
+      - "scripts/astra-social-oauth-vault*"
+      - "scripts/astra-social-oauth-vault*"
       - "config/astra-social-sites.json"
+      - "data/social/account-vault.json"
       - ".github/workflows/astra-social-amplifier.yml"
   pull_request:
     paths:
       - "scripts/astra-social-amplifier*"
+      - "scripts/astra-social-oauth-vault*"
       - "config/astra-social-sites.json"
       - ".github/workflows/astra-social-amplifier.yml"
 
@@ -40,7 +44,23 @@ jobs:
         with:
           node-version: '22'
       - name: Test syndication engine without social credentials
-        run: node --test scripts/astra-social-amplifier.test.mjs
+        run: node --test scripts/astra-social-amplifier.test.mjs scripts/astra-social-oauth-vault.test.mjs
+      - name: Refresh expiring long-lived Instagram grants (never log tokens)
+        if: github.event_name != 'pull_request'
+        env:
+          ASTRA_SOCIAL_VAULT_KEY: ${{ secrets.ASTRA_SOCIAL_VAULT_KEY }}
+        run: node scripts/astra-social-oauth-vault.mjs renew
+      - name: Persist encrypted rotation receipts (no plaintext credentials)
+        if: github.event_name != 'pull_request'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/social/account-vault.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'chore(social): rotate encrypted OAuth credentials [skip ci]'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
       - name: Plan new verified articles; baseline the first scan
         if: github.event_name != 'pull_request'
         run: node scripts/astra-social-amplifier.mjs plan
@@ -59,6 +79,7 @@ jobs:
         if: github.event_name != 'pull_request'
         env:
           ASTRA_SOCIAL_META_ACCOUNTS_JSON: ${{ secrets.ASTRA_SOCIAL_META_ACCOUNTS_JSON }}
+          ASTRA_SOCIAL_VAULT_KEY: ${{ secrets.ASTRA_SOCIAL_VAULT_KEY }}
         run: node scripts/astra-social-amplifier.mjs claim
       - name: Persist claim BEFORE attempting Meta publication
         if: github.event_name != 'pull_request'
@@ -73,6 +94,7 @@ jobs:
         if: github.event_name != 'pull_request'
         env:
           ASTRA_SOCIAL_META_ACCOUNTS_JSON: ${{ secrets.ASTRA_SOCIAL_META_ACCOUNTS_JSON }}
+          ASTRA_SOCIAL_VAULT_KEY: ${{ secrets.ASTRA_SOCIAL_VAULT_KEY }}
         run: node scripts/astra-social-amplifier.mjs deliver
       - name: Persist remote confirmations; fail closed on push conflict
         if: github.event_name != 'pull_request'
