@@ -1,18 +1,34 @@
-name: UNIVERSAL SKILLS public proof — isolated and free
+name: UNIVERSAL SKILLS Omega — free cross-project CI
 on:
   push:
-    branches:
-      - ci/universal-skills-omega-20261012
+    branches: [main, ci/universal-skills-omega-20261012]
+    paths:
+      - 'tools/universal-skill-intelligence/**'
+      - '.github/workflows/universal-skills-public-proof.yml'
+  pull_request:
     paths:
       - 'tools/universal-skill-intelligence/**'
       - '.github/workflows/universal-skills-public-proof.yml'
   workflow_dispatch:
+    inputs:
+      project:
+        description: 'Category id or all (no private details)'
+        type: string
+        required: false
+        default: 'public-smoke'
+      query:
+        description: 'Optional free-text skill search'
+        type: string
+        required: false
+        default: ''
+  schedule:
+    - cron: '37 7 * * 0'
 permissions:
   contents: read
 jobs:
   portable-smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 15
     defaults:
       run:
         working-directory: tools/universal-skill-intelligence
@@ -21,24 +37,28 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Verify exact copied engine with standard Node
+      - name: Verify engine with standard Node
         run: |
           node --version
           node --check scripts/universal-skill-intelligence.mjs
           node --test scripts/universal-skill-intelligence.test.mjs
-      - name: Probe live skills.sh API and GitHub provenance without installing code
+      - name: Probe skills.sh API and verify candidate repository identity (zero-install)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_PROJECT: ${{ inputs.project || 'public-smoke' }}
+          INPUT_QUERY: ${{ inputs.query || '' }}
+          EVENT_NAME: ${{ github.event_name }}
         run: |
-          node scripts/universal-skill-intelligence.mjs \
-            --config=config/public-probe.json \
-            --project=public-smoke \
-            --verifyTop=1 \
-            --report=artifacts/public-proof/report.json \
-            --strict
-      - name: Publish evidence even if live probe fails
+          project="$INPUT_PROJECT"
+          if [ "$EVENT_NAME" = "schedule" ]; then project="all"; fi
+          args=("--config=config/public-probe.json" "--project=$project" "--verifyTop=1" "--timeoutMs=8000" "--report=artifacts/public-proof/report.json" "--strict")
+          if [ -n "$INPUT_QUERY" ]; then args+=("--query=$INPUT_QUERY"); fi
+          node scripts/universal-skill-intelligence.mjs "${args[@]}"
+      - name: Preserve query and safety evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: universal-skills-public-proof
+          name: universal-skills-evidence
           path: tools/universal-skill-intelligence/artifacts/public-proof/report.json
           if-no-files-found: warn
           retention-days: 7
