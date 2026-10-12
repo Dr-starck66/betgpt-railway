@@ -65,6 +65,11 @@
         "type": "command",
         "run": "node scripts/astra-stream-resilience-guard.mjs",
         "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-resume-guard.mjs",
+        "timeoutMs": 120000
       }
     ],
     "ASTRA_TRUE_LINEUPS": [
@@ -112,8 +117,8 @@
     "ASTRA_HEADING_ARCHITECTURE": [
       {
         "type": "command",
-        "run": "npm run seo:headings",
-        "timeoutMs": 90000
+        "run": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-heading-architecture-guard.mjs --strict",
+        "timeoutMs": 150000
       }
     ],
     "ASTRA_IMAGE_RELEVANCE_RIGHTS": [
@@ -135,6 +140,11 @@
         "type": "command",
         "run": "npm run editorial:corpus-audit",
         "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-content-omega-proof.mjs",
+        "timeoutMs": 120000
       }
     ],
     "ASTRA_BROADCAST_AFFILIATE": [
@@ -142,6 +152,11 @@
         "type": "command",
         "run": "npm run test:broadcast-affiliate",
         "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-broadcast-affiliate-guard.mjs",
+        "timeoutMs": 120000
       }
     ],
     "ASTRA_AFFILIATE_LINK_GUARD": [
@@ -163,6 +178,11 @@
         "type": "command",
         "run": "npm run test:editorial-authority",
         "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-editorial-authority-gate.ts",
+        "timeoutMs": 120000
       }
     ],
     "ASTRA_RAILWAY_DEPLOY_GATE": [
@@ -196,15 +216,15 @@
     "ASTRA_SEO_AUTOMATION": [
       {
         "type": "command",
-        "run": "npm run seo:audit",
-        "timeoutMs": 90000
+        "run": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/seo-audit.mjs",
+        "timeoutMs": 150000
       }
     ],
     "ASTRA_CRAWL_FIRST": [
       {
         "type": "command",
-        "run": "npm run seo:audit",
-        "timeoutMs": 90000
+        "run": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/seo-audit.mjs",
+        "timeoutMs": 150000
       }
     ],
     "ASTRA_IMAGE_DELIVERY": [
@@ -246,6 +266,18 @@
       {
         "type": "command",
         "run": "npm run test:semantic-flow",
+        "timeoutMs": 120000
+      }
+    ],
+    "ASTRA_NEWS_ELIGIBILITY": [
+      {
+        "type": "command",
+        "run": "node --test scripts/astra-news-eligibility-proof.test.mjs",
+        "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-news-eligibility-proof.mjs",
         "timeoutMs": 120000
       }
     ]
