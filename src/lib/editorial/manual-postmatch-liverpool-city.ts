@@ -63,7 +63,7 @@ export const liverpoolManchesterCityPostmatch: EditorialArticle = {
   ],
   "createdAt": "2026-10-11T19:51:00.000Z",
   "publishedAt": "2026-10-11T19:51:00.000Z",
-  "modifiedAt": "2026-10-12T06:00:00.000Z",
+  "modifiedAt": "2026-10-12T05:42:00.000Z",
   "parisDate": "2026-10-11",
   "scheduledTime": "21:51",
   "category": "Football",
@@ -165,13 +165,13 @@ export const liverpoolManchesterCityPostmatch: EditorialArticle = {
   "duplicateScore": 0,
   "corrections": [
     {
-      "at": "2026-10-12T06:00:00.000Z",
+      "at": "2026-10-12T05:42:00.000Z",
       "note": "Réécriture complète après audit : suppression des blocs d'avant-match, ajout de la chronologie et de l'analyse sourcées, remplacement du visuel générique par Anfield sous licence ouverte."
     }
   ],
   "sourceChanges": [
     {
-      "at": "2026-10-12T06:00:00.000Z",
+      "at": "2026-10-12T05:42:00.000Z",
       "note": "Ajout des centres de match officiels de Liverpool et Manchester City, corroboration Sky Sports et chiffres Maxifoot."
     }
   ],
