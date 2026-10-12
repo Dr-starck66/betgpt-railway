@@ -56,6 +56,21 @@
         "type": "command",
         "run": "node --test scripts/astra-risk-dry-run.test.mjs",
         "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node --test scripts/astra-safe-push-dry-run.test.mjs scripts/astra-never-fail-build-dry-run.test.mjs",
+        "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-safe-push.mjs --astra-dry-run --branch audit-branch artifacts/proof.json",
+        "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-never-fail-build-guard.mjs --astra-dry-run",
+        "timeoutMs": 90000
       }
     ],
     "ASTRA_DESIGN_INTELLIGENCE": [
