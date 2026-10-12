@@ -3,6 +3,8 @@ import { describe, it } from "node:test";
 import { buildEdition, applyEventOverride } from "./engine.ts";
 import { newsEntries, learnTopics, renderNewsSitemap } from "./feed.ts";
 import { qualityGate } from "./quality.ts";
+import { manualEditorialArticles } from "./manual-articles.ts";
+import { editorialGoldStandardGate } from "./gold-standard.ts";
 import { optimizeTimes, parisDate, slotInstant } from "./time.ts";
 import type { ArticleType, EditorialMatch, EditorialNewsSignal, SlotId } from "./types.ts";
 import { autoPublishableCluster, clusterSignals, parseGoogleNewsRss, sourceTier } from "./news-scout.server.ts";
@@ -59,7 +61,7 @@ function board(): EditorialMatch[] {
 }
 
 describe("editorial engine", () => {
-  it("keeps Paris slots closed before 08:00 and publishes them after 19:00", () => {
+  it("keeps Paris slots closed and refuses shallow match templates instead of force-publishing", () => {
     assert.equal(parisDate(EARLY), "2026-09-25");
     assert.equal(parisDate(NOW), "2026-09-25");
     const early = buildEdition({ now: EARLY, matches: board() });
@@ -67,7 +69,9 @@ describe("editorial engine", () => {
     assert.ok(early.slots.every((slot) => slot.article?.status === "SCHEDULED" || slot.skipped));
     const open = buildEdition({ now: NOW, matches: board() });
     const published = open.articles.filter((article) => article.status === "PUBLISHED");
-    assert.equal(published.length, 3);
+    assert.equal(published.length, 0, "3 short generic articles must never be published to satisfy a quota");
+    assert.ok(open.skipped.length >= 1);
+    assert.ok(open.skipped.some((row) => /référence éditoriale/.test(row.reason)));
     assert.equal(open.targetPerDay, 3);
     assert.equal(open.publicationPolicy, "OPPORTUNITY_DRIVEN_MAX_3");
     assert.equal(new Set(published.map((article) => article.id)).size, published.length);
@@ -142,10 +146,14 @@ describe("editorial engine", () => {
 
   it("keeps the news sitemap inside two days and rejects clickbait", () => {
     const edition = buildEdition({ now: NOW, matches: board() });
-    const entries = newsEntries(edition, NOW.getTime());
+    const strong = manualEditorialArticles().find((article) => article.slug.includes("manchester-city-18-points"))!;
+    assert.equal(editorialGoldStandardGate(strong).pass, true);
+    const sourced = { ...strong, id: "published-sourced-test", createdAt: NOW.toISOString(), publishedAt: NOW.toISOString(), modifiedAt: NOW.toISOString(), parisDate: parisDate(NOW) };
+    const editionWithNews = { ...edition, articles: [sourced] };
+    const entries = newsEntries(editionWithNews, NOW.getTime());
     for (const entry of entries) assert.ok(NOW.getTime() - Date.parse(entry.published) <= 2 * 86400000);
     const xml = renderNewsSitemap(
-      newsEntries(edition, NOW.getTime()).filter((entry) => Date.parse(entry.published) >= NOW.getTime() - 2 * 86400000),
+      newsEntries(editionWithNews, NOW.getTime()).filter((entry) => Date.parse(entry.published) >= NOW.getTime() - 2 * 86400000),
     );
     const stale = renderNewsSitemap([
       {
@@ -208,7 +216,7 @@ describe("editorial engine", () => {
 
 
 
-  it("publishes a corroborated fresh news cluster at most once", () => {
+  it("keeps short corroborated news in candidates but refuses to publish it below the newsroom reference", () => {
     const signals: EditorialNewsSignal[] = [
       {
         id: "n1",
@@ -237,9 +245,9 @@ describe("editorial engine", () => {
     ];
     const edition = buildEdition({ now: NOW, matches: [], signals });
     const news = edition.articles.filter((article) => article.articleType === "news");
-    assert.equal(news.length, 1);
-    assert.ok(news[0]!.sources.filter((source) => source.status === "CORROBORATED").length >= 2);
-    assert.ok(news[0]!.discoverOpportunity.total >= 70);
+    assert.equal(news.length, 0, "two headlines are not a researched 1500-word article");
+    assert.ok(edition.candidates.some((candidate) => candidate.articleType === "news"));
+    assert.ok(edition.skipped.some((skip) => /référence éditoriale/.test(skip.reason)));
   });
 
   it("keeps a material resolution separate from the earlier controversy", () => {
@@ -422,11 +430,10 @@ describe("editorial engine", () => {
     assert.equal(learnTopics([{ league: "L1", type: "preview", clicks: null }]).status, "UNKNOWN");
   });
 
-  it("never recommends a price under 1.80 as a selection", () => {
+  it("does not turn a low-price match into a falsely authoritative Discover article", () => {
     const edition = buildEdition({ now: NOW, matches: board() });
     const senegal = edition.articles.find((article) => article.matchId === "sen");
-    assert.ok(senegal, "le match à cote 1,30 doit avoir sa page, pas seulement la liste");
-    assert.match(senegal.paragraphs.map((part) => part.body).join(" "), /sous 1,80/);
+    assert.equal(senegal, undefined, "a shallow fixture at a 1.30 price may remain in the match directory but is not a news article");
   });
 
   it("rejects internally repetitive and templated editorial copy", () => {
@@ -578,22 +585,23 @@ describe("editorial engine", () => {
 
 
   it("never evicts an already-published URL when daily inventory exceeds three or the day changes", () => {
-    const base = buildEdition({ now: NOW, matches: board() });
-    assert.equal(base.articles.length, 3);
-
-    const original = base.articles[0]!;
+    // Four previously published high-quality articles stay available even
+    // when the future-article gate rejects fresh generic match templates.
+    const reference = manualEditorialArticles().find((article) => article.slug.includes("manchester-city-18-points"))!;
+    const original = { ...reference, parisDate: parisDate(NOW), publishedAt: NOW.toISOString(), createdAt: NOW.toISOString(), modifiedAt: NOW.toISOString(), status: "PUBLISHED" as const };
     const extra = {
       ...original,
       id: "historical-extra",
       slug: "historical-extra-published-url",
       slot: "noon" as const,
     };
-
+    const inventory = [original, extra, { ...original, id: "historical-three", slug: "historical-third-url", slot: "evening" as const }, { ...original, id: "historical-four", slug: "historical-fourth-url", slot: "noon" as const }];
     const sameDay = buildEdition({
       now: NOW,
       matches: board(),
-      frozen: [...base.articles, extra],
+      frozen: inventory,
     });
+    assert.equal(sameDay.articles.length, 4);
     assert.ok(
       sameDay.articles.some((article) => article.slug === "historical-extra-published-url"),
       "a fourth already-published URL must never be pruned by the three-slot policy",
