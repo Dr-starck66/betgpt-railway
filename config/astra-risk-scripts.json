@@ -1,0 +1,63 @@
+{
+  "schema": "astra-risk-scripts/v1",
+  "mode": "read-only-static-dry-run",
+  "policy": "Never import, spawn, fetch, or invoke target scripts in preview. Read only source bytes. Production behavior remains UNVERIFIED.",
+  "scripts": [
+    {
+      "path": "scripts/astra-authority-citation-engine.mjs",
+      "risk": "network-data-publication"
+    },
+    {
+      "path": "scripts/astra-cloud-bridge.mjs",
+      "risk": "network-probes"
+    },
+    {
+      "path": "scripts/astra-deploy-sync-gate.mjs",
+      "risk": "git-deployment"
+    },
+    {
+      "path": "scripts/astra-green-release-sync.mjs",
+      "risk": "cross-repository-sync"
+    },
+    {
+      "path": "scripts/astra-launch-video.mjs",
+      "risk": "video-render-and-file-write"
+    },
+    {
+      "path": "scripts/astra-public-autosync.mjs",
+      "risk": "background-sync-and-git"
+    },
+    {
+      "path": "scripts/astra-public-proxy.mjs",
+      "risk": "network-server"
+    },
+    {
+      "path": "scripts/astra-public-route-gate.mjs",
+      "risk": "network-probes-and-report"
+    },
+    {
+      "path": "scripts/astra-safe-push.mjs",
+      "risk": "git-push"
+    },
+    {
+      "path": "scripts/astra-social-amplifier.mjs",
+      "risk": "external-social-post"
+    },
+    {
+      "path": "scripts/astra-social-oauth-vault.mjs",
+      "risk": "oauth-secret-mutation"
+    },
+    {
+      "path": "scripts/astra-software-heritage-archive.mjs",
+      "risk": "external-archive-publication"
+    },
+    {
+      "path": "scripts/astra-stamp-revision.mjs",
+      "risk": "revision-file-write"
+    },
+    {
+      "path": "scripts/astra-wait-public-revision.mjs",
+      "risk": "external-network-polling"
+    }
+  ]
+}
