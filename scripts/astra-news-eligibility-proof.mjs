@@ -27,7 +27,7 @@ export function classify({wiring,tests,publicProbe}) {
   return publicProbe.status==="PASS"?"PASS_PUBLIC_TECHNICAL":"UNVERIFIED";
 }
 function xmlValues(xml,tag) {
-  const re=new RegExp("<"+tag+"(?:\\s[^>]*)?>([\s\S]*?)<\\/"+tag+">","gi");
+  const re=new RegExp("<"+tag+"(?:\\s[^>]*)?>([\\s\\S]*?)<\\/"+tag+">","gi");
   return [...xml.matchAll(re)].map(m=>m[1].trim().replace(/&amp;/g,"&"));
 }
 export function inspectNewsSitemap(xml,origin,now=Date.now()) {
