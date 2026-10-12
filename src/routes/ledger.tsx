@@ -446,31 +446,42 @@ function LedgerPage() {
       </section>
 
       <section className="section-card p-5 sm:p-6">
-        <h2 className="font-display text-xl">Ce que BetGPT corrige après ses erreurs</h2>
-        <p className="mt-1 text-sm text-mist">
-          Les probabilités et certaines règles sont ajustées à partir des résultats enregistrés.
-          Une correction n’est considérée utile que si elle améliore ensuite les nouveaux matchs,
-          sans modifier les anciens résultats.
+        <h2 className="font-display text-xl">Apprentissage BetGPT : ce qui fonctionne et ce qui reste à prouver</h2>
+        <p className="mt-2 text-sm leading-relaxed text-mist">
+          BetGPT utilise les résultats connus pour recalibrer certaines probabilités et resserrer des
+          critères de sélection. Le mécanisme existe dans le moteur et peut influencer les prochaines prédictions.
+          <strong className="text-paper"> En revanche, l'application de ces ajustements ne nécessite pas
+          systématiquement la preuve qu'ils améliorent les résultats sur de nouveaux matchs.</strong>
+          Nous ne pouvons donc pas les présenter comme un gain de performance démontré.
         </p>
-        {data.errorLearn ? (
-          <>
-            <p className="mt-3 text-sm text-paper">
-              {data.errorLearn.n} pronos tranchés · {data.errorLearn.nWrong} faux · annoncé{" "}
-              {Math.round(data.errorLearn.meanP * 100)} % · réel{" "}
-              {Math.round(data.errorLearn.hitRate * 100)} %.
-              {data.errorLearn.recentMiseN
-                ? ` Mises récentes : ${Math.round(data.errorLearn.recentMiseHit * 100)} % sur ${data.errorLearn.recentMiseN}.`
-                : ""}
+        <p className="mt-3 text-sm leading-relaxed text-mist">
+          Les observations utilisées ici mélangent notamment des tests historiques et des pronostics publiés.
+          Elles ne représentent pas uniquement des paris réels enregistrés avant coup d'envoi.
+          Certains filtres candidats disposent d'une évaluation chronologique séparée et peuvent rester
+          en mode d'observation tant que leurs critères ne sont pas validés.
+        </p>
+        {data.errorLearn?.n ? (
+          <div className="mt-4 rounded-xl border border-line bg-surface p-4 text-sm">
+            <p className="font-semibold text-paper">Échantillon technique de recalibrage (historique et observations publiques)</p>
+            <p className="mt-2 text-mist">
+              {data.errorLearn.n} observations prises en compte, dont {data.errorLearn.nWrong} classées perdantes.
+              Probabilité moyenne annoncée : {Math.round(data.errorLearn.meanP * 100)} % ;
+              fréquence observée dans cet échantillon : {Math.round(data.errorLearn.hitRate * 100)} %.
             </p>
-            <ul className="mt-3 space-y-1.5 text-sm text-mist">
-              {(data.errorLearn.lessons?.length ? data.errorLearn.lessons : data.errorLearn.notes).map((n: string) => (
-                <li key={n}>{n}</li>
-              ))}
-            </ul>
-          </>
+            <p className="mt-2 text-xs leading-relaxed text-muted">
+              Ces chiffres décrivent les données utilisées par l'algorithme, pas la rentabilité des pronostics
+              réellement publiés, ni une amélioration validée hors échantillon. La performance publique
+              reste contrôlable dans les exports du registre.
+            </p>
+          </div>
         ) : (
-          <p className="mt-3 text-sm text-mist">En attente des premiers scores.</p>
+          <p className="mt-3 text-sm text-muted">Aucun recalibrage mesurable n'est disponible dans les données actuellement chargées.</p>
         )}
+        <p className="mt-3 text-xs text-muted">
+          Pour annoncer une amélioration prouvée, il faudrait comparer de manière chronologique une version
+          corrigée et une version témoin sur des matchs ultérieurs, avec résultats, cotes enregistrées et
+          échantillon suffisant. Ce résultat n'est pas établi ici.
+        </p>
       </section>
 
       <div className="surface-card flex flex-wrap gap-2 p-3">
