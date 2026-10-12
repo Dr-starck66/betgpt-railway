@@ -74,12 +74,26 @@ async function main() {
   if (!validTasks.has(task)) throw new Error("Bad --task");
   const registry=json(registryFile), config=json(configFile);
   if (registry.schema!=="astra-brick-registry/1" || !Array.isArray(registry.bricks) || !registry.bricks.length) throw new Error("Missing registry");
-  if (!config.siteId || !Array.isArray(config.capabilities) || !config.checks || typeof config.checks!=="object") throw new Error("Invalid site configuration");
+  if (config.schema!=="astra-master-site/1" || !config.siteId || !Array.isArray(config.capabilities) || !config.checks || typeof config.checks!=="object") throw new Error("Invalid site configuration");
+  if (registry.bricks.length < 39) throw new Error("Registry shrinkage detected: at least 39 known ASTRA bricks required");
+  const core=["ASTRA_MASTER_GATE","ASTRA_BRICK_PROOF_GATE","ASTRA_NO_REPEAT","ASTRA_ZERO_COST","ASTRA_AUTOMATION_EVIDENCE"];
+  for (const id of core) if (!registry.bricks.some(b => b.id===id)) throw new Error("Mandatory global brick removed: "+id);
+  const signalFiles={
+    seo:["config/portfolio-sites.json","scripts/generate-sitemaps.mjs","scripts/astra-semantic-flow-guard.mjs"],
+    editorial:["scripts/content-quality-gate.mjs","src/lib/editorial","scripts/astra-editorial-corpus-audit.ts"],
+    news:["scripts/discover-news-gate.mjs","src/lib/editorial/discover-launchpad.test.ts"],
+    football:["scripts/astra-flag-guard.mjs","src/engine/official-lineups.test.ts"],
+    affiliate:["scripts/astra-affiliate-conversion-guard.mjs","scripts/astra-affiliate-direct.mjs"],
+    railway:["railway.json","railway.toml"],
+    runtime:["scripts/serve.mjs","scripts/astra-stream-resilience-guard.mjs"]
+  };
+  const inferredCapabilities=Object.entries(signalFiles).filter(([, paths]) => paths.some(p=>existsSync(resolve(root,p)))).map(([cap])=>cap);
+  const capabilities=new Set([...config.capabilities,...inferredCapabilities]);
   const ids=new Set(), results=[];
   for (const b of registry.bricks) {
     if (!b.id || ids.has(b.id) || !Array.isArray(b.on) || !b.scope) throw new Error("Duplicate or malformed brick ID");
     ids.add(b.id);
-    const applies=(b.scope==="universal"||config.capabilities.includes(b.scope)) &&
+    const applies=(b.scope==="universal"||capabilities.has(b.scope)) &&
       (task==="all"||b.on.includes(task));
     if (!applies) { results.push({id:b.id,scope:b.scope,status:"N/A",reason:"not-applicable-to-this-task-or-site"}); continue; }
     const checks=config.checks[b.id];
@@ -104,6 +118,7 @@ async function main() {
     commit:process.env.GITHUB_SHA||process.env.RAILWAY_GIT_COMMIT_SHA||null,
     registrySha256:sha256(readFileSync(registryFile,"utf8")),
     siteConfigSha256:sha256(readFileSync(configFile,"utf8")),
+    effectiveCapabilities:[...capabilities],inferredCapabilities,
     summary:{pass:results.filter(x=>x.status==="PASS").length,na:results.filter(x=>x.status==="N/A").length,
       fail:failures.length,unverified:unverified.length,unknownBindings:unknownBindings.length},
     status:failures.length||unverified.length||unknownBindings.length?"FAIL":"PASS",unknownBindings,results};
