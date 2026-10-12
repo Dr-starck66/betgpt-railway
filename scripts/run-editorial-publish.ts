@@ -48,8 +48,33 @@ console.log(
   `ASTRA_DISCOVER_LAUNCHPAD_STATIC_PASS candidates=${discoverAudits.length} pass=${discoverAudits.filter((audit) => audit.verdict === "PASS").length} review=${discoverAudits.filter((audit) => audit.verdict === "REVIEW").length}`,
 );
 
+console.log("ASTRA_PREPUBLICATION_PROOF", JSON.stringify({
+  schema: "astra-editorial-pipeline-proof/v1",
+  generatedAt: now.toISOString(),
+  phase: "prepublication-only",
+  articlesValidated: published.length,
+  checks: {
+    sourceIntegrity: { checked: published.length, failed: integrityFailures.length },
+    editorialAuthority: { checked: published.length, failed: authorityFailures.length },
+    discoverStatic: { checked: discoverAudits.length, failed: discoverFailures.length },
+  },
+  status: "PASS_PREPUBLICATION",
+  note: "Does not prove live URL, Search Console indexing or actual social delivery",
+}));
+
 const persisted = writeLedger(published);
 const social = await syncPublishedArticlesToSocial(published, now);
+
+console.log("ASTRA_PUBLICATION_PERSISTENCE_PROOF", JSON.stringify({
+  schema: "astra-editorial-persistence-proof/v1",
+  generatedAt: new Date().toISOString(),
+  articles: published.length,
+  articleLedgerPersisted: persisted,
+  socialQueuePersisted: social.persisted,
+  socialDeliveryAttempts: social.publishAttempts,
+  status: persisted && social.persisted ? "PASS_LEDGER_ONLY" : "FAIL",
+  note: "Social queue persistence is not proof of an external post or Google indexing",
+}));
 
 console.log(
   JSON.stringify(
