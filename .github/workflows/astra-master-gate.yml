@@ -36,6 +36,10 @@ jobs:
         run: node scripts/astra-live-capability-proof.mjs
       - name: Evaluate optimizer against actual evidence (unknowns stay UNVERIFIED)
         run: node scripts/astra-optimizer-omega.mjs --portfolio=config/astra-optimizer-portfolio.json --observations=artifacts/astra-optimizer/observations.json --capability-audit=artifacts/astra-capabilities/live.json --output=artifacts/astra-optimizer/betgpt-audit.json
+      - name: Prove fresh per-script risk contracts with hashed source, no active effects
+        run: |
+          node --test scripts/astra-risk-contract-proof.test.mjs
+          node scripts/astra-risk-contract-proof.mjs --all --report=artifacts/astra-risk-preflight/contracts.json
       - name: Central proof gate - source changes
         run: node scripts/astra-master-gate.mjs --task=code --strict
       - name: Central proof gate - all other site scopes
