@@ -1,0 +1,145 @@
+{
+  "schema": "astra-optimizer/config-v1",
+  "version": "2026-10-12",
+  "policy": {
+    "costIncreaseEur": 0,
+    "failClosed": true,
+    "unknownBricksFail": true,
+    "noAutomaticProductionChanges": true
+  },
+  "goals": {
+    "proof": {
+      "metric": "proof_pass_rate",
+      "direction": "min",
+      "target": 0.95,
+      "rate": true,
+      "minSamples": 100,
+      "maxAgeHours": 168,
+      "description": "Measure real outcome with fresh hashed provider artifacts. No inferred PASS."
+    },
+    "editorial": {
+      "metric": "content_acceptance_rate",
+      "direction": "min",
+      "target": 0.95,
+      "rate": true,
+      "minSamples": 100,
+      "maxAgeHours": 168,
+      "description": "Measure real outcome with fresh hashed provider artifacts. No inferred PASS."
+    },
+    "seo": {
+      "metric": "seo_acceptance_rate",
+      "direction": "min",
+      "target": 0.95,
+      "rate": true,
+      "minSamples": 100,
+      "maxAgeHours": 168,
+      "description": "Measure real outcome with fresh hashed provider artifacts. No inferred PASS."
+    },
+    "news": {
+      "metric": "sourced_article_acceptance_rate",
+      "direction": "min",
+      "target": 0.95,
+      "rate": true,
+      "minSamples": 100,
+      "maxAgeHours": 168,
+      "description": "Measure real outcome with fresh hashed provider artifacts. No inferred PASS."
+    },
+    "image": {
+      "metric": "image_delivery_success_rate",
+      "direction": "min",
+      "target": 0.95,
+      "rate": true,
+      "minSamples": 100,
+      "maxAgeHours": 168,
+      "description": "Measure real outcome with fresh hashed provider artifacts. No inferred PASS."
+    },
+    "traffic": {
+      "metric": "measured_organic_sessions",
+      "direction": "min",
+      "target": 1,
+      "rate": false,
+      "minSamples": 28,
+      "maxAgeHours": 720,
+      "description": "Measure real outcome with fresh hashed provider artifacts. No inferred PASS."
+    },
+    "runtime": {
+      "metric": "runtime_success_rate",
+      "direction": "min",
+      "target": 0.95,
+      "rate": true,
+      "minSamples": 100,
+      "maxAgeHours": 168,
+      "description": "Measure real outcome with fresh hashed provider artifacts. No inferred PASS."
+    },
+    "social": {
+      "metric": "social_publication_confirmation_rate",
+      "direction": "min",
+      "target": 0.95,
+      "rate": true,
+      "minSamples": 100,
+      "maxAgeHours": 168,
+      "description": "Measure real outcome with fresh hashed provider artifacts. No inferred PASS."
+    },
+    "affiliate": {
+      "metric": "affiliate_destination_valid_rate",
+      "direction": "min",
+      "target": 0.95,
+      "rate": true,
+      "minSamples": 100,
+      "maxAgeHours": 168,
+      "description": "Measure real outcome with fresh hashed provider artifacts. No inferred PASS."
+    },
+    "football": {
+      "metric": "football_data_verified_rate",
+      "direction": "min",
+      "target": 0.95,
+      "rate": true,
+      "minSamples": 100,
+      "maxAgeHours": 168,
+      "description": "Measure real outcome with fresh hashed provider artifacts. No inferred PASS."
+    }
+  },
+  "brickGoals": {
+    "ASTRA_MASTER_GATE": "proof",
+    "ASTRA_BRICK_PROOF_GATE": "proof",
+    "ASTRA_NO_REPEAT": "proof",
+    "ASTRA_ZERO_COST": "proof",
+    "ASTRA_AUTOMATION_EVIDENCE": "proof",
+    "ASTRA_OPTIMIZER_OMEGA": "proof",
+    "ASTRA_CONTENT_QUALITY": "editorial",
+    "ASTRA_CONTENT_BULKER": "editorial",
+    "ASTRA_PUBLISH_AUDIT": "editorial",
+    "ASTRA_ZERO_WEAK_PAGE": "seo",
+    "ASTRA_HEADING_ARCHITECTURE": "seo",
+    "ASTRA_SEMANTIC_FLOW": "seo",
+    "ASTRA_FULL_INDEXATION": "seo",
+    "ASTRA_CRAWL_FIRST": "seo",
+    "ASTRA_SEARCH_INTELLIGENCE": "seo",
+    "ASTRA_WAYBACK_REBUILDER": "seo",
+    "ASTRA_SEARCH_CONSOLE": "seo",
+    "ASTRA_SEO_AUTOMATION": "seo",
+    "ASTRA_BACKLINK_INTEGRITY": "seo",
+    "ASTRA_NEWS_SOURCE_INTEGRITY": "news",
+    "ASTRA_DISCOVER_NEWS": "news",
+    "ASTRA_EDITORIAL_AUTHORITY": "news",
+    "ASTRA_IMAGE_RELEVANCE_RIGHTS": "image",
+    "ASTRA_IMAGE_DELIVERY": "image",
+    "ASTRA_SEMRUSH_TRAFFIC_BOOSTER": "traffic",
+    "ASTRA_DESIGN_INTELLIGENCE": "runtime",
+    "ASTRA_TARDIGRADE": "runtime",
+    "ASTRA_RAILWAY_DEPLOY_GATE": "runtime",
+    "ASTRA_HEALTH_GATE": "runtime",
+    "ASTRA_PRODUCTION_PROOF": "runtime",
+    "ASTRA_SRE_BRIGADE": "runtime",
+    "ASTRA_LAUNCH_VIDEO": "runtime",
+    "ASTRA_SOCIAL_AUTO": "social",
+    "ASTRA_AFFILIATE_LINK_GUARD": "affiliate",
+    "ASTRA_AFFILIATE_PROGRAM_VALIDATION": "affiliate",
+    "ASTRA_BROADCAST_AFFILIATE": "affiliate",
+    "ASTRA_TRUE_LINEUPS": "football",
+    "ASTRA_FLAG_GUARD": "football",
+    "ASTRA_ODDS_TRUTH": "football",
+    "ASTRA_ROI_LEDGER": "football",
+    "ASTRA_NEWS_ELIGIBILITY": "news"
+  }
+}
