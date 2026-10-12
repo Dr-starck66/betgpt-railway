@@ -25,8 +25,13 @@ jobs:
         run: node --test scripts/astra-optimizer-omega.test.mjs scripts/astra-risk-dry-run.test.mjs
       - name: Inspect 14 risky entrypoints without executing their code
         run: node scripts/astra-risk-dry-run.mjs --all --report=artifacts/astra-risk-preflight/report.json
+      - name: Test live capability verifier against fake HTTP/error fixtures
+        run: node --test scripts/astra-live-capability-proof.test.mjs
+      - name: Probe real public BetGPT origin read-only, preserve partial proof
+        continue-on-error: true
+        run: node scripts/astra-live-capability-proof.mjs
       - name: Evaluate optimizer against actual evidence (unknowns stay UNVERIFIED)
-        run: node scripts/astra-optimizer-omega.mjs --portfolio=config/astra-optimizer-portfolio.json --output=artifacts/astra-optimizer/betgpt-audit.json
+        run: node scripts/astra-optimizer-omega.mjs --portfolio=config/astra-optimizer-portfolio.json --observations=artifacts/astra-optimizer/observations.json --capability-audit=artifacts/astra-capabilities/live.json --output=artifacts/astra-optimizer/betgpt-audit.json
       - name: Central proof gate - source changes
         run: node scripts/astra-master-gate.mjs --task=code --strict
       - name: Central proof gate - all other site scopes
@@ -42,4 +47,5 @@ jobs:
             artifacts/astra-news-eligibility/*.json
             artifacts/astra-risk-preflight/*.json
             artifacts/astra-optimizer/*.json
+            artifacts/astra-capabilities/*.json
           if-no-files-found: error
