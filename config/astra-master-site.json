@@ -248,6 +248,20 @@
         "run": "npm run test:semantic-flow",
         "timeoutMs": 120000
       }
+    ],
+    "ASTRA_NEWS_ELIGIBILITY": [
+      {
+        "type": "command",
+        "run": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/editorial/source-integrity.test.ts src/lib/editorial/discover-launchpad.test.ts",
+        "timeoutMs": 120000
+      }
+    ],
+    "ASTRA_OPTIMIZER_OMEGA": [
+      {
+        "type": "command",
+        "run": "node --test scripts/astra-semantic-flow-autorepair.test.mjs scripts/astra-seo-self-heal.test.mjs",
+        "timeoutMs": 120000
+      }
     ]
   }
 }
