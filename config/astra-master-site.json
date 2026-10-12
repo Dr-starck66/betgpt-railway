@@ -101,6 +101,16 @@
         "type": "command",
         "run": "node --test scripts/astra-risk-guard-direct.test.mjs",
         "timeoutMs": 120000
+      },
+      {
+        "type": "command",
+        "run": "node --test scripts/astra-risk-contract-proof.test.mjs",
+        "timeoutMs": 120000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-risk-contract-proof.mjs --all --report=artifacts/astra-risk-preflight/contracts.json",
+        "timeoutMs": 120000
       }
     ],
     "ASTRA_DESIGN_INTELLIGENCE": [
@@ -399,5 +409,10 @@
         "resultReport": "artifacts/astra-optimizer/betgpt-audit.json"
       }
     ]
+  },
+  "riskContractProof": {
+    "manifest": "config/astra-risk-scripts.json",
+    "report": "artifacts/astra-risk-preflight/contracts.json",
+    "scope": "audit-isolation-only"
   }
 }
