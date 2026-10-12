@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-12T15:09:16.204Z",
+      "lastCheckedAt": "2026-10-12T15:11:41.920Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -44,17 +44,22 @@
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-12T15:09:16.541Z",
+      "lastCheckedAt": "2026-10-12T15:11:42.534Z",
       "seen": {}
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-12T15:09:58.912Z",
+      "lastCheckedAt": "2026-10-12T15:12:24.915Z",
       "seen": {}
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-12T15:09:59.534Z",
+      "lastCheckedAt": "2026-10-12T15:12:25.599Z",
+      "seen": {}
+    },
+    "avocatbelgique": {
+      "bootstrapped": true,
+      "lastCheckedAt": "2026-10-12T15:13:08.188Z",
       "seen": {}
     }
   },
