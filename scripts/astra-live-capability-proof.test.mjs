@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {assessHttp,classifyCapabilities,formatCapabilityAudit} from "./astra-live-capability-proof.mjs";
+import {assessHttp,classifyCapabilities,formatCapabilityAudit,maxBytes} from "./astra-live-capability-proof.mjs";
 const html="<html><head></head><body>BetGPT football analyses</body></html>";
 const goodHome=()=>assessHttp({url:"https://betgpt.live/",finalUrl:"https://betgpt.live/",
  status:200,contentType:"text/html; charset=utf-8",body:html,kind:"home"});
@@ -45,4 +45,15 @@ test("Google News sitemap existence is not proof of Google News inclusion",()=>{
 test("unknown response fails closed and never yields verified capabilities",()=>{
  const r=formatCapabilityAudit({home:{status:"UNVERIFIED",httpStatus:null}});
  assert.equal(r.status,"UNVERIFIED");assert.deepEqual(r.sites[0].verifiedCapabilities,[]);
+});
+
+test("ordinary valid multi-megabyte sitemaps must not get a false size failure",()=>{
+ assert.equal(maxBytes("sitemap"),50*1024*1024);
+ assert.equal(maxBytes("news"),50*1024*1024);
+ assert.equal(maxBytes("home"),2*1024*1024);
+ const huge="<urlset>"+(" ".repeat(1200000))+"</urlset>";
+ const out=assessHttp({url:"https://betgpt.live/sitemap.xml",finalUrl:"https://betgpt.live/sitemap.xml",
+   status:200,contentType:"application/xml",body:huge,kind:"sitemap"});
+ assert.equal(out.status,"PASS",JSON.stringify(out.failures));
+ assert.ok(out.bodyBytes>1024*1024);
 });

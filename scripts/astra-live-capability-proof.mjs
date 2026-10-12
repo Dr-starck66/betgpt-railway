@@ -6,7 +6,11 @@ import {createHash} from "node:crypto";
 import {pathToFileURL} from "node:url";
 const sha=b=>createHash("sha256").update(b).digest("hex");
 const ORIGIN="https://betgpt.live";
-const MAX_BYTES=1024*1024;
+export function maxBytes(kind){
+ if(kind==="sitemap"||kind==="news")return 50*1024*1024;
+ if(kind==="robots")return 512*1024;
+ return 2*1024*1024;
+}
 export function assessHttp({url,finalUrl,status,contentType,body,kind}){
  const failures=[];
  try{
@@ -31,7 +35,7 @@ export function assessHttp({url,finalUrl,status,contentType,body,kind}){
   if(!/<urlset\b/i.test(body||""))failures.push("news-urlset-missing");
   if(!/www\.google\.com\/schemas\/sitemap-news\/0\.9/i.test(body||""))failures.push("news-namespace-missing");
  }
- if(Buffer.byteLength(body||"","utf8")>MAX_BYTES)failures.push("response-over-limit");
+ if(Buffer.byteLength(body||"","utf8")>maxBytes(kind))failures.push("response-over-limit");
  return {status:failures.length?"FAIL":"PASS",failures,finalUrl,httpStatus:status,
     contentType,bodySha256:sha(Buffer.from(body||"","utf8")),bodyBytes:Buffer.byteLength(body||"","utf8")};
 }
@@ -53,8 +57,24 @@ async function request(path,kind){
   const response=await fetch(url,{redirect:"follow",
    headers:{"user-agent":"ASTRA-CAPABILITY-READONLY/1.0",accept:"*/*","cache-control":"no-cache"},
    signal:AbortSignal.timeout(12000)});
-  const bytes=await response.arrayBuffer();
-  const body=Buffer.from(bytes).toString("utf8");
+  const limit=maxBytes(kind);
+  const advertised=Number(response.headers.get("content-length")||0);
+  if(advertised>limit)return {status:"FAIL",httpStatus:response.status,failures:["response-over-limit"],bodyBytes:advertised};
+  const reader=response.body?.getReader();
+  const chunks=[];let length=0;
+  if(reader){
+   while(true){
+    const part=await reader.read();
+    if(part.done)break;
+    length+=part.value.byteLength;
+    if(length>limit){
+     await reader.cancel().catch(()=>{});
+     return {status:"FAIL",httpStatus:response.status,failures:["response-over-limit"],bodyBytes:length};
+    }
+    chunks.push(Buffer.from(part.value));
+   }
+  }
+  const body=Buffer.concat(chunks).toString("utf8");
   return assessHttp({url,finalUrl:response.url,status:response.status,
     contentType:response.headers.get("content-type")||"",body,kind});
  }catch(err){return{status:"UNVERIFIED",failures:["network-error:"+String(err?.cause?.code||err?.name||"unknown")],
