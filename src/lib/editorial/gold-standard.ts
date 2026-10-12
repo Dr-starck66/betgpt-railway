@@ -87,7 +87,7 @@ export function editorialGoldStandardGate(article: GoldStandardDraft): {
     reasons.push("référence éditoriale : grande image pertinente et créditée indisponible");
   }
 
-  const forbidden = /\b(?:le cluster contient|les entités explicitement détectées|le desk observe|signal desk|score interne|la chronologie des publications|pourquoi BetGPT ne force pas un contexte de match|ce qui peut encore évoluer juste avant le coup d.envoi)\b/i;
+  const forbidden = /\b(?:le cluster contient|les entités explicitement détectées|le desk observe|signal desk|score interne|la chronologie des publications|pourquoi BetGPT ne force pas un contexte de match|ce qui peut encore évoluer juste avant le coup d.envoi|reconstruction seo|intention de recherche|densité de mots.clés|comment nous vérifions les projets|quelles informations changent et lesquelles doivent rester constantes|comment utiliser ce guide comme point de départ|répartition de l.autorité entre les contenus)\b/i;
   if (forbidden.test(`${article.h1} ${all} ${article.paragraphs.map((p) => p.h2).join(" ")}`)) {
     reasons.push("référence éditoriale : jargon de générateur, plan passe-partout ou recyclage de dépêche");
   }
