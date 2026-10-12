@@ -45,10 +45,6 @@ function LedgerPage() {
   const base = data.championship.ablation.find((a) => a.name === "BASELINE");
   const tac = data.championship.ablation.find((a) => a.name === "TACTICAL");
   const tacticalHelps = Boolean(base && tac && tac.brier < base.brier - 0.002);
-  const asOf = data.liveAsOf
-    ? format(new Date(data.liveAsOf), "d MMM · HH:mm", { locale: fr })
-    : "";
-  const ev = data.evidence;
   const datasetJsonLd = {
     "@context": "https://schema.org",
     "@type": "Dataset",
@@ -618,15 +614,6 @@ function Tab({
       {children}
     </button>
   );
-}
-
-function publicMethodName(engine: string, index: number): string {
-  const key = String(engine || "").toLowerCase();
-  if (/roi5|canonical|champion/.test(key)) return "Méthode BetGPT principale";
-  if (/tact/.test(key)) return "Avec lecture tactique";
-  if (/baseline|base/.test(key)) return "Modèle statistique";
-  if (/ensemble|blend|mix/.test(key)) return "Combinaison de modèles";
-  return `Méthode BetGPT ${index + 1}`;
 }
 
 function Kpi({ label, value }: { label: string; value: string }) {
