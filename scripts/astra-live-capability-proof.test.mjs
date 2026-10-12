@@ -1,0 +1,48 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import {assessHttp,classifyCapabilities,formatCapabilityAudit} from "./astra-live-capability-proof.mjs";
+const html="<html><head></head><body>BetGPT football analyses</body></html>";
+const goodHome=()=>assessHttp({url:"https://betgpt.live/",finalUrl:"https://betgpt.live/",
+ status:200,contentType:"text/html; charset=utf-8",body:html,kind:"home"});
+const goodRobots=()=>assessHttp({url:"https://betgpt.live/robots.txt",finalUrl:"https://betgpt.live/robots.txt",
+ status:200,contentType:"text/plain",body:"User-agent: *\nAllow: /",kind:"robots"});
+const goodSitemap=()=>assessHttp({url:"https://betgpt.live/sitemap.xml",finalUrl:"https://betgpt.live/sitemap.xml",
+ status:200,contentType:"application/xml",body:"<urlset></urlset>",kind:"sitemap"});
+const goodNews=()=>assessHttp({url:"https://betgpt.live/news-sitemap.xml",finalUrl:"https://betgpt.live/news-sitemap.xml",
+ status:200,contentType:"application/xml",body:'<urlset xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"></urlset>',kind:"news"});
+test("valid branded homepage over HTTPS yields runtime proof only",()=>{
+ const h=goodHome();assert.equal(h.status,"PASS");assert.match(h.bodySha256,/^[a-f0-9]{64}$/);
+ assert.deepEqual(classifyCapabilities({home:h}).verifiedCapabilities,["runtime"]);
+});
+test("HTTP 200 on a bot/error page does not count as BetGPT",()=>{
+ const h=assessHttp({url:"https://betgpt.live/",finalUrl:"https://betgpt.live/",status:200,
+ contentType:"text/html",body:"Cloudflare challenge",kind:"home"});
+ assert.equal(h.status,"FAIL");assert.ok(h.failures.includes("brand-marker-missing"));
+});
+test("redirect to another host cannot satisfy proof",()=>{
+ const h=assessHttp({url:"https://betgpt.live/",finalUrl:"https://phishing.example/",status:200,
+ contentType:"text/html",body:html,kind:"home"});
+ assert.equal(h.status,"FAIL");assert.ok(h.failures.includes("unexpected-origin-or-redirect"));
+});
+test("503 unavailable branded page is not valid",()=>{
+ const h=assessHttp({url:"https://betgpt.live/",finalUrl:"https://betgpt.live/",status:503,
+ contentType:"text/html",body:html,kind:"home"});
+ assert.equal(h.status,"FAIL");
+});
+test("robots and sitemap are required for SEO capability",()=>{
+ const p={home:goodHome(),robots:goodRobots(),sitemap:goodSitemap(),news:goodNews()};
+ assert.deepEqual(classifyCapabilities(p).verifiedCapabilities,["runtime","seo","news"]);
+ p.sitemap.status="FAIL";assert.deepEqual(classifyCapabilities(p).verifiedCapabilities,["runtime"]);
+});
+test("Google News sitemap existence is not proof of Google News inclusion",()=>{
+ const p={home:goodHome(),robots:goodRobots(),sitemap:goodSitemap(),news:goodNews()};
+ const r=formatCapabilityAudit(p,"2026-10-13T00:00:00.000Z");
+ assert.equal(r.status,"PASS");assert.equal(r.sites.length,1);
+ assert.equal(r.sites[0].evidence.httpStatus,200);
+ assert.equal(r.sites[0].verifiedCapabilities.includes("news"),true);
+ assert.match(r.note,/not deployment revision, uptime history/);
+});
+test("unknown response fails closed and never yields verified capabilities",()=>{
+ const r=formatCapabilityAudit({home:{status:"UNVERIFIED",httpStatus:null}});
+ assert.equal(r.status,"UNVERIFIED");assert.deepEqual(r.sites[0].verifiedCapabilities,[]);
+});
