@@ -40,20 +40,20 @@ test("missing executable proof is never a PASS",()=>{
   const {run}=fixture([always],{});
   const {res,data}=run();
   assert.notEqual(res.status,0);
-  assert.equal(data.results[0].status,"UNVERIFIED");
+  assert.equal(data.results.find(r=>r.id==="ALWAYS").status,"UNVERIFIED");
 });
 test("a file existing alone cannot establish activation",()=>{
   const f=fixture([always],{ALWAYS:[{type:"file",path:"config/astra-master-site.json"}]});
   const {res,data}=f.run();
   assert.notEqual(res.status,0);
-  assert.equal(data.results[0].status,"UNVERIFIED");
+  assert.equal(data.results.find(r=>r.id==="ALWAYS").status,"UNVERIFIED");
 });
 test("failed executable blocks strict mode",()=>{
   const {run}=fixture([always],{ALWAYS:[{type:"command",run:"node -e \"process.exit(3)\""}]});
   const {res,data}=run();
   assert.notEqual(res.status,0);
-  assert.equal(data.results[0].status,"FAIL");
-  assert.equal(data.results[0].evidence[0].exitCode,3);
+  assert.equal(data.results.find(r=>r.id==="ALWAYS").status,"FAIL");
+  assert.equal(data.results.find(r=>r.id==="ALWAYS").evidence[0].exitCode,3);
 });
 test("unregistered binding cannot be silently accepted",()=>{
   const {run}=fixture([always],{ALWAYS:[{type:"command",run:"node -e \"process.exit(0)\""}],UNLISTED:[{type:"command",run:"true"}]});
