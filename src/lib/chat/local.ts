@@ -25,6 +25,7 @@ export function classifyChatIntent(question: string): ChatIntent {
   if (casual) return "CASUAL";
 
   const todayPicks =
+    /\b(?:mises?|paries?|joues?) tu aujourd hui\b/.test(compact) ||
     /\b(ticket du jour|pari du jour|prono du jour|pronostic du jour|meilleur pari|meilleure cote|match le plus interessant|mises? aujourd|joues? aujourd|paries? aujourd)\b/.test(compact) ||
     /\b(?:quels?|quelles?|quoi|donne|cherche|trouve|analyse)\b.{0,60}\b(?:aujourd hui|ce soir|btts|0 0|2 1)\b/.test(compact) ||
     /\b(?:btts|0 0|2 1)\b.{0,30}\b(?:aujourd hui|ce soir)\b/.test(compact);
