@@ -1,4 +1,4 @@
-import type { ArticleType, EditorialArticle, EditorialParagraph, EditorialSource } from "@/lib/editorial/types";
+import type { EditorialArticle, EditorialParagraph, EditorialSource } from "@/lib/editorial/types";
 
 /**
  * ASTRA EDITORIAL GOLD STANDARD Ω · future publication gate.
