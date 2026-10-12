@@ -27,7 +27,7 @@ export function classify({wiring,tests,publicProbe}) {
   return publicProbe.status==="PASS"?"PASS_PUBLIC_TECHNICAL":"UNVERIFIED";
 }
 function xmlValues(xml,tag) {
-  const re=new RegExp("<"+tag+"(?:\\s[^>]*)?>([\\s\\S]*?)<\\/"+tag+">","gi");
+  const re=new RegExp("<"+tag+"(?:\\s[^>]*)?>([\s\S]*?)<\\/"+tag+">","gi");
   return [...xml.matchAll(re)].map(m=>m[1].trim().replace(/&amp;/g,"&"));
 }
 export function inspectNewsSitemap(xml,origin,now=Date.now()) {
@@ -37,10 +37,10 @@ export function inspectNewsSitemap(xml,origin,now=Date.now()) {
   if(entries.length && !xml.includes("http://www.google.com/schemas/sitemap-news/0.9"))failures.push("missing-news-namespace");
   if(entries.length>1000)failures.push("news-sitemap-over-1000-entries");
   for(const entry of entries){
-    const newsBlocks=[...entry.matchAll(/<news:news>([\\s\\S]*?)<\\/news:news>/gi)].map(x=>x[1]);
+    const newsBlocks=[...entry.matchAll(/<news:news>([\s\S]*?)<\/news:news>/gi)].map(x=>x[1]);
     if(newsBlocks.length!==1){failures.push("invalid-news-block-count");continue;}
     const news=newsBlocks[0];
-    const publicationBlocks=[...news.matchAll(/<news:publication>([\\s\\S]*?)<\\/news:publication>/gi)].map(x=>x[1]);
+    const publicationBlocks=[...news.matchAll(/<news:publication>([\s\S]*?)<\/news:publication>/gi)].map(x=>x[1]);
     if(publicationBlocks.length!==1)failures.push("invalid-news-publication-count");
     const pub=publicationBlocks[0]||"";
     if(!xmlValues(pub,"news:name")[0])failures.push("missing-news-name");
