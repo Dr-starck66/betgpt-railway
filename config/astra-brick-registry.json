@@ -338,6 +338,28 @@
         "seo"
       ],
       "purpose": "Sensible internal/external links"
+    },
+    {
+      "id": "ASTRA_OPTIMIZER_OMEGA",
+      "scope": "universal",
+      "on": [
+        "code",
+        "content",
+        "seo",
+        "deploy"
+      ],
+      "purpose": "Evidence-driven performance optimization, trials, regression and zero-cost guardrails for all ASTRA bricks"
+    },
+    {
+      "id": "ASTRA_NEWS_ELIGIBILITY",
+      "scope": "news",
+      "on": [
+        "content",
+        "seo",
+        "deploy",
+        "code"
+      ],
+      "purpose": "Google News technical preflight: fresh sitemap, article provenance, transparency, no false inclusion claims"
     }
   ]
 }
