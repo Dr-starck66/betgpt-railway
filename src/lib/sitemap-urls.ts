@@ -20,6 +20,7 @@ import { parisDay, parisOffsetDay } from "@/lib/seo/money-map";
 import type { MatchInput } from "@/engine/types";
 import { buildEdition } from "@/lib/editorial/engine";
 import { readLedger } from "@/lib/editorial/ledger-store";
+import { manualEditorialArticles } from "@/lib/editorial/manual-articles";
 import { classicNewsPaths, renderNewsSitemap } from "@/lib/editorial/feed";
 import { ASTRA_SELF_HEAL_SITEMAP_ROUTES } from "@/lib/seo/astra-self-heal-sitemap";
 import { readIaThread } from "@/engine/forum-ia";
@@ -156,7 +157,11 @@ export async function loadSitemapUrls(): Promise<SitemapUrl[]> {
     });
   }
 
-  const edition = buildEdition({ now: new Date(), matches: liveMatches as MatchInput[], frozen: readLedger() });
+  // Preserve every corrected/manual article in the classic sitemap, just as in the News sitemap.
+  const seeded = manualEditorialArticles();
+  const seededIds = new Set(seeded.map((article) => article.id));
+  const frozen = [...seeded, ...readLedger().filter((article) => !seededIds.has(article.id))];
+  const edition = buildEdition({ now: new Date(), matches: liveMatches as MatchInput[], frozen });
   for (const row of stablePublicEvidenceTickets()) {
     if (!row.id || !row.home || !row.away || !row.recordedAt) continue;
     const encoded = encodeURIComponent(row.id);
