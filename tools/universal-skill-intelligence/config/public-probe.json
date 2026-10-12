@@ -1,6 +1,119 @@
 {
   "schema": "universal-skill-intelligence/projects-v1",
+  "purpose": "Public category-only inventory; NO customer names or private business details",
   "projects": [
-    {"id":"public-smoke","label":"Generic public smoke test only","kind":"testing","queries":["react best practices","find-skills"]}
+    {
+      "id": "public-smoke",
+      "label": "Read-only live API smoke test",
+      "kind": "testing",
+      "queries": [
+        "react best practices",
+        "find-skills"
+      ]
+    },
+    {
+      "id": "engineering",
+      "label": "Deployment and software quality",
+      "kind": "engineering",
+      "queries": [
+        "github actions testing"
+      ]
+    },
+    {
+      "id": "seo-editorial",
+      "label": "Technical SEO and publishing",
+      "kind": "editorial",
+      "queries": [
+        "technical seo audit"
+      ]
+    },
+    {
+      "id": "wine-export",
+      "label": "International trade and supply chains",
+      "kind": "trade",
+      "queries": [
+        "international trade export compliance"
+      ]
+    },
+    {
+      "id": "sport-analysis",
+      "label": "Sport data and chatbot research",
+      "kind": "sport",
+      "queries": [
+        "sports data integration"
+      ]
+    },
+    {
+      "id": "lead-generation",
+      "label": "Ethical lead generation and analytics",
+      "kind": "marketing",
+      "queries": [
+        "marketing attribution tracking"
+      ]
+    },
+    {
+      "id": "domain-archives",
+      "label": "Website archive research",
+      "kind": "domains",
+      "queries": [
+        "wayback archive restore"
+      ]
+    },
+    {
+      "id": "media-production",
+      "label": "Video and content production",
+      "kind": "media",
+      "queries": [
+        "video production automation"
+      ]
+    },
+    {
+      "id": "security-intel",
+      "label": "Threat intelligence",
+      "kind": "security",
+      "queries": [
+        "threat intelligence research"
+      ]
+    },
+    {
+      "id": "scientific-research",
+      "label": "Scientific methods",
+      "kind": "science",
+      "queries": [
+        "scientific research reproducibility"
+      ]
+    },
+    {
+      "id": "historical-research",
+      "label": "Archive and geospatial research",
+      "kind": "archaeology",
+      "queries": [
+        "geospatial history research"
+      ]
+    },
+    {
+      "id": "application-building",
+      "label": "Full-stack software and QA",
+      "kind": "software",
+      "queries": [
+        "automated browser testing"
+      ]
+    },
+    {
+      "id": "quant-analysis",
+      "label": "Quantitative analysis and research",
+      "kind": "quant",
+      "queries": [
+        "quantitative backtesting"
+      ]
+    },
+    {
+      "id": "future",
+      "label": "Any unclassified future need",
+      "kind": "general",
+      "queries": [
+        "workflow automation testing"
+      ]
+    }
   ]
 }
