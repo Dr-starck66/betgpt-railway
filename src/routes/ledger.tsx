@@ -8,6 +8,7 @@ import { Crest } from "@/components/crest";
 import { CupNight } from "@/components/cup-night";
 import { VerdictBadge } from "@/components/ui/badge";
 import { fmtEur, fmtOdds, fmtSignedPct } from "@/lib/utils";
+import type { CanonicalReplayEvidenceRow } from "@/engine/canonical-roi5-evidence";
 import { SITE_URL } from "@/lib/seo";
 import { AstraSidewings } from "@/components/astra-sidewings";
 
@@ -138,46 +139,93 @@ function LedgerPage() {
       }}
     >
       <div className="space-y-8">
-      <section className="hero-panel p-6 sm:p-8">
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start">
+      <section className="relative overflow-hidden rounded-[2rem] border border-emerald-400/25 bg-gradient-to-br from-[#071923] via-[#102b32] to-[#133d30] px-5 py-8 text-white shadow-[0_24px_65px_rgba(5,30,28,0.18)] sm:px-9 sm:py-11" aria-labelledby="historical-roi-headline">
+        <div aria-hidden="true" className="pointer-events-none absolute -right-16 -top-24 h-72 w-72 rounded-full bg-emerald-400/10 blur-3xl" />
+        <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(300px,0.8fr)] lg:items-end">
           <div>
-            <p className="eyebrow">Transparence & performance</p>
-            <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-5xl">Bilan BetGPT</h1>
-            <p className="mt-4 max-w-3xl text-base leading-relaxed text-mist sm:text-lg">
-              Le tableau de bord qui montre tout, sans jargon inutile : ce qui a gagné, ce qui a perdu et combien cela représente
-              en euros avec une mise de référence de 100 €. Les pertes restent visibles : aucun historique n’est nettoyé après coup.
-              {asOf ? ` Scores à ${asOf}.` : ""}
-            </p>
-            <div className="mt-6 rounded-2xl border border-sage/50 bg-sage/10 p-5 sm:p-6" role="group" aria-label="ROI historique calculé de BetGPT">
-              <p className="text-sm font-semibold uppercase tracking-wide text-sage">ROI historique calculé · Méthode BetGPT</p>
-              <p className="mt-2 font-display text-5xl font-bold tabular-nums text-sage sm:text-6xl" data-testid="historical-roi-value">
-                {fmtSignedPct(canonical.summary.roi)}
-              </p>
-              <p className="mt-3 text-sm leading-relaxed text-mist">
-                Rendement calculé sur {canonical.summary.n} sélections historiques, protections incluses,
-                à partir de nos statistiques. Les cotes historiques ont été reconstruites ; les résultats
-                des pronostics publiés en direct sont présentés séparément plus bas.
-              </p>
+            <div className="flex flex-wrap items-center gap-3">
+              <p className="text-xs font-bold uppercase tracking-[0.23em] text-emerald-200">BetGPT · Bilan de performance</p>
+              <span className="rounded-full border border-white/20 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-white/80">Archive vérifiable</span>
             </div>
-            <div className="mt-5 flex flex-wrap gap-2">
-              <span className="chip-pill">💶 Mise repère : 100 €</span>
-              <span className="chip-pill">🟢 Gagnant = vert</span>
-              <span className="chip-pill">🔴 Perdu = rouge</span>
-              <span className="chip-pill">Historique public</span>
+            <h1 id="historical-roi-headline" className="mt-5 max-w-2xl text-3xl font-bold tracking-tight sm:text-5xl">
+              Notre méthode. <span className="text-emerald-300">Ses résultats.</span> Sans masquer les pertes.
+            </h1>
+            <p className="mt-6 text-sm font-semibold uppercase tracking-[0.18em] text-emerald-200">
+              ROI historique calculé · méthode BetGPT
+            </p>
+            <div className="mt-2 flex flex-wrap items-baseline gap-x-5 gap-y-1">
+              <span data-testid="historical-roi-value" className="font-display text-6xl font-black tabular-nums tracking-tighter text-white sm:text-8xl">
+                {fmtSignedPct(canonical.summary.roi)}
+              </span>
+              <span className="text-sm font-medium text-emerald-100">sur {canonical.summary.n} sélections historiques</span>
+            </div>
+            <p className="mt-5 max-w-2xl text-sm leading-7 text-slate-200 sm:text-base">
+              Voici le rendement obtenu en rejouant chronologiquement notre méthode sur des résultats d'archives,
+              avec le marché 1N2 comme pari principal et des protections ponctuelles sur score exact.
+              <strong className="font-semibold text-white"> C'est un résultat de backtest calculé, pas une promesse et pas le rendement des paris publiés en direct.</strong>
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <a href="#historique-paris" className="inline-flex min-h-11 items-center rounded-xl bg-emerald-300 px-5 text-sm font-bold text-[#092d24] shadow-sm transition hover:bg-emerald-200">
+                Auditer les {canonical.summary.n} paris
+              </a>
+              <a href="#pronostics-publics" className="inline-flex min-h-11 items-center rounded-xl border border-white/30 px-5 text-sm font-semibold text-white transition hover:bg-white/10">
+                Voir les pronostics publiés
+              </a>
             </div>
           </div>
-          <aside className="surface-card p-5">
-            <p className="text-sm font-semibold text-paper">Lecture correcte</p>
-            <ul className="mt-4 space-y-3 text-sm leading-relaxed text-mist">
-              <li>• Les résultats réels et les simulations sont séparés.</li>
-              <li>• Le ROI affiché suit les hypothèses indiquées.</li>
-              <li>• Un petit échantillon reste explicitement signalé.</li>
-            </ul>
-          </aside>
+          <div className="rounded-2xl border border-white/15 bg-white/[0.07] p-5 backdrop-blur-sm sm:p-6">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-200">Le test en chiffres</p>
+            <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-6">
+              <div><p className="text-xs text-slate-300">Sélections</p><p className="mt-1 text-3xl font-black tabular-nums">{canonical.summary.n}</p></div>
+              <div><p className="text-xs text-slate-300">Taux de réussite 1N2</p><p className="mt-1 text-3xl font-black tabular-nums">{(canonical.summary.hitRate * 100).toFixed(1).replace(".", ",")} %</p></div>
+              <div><p className="text-xs text-slate-300">Gagnants / perdants</p><p className="mt-1 text-2xl font-bold tabular-nums">{canonical.summary.wins} / {canonical.summary.losses}</p></div>
+              <div><p className="text-xs text-slate-300">Bénéfice simulé</p><p className="mt-1 text-2xl font-bold tabular-nums text-emerald-200">{fmtEur(canonical.summary.profit * 100, true)}</p></div>
+            </div>
+            <p className="mt-6 border-t border-white/15 pt-4 text-xs leading-6 text-slate-200">
+              Mise de référence : 100 € par sélection principale, plus les éventuelles protections.
+              Capital simulé total : <strong className="text-white">{fmtEur(canonical.summary.capital * 100)}</strong>.
+              Cotes historiques modélisées et reconstruites, non enregistrées chez un bookmaker.
+            </p>
+          </div>
         </div>
       </section>
 
-      <section className="section-card border-sage/40 p-5 sm:p-6">
+      <section className="section-card p-5 sm:p-8" aria-labelledby="historical-curve-title">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p className="eyebrow">La trajectoire, pas seulement un pourcentage</p>
+            <h2 id="historical-curve-title" className="mt-1 font-display text-2xl font-bold text-paper">Courbe des gains et des pertes du test</h2>
+            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-mist">
+              Résultat net cumulé en unités de 100 € : tous les paris gagnés, perdus et les coûts de protection restent dans le calcul.
+            </p>
+          </div>
+          <span className="rounded-full border border-line px-3 py-2 text-xs font-semibold text-mist">
+            {canonical.summary.n} décisions chronologiques
+          </span>
+        </div>
+        <div className="mt-5">
+          <HistoricalEquityChart rows={canonical.rows} />
+        </div>
+        <div className="mt-5 grid gap-3 sm:grid-cols-3">
+          <div className="rounded-xl border border-line/70 bg-surface/60 px-4 py-4">
+            <p className="text-xs text-muted">ROI sur la tranche finale</p>
+            <p className="mt-1 font-display text-2xl font-bold tabular-nums text-paper">{fmtSignedPct(canonical.summary.validationRoi)}</p>
+            <p className="mt-1 text-xs text-muted">{canonical.summary.validationN} sélections du test final</p>
+          </div>
+          <div className="rounded-xl border border-line/70 bg-surface/60 px-4 py-4">
+            <p className="text-xs text-muted">Plus forte baisse historique</p>
+            <p className="mt-1 font-display text-2xl font-bold tabular-nums text-paper">{canonical.summary.maxDrawdown.toFixed(2).replace(".", ",")} unités</p>
+            <p className="mt-1 text-xs text-muted">Point haut à point bas de la courbe</p>
+          </div>
+          <div className="rounded-xl border border-line/70 bg-surface/60 px-4 py-4">
+            <p className="text-xs text-muted">Protections gagnantes</p>
+            <p className="mt-1 font-display text-2xl font-bold tabular-nums text-paper">{canonical.summary.hedgeHits} / {canonical.summary.hedges}</p>
+            <p className="mt-1 text-xs text-muted">Scores exacts utilisés en couverture</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="section-card border-sage/40 p-5 sm:p-6" aria-label="Comprendre la méthode historique">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <p className="eyebrow">Notre meilleure méthode historique</p>
@@ -204,10 +252,10 @@ function LedgerPage() {
         </p>
       </section>
 
-      <section className="section-card p-5 sm:p-6">
+      <section id="historique-paris" className="section-card scroll-mt-20 p-5 sm:p-6">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <p className="eyebrow">Match par match</p>
+            <p className="eyebrow">Match par match · vérification publique</p>
             <h2 className="mt-1 font-display text-2xl">Les {canonical.summary.n} paris utilisés pour calculer ce bilan</h2>
             <p className="mt-2 max-w-4xl text-sm leading-relaxed text-mist">
               Ici, rien n’est caché : chaque match du test est affiché avec le pari choisi, la cote utilisée
@@ -227,9 +275,9 @@ function LedgerPage() {
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-5">
           <Kpi label="🟢 Gagnants" value={String(canonical.summary.wins)} />
           <Kpi label="🔴 Perdants" value={String(canonical.summary.losses)} />
-          <Kpi label="🎯 Taux de réussite" value={`${Math.round(canonical.summary.hitRate * 100)} %`} />
+          <Kpi label="🎯 Taux de réussite" value={`${(canonical.summary.hitRate * 100).toFixed(1).replace(".", ",")} %`} />
           <Kpi label="🛡️ Protections réussies" value={`${canonical.summary.hedgeHits}/${canonical.summary.hedges}`} />
-          <Kpi label="💶 Bilan · 100 € / pari" value={fmtEur(canonical.summary.profit * 100, true)} />
+          <Kpi label="Résultat historique · base 100 €" value={fmtEur(canonical.summary.profit * 100, true)} />
         </div>
 
         <div className="mt-4 rounded-2xl border border-line bg-white/70 p-4 text-sm shadow-sm">
@@ -243,7 +291,7 @@ function LedgerPage() {
             </span>
           </p>
           <p className="mt-1 text-xs text-muted">
-            Base de lecture : 100 € sur chaque pari principal du replay historique.
+            Base de lecture : 100 € sur chaque pari principal ; le capital investi dans les protections s’ajoute à la mise de base.
           </p>
         </div>
 
@@ -347,7 +395,7 @@ function LedgerPage() {
       </section>
 
       {ev ? (
-        <section className="section-card p-5 sm:p-6">
+        <section id="pronostics-publics" className="section-card scroll-mt-20 p-5 sm:p-6">
           <h2 className="font-display text-xl">Résultats des pronostics réellement publiés</h2>
           <p className="mt-1 text-sm text-mist">
             Ici, on compte seulement les paris 1-N-2 que BetGPT a réellement publiés avant le coup
@@ -765,6 +813,57 @@ function Kpi({ label, value }: { label: string; value: string }) {
     <div className="surface-card min-w-0 px-4 py-4">
       <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">{label}</p>
       <p className="mt-2 break-words font-display text-lg font-bold tabular text-paper sm:text-2xl">{value}</p>
+    </div>
+  );
+}
+
+/** Data-only evidence chart: every observation is a real row of the canonical archive replay.
+ * Never interpolate missing matches, never imply observed bookmaker odds or actual deposited money. */
+function HistoricalEquityChart({ rows }: { rows: CanonicalReplayEvidenceRow[] }) {
+  if (!rows.length) return <p className="rounded-xl border border-line p-7 text-sm text-muted">Historique indisponible : aucun tracé inventé.</p>;
+  const width = 1000;
+  const height = 252;
+  const left = 14;
+  const right = 986;
+  const top = 16;
+  const bottom = 225;
+  const values = [0, ...rows.map((row) => row.cumulativePnl)];
+  const low = Math.min(...values, 0);
+  const high = Math.max(...values, 0);
+  const spread = Math.max(1, high - low);
+  const y = (v: number) => bottom - ((v - low) / spread) * (bottom - top);
+  const x = (index: number) => left + (index / Math.max(1, values.length - 1)) * (right - left);
+  const line = values.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+  const zeroY = y(0);
+  const lastY = y(values[values.length - 1]!);
+  return (
+    <div className="overflow-hidden rounded-2xl border border-line bg-gradient-to-b from-white to-emerald-50/40 p-3 sm:p-5">
+      <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`Courbe des résultats historiques cumulés sur ${rows.length} sélections, de zéro à ${values[values.length - 1]!.toFixed(2)} unités`} className="h-auto w-full" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="betgpt-equity-fill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#16a34a" stopOpacity="0.24" />
+            <stop offset="100%" stopColor="#16a34a" stopOpacity="0.015" />
+          </linearGradient>
+        </defs>
+        {[0, 0.25, 0.5, 0.75, 1].map((fraction) => {
+          const lineY = top + fraction * (bottom - top);
+          const level = high - spread * fraction;
+          return (
+            <g key={fraction}>
+              <line x1={left} y1={lineY} x2={right} y2={lineY} stroke="#d4e6dd" strokeDasharray="4 6" />
+              <text x={left + 7} y={Math.max(13, lineY - 5)} fontSize="13" fill="#587069">{level.toFixed(0)} u.</text>
+            </g>
+          );
+        })}
+        <line x1={left} y1={zeroY} x2={right} y2={zeroY} stroke="#64748b" strokeWidth="1.2" strokeDasharray="6 5" />
+        <polygon points={`${left},${bottom} ${line} ${right},${bottom}`} fill="url(#betgpt-equity-fill)" />
+        <polyline points={line} stroke="#168759" strokeWidth="3.6" strokeLinecap="round" strokeLinejoin="round" fill="none" vectorEffect="non-scaling-stroke" />
+        <circle cx={right} cy={lastY} r="5" fill="#047857" stroke="#ffffff" strokeWidth="2" />
+      </svg>
+      <div className="mt-1 flex justify-between gap-4 px-2 text-xs text-muted">
+        <span>Première sélection</span>
+        <span>Dernière sélection · <strong className="text-sage">{fmtEur(values[values.length - 1]! * 100, true)} simulés</strong></span>
+      </div>
     </div>
   );
 }
