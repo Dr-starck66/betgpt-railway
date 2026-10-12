@@ -9,7 +9,7 @@ const goodRobots=()=>assessHttp({url:"https://betgpt.live/robots.txt",finalUrl:"
 const goodSitemap=()=>assessHttp({url:"https://betgpt.live/sitemap.xml",finalUrl:"https://betgpt.live/sitemap.xml",
  status:200,contentType:"application/xml",body:"<urlset></urlset>",kind:"sitemap"});
 const goodNews=()=>assessHttp({url:"https://betgpt.live/news-sitemap.xml",finalUrl:"https://betgpt.live/news-sitemap.xml",
- status:200,contentType:"application/xml",body:'<urlset xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"></urlset>',kind:"news"});
+ status:200,contentType:"application/xml",body:'<urlset xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"><url><loc>https://betgpt.live/actualites/test</loc><news:news><news:publication><news:name>BetGPT</news:name><news:language>fr</news:language></news:publication><news:publication_date>'+new Date().toISOString()+'</news:publication_date><news:title>Actualité de football vérifiée</news:title></news:news></url></urlset>',kind:"news"});
 test("valid branded homepage over HTTPS yields runtime proof only",()=>{
  const h=goodHome();assert.equal(h.status,"PASS");assert.match(h.bodySha256,/^[a-f0-9]{64}$/);
  assert.deepEqual(classifyCapabilities({home:h}).verifiedCapabilities,["runtime"]);
@@ -56,4 +56,17 @@ test("ordinary valid multi-megabyte sitemaps must not get a false size failure",
    status:200,contentType:"application/xml",body:huge,kind:"sitemap"});
  assert.equal(out.status,"PASS",JSON.stringify(out.failures));
  assert.ok(out.bodyBytes>1024*1024);
+});
+
+test("an empty News sitemap cannot count as recent published news",()=>{
+ const body='<urlset xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"></urlset>';
+ const r=assessHttp({url:"https://betgpt.live/news-sitemap.xml",finalUrl:"https://betgpt.live/news-sitemap.xml",status:200,contentType:"application/xml",body,kind:"news"});
+ assert.equal(r.status,"FAIL");
+ assert.ok(r.failures.includes("news-no-article-entries"));
+});
+test("old or malformed article dates cannot count as fresh news",()=>{
+ const body='<urlset xmlns:news="http://www.google.com/schemas/sitemap-news/0.9"><url><loc>https://betgpt.live/actualites/test</loc><news:news><news:publication><news:name>BetGPT</news:name><news:language>fr</news:language></news:publication><news:publication_date>2020-01-01T00:00:00Z</news:publication_date><news:title>Ancienne information</news:title></news:news></url></urlset>';
+ const r=assessHttp({url:"https://betgpt.live/news-sitemap.xml",finalUrl:"https://betgpt.live/news-sitemap.xml",status:200,contentType:"application/xml",body,kind:"news"});
+ assert.equal(r.status,"FAIL");
+ assert.ok(r.failures.includes("news-invalid-or-stale-date"));
 });
