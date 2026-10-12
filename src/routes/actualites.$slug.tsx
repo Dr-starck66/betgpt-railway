@@ -69,7 +69,7 @@ export const Route = createFileRoute("/actualites/$slug")({
     const url = articleUrl(article.slug);
     const image = absImg(article.image.src);
     // Re-audit historical persisted postmatches: old serialized quality.pass is not enough.
-    const editoriallyIndexable = qualityGate(article, []).pass && article.quality.pass;
+    const editoriallyIndexable = article.quality.pass && (article.articleType !== "postmatch" || qualityGate(article, []).pass);
     const imageCopy = publicEditorialImageCopy(article);
     return {
       meta: [
