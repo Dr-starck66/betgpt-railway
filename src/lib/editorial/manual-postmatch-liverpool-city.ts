@@ -94,14 +94,14 @@ export const liverpoolManchesterCityPostmatch: EditorialArticle = {
       "id": "sky-20261011",
       "label": "Sky Sports — match report",
       "status": "CORROBORATED",
-      "note": "Corroboration de l'expulsion, des buteurs et du déroulement de la rencontre.",
+      "note": "Liverpool–Manchester City à Anfield : corroboration de l'expulsion, des buteurs et du déroulement de la rencontre.",
       "url": "https://www.skysports.com/football/liverpool-vs-manchester-city/559501"
     },
     {
       "id": "maxifoot-20261011",
       "label": "Maxifoot — statistiques de la rencontre",
       "status": "HIGH_CONFIDENCE",
-      "note": "Chiffres affichés par Maxifoot : possession, tirs et xG ; les définitions varient selon les fournisseurs.",
+      "note": "Liverpool–Manchester City à Anfield : possession, tirs et xG relevés par Maxifoot ; définitions variables selon les fournisseurs.",
       "url": "https://www.maxifoot.fr/match/liverpool-manchester-city-20261011.htm"
     }
   ],
@@ -137,7 +137,7 @@ export const liverpoolManchesterCityPostmatch: EditorialArticle = {
     "alt": "Vue du stade Anfield à Liverpool, où s'est joué Liverpool–Manchester City le 11 octobre 2026",
     "width": 4032,
     "height": 3024,
-    "credit": "Photo d'Anfield (illustration, pas une photographie de la rencontre) : auteur du cliché publié sur Wikimedia Commons, licence CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Anfield_Stadium.jpg"
+    "credit": "Anfield (photographie d’illustration, 2023), Vojta.zurek, CC BY-SA 4.0. Source : https://commons.wikimedia.org/wiki/File:Anfield_Stadium.jpg — licence : https://creativecommons.org/licenses/by-sa/4.0/"
   },
   "links": [
     {
