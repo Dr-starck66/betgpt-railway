@@ -82,3 +82,28 @@ test("missing a canonical brick rejects a same-sized registry",()=>{
   assert.notEqual(res.status,0);
   assert.match(data.fatal,/STALE_REGISTRY_BASELINE/);
 });
+
+test("successful command cannot falsely PASS when outcome report says UNVERIFIED",()=>{
+  const runCmd='mkdir -p artifacts && printf \'{"status":"UNVERIFIED"}\' > artifacts/outcome.json';
+  const f=fixture([always],{ALWAYS:[{type:"command",run:runCmd,resultReport:"artifacts/outcome.json"}]});
+  const {res,data}=f.run();
+  assert.notEqual(res.status,0);
+  const row=data.results.find(r=>r.id==="ALWAYS");
+  assert.equal(row.status,"UNVERIFIED");
+  assert.equal(row.evidence[0].outcomeStatus,"UNVERIFIED");
+});
+test("outcome-attested command with missing report remains UNVERIFIED",()=>{
+  const f=fixture([always],{ALWAYS:[{type:"command",run:"true",resultReport:"artifacts/absent.json"}]});
+  const {res,data}=f.run();
+  assert.notEqual(res.status,0);
+  const row=data.results.find(r=>r.id==="ALWAYS");
+  assert.equal(row.status,"UNVERIFIED");
+  assert.match(row.evidence[0].reportReason,/missing-or-stale-outcome-report/);
+});
+test("outcome report with FAIL overrides successful command exit",()=>{
+  const runCmd='mkdir -p artifacts && printf \'{"status":"FAIL"}\' > artifacts/outcome.json';
+  const f=fixture([always],{ALWAYS:[{type:"command",run:runCmd,resultReport:"artifacts/outcome.json"}]});
+  const {res,data}=f.run();
+  assert.notEqual(res.status,0);
+  assert.equal(data.results.find(r=>r.id==="ALWAYS").status,"FAIL");
+});
