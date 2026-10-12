@@ -225,32 +225,36 @@ function LedgerPage() {
         </div>
       </section>
 
-      <section className="section-card border-sage/40 p-5 sm:p-6" aria-label="Comprendre la méthode historique">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <p className="eyebrow">Notre meilleure méthode historique</p>
-            <h2 className="mt-1 font-display text-2xl">Ce que le test historique a réellement donné</h2>
-            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-mist">
-              Nous avons rejoué la méthode actuelle match après match, sans utiliser le résultat final
-              à l’avance. Sur cet historique, les statistiques donnent {fmtSignedPct(canonical.summary.roi)}
-              de ROI calculé, protections incluses. Les cotes de l’étude sont reconstruites : ce calcul
-              historique ne doit pas être confondu avec le ROI des pronostics réellement publiés.
-            </p>
+      <details className="group section-card p-5 sm:p-6">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-paper">
+          <span className="text-lg">Comprendre comment le +{(canonical.summary.roi * 100).toFixed(2).replace(".", ",")} % historique a été calculé</span>
+          <span className="rounded-full border border-line px-3 py-1 text-xs text-mist group-open:hidden">Voir la méthode</span>
+        </summary>
+        <div className="mt-5 space-y-4 border-t border-line pt-5 text-sm leading-7 text-mist">
+          <p>
+            Les décisions ont été rejouées dans l’ordre chronologique à partir d’une archive de résultats.
+            Le pari principal reste le marché 1N2 ; les cotes retenues par la sélection sont comprises entre 1,80 et 3,00.
+            Une couverture de score exact est ajoutée seulement si la règle historique la sélectionne.
+          </p>
+          <p>
+            <strong>Pas de confusion de provenance :</strong> les scores finaux proviennent de l’archive,
+            tandis que les cotes historiques sont reconstruites par le modèle, non observées chez un bookmaker.
+            Les gains indiqués sont des unités de simulation, et les pertes restent dans toutes les statistiques.
+          </p>
+          <p>
+            Le test a une phase chronologique finale de {canonical.summary.validationN} sélections, au rendement
+            {fmtSignedPct(canonical.summary.validationRoi)}. Il ne prouve pas que le même rendement serait reproductible
+            avec des cotes réelles ou des mises futures. Le calcul utilise le capital simulé réellement engagé,
+            protections incluses.
+          </p>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <Kpi label="ROI historique total" value={fmtSignedPct(canonical.summary.roi)} />
+            <Kpi label="Validation finale" value={fmtSignedPct(canonical.summary.validationRoi)} />
+            <Kpi label="Capital simulé" value={fmtEur(canonical.summary.capital * 100)} />
+            <Kpi label="Recul maximal" value={`${canonical.summary.maxDrawdown.toFixed(2)} mises`} />
           </div>
-          <span className="chip-pill">Méthode utilisée aujourd’hui</span>
         </div>
-        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Kpi label="ROI historique calculé" value={fmtSignedPct(canonical.summary.roi)} />
-          <Kpi label="Test final" value={fmtSignedPct(canonical.summary.validationRoi)} />
-          <Kpi label="Paris testés" value={String(canonical.summary.n)} />
-          <Kpi label="Pire recul" value={`${canonical.summary.maxDrawdown.toFixed(2)} mises`} />
-        </div>
-        <p className="mt-3 text-xs text-muted">
-          Sur les {canonical.summary.validationN} paris gardés pour le test final :{" "}
-          {fmtSignedPct(canonical.summary.validationRoi)} de rendement simulé, avec une plus forte baisse
-          de {canonical.summary.validationMaxDrawdown.toFixed(2)} mises. Résultats historiques uniquement.
-        </p>
-      </section>
+      </details>
 
       <section id="historique-paris" className="section-card scroll-mt-20 p-5 sm:p-6">
         <div className="flex flex-wrap items-start justify-between gap-3">
@@ -295,7 +299,29 @@ function LedgerPage() {
           </p>
         </div>
 
-        <div className="mt-4 overflow-x-auto">
+        <div className="mt-5 space-y-3 lg:hidden">
+          {canonicalRows.map((row) => (
+            <article key={row.id} className="rounded-xl border border-line bg-white/70 p-4 shadow-sm">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-medium text-muted">{format(new Date(row.kickoff), "dd/MM/yyyy")} · {LEAGUE_LABEL[row.league] ?? row.league}</p>
+                  <h3 className="mt-1 text-sm font-bold text-paper">{row.home} – {row.away}</h3>
+                  <p className="mt-1 text-xs text-mist">Pari 1N2 : victoire {row.selection} · cote reconstruite {row.odds.toFixed(2)}</p>
+                </div>
+                <span className={row.result === "win" ? "rounded-lg bg-sage/10 px-2 py-1 text-xs font-bold text-sage" : "rounded-lg bg-rust/10 px-2 py-1 text-xs font-bold text-rust"}>
+                  {row.result === "win" ? "GAGNÉ" : "PERDU"}
+                </span>
+              </div>
+              <div className="mt-4 grid grid-cols-2 gap-3 border-t border-line/70 pt-3 text-sm">
+                <div><span className="block text-xs text-muted">Score final</span><strong className="text-paper">{row.score}</strong></div>
+                <div><span className="block text-xs text-muted">Gain / perte simulé</span><strong className={row.pnl >= 0 ? "text-sage" : "text-rust"}>{fmtEur(row.pnl * 100, true)}</strong></div>
+                <div><span className="block text-xs text-muted">Protection score exact</span><strong className="text-paper">{row.hedge ? `${row.hedge.score} · ${row.hedge.hit ? "gagnée" : "perdue"}` : "Aucune"}</strong></div>
+                <div><span className="block text-xs text-muted">Cumul historique</span><strong className={row.cumulativePnl >= 0 ? "text-sage" : "text-rust"}>{fmtEur(row.cumulativePnl * 100, true)}</strong></div>
+              </div>
+            </article>
+          ))}
+        </div>
+        <div className="mt-4 hidden overflow-x-auto lg:block">
           <table className="w-full min-w-[1120px] text-sm">
             <thead className="text-left text-[11px] font-semibold uppercase tracking-wider text-muted">
               <tr className="border-b border-line">
@@ -521,86 +547,27 @@ function LedgerPage() {
 
       {r.clNight ? <CupNight night={r.clNight} /> : null}
 
-      <section className="section-card border-sage/40 p-5 sm:p-6">
-        <h2 className="font-display text-xl">Et si on avait misé 100 € sur chaque pari publié ?</h2>
-        <p className="mt-1 text-sm text-mist">
-          Cette simulation applique 100 € à chaque pari réellement retenu par BetGPT. Les matchs
-          simplement surveillés ou écartés ne sont pas ajoutés artificiellement au bilan.
+      <details className="section-card p-5 sm:p-6">
+        <summary className="cursor-pointer text-lg font-bold text-paper">
+          Simulation complémentaire des pronostics publics (hors ROI historique)
+        </summary>
+        <p className="mt-4 text-sm leading-6 text-mist">
+          Cette simulation séparée utilise les pronostics enregistrés publiquement ; elle ne s'ajoute
+          jamais au +{(canonical.summary.roi * 100).toFixed(2).replace(".", ",")} % du replay historique.
+          Un bénéfice fictif n'est pas assimilé à un gain réellement encaissé.
         </p>
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Kpi label="Paris simulés" value={String(r.sim.n)} />
-          <Kpi label="100 € par pari" value={`${fmtEur(r.sim.mainStaked)} → ${fmtEur(r.sim.mainReturned)}`} />
-          <Kpi
-            label={`Protections score exact · ${r.sim.covered}`}
-            value={`${fmtEur(r.sim.coverStaked)} → ${fmtEur(r.sim.coverReturned)}`}
-          />
-          <Kpi label="Bilan simulé" value={fmtEur(r.sim.profit, true)} />
+          <Kpi label="Paris concernés" value={String(r.sim.n)} />
+          <Kpi label="Mise / retours simulés" value={`${fmtEur(r.sim.mainStaked)} / ${fmtEur(r.sim.mainReturned)}`} />
+          <Kpi label="Protections utilisées" value={String(r.sim.covered)} />
+          <Kpi label="Résultat net simulé" value={fmtEur(r.sim.profit, true)} />
         </div>
-        {r.sim.n ? (
-          <p className="mt-3 text-sm text-paper">
-            Sans protection : {fmtEur(r.sim.mainReturned - r.sim.mainStaked, true)}. Avec protection : {fmtEur(r.sim.profit, true)} ({fmtSignedPct(r.sim.roi)}). {r.sim.hits} gagnants, {r.sim.covered} couverts, {r.losses} perdants.
-          </p>
-        ) : (
-          <p className="mt-3 text-sm text-paper">Pas encore de match tranché pour la simu.</p>
-        )}
-        {r.misePending ? (
-          <p className="mt-2 text-sm text-mist">
-            {r.misePending} mise{r.misePending > 1 ? "s" : ""} encore à jouer
-            {r.miseSettled ? ` · ${r.miseHits}/${r.miseSettled} déjà tranchée${r.miseSettled > 1 ? "s" : ""}` : ""}.
-          </p>
-        ) : null}
-      </section>
-
-      {data.archive ? (
-        <section className="section-card border-sage/40 p-5 sm:p-6">
-          <h2 className="font-display text-xl">Test historique sur les anciennes saisons</h2>
-          <p className="mt-1 text-sm text-mist">
-            La méthode actuelle a été rejouée dans l’ordre sur {data.archive.n} anciens matchs
-            ({data.archive.years}). Ce test est séparé des pronostics réellement publiés et ne garantit
-            aucun résultat futur.
-          </p>
-          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <Kpi label="Pronos justes" value={`${Math.round(data.archive.acc * 100)} %`} />
-            <Kpi label="Résultat simulé · 100 €" value={data.archive.profit == null ? "Indisponible" : fmtEur(data.archive.profit, true)} />
-            <Kpi label="Rendement simulé" value={data.archive.roi == null ? "Indisponible" : fmtSignedPct(data.archive.roi)} />
-            <Kpi label="Matchs" value={String(data.archive.n)} />
-          </div>
-          <ul className="mt-4 space-y-1.5 text-sm text-mist">
-            {data.archive.notes.map((n) => (
-              <li key={n}>{n}</li>
-            ))}
-          </ul>
-          {data.archive.byLeague.length ? (
-          <div className="mt-4 overflow-x-auto">
-            <table className="w-full min-w-[520px] text-sm">
-              <thead className="text-left text-[11px] font-semibold uppercase tracking-wider text-muted">
-                <tr className="border-b border-line">
-                  <th className="py-2 pr-3 font-medium">Compétition</th>
-                  <th className="py-2 pr-3 font-medium">Matchs</th>
-                  <th className="py-2 pr-3 font-medium">Pronos justes</th>
-                  <th className="py-2 pr-3 font-medium">Bénéfice net · 100 €</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.archive.byLeague.map((lg) => (
-                  <tr key={lg.league} className="border-b border-line/50">
-                    <td className="py-2 pr-3 text-paper">{LEAGUE_LABEL[lg.league] ?? lg.league}</td>
-                    <td className="py-2 pr-3 tabular">{lg.n}</td>
-                    <td className="py-2 pr-3 tabular">{Math.round(lg.acc * 100)} %</td>
-                    <td className="py-2 pr-3 tabular text-paper">
-                      {lg.profit == null ? "Indisponible" : fmtEur(lg.profit, true)}
-                      <span className="ml-1 text-mist">{lg.roi == null ? "—" : fmtSignedPct(lg.roi)}</span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          ) : null}
-        </section>
-      ) : (
-        <p className="text-sm text-mist">Test historique indisponible.</p>
-      )}
+        <p className="mt-4 text-xs leading-6 text-muted">
+          Pari principal : {fmtEur(r.sim.mainStaked)} engagé, {fmtEur(r.sim.mainReturned)} retourné.
+          Couvertures : {fmtEur(r.sim.coverStaked)} engagés, {fmtEur(r.sim.coverReturned)} retournés.
+          Rendement simulé distinct : {r.sim.n ? fmtSignedPct(r.sim.roi) : "non calculé"}.
+        </p>
+      </details>
 
       <section className="section-card p-5 sm:p-6">
         <h2 className="font-display text-xl">Quelle méthode prédit le mieux ?</h2>
