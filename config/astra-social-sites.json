@@ -94,6 +94,44 @@
         "/sitemap.xml"
       ],
       "instagramReview": false
+    },
+    {
+      "id": "andaluztarija",
+      "name": "Andaluz Tarija",
+      "siteUrl": "https://andaluztarija.com",
+      "language": "es",
+      "articlePath": null,
+      "keywords": [
+        "Bolivia",
+        "Tarija",
+        "noticias"
+      ],
+      "feeds": [
+        "/sitemap-news.xml",
+        "/news-sitemap.xml",
+        "/feed/",
+        "/sitemap.xml"
+      ],
+      "instagramReview": false
+    },
+    {
+      "id": "avocatbelgique",
+      "name": "Avocat Belgique",
+      "siteUrl": "https://avocat-belgique.com",
+      "language": "fr",
+      "articlePath": null,
+      "keywords": [
+        "droitbelge",
+        "avocat",
+        "Belgique"
+      ],
+      "feeds": [
+        "/sitemap-news.xml",
+        "/news-sitemap.xml",
+        "/feed/",
+        "/sitemap.xml"
+      ],
+      "instagramReview": false
     }
   ]
 }
