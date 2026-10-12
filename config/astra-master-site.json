@@ -345,7 +345,8 @@
       {
         "type": "command",
         "run": "node scripts/astra-optimizer-omega.mjs --portfolio=config/astra-optimizer-portfolio.json --output=artifacts/astra-optimizer/betgpt-audit.json",
-        "timeoutMs": 90000
+        "timeoutMs": 90000,
+        "resultReport": "artifacts/astra-optimizer/betgpt-audit.json"
       }
     ]
   }
