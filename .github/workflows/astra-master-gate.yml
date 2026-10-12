@@ -21,6 +21,12 @@ jobs:
         run: npm ci --ignore-scripts
       - name: Run ASTRA core regression tests
         run: node --test scripts/astra-master-gate.test.mjs
+      - name: Negative tests for optimizer and safe-mode risk previews
+        run: node --test scripts/astra-optimizer-omega.test.mjs scripts/astra-risk-dry-run.test.mjs
+      - name: Inspect 14 risky entrypoints without executing their code
+        run: node scripts/astra-risk-dry-run.mjs --all --report=artifacts/astra-risk-preflight/report.json
+      - name: Evaluate optimizer against actual evidence (unknowns stay UNVERIFIED)
+        run: node scripts/astra-optimizer-omega.mjs --portfolio=config/astra-optimizer-portfolio.json --output=artifacts/astra-optimizer/betgpt-audit.json
       - name: Central proof gate - source changes
         run: node scripts/astra-master-gate.mjs --task=code --strict
       - name: Central proof gate - all other site scopes
@@ -34,4 +40,6 @@ jobs:
           path: |
             artifacts/astra-master-gate/*.json
             artifacts/astra-news-eligibility/*.json
+            artifacts/astra-risk-preflight/*.json
+            artifacts/astra-optimizer/*.json
           if-no-files-found: error
