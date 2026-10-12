@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-12T17:32:34.553Z",
+      "lastCheckedAt": "2026-10-12T21:45:12.691Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -45,40 +45,75 @@
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-12T17:32:35.026Z",
+      "lastCheckedAt": "2026-10-12T21:45:13.208Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-12T17:33:01.987Z",
-      "seen": {},
+      "lastCheckedAt": "2026-10-12T21:45:40.004Z",
+      "seen": {
+        "113acfc5949a8ca9ca": {
+          "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
+          "date": "2026-10-12T21:30:00+02:00",
+          "seenAt": "2026-10-12T21:45:40.004Z"
+        }
+      },
       "sourceStatus": "VERIFIED"
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-12T17:33:02.547Z",
+      "lastCheckedAt": "2026-10-12T21:45:44.751Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-12T17:33:29.046Z",
+      "lastCheckedAt": "2026-10-12T21:46:11.362Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": false,
-      "lastCheckedAt": "2026-10-12T17:33:01.028Z",
+      "lastCheckedAt": "2026-10-12T21:45:39.211Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {}
     },
     "andaluztarija": {
       "bootstrapped": false,
-      "lastCheckedAt": "2026-10-12T17:33:28.549Z",
+      "lastCheckedAt": "2026-10-12T21:46:10.753Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {}
     }
   },
-  "jobs": {}
+  "jobs": {
+    "instagram:113acfc5949a8ca9ca": {
+      "id": "instagram:113acfc5949a8ca9ca",
+      "siteId": "bizarre",
+      "network": "instagram",
+      "articleUrl": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
+      "imageUrl": "https://www.bizarresexuality.com/assets/news-inner-sky-physical-ai-2026-16x9.jpg",
+      "text": "Inner Sky Labs Launches Physical AI Models and Kavach Safety Layer\n\nInner Sky Labs announced physical AI models and an independent safety layer on October 12, 2026. What this means, and does not mean, for companion robots.\n\nhttps://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#relationships #sexualhealth #education #Launches #Physical #Models",
+      "createdAt": "2026-10-12T21:45:40.185Z",
+      "status": "WAIT_REVIEW",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:113acfc5949a8ca9ca": {
+      "id": "x:113acfc5949a8ca9ca",
+      "siteId": "bizarre",
+      "network": "x",
+      "articleUrl": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
+      "imageUrl": "https://www.bizarresexuality.com/assets/news-inner-sky-physical-ai-2026-16x9.jpg",
+      "text": "Inner Sky Labs Launches Physical AI Models and Kavach Safety Layer\nhttps://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#relationships #sexualhealth",
+      "createdAt": "2026-10-12T21:45:40.185Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    }
+  }
 }
