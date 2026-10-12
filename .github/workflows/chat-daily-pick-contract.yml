@@ -3,12 +3,14 @@ on:
   pull_request:
     paths:
       - 'src/lib/chat/complete.ts'
+      - 'src/lib/chat/local.ts'
       - 'src/lib/chat/chat.test.ts'
       - '.github/workflows/chat-daily-pick-contract.yml'
   push:
     branches: [fix/chat-daily-pick-contract-failclosed]
     paths:
       - 'src/lib/chat/complete.ts'
+      - 'src/lib/chat/local.ts'
       - 'src/lib/chat/chat.test.ts'
       - '.github/workflows/chat-daily-pick-contract.yml'
   workflow_dispatch:
