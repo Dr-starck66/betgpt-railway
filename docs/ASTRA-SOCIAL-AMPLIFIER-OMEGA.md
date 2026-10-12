@@ -33,3 +33,21 @@ Tests: `node --test scripts/astra-social-amplifier.test.mjs`.
 **Google Discover placement, social reach, and indexing cannot be guaranteed.** Google News / Discover eligibility is distinct from social promotion.
 
 Billing: standard GitHub-hosted runners for a public repository are free. No external paid API is invoked by default.
+## One-time OAuth consent and automatic renewal (v2)
+
+**NEVER request, store or transmit social network passwords to ASTRA.** The account owner logs in directly on Instagram's official consent screen. ASTRA receives only a revocable authorization code, exchanges it for a long-lived access token, stores AES-256-GCM ciphertext, and refreshes it before expiration.
+
+Files and protections:
+- `scripts/astra-social-oauth-vault.mjs`: `enroll`, `renew`, `health` commands; no tokens or passwords in logs
+- `data/social/account-vault.json`: only encrypted tokens and public metadata. Initial state is empty
+- `ASTRA_SOCIAL_VAULT_KEY`: one 32-byte base64 key kept in GitHub Actions secrets; **not** in Git, email, chat, URL or client-side JavaScript
+- `ASTRA_SOCIAL_INSTAGRAM_APP_ID` / `ASTRA_SOCIAL_INSTAGRAM_APP_SECRET`: confidential Meta app configuration used at first authorization; never publish the secret
+- `ASTRA_SOCIAL_IG_SITE_ID`, `ASTRA_SOCIAL_IG_AUTHORIZATION_CODE`, `ASTRA_SOCIAL_IG_REDIRECT_URI`: one-time server-side code exchange inputs; `enroll` needs these on the protected backend. The authorization code must NOT be added as a plaintext `workflow_dispatch` input, issue, or repository variable.
+
+The GitHub workflow executes `renew` on each run, persisting **encrypted ciphertext only** before any remote posting, then publishes using the renewed credentials. When Meta returns invalid/revoked credentials, the account is marked `RECONNECT_REQUIRED` (no repeated failing posts). When an upstream timeout occurs, `RETRY_REFRESH` is recorded. The statuses mean exactly what happened, never a fabricated PASS. A 60-day token renewal must run before the grant expires; external platform revocation can still require another human approval.
+
+The Meta authorization screen and callback backend are **NOT YET DEPLOYED**. Until those are provisioned with the proper Meta app, registered redirect URI, secure authenticated callback and GitHub secret, a one-click login is **NOT** live. This repository does **not** support importing passwords or session cookies. Avoid publishing a fake "Connect Instagram" button.
+
+Compatibility: encrypted vault entries with `authMode=instagram_login` use `graph.instagram.com` for publishing; legacy `ASTRA_SOCIAL_META_ACCOUNTS_JSON` entries continue using the older `graph.facebook.com` Page Login route. X remains `WAIT_X_COST` under the zero-extra-spend policy; its OAuth refresh flow does not waive the network's posting charges.
+
+Do not commit the app secret, account password, plaintext OAuth token, or callback authorization code.
