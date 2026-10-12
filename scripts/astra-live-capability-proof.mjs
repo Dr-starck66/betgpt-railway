@@ -99,8 +99,10 @@ async function main(){
  console.log("ASTRA_LIVE_CAPABILITY",JSON.stringify({status:audit.status,
    capabilities:audit.sites[0].verifiedCapabilities,
    homeHttpStatus:h.httpStatus,homeSha256:h.bodySha256,
-   runtimeSamples:1,seoStatus:probes.sitemap.status,
-   newsSitemapStatus:probes.news.status,report:"artifacts/astra-capabilities/live.json"}));
+   runtimeSamples:1,
+   robots:{status:probes.robots.status,httpStatus:probes.robots.httpStatus||null,failures:probes.robots.failures||[]},
+   sitemap:{status:probes.sitemap.status,httpStatus:probes.sitemap.httpStatus||null,failures:probes.sitemap.failures||[]},
+   newsSitemap:{status:probes.news.status,httpStatus:probes.news.httpStatus||null,failures:probes.news.failures||[]},report:"artifacts/astra-capabilities/live.json"}));
  if(audit.status!=="PASS")process.exitCode=1;
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).href)await main();
