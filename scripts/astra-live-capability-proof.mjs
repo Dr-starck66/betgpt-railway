@@ -32,8 +32,24 @@ export function assessHttp({url,finalUrl,status,contentType,body,kind}){
   if(!/(xml|text\/plain)/i.test(contentType||""))failures.push("sitemap-content-type");
  }
  if(kind==="news"){
-  if(!/<urlset\b/i.test(body||""))failures.push("news-urlset-missing");
-  if(!/www\.google\.com\/schemas\/sitemap-news\/0\.9/i.test(body||""))failures.push("news-namespace-missing");
+  const xml=String(body||"");
+  if(!/<urlset\b/i.test(xml))failures.push("news-urlset-missing");
+  if(!/www\.google\.com\/schemas\/sitemap-news\/0\.9/i.test(xml))failures.push("news-namespace-missing");
+  const blocks=[...xml.matchAll(/<url(?:\s[^>]*)?>([\s\S]*?)<\/url>/gi)].map(x=>x[1]);
+  if(!blocks.length)failures.push("news-no-article-entries");
+  if(blocks.length>1000)failures.push("news-too-many-urls");
+  let fresh=0;
+  for(const entry of blocks){
+   const v=tag=>entry.match(new RegExp("<"+tag+"(?:\\s[^>]*)?>([\\s\\S]*?)<\\/"+tag+">","i"))?.[1]?.trim()||"";
+   const loc=v("loc"),published=v("news:publication_date");
+   const publisher=v("news:name"),language=v("news:language"),title=v("news:title");
+   const date=Date.parse(published);
+   if(!publisher||!language||!title)failures.push("news-missing-required-fields");
+   if(!Number.isFinite(date)||date>Date.now()+60000||Date.now()-date>48*3600_000)failures.push("news-invalid-or-stale-date");
+   try{if(new URL(loc).origin!==ORIGIN)failures.push("news-foreign-origin")}catch{failures.push("news-invalid-loc")}
+   if(publisher&&language&&title&&Number.isFinite(date)&&date<=Date.now()+60000&&Date.now()-date<=48*3600_000)fresh++;
+  }
+  if(blocks.length&&!fresh)failures.push("news-no-recent-items");
  }
  if(Buffer.byteLength(body||"","utf8")>maxBytes(kind))failures.push("response-over-limit");
  return {status:failures.length?"FAIL":"PASS",failures,finalUrl,httpStatus:status,
