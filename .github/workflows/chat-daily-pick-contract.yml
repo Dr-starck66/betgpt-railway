@@ -1,0 +1,32 @@
+name: BetGPT daily chat no-bet contract regression
+on:
+  pull_request:
+    paths:
+      - 'src/lib/chat/complete.ts'
+      - 'src/lib/chat/chat.test.ts'
+      - '.github/workflows/chat-daily-pick-contract.yml'
+  push:
+    branches: [fix/chat-daily-pick-contract-failclosed]
+    paths:
+      - 'src/lib/chat/complete.ts'
+      - 'src/lib/chat/chat.test.ts'
+      - '.github/workflows/chat-daily-pick-contract.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  prove-no-fake-pick:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install locked dependencies without lifecycle scripts
+        run: npm ci --ignore-scripts
+      - name: Run actual BetGPT chat regressions
+        run: node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/chat/chat.test.ts
+      - name: Check compilation and static types
+        run: npm run typecheck
