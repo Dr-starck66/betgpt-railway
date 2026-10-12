@@ -1,0 +1,99 @@
+{
+  "schema": 1,
+  "sites": [
+    {
+      "id": "betgpt",
+      "name": "BetGPT",
+      "siteUrl": "https://betgpt.live",
+      "language": "fr",
+      "articlePath": "/actualites/",
+      "keywords": [
+        "football",
+        "pronostics",
+        "ligue1"
+      ],
+      "feeds": [
+        "/sitemap-news.xml",
+        "/news-sitemap.xml",
+        "/sitemap.xml"
+      ],
+      "instagramReview": false
+    },
+    {
+      "id": "gamicnews",
+      "name": "GAMIC News",
+      "siteUrl": "https://gamicnews.com",
+      "language": "id",
+      "articlePath": "/berita/",
+      "keywords": [
+        "game",
+        "gaming",
+        "teknologi"
+      ],
+      "feeds": [
+        "/sitemap-news.xml",
+        "/news-sitemap.xml",
+        "/feed/",
+        "/sitemap.xml"
+      ],
+      "instagramReview": false
+    },
+    {
+      "id": "cibao",
+      "name": "El Diario del Cibao",
+      "siteUrl": "https://eldiariodelcibao.com",
+      "language": "es",
+      "articlePath": null,
+      "keywords": [
+        "Cibao",
+        "RepublicaDominicana",
+        "noticias"
+      ],
+      "feeds": [
+        "/sitemap-news.xml",
+        "/news-sitemap.xml",
+        "/feed/",
+        "/sitemap.xml"
+      ],
+      "instagramReview": false
+    },
+    {
+      "id": "bizarre",
+      "name": "Bizarre Sexuality",
+      "siteUrl": "https://bizarresexuality.com",
+      "language": "en",
+      "articlePath": null,
+      "keywords": [
+        "relationships",
+        "sexualhealth",
+        "education"
+      ],
+      "feeds": [
+        "/sitemap-news.xml",
+        "/news-sitemap.xml",
+        "/feed/",
+        "/sitemap.xml"
+      ],
+      "instagramReview": true
+    },
+    {
+      "id": "freehotels",
+      "name": "FreeHotels",
+      "siteUrl": "https://freehotels.info",
+      "language": "en",
+      "articlePath": null,
+      "keywords": [
+        "travel",
+        "hotels",
+        "destinations"
+      ],
+      "feeds": [
+        "/sitemap-news.xml",
+        "/news-sitemap.xml",
+        "/feed/",
+        "/sitemap.xml"
+      ],
+      "instagramReview": false
+    }
+  ]
+}
