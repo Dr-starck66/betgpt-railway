@@ -58,6 +58,11 @@
         "type": "command",
         "run": "node scripts/astra-visual-entity-guard.mjs",
         "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-mobile-parity-guard.mjs",
+        "timeoutMs": 120000
       }
     ],
     "ASTRA_TARDIGRADE": [
@@ -134,11 +139,6 @@
         "type": "command",
         "run": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-heading-architecture-guard.mjs --strict",
         "timeoutMs": 150000
-      },
-      {
-        "type": "command",
-        "run": "node scripts/astra-mobile-parity-guard.mjs",
-        "timeoutMs": 120000
       }
     ],
     "ASTRA_IMAGE_RELEVANCE_RIGHTS": [
@@ -170,6 +170,11 @@
         "type": "command",
         "run": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-content-omega-proof.mjs",
         "timeoutMs": 120000
+      },
+      {
+        "type": "command",
+        "run": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-editorial-corpus-audit.ts",
+        "timeoutMs": 120000
       }
     ],
     "ASTRA_BROADCAST_AFFILIATE": [
@@ -196,11 +201,6 @@
         "type": "command",
         "run": "npm run test:editorial-authority",
         "timeoutMs": 90000
-      },
-      {
-        "type": "command",
-        "run": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-editorial-corpus-audit.ts",
-        "timeoutMs": 120000
       }
     ],
     "ASTRA_PUBLISH_AUDIT": [
