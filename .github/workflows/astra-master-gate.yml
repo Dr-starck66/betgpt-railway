@@ -31,5 +31,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: astra-master-gate-betgpt
-          path: artifacts/astra-master-gate/*.json
+          path: |
+            artifacts/astra-master-gate/*.json
+            artifacts/astra-news-eligibility/*.json
           if-no-files-found: error
