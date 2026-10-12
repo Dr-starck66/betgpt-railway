@@ -7,6 +7,7 @@ import { isPublicArticle } from "@/lib/editorial/types";
 import { absImg } from "@/lib/image-seo";
 import { publicEditorialImageCopy } from "@/lib/editorial/image-copy";
 import { SITE_URL } from "@/lib/programmatic";
+import { qualityGate } from "@/lib/editorial/quality";
 import { manualEditorialArticleBySlug } from "@/lib/editorial/manual-articles";
 
 const LEGACY_NEWS_MATCH_REDIRECTS: Record<string, string> = {
@@ -67,12 +68,14 @@ export const Route = createFileRoute("/actualites/$slug")({
     const article = loaderData.article;
     const url = articleUrl(article.slug);
     const image = absImg(article.image.src);
+    // Re-audit historical persisted postmatches: old serialized quality.pass is not enough.
+    const editoriallyIndexable = qualityGate(article, []).pass && article.quality.pass;
     const imageCopy = publicEditorialImageCopy(article);
     return {
       meta: [
         { title: article.title },
         { name: "description", content: article.lead },
-        { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1" },
+        { name: "robots", content: editoriallyIndexable ? "index, follow, max-image-preview:large, max-snippet:-1" : "noindex, follow" },
         { name: "news_keywords", content: article.keywords },
         { property: "og:type", content: "article" },
         { property: "og:title", content: article.h1 },
