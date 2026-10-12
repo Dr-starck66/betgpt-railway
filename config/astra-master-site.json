@@ -96,6 +96,11 @@
         "type": "command",
         "run": "node --check scripts/astra-live-capability-proof.mjs",
         "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node --test scripts/astra-risk-guard-direct.test.mjs",
+        "timeoutMs": 120000
       }
     ],
     "ASTRA_DESIGN_INTELLIGENCE": [
