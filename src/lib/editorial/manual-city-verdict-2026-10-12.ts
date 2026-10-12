@@ -66,20 +66,69 @@ export const cityVerdict20261012: EditorialArticle = {
     },
     {
       "h2": "Retrait de titres, indemnisation, relégation : trois dossiers qui ne doivent pas être mélangés",
-      "body": "Les conséquences souvent évoquées depuis le verdict ne sont pas interchangeables. Une sanction sportive portant sur une saison en cours poserait la question du classement, des qualifications européennes et des compétitions futures. Une sanction concernant des titres passés engagerait une autre discussion, notamment sur le traitement des palmarès et des classements historiques. Enfin, d'éventuelles démarches indemnitaires d'autres clubs reposeraient sur des procédures et des preuves de préjudice qui ne se réduisent pas au verdict disciplinaire lui-même. AP et Reuters recensent différents scénarios, mais ni leur existence théorique ni les prises de position de personnalités du football ne constituent une décision exécutoire. À cela s'ajoute l'incertitude propre à l'appel : si certains constats sont infirmés, confirmés ou ajustés, la base de la sanction pourrait changer. La bonne lecture consiste donc à maintenir trois colonnes séparées : faits retenus par la commission, moyens de défense du club et conséquences éventuellement prononcées. Tant que la troisième colonne n'est pas renseignée par une autorité compétente, afficher une relégation ou des titres retirés comme un fait accompli désinforme le public.",
+      "body": "Les conséquences souvent évoquées depuis le verdict ne sont pas interchangeables. Une sanction sportive portant sur une saison en cours poserait la question du classement, des qualifications européennes et des compétitions futures.",
       "sourceIds": [
         "ap-sanctions",
         "reuters-appeal",
         "premier-verdict"
+      ],
+      "subsections": [
+        {
+          "h3": "Titres anciens : une question différente du classement actuel",
+          "body": "Une sanction concernant des titres passés engagerait une autre discussion, notamment sur le traitement des palmarès et des classements historiques.",
+          "sourceIds": [
+            "ap-sanctions",
+            "reuters-appeal",
+            "premier-verdict"
+          ]
+        },
+        {
+          "h3": "Indemnisations : des procédures et des preuves spécifiques",
+          "body": "Enfin, d'éventuelles démarches indemnitaires d'autres clubs reposeraient sur des procédures et des preuves de préjudice qui ne se réduisent pas au verdict disciplinaire lui-même. AP et Reuters recensent différents scénarios, mais ni leur existence théorique ni les prises de position de personnalités du football ne constituent une décision exécutoire.",
+          "sourceIds": [
+            "ap-sanctions",
+            "reuters-appeal",
+            "premier-verdict"
+          ]
+        },
+        {
+          "h3": "Pourquoi l'appel peut modifier les scénarios évoqués",
+          "body": "À cela s'ajoute l'incertitude propre à l'appel : si certains constats sont infirmés, confirmés ou ajustés, la base de la sanction pourrait changer. La bonne lecture consiste donc à maintenir trois colonnes séparées : faits retenus par la commission, moyens de défense du club et conséquences éventuellement prononcées. Tant que la troisième colonne n'est pas renseignée par une autorité compétente, afficher une relégation ou des titres retirés comme un fait accompli désinforme le public.",
+          "sourceIds": [
+            "ap-sanctions",
+            "reuters-appeal",
+            "premier-verdict"
+          ]
+        }
       ]
     },
     {
       "h2": "Ce que l'affaire change déjà, avant toute nouvelle sanction",
-      "body": "Même sans retrait de points officiellement prononcé, le dossier a des effets visibles. La réception à Liverpool a montré que le sujet financier s'invite désormais jusque dans les déplacements de City. La communication du club est soumise à la contrainte d'une procédure en cours, tandis que les autorités doivent défendre la crédibilité d'un système de contrôle qui a mis des années à produire une décision. Les supporters rivaux discutent du passé ; les joueurs de City doivent, eux, préparer le prochain match avec l'incertitude autour de leurs résultats futurs. Le risque commercial et réputationnel est également distinct du risque purement sportif : une marque peut subir des interrogations publiques avant qu'une sanction finale ne soit arrêtée. Ce constat ne préjuge pas de la position que prendra l'instance d'appel. Il décrit un décalage concret entre la continuité quotidienne du championnat et une procédure institutionnelle exceptionnelle. Pour le lecteur, cette situation fournit un angle plus utile qu'une prédiction sensationnaliste : comprendre ce qui a déjà changé, plutôt que deviner la peine exacte. Les prochains jours pourront apporter des déclarations, mais seule une information officielle supplémentaire modifiera le statut juridique du dossier.",
+      "body": "Même sans retrait de points officiellement prononcé, le dossier a des effets visibles. La réception à Liverpool a montré que le sujet financier s'invite désormais jusque dans les déplacements de City. La communication du club est soumise à la contrainte d'une procédure en cours, tandis que les autorités doivent défendre la crédibilité d'un système de contrôle qui a mis des années à produire une décision. Les supporters rivaux discutent du passé ; les joueurs de City doivent, eux, préparer le prochain match avec l'incertitude autour de leurs résultats futurs.",
       "sourceIds": [
         "reuters-anfield",
         "premier-appeal",
         "ap-sanctions"
+      ],
+      "subsections": [
+        {
+          "h3": "Un risque de réputation distinct de la sanction sportive",
+          "body": "Le risque commercial et réputationnel est également distinct du risque purement sportif : une marque peut subir des interrogations publiques avant qu'une sanction finale ne soit arrêtée.",
+          "sourceIds": [
+            "reuters-anfield",
+            "premier-appeal",
+            "ap-sanctions"
+          ]
+        },
+        {
+          "h3": "Le seul cap fiable : distinguer les faits des pronostics",
+          "body": "Ce constat ne préjuge pas de la position que prendra l'instance d'appel. Il décrit un décalage concret entre la continuité quotidienne du championnat et une procédure institutionnelle exceptionnelle. Pour le lecteur, cette situation fournit un angle plus utile qu'une prédiction sensationnaliste : comprendre ce qui a déjà changé, plutôt que deviner la peine exacte. Les prochains jours pourront apporter des déclarations, mais seule une information officielle supplémentaire modifiera le statut juridique du dossier.",
+          "sourceIds": [
+            "reuters-anfield",
+            "premier-appeal",
+            "ap-sanctions"
+          ]
+        }
       ]
     },
     {
