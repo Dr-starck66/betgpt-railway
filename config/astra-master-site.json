@@ -71,6 +71,16 @@
         "type": "command",
         "run": "node scripts/astra-never-fail-build-guard.mjs --astra-dry-run",
         "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-risk-dry-run.mjs --all --report=artifacts/astra-risk-preflight/report.json",
+        "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-model-max-guard.mjs",
+        "timeoutMs": 90000
       }
     ],
     "ASTRA_DESIGN_INTELLIGENCE": [
@@ -100,6 +110,11 @@
         "type": "command",
         "run": "node scripts/astra-match-route-resilience-guard.mjs",
         "timeoutMs": 120000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-cloud-egress.mjs config/astra-cloud-egress.json --validate-config",
+        "timeoutMs": 90000
       }
     ],
     "ASTRA_TRUE_LINEUPS": [
