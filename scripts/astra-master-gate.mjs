@@ -111,6 +111,20 @@ async function main() {
     const status=failed?"FAIL":executed && evidence.every(e=>e.status==="PASS"||e.status==="WIRED")?"PASS":"UNVERIFIED";
     results.push({id:b.id,scope:b.scope,status,evidence});
   }
+  // Discovery: any ASTRA script outside the evidence matrix is visible and blocks PASS.
+  // Exemptions require a human-readable, substantive reason: never silently ignore a brick.
+  const exemptions=config.scriptExemptions && typeof config.scriptExemptions==="object" ? config.scriptExemptions : {};
+  const scriptsDir=join(root,"scripts");
+  const astraScripts=existsSync(scriptsDir)?readdirSync(scriptsDir,{withFileTypes:true})
+    .filter(d=>d.isFile() && /^astra-.+\.(?:mjs|js|ts)$/.test(d.name) && !/\.test\./.test(d.name))
+    .map(d=>"scripts/"+d.name):[];
+  const evidenceBindings=JSON.stringify(config.checks);
+  const untrackedScripts=astraScripts.filter(file=>{
+    if(file==="scripts/astra-master-gate.mjs" || file==="scripts/astra-onboard-site.mjs") return false;
+    if(evidenceBindings.includes(file)) return false;
+    return !(typeof exemptions[file]==="string" && exemptions[file].trim().length>=24);
+  });
+  const invalidExemptions=Object.entries(exemptions).filter(([file,reason])=>!astraScripts.includes(file) || typeof reason!=="string" || reason.trim().length<24).map(([file])=>file);
   const unknownBindings=Object.keys(config.checks).filter(id=>!ids.has(id));
   const failures=results.filter(r=>r.status==="FAIL");
   const unverified=results.filter(r=>r.status==="UNVERIFIED");
@@ -120,12 +134,14 @@ async function main() {
     siteConfigSha256:sha256(readFileSync(configFile,"utf8")),
     effectiveCapabilities:[...capabilities],inferredCapabilities,
     summary:{pass:results.filter(x=>x.status==="PASS").length,na:results.filter(x=>x.status==="N/A").length,
-      fail:failures.length,unverified:unverified.length,unknownBindings:unknownBindings.length},
-    status:failures.length||unverified.length||unknownBindings.length?"FAIL":"PASS",unknownBindings,results};
+      fail:failures.length,unverified:unverified.length,unknownBindings:unknownBindings.length,untrackedScripts:untrackedScripts.length,invalidExemptions:invalidExemptions.length},
+    status:failures.length||unverified.length||unknownBindings.length||untrackedScripts.length||invalidExemptions.length?"FAIL":"PASS",unknownBindings,untrackedScripts,invalidExemptions,results};
   writeReport(report);
   console.log("ASTRA_MASTER_GATE",JSON.stringify({siteId:report.siteId,task,status:report.status,summary:report.summary,report:relative(root,reportFile)}));
   for (const r of [...failures,...unverified]) console.error("ASTRA_UNPROVEN_BRICK",r.id,r.status,r.reason||"check-failed");
   if (unknownBindings.length) console.error("ASTRA_UNKNOWN_BINDINGS",unknownBindings.join(","));
+  if (untrackedScripts.length) console.error("ASTRA_UNTRACKED_SCRIPTS",untrackedScripts.join(","));
+  if (invalidExemptions.length) console.error("ASTRA_INVALID_EXEMPTIONS",invalidExemptions.join(","));
   if (strict&&report.status!=="PASS") process.exitCode=1;
 }
 main().catch(e=>{
