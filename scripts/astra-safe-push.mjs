@@ -12,6 +12,26 @@ const files = args.filter((arg, i) => {
   return !arg.startsWith("--");
 });
 const attempts = Math.max(1, Number(process.env.ASTRA_SAFE_PUSH_ATTEMPTS || 6));
+// Safe CLI preview. Exits BEFORE any git config/add/commit/fetch/push call.
+if (args.includes("--astra-dry-run")) {
+  const validBranch=/^[a-zA-Z0-9][a-zA-Z0-9._/-]{0,100}$/.test(branch) &&
+    !branch.includes("..") && !branch.includes("//") && !branch.endsWith(".");
+  const validFiles=files.length>0 && files.every(file=>typeof file==="string" &&
+    file.length<240 && !file.startsWith("/") && !file.startsWith("-") &&
+    !file.includes("..") && !file.includes("\\") &&
+    !/[\r\n]/.test(file));
+  if(!validBranch || !validFiles){
+    console.error("ASTRA_SAFE_PUSH_DRY_RUN_FAIL invalid branch or file paths");
+    process.exit(2);
+  }
+  console.log("ASTRA_SAFE_PUSH_DRY_RUN",JSON.stringify({
+    status:"INSPECTED_ONLY", executionStatus:"UNVERIFIED",
+    branch, files, commands:["git config","git add","git diff","git commit","git fetch","git rebase","git push"],
+    commandsExecuted:0,networkCalls:0,repositoryMutations:0
+  }));
+  process.exit(0);
+}
+
 
 function run(command, commandArgs, options = {}) {
   const result = spawnSync(command, commandArgs, {
