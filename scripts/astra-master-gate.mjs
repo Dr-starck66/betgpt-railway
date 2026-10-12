@@ -50,7 +50,7 @@ function checkDefinition(c) {
     if (!c.run || typeof c.run !== "string") throw new Error("command.run missing");
     const t=Date.now();
     const timeoutMs=Math.min(Math.max(c.timeoutMs || 90000,1000),300000);
-    const run=spawnSync("bash",["-lc",c.run],{cwd:root,encoding:"utf8",timeout:timeoutMs,
+    const run=spawnSync("/bin/sh",["-c",c.run],{cwd:root,encoding:"utf8",timeout:timeoutMs,
       env:{...process.env,ASTRA_MASTER_GATE_ACTIVE:"1"},maxBuffer:1024*1024});
     const result={type:"command",command:c.run,status:run.status===0&&!run.error?"PASS":"FAIL",
       exitCode:run.status,durationMs:Date.now()-t,outputSha256:sha256((run.stdout||"")+(run.stderr||""))};
@@ -75,7 +75,11 @@ async function main() {
   const registry=json(registryFile), config=json(configFile);
   if (registry.schema!=="astra-brick-registry/1" || !Array.isArray(registry.bricks) || !registry.bricks.length) throw new Error("Missing registry");
   if (config.schema!=="astra-master-site/1" || !config.siteId || !Array.isArray(config.capabilities) || !config.checks || typeof config.checks!=="object") throw new Error("Invalid site configuration");
-  if (registry.bricks.length < 39) throw new Error("Registry shrinkage detected: at least 39 known ASTRA bricks required");
+  const baselineBrickIds=["ASTRA_MASTER_GATE","ASTRA_BRICK_PROOF_GATE","ASTRA_NO_REPEAT","ASTRA_ZERO_COST","ASTRA_CONTENT_QUALITY","ASTRA_CONTENT_BULKER","ASTRA_ZERO_WEAK_PAGE","ASTRA_HEADING_ARCHITECTURE","ASTRA_SEMANTIC_FLOW","ASTRA_NEWS_SOURCE_INTEGRITY","ASTRA_DISCOVER_NEWS","ASTRA_IMAGE_RELEVANCE_RIGHTS","ASTRA_FULL_INDEXATION","ASTRA_CRAWL_FIRST","ASTRA_SEARCH_INTELLIGENCE","ASTRA_SEMRUSH_TRAFFIC_BOOSTER","ASTRA_WAYBACK_REBUILDER","ASTRA_DESIGN_INTELLIGENCE","ASTRA_TARDIGRADE","ASTRA_RAILWAY_DEPLOY_GATE","ASTRA_HEALTH_GATE","ASTRA_PRODUCTION_PROOF","ASTRA_SRE_BRIGADE","ASTRA_LAUNCH_VIDEO","ASTRA_SOCIAL_AUTO","ASTRA_AFFILIATE_LINK_GUARD","ASTRA_BROADCAST_AFFILIATE","ASTRA_TRUE_LINEUPS","ASTRA_FLAG_GUARD","ASTRA_ODDS_TRUTH","ASTRA_ROI_LEDGER","ASTRA_PUBLISH_AUDIT","ASTRA_EDITORIAL_AUTHORITY","ASTRA_AFFILIATE_PROGRAM_VALIDATION","ASTRA_SEARCH_CONSOLE","ASTRA_IMAGE_DELIVERY","ASTRA_SEO_AUTOMATION","ASTRA_AUTOMATION_EVIDENCE","ASTRA_BACKLINK_INTEGRITY","ASTRA_OPTIMIZER_OMEGA","ASTRA_NEWS_ELIGIBILITY"];
+  if (registry.bricks.length<baselineBrickIds.length) throw new Error("Registry shrinkage detected: expected at least "+baselineBrickIds.length+" ASTRA bricks");
+  const present=new Set(registry.bricks.map(b=>b.id));
+  const missingBaseline=baselineBrickIds.filter(id=>!present.has(id));
+  if (missingBaseline.length) throw new Error("STALE_REGISTRY_BASELINE missing="+missingBaseline.join(","));
   const core=["ASTRA_MASTER_GATE","ASTRA_BRICK_PROOF_GATE","ASTRA_NO_REPEAT","ASTRA_ZERO_COST","ASTRA_AUTOMATION_EVIDENCE"];
   for (const id of core) if (!registry.bricks.some(b => b.id===id)) throw new Error("Mandatory global brick removed: "+id);
   const signalFiles={
@@ -139,6 +143,7 @@ async function main() {
   writeReport(report);
   console.log("ASTRA_MASTER_GATE",JSON.stringify({siteId:report.siteId,task,status:report.status,summary:report.summary,report:relative(root,reportFile)}));
   for (const r of [...failures,...unverified]) console.error("ASTRA_UNPROVEN_BRICK",r.id,r.status,r.reason||"check-failed");
+  for (const r of failures) for (const e of r.evidence||[]) if(e.status==="FAIL") console.error("ASTRA_EXECUTABLE_FAILURE",JSON.stringify({id:r.id,type:e.type,exitCode:e.exitCode??null,error:e.error||null,reason:e.reason||null}));
   if (unknownBindings.length) console.error("ASTRA_UNKNOWN_BINDINGS",unknownBindings.join(","));
   if (untrackedScripts.length) console.error("ASTRA_UNTRACKED_SCRIPTS",untrackedScripts.join(","));
   if (invalidExemptions.length) console.error("ASTRA_INVALID_EXEMPTIONS",invalidExemptions.join(","));
