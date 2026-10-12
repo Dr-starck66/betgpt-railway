@@ -23,6 +23,8 @@ jobs:
         run: node --test scripts/astra-master-gate.test.mjs
       - name: Negative tests for optimizer and safe-mode risk previews
         run: node --test scripts/astra-optimizer-omega.test.mjs scripts/astra-risk-dry-run.test.mjs
+      - name: Prove all 14 risky entrypoints block active operations under audit mode
+        run: node --test scripts/astra-risk-entrypoint-block.test.mjs
       - name: Inspect 14 risky entrypoints without executing their code
         run: node scripts/astra-risk-dry-run.mjs --all --report=artifacts/astra-risk-preflight/report.json
       - name: Test live capability verifier against fake HTTP/error fixtures

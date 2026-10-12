@@ -81,6 +81,16 @@
         "type": "command",
         "run": "node scripts/astra-model-max-guard.mjs",
         "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node --test scripts/astra-risk-entrypoint-block.test.mjs",
+        "timeoutMs": 120000
+      },
+      {
+        "type": "command",
+        "run": "node --test scripts/astra-live-capability-proof.test.mjs",
+        "timeoutMs": 90000
       }
     ],
     "ASTRA_DESIGN_INTELLIGENCE": [
