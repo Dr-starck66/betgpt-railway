@@ -107,3 +107,41 @@ test("outcome report with FAIL overrides successful command exit",()=>{
   assert.notEqual(res.status,0);
   assert.equal(data.results.find(r=>r.id==="ALWAYS").status,"FAIL");
 });
+
+test("risk contract cannot be replaced by a filename substring in a successful command",()=>{
+ const script="scripts/astra-bad.mjs",f=fixture([always],{ALWAYS:[{type:"command",run:"echo scripts/astra-bad.mjs"}]});
+ fs.mkdirSync(path.join(f.cwd,"scripts"),{recursive:true});
+ fs.writeFileSync(path.join(f.cwd,script),"console.log('unverified active operation')");
+ const cfgFile=path.join(f.cwd,"config/astra-master-site.json"),cfg=JSON.parse(fs.readFileSync(cfgFile,"utf8"));
+ cfg.riskContractProof={manifest:"config/astra-risk-scripts.json",report:"artifacts/astra-risk-preflight/contracts.json"};
+ fs.writeFileSync(cfgFile,JSON.stringify(cfg));
+ fs.writeFileSync(path.join(f.cwd,"config/astra-risk-scripts.json"),
+  JSON.stringify({schema:"astra-risk-scripts/v1",scripts:[{path:script,risk:"external-side-effects"}]}));
+ const {res,data}=f.run();
+ assert.notEqual(res.status,0);
+ assert.equal(data.riskContract.status,"UNVERIFIED");
+ assert.ok(data.untrackedScripts.includes(script));
+ assert.ok(data.riskContract.reasons.includes("missing-or-stale-contract-evidence"));
+});
+test("forged source hash in purported risk evidence is rejected",()=>{
+ const script="scripts/astra-bad.mjs",f=fixture([always],{ALWAYS:[{type:"command",run:"true"}]});
+ fs.mkdirSync(path.join(f.cwd,"scripts"),{recursive:true});fs.writeFileSync(path.join(f.cwd,script),"throw Error('not safe')");
+ const cfgFile=path.join(f.cwd,"config/astra-master-site.json"),cfg=JSON.parse(fs.readFileSync(cfgFile,"utf8"));
+ cfg.riskContractProof={manifest:"config/astra-risk-scripts.json",report:"artifacts/astra-risk-preflight/contracts.json"};
+ fs.writeFileSync(cfgFile,JSON.stringify(cfg));
+ fs.writeFileSync(path.join(f.cwd,"config/astra-risk-scripts.json"),JSON.stringify({
+  schema:"astra-risk-scripts/v1",scripts:[{path:script,risk:"external-side-effects"}]}));
+ const reportPath=path.join(f.cwd,"artifacts/astra-risk-preflight/contracts.json");
+ fs.mkdirSync(path.dirname(reportPath),{recursive:true});
+ const cmd="mkdir -p artifacts/astra-risk-preflight && cp config/report-fixture.json artifacts/astra-risk-preflight/contracts.json";
+ fs.writeFileSync(path.join(f.cwd,"config/report-fixture.json"),JSON.stringify({
+  schema:"astra-risk-contract-proof/v1",status:"PASS",operationalStatus:"UNVERIFIED",
+  items:[{path:script,risk:"external-side-effects",status:"PASS",operationalStatus:"UNVERIFIED",
+   safetyContract:"DENY_OPERATION_IN_AUDIT_MODE",exitCode:78,guardRefused:true,workspaceClean:true,
+   forbiddenAttempt:false,codeSha256:"0".repeat(64)}]}));
+ cfg.checks.ALWAYS=[{type:"command",run:cmd}];fs.writeFileSync(cfgFile,JSON.stringify(cfg));
+ const {res,data}=f.run();
+ assert.notEqual(res.status,0);
+ assert.ok(data.untrackedScripts.includes(script));
+ assert.match(data.riskContract.reasons.join(" "),/script-contract-unproven/);
+});
