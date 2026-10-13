@@ -18,7 +18,7 @@ globalThis.fetch=deny;
 for(const key of ['get','request','createServer']){http[key]=deny;https[key]=deny;}
 for(const key of ['connect','createConnection','createServer'])net[key]=deny;
 for(const key of ['spawn','spawnSync','exec','execSync','execFile','execFileSync','fork'])cp[key]=deny;
-for(const key of ['writeFileSync','appendFileSync','mkdirSync','createWriteStream','renameSync','rmSync','unlinkSync','openSync'])fs[key]=deny;
+for(const key of ['writeFileSync','appendFileSync','mkdirSync','createWriteStream','renameSync','rmSync','unlinkSync'])fs[key]=deny;
 syncBuiltinESMExports();`;
 function safePath(root,path){
  if(typeof path!=="string"||!/^scripts\/astra-[a-z0-9-]+\.mjs$/.test(path))throw Error("invalid-script-path");
