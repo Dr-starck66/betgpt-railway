@@ -436,6 +436,15 @@ export async function completeChat(
     return success(base, mode, last, recentRoasts);
   }
 
+  // Tactical-system questions already have a precise deterministic answer in
+  // localReply. Route them before a small local model can replace that answer
+  // with generic prose lacking the actual overload/width/half-space mechanics.
+  const tacticalQuestion =
+    /\b(?:4-4-2|3-2-5|4-3-3|3-4-3|pressing|bloc|demi[- ]?espace|surnombre|piston|largeur|milieu|ligne défensive|ligne defensive)\b/i.test(last);
+  if (tacticalQuestion) {
+    return success(localReply(last, "", mode), mode, last, recentRoasts);
+  }
+
   const mustGround = shouldGround(last);
   const desk = chatNeedsDesk(last) ? await deskNow(last) : "";
 
