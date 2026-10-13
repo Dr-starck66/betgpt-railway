@@ -1,3 +1,8 @@
+// ASTRA isolated audit mode: deny all active operations BEFORE entrypoint execution.
+if (process.env.ASTRA_RISK_MODE === "audit") {
+  process.stderr.write("ASTRA_RISK_EFFECTS_BLOCKED "+JSON.stringify({entrypoint:"scripts/astra-authority-citation-engine.mjs",status:"BLOCKED",operationStatus:"UNVERIFIED",exitCode:78})+"\n");
+  process.exit(78);
+}
 import fs from "node:fs/promises";
 import path from "node:path";
 import crypto from "node:crypto";

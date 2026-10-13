@@ -1,4 +1,9 @@
 #!/usr/bin/env node
+// ASTRA isolated audit mode: deny all active operations BEFORE entrypoint execution.
+if (process.env.ASTRA_RISK_MODE === "audit") {
+  process.stderr.write("ASTRA_RISK_EFFECTS_BLOCKED "+JSON.stringify({entrypoint:"scripts/astra-launch-video.mjs",status:"BLOCKED",operationStatus:"UNVERIFIED",exitCode:78})+"\n");
+  process.exit(78);
+}
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { buildAutoScenes, captureWebsite, normalizeConfig, renderLaunchVideos } from "./lib/astra-launch-video.mjs";

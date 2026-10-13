@@ -51,6 +51,75 @@
         "type": "command",
         "run": "node --test scripts/astra-master-gate.test.mjs",
         "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node --test scripts/astra-risk-dry-run.test.mjs",
+        "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node --test scripts/astra-safe-push-dry-run.test.mjs scripts/astra-never-fail-build-dry-run.test.mjs",
+        "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-safe-push.mjs --astra-dry-run --branch audit-branch artifacts/proof.json",
+        "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-never-fail-build-guard.mjs --astra-dry-run",
+        "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-risk-dry-run.mjs --all --report=artifacts/astra-risk-preflight/report.json",
+        "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-model-max-guard.mjs",
+        "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node --test scripts/astra-risk-entrypoint-block.test.mjs",
+        "timeoutMs": 120000
+      },
+      {
+        "type": "command",
+        "run": "node --test scripts/astra-live-capability-proof.test.mjs",
+        "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node --check scripts/astra-live-capability-proof.mjs",
+        "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node --test scripts/astra-risk-guard-direct.test.mjs",
+        "timeoutMs": 120000
+      },
+      {
+        "type": "command",
+        "run": "node --test scripts/astra-risk-contract-proof.test.mjs",
+        "timeoutMs": 120000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-risk-contract-proof.mjs --all --report=artifacts/astra-risk-preflight/contracts.json",
+        "timeoutMs": 120000
+      },
+      {
+        "type": "command",
+        "run": "npm run test:sidewings",
+        "timeoutMs": 90000
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-sidewing-audit.mjs"
       }
     ],
     "ASTRA_DESIGN_INTELLIGENCE": [
@@ -58,12 +127,32 @@
         "type": "command",
         "run": "node scripts/astra-visual-entity-guard.mjs",
         "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-mobile-parity-guard.mjs",
+        "timeoutMs": 120000
       }
     ],
     "ASTRA_TARDIGRADE": [
       {
         "type": "command",
         "run": "node scripts/astra-stream-resilience-guard.mjs",
+        "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-resume-guard.mjs",
+        "timeoutMs": 120000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-match-route-resilience-guard.mjs",
+        "timeoutMs": 120000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-cloud-egress.mjs config/astra-cloud-egress.json --validate-config",
         "timeoutMs": 90000
       }
     ],
@@ -86,6 +175,11 @@
         "type": "command",
         "run": "npm run test:odds-truth",
         "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-odds-truth-guard.mjs",
+        "timeoutMs": 120000
       }
     ],
     "ASTRA_ROI_LEDGER": [
@@ -100,6 +194,11 @@
         "type": "command",
         "run": "node scripts/astra-semantic-flow-guard.mjs --strict",
         "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-semantic-flow-autorepair.mjs",
+        "timeoutMs": 120000
       }
     ],
     "ASTRA_ZERO_WEAK_PAGE": [
@@ -112,8 +211,8 @@
     "ASTRA_HEADING_ARCHITECTURE": [
       {
         "type": "command",
-        "run": "npm run seo:headings",
-        "timeoutMs": 90000
+        "run": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-heading-architecture-guard.mjs --strict",
+        "timeoutMs": 150000
       }
     ],
     "ASTRA_IMAGE_RELEVANCE_RIGHTS": [
@@ -128,6 +227,11 @@
         "type": "command",
         "run": "node scripts/astra-indexability-release-gate.mjs",
         "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-sitemap-runtime-sample-gate.mjs",
+        "timeoutMs": 120000
       }
     ],
     "ASTRA_CONTENT_QUALITY": [
@@ -135,6 +239,16 @@
         "type": "command",
         "run": "npm run editorial:corpus-audit",
         "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-content-omega-proof.mjs",
+        "timeoutMs": 120000
+      },
+      {
+        "type": "command",
+        "run": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-editorial-corpus-audit.ts",
+        "timeoutMs": 120000
       }
     ],
     "ASTRA_BROADCAST_AFFILIATE": [
@@ -142,6 +256,11 @@
         "type": "command",
         "run": "npm run test:broadcast-affiliate",
         "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-broadcast-affiliate-guard.mjs",
+        "timeoutMs": 120000
       }
     ],
     "ASTRA_AFFILIATE_LINK_GUARD": [
@@ -163,12 +282,22 @@
         "type": "command",
         "run": "npm run test:editorial-authority",
         "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-editorial-authority-gate.ts",
+        "timeoutMs": 120000
       }
     ],
     "ASTRA_RAILWAY_DEPLOY_GATE": [
       {
         "type": "command",
         "run": "npm run release:preflight",
+        "timeoutMs": 120000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-release-gate.mjs validate",
         "timeoutMs": 120000
       }
     ],
@@ -191,20 +320,35 @@
         "type": "command",
         "run": "npm run guard:launch-video",
         "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-launch-video-guard.mjs",
+        "timeoutMs": 120000
       }
     ],
     "ASTRA_SEO_AUTOMATION": [
       {
         "type": "command",
-        "run": "npm run seo:audit",
-        "timeoutMs": 90000
+        "run": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/seo-audit.mjs",
+        "timeoutMs": 150000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-seo-self-heal.mjs",
+        "timeoutMs": 120000
       }
     ],
     "ASTRA_CRAWL_FIRST": [
       {
         "type": "command",
-        "run": "npm run seo:audit",
-        "timeoutMs": 90000
+        "run": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/seo-audit.mjs",
+        "timeoutMs": 150000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-public-seo-readiness-gate.mjs",
+        "timeoutMs": 120000
       }
     ],
     "ASTRA_IMAGE_DELIVERY": [
@@ -248,6 +392,36 @@
         "run": "npm run test:semantic-flow",
         "timeoutMs": 120000
       }
+    ],
+    "ASTRA_NEWS_ELIGIBILITY": [
+      {
+        "type": "command",
+        "run": "node --test scripts/astra-news-eligibility-proof.test.mjs",
+        "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-news-eligibility-proof.mjs",
+        "timeoutMs": 120000
+      }
+    ],
+    "ASTRA_OPTIMIZER_OMEGA": [
+      {
+        "type": "command",
+        "run": "node --test scripts/astra-optimizer-omega.test.mjs",
+        "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-optimizer-omega.mjs --portfolio=config/astra-optimizer-portfolio.json --output=artifacts/astra-optimizer/betgpt-audit.json",
+        "timeoutMs": 90000,
+        "resultReport": "artifacts/astra-optimizer/betgpt-audit.json"
+      }
     ]
+  },
+  "riskContractProof": {
+    "manifest": "config/astra-risk-scripts.json",
+    "report": "artifacts/astra-risk-preflight/contracts.json",
+    "scope": "audit-isolation-only"
   }
 }

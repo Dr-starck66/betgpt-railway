@@ -21,6 +21,25 @@ jobs:
         run: npm ci --ignore-scripts
       - name: Run ASTRA core regression tests
         run: node --test scripts/astra-master-gate.test.mjs
+      - name: Negative tests for optimizer and safe-mode risk previews
+        run: node --test scripts/astra-optimizer-omega.test.mjs scripts/astra-risk-dry-run.test.mjs
+      - name: Prove all 14 risky entrypoints block active operations under audit mode
+        run: node --test scripts/astra-risk-entrypoint-block.test.mjs
+      - name: Isolated high-risk entrypoint refusal proof, 14 actual processes
+        run: node --test scripts/astra-risk-guard-direct.test.mjs
+      - name: Inspect 14 risky entrypoints without executing their code
+        run: node scripts/astra-risk-dry-run.mjs --all --report=artifacts/astra-risk-preflight/report.json
+      - name: Test live capability verifier against fake HTTP/error fixtures
+        run: node --test scripts/astra-live-capability-proof.test.mjs
+      - name: Probe real public BetGPT origin read-only, preserve partial proof
+        continue-on-error: true
+        run: node scripts/astra-live-capability-proof.mjs
+      - name: Evaluate optimizer against actual evidence (unknowns stay UNVERIFIED)
+        run: node scripts/astra-optimizer-omega.mjs --portfolio=config/astra-optimizer-portfolio.json --observations=artifacts/astra-optimizer/observations.json --capability-audit=artifacts/astra-capabilities/live.json --output=artifacts/astra-optimizer/betgpt-audit.json
+      - name: Prove fresh per-script risk contracts with hashed source, no active effects
+        run: |
+          node --test scripts/astra-risk-contract-proof.test.mjs
+          node scripts/astra-risk-contract-proof.mjs --all --report=artifacts/astra-risk-preflight/contracts.json
       - name: Central proof gate - source changes
         run: node scripts/astra-master-gate.mjs --task=code --strict
       - name: Central proof gate - all other site scopes
@@ -31,5 +50,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: astra-master-gate-betgpt
-          path: artifacts/astra-master-gate/*.json
+          path: |
+            artifacts/astra-master-gate/*.json
+            artifacts/astra-news-eligibility/*.json
+            artifacts/astra-risk-preflight/*.json
+            artifacts/astra-optimizer/*.json
+            artifacts/astra-capabilities/*.json
           if-no-files-found: error

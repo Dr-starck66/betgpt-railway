@@ -1,3 +1,8 @@
+// ASTRA isolated audit mode: deny any audit-report writes before script entrypoint.
+if (process.env.ASTRA_RISK_MODE === "audit") {
+  process.stderr.write("ASTRA_RISK_EFFECTS_BLOCKED "+JSON.stringify({entrypoint:"scripts/astra-sidewing-audit.mjs",status:"BLOCKED",operationStatus:"UNVERIFIED",exitCode:78})+"\n");
+  process.exit(78);
+}
 import fs from "node:fs";
 import path from "node:path";
 import { auditSidewingOpportunity, recommendedLinkBudget } from "../src/lib/seo/astra-sidewing-auditor.ts";

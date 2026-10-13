@@ -1,4 +1,9 @@
 #!/usr/bin/env node
+// ASTRA isolated audit mode: deny all active operations BEFORE entrypoint execution.
+if (process.env.ASTRA_RISK_MODE === "audit") {
+  process.stderr.write("ASTRA_RISK_EFFECTS_BLOCKED "+JSON.stringify({entrypoint:"scripts/astra-green-release-sync.mjs",status:"BLOCKED",operationStatus:"UNVERIFIED",exitCode:78})+"\n");
+  process.exit(78);
+}
 
 const SOURCE_REPO = process.env.ASTRA_SOURCE_REPO || "Dr-starck66/betgpt-railway";
 const WRAPPER_REPO = process.env.ASTRA_WRAPPER_REPO || "Dr-starck66/zip-github";

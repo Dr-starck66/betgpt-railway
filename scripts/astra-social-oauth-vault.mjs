@@ -1,3 +1,8 @@
+// ASTRA isolated audit mode: deny all active operations BEFORE entrypoint execution.
+if (process.env.ASTRA_RISK_MODE === "audit") {
+  process.stderr.write("ASTRA_RISK_EFFECTS_BLOCKED "+JSON.stringify({entrypoint:"scripts/astra-social-oauth-vault.mjs",status:"BLOCKED",operationStatus:"UNVERIFIED",exitCode:78})+"\n");
+  process.exit(78);
+}
 /**
  * ASTRA Social credential vault (server / GitHub Actions only).
  * Stores ONLY AES-256-GCM ciphertext in Git; never store OAuth secrets or passwords in the repository.

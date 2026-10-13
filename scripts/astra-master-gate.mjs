@@ -50,11 +50,31 @@ function checkDefinition(c) {
     if (!c.run || typeof c.run !== "string") throw new Error("command.run missing");
     const t=Date.now();
     const timeoutMs=Math.min(Math.max(c.timeoutMs || 90000,1000),300000);
-    const run=spawnSync("bash",["-lc",c.run],{cwd:root,encoding:"utf8",timeout:timeoutMs,
+    const run=spawnSync("/bin/sh",["-c",c.run],{cwd:root,encoding:"utf8",timeout:timeoutMs,
       env:{...process.env,ASTRA_MASTER_GATE_ACTIVE:"1"},maxBuffer:1024*1024});
     const result={type:"command",command:c.run,status:run.status===0&&!run.error?"PASS":"FAIL",
       exitCode:run.status,durationMs:Date.now()-t,outputSha256:sha256((run.stdout||"")+(run.stderr||""))};
     if (run.error) result.error=run.error.code || run.error.message;
+    // Some commands prove only that the engine ran, not that its real-world objective
+    // was met. A fresh, on-disk outcome report is mandatory before these can PASS.
+    if(c.resultReport){
+      const file=safePath(c.resultReport);
+      try{
+        if(!existsSync(file) || statSync(file).mtimeMs < t-2000)throw Error("missing-or-stale-outcome-report");
+        const bytes=readFileSync(file);
+        const outcome=JSON.parse(bytes.toString("utf8"));
+        result.outcomeStatus=String(outcome.status||"UNVERIFIED");
+        result.outcomeSha256=sha256(bytes);
+        if(run.status===0&&!run.error){
+          result.status=result.outcomeStatus==="PASS"?"PASS":
+            result.outcomeStatus==="FAIL"?"FAIL":"UNVERIFIED";
+        }
+      }catch(error){
+        result.status=run.status===0&&!run.error?"UNVERIFIED":"FAIL";
+        result.outcomeStatus="UNVERIFIED";
+        result.reportReason=error.message;
+      }
+    }
     return result;
   }
   if (c.type === "http") return {type:"http",status:"PENDING",url:c.url};
@@ -75,7 +95,11 @@ async function main() {
   const registry=json(registryFile), config=json(configFile);
   if (registry.schema!=="astra-brick-registry/1" || !Array.isArray(registry.bricks) || !registry.bricks.length) throw new Error("Missing registry");
   if (config.schema!=="astra-master-site/1" || !config.siteId || !Array.isArray(config.capabilities) || !config.checks || typeof config.checks!=="object") throw new Error("Invalid site configuration");
-  if (registry.bricks.length < 39) throw new Error("Registry shrinkage detected: at least 39 known ASTRA bricks required");
+  const baselineBrickIds=["ASTRA_MASTER_GATE","ASTRA_BRICK_PROOF_GATE","ASTRA_NO_REPEAT","ASTRA_ZERO_COST","ASTRA_CONTENT_QUALITY","ASTRA_CONTENT_BULKER","ASTRA_ZERO_WEAK_PAGE","ASTRA_HEADING_ARCHITECTURE","ASTRA_SEMANTIC_FLOW","ASTRA_NEWS_SOURCE_INTEGRITY","ASTRA_DISCOVER_NEWS","ASTRA_IMAGE_RELEVANCE_RIGHTS","ASTRA_FULL_INDEXATION","ASTRA_CRAWL_FIRST","ASTRA_SEARCH_INTELLIGENCE","ASTRA_SEMRUSH_TRAFFIC_BOOSTER","ASTRA_WAYBACK_REBUILDER","ASTRA_DESIGN_INTELLIGENCE","ASTRA_TARDIGRADE","ASTRA_RAILWAY_DEPLOY_GATE","ASTRA_HEALTH_GATE","ASTRA_PRODUCTION_PROOF","ASTRA_SRE_BRIGADE","ASTRA_LAUNCH_VIDEO","ASTRA_SOCIAL_AUTO","ASTRA_AFFILIATE_LINK_GUARD","ASTRA_BROADCAST_AFFILIATE","ASTRA_TRUE_LINEUPS","ASTRA_FLAG_GUARD","ASTRA_ODDS_TRUTH","ASTRA_ROI_LEDGER","ASTRA_PUBLISH_AUDIT","ASTRA_EDITORIAL_AUTHORITY","ASTRA_AFFILIATE_PROGRAM_VALIDATION","ASTRA_SEARCH_CONSOLE","ASTRA_IMAGE_DELIVERY","ASTRA_SEO_AUTOMATION","ASTRA_AUTOMATION_EVIDENCE","ASTRA_BACKLINK_INTEGRITY","ASTRA_OPTIMIZER_OMEGA","ASTRA_NEWS_ELIGIBILITY"];
+  if (registry.bricks.length<baselineBrickIds.length) throw new Error("Registry shrinkage detected: expected at least "+baselineBrickIds.length+" ASTRA bricks");
+  const present=new Set(registry.bricks.map(b=>b.id));
+  const missingBaseline=baselineBrickIds.filter(id=>!present.has(id));
+  if (missingBaseline.length) throw new Error("STALE_REGISTRY_BASELINE missing="+missingBaseline.join(","));
   const core=["ASTRA_MASTER_GATE","ASTRA_BRICK_PROOF_GATE","ASTRA_NO_REPEAT","ASTRA_ZERO_COST","ASTRA_AUTOMATION_EVIDENCE"];
   for (const id of core) if (!registry.bricks.some(b => b.id===id)) throw new Error("Mandatory global brick removed: "+id);
   const signalFiles={
@@ -118,9 +142,40 @@ async function main() {
   const astraScripts=existsSync(scriptsDir)?readdirSync(scriptsDir,{withFileTypes:true})
     .filter(d=>d.isFile() && /^astra-.+\.(?:mjs|js|ts)$/.test(d.name) && !/\.test\./.test(d.name))
     .map(d=>"scripts/"+d.name):[];
+  // Per-script risk evidence must come from a fresh, actual isolated execution,
+  // with exact SHA-256 for every source. A filename in a config string is NOT proof.
+  let riskContract={status:"UNVERIFIED",verified:[],operationalUnverified:[],reasons:[]};
+  let riskPaths=new Set();
+  if(config.riskContractProof){
+    try{
+      const manifest=json(safePath(config.riskContractProof.manifest));
+      const items=manifest.scripts;
+      if(manifest.schema!=="astra-risk-scripts/v1"||!Array.isArray(items)||!items.length||
+         new Set(items.map(x=>x.path)).size!==items.length)throw Error("invalid-risk-manifest");
+      riskPaths=new Set(items.map(x=>x.path));
+      const file=safePath(config.riskContractProof.report);
+      if(!existsSync(file)||statSync(file).mtimeMs<Date.parse(startedAt)-2000)throw Error("missing-or-stale-contract-evidence");
+      const report=json(file);
+      if(report.schema!=="astra-risk-contract-proof/v1"||report.status!=="PASS"||
+         report.operationalStatus!=="UNVERIFIED"||report.items?.length!==items.length)throw Error("invalid-contract-report");
+      const map=new Map(report.items.map(x=>[x.path,x]));
+      if(map.size!==items.length)throw Error("duplicate-evidence-path");
+      for(const item of items){
+        const row=map.get(item.path),abs=safePath(item.path);
+        if(!row||!existsSync(abs)||row.risk!==item.risk||row.status!=="PASS"||
+           row.operationalStatus!=="UNVERIFIED"||row.safetyContract!=="DENY_OPERATION_IN_AUDIT_MODE"||
+           row.exitCode!==78||row.guardRefused!==true||row.workspaceClean!==true||
+           row.forbiddenAttempt!==false||row.codeSha256!==sha256(readFileSync(abs)))
+           throw Error("script-contract-unproven:"+item.path);
+      }
+      riskContract={status:"PASS_SAFETY_ONLY",verified:items.map(x=>x.path),
+        operationalUnverified:items.map(x=>x.path),reportSha256:sha256(readFileSync(file)),reasons:[]};
+    }catch(e){riskContract.reasons.push(e.message);}
+  }
   const evidenceBindings=JSON.stringify(config.checks);
   const untrackedScripts=astraScripts.filter(file=>{
     if(file==="scripts/astra-master-gate.mjs" || file==="scripts/astra-onboard-site.mjs") return false;
+    if(riskPaths.has(file))return !riskContract.verified.includes(file);
     if(evidenceBindings.includes(file)) return false;
     return !(typeof exemptions[file]==="string" && exemptions[file].trim().length>=24);
   });
@@ -134,14 +189,18 @@ async function main() {
     siteConfigSha256:sha256(readFileSync(configFile,"utf8")),
     effectiveCapabilities:[...capabilities],inferredCapabilities,
     summary:{pass:results.filter(x=>x.status==="PASS").length,na:results.filter(x=>x.status==="N/A").length,
-      fail:failures.length,unverified:unverified.length,unknownBindings:unknownBindings.length,untrackedScripts:untrackedScripts.length,invalidExemptions:invalidExemptions.length},
-    status:failures.length||unverified.length||unknownBindings.length||untrackedScripts.length||invalidExemptions.length?"FAIL":"PASS",unknownBindings,untrackedScripts,invalidExemptions,results};
+      fail:failures.length,unverified:unverified.length,unknownBindings:unknownBindings.length,untrackedScripts:untrackedScripts.length,invalidExemptions:invalidExemptions.length,
+      riskContractsVerified:riskContract.verified.length,riskOperationsUnverified:riskContract.operationalUnverified.length},
+    status:failures.length||unverified.length||unknownBindings.length||untrackedScripts.length||invalidExemptions.length||riskContract.reasons.length?"FAIL":"PASS",unknownBindings,untrackedScripts,invalidExemptions,riskContract,results};
   writeReport(report);
   console.log("ASTRA_MASTER_GATE",JSON.stringify({siteId:report.siteId,task,status:report.status,summary:report.summary,report:relative(root,reportFile)}));
   for (const r of [...failures,...unverified]) console.error("ASTRA_UNPROVEN_BRICK",r.id,r.status,r.reason||"check-failed");
+  for (const r of failures) for (const e of r.evidence||[]) if(e.status==="FAIL") console.error("ASTRA_EXECUTABLE_FAILURE",JSON.stringify({id:r.id,type:e.type,exitCode:e.exitCode??null,error:e.error||null,reason:e.reason||null}));
   if (unknownBindings.length) console.error("ASTRA_UNKNOWN_BINDINGS",unknownBindings.join(","));
   if (untrackedScripts.length) console.error("ASTRA_UNTRACKED_SCRIPTS",untrackedScripts.join(","));
   if (invalidExemptions.length) console.error("ASTRA_INVALID_EXEMPTIONS",invalidExemptions.join(","));
+  if(riskContract.reasons.length) console.error("ASTRA_RISK_CONTRACT_UNVERIFIED",riskContract.reasons.join(";"));
+  if(riskContract.operationalUnverified.length)console.log("ASTRA_RISK_ACTIVE_OPERATIONS_UNVERIFIED",riskContract.operationalUnverified.length);
   if (strict&&report.status!=="PASS") process.exitCode=1;
 }
 main().catch(e=>{

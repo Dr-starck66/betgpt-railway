@@ -1,4 +1,9 @@
 #!/usr/bin/env node
+// ASTRA isolated audit mode: deny all active operations BEFORE entrypoint execution.
+if (process.env.ASTRA_RISK_MODE === "audit") {
+  process.stderr.write("ASTRA_RISK_EFFECTS_BLOCKED "+JSON.stringify({entrypoint:"scripts/astra-deploy-sync-gate.mjs",status:"BLOCKED",operationStatus:"UNVERIFIED",exitCode:78})+"\n");
+  process.exit(78);
+}
 import { execFileSync } from "node:child_process";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

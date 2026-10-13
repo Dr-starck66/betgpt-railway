@@ -6,6 +6,26 @@ import path from "node:path";
 const root = process.cwd();
 const configPath = process.env.ASTRA_NEVER_FAIL_CONFIG || "config/astra-never-fail-build-guard.json";
 const cfg = JSON.parse(readFileSync(path.join(root, configPath), "utf8"));
+// Validate configuration only: do not launch build checks or write reports.
+if (process.argv.includes("--astra-dry-run")) {
+  const mandatory=cfg.requiredChecks;
+  const extra=cfg.extendedChecks??[];
+  const entries=[...(Array.isArray(mandatory)?mandatory:[]),...(Array.isArray(extra)?extra:[])];
+  const ids=entries.map(x=>x?.id);
+  const valid=Array.isArray(mandatory)&&mandatory.length>0&&Array.isArray(extra)&&
+    entries.every(x=>typeof x?.id==="string"&&x.id.trim()&&typeof x.command==="string"&&x.command.trim())&&
+    new Set(ids).size===ids.length;
+  if(!valid){
+    console.error("ASTRA_NEVER_FAIL_DRY_RUN_FAIL invalid configured checks");
+    process.exit(2);
+  }
+  console.log("ASTRA_NEVER_FAIL_DRY_RUN",JSON.stringify({
+    status:"INSPECTED_ONLY",executionStatus:"UNVERIFIED",
+    required:mandatory.length,extended:extra.length,commandsExecuted:0,filesWritten:0,networkCalls:0
+  }));
+  process.exit(0);
+}
+
 const extended = process.env.ASTRA_NEVER_FAIL_EXTENDED === "1" || process.argv.includes("--extended");
 const checks = [
   ...(Array.isArray(cfg.requiredChecks) ? cfg.requiredChecks : []),

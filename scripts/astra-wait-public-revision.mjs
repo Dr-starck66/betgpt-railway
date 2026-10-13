@@ -1,4 +1,9 @@
 #!/usr/bin/env node
+// ASTRA isolated audit mode: deny all active operations BEFORE entrypoint execution.
+if (process.env.ASTRA_RISK_MODE === "audit") {
+  process.stderr.write("ASTRA_RISK_EFFECTS_BLOCKED "+JSON.stringify({entrypoint:"scripts/astra-wait-public-revision.mjs",status:"BLOCKED",operationStatus:"UNVERIFIED",exitCode:78})+"\n");
+  process.exit(78);
+}
 
 const publicUrl = process.env.ASTRA_PUBLIC_REVISION_URL || "https://betgpt.live/api/astra-revision";
 const canonicalUrl =
