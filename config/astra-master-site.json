@@ -111,6 +111,15 @@
         "type": "command",
         "run": "node scripts/astra-risk-contract-proof.mjs --all --report=artifacts/astra-risk-preflight/contracts.json",
         "timeoutMs": 120000
+      },
+      {
+        "type": "command",
+        "run": "npm run test:sidewings",
+        "timeoutMs": 90000
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-sidewing-audit.mjs"
       }
     ],
     "ASTRA_DESIGN_INTELLIGENCE": [
