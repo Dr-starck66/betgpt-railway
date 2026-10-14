@@ -107,7 +107,7 @@ export function isAbsurdScoreClaim(text: string): boolean {
   return /\b(?:dix(?:[-\s](?:sept|huit|neuf))?|onze|douze|treize|quatorze|quinze|seize|vingt(?:[-\s](?:et[-\s])?(?:un|deux|trois|quatre|cinq|six|sept|huit|neuf))?|trente(?:[-\s](?:et[-\s])?(?:un|deux|trois|quatre|cinq|six|sept|huit|neuf))?|quarante(?:[-\s](?:et[-\s])?(?:un|deux|trois|quatre|cinq|six|sept|huit|neuf))?|cinquante(?:[-\s](?:et[-\s])?(?:un|deux|trois|quatre|cinq|six|sept|huit|neuf))?|soixante(?:[-\s](?:et[-\s])?(?:un|deux|trois|quatre|cinq|six|sept|huit|neuf))?|cent)\s*(?:[-–—:]|à|a)\s*z[eé]ro(?:s)?\b/i.test(text);
 }
 
-function localReply(last: string, desk: string, mode: PersonalityMode): string {
+export function localReply(last: string, desk: string, mode: PersonalityMode): string {
   const intent = classifyChatIntent(last);
   if (intent === "CASUAL") {
     return mode === "ROAST"
@@ -150,7 +150,22 @@ function localReply(last: string, desk: string, mode: PersonalityMode): string {
       mode === "ROAST"
         ? "J’ai les affiches du desk sous les yeux. Si aucun pick automatique ne passe, je te montre les données disponibles au lieu de te les redemander."
         : "J’ai déjà les affiches du desk. Je vais donc t’épargner l’étape où l’on fait semblant de ne pas les avoir : voici les données utilisables :";
-    return `${opener}\n\n${desk}`;
+    // A live fixture without a qualified bet is not a recommendation.
+    // Keep the daily response contract without inventing a score, price or bookmaker URL.
+    const availableDesk = desk
+      .split("\n")
+      .filter((line) => !line.startsWith("Instruction :"))
+      .join("\n")
+      .trim();
+    return [
+      availableDesk ? opener : "Aucune sélection du jour vérifiable n'est disponible dans le desk actuel.",
+      "",
+      "Niveau : INDISPONIBLE — aucun pari qualifié",
+      "Pari à prendre : aucun — données insuffisantes",
+      "Meilleure cote trouvée : indisponible",
+      "Raison : aucun pari 1N2 n'a passé les contrôles de sélection ; je refuse d'inventer une cote ou un bookmaker.",
+      availableDesk ? `\nDonnées factuelles du desk (sans recommandation) :\n${availableDesk}` : "",
+    ].filter(Boolean).join("\n");
   }
   if (intent === "GENERAL_SCHEDULE" || intent === "NAMED_MATCH") return desk;
   if (/\b(?:4-4-2|3-2-5|4-3-3|3-4-3|pressing|bloc|demi[- ]?espace|surnombre|piston|largeur|milieu|ligne défensive|ligne defensive)\b/i.test(last)) {
@@ -434,15 +449,6 @@ export async function completeChat(
         ? "Non : un combiné pareil n’est jamais « sûr à 100 % ». Douze sélections empilent douze occasions de faire exploser le ticket. Et « je mets tout », c’est précisément le moment où je te dis de réduire la mise, pas de jouer au cascadeur bancaire."
         : "Un combiné pareil n’est jamais sûr à 100 %. Douze sélections multiplient les points de rupture, et miser tout son budget sur un seul ticket est un risque disproportionné. Réduis la mise ou simplifie le ticket, avant que ton portefeuille ne demande l’asile politique.";
     return success(base, mode, last, recentRoasts);
-  }
-
-  // Tactical-system questions already have a precise deterministic answer in
-  // localReply. Route them before a small local model can replace that answer
-  // with generic prose lacking the actual overload/width/half-space mechanics.
-  const tacticalQuestion =
-    /\b(?:4-4-2|3-2-5|4-3-3|3-4-3|pressing|bloc|demi[- ]?espace|surnombre|piston|largeur|milieu|ligne défensive|ligne defensive)\b/i.test(last);
-  if (tacticalQuestion) {
-    return success(localReply(last, "", mode), mode, last, recentRoasts);
   }
 
   const mustGround = shouldGround(last);

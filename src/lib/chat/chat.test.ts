@@ -14,7 +14,7 @@ import { personalityBrief } from "./personality.ts";
 import { betgptPrompt } from "./prompt.ts";
 import { buildChallengeUrl, buildFacebookShareUrl, buildShareMoment, buildXShareUrl } from "./share.ts";
 import { renderDailyChatPick, selectDailyChatPick, selectDailyDataFallback } from "./daily-pick.ts";
-import { chatNeedsDesk, isAbsurdScoreClaim } from "./complete.ts";
+import { chatNeedsDesk, isAbsurdScoreClaim, localReply } from "./complete.ts";
 
 it("forces every legacy or missing mode to Sans filtre", () => {
   assert.equal(parseMode(undefined), "ROAST");
@@ -646,4 +646,26 @@ it("skips the live desk for pure conversation and tactics", () => {
 it("keeps the live desk for factual current football requests", () => {
   assert.equal(chatNeedsDesk("Qu'est-ce que tu mises aujourd'hui ?"), true);
   assert.equal(chatNeedsDesk("Quel est le prochain match de la France ?"), true);
+});
+
+it("daily pick with fixtures but no qualified odds returns a truthful structured no-bet result", () => {
+  const text = localReply(
+    "Qu'est-ce que tu mises aujourd'hui, et pourquoi ?",
+    "Matchs du jour disponibles : France – Italie · 20:45. Aucune cote bookmaker validée.",
+    "ROAST",
+  );
+  assert.match(text, /Niveau : INDISPONIBLE/);
+  assert.match(text, /Pari à prendre : aucun/);
+  assert.match(text, /Meilleure cote trouvée : indisponible/);
+  assert.match(text, /France – Italie/);
+  assert.doesNotMatch(text, /Lien pour parier :|https?:\/\//i);
+  assert.doesNotMatch(text, /Instruction :/);
+});
+
+it("daily pick without desk data does not claim fixtures or fabricate a betting selection", () => {
+  const text = localReply("Que mises-tu aujourd'hui ?", "", "ROAST");
+  assert.match(text, /Niveau : INDISPONIBLE/);
+  assert.match(text, /Pari à prendre : aucun/);
+  assert.match(text, /Meilleure cote trouvée : indisponible/);
+  assert.doesNotMatch(text, /J.ai les affiches du desk/);
 });
