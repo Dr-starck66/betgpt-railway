@@ -23,6 +23,148 @@
         "type": "command",
         "run": "node --check scripts/astra-master-gate.mjs",
         "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "node --test scripts/astra-script-source-proof.test.mjs",
+        "timeoutMs": 120000
+      },
+      {
+        "type": "command",
+        "run": "node scripts/astra-script-source-proof.mjs",
+        "timeoutMs": 120000
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-authority-citation-engine.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-broadcast-affiliate-guard.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-cloud-bridge.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-cloud-egress.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-content-omega-proof.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-deploy-sync-gate.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-editorial-authority-gate.ts"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-editorial-corpus-audit.ts"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-green-release-sync.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-heading-architecture-guard.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-launch-video-guard.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-launch-video.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-match-route-resilience-guard.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-mobile-parity-guard.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-model-max-guard.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-never-fail-build-guard.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-odds-truth-guard.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-public-autosync.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-public-proxy.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-public-route-gate.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-public-seo-readiness-gate.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-release-gate.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-resume-guard.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-safe-push.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-semantic-flow-autorepair.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-seo-self-heal.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-sidewing-audit.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-sitemap-runtime-sample-gate.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-social-amplifier.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-social-oauth-vault.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-software-heritage-archive.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-stamp-revision.mjs"
+      },
+      {
+        "type": "file",
+        "path": "scripts/astra-wait-public-revision.mjs"
       }
     ],
     "ASTRA_BRICK_PROOF_GATE": [
@@ -246,6 +388,20 @@
       {
         "type": "command",
         "run": "npm run test:semantic-flow",
+        "timeoutMs": 120000
+      }
+    ],
+    "ASTRA_NEWS_ELIGIBILITY": [
+      {
+        "type": "command",
+        "run": "node --experimental-strip-types --import ./scripts/ts-alias.mjs --test src/lib/editorial/source-integrity.test.ts src/lib/editorial/discover-launchpad.test.ts",
+        "timeoutMs": 120000
+      }
+    ],
+    "ASTRA_OPTIMIZER_OMEGA": [
+      {
+        "type": "command",
+        "run": "node --test scripts/astra-semantic-flow-autorepair.test.mjs scripts/astra-seo-self-heal.test.mjs",
         "timeoutMs": 120000
       }
     ]
