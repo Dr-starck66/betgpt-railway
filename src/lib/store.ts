@@ -24,7 +24,7 @@ let testMemory = false;
 function rememberKv(key: string, value: unknown): void {
   // Refresh insertion order so reads/writes retain the most recently used entries.
   mem.delete(key);
-  rememberKv(key, value);
+  mem.set(key, value);
   while (mem.size > MAX_KV_ENTRIES) {
     const oldest = mem.keys().next().value;
     if (oldest === undefined) break;
@@ -74,7 +74,7 @@ export async function kvGet<T>(key: string): Promise<T | null> {
 }
 
 export async function kvSet(key: string, value: unknown): Promise<void> {
-  mem.set(key, value);
+  rememberKv(key, value);
   const sql = await trySql();
   if (!sql) return;
   try {
