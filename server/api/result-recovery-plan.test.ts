@@ -2,7 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {planResultRecovery,RECOVERY_BATCH_LIMIT} from "./result-recovery-plan.ts";
 const now=Date.UTC(2026,9,15,12);
-const ticket=(id,days,kind="mise",result=undefined)=>({
+type PendingFixture = Parameters<typeof planResultRecovery>[0][number];
+const ticket=(id: string,days: number,kind: "mise" | "prono"="mise",result: "win" | "lose" | "void" | undefined=undefined): PendingFixture=>({
  matchId:id,kind,result,kickoff:new Date(now-days*864e5).toISOString(),
  league:"PL",home:"A",away:"B",
 });
