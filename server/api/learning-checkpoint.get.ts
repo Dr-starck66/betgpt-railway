@@ -3,7 +3,7 @@ import { hydrateTickets, loadTickets, syncTickets } from "../../src/engine/ticke
 import { buildLearningMemory } from "../../src/engine/learning-memory";
 import { ensureLive, getLiveSnapshot, recoverFixtureResults } from "../../src/engine/live";
 import { runEngine } from "../../src/engine/pipeline";
-import { createLearningCheckpointCoordinator } from "./learning-refresh-coordinator";
+import { createLearningCheckpointCoordinator } from "../../src/engine/learning-refresh-coordinator";
 
 async function recoverPendingResults(): Promise<{ targets: number; recovered: number }> {
   const now = Date.now();
