@@ -46,8 +46,9 @@ test("mandatory live refresh succeeds and feeds engine",async()=>{
  assert.equal(engines,1);
 });
 test("slow optional recovery degrades but no 503 and no duplicate attempt",async()=>{
- let engines=0,recoveryCalls=0,done;
- const pending=new Promise(resolve=>{done=resolve});
+ let engines=0,recoveryCalls=0;
+ let done: ((value: {targets:number; recovered:number}) => void) | undefined;
+ const pending=new Promise<{targets:number; recovered:number}>(resolve=>{done=resolve});
  const gate=createLearningCheckpointCoordinator({
   getSnapshot:()=>snap(),ensureLive:async()=>{throw Error("unwanted")},
   recoverPending:()=>{recoveryCalls++;return pending},
@@ -58,12 +59,13 @@ test("slow optional recovery degrades but no 503 and no duplicate attempt",async
  const b=await gate.refresh();
  assert.equal(b.recovery.status,"DEGRADED");assert.equal(recoveryCalls,1);
  assert.equal(engines,2);
- done({targets:1,recovered:1});
+ done!({targets:1,recovered:1});
  await pending;
 });
 test("upstream timeout is a truthful failure with bounded repeated calls",async()=>{
- let current=null,calls=0, clock=now,resolve;
- const pending=new Promise(r=>resolve=r);
+ let current=null,calls=0, clock=now;
+ let resolve: (() => void) | undefined;
+ const pending=new Promise<void>(r=>{resolve=r});
  const gate=createLearningCheckpointCoordinator({
   getSnapshot:()=>current,ensureLive:()=>{calls++;return pending},
   recoverPending:async()=>({targets:1,recovered:0}),runEngine:()=>{throw Error("bad")},
@@ -72,7 +74,7 @@ test("upstream timeout is a truthful failure with bounded repeated calls",async(
  await assert.rejects(gate.refresh(),/LIVE_TIMEOUT/);
  await assert.rejects(gate.refresh(),/COOLDOWN/);
  assert.equal(calls,1);
- resolve(undefined);
+ resolve!();
  await pending;
  clock+=101;
  await assert.rejects(gate.refresh(),/STALE_OR_EMPTY/);
