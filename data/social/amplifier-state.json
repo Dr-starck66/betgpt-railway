@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-15T03:56:03.591Z",
+      "lastCheckedAt": "2026-10-15T09:06:50.284Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -45,43 +45,48 @@
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-15T03:56:04.441Z",
+      "lastCheckedAt": "2026-10-15T09:06:50.766Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-15T03:56:06.304Z",
+      "lastCheckedAt": "2026-10-15T09:06:51.957Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
           "date": "2026-10-12T21:30:00+02:00",
           "seenAt": "2026-10-12T21:45:40.004Z"
+        },
+        "41021d6adb538d0ef6": {
+          "url": "https://www.bizarresexuality.com/news/cologne-robot-incident-teleoperation-safety-2026",
+          "date": "2026-10-15T08:35:00+02:00",
+          "seenAt": "2026-10-15T09:06:51.957Z"
         }
       },
       "sourceStatus": "VERIFIED"
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-15T03:56:06.905Z",
+      "lastCheckedAt": "2026-10-15T09:06:52.556Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-15T03:56:08.307Z",
+      "lastCheckedAt": "2026-10-15T09:06:53.479Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": false,
-      "lastCheckedAt": "2026-10-15T03:56:05.039Z",
+      "lastCheckedAt": "2026-10-15T09:06:51.071Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {}
     },
     "andaluztarija": {
       "bootstrapped": false,
-      "lastCheckedAt": "2026-10-15T03:56:07.445Z",
+      "lastCheckedAt": "2026-10-15T09:06:53.034Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {}
     }
@@ -109,6 +114,34 @@
       "imageUrl": "https://www.bizarresexuality.com/assets/news-inner-sky-physical-ai-2026-16x9.jpg",
       "text": "Inner Sky Labs Launches Physical AI Models and Kavach Safety Layer\nhttps://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#relationships #sexualhealth",
       "createdAt": "2026-10-12T21:45:40.185Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:41021d6adb538d0ef6": {
+      "id": "instagram:41021d6adb538d0ef6",
+      "siteId": "bizarre",
+      "network": "instagram",
+      "articleUrl": "https://www.bizarresexuality.com/news/cologne-robot-incident-teleoperation-safety-2026",
+      "imageUrl": "https://www.bizarresexuality.com/assets/news-cologne-robot-teleoperation-safety-2026.png",
+      "text": "Cologne Robot Incident Raises a Hard Safety Question: Who Controls the Machine?\n\nCologne police are investigating whether a robot involved in an alleged harassment incident was remotely controlled or preprogrammed. The case exposes practical safety, consent and evidence gaps for public-facing robots.\n\nhttps://www.bizarresexuality.com/news/cologne-robot-incident-teleoperation-safety-2026?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#relationships #sexualhealth #education #Cologne #Incident #Raises",
+      "createdAt": "2026-10-15T09:06:52.056Z",
+      "status": "WAIT_REVIEW",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:41021d6adb538d0ef6": {
+      "id": "x:41021d6adb538d0ef6",
+      "siteId": "bizarre",
+      "network": "x",
+      "articleUrl": "https://www.bizarresexuality.com/news/cologne-robot-incident-teleoperation-safety-2026",
+      "imageUrl": "https://www.bizarresexuality.com/assets/news-cologne-robot-teleoperation-safety-2026.png",
+      "text": "Cologne Robot Incident Raises a Hard Safety Question: Who Controls the Machine?\nhttps://www.bizarresexuality.com/news/cologne-robot-incident-teleoperation-safety-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#relationships #sexualhealth",
+      "createdAt": "2026-10-15T09:06:52.057Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,
