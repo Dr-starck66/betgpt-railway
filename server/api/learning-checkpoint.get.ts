@@ -4,30 +4,21 @@ import { buildLearningMemory } from "../../src/engine/learning-memory";
 import { ensureLive, getLiveSnapshot, recoverFixtureResults } from "../../src/engine/live";
 import { runEngine } from "../../src/engine/pipeline";
 import { createLearningCheckpointCoordinator } from "../../src/engine/learning-refresh-coordinator";
+import { planResultRecovery, type RecoveryCursor } from "./result-recovery-plan";
 
+// A rotating cursor prevents a permanently unresolved fixture from starving
+// older tickets. It remains runtime-local; no new service or persistent queue.
+let recoveryCursor: RecoveryCursor = { recent: 0, historical: 0 };
 async function recoverPendingResults(): Promise<{ targets: number; recovered: number }> {
-  const now = Date.now();
-  const seen = new Set<string>();
-  const targets = loadTickets()
-    .filter((row) => {
-      if (row.result) return false;
-      const kickoff = Date.parse(row.kickoff);
-      return Number.isFinite(kickoff) && kickoff <= now - 90 * 60_000 && now - kickoff <= 8 * 864e5;
-    })
-    .filter((row) => {
-      if (seen.has(row.matchId)) return false;
-      seen.add(row.matchId);
-      return true;
-    })
-    .map((row) => ({ matchId: row.matchId, kickoff: row.kickoff, league: row.league, home: row.home, away: row.away, competition: row.competition, competitionKey: row.competitionKey }));
-
-  if (!targets.length) return { targets: 0, recovered: 0 };
-  // Runs under a single-flight, three-second response budget. Let bounded
-  // provider retries complete in the background rather than failing the
-  // entire fresh learning checkpoint after a slow historical fixture.
-  const recovered = await recoverFixtureResults(targets);
+  const plan = planResultRecovery(loadTickets(), Date.now(), recoveryCursor);
+  recoveryCursor = plan.nextCursor;
+  if (!plan.targets.length) return { targets: 0, recovered: 0 };
+  // At most four requests per cycle, two provider workers and a short
+  // checkpoint response budget. Settlement requires independently verified
+  // final scores; unresolved tickets retain their original result=null.
+  const recovered = await recoverFixtureResults(plan.targets);
   if (recovered.length) syncTickets([], recovered, []);
-  return { targets: targets.length, recovered: recovered.length };
+  return { targets: plan.targets.length, recovered: recovered.length };
 }
 
 

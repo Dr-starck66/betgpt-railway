@@ -1220,7 +1220,7 @@ export async function recoverEspnResults(targets: ResultRecoveryTarget[]): Promi
   for (const target of targets) {
     if (!/^espn-\d{5,12}$/i.test(target.matchId)) continue;
     const kickoffMs = Date.parse(target.kickoff);
-    if (!Number.isFinite(kickoffMs) || kickoffMs > now - 90 * 60_000 || now - kickoffMs > 8 * 864e5) continue;
+    if (!Number.isFinite(kickoffMs) || kickoffMs > now - 90 * 60_000 || now - kickoffMs > 90 * 864e5) continue;
     unique.set(target.matchId, target);
   }
 
@@ -1244,10 +1244,9 @@ export async function recoverFixtureResults(targets: ResultRecoveryTarget[]): Pr
   const eligible = targets
     .filter((target) => {
       const kickoffMs = Date.parse(target.kickoff);
-      return Number.isFinite(kickoffMs) && kickoffMs <= now - 90 * 60_000 && now - kickoffMs <= 8 * 864e5;
+      return Number.isFinite(kickoffMs) && kickoffMs <= now - 90 * 60_000 && now - kickoffMs <= 90 * 864e5;
     })
-    .sort((a, b) => String(b.kickoff).localeCompare(String(a.kickoff)))
-    .slice(0, 8);
+    .slice(0, 4); // Caller owns the rotating priority order; never starve old fixtures.
 
   const direct = await recoverEspnResults(eligible);
   const foundIds = new Set(direct.map((match) => match.id));

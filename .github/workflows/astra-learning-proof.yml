@@ -19,6 +19,8 @@ on:
       - "src/engine/adaptive-learning.ts"
       - "src/engine/roi5-continuous-learning.ts"
       - "server/api/learning-checkpoint.get.ts"
+      - "server/api/result-recovery-plan.ts"
+      - "server/api/result-recovery-plan.test.ts"
       - "src/lib/editorial/run.server.ts"
       - ".github/workflows/astra-learning-proof.yml"
   push:
@@ -40,6 +42,8 @@ on:
       - "src/engine/adaptive-learning.ts"
       - "src/engine/roi5-continuous-learning.ts"
       - "server/api/learning-checkpoint.get.ts"
+      - "server/api/result-recovery-plan.ts"
+      - "server/api/result-recovery-plan.test.ts"
       - ".github/workflows/astra-learning-proof.yml"
   workflow_dispatch:
 
@@ -67,6 +71,7 @@ jobs:
           src/engine/learning-refresh-coordinator.test.ts
           src/engine/learn.test.ts
           src/engine/live-result-recovery.test.ts
+          server/api/result-recovery-plan.test.ts
           src/engine/roi5-continuous-learning.test.ts
           src/engine/adaptive-learning.test.ts
       - name: Typecheck
