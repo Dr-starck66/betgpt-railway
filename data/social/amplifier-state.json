@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-15T21:45:46.554Z",
+      "lastCheckedAt": "2026-10-15T21:54:41.101Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -45,13 +45,13 @@
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-15T21:45:47.049Z",
+      "lastCheckedAt": "2026-10-15T21:54:41.726Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-15T21:45:48.123Z",
+      "lastCheckedAt": "2026-10-15T21:54:43.150Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -68,31 +68,36 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-15T21:45:48.611Z",
+      "lastCheckedAt": "2026-10-15T21:54:44.045Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
           "date": "2026-10-15",
           "seenAt": "2026-10-15T21:45:48.611Z"
+        },
+        "a1d5be49819d7c551a": {
+          "url": "https://freehotels.info/news/en/premier-inn-whitbread-interim-results-traveller-impact-2026/",
+          "date": "Tue, 13 Oct 2026 00:00:00 GMT",
+          "seenAt": "2026-10-15T21:54:44.045Z"
         }
       },
       "sourceStatus": "VERIFIED"
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-15T21:45:49.312Z",
+      "lastCheckedAt": "2026-10-15T21:54:45.267Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": false,
-      "lastCheckedAt": "2026-10-15T21:45:47.217Z",
+      "lastCheckedAt": "2026-10-15T21:54:42.096Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {}
     },
     "andaluztarija": {
       "bootstrapped": false,
-      "lastCheckedAt": "2026-10-15T21:45:48.857Z",
+      "lastCheckedAt": "2026-10-15T21:54:44.616Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {}
     }
@@ -176,6 +181,34 @@
       "imageUrl": "https://freehotels.info/editorial/vignette-collection-greater-china-2026-1600x900.svg",
       "text": "Vignette Collection s’étend en Grande Chine : ce que l’annonce IHG change vraiment\nhttps://freehotels.info/news/fr/vignette-collection-grande-chine-2026/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#travel #hotels",
       "createdAt": "2026-10-15T21:45:48.701Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:a1d5be49819d7c551a": {
+      "id": "instagram:a1d5be49819d7c551a",
+      "siteId": "freehotels",
+      "network": "instagram",
+      "articleUrl": "https://freehotels.info/news/en/premier-inn-whitbread-interim-results-traveller-impact-2026/",
+      "imageUrl": "https://freehotels.info/editorial/premier-inn-whitbread-interim-results-traveller-impact-2026.svg",
+      "text": "Premier Inn’s 2026 Turnaround: What Whitbread’s Results Mean for Travellers\n\nWhitbread’s 13 October 2026 interim results show stronger hotel trading and a continuing shift toward a hotel-focused business. Here is what travellers can verify before booking.\n\nhttps://freehotels.info/news/en/premier-inn-whitbread-interim-results-traveller-impact-2026/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#travel #hotels #destinations #Premier #Turnaround #Whitbreads",
+      "createdAt": "2026-10-15T21:54:44.167Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:a1d5be49819d7c551a": {
+      "id": "x:a1d5be49819d7c551a",
+      "siteId": "freehotels",
+      "network": "x",
+      "articleUrl": "https://freehotels.info/news/en/premier-inn-whitbread-interim-results-traveller-impact-2026/",
+      "imageUrl": "https://freehotels.info/editorial/premier-inn-whitbread-interim-results-traveller-impact-2026.svg",
+      "text": "Premier Inn’s 2026 Turnaround: What Whitbread’s Results Mean for Travellers\nhttps://freehotels.info/news/en/premier-inn-whitbread-interim-results-traveller-impact-2026/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#travel #hotels",
+      "createdAt": "2026-10-15T21:54:44.168Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,
