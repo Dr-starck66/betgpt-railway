@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-14T23:54:12.495Z",
+      "lastCheckedAt": "2026-10-15T00:55:34.172Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -45,13 +45,13 @@
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-14T23:54:12.920Z",
+      "lastCheckedAt": "2026-10-15T00:55:34.732Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-14T23:54:14.119Z",
+      "lastCheckedAt": "2026-10-15T00:55:36.012Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -63,25 +63,25 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-14T23:54:14.540Z",
+      "lastCheckedAt": "2026-10-15T00:55:36.424Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-14T23:54:15.228Z",
+      "lastCheckedAt": "2026-10-15T00:55:37.321Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": false,
-      "lastCheckedAt": "2026-10-14T23:54:13.182Z",
+      "lastCheckedAt": "2026-10-15T00:55:35.137Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {}
     },
     "andaluztarija": {
       "bootstrapped": false,
-      "lastCheckedAt": "2026-10-14T23:54:14.735Z",
+      "lastCheckedAt": "2026-10-15T00:55:36.829Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {}
     }
