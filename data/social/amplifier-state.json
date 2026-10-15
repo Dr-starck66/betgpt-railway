@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-15T19:09:27.077Z",
+      "lastCheckedAt": "2026-10-15T21:45:46.554Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -45,13 +45,13 @@
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-15T19:09:27.865Z",
+      "lastCheckedAt": "2026-10-15T21:45:47.049Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-15T19:09:30.082Z",
+      "lastCheckedAt": "2026-10-15T21:45:48.123Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -68,25 +68,31 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-15T19:09:30.746Z",
-      "seen": {},
+      "lastCheckedAt": "2026-10-15T21:45:48.611Z",
+      "seen": {
+        "8d1925756df5539dba": {
+          "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
+          "date": "2026-10-15",
+          "seenAt": "2026-10-15T21:45:48.611Z"
+        }
+      },
       "sourceStatus": "VERIFIED"
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-15T19:09:32.827Z",
+      "lastCheckedAt": "2026-10-15T21:45:49.312Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": false,
-      "lastCheckedAt": "2026-10-15T19:09:28.659Z",
+      "lastCheckedAt": "2026-10-15T21:45:47.217Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {}
     },
     "andaluztarija": {
       "bootstrapped": false,
-      "lastCheckedAt": "2026-10-15T19:09:31.489Z",
+      "lastCheckedAt": "2026-10-15T21:45:48.857Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {}
     }
@@ -142,6 +148,34 @@
       "imageUrl": "https://www.bizarresexuality.com/assets/news-cologne-robot-teleoperation-safety-2026.png",
       "text": "Cologne Robot Incident Raises a Hard Safety Question: Who Controls the Machine?\nhttps://www.bizarresexuality.com/news/cologne-robot-incident-teleoperation-safety-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#relationships #sexualhealth",
       "createdAt": "2026-10-15T09:06:52.057Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:8d1925756df5539dba": {
+      "id": "instagram:8d1925756df5539dba",
+      "siteId": "freehotels",
+      "network": "instagram",
+      "articleUrl": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
+      "imageUrl": "https://freehotels.info/editorial/vignette-collection-greater-china-2026-1600x900.svg",
+      "text": "Vignette Collection s’étend en Grande Chine : ce que l’annonce IHG change vraiment\n\nIHG met en avant de nouveaux hôtels Vignette Collection à Chengdu, Chongqing, Shanghai, Beidaihe, Qiandao Lake, Sanya et Hong Kong. Analyse pratique sans inventer prix ni disponibilités.\n\nhttps://freehotels.info/news/fr/vignette-collection-grande-chine-2026/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#travel #hotels #destinations #Vignette #Collection #setend",
+      "createdAt": "2026-10-15T21:45:48.701Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:8d1925756df5539dba": {
+      "id": "x:8d1925756df5539dba",
+      "siteId": "freehotels",
+      "network": "x",
+      "articleUrl": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
+      "imageUrl": "https://freehotels.info/editorial/vignette-collection-greater-china-2026-1600x900.svg",
+      "text": "Vignette Collection s’étend en Grande Chine : ce que l’annonce IHG change vraiment\nhttps://freehotels.info/news/fr/vignette-collection-grande-chine-2026/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#travel #hotels",
+      "createdAt": "2026-10-15T21:45:48.701Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,
