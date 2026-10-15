@@ -32,11 +32,11 @@ test("no stale snapshot may masquerade as PASS",async()=>{
   runEngine:()=>{throw Error("must not run stale")},now:()=>now
  },policy);
  await assert.rejects(gate.refresh(),/STALE_OR_EMPTY/);
- current={...snap(),meta:{stale:true}};
+ current={...snap(),meta:{...snap().meta,stale:true}};
  await assert.rejects(gate.refresh(),/STALE_OR_EMPTY/);
 });
 test("mandatory live refresh succeeds and feeds engine",async()=>{
- let current=null, engines=0;
+ let current: ReturnType<typeof snap> | null=null, engines=0;
  const gate=createLearningCheckpointCoordinator({
   getSnapshot:()=>current,ensureLive:async()=>{current=snap();},
   recoverPending:async()=>({targets:2,recovered:2}),runEngine:()=>{engines++},now:()=>now
@@ -63,7 +63,7 @@ test("slow optional recovery degrades but no 503 and no duplicate attempt",async
  await pending;
 });
 test("upstream timeout is a truthful failure with bounded repeated calls",async()=>{
- let current=null,calls=0, clock=now;
+ let current: ReturnType<typeof snap> | null=null,calls=0, clock=now;
  let resolve: (() => void) | undefined;
  const pending=new Promise<void>(r=>{resolve=r});
  const gate=createLearningCheckpointCoordinator({
@@ -87,7 +87,7 @@ test("upstream timeout may use a genuinely fresh snapshot only with warning",asy
  },policy);
  const r=await gate.refresh();
  assert.equal(r.refresh.source,"FRESH_AFTER_TIMEOUT");
- assert.match(r.refresh.warning,/partial upstream/);
+ assert.match(r.refresh.warning ?? '',/partial upstream/);
 });
 test("freshness rejects invalid future and expired timestamps",()=>{
  assert.equal(usableLearningSnapshot(snap(now+1),now),false);
