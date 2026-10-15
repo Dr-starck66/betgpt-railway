@@ -60,7 +60,6 @@ export async function withinDeadline<T>(
       work,
       new Promise<never>((_, reject) => {
         timer = setTimeout(() => reject(new Error(code)), ms);
-        timer.unref?.();
       }),
     ]);
   } finally {
@@ -106,7 +105,7 @@ export function createLearningCheckpointCoordinator(
 
     let warning: string | undefined;
     try {
-      await withinDeadline(inFlightLive, policy.liveTimeoutMs, "ASTRA_LEARNING_LIVE_TIMEOUT");
+      await withinDeadline(inFlightLive!, policy.liveTimeoutMs, "ASTRA_LEARNING_LIVE_TIMEOUT");
     } catch (error) {
       lastLiveFailureAt = now();
       warning = error instanceof Error ? error.message : "ASTRA_LEARNING_UPSTREAM_ERROR";
@@ -137,7 +136,7 @@ export function createLearningCheckpointCoordinator(
       inFlightRecovery = operation;
     }
     try {
-      const outcome = await withinDeadline(inFlightRecovery, policy.recoveryTimeoutMs, "ASTRA_LEARNING_RECOVERY_TIMEOUT");
+      const outcome = await withinDeadline(inFlightRecovery!, policy.recoveryTimeoutMs, "ASTRA_LEARNING_RECOVERY_TIMEOUT");
       return { status: "PASS", ...outcome };
     } catch (error) {
       return {
