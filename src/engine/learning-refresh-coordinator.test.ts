@@ -80,7 +80,7 @@ test("upstream timeout is a truthful failure with bounded repeated calls",async(
  await assert.rejects(gate.refresh(),/STALE_OR_EMPTY/);
 });
 test("upstream timeout may use a genuinely fresh snapshot only with warning",async()=>{
- let current=null;
+ let current: ReturnType<typeof snap> | null=null;
  const gate=createLearningCheckpointCoordinator({
   getSnapshot:()=>current,ensureLive:async()=>{current=snap();throw Error("partial upstream failure")},
   recoverPending:async()=>({targets:0,recovered:0}),runEngine:()=>{},now:()=>now
