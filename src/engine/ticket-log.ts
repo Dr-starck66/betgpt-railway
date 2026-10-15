@@ -172,6 +172,7 @@ export function stablePublicEvidenceTickets(rows?: TicketRow[]): TicketRow[] {
 }
 
 let ticketsHydrated = false;
+let ticketsHydrating: Promise<void> | null = null;
 const RUNTIME_CHECKPOINT_URL =
   "https://raw.githubusercontent.com/Dr-starck66/betgpt-railway/runtime-memory/runtime-learning-checkpoint.json";
 
@@ -199,6 +200,7 @@ async function loadRuntimeCheckpoint(): Promise<TicketRow[]> {
         "user-agent": "BetGPT-Learning-Failover/2.0",
       },
       cache: "no-store",
+      signal: AbortSignal.timeout(4_000),
     });
     if (!res.ok) return [];
     return parseRuntimeCheckpointPayload(await res.json());
@@ -214,21 +216,29 @@ async function loadRuntimeCheckpoint(): Promise<TicketRow[]> {
  */
 export async function hydrateTickets(): Promise<void> {
   if (ticketsHydrated) return;
-  ticketsHydrated = true;
-
-  let merged = loadTickets();
-  const checkpoint = await loadRuntimeCheckpoint();
-  if (checkpoint.length) merged = mergeTickets(merged, checkpoint);
-
-  try {
-    const { kvGet } = await import("@/lib/store");
-    const remote = await kvGet<TicketRow[]>("tickets");
-    if (Array.isArray(remote) && remote.length) merged = mergeTickets(merged, parseRows(remote));
-  } catch {
-    /* preview / missing table */
-  }
-
-  MEM = stripFakeProof(compactTickets(merged));
+  if (ticketsHydrating) return ticketsHydrating;
+  // Hydration was previously flagged complete BEFORE its external fetches
+  // settled, making parallel learning checks race against partially loaded data.
+  let task: Promise<void>;
+  task = (async () => {
+    let merged = loadTickets();
+    const checkpoint = await loadRuntimeCheckpoint();
+    if (checkpoint.length) merged = mergeTickets(merged, checkpoint);
+    try {
+      const { kvGet } = await import("@/lib/store");
+      const remote = await kvGet<TicketRow[]>("tickets");
+      if (Array.isArray(remote) && remote.length) merged = mergeTickets(merged, parseRows(remote));
+    } catch {
+      /* preview / missing table */
+    }
+    // Merge anything committed to this instance while external hydration ran.
+    MEM = stripFakeProof(compactTickets(mergeTickets(merged, loadTickets())));
+    ticketsHydrated = true;
+  })().finally(() => {
+    if (ticketsHydrating === task) ticketsHydrating = null;
+  });
+  ticketsHydrating = task;
+  return task;
 }
 
 function save(rows: TicketRow[]): void {

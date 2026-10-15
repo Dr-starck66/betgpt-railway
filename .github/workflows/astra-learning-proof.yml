@@ -64,6 +64,7 @@ jobs:
           src/engine/competition-scope.test.ts
           src/engine/international-auto-feed.test.ts
           src/engine/learning-memory.test.ts
+          src/engine/learning-refresh-coordinator.test.ts
           src/engine/learn.test.ts
           src/engine/live-result-recovery.test.ts
           src/engine/roi5-continuous-learning.test.ts
