@@ -25,7 +25,15 @@ export type RecoverySummary = {
   error?: string;
 };
 
-export const LEARNING_REFRESH_POLICY = Object.freeze({
+export type LearningRefreshPolicy = {
+  maxLiveAgeMs: number;
+  liveTimeoutMs: number;
+  recoveryTimeoutMs: number;
+  failedLiveCooldownMs: number;
+  recoveryCooldownMs: number;
+};
+
+export const LEARNING_REFRESH_POLICY: Readonly<LearningRefreshPolicy> = Object.freeze({
   maxLiveAgeMs: 10 * 60_000,
   liveTimeoutMs: 12_000,
   recoveryTimeoutMs: 3_000,
@@ -77,7 +85,7 @@ type CoordinatorDependencies = {
 
 export function createLearningCheckpointCoordinator(
   deps: CoordinatorDependencies,
-  policy = LEARNING_REFRESH_POLICY,
+  policy: Readonly<LearningRefreshPolicy> = LEARNING_REFRESH_POLICY,
 ) {
   const now = deps.now ?? Date.now;
   let cycle: Promise<{ refresh: LearningRefreshSummary; recovery: RecoverySummary }> | null = null;
