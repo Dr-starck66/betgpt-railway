@@ -3,15 +3,7 @@ import { hydrateTickets, loadTickets, syncTickets } from "../../src/engine/ticke
 import { buildLearningMemory } from "../../src/engine/learning-memory";
 import { ensureLive, getLiveSnapshot, recoverFixtureResults } from "../../src/engine/live";
 import { runEngine } from "../../src/engine/pipeline";
-
-const REFRESH_TIMEOUT_MS = 18_000;
-
-function timeout<T>(promise: Promise<T>, ms: number, code: string): Promise<T> {
-  return Promise.race([
-    promise,
-    new Promise<never>((_, reject) => setTimeout(() => reject(new Error(code)), ms)),
-  ]);
-}
+import { createLearningCheckpointCoordinator } from "./learning-refresh-coordinator";
 
 async function recoverPendingResults(): Promise<{ targets: number; recovered: number }> {
   const now = Date.now();
@@ -30,32 +22,28 @@ async function recoverPendingResults(): Promise<{ targets: number; recovered: nu
     .map((row) => ({ matchId: row.matchId, kickoff: row.kickoff, league: row.league, home: row.home, away: row.away, competition: row.competition, competitionKey: row.competitionKey }));
 
   if (!targets.length) return { targets: 0, recovered: 0 };
-  const recovered = await timeout(
-    recoverFixtureResults(targets),
-    14_000,
-    "ASTRA_RESULT_RECOVERY_TIMEOUT",
-  );
+  // Runs under a single-flight, three-second response budget. Let bounded
+  // provider retries complete in the background rather than failing the
+  // entire fresh learning checkpoint after a slow historical fixture.
+  const recovered = await recoverFixtureResults(targets);
   if (recovered.length) syncTickets([], recovered, []);
   return { targets: targets.length, recovered: recovered.length };
 }
 
-async function refreshBeforeCheckpoint(): Promise<{ targets: number; recovered: number }> {
-  const [, recovery] = await Promise.all([
-    timeout(ensureLive().then(() => undefined), REFRESH_TIMEOUT_MS, "ASTRA_LEARNING_REFRESH_TIMEOUT"),
-    recoverPendingResults(),
-  ]);
-  // runEngine() synchronously settles tickets against the refreshed live/history
-  // snapshot through syncTickets() before the checkpoint reads the ledger.
-  runEngine();
-  return recovery;
-}
+
+const checkpointCoordinator = createLearningCheckpointCoordinator({
+  ensureLive,
+  getSnapshot: getLiveSnapshot,
+  recoverPending: recoverPendingResults,
+  runEngine,
+});
 
 export default defineEventHandler(async (event) => {
   await hydrateTickets();
 
-  let recovery = { targets: 0, recovered: 0 };
+  let cycle: Awaited<ReturnType<typeof checkpointCoordinator.refresh>>;
   try {
-    recovery = await refreshBeforeCheckpoint();
+    cycle = await checkpointCoordinator.refresh();
   } catch (error) {
     setResponseStatus(event, 503);
     setHeader(event, "cache-control", "no-store, no-cache, must-revalidate, max-age=0");
@@ -68,7 +56,7 @@ export default defineEventHandler(async (event) => {
         status: "FAIL",
         error: error instanceof Error ? error.message : String(error),
       },
-      recovery,
+      recovery: { status: "UNVERIFIED", targets: 0, recovered: 0 },
       tickets: [],
       learning: null,
     };
@@ -99,12 +87,8 @@ export default defineEventHandler(async (event) => {
     schema: "astra-betgpt-runtime-checkpoint/v2",
     generatedAt: new Date().toISOString(),
     source: "betgpt-runtime",
-    refresh: {
-      status: "PASS",
-      liveFetchedAt: live?.fetchedAt ?? null,
-      liveAsOf: live?.meta?.asOf ?? null,
-    },
-    recovery,
+    refresh: cycle.refresh,
+    recovery: cycle.recovery,
     capture: {
       upcomingPredictions: upcomingPredictions.length,
       upcomingByCompetition,
