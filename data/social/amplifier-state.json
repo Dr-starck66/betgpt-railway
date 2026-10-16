@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-16T09:51:22.553Z",
+      "lastCheckedAt": "2026-10-16T14:05:03.848Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -45,13 +45,13 @@
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-16T09:51:23.067Z",
+      "lastCheckedAt": "2026-10-16T14:05:04.274Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-16T09:51:24.366Z",
+      "lastCheckedAt": "2026-10-16T14:05:05.207Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -68,7 +68,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-16T09:51:25.000Z",
+      "lastCheckedAt": "2026-10-16T14:05:05.589Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -85,21 +85,21 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-16T09:51:25.668Z",
+      "lastCheckedAt": "2026-10-16T14:05:06.318Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
-      "bootstrapped": false,
-      "lastCheckedAt": "2026-10-16T09:51:23.403Z",
-      "sourceStatus": "BLOCKED_SOURCE",
-      "seen": {}
+      "bootstrapped": true,
+      "lastCheckedAt": "2026-10-16T14:05:04.632Z",
+      "seen": {},
+      "sourceStatus": "VERIFIED"
     },
     "andaluztarija": {
-      "bootstrapped": false,
-      "lastCheckedAt": "2026-10-16T09:51:25.171Z",
-      "sourceStatus": "BLOCKED_SOURCE",
-      "seen": {}
+      "bootstrapped": true,
+      "lastCheckedAt": "2026-10-16T14:05:05.992Z",
+      "seen": {},
+      "sourceStatus": "VERIFIED"
     }
   },
   "jobs": {
