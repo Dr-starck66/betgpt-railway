@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-16T00:47:29.807Z",
+      "lastCheckedAt": "2026-10-16T04:25:41.613Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -45,13 +45,13 @@
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-16T00:47:30.385Z",
+      "lastCheckedAt": "2026-10-16T04:25:42.012Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-16T00:47:31.624Z",
+      "lastCheckedAt": "2026-10-16T04:25:42.904Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -68,7 +68,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-16T00:47:32.535Z",
+      "lastCheckedAt": "2026-10-16T04:25:43.408Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -85,19 +85,19 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-16T00:47:33.110Z",
+      "lastCheckedAt": "2026-10-16T04:25:44.115Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": false,
-      "lastCheckedAt": "2026-10-16T00:47:30.563Z",
+      "lastCheckedAt": "2026-10-16T04:25:42.300Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {}
     },
     "andaluztarija": {
       "bootstrapped": false,
-      "lastCheckedAt": "2026-10-16T00:47:32.691Z",
+      "lastCheckedAt": "2026-10-16T04:25:43.704Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {}
     }
