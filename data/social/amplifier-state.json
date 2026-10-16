@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-16T18:00:50.268Z",
+      "lastCheckedAt": "2026-10-16T18:49:52.876Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -45,14 +45,13 @@
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-16T18:00:50.579Z",
-      "seen": {},
-      "sourceStatus": "VERIFIED"
+      "lastCheckedAt": "2026-10-16T18:49:53.477Z",
+      "sourceStatus": "BLOCKED_SOURCE",
+      "seen": {}
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-16T18:00:51.915Z",
-      "sourceStatus": "BLOCKED_SOURCE",
+      "lastCheckedAt": "2026-10-16T18:49:54.238Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -64,12 +63,12 @@
           "date": "2026-10-15T08:35:00+02:00",
           "seenAt": "2026-10-15T09:06:51.957Z"
         }
-      }
+      },
+      "sourceStatus": "VERIFIED"
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-16T18:00:52.436Z",
-      "sourceStatus": "BLOCKED_SOURCE",
+      "lastCheckedAt": "2026-10-16T18:49:54.546Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -81,25 +80,26 @@
           "date": "Tue, 13 Oct 2026 00:00:00 GMT",
           "seenAt": "2026-10-15T21:54:44.045Z"
         }
-      }
+      },
+      "sourceStatus": "VERIFIED"
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-16T18:00:53.317Z",
+      "lastCheckedAt": "2026-10-16T18:49:55.059Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-16T18:00:50.894Z",
+      "lastCheckedAt": "2026-10-16T18:49:53.724Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-16T18:00:52.926Z",
-      "sourceStatus": "BLOCKED_SOURCE",
-      "seen": {}
+      "lastCheckedAt": "2026-10-16T18:49:54.825Z",
+      "seen": {},
+      "sourceStatus": "VERIFIED"
     }
   },
   "jobs": {
