@@ -41,7 +41,7 @@ export function blogArticleLd(a: BlogArticle) {
         mainEntityOfPage: url,
         articleSection: a.section,
         keywords: a.keywords,
-        wordCount: Math.max(400, a.lead.length + a.paragraphs.reduce((n, p) => n + p.body.length, 0)),
+        wordCount: [a.lead, ...a.paragraphs.map((p) => p.body), ...a.faq.map((f) => f.a)].join(" ").trim().split(/\s+/).filter(Boolean).length,
         articleBody: [a.lead, ...a.paragraphs.map((p) => `${p.h2}. ${p.body}`), ...a.faq.map((f) => `${f.q} ${f.a}`)].join("\n\n"),
         author: { "@type": "Organization", name: "Rédaction BetGPT", url: `${SITE_URL}/redaction` },
         publisher: {
