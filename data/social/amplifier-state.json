@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-17T13:14:52.320Z",
+      "lastCheckedAt": "2026-10-17T14:11:17.376Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -45,13 +45,13 @@
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-17T13:14:53.116Z",
+      "lastCheckedAt": "2026-10-17T14:11:17.930Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-17T13:14:55.119Z",
+      "lastCheckedAt": "2026-10-17T14:11:19.112Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -68,8 +68,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-17T13:14:55.757Z",
-      "sourceStatus": "BLOCKED_SOURCE",
+      "lastCheckedAt": "2026-10-17T14:11:19.692Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -81,25 +80,26 @@
           "date": "Tue, 13 Oct 2026 00:00:00 GMT",
           "seenAt": "2026-10-15T21:54:44.045Z"
         }
-      }
+      },
+      "sourceStatus": "VERIFIED"
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-17T13:14:57.216Z",
-      "sourceStatus": "BLOCKED_SOURCE",
-      "seen": {}
+      "lastCheckedAt": "2026-10-17T14:11:20.666Z",
+      "seen": {},
+      "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-17T13:14:53.905Z",
+      "lastCheckedAt": "2026-10-17T14:11:18.397Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-17T13:14:56.560Z",
-      "seen": {},
-      "sourceStatus": "VERIFIED"
+      "lastCheckedAt": "2026-10-17T14:11:20.124Z",
+      "sourceStatus": "BLOCKED_SOURCE",
+      "seen": {}
     }
   },
   "jobs": {
