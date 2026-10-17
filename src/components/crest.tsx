@@ -64,6 +64,9 @@ export function Crest({
       width={size}
       height={size}
       referrerPolicy="no-referrer"
+      loading="lazy"
+      decoding="async"
+      fetchPriority="low"
       className={cn("shrink-0 rounded-sm bg-white object-contain p-0.5")}
       style={{ width: size, height: size }}
       data-filename={seo.filename}
