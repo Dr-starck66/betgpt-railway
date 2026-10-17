@@ -279,6 +279,7 @@ const COVERS: Record<string, CoverSpec> = {
 };
 
 export function blogCover(a: BlogArticle): BlogImg {
+  if (a.cover) return blogImageSeo(a.cover, `Photographie de football illustrant l'analyse tactique de ${a.h1} : il ne s'agit pas d'un portrait du joueur`, `Illustration de football consacrée à l'analyse du jeu, et non photographie de ce joueur.`);
   const spec = COVERS[a.slug];
   const src = `/blog/discover/${a.slug}.jpg`;
   if (!spec) {
