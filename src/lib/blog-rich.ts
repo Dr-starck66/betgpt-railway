@@ -1,6 +1,7 @@
 import type { BlogArticle } from "@/lib/blog";
 import { CLUSTER_MEILLEUR_SITE, CLUSTER_PRONO_GRATUIT, CLUSTER_XG } from "@/lib/blog";
 import { blogImageSeo, type ImageSeo } from "@/lib/image-seo";
+import { PLAYER_BIOGRAPHIES } from "@/lib/player-biographies";
 
 export type BlogImg = ImageSeo;
 
@@ -300,6 +301,10 @@ export function blogInline(a: BlogArticle): BlogImg {
 }
 
 export function blogTakeaways(a: BlogArticle): string[] {
+  if (a.cluster?.startsWith("joueur-")) {
+    const b = PLAYER_BIOGRAPHIES[a.cluster.slice("joueur-".length)];
+    if (b) return [b.born.split(". ").slice(0,2).join(". "), b.memorable.split(". ").slice(0,2).join(". "), b.football.split(". ").slice(0,2).join(". ")];
+  }
   return [
     a.lead.replace(/\s+/g, " ").trim(),
     a.paragraphs[0]?.body.split(". ").slice(0, 1).join(". ") ?? "Le desk ne invente pas les matchs.",
@@ -310,6 +315,23 @@ export function blogTakeaways(a: BlogArticle): string[] {
 export type BlogTable = { caption: string; headers: string[]; rows: string[][] };
 
 export function blogTable(a: BlogArticle): BlogTable {
+  if (a.cluster?.startsWith("joueur-")) {
+    const b = PLAYER_BIOGRAPHIES[a.cluster.slice("joueur-".length)];
+    if (b) {
+      const excerpt = (text: string) => text.split(". ").slice(0, 2).join(". ").replace(/\\.$/, "") + ".";
+      return {
+        caption: "Les grandes étapes de la carrière",
+        headers: ["Chapitre", "À retenir"],
+        rows: [
+          ["Les origines", excerpt(b.born)],
+          ["Les débuts professionnels", excerpt(b.journey)],
+          ["La grande soirée", excerpt(b.memorable)],
+          ["En équipe nationale", excerpt(b.international)],
+          ["Son jeu", excerpt(b.football)],
+        ],
+      };
+    }
+  }
   if (a.cluster === CLUSTER_MEILLEUR_SITE) {
     return {
       caption: "Comment juger un site de paris sportif en ligne (France)",
