@@ -9,7 +9,7 @@ import type { BlogArticle } from "@/lib/blog";
 
 export const PLAYER_RANKING_SOURCE = "https://sportune.20minutes.fr/mbappe-4e-les-10-joueurs-du-mondial-2026-les-plus-recherches-sur-google-404710";
 export const PLAYER_EDITORIAL_SERIES = "Recherches Google football : étude publiée en juin 2026, estimations moyennes historiques et non tendance temps réel";
-const START = Date.parse("2026-10-17T08:00:00.000Z");
+const START = Date.parse("2026-10-17T05:40:00.000Z");
 const TWO_DAYS = 48 * 60 * 60 * 1000;
 
 // Bespoke scouting notes: interpretive journalism; no invented current-season statistics.
