@@ -1,5 +1,5 @@
 import type { BlogArticle } from "@/lib/blog";
-import { BLOG } from "@/lib/blog";
+import { publishedBlogArticles } from "@/lib/blog";
 import { blogCover, blogInline } from "@/lib/blog-rich";
 import { BRAND_LOGO, imageObjectLd } from "@/lib/image-seo";
 import { SITE_URL } from "@/lib/programmatic";
@@ -12,7 +12,7 @@ export function blogHubLd() {
     url: `${SITE_URL}/blog`,
     inLanguage: "fr-FR",
     publisher: { "@type": "NewsMediaOrganization", name: "BetGPT", url: SITE_URL },
-    blogPost: BLOG.map((a) => ({
+    blogPost: publishedBlogArticles().map((a) => ({ 
       "@type": "BlogPosting",
       headline: a.h1,
       url: `${SITE_URL}/blog/${a.slug}`,
@@ -31,7 +31,7 @@ export function blogArticleLd(a: BlogArticle) {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "NewsArticle",
+        "@type": a.isNews === true ? "NewsArticle" : "Article",
         headline: a.h1,
         description: a.lead,
         datePublished: a.published,
