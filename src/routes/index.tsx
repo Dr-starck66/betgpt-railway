@@ -265,6 +265,15 @@ function Home() {
         </Link>
       </section>
 
+      <aside className="rounded-2xl border border-line bg-white px-5 py-4 text-sm leading-relaxed text-muted" aria-label="Ressources sportives complémentaires">
+        Pour suivre aussi les scores NBA, NFL, NHL et MLB et retrouver des guides vers les diffuseurs officiels,
+        consultez le guide sportif indépendant{" "}
+        <a href="https://streameasthub.com/" className="font-semibold text-link underline underline-offset-2 hover:text-paper">
+          streameast
+        </a>
+        .
+      </aside>
+
       <HomeHunter />
 
       <LatestNews published={data.news.published} planned={data.news.planned} />
