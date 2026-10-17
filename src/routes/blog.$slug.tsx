@@ -70,7 +70,7 @@ function ArticlePage() {
         </Link>
       </p>
       <header>
-        <p className="text-[11px] uppercase tracking-wider text-muted">{a.section} · 8 sept. 2026 · 6 min</p>
+        <p className="text-[11px] uppercase tracking-wider text-muted">{a.section} · {new Date(a.published).toLocaleDateString("fr-FR", { timeZone: "Europe/Paris", day: "numeric", month: "long", year: "numeric" })}</p>
         <h1 className="mt-1 text-3xl font-semibold tracking-tight">{a.h1}</h1>
         <p className="seo-answer mt-3 text-base leading-relaxed text-paper">{a.lead}</p>
       </header>
