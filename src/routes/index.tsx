@@ -276,9 +276,12 @@ function Home() {
 
       <HomeHunter />
 
-      <LatestNews published={data.news.published} planned={data.news.planned} />
+      {/* All news markup remains server-rendered/indexable; only offscreen paint is deferred. */}
+      <div className="html-first-defer-paint">
+        <LatestNews published={data.news.published} planned={data.news.planned} />
+      </div>
 
-      <section className="space-y-5">
+      <section className="html-first-defer-paint space-y-5">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
           <div>
             <p className="eyebrow">Calendrier éditorial et data</p>
@@ -329,7 +332,9 @@ function Home() {
 
       {data.dailyBest ? <DailyBest prediction={data.dailyBest.prediction} market={data.dailyBest.market} /> : null}
 
-      <CoconMesh {...meshHub("/", "Accueil football", matches, "prono")} />
+      <div className="html-first-defer-paint">
+        <CoconMesh {...meshHub("/", "Accueil football", matches, "prono")} />
+      </div>
     </div>
   );
 }
