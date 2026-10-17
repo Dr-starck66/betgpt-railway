@@ -37,6 +37,29 @@ function hasGlobbedMigrations(root: string): boolean {
  * migrations — no schema to apply — skips it entirely rather than paying for a
  * PGLite instance it never queries.
  */
+/**
+ * Keep critical fonts on the same HTTPS origin. The tracked .grok originals
+ * are copied into Vite's public assets before the build copies public/.
+ * This removes an entire blocking third-party font stylesheet and DNS hop.
+ */
+function selfHostBetgptFonts(): Plugin {
+  return {
+    name: "betgpt-selfhost-fonts",
+    configResolved(config) {
+      const source = join(config.root, ".grok", "fonts");
+      const target = join(config.root, "public", "fonts");
+      const names = ["Inter-Medium.woff2", "Inter-SemiBold.woff2", "Inter-Bold.woff2"];
+      for (const name of names) {
+        if (!existsSync(join(source, name))) {
+          throw new Error(`[betgpt-selfhost-fonts] missing tracked font asset: ${name}`);
+        }
+      }
+      mkdirSync(target, { recursive: true });
+      for (const name of names) copyFileSync(join(source, name), join(target, name));
+    },
+  };
+}
+
 function pgliteBootstrapPlugin(): Plugin {
   return {
     name: "app-builder:pglite-bootstrap",
@@ -321,6 +344,7 @@ export default defineConfig(({ command, isPreview }) => ({
   },
   resolve: { tsconfigPaths: true },
   plugins: [
+    selfHostBetgptFonts(),
     pgliteBootstrapPlugin(),
     pgliteVercelAssetsPlugin(),
     nodeBuiltinBrowserShim(),
