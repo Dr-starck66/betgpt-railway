@@ -32,6 +32,13 @@ export function SeoImg({
       fetchPriority={priority ? "high" : "low"}
       data-filename={seo.filename}
       className={className}
+      onError={(e) => {
+        const node = e.currentTarget;
+        if (seo.fallbackSrc && node.dataset.photoFallback !== "used" && node.src !== seo.fallbackSrc) {
+          node.dataset.photoFallback = "used";
+          node.src = seo.fallbackSrc;
+        }
+      }}
       {...rest}
     />
   );
@@ -44,6 +51,9 @@ export function SeoImg({
       <meta itemProp="contentUrl" content={seo.src} />
       <figcaption itemProp="caption" className="px-3 py-2 text-xs leading-relaxed text-muted">
         {seo.caption}
+        {seo.creditUrl && seo.licenseUrl ? (
+          <> <a href={seo.creditUrl} rel="noopener noreferrer external" target="_blank" className="underline">Source et auteur</a> · <a href={seo.licenseUrl} rel="noopener noreferrer external" target="_blank" className="underline">Licence Creative Commons</a></>
+        ) : null}
       </figcaption>
     </figure>
   );
