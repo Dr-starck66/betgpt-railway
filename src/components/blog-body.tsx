@@ -99,7 +99,7 @@ export function BlogBody({ article: a }: { article: BlogArticle }) {
           <section key={id} id={id} className="space-y-4">
             <h2 className="text-xl font-semibold tracking-tight">{p.h2}</h2>
             <p className="text-sm leading-relaxed text-paper">{linkify(p.body)}</p>
-            {i === 0 ? <BlogFigure img={inline} /> : null}
+            {i === 0 && !a.cluster?.startsWith("joueur-") ? <BlogFigure img={inline} /> : null}
             {subs.map((s) => (
               <div key={s.h3}>
                 <h3 className="text-base font-semibold text-paper" id={slugHeading(s.h3)}>
