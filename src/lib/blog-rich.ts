@@ -1,6 +1,7 @@
 import type { BlogArticle } from "@/lib/blog";
 import { CLUSTER_MEILLEUR_SITE, CLUSTER_PRONO_GRATUIT, CLUSTER_XG } from "@/lib/blog";
 import { blogImageSeo, type ImageSeo } from "@/lib/image-seo";
+import { playerPhoto } from "@/lib/player-photo-rights";
 import { PLAYER_BIOGRAPHIES } from "@/lib/player-biographies";
 
 export type BlogImg = ImageSeo;
@@ -280,6 +281,15 @@ const COVERS: Record<string, CoverSpec> = {
 };
 
 export function blogCover(a: BlogArticle): BlogImg {
+  const photo = a.cluster?.startsWith("joueur-") ? playerPhoto(a.cluster.slice(7)) : undefined;
+  if (photo) return {
+    ...blogImageSeo(photo.src, photo.description, `Photo de ${photo.player} : ${photo.credit} / Wikimedia Commons (${photo.license}).`),
+    width: photo.width, height: photo.height,
+    credit: `${photo.credit} / Wikimedia Commons`,
+    creditUrl: photo.sourcePage,
+    licenseUrl: photo.licenseUrl,
+    fallbackSrc: photo.fallbackSrc,
+  };
   if (a.cover) return blogImageSeo(a.cover, `Photographie de football illustrant l'analyse tactique de ${a.h1} : il ne s'agit pas d'un portrait du joueur`, `Illustration de football consacrée à l'analyse du jeu, et non photographie de ce joueur.`);
   const spec = COVERS[a.slug];
   const src = `/blog/discover/${a.slug}.jpg`;
