@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-17T17:23:09.590Z",
+      "lastCheckedAt": "2026-10-17T18:51:52.608Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -45,13 +45,13 @@
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-17T17:23:10.401Z",
+      "lastCheckedAt": "2026-10-17T18:51:53.033Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-17T17:23:12.497Z",
+      "lastCheckedAt": "2026-10-17T18:51:53.984Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {
         "113acfc5949a8ca9ca": {
@@ -68,7 +68,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-17T17:23:13.468Z",
+      "lastCheckedAt": "2026-10-17T18:51:54.527Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -85,19 +85,19 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-17T17:23:14.942Z",
-      "seen": {},
-      "sourceStatus": "VERIFIED"
+      "lastCheckedAt": "2026-10-17T18:51:55.265Z",
+      "sourceStatus": "BLOCKED_SOURCE",
+      "seen": {}
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-17T17:23:11.196Z",
+      "lastCheckedAt": "2026-10-17T18:51:53.445Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-17T17:23:14.224Z",
+      "lastCheckedAt": "2026-10-17T18:51:54.883Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     }
