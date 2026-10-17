@@ -234,6 +234,18 @@
   }
 }
 
+/*
+ * Below-the-fold HTML stays in the SSR response (Google sees real text and
+ * links) while Chromium may skip its layout/paint work until scrolling near.
+ * Scope narrowly to editorial/match sections, never the hero or navigation.
+ */
+@supports (content-visibility: auto) {
+  .html-first-defer-paint {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 640px;
+  }
+}
+
 /* Keep navigation clear of mobile safe areas without masking page overflow. */
 .app-shell {
   padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
