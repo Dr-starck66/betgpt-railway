@@ -1149,7 +1149,7 @@ for (const p of PLAYER_PROFILES) {
   CLUSTERS["joueur-" + p.slug] = {
     title: "Dossier joueur : " + p.name,
     pillar: p.slug + "-portrait-2026",
-    pillarH1: p.name + " : portrait, jeu et clés tactiques (2026)",
+    pillarH1: p.name + " : son histoire, ses clubs et ses grands moments",
   };
 }
 
