@@ -1,4 +1,4 @@
-import { allPlayerCocoonArticles } from "@/lib/player-cocoons";
+import { allPlayerCocoonArticles, PLAYER_PROFILES } from "@/lib/player-cocoons";
 
 export type BlogArticle = {
   slug: string;
@@ -1145,6 +1145,13 @@ export const BLOG: BlogArticle[] = [
 
 // Ten topic clusters: 1 pillar + 3 distinct satellites apiece.
 BLOG.push(...allPlayerCocoonArticles());
+for (const p of PLAYER_PROFILES) {
+  CLUSTERS["joueur-" + p.slug] = {
+    title: "Dossier joueur : " + p.name,
+    pillar: p.slug + "-portrait-2026",
+    pillarH1: p.name + " : portrait, jeu et clés tactiques (2026)",
+  };
+}
 
 export function publishedBlogArticles(now = Date.now()): BlogArticle[] {
   return BLOG.filter((a) => !a.releaseAt || Date.parse(a.releaseAt) <= now);
