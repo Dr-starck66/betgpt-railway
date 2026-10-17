@@ -177,7 +177,7 @@ function Home() {
 
             {featuredStory ? (
               <a href={featuredStory.href} className="mt-5 block overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/8 transition hover:bg-white/10">
-                <img src={featuredStory.image} alt={featuredStory.alt} width={1200} height={675} className="aspect-[16/8.5] w-full object-cover" loading="lazy" />
+                <img src={featuredStory.image} alt={featuredStory.alt} width={1200} height={675} className="aspect-[16/8.5] w-full object-cover" loading="lazy" decoding="async" fetchPriority="low" />
                 <div className="p-4 sm:p-5">
                   <div className="flex flex-wrap gap-2 text-[11px] font-bold uppercase tracking-[0.14em] text-sage">
                     <span>{featuredStory.category}</span><span className="text-white/45">{featuredStory.time}</span>
