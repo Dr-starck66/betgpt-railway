@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-17T18:51:52.608Z",
+      "lastCheckedAt": "2026-10-17T19:37:52.886Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -45,14 +45,13 @@
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-17T18:51:53.033Z",
+      "lastCheckedAt": "2026-10-17T19:37:53.191Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-17T18:51:53.984Z",
-      "sourceStatus": "BLOCKED_SOURCE",
+      "lastCheckedAt": "2026-10-17T19:37:53.816Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -64,11 +63,12 @@
           "date": "2026-10-15T08:35:00+02:00",
           "seenAt": "2026-10-15T09:06:51.957Z"
         }
-      }
+      },
+      "sourceStatus": "VERIFIED"
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-17T18:51:54.527Z",
+      "lastCheckedAt": "2026-10-17T19:37:54.075Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -85,19 +85,19 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-17T18:51:55.265Z",
-      "sourceStatus": "BLOCKED_SOURCE",
-      "seen": {}
+      "lastCheckedAt": "2026-10-17T19:37:54.599Z",
+      "seen": {},
+      "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-17T18:51:53.445Z",
+      "lastCheckedAt": "2026-10-17T19:37:53.421Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-17T18:51:54.883Z",
+      "lastCheckedAt": "2026-10-17T19:37:54.345Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     }
