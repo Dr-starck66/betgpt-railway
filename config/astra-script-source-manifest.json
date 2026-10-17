@@ -6,6 +6,7 @@
     "scripts/astra-broadcast-affiliate-guard.mjs",
     "scripts/astra-cloud-bridge.mjs",
     "scripts/astra-cloud-egress.mjs",
+    "scripts/astra-consignes-preflight.mjs",
     "scripts/astra-content-omega-proof.mjs",
     "scripts/astra-deploy-sync-gate.mjs",
     "scripts/astra-editorial-authority-gate.ts",
