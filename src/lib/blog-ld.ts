@@ -50,7 +50,7 @@ export function blogArticleLd(a: BlogArticle) {
           url: SITE_URL,
           logo: imageObjectLd(BRAND_LOGO, SITE_URL),
         },
-        image: [img(cover), img(inline)],
+        image: a.cluster?.startsWith("joueur-") ? [img(cover)] : [img(cover), img(inline)],
         thumbnailUrl: `${SITE_URL}${cover.src}`,
         speakable: { "@type": "SpeakableSpecification", cssSelector: [".seo-answer", "h1", "h2"] },
         hasPart: a.paragraphs.map((p) => ({ "@type": "WebPageElement", name: p.h2 })),
