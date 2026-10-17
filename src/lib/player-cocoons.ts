@@ -6,6 +6,7 @@
  * No made-up match scores, transfers, awards, quotes or Google placements.
  */
 import type { BlogArticle } from "@/lib/blog";
+import { PLAYER_BIOGRAPHIES } from "@/lib/player-biographies";
 
 export const PLAYER_RANKING_SOURCE = "https://sportune.20minutes.fr/mbappe-4e-les-10-joueurs-du-mondial-2026-les-plus-recherches-sur-google-404710";
 export const PLAYER_EDITORIAL_SERIES = "Recherches Google football : étude publiée en juin 2026, estimations moyennes historiques et non tendance temps réel";
@@ -133,70 +134,91 @@ export const PLAYER_PROFILES: Player[] = [
 ];
 
 const SUBJECTS = [
-  {suffix:"",title:"portrait et analyse tactique",tag:"Dossier principal"},
-  {suffix:"style-de-jeu",title:"style de jeu et points forts",tag:"Lecture tactique"},
-  {suffix:"statistiques",title:"quelles statistiques regarder ?",tag:"Méthode et indicateurs"},
-  {suffix:"duels-et-limites",title:"duels, oppositions et limites",tag:"Scénarios de match"},
+ {suffix:"",title:"portrait, parcours et grands moments",tag:"Sa vie et sa carrière"},
+ {suffix:"style-de-jeu",title:"pourquoi son football plaît tant aux supporters",tag:"Sa façon de jouer"},
+ {suffix:"statistiques",title:"buts, records et trophées expliqués simplement",tag:"Buts et trophées"},
+ {suffix:"duels-et-limites",title:"ses plus beaux souvenirs et ses moments difficiles",tag:"Les moments forts et les épreuves"},
 ] as const;
 
 function addTime(days:number): string { return new Date(START + days * 24*60*60*1000).toISOString(); }
-export function publicationAt(p:Player): string {return addTime((p.rank-1)*2);}
+export function publicationAt(p:Player): string { return addTime((p.rank - 1) * 2); }
 export function publicPlayers(now=Date.now()): Player[] {
  return PLAYER_PROFILES.filter((p)=>Date.parse(publicationAt(p))<=now);
 }
+/** Public-facing stories are about people first: formative years, clubs, famous games, feelings, concrete trophies.
+ * Four genuinely differentiated editorial reads rather than four near-duplicate SEO-method articles. */
 export function allPlayerCocoonArticles(): BlogArticle[] {
  return PLAYER_PROFILES.flatMap((p)=> {
+  const bio=PLAYER_BIOGRAPHIES[p.slug];
+  if (!bio) throw new Error("PLAYER_BIOGRAPHY_MISSING: "+p.slug);
   const published=publicationAt(p), cluster="joueur-"+p.slug;
   const hubSlug=p.slug+"-portrait-2026";
-  const paths=SUBJECTS.map((s)=>s.suffix ? p.slug+"-"+s.suffix+"-2026" : hubSlug);
-  const monthly=p.monthly.toLocaleString("fr-FR");
-  const factNote="Les "+monthly+" recherches par mois proviennent d'une étude internationale publiée en juin 2026, mesurant une moyenne historique : ce chiffre n'est ni une mesure en direct ni une prévision d'audience pour BetGPT.";
-  const pages:BlogArticle[] = SUBJECTS.map((s,i)=> {
-    const h1=i===0 ? p.name+" : portrait, jeu et clés tactiques (2026)" :
-       p.name+" : "+s.title;
-    const paragraphs = i===0 ? [
-      {h2:"Pourquoi "+p.name+" suscite autant de recherches",body:factNote+" Le nom apparaît au rang "+p.rank+" de l'étude. La curiosité n'établit pas une hiérarchie sportive, elle signale d'abord l'attention du public. Pour les lecteurs de BetGPT, l'intérêt est de passer du nom au jeu : "+p.profile},
-      {h2:"Le mécanisme tactique à comprendre",body:p.mechanism+" "+p.withoutBall},
-      {h2:"Le duel qui éclaire vraiment ses matchs",body:p.keyDuel+" "+p.observation},
-      {h2:"Ce que les highlights ne permettent pas de conclure",body:p.vulnerability+" "+p.angle},
-      {h2:"Comment comparer sans confondre popularité et performance",body:p.comparison+" Une comparaison sérieuse tient compte du poste, du temps de jeu, de l'adversaire, des minutes jouées et des rôles confiés par l'entraîneur. Aucun volume de recherche ne remplace ces éléments."},
-      {h2:"Une méthode de lecture pour les prochains matchs",body:"Avant la rencontre, relever le onze titulaire et le rôle annoncé. Pendant le match, noter "+p.observation.toLowerCase()+" Après, comparer les observations avec des données officielles cohérentes, sans inventer de statistiques ni tirer de conclusion d'une unique séquence. Ce dossier restera un guide de méthode : une actualité factuelle doit faire l'objet d'une mise à jour distincte et sourcée."}
+  const paths=SUBJECTS.map((subject)=> subject.suffix ? p.slug+"-"+subject.suffix+"-2026" : hubSlug);
+  const articles:BlogArticle[]=SUBJECTS.map((subject,i)=>{
+    const h1=i===0 ? p.name+" : son histoire, ses clubs et ses grands moments" : p.name+" : "+subject.title;
+    const lead=[
+      "De ses débuts à ses plus grands matches, découvrez l'histoire de "+p.name+", les clubs qui ont changé sa vie, ses grandes victoires et ses moments difficiles. Un portrait raconté simplement.",
+      "Pourquoi aime-t-on regarder jouer "+p.name+" ? Ses gestes préférés, les actions dont les supporters se souviennent et ce qu'il apporte à son équipe, sans jargon.",
+      "Quels titres et quels buts ont marqué la carrière de "+p.name+" ? Voici les chiffres historiques et les grandes victoires, avec leurs dates et leurs sources.",
+      "Les grandes joies, les finales, les blessures ou les doutes : retour sur les moments qui ont fait grandir "+p.name+" et sur ce qui passionne ses supporters."
+    ][i];
+    // Each article has its own intent. Main article covers the whole life story; children explore different chapters.
+    const paragraphs:BlogArticle["paragraphs"]=i===0 ? [
+      {h2:"Qui est "+p.name+" et d'où vient-il ?",body:bio.born},
+      {h2:"Ses premiers clubs : comment tout a commencé",body:bio.journey},
+      {h2:"L'aventure qui l'a rendu célèbre",body:bio.clubStory},
+      {h2:"Le match ou la soirée que les fans n'oublient pas",body:bio.memorable},
+      {h2:"Ce qu'il a vécu avec "+(p.nation==="Brésil"?"le Brésil":p.nation==="France"?"les Bleus":p.nation==="Angleterre"?"l'Angleterre":p.nation==="Portugal"?"le Portugal":p.nation==="Argentine"?"l'Argentine":p.nation==="Turquie"?"la Turquie":p.nation==="Suède"?"la Suède":"sa sélection"),body:bio.international},
+      {h2:"Un homme et un caractère derrière les buts",body:bio.character},
+      {h2:"Pourquoi son histoire intéresse encore les supporters",body:bio.perspective},
+      {h2:"Pourquoi ce joueur figure dans notre série",body:"Une étude internationale sur les recherches Google, publiée en juin 2026, mentionne "+p.name+" parmi dix footballeurs très recherchés. Il s'agit d'une moyenne historique, pas d'un classement des recherches d'aujourd'hui. La célébrité explique le choix du sujet ; elle ne prouve pas qu'il est actuellement le meilleur joueur. Nous avons privilégié son parcours et ses vrais grands matches pour raconter autre chose qu'un nom populaire."}
     ] : i===1 ? [
-      {h2:"Comprendre son registre plutôt que son étiquette de poste",body:p.profile+" Sur le terrain, les appellations d'ailier, milieu ou numéro neuf ne suffisent pas pour expliquer les situations réellement créées."},
-      {h2:"Le rôle du collectif dans le mouvement",body:p.mechanism+" "+p.withoutBall},
-      {h2:"Les repères à observer sur les séquences complètes",body:p.keyDuel+" "+p.observation+" Une séquence non coupée aide à repérer les espaces, l'orientation du corps et la réaction des défenseurs."},
-      {h2:"Éviter la surestimation",body:p.vulnerability+" "+p.comparison+" Il faut comparer des possessions comparables, sans déduire la performance d'une poignée de vidéos."}
+      {h2:"Ce qu'on aime voir quand "+p.name+" joue",body:bio.football},
+      {h2:"Comment il a appris à jouer de cette manière",body:bio.journey},
+      {h2:"Un grand match qui montre son talent",body:bio.memorable},
+      {h2:"Ce qui le rend différent des autres joueurs",body:bio.character},
+      {h2:"Pourquoi son jeu fait parler dans les tribunes",body:bio.perspective}
     ] : i===2 ? [
-      {h2:"Les statistiques adaptées à son poste",body:p.angle+" "+p.observation+" Le poste et le contexte doivent guider la sélection des indicateurs : les buts seuls ne décrivent ni l'organisation ni les espaces créés."},
-      {h2:"Séparer contribution offensive et mouvement sans ballon",body:p.mechanism+" "+p.withoutBall+" Une donnée d'événement doit être complétée par l'observation vidéo, sans fabriquer de compteur absent des sources."},
-      {h2:"Pourquoi comparer par 90 minutes demande de la prudence",body:p.vulnerability+" Les petites séries amplifient la variation. Préciser l'adversaire, le temps passé sur le terrain, la phase de compétition et la qualité des occasions évite de surinterpréter les ratios."},
-      {h2:"La grille BetGPT pour contrôler un chiffre",body:"Comparer les définitions entre fournisseurs, dater la période étudiée et signaler les absences de données. "+p.comparison+" L'étude sur les recherches Google classe la notoriété, et non les xG, la qualité de passe ou la réussite des duels ; elle ne doit pas servir de statistique sportive."}
+      {h2:"Ses buts et ses chiffres les plus connus",body:bio.numbers},
+      {h2:"Les trophées qu'il a vraiment gagnés",body:bio.trophies},
+      {h2:"Le chemin suivi pour atteindre ces titres",body:bio.clubStory},
+      {h2:"Les grandes compétitions avec son pays",body:bio.international},
+      {h2:"Ce que les statistiques ne racontent pas de lui",body:bio.character}
     ] : [
-      {h2:"Le scénario de match le plus intéressant",body:p.keyDuel+" "+p.mechanism},
-      {h2:"Ce qui limite ce profil de joueur",body:p.vulnerability+" "+p.withoutBall},
-      {h2:"Avec quels autres profils le comparer",body:p.comparison+" "+p.profile},
-      {h2:"Questions à poser après le coup de sifflet",body:p.observation+" La réponse doit reposer sur des faits vérifiables du match concerné, non sur un pronostic transformé en certitude. L'analyse ne prétend pas rapporter un match qui n'a pas encore eu lieu."}
+      {h2:"La soirée qui a marqué sa carrière",body:bio.memorable},
+      {h2:"Les blessures, les défaites ou la pression",body:bio.difficulties},
+      {h2:"Comment sa carrière a pris un autre chemin",body:bio.journey},
+      {h2:"Sa relation avec les supporters",body:bio.character},
+      {h2:"Ce qu'il reste à écrire dans son histoire",body:bio.perspective}
     ];
-    const lead=i===0 ?
-     "Dossier BetGPT consacré à "+p.name+" ("+p.nation+") : "+p.archetype+". À partir d'une étude Google de juin 2026 et d'une analyse du jeu, voici ce qui mérite vraiment d'être observé." :
-     "Analyse de "+p.name+" : "+p.angle+" Guide tactique lié au dossier principal, sans chiffres de match inventés.";
+    const question=i===0?"D'où vient "+p.name+" ?":i===1?"Qu'est-ce qui rend "+p.name+" intéressant à regarder ?":i===2?"Quels sont les chiffres historiques de "+p.name+" ?":"Quels événements ont changé la carrière de "+p.name+" ?";
+    const answer=i===0?bio.born:i===1?bio.football:i===2?bio.numbers:bio.memorable;
     return {
-      slug:paths[i],h1,title:h1+" | BetGPT",lead,keywords:p.name+", "+p.slug+", "+s.title+", football 2026, tactique",
-      section:"Portraits de joueurs",published,releaseAt:published,cluster,
+      slug:paths[i],h1,title:h1+" | BetGPT",lead,
+      keywords:[p.name,p.slug,subject.title,"parcours footballeur","biographie football"].join(", "),
+      section:"Portraits de footballeurs",published,releaseAt:published,cluster,
+      // The pillar enters existing RSS and discovery infrastructure as the topical release.
       isNews:i===0,cover:p.image,
-      paragraphs,faq:[
-        {q:"Pourquoi "+p.name+" figure-t-il dans cette série ?",a:"Une étude publiée en juin 2026 le classe "+p.rank+"e parmi dix footballeurs très recherchés mondialement. Il ne s'agit pas d'un classement Google Trends en direct."},
-        {q:"Que faut-il regarder pour analyser "+p.name+" ?",a:p.observation+" Le collectif, l'adversaire et le temps de jeu modifient l'interprétation."},
-        {q:"Cette page garantit-elle un résultat ou une apparition sur Google Discover ?",a:"Non. BetGPT publie une analyse éditoriale. Les classements sportifs, les résultats et la distribution par Google restent indépendants."}
+      paragraphs,
+      faq:[
+        {q:question,a:answer},
+        {q:"Où retrouver les grands moments et les titres de "+p.name+" ?",a:"Ce dossier comprend quatre articles complémentaires : son histoire, sa façon de jouer, ses records et ses moments marquants. Les principaux faits sont recoupés avec les pages officielles des clubs, de l'UEFA ou de la FIFA."},
       ],
       links:[
-        ...paths.filter((slug)=>slug!==paths[i]).map((slug)=>({href:"/blog/"+slug,label:slug===hubSlug?"Dossier complet "+p.name:p.name+" — "+SUBJECTS[paths.indexOf(slug)].tag})),
-        {href:PLAYER_RANKING_SOURCE,label:"Source : étude des recherches Google publiée en juin 2026"},
-        {href:"/scores-en-direct",label:"Scores en direct BetGPT"}
-      ]
+        ...paths.filter((slug)=>slug!==paths[i]).map((slug)=>({
+           href:"/blog/"+slug,
+           label: slug===hubSlug ? "Portrait complet de "+p.name : p.name+" — "+SUBJECTS[paths.indexOf(slug)].tag
+        })),
+        ...bio.sources,
+        {href:PLAYER_RANKING_SOURCE,label:"Pourquoi ce joueur : étude Google publiée en juin 2026"},
+        {href:"/scores-en-direct",label:"Suivre les matchs et résultats de football"}
+      ],
     };
-  }); return pages;});
+  });
+  return articles;
+ });
 }
+
 export function releasedPlayerCocoonArticles(now=Date.now()): BlogArticle[] {
  return allPlayerCocoonArticles().filter((a)=>Date.parse(a.releaseAt||"")<=now);
 }
