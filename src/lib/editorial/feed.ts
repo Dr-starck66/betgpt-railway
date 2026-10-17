@@ -1,4 +1,6 @@
 import { SITE_URL } from "@/lib/programmatic";
+import { publishedBlogArticles } from "@/lib/blog";
+import { blogCover } from "@/lib/blog-rich";
 import { absImg } from "@/lib/image-seo";
 import type { EditorialArticle, EditorialEdition } from "@/lib/editorial/types";
 import { isPublicArticle } from "@/lib/editorial/types";
@@ -90,6 +92,24 @@ function esc(value: string): string {
 }
 
 export function actualitesRss(articles: EditorialArticle[]): string {
+  // Include freshly released original player analyses, without exposing scheduled pages.
+  // These remain editorial features; their inclusion cannot guarantee Google News placement.
+  const playerItems = publishedBlogArticles()
+    .filter((a) => a.isNews === true && Date.parse(a.published) <= Date.now())
+    .sort((a, b) => b.published.localeCompare(a.published))
+    .slice(0, 10)
+    .map((a) => {
+      const loc = `${SITE_URL}/blog/${a.slug}`;
+      return `  <item>
+    <title>${esc(a.h1)}</title>
+    <link>${loc}</link>
+    <guid isPermaLink="true">${loc}</guid>
+    <pubDate>${new Date(a.published).toUTCString()}</pubDate>
+    <category>${esc(a.section)}</category>
+    <description>${esc(a.lead)}</description>
+    <enclosure url="${esc(absImg(blogCover(a).src))}" type="image/jpeg" length="0"/>
+  </item>`;
+    });
   const items = articles.filter(isEditorialIndexable).slice(0, 20).map((article) => {
     const loc = articleUrl(article.slug);
     return `  <item>
@@ -110,7 +130,7 @@ export function actualitesRss(articles: EditorialArticle[]): string {
   <description>Actualités football publiées uniquement lorsqu'un développement frais, suffisamment sourcé et distinct franchit les contrôles éditoriaux BetGPT. Plafond de trois publications automatiques par jour, sans quota de remplissage.</description>
   <language>fr</language>
   <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
-${items.join("\n")}
+${[...playerItems, ...items].join("\n")}
 </channel>
 </rss>
 `;
