@@ -250,7 +250,7 @@ export const getDesk = createServerFn({ method: "GET" }).handler(async (): Promi
 });
 
 /** Accueil : même desk, sans le ballast (championship, coaches, archive) qui gonfle l'HTML. */
-export const getHomeDesk = createServerFn({ method: "GET" }).handler(async () => {
+async function buildHomeDesk() {
   const d = (await getDesk()) ?? emptyDesk();
   const ordered = orderHomeMatches(d.matches);
   const first = ordered.slice(0, 10);
@@ -284,6 +284,55 @@ export const getHomeDesk = createServerFn({ method: "GET" }).handler(async () =>
     predictions: d.predictions.filter((p) => ids.has(p.matchId)).map(cardPrediction),
     news,
   };
+}
+
+/**
+ * ASTRA HTML-FIRST: the homepage stays SSR and contains its full crawlable
+ * headline, news and match markup. Avoid holding every request open while
+ * rebuilding the live sports desk/editorial feed.
+ *
+ * A 15-second stale-while-revalidate window never changes the on-demand
+ * league filters, live score polling, or other routes. The first request
+ * still awaits real data, rather than shipping a blank SPA to Google.
+ */
+type HomeDeskSnapshot = Awaited<ReturnType<typeof buildHomeDesk>>;
+type HomeDeskCache = {
+  data: HomeDeskSnapshot | null;
+  readyAt: number;
+  pending: Promise<HomeDeskSnapshot> | null;
+};
+const HOME_FRESH_MS = 15_000;
+const homeGlobal = globalThis as typeof globalThis & { __betgptHomeDeskCache?: HomeDeskCache };
+
+function refreshHomeSnapshot(cache: HomeDeskCache): Promise<HomeDeskSnapshot> {
+  if (cache.pending) return cache.pending;
+  const job = buildHomeDesk();
+  cache.pending = job;
+  // A successful refresh replaces the cached HTML data atomically. A failed
+  // refresh never erases the last coherent server-renderable snapshot.
+  void job.then((next) => {
+    cache.data = next;
+    cache.readyAt = Date.now();
+  }).catch((err) => {
+    console.error("[home-ssr-refresh]", err instanceof Error ? err.message : String(err));
+  }).finally(() => {
+    if (cache.pending === job) cache.pending = null;
+  });
+  return job;
+}
+
+export const getHomeDesk = createServerFn({ method: "GET" }).handler(async () => {
+  const cache = homeGlobal.__betgptHomeDeskCache ??= { data: null, readyAt: 0, pending: null };
+  if (cache.data) {
+    if (Date.now() - cache.readyAt >= HOME_FRESH_MS && !cache.pending) {
+      // Refresh in the background while the indexable HTML renders right now.
+      void refreshHomeSnapshot(cache).catch(() => undefined);
+    }
+    return cache.data;
+  }
+  // Cold start: render real match/news content into the initial HTML, not a
+  // JavaScript-only spinner. Concurrent arrivals share the same server work.
+  return await refreshHomeSnapshot(cache);
 });
 
 export const getHomeSlice = createServerFn({ method: "GET" })
