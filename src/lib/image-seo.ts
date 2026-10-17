@@ -11,6 +11,11 @@ export type ImageSeo = {
   caption: string;
   width?: number;
   height?: number;
+  /** Copyright provenance of editorial photos, when supplied. */
+  credit?: string;
+  licenseUrl?: string;
+  creditUrl?: string;
+  fallbackSrc?: string;
 };
 
 export const BRAND_LOGO: ImageSeo = {
@@ -124,7 +129,9 @@ export function imageObjectLd(img: ImageSeo, pageUrl?: string): Record<string, u
     width: img.width,
     height: img.height,
     inLanguage: "fr-FR",
-    creditText: /espncdn/.test(img.src) ? "ESPN" : "BetGPT",
+    creditText: img.credit || (/espncdn/.test(img.src) ? "ESPN" : "BetGPT"),
+    ...(img.licenseUrl ? { license: img.licenseUrl } : {}),
+    ...(img.creditUrl ? { acquireLicensePage: img.creditUrl } : {}),
     ...(pageUrl ? { isPartOf: pageUrl } : {}),
   };
 }
