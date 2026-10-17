@@ -1,3 +1,5 @@
+import { allPlayerCocoonArticles } from "@/lib/player-cocoons";
+
 export type BlogArticle = {
   slug: string;
   title: string;
@@ -6,6 +8,10 @@ export type BlogArticle = {
   keywords: string;
   section: string;
   published: string;
+  /** Publication embargo; evaluated at request time (not at process startup). */
+  releaseAt?: string;
+  /** Existing licensed, generic football art; not represented as a portrait. */
+  cover?: string;
   paragraphs: { h2: string; body: string }[];
   faq: { q: string; a: string }[];
   links: { href: string; label: string }[];
@@ -1137,13 +1143,21 @@ export const BLOG: BlogArticle[] = [
   },
 ];
 
+// Ten topic clusters: 1 pillar + 3 distinct satellites apiece.
+BLOG.push(...allPlayerCocoonArticles());
+
+export function publishedBlogArticles(now = Date.now()): BlogArticle[] {
+  return BLOG.filter((a) => !a.releaseAt || Date.parse(a.releaseAt) <= now);
+}
+
 export function blogBySlug(slug: string): BlogArticle | undefined {
-  return BLOG.find((a) => a.slug === slug);
+  return publishedBlogArticles().find((a) => a.slug === slug);
 }
 
 export function relatedArticles(slug: string): BlogArticle[] {
-  const cur = BLOG.find((a) => a.slug === slug);
-  const rest = BLOG.filter((a) => a.slug !== slug);
+  const live = publishedBlogArticles();
+  const cur = live.find((a) => a.slug === slug);
+  const rest = live.filter((a) => a.slug !== slug);
   if (!cur?.cluster) return rest;
   return [
     ...rest.filter((a) => a.cluster === cur.cluster),
@@ -1152,5 +1166,5 @@ export function relatedArticles(slug: string): BlogArticle[] {
 }
 
 export function clusterArticles(cluster: string): BlogArticle[] {
-  return BLOG.filter((a) => a.cluster === cluster);
+  return publishedBlogArticles().filter((a) => a.cluster === cluster);
 }
