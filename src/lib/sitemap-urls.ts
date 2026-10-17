@@ -4,7 +4,7 @@ import { archiveSlug, loadArchiveHistory } from "@/engine/archive";
 import { stablePublicEvidenceTickets } from "@/engine/ticket-log";
 import { HUNTER_SCENARIOS } from "@/engine/hunter";
 import { LEAGUE_FR, LEAGUE_SLUG } from "@/engine/stats";
-import { BLOG } from "@/lib/blog";
+import { BLOG, publishedBlogArticles } from "@/lib/blog";
 import { blogCover, blogInline } from "@/lib/blog-rich";
 import { BRAND_LOGO, BRAND_OG, absImg, crestSeo } from "@/lib/image-seo";
 import { LEAGUE_HUBS, SITE_URL, teamPath } from "@/lib/programmatic";
@@ -295,7 +295,7 @@ export function buildSitemapUrls(input: {
       priority: "0.55",
     });
   }
-  for (const a of BLOG) {
+  for (const a of publishedBlogArticles()) {
     const cover = blogCover(a);
     const inline = blogInline(a);
     out.push({
