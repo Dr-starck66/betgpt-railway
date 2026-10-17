@@ -5,6 +5,8 @@ import { formatParis } from "@/lib/editorial/time";
 import { isPublicArticle } from "@/lib/editorial/types";
 import { publicEditorialImageCopy } from "@/lib/editorial/image-copy";
 import { SITE_URL } from "@/lib/programmatic";
+import { publishedBlogArticles } from "@/lib/blog";
+import { blogCover } from "@/lib/blog-rich";
 
 export const Route = createFileRoute("/actualites/")({
   loader: () => getEditorialEdition(),
@@ -36,6 +38,7 @@ function ActualitesPage() {
     (section) => (sectionArticles(edition, section.slug)?.length ?? 0) >= SECTION_MIN,
   );
   const [featured, ...rest] = published;
+  const playerFeatures = publishedBlogArticles().filter((article) => article.isNews && article.cluster?.startsWith("joueur-")).reverse();
 
   return (
     <div className="mx-auto max-w-[1280px] space-y-8">
@@ -55,6 +58,28 @@ function ActualitesPage() {
           <span className="chip-pill">{edition.parisDate} · Europe/Paris</span>
         </div>
       </section>
+
+      {playerFeatures.length ? (
+        <section className="space-y-4" aria-label="Dossiers footballeurs recherchés">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="text-2xl font-bold tracking-tight">Les joueurs les plus recherchés : dossiers BetGPT</h2>
+            <span className="text-xs text-muted">Classement historique publié en juin 2026, pas Google Trends en direct</span>
+          </div>
+          <ul className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {playerFeatures.map((article) => (
+              <li key={article.slug}>
+                <Link to="/blog/$slug" params={{ slug: article.slug }} className="surface-card block h-full overflow-hidden">
+                  <img src={blogCover(article).src} alt={blogCover(article).alt} width={1200} height={675} loading="lazy" decoding="async" className="aspect-video w-full object-cover" />
+                  <div className="p-4">
+                    <h3 className="font-semibold text-paper">{article.h1}</h3>
+                    <p className="mt-2 line-clamp-3 text-sm text-muted">{article.lead}</p>
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       {hubs.length ? (
         <ul className="flex flex-wrap gap-2 text-sm">
