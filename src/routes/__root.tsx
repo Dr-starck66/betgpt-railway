@@ -41,13 +41,8 @@ export const Route = createRootRoute({
       { rel: "alternate", type: "application/feed+json", href: "/feed.json", title: "BetGPT JSON" },
       { rel: "manifest", href: "/__grok/manifest.webmanifest" },
       { rel: "apple-touch-icon", href: "/__grok/icon-180.png" },
-      // Start font TLS handshakes early: stylesheet remains unchanged to avoid typographic regressions.
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap",
-      },
+      // LCP headline is bold: preload one same-origin font, never block HTML on Google Fonts.
+      { rel: "preload", href: "/fonts/Inter-Bold.woff2", as: "font", type: "font/woff2", crossOrigin: "anonymous" },
     ],
   }),
   component: () => (
