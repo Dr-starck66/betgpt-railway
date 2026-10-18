@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://match-methode-astra.onrender.com/sitemap.xml
