@@ -14,3 +14,7 @@ Branche indépendante des services BetGPT en production. Nouveau nom éditorial 
 
 ## Déploiement Railway
 Service dédié à MatchFolio : root directory `/affiliate-football`, démarrage `npm start`, serveur Node natif dans `server.js`, endpoint `/health`. Déploiement distinct de BetGPT sur la branche ASTRA dédiée, sans changement du DNS et sans engagement de nouveaux abonnements. La conformité légale finale de l'éditeur reste à compléter. Canonicals à aligner sur le domaine de préproduction Railway après sa création.
+
+
+### Audit supplémentaire du 18/10/2026
+Comparaison des mentions avec SportyTrader et RueDesJoueurs (n'impliquant aucune approbation par les opérateurs). Les mentions du site distinguent les obligations de l'éditeur professionnel de celles d'un bookmaker opérateur. Contact direct vérifié avec le profil GitHub authentifié du propriétaire. Domaine final non raccordé. La raison sociale et le responsable de publication restent à confirmer, ainsi que l'adresse, le téléphone et les numéros d'immatriculation s'ils sont applicables. La conformité ne peut pas être qualifiée de complète avant cela.
