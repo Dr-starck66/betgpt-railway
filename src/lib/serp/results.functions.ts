@@ -5,6 +5,7 @@ import { getDesk } from "@/lib/desk.functions";
 import { slugify } from "@/lib/programmatic";
 import { parisDay, parisOffsetDay } from "@/lib/seo/money-map";
 import { mergeResults, recentResults, rowFromHistory, rowFromMatch, type ResultRow } from "@/lib/serp/results";
+import { withTimeoutFallback } from "@/lib/serp/results-time-budget";
 
 const RESULTS_REFRESH_TTL_MS = 5 * 60_000;
 const RESULTS_PROVIDER_DAYS = 10;
@@ -262,60 +263,73 @@ async function fetchEspnDay(day: string): Promise<ResultRow[]> {
 }
 
 async function freshFotMobResults(now = Date.now()): Promise<ResultRow[]> {
+  // Serving a request must never wait on 10 FotMob days plus ESPN fallbacks.
+  // Keep historical verified rows while a bounded background refresh runs.
+  if (resultsMem.__betgptFotmobRefresh) return resultsMem.__betgptFotmobRows ?? [];
   if (
-    resultsMem.__betgptFotmobRows &&
-    now - (resultsMem.__betgptFotmobAt ?? 0) < RESULTS_REFRESH_TTL_MS
-  ) {
-    return resultsMem.__betgptFotmobRows;
-  }
-  if (!resultsMem.__betgptFotmobRefresh) {
-    const days = Array.from({ length: RESULTS_PROVIDER_DAYS }, (_, i) => parisOffsetDay(-i, now));
-    resultsMem.__betgptFotmobRefresh = Promise.all(
-      days.map(async (day) => {
-        // A provider can return HTTP 200 with an empty payload. That is not
-        // sufficient evidence that there were no finished matches in the
-        // competitions BetGPT tracks, so treat an empty primary result as a
-        // semantic miss and fall back to ESPN for that day.
+    resultsMem.__betgptFotmobAt &&
+    now - resultsMem.__betgptFotmobAt < RESULTS_REFRESH_TTL_MS
+  ) return resultsMem.__betgptFotmobRows ?? [];
+
+  const days = Array.from({ length: RESULTS_PROVIDER_DAYS }, (_, i) => parisOffsetDay(-i, now));
+  let nextDay = 0;
+  const parts: ResultRow[][] = Array.from({ length: days.length }, () => []);
+  resultsMem.__betgptFotmobRefresh = (async () => {
+    // At most two days concurrently. Previously the code launched ten days
+    // in parallel and up to 120 ESPN requests after FotMob misses.
+    await Promise.all(Array.from({ length: 2 }, async () => {
+      while (nextDay < days.length) {
+        const index = nextDay++;
+        const day = days[index]!;
+        let rows: ResultRow[] = [];
         try {
           const primary = await fetchFotMobDay(day);
-          if (primary.length) return primary;
+          rows = primary.length ? primary : await fetchEspnDay(day);
         } catch {
-          // Fall through to the independent provider below.
+          try { rows = await fetchEspnDay(day); } catch { /* no invented match scores */ }
         }
-        try {
-          return await fetchEspnDay(day);
-        } catch {
-          return [] as ResultRow[];
+        parts[index] = rows;
+        if (rows.length) {
+          resultsMem.__betgptFotmobRows = mergeResults(resultsMem.__betgptFotmobRows ?? [], rows);
+          resultsMem.__betgptFotmobAt = Date.now(); // actual provider observation
         }
-      }),
-    )
-      .then((parts) => {
-        const rows = parts.flat().sort((a, b) => b.kickoff.localeCompare(a.kickoff));
-        // Cache empty/error-equivalent responses too. Otherwise a blocked
-        // provider causes ten outbound requests on every page view.
-        resultsMem.__betgptFotmobRows = rows;
-        resultsMem.__betgptFotmobAt = Date.now();
-        return rows;
-      })
-      .finally(() => {
-        resultsMem.__betgptFotmobRefresh = null;
-      });
-  }
-  return resultsMem.__betgptFotmobRefresh;
+      }
+    }));
+    const all = parts.flat().sort((a, b) => b.kickoff.localeCompare(a.kickoff));
+    // A verified empty refresh is negatively cached; never retain stale scores indefinitely.
+    resultsMem.__betgptFotmobRows = all;
+    resultsMem.__betgptFotmobAt = Date.now();
+    return all;
+  })().catch((error) => {
+    console.warn("[BETGPT_RESULTS_PROVIDER_REFRESH]", String(error));
+    resultsMem.__betgptFotmobAt = Date.now(); // rate-limit provider failures
+    return resultsMem.__betgptFotmobRows ?? [];
+  }).finally(() => {
+    resultsMem.__betgptFotmobRefresh = null;
+  });
+  // Warm/cold HTTP requests return promptly using only observed, cached data.
+  return resultsMem.__betgptFotmobRows ?? [];
 }
 
 export async function loadResultsBoardData(): Promise<{ asOf: string; rows: ResultRow[] }> {
-  const [desk, archive, fotmob] = await Promise.all([getDesk(), freshResultArchive(), freshFotMobResults()]);
-  const fromDesk = (desk.matches ?? []).map(rowFromMatch).filter((r): r is ResultRow => !!r);
+  const [desk, archive, fotmob] = await Promise.all([
+    withTimeoutFallback(Promise.resolve().then(() => getDesk()), 3_500, () => null),
+    freshResultArchive(),
+    freshFotMobResults(),
+  ]);
+  const fromDesk = (desk?.matches ?? []).map(rowFromMatch).filter((r): r is ResultRow => !!r);
   const cutoff = Date.now() - 21 * 864e5;
   const fromArchive = archive
     .filter((h) => Date.parse(h.kickoff) >= cutoff)
     .map(rowFromHistory)
     .filter((r): r is ResultRow => !!r);
-  // If a provider-only score matches our durable archive, keep the durable row so the dossier link is real.
   const mergedExternal = mergeResults(fromArchive, fotmob);
   const rows = recentResults(mergeResults(fromDesk, mergedExternal));
-  return { asOf: fotmob.length ? new Date().toISOString() : desk.liveAsOf, rows };
+  // Timestamp only of an actual provider observation; never relabel stale cache as fresh.
+  const asOf = fotmob.length && resultsMem.__betgptFotmobAt
+    ? new Date(resultsMem.__betgptFotmobAt).toISOString()
+    : desk?.liveAsOf || rows[0]?.kickoff || "";
+  return { asOf, rows };
 }
 
 export const getResultsBoard = createServerFn({ method: "GET" }).handler(loadResultsBoardData);
