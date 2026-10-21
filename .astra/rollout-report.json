@@ -3,7 +3,7 @@
   "profile": "betgpt-v1",
   "command": "apply",
   "target": "/home/runner/work/betgpt-railway/betgpt-railway/target",
-  "generatedAt": "2026-10-20T09:24:35.046Z",
+  "generatedAt": "2026-10-21T09:21:19.739Z",
   "status": "PASS",
   "bricks": [
     {
