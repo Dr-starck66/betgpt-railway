@@ -56,3 +56,16 @@ test("a strong sample still cannot claim improvement without a parallel champion
   assert.equal(report.status, "ABSOLUTE_TARGET_MET_NO_CHAMPION_COMPARISON");
   assert.equal(report.integrity.relativeModelImprovement, "NOT_PROVEN_WITHOUT_FROZEN_PARALLEL_CHAMPION");
 });
+
+test("real BET records remain separate from earlier shadow forecasts on the same fixture", () => {
+  const preview = ticket(1);
+  const bet = ticket(9, {
+    home: preview.home, away: preview.away, kickoff: preview.kickoff,
+    recordedAt: "2026-10-24T15:00:00Z",
+    kind: "mise", decision: "BET", result: "win", odds: 2.1,
+  });
+  const report = evaluateForwardAccuracy(checkpoint([bet, preview]), { from, asOf });
+  assert.equal(report.metrics.n, 1);
+  assert.equal(report.actualBets.n, 1);
+  assert.equal(report.actualBets.wins, 1);
+});
