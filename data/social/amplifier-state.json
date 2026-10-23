@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-23T15:17:12.501Z",
+      "lastCheckedAt": "2026-10-23T19:09:47.150Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -39,19 +39,24 @@
           "url": "https://betgpt.live/actualites/psg-le-mans-les-compositions-probables-2026-10-10",
           "date": "2026-10-10T11:11:28.409Z",
           "seenAt": "2026-10-12T15:09:16.204Z"
+        },
+        "e8897ad2f6e2b70323": {
+          "url": "https://betgpt.live/actualites/psg-lyon-reporte-lundi-26-octobre-2026",
+          "date": "2026-10-23T15:05:43.893Z",
+          "seenAt": "2026-10-23T19:09:47.150Z"
         }
       },
       "sourceStatus": "VERIFIED"
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-23T15:17:13.428Z",
+      "lastCheckedAt": "2026-10-23T19:09:50.821Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-23T15:17:15.955Z",
+      "lastCheckedAt": "2026-10-23T19:09:52.451Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -68,7 +73,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-23T15:17:17.094Z",
+      "lastCheckedAt": "2026-10-23T19:09:53.043Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -79,25 +84,40 @@
           "url": "https://freehotels.info/news/en/premier-inn-whitbread-interim-results-traveller-impact-2026/",
           "date": "Tue, 13 Oct 2026 00:00:00 GMT",
           "seenAt": "2026-10-15T21:54:44.045Z"
+        },
+        "7ad7951f2175727db4": {
+          "url": "https://freehotels.info/news/en/hilton-honors-pay-with-points-checkout-2026/",
+          "date": "Fri, 23 Oct 2026 00:00:00 GMT",
+          "seenAt": "2026-10-23T19:09:53.043Z"
+        },
+        "941f27f23c027b332b": {
+          "url": "https://freehotels.info/news/fr/accor-resultats-t3-2026-impact-voyageurs/",
+          "date": "Fri, 23 Oct 2026 00:00:00 GMT",
+          "seenAt": "2026-10-23T19:09:53.043Z"
+        },
+        "f90e60cb9cbbff4a9c": {
+          "url": "https://freehotels.info/news/fr/ihg-1000-hotels-europe-2026/",
+          "date": "Fri, 23 Oct 2026 00:00:00 GMT",
+          "seenAt": "2026-10-23T19:09:53.043Z"
         }
       },
       "sourceStatus": "VERIFIED"
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-23T15:17:18.693Z",
+      "lastCheckedAt": "2026-10-23T19:09:54.423Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-23T15:17:14.499Z",
+      "lastCheckedAt": "2026-10-23T19:09:51.478Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-23T15:17:17.951Z",
+      "lastCheckedAt": "2026-10-23T19:09:53.888Z",
       "seen": {
         "c022035f3d7190f6f1": {
           "url": "https://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/",
@@ -606,6 +626,118 @@
       "imageUrl": null,
       "text": "Ley 206 de Tarija: debate de 2021 sobre transferencias a municipios\nhttps://andaluztarija.com/2021/10/26/oscar-montes-en-campana-para-eliminar-la-ley-del-206-a-favor-de-municipios/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija",
       "createdAt": "2026-10-23T15:01:25.699Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:e8897ad2f6e2b70323": {
+      "id": "instagram:e8897ad2f6e2b70323",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/psg-lyon-reporte-lundi-26-octobre-2026",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/PSG-Lyon_Parc_des_Princes_02.jpg",
+      "text": "PSG–Lyon reporté au lundi 26 octobre : horaire, préfecture, classement et conséquences | BetGPT\n\nPSG–Lyon se jouera lundi 26 octobre à 20 h 30 et non dimanche : la LFP a déplacé ce choc de Ligue 1 après une décision de la Préfecture de police de Paris. Voici la chronologie vérifiée, les conséquences pour les deux équipes, le classement et les supporters, sans confondre informations confirmées et détails encore inconnus.\n\nhttps://betgpt.live/actualites/psg-lyon-reporte-lundi-26-octobre-2026?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #PSGLyon #reporte #octobre",
+      "createdAt": "2026-10-23T19:09:50.244Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:e8897ad2f6e2b70323": {
+      "id": "x:e8897ad2f6e2b70323",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/psg-lyon-reporte-lundi-26-octobre-2026",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/PSG-Lyon_Parc_des_Princes_02.jpg",
+      "text": "PSG–Lyon reporté au lundi 26 octobre : horaire, préfecture, classement et conséquences | BetGPT\nhttps://betgpt.live/actualites/psg-lyon-reporte-lundi-26-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-23T19:09:50.244Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:7ad7951f2175727db4": {
+      "id": "instagram:7ad7951f2175727db4",
+      "siteId": "freehotels",
+      "network": "instagram",
+      "articleUrl": "https://freehotels.info/news/en/hilton-honors-pay-with-points-checkout-2026/",
+      "imageUrl": "https://freehotels.info/editorial/hilton-pay-with-points-oct-2026.svg",
+      "text": "Hilton Honors Pay with Points launches at checkout: eligibility, rollout and real value\n\nHilton unveiled Pay with Points on 21 October 2026. Learn which members can use it, why the US pilot is limited, and how to check redemption value.\n\nhttps://freehotels.info/news/en/hilton-honors-pay-with-points-checkout-2026/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#travel #hotels #destinations #Hilton #Honors #Points",
+      "createdAt": "2026-10-23T19:09:53.139Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:7ad7951f2175727db4": {
+      "id": "x:7ad7951f2175727db4",
+      "siteId": "freehotels",
+      "network": "x",
+      "articleUrl": "https://freehotels.info/news/en/hilton-honors-pay-with-points-checkout-2026/",
+      "imageUrl": "https://freehotels.info/editorial/hilton-pay-with-points-oct-2026.svg",
+      "text": "Hilton Honors Pay with Points launches at checkout: eligibility, rollout and real value\nhttps://freehotels.info/news/en/hilton-honors-pay-with-points-checkout-2026/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#travel #hotels",
+      "createdAt": "2026-10-23T19:09:53.139Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:941f27f23c027b332b": {
+      "id": "instagram:941f27f23c027b332b",
+      "siteId": "freehotels",
+      "network": "instagram",
+      "articleUrl": "https://freehotels.info/news/fr/accor-resultats-t3-2026-impact-voyageurs/",
+      "imageUrl": "https://freehotels.info/editorial/accor-t3-2026-revpar.svg",
+      "text": "Accor : RevPAR +4,9 % au troisième trimestre 2026, ce que cela dit des prix des hôtels\n\nAccor annonce RevPAR +4,9 % et 1,503 milliard d’euros de chiffre d’affaires au T3 2026. Analyse des limites pour les voyageurs et des vrais critères de réservation.\n\nhttps://freehotels.info/news/fr/accor-resultats-t3-2026-impact-voyageurs/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#travel #hotels #destinations #RevPAR #troisieme #trimestre",
+      "createdAt": "2026-10-23T19:09:53.228Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:941f27f23c027b332b": {
+      "id": "x:941f27f23c027b332b",
+      "siteId": "freehotels",
+      "network": "x",
+      "articleUrl": "https://freehotels.info/news/fr/accor-resultats-t3-2026-impact-voyageurs/",
+      "imageUrl": "https://freehotels.info/editorial/accor-t3-2026-revpar.svg",
+      "text": "Accor : RevPAR +4,9 % au troisième trimestre 2026, ce que cela dit des prix des hôtels\nhttps://freehotels.info/news/fr/accor-resultats-t3-2026-impact-voyageurs/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#travel #hotels",
+      "createdAt": "2026-10-23T19:09:53.228Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:f90e60cb9cbbff4a9c": {
+      "id": "instagram:f90e60cb9cbbff4a9c",
+      "siteId": "freehotels",
+      "network": "instagram",
+      "articleUrl": "https://freehotels.info/news/fr/ihg-1000-hotels-europe-2026/",
+      "imageUrl": "https://freehotels.info/editorial/ihg-europe-1000-2026.svg",
+      "text": "IHG franchit 1 000 hôtels ouverts en Europe : ce que cela change pour les voyageurs\n\nIHG annonce plus de 1 000 hôtels ouverts en Europe le 22 octobre 2026. Où sont les ouvertures, que signifie le pipeline et comment comparer les séjours ?\n\nhttps://freehotels.info/news/fr/ihg-1000-hotels-europe-2026/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#travel #hotels #destinations #franchit #ouverts #Europe",
+      "createdAt": "2026-10-23T19:09:53.320Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:f90e60cb9cbbff4a9c": {
+      "id": "x:f90e60cb9cbbff4a9c",
+      "siteId": "freehotels",
+      "network": "x",
+      "articleUrl": "https://freehotels.info/news/fr/ihg-1000-hotels-europe-2026/",
+      "imageUrl": "https://freehotels.info/editorial/ihg-europe-1000-2026.svg",
+      "text": "IHG franchit 1 000 hôtels ouverts en Europe : ce que cela change pour les voyageurs\nhttps://freehotels.info/news/fr/ihg-1000-hotels-europe-2026/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#travel #hotels",
+      "createdAt": "2026-10-23T19:09:53.320Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,
