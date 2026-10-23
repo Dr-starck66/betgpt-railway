@@ -1,0 +1,52 @@
+name: ASTRA BetGPT Discover Daily Publication Proof
+
+on:
+  # 00:35 UTC = 01:35/02:35 Paris: all three slots from previous Paris day are closed.
+  schedule:
+    - cron: "35 0 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/astra-discover-daily-proof.mjs"
+      - ".github/workflows/editorial-discover-daily-proof.yml"
+  pull_request:
+    paths:
+      - "scripts/astra-discover-daily-proof.mjs"
+      - ".github/workflows/editorial-discover-daily-proof.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: betgpt-discover-daily-proof-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  contract:
+    name: Fail-closed publication monitor tests
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Prove bad dates and missing publications cannot pass
+        run: node scripts/astra-discover-daily-proof.mjs --self-test
+      - name: Report previous real day without disguising missing publications
+        run: node scripts/astra-discover-daily-proof.mjs --report-only
+
+  daily-proof:
+    name: Daily real publication and public HTTP verification
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify 3 original automated publications, public URL and news sitemap
+        run: node scripts/astra-discover-daily-proof.mjs
