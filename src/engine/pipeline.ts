@@ -1920,6 +1920,17 @@ export function getPrediction(id: string): { match: MatchInput; prediction: Pred
 
 export function predictMatch(match: MatchInput): PredictionRecord {
   const rec = attachLiveIntel(match, buildPrediction(match, learnedNow(match), DEFAULT_ROI5_DOMINANCE_POLICY));
+  // Direct match fallbacks bypass runEngineUncached; protect actionable matches
+  // here too. Historical match pages remain an unmodified audit record.
+  const kickoffMs = Date.parse(match.kickoff);
+  if (
+    Number.isFinite(kickoffMs) &&
+    kickoffMs >= Date.now() - 4 * 3600_000 &&
+    match.status !== "finished" &&
+    match.status !== "cancelled"
+  ) {
+    applyCanonicalRiskBrakeToMarkets(rec.markets, canonicalRiskState(loadTickets()));
+  }
   try {
     const v = recordPredictionVersion(match, rec);
     const series = versionsFor(match.id);
