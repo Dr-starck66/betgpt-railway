@@ -52,11 +52,23 @@ export function normalizeConfig(input = {}) {
       durationToleranceSeconds: Number(input.proof?.durationToleranceSeconds ?? 1.25),
       minBytes: Number(input.proof?.minBytes ?? 50_000),
     },
+    capture: {
+      preseedLocalStorage: input.capture?.preseedLocalStorage && typeof input.capture.preseedLocalStorage === "object"
+        ? Object.fromEntries(Object.entries(input.capture.preseedLocalStorage).map(([key, value]) => [String(key), String(value)]))
+        : {},
+      clickSelectors: Array.isArray(input.capture?.clickSelectors) ? input.capture.clickSelectors.map(String).filter(Boolean) : [],
+      clickText: Array.isArray(input.capture?.clickText) ? input.capture.clickText.map(String).filter(Boolean) : [],
+      forbiddenText: Array.isArray(input.capture?.forbiddenText) ? input.capture.forbiddenText.map(String).filter(Boolean) : [],
+      requiredText: Array.isArray(input.capture?.requiredText) ? input.capture.requiredText.map(String).filter(Boolean) : [],
+      waitAfterActionsMs: Math.max(0, Math.min(10_000, Number(input.capture?.waitAfterActionsMs ?? 750))),
+    },
   };
 }
 
 export function buildAutoScenes(config, captureFiles) {
-  if (!Array.isArray(captureFiles) || !captureFiles.length) throw new Error("ASTRA_LAUNCH_VIDEO_CAPTURE_MISSING");
+  if (!Array.isArray(captureFiles) || !captureFiles.length) {
+    throw new Error("ASTRA_LAUNCH_VIDEO_CAPTURE_MISSING");
+  }
   const desired = config.sceneCount || 3;
   const texts = [
     config.project.tagline,
@@ -97,18 +109,76 @@ export function assertDependencies() {
   return true;
 }
 
-export async function captureWebsite({ url, outDir, sceneCount = 3, viewport = { width: 1440, height: 900 } }) {
+export async function captureWebsite({
+  url,
+  outDir,
+  sceneCount = 3,
+  viewport = { width: 1440, height: 900 },
+  preseedLocalStorage = {},
+  clickSelectors = [],
+  clickText = [],
+  forbiddenText = [],
+  requiredText = [],
+  waitAfterActionsMs = 750,
+}) {
   if (!url) throw new Error("ASTRA_LAUNCH_VIDEO_CAPTURE_URL_REQUIRED");
   let chromium;
-  try { ({ chromium } = await import("playwright")); }
-  catch { throw new Error("ASTRA_LAUNCH_VIDEO_PLAYWRIGHT_MISSING install=playwright"); }
+  try {
+    ({ chromium } = await import("playwright"));
+  } catch {
+    throw new Error("ASTRA_LAUNCH_VIDEO_PLAYWRIGHT_MISSING install=playwright");
+  }
   mkdirSync(outDir, { recursive: true });
   const browser = await chromium.launch({ headless: true });
   try {
-    const page = await browser.newPage({ viewport });
+    const context = await browser.newContext({ viewport });
+    const seedEntries = Object.entries(preseedLocalStorage || {});
+    if (seedEntries.length) {
+      await context.addInitScript((entries) => {
+        try {
+          for (const [key, value] of entries) localStorage.setItem(key, value);
+        } catch {
+          // Fail-safe: DOM proof below still blocks forbidden overlays from passing.
+        }
+      }, seedEntries);
+    }
+    const page = await context.newPage();
     const response = await page.goto(url, { waitUntil: "domcontentloaded", timeout: 45_000 });
-    if (!response || response.status() >= 400) throw new Error(`ASTRA_LAUNCH_VIDEO_CAPTURE_HTTP_FAIL status=${response?.status?.() ?? "none"}`);
-    await page.waitForTimeout(1000);
+    if (!response || response.status() >= 400) {
+      throw new Error(`ASTRA_LAUNCH_VIDEO_CAPTURE_HTTP_FAIL status=${response?.status?.() ?? "none"}`);
+    }
+    await page.waitForTimeout(750);
+
+    for (const selector of clickSelectors) {
+      const locator = page.locator(selector).first();
+      if (!(await locator.isVisible().catch(() => false))) {
+        throw new Error(`ASTRA_LAUNCH_VIDEO_CAPTURE_ACTION_MISSING selector=${selector}`);
+      }
+      await locator.click({ timeout: 5_000 });
+    }
+    for (const text of clickText) {
+      const locator = page.getByText(text, { exact: false }).first();
+      if (!(await locator.isVisible().catch(() => false))) {
+        throw new Error(`ASTRA_LAUNCH_VIDEO_CAPTURE_ACTION_MISSING text=${text}`);
+      }
+      await locator.click({ timeout: 5_000 });
+    }
+    if (clickSelectors.length || clickText.length || seedEntries.length) {
+      await page.waitForTimeout(waitAfterActionsMs);
+    }
+
+    const bodyText = await page.locator("body").innerText().catch(() => "");
+    for (const text of forbiddenText) {
+      if (bodyText.includes(text)) {
+        throw new Error(`ASTRA_LAUNCH_VIDEO_CAPTURE_FORBIDDEN_TEXT text=${text}`);
+      }
+    }
+    for (const text of requiredText) {
+      if (!bodyText.includes(text)) {
+        throw new Error(`ASTRA_LAUNCH_VIDEO_CAPTURE_REQUIRED_TEXT_MISSING text=${text}`);
+      }
+    }
+
     const height = await page.evaluate(() => Math.max(document.body.scrollHeight, document.documentElement.scrollHeight));
     const positions = Array.from({ length: sceneCount }, (_, index) => {
       if (sceneCount === 1) return 0;
@@ -123,7 +193,9 @@ export async function captureWebsite({ url, outDir, sceneCount = 3, viewport = {
       files.push(file);
     }
     return files;
-  } finally { await browser.close(); }
+  } finally {
+    await browser.close();
+  }
 }
 
 function escapeFilterPath(file) {
@@ -148,19 +220,27 @@ function segmentVideo({ scene, preset, outFile, workDir }) {
   ].join(",");
   const audioExpr = `aevalsrc=0.004*(sin(2*PI*110*t)+0.65*sin(2*PI*165*t)+0.4*sin(2*PI*220*t)):s=48000:d=${duration}`;
   run("ffmpeg", [
-    "-hide_banner", "-loglevel", "error", "-y", "-loop", "1", "-t", String(duration), "-i", scene.image,
-    "-f", "lavfi", "-i", audioExpr, "-vf", filter,
+    "-hide_banner", "-loglevel", "error", "-y",
+    "-loop", "1", "-t", String(duration), "-i", scene.image,
+    "-f", "lavfi", "-i", audioExpr,
+    "-vf", filter,
     "-af", `afade=t=in:st=0:d=0.35,afade=t=out:st=${fadeOutStart}:d=0.35`,
-    "-map", "0:v:0", "-map", "1:a:0", "-r", String(preset.fps),
+    "-map", "0:v:0", "-map", "1:a:0",
+    "-r", String(preset.fps),
     "-c:v", "libx264", "-preset", "veryfast", "-crf", "21", "-pix_fmt", "yuv420p",
-    "-c:a", "aac", "-b:a", "128k", "-shortest", "-movflags", "+faststart", outFile,
+    "-c:a", "aac", "-b:a", "128k", "-shortest", "-movflags", "+faststart",
+    outFile,
   ]);
 }
 
-export function sha256File(file) { return createHash("sha256").update(readFileSync(file)).digest("hex"); }
+export function sha256File(file) {
+  return createHash("sha256").update(readFileSync(file)).digest("hex");
+}
 
 export function probeVideo(file) {
-  const result = run("ffprobe", ["-v", "error", "-show_streams", "-show_format", "-of", "json", file]);
+  const result = run("ffprobe", [
+    "-v", "error", "-show_streams", "-show_format", "-of", "json", file,
+  ]);
   return JSON.parse(result.stdout);
 }
 
@@ -196,7 +276,11 @@ export function evaluateProbe({ probe, expected, black = { maxBlackSeconds: 0 },
     audio: expected.requireAudio === false ? true : Boolean(audio),
     black: Number(black.maxBlackSeconds || 0) <= (expected.maxBlackSeconds ?? 1.25),
     fileSize: Number(fileBytes) >= (expected.minBytes ?? 50_000),
-    scenes: !sceneManifest || (Array.isArray(sceneManifest.scenes) && sceneManifest.scenes.length === expected.sceneCount && sceneManifest.scenes.every((s) => s.sha256 && s.bytes > 0)),
+    scenes: !sceneManifest || (
+      Array.isArray(sceneManifest.scenes) &&
+      sceneManifest.scenes.length === expected.sceneCount &&
+      sceneManifest.scenes.every((s) => s.sha256 && s.bytes > 0)
+    ),
   };
   return {
     status: Object.values(checks).every(Boolean) ? "PASS" : "FAIL",
@@ -209,22 +293,37 @@ export function proveVideo({ file, config, format, sceneManifest }) {
   const preset = FORMAT_PRESETS[format];
   if (!preset) throw new Error(`ASTRA_LAUNCH_VIDEO_FORMAT_INVALID ${format}`);
   const report = evaluateProbe({
-    probe: probeVideo(file), black: detectBlack(file), fileBytes: statSync(file).size, sceneManifest,
+    probe: probeVideo(file),
+    black: detectBlack(file),
+    fileBytes: statSync(file).size,
+    sceneManifest,
     expected: {
-      width: preset.width, height: preset.height, minFps: 24, durationSeconds: config.durationSeconds,
-      durationToleranceSeconds: config.proof.durationToleranceSeconds, requireAudio: config.proof.requireAudio,
-      maxBlackSeconds: config.proof.maxBlackSeconds, minBytes: config.proof.minBytes, sceneCount: config.sceneCount,
+      width: preset.width,
+      height: preset.height,
+      minFps: 24,
+      durationSeconds: config.durationSeconds,
+      durationToleranceSeconds: config.proof.durationToleranceSeconds,
+      requireAudio: config.proof.requireAudio,
+      maxBlackSeconds: config.proof.maxBlackSeconds,
+      minBytes: config.proof.minBytes,
+      sceneCount: config.sceneCount,
     },
   });
-  if (report.status !== "PASS") throw new Error(`ASTRA_LAUNCH_VIDEO_PROOF_FAIL format=${format} report=${JSON.stringify(report)}`);
+  if (report.status !== "PASS") {
+    throw new Error(`ASTRA_LAUNCH_VIDEO_PROOF_FAIL format=${format} report=${JSON.stringify(report)}`);
+  }
   return report;
 }
 
 export function renderLaunchVideos({ config: rawConfig, scenes, outDir }) {
   assertDependencies();
   const config = normalizeConfig(rawConfig);
-  if (!Array.isArray(scenes) || scenes.length !== config.sceneCount) throw new Error(`ASTRA_LAUNCH_VIDEO_SCENE_COUNT_INVALID expected=${config.sceneCount} got=${scenes?.length ?? 0}`);
-  for (const scene of scenes) if (!scene.image || !existsSync(scene.image)) throw new Error(`ASTRA_LAUNCH_VIDEO_SCENE_IMAGE_MISSING ${scene.id}`);
+  if (!Array.isArray(scenes) || scenes.length !== config.sceneCount) {
+    throw new Error(`ASTRA_LAUNCH_VIDEO_SCENE_COUNT_INVALID expected=${config.sceneCount} got=${scenes?.length ?? 0}`);
+  }
+  for (const scene of scenes) {
+    if (!scene.image || !existsSync(scene.image)) throw new Error(`ASTRA_LAUNCH_VIDEO_SCENE_IMAGE_MISSING ${scene.id}`);
+  }
   mkdirSync(outDir, { recursive: true });
   const slug = slugify(config.project.name);
   const outputs = [];
@@ -232,7 +331,8 @@ export function renderLaunchVideos({ config: rawConfig, scenes, outDir }) {
     const preset = FORMAT_PRESETS[format];
     const workDir = path.join(outDir, `.work-${format}`);
     mkdirSync(workDir, { recursive: true });
-    const segmentFiles = [], manifestScenes = [];
+    const segmentFiles = [];
+    const manifestScenes = [];
     for (const scene of scenes) {
       const segment = path.join(workDir, `${scene.id}.mp4`);
       segmentVideo({ scene, preset, outFile: segment, workDir });
