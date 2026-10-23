@@ -1,5 +1,6 @@
 import type { EditorialArticle } from "@/lib/editorial/types";
 import { SITE_URL } from "@/lib/programmatic";
+import { absImg } from "@/lib/image-seo";
 import type { SocialPublication } from "@/lib/social/types";
 
 const X_LIMIT = 280;
@@ -127,7 +128,7 @@ export function buildXPublication(article: EditorialArticle, now = new Date()): 
     network: "x",
     text: fitted.text,
     hashtags: fitted.hashtags,
-    imageUrl: article.image?.src ? `${SITE_URL}${article.image.src}` : null,
+    imageUrl: article.image?.src ? absImg(article.image.src) : null,
     createdAt,
     scheduledAt: article.publishedAt ?? createdAt,
     attemptedAt: null,

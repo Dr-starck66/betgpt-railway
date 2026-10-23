@@ -90,6 +90,16 @@ describe("ASTRA SOCIAL", () => {
     assert.match(fitted.text, /https:\/\/betgpt\.live/);
   });
 
+  it("preserves absolute external article images and prefixes local assets exactly once", () => {
+    const external = "https://commons.wikimedia.org/wiki/Special:FilePath/PSG-Lyon_Parc_des_Princes_02.jpg";
+    const outside = buildXPublication(article({ image: { ...article().image, src: external } }));
+    assert.equal(outside.imageUrl, external);
+    assert.ok(!(outside.imageUrl ?? "").includes("betgpt.livehttps:"));
+
+    const local = buildXPublication(article());
+    assert.equal(local.imageUrl, "https://betgpt.live/blog/discover/psg-om.jpg");
+  });
+
   it("uses a deterministic idempotency key per article", () => {
     const a = buildXPublication(article(), new Date("2026-10-01T15:06:00.000Z"));
     const b = buildXPublication(article(), new Date("2026-10-01T15:07:00.000Z"));
