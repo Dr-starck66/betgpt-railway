@@ -107,6 +107,12 @@ export function isAbsurdScoreClaim(text: string): boolean {
   return /\b(?:dix(?:[-\s](?:sept|huit|neuf))?|onze|douze|treize|quatorze|quinze|seize|vingt(?:[-\s](?:et[-\s])?(?:un|deux|trois|quatre|cinq|six|sept|huit|neuf))?|trente(?:[-\s](?:et[-\s])?(?:un|deux|trois|quatre|cinq|six|sept|huit|neuf))?|quarante(?:[-\s](?:et[-\s])?(?:un|deux|trois|quatre|cinq|six|sept|huit|neuf))?|cinquante(?:[-\s](?:et[-\s])?(?:un|deux|trois|quatre|cinq|six|sept|huit|neuf))?|soixante(?:[-\s](?:et[-\s])?(?:un|deux|trois|quatre|cinq|six|sept|huit|neuf))?|cent)\s*(?:[-–—:]|à|a)\s*z[eé]ro(?:s)?\b/i.test(text);
 }
 
+// Keep the narrow, deterministic 4-4-2 / 3-2-5 explanation available
+// before a small generative model can replace it with misleading tactics.
+export function isTacticalFormationComparison(text: string): boolean {
+  return /\b4-4-2\b/.test(text) && /\b3-2-5\b/.test(text);
+}
+
 export function localReply(last: string, desk: string, mode: PersonalityMode): string {
   const intent = classifyChatIntent(last);
   if (intent === "CASUAL") {
@@ -449,6 +455,12 @@ export async function completeChat(
         ? "Non : un combiné pareil n’est jamais « sûr à 100 % ». Douze sélections empilent douze occasions de faire exploser le ticket. Et « je mets tout », c’est précisément le moment où je te dis de réduire la mise, pas de jouer au cascadeur bancaire."
         : "Un combiné pareil n’est jamais sûr à 100 %. Douze sélections multiplient les points de rupture, et miser tout son budget sur un seul ticket est un risque disproportionné. Réduis la mise ou simplifie le ticket, avant que ton portefeuille ne demande l’asile politique.";
     return success(base, mode, last, recentRoasts);
+  }
+
+  // Restore the pre-model tactical path removed in a87f529.
+  // Its existing localReply answer covers midfield overload and offensive width.
+  if (isTacticalFormationComparison(last)) {
+    return success(localReply(last, "", mode), mode, last, recentRoasts);
   }
 
   const mustGround = shouldGround(last);
