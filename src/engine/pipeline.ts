@@ -50,6 +50,7 @@ import { liveSuperBet } from "./live-super";
 import { pushNewPredictions } from "./prediction-hook";
 import { MIN_BET_ODDS, MAX_BET_ODDS, oddsPlayable } from "@/lib/markets";
 import { adaptiveAllows, adaptiveSafetyBlock, buildAdaptiveLearningReport, scoreProspectiveTrust, type AdaptiveLearningReport } from "./adaptive-learning";
+import { canonicalRiskState, applyCanonicalRiskBrakeToMarkets } from "./learning-memory";
 import { internationalCompetitionKeyOf, internationalCompetitionKeysOf, rowsForInternationalCompetition } from "./competition-scope";
 import { bestThree, estimateRho, runStatisticalStack, anchorToListedFavorite } from "./models";
 import type {
@@ -1777,9 +1778,29 @@ function runEngineUncached(): EngineRun {
     }
   }
   applyTicketCap(predictions);
-  const clPhaseBest = promoteCupPhaseBest(predictions, kept, "CL", "clPhaseBest");
-  const elPhaseBest = promoteCupPhaseBest(predictions, kept, "EL", "elPhaseBest");
+  let clPhaseBest = promoteCupPhaseBest(predictions, kept, "CL", "clPhaseBest");
+  let elPhaseBest = promoteCupPhaseBest(predictions, kept, "EL", "elPhaseBest");
   applyTicketCap(predictions);
+  // ASTRA_CANONICAL_ROI_BRAKE_V1: veto new stake recommendations after a
+  // verified negative canonical sample. Observational predictions still settle
+  // and teach the learner; historical tickets remain untouched.
+  const canonicalRisk = canonicalRiskState(actualTickets);
+  if (canonicalRisk.status === "PAUSE") {
+    let blocked = 0;
+    for (const p of predictions) {
+      blocked += applyCanonicalRiskBrakeToMarkets(p.markets, canonicalRisk);
+    }
+    // These phase highlights were picked before the final risk veto.
+    if (clPhaseBest?.market.decision !== "BET") clPhaseBest = null;
+    if (elPhaseBest?.market.decision !== "BET") elPhaseBest = null;
+    console.warn("[BETGPT_ROI_CIRCUIT_BREAKER]", JSON.stringify({
+      settledN: canonicalRisk.settledN,
+      wins: canonicalRisk.wins,
+      losses: canonicalRisk.losses,
+      roi: canonicalRisk.roi,
+      blocked,
+    }));
+  }
   const ablation = learned.championship.ablation;
   const tacticalHelps = ablation.some(
     (a) => a.name === "TACTICAL" && ablation.find((b) => b.name === "BASELINE" && a.brier < b.brier - 0.002),
@@ -1899,6 +1920,17 @@ export function getPrediction(id: string): { match: MatchInput; prediction: Pred
 
 export function predictMatch(match: MatchInput): PredictionRecord {
   const rec = attachLiveIntel(match, buildPrediction(match, learnedNow(match), DEFAULT_ROI5_DOMINANCE_POLICY));
+  // Direct match fallbacks bypass runEngineUncached; protect actionable matches
+  // here too. Historical match pages remain an unmodified audit record.
+  const kickoffMs = Date.parse(match.kickoff);
+  if (
+    Number.isFinite(kickoffMs) &&
+    kickoffMs >= Date.now() - 4 * 3600_000 &&
+    match.status !== "finished" &&
+    match.status !== "cancelled"
+  ) {
+    applyCanonicalRiskBrakeToMarkets(rec.markets, canonicalRiskState(loadTickets()));
+  }
   try {
     const v = recordPredictionVersion(match, rec);
     const series = versionsFor(match.id);

@@ -434,3 +434,77 @@ export async function persistLearningMemory(rows: TicketRow[]): Promise<Learning
   await kvSet(LEARNING_MEMORY_KEY, snapshot);
   return snapshot;
 }
+
+
+/**
+ * ASTRA_CANONICAL_ROI_BRAKE_V1
+ *
+ * Circuit-breaker based ONLY on honest, pre-kickoff canonical BET tickets,
+ * with the same fixture/market deduplication as the public learning ledger.
+ * Archive, closing, WATCH and NO_BET rows cannot improve or worsen this KPI.
+ *
+ * A halt is deliberate fail-closed: it does not automatically lift because
+ * shadow outcomes look good. Release needs a separately verified policy.
+ */
+export const CANONICAL_RISK_POLICY = Object.freeze({
+  minSettled: 30,
+  stopRoi: -0.10,
+});
+
+export type CanonicalRiskState = {
+  status: "PAUSE" | "CONTINUE";
+  settledN: number;
+  wins: number;
+  losses: number;
+  roi: number | null;
+  minSettled: number;
+  stopRoi: number;
+};
+
+export function canonicalRiskState(rows: TicketRow[]): CanonicalRiskState {
+  const settled = learningRowsOf(rows).filter(honestSettledBet);
+  const wins = settled.filter((row) => row.result === "win").length;
+  const returned = settled.reduce(
+    (sum, row) => sum + (row.result === "win" ? row.odds : 0),
+    0,
+  );
+  const roi = settled.length ? (returned - settled.length) / settled.length : null;
+  return {
+    status: settled.length >= CANONICAL_RISK_POLICY.minSettled &&
+      roi != null && roi <= CANONICAL_RISK_POLICY.stopRoi
+        ? "PAUSE"
+        : "CONTINUE",
+    settledN: settled.length,
+    wins,
+    losses: settled.length - wins,
+    roi,
+    ...CANONICAL_RISK_POLICY,
+  };
+}
+
+type RiskMarket = {
+  decision: "BET" | "WATCH" | "NO_BET";
+  stakePct: number;
+  premium: boolean;
+  cover?: unknown;
+  rejectionReason?: string;
+};
+
+export function applyCanonicalRiskBrakeToMarkets<T extends RiskMarket>(
+  markets: T[],
+  state: CanonicalRiskState,
+): number {
+  if (state.status !== "PAUSE") return 0;
+  let blocked = 0;
+  for (const market of markets) {
+    if (market.decision !== "BET") continue;
+    market.decision = "NO_BET";
+    market.stakePct = 0;
+    market.premium = false;
+    market.cover = undefined;
+    market.rejectionReason =
+      `Suspension de sécurité ROI canonique : ${state.settledN} résultats, ${((state.roi ?? 0) * 100).toFixed(2)} %. Analyse et apprentissage uniquement, aucune nouvelle mise.`;
+    blocked += 1;
+  }
+  return blocked;
+}
