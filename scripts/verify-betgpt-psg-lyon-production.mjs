@@ -20,12 +20,12 @@ try {
   const page = await get(origin + articlePath);
   const articleUrl = origin + articlePath;
   if (page.status !== 200) throw Error("ARTICLE_NOT_200 status=" + page.status);
-  if (page.finalUrl.replace(/\\/$/,"") !== articleUrl) throw Error("CANONICAL_ROUTE_REDIRECT " + page.finalUrl);
+  if (page.finalUrl.replace(/\/$/,"") !== articleUrl) throw Error("CANONICAL_ROUTE_REDIRECT " + page.finalUrl);
   if (!page.contentType.includes("text/html")) throw Error("BAD_CONTENT_TYPE " + page.contentType);
   if (!page.body.includes("PSG") || !page.body.includes("Lyon")) throw Error("EXPECTED_ARTICLE_ABSENT");
-  const canonicalLinks = [...page.body.matchAll(/<link\\b[^>]*rel=[\"']canonical[\"'][^>]*>/gi)];
+  const canonicalLinks = [...page.body.matchAll(/<link\b[^>]*rel=["']canonical["'][^>]*>/gi)];
   if (canonicalLinks.length !== 1 || !canonicalLinks[0][0].includes(articleUrl)) throw Error("CANONICAL_INVALID");
-  const metaRobots = [...page.body.matchAll(/<meta\\b[^>]*name=[\"']robots[\"'][^>]*>/gi)].map(x=>x[0]);
+  const metaRobots = [...page.body.matchAll(/<meta\b[^>]*name=["']robots["'][^>]*>/gi)].map(x=>x[0]);
   if (metaRobots.some(x=>/noindex/i.test(x))) throw Error("ARTICLE_NOINDEX");
   if (!metaRobots.some(x=>/max-image-preview:large/i.test(x))) throw Error("DISCOVER_LARGE_IMAGE_META_MISSING");
   console.log("ASTRA_BETGPT_LIVE_ARTICLE_HTTP200_PASS", JSON.stringify({article:articleUrl,status:page.status,revision:current.sourceSha,canonical:true,indexable:true}));
