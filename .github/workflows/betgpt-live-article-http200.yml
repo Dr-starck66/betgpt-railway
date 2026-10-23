@@ -1,0 +1,23 @@
+name: ASTRA BetGPT Live Article HTTP 200
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "scripts/verify-betgpt-psg-lyon-production.mjs"
+      - ".github/workflows/betgpt-live-article-http200.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-actualites:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Checkout latest proof script
+        uses: actions/checkout@v4
+      - name: Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify expected production revision, HTTP 200, canonical and indexation
+        run: node scripts/verify-betgpt-psg-lyon-production.mjs
