@@ -206,25 +206,51 @@ function trustOf(state: ProfileState, row: TicketRow): number {
   return segment * (1 - ADAPTIVE_CONFIG.modelBlend) + model * ADAPTIVE_CONFIG.modelBlend;
 }
 
+/**
+ * As-of replay: a prediction may only learn results whose match has finished
+ * before the prediction was RECORDED, not merely before its kickoff.
+ *
+ * TicketRow does not currently carry a verified settlement timestamp. The
+ * four-hour lag is a conservative proxy for ordinary football fixtures,
+ * not proof that an exceptionally delayed result had been published.
+ * Identical fixtures/markets are scored only once (their earliest forecast).
+ */
 export function walkForwardTrust(actualRows: TicketRow[], archiveRows: TicketRow[]): WalkForwardPoint[] {
-  const actual = actualRows
-    .filter((r) => validTarget(r) && honest(r) && r.book !== "clôture")
-    .sort((a, b) => a.kickoff.localeCompare(b.kickoff));
+  const candidates = actualRows
+    .filter((r) => validTarget(r) && honest(r) && !/cl[oô]ture|d[eé]riv[eé]|archive/i.test(r.book || ""))
+    .sort((a, b) => a.recordedAt.localeCompare(b.recordedAt) || a.kickoff.localeCompare(b.kickoff) || a.id.localeCompare(b.id));
+  const seen = new Set<string>();
+  const actual = candidates.filter((r) => {
+    const fixture = `${r.home.trim().toLowerCase()}|${r.away.trim().toLowerCase()}|${r.kickoff}|${r.market}`;
+    if (seen.has(fixture)) return false;
+    seen.add(fixture);
+    return true;
+  });
   const archive = archiveRows
-    .filter(validTarget)
+    .filter((r) => validTarget(r) && Number.isFinite(Date.parse(r.kickoff)))
     .sort((a, b) => a.kickoff.localeCompare(b.kickoff));
+  const settlementBufferMs = 4 * 60 * 60 * 1000;
   const state = emptyState();
   const out: WalkForwardPoint[] = [];
-  let ai = 0;
+  let archiveIndex = 0;
+  let pending: TicketRow[] = [];
   for (const row of actual) {
-    const cutoff = Date.parse(row.kickoff);
-    while (ai < archive.length) {
-      const r = archive[ai]!;
-      const k = Date.parse(r.kickoff);
-      if (!Number.isFinite(k) || k >= cutoff) break;
-      add(state, r, ADAPTIVE_CONFIG.archiveWeight);
-      ai += 1;
+    const recordedMs = Date.parse(row.recordedAt);
+    while (archiveIndex < archive.length) {
+      const prior = archive[archiveIndex]!;
+      if (Date.parse(prior.kickoff) + settlementBufferMs > recordedMs) break;
+      add(state, prior, ADAPTIVE_CONFIG.archiveWeight);
+      archiveIndex += 1;
     }
+    const outstanding: TicketRow[] = [];
+    for (const prior of pending) {
+      if (Date.parse(prior.kickoff) + settlementBufferMs <= recordedMs) {
+        add(state, prior, ADAPTIVE_CONFIG.actualWeight);
+      } else {
+        outstanding.push(prior);
+      }
+    }
+    pending = outstanding;
     const trust = trustOf(state, row);
     out.push({
       id: row.id,
@@ -237,10 +263,10 @@ export function walkForwardTrust(actualRows: TicketRow[], archiveRows: TicketRow
       trust,
       result: row.result as "win" | "lose",
     });
-    // Only after scoring: no row can teach the model its own answer.
-    add(state, row, ADAPTIVE_CONFIG.actualWeight);
+    // Queue the settled result: it cannot affect contemporaneous forecasts.
+    pending.push(row);
   }
-  return out;
+  return out.sort((a, b) => a.kickoff.localeCompare(b.kickoff) || a.id.localeCompare(b.id));
 }
 
 export function adaptiveMetrics(rows: WalkForwardPoint[]): AdaptiveMetrics {
@@ -348,9 +374,13 @@ export function chooseAdaptivePolicy(points: WalkForwardPoint[]): AdaptivePolicy
       reason: "Pas assez de tickets honnêtes pour séparer apprentissage et holdout sans faux progrès.",
     };
   }
-  const split = Math.max(18, Math.floor(points.length * ADAPTIVE_CONFIG.trainFraction));
-  const train = points.slice(0, split);
-  const holdout = points.slice(split);
+  // Never split one kickoff cohort between training and validation.
+  // Keep the entire later cohort in the untouched holdout.
+  const ordered = [...points].sort((a, b) => a.kickoff.localeCompare(b.kickoff));
+  const split = Math.max(18, Math.floor(ordered.length * ADAPTIVE_CONFIG.trainFraction));
+  const holdoutFrom = ordered[split]?.kickoff;
+  const train = holdoutFrom ? ordered.filter((p) => p.kickoff < holdoutFrom) : ordered;
+  const holdout = holdoutFrom ? ordered.filter((p) => p.kickoff >= holdoutFrom) : [];
   let best: { c: AdaptiveCandidate; score: number; metrics: AdaptiveMetrics; recent: AdaptiveMetrics; stability: number } | null = null;
   let candidateCount = 0;
   for (const c of candidateGrid()) {
@@ -370,6 +400,7 @@ export function chooseAdaptivePolicy(points: WalkForwardPoint[]): AdaptivePolicy
   const promoted =
     enough &&
     holdoutMetrics.roiFlat > 0 &&
+    holdoutMetrics.hitRate >= ADAPTIVE_CONFIG.targetHitRate &&
     trainRecent.roiFlat > 0 &&
     roiLift >= ADAPTIVE_CONFIG.minRoiLiftVsBaseline &&
     stability >= ADAPTIVE_CONFIG.minStability;
@@ -386,7 +417,7 @@ export function chooseAdaptivePolicy(points: WalkForwardPoint[]): AdaptivePolicy
     candidateCount,
     reason: promoted
       ? `PROMOTED ROI-FIRST : challenger +${(roiLift * 100).toFixed(2)} points de ROI vs baseline sur holdout chronologique, stabilité ${(stability * 100).toFixed(0)} %.`
-      : `SHADOW ROI-FIRST : promotion refusée (lift ROI ${(roiLift * 100).toFixed(2)} pts, stabilité ${(stability * 100).toFixed(0)} %, n=${holdoutMetrics.n}).`,
+      : `SHADOW ROI-FIRST : promotion refusée (lift ROI ${(roiLift * 100).toFixed(2)} pts, précision ${(holdoutMetrics.hitRate * 100).toFixed(1)} % / objectif ${ADAPTIVE_CONFIG.targetHitRate * 100} %, stabilité ${(stability * 100).toFixed(0)} %, n=${holdoutMetrics.n}).`,
   };
 }
 
