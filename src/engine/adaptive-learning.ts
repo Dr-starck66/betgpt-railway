@@ -218,17 +218,17 @@ function trustOf(state: ProfileState, row: TicketRow): number {
 export function walkForwardTrust(actualRows: TicketRow[], archiveRows: TicketRow[]): WalkForwardPoint[] {
   const candidates = actualRows
     .filter((r) => validTarget(r) && honest(r) && !/cl[oô]ture|d[eé]riv[eé]|archive/i.test(r.book || ""))
-    .sort((a, b) => a.recordedAt.localeCompare(b.recordedAt) || a.kickoff.localeCompare(b.kickoff) || a.id.localeCompare(b.id));
+    .sort((a, b) => Date.parse(a.recordedAt) - Date.parse(b.recordedAt) || Date.parse(a.kickoff) - Date.parse(b.kickoff) || a.id.localeCompare(b.id));
   const seen = new Set<string>();
   const actual = candidates.filter((r) => {
-    const fixture = `${r.home.trim().toLowerCase()}|${r.away.trim().toLowerCase()}|${r.kickoff}|${r.market}`;
+    const fixture = `${r.home.trim().toLowerCase()}|${r.away.trim().toLowerCase()}|${Date.parse(r.kickoff)}|${r.market}`;
     if (seen.has(fixture)) return false;
     seen.add(fixture);
     return true;
   });
   const archive = archiveRows
     .filter((r) => validTarget(r) && Number.isFinite(Date.parse(r.kickoff)))
-    .sort((a, b) => a.kickoff.localeCompare(b.kickoff));
+    .sort((a, b) => Date.parse(a.kickoff) - Date.parse(b.kickoff));
   const settlementBufferMs = 4 * 60 * 60 * 1000;
   const state = emptyState();
   const out: WalkForwardPoint[] = [];
@@ -266,7 +266,7 @@ export function walkForwardTrust(actualRows: TicketRow[], archiveRows: TicketRow
     // Queue the settled result: it cannot affect contemporaneous forecasts.
     pending.push(row);
   }
-  return out.sort((a, b) => a.kickoff.localeCompare(b.kickoff) || a.id.localeCompare(b.id));
+  return out.sort((a, b) => Date.parse(a.kickoff) - Date.parse(b.kickoff) || a.id.localeCompare(b.id));
 }
 
 export function adaptiveMetrics(rows: WalkForwardPoint[]): AdaptiveMetrics {
@@ -376,11 +376,11 @@ export function chooseAdaptivePolicy(points: WalkForwardPoint[]): AdaptivePolicy
   }
   // Never split one kickoff cohort between training and validation.
   // Keep the entire later cohort in the untouched holdout.
-  const ordered = [...points].sort((a, b) => a.kickoff.localeCompare(b.kickoff));
+  const ordered = [...points].sort((a, b) => Date.parse(a.kickoff) - Date.parse(b.kickoff));
   const split = Math.max(18, Math.floor(ordered.length * ADAPTIVE_CONFIG.trainFraction));
-  const holdoutFrom = ordered[split]?.kickoff;
-  const train = holdoutFrom ? ordered.filter((p) => p.kickoff < holdoutFrom) : ordered;
-  const holdout = holdoutFrom ? ordered.filter((p) => p.kickoff >= holdoutFrom) : [];
+  const holdoutFrom = ordered[split] ? Date.parse(ordered[split]!.kickoff) : null;
+  const train = holdoutFrom != null ? ordered.filter((p) => Date.parse(p.kickoff) < holdoutFrom) : ordered;
+  const holdout = holdoutFrom != null ? ordered.filter((p) => Date.parse(p.kickoff) >= holdoutFrom) : [];
   let best: { c: AdaptiveCandidate; score: number; metrics: AdaptiveMetrics; recent: AdaptiveMetrics; stability: number } | null = null;
   let candidateCount = 0;
   for (const c of candidateGrid()) {
