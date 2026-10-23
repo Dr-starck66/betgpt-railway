@@ -531,5 +531,28 @@
     "remotePostUrl": null,
     "error": null,
     "retryCount": 0
+  },
+  {
+    "id": "x:manual-2026-10-23-psg-lyon-report:v1",
+    "articleId": "manual-2026-10-23-psg-lyon-report",
+    "articleSlug": "psg-lyon-reporte-lundi-26-octobre-2026",
+    "articleTitle": "PSG–Lyon reporté au lundi 26 octobre : ce qui change pour le match et les supporters",
+    "articleUrl": "https://betgpt.live/actualites/psg-lyon-reporte-lundi-26-octobre-2026",
+    "trackedUrl": "https://betgpt.live/actualites/psg-lyon-reporte-lundi-26-octobre-2026?utm_source=x&utm_medium=social&utm_campaign=editorial_auto&utm_content=psg-lyon-reporte-lundi-26-octobre-2026",
+    "network": "x",
+    "text": "🔴 PSG–Lyon reporté au lundi 26 octobre : ce qui change…\n\nÀ lire sur BetGPT 👇\n\nhttps://betgpt.live/actualites/psg-lyon-reporte-lundi-26-octobre-2026?utm_source=x&utm_medium=social&utm_campaign=editorial_auto&utm_content=psg-lyon-reporte-lundi-26-octobre-2026\n\n#ParisSaintGermain",
+    "hashtags": [
+      "#ParisSaintGermain"
+    ],
+    "imageUrl": "https://betgpt.livehttps://commons.wikimedia.org/wiki/Special:FilePath/PSG-Lyon_Parc_des_Princes_02.jpg",
+    "createdAt": "2026-10-23T15:07:23.123Z",
+    "scheduledAt": "2026-10-23T15:05:43.893Z",
+    "attemptedAt": null,
+    "publishedAt": null,
+    "status": "READY_TO_X",
+    "remotePostId": null,
+    "remotePostUrl": null,
+    "error": null,
+    "retryCount": 0
   }
 ]

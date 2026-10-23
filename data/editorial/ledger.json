@@ -222,7 +222,30 @@
         "label": "Rédaction BetGPT"
       }
     ],
-    "related": [],
+    "related": [
+      {
+        "href": "/actualites/psg-le-mans-les-compositions-probables-2026-10-10",
+        "title": "PSG - Le Mans : les compositions probables",
+        "image": {
+          "src": "/blog/discover/inline-crowd.jpg",
+          "alt": "Tribunes d'un stade de football",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/je-t-embrasse-cristiano-ronaldo-rend-finalement-hommage-a-lionel-messi-au-lendemain-de-sa",
+        "title": "« Je t’embrasse » : Cristiano Ronaldo rend finalement hommage à Lionel Messi, au lendemain de sa retraite internationale",
+        "image": {
+          "src": "/blog/discover/score-en-direct-ligue-1.jpg",
+          "alt": "Ambiance de match de football",
+          "width": 1200,
+          "height": 675,
+          "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      }
+    ],
     "quality": {
       "pass": true,
       "reasons": []
@@ -4325,6 +4348,17 @@
         }
       },
       {
+        "href": "/actualites/psg-lyon-reporte-lundi-26-octobre-2026",
+        "title": "PSG–Lyon reporté au lundi 26 octobre : ce qui change pour le match et les supporters",
+        "image": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/PSG-Lyon_Parc_des_Princes_02.jpg",
+          "alt": "PSG et Olympique Lyonnais au Parc des Princes en février 2020, photographie d’illustration historique",
+          "width": 3724,
+          "height": 2096,
+          "credit": "Zakarie Faibis, PSG–OL au Parc des Princes, 9 février 2020. CC BY-SA 4.0. https://commons.wikimedia.org/wiki/File:PSG-Lyon_Parc_des_Princes_02.jpg — https://creativecommons.org/licenses/by-sa/4.0/"
+        }
+      },
+      {
         "href": "/actualites/portugal-cristiano-ronaldo-ne-reviendra-en-selection-qu-a-une-condition-2026-10-06",
         "title": "Portugal : Cristiano Ronaldo ne reviendra en sélection qu’à une condition",
         "image": {
@@ -5971,6 +6005,17 @@
           "width": 1200,
           "height": 675,
           "credit": "Football : actualités, contexte et analyse sur BetGPT."
+        }
+      },
+      {
+        "href": "/actualites/psg-lyon-reporte-lundi-26-octobre-2026",
+        "title": "PSG–Lyon reporté au lundi 26 octobre : ce qui change pour le match et les supporters",
+        "image": {
+          "src": "https://commons.wikimedia.org/wiki/Special:FilePath/PSG-Lyon_Parc_des_Princes_02.jpg",
+          "alt": "PSG et Olympique Lyonnais au Parc des Princes en février 2020, photographie d’illustration historique",
+          "width": 3724,
+          "height": 2096,
+          "credit": "Zakarie Faibis, PSG–OL au Parc des Princes, 9 février 2020. CC BY-SA 4.0. https://commons.wikimedia.org/wiki/File:PSG-Lyon_Parc_des_Princes_02.jpg — https://creativecommons.org/licenses/by-sa/4.0/"
         }
       },
       {
