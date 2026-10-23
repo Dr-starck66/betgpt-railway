@@ -1,0 +1,43 @@
+name: BetGPT Ω — Forward Prediction Accuracy (shadow-only)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 8 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: betgpt-forward-accuracy-shadow
+  cancel-in-progress: true
+
+jobs:
+  forward-accuracy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify evaluation regression tests
+        run: node --test scripts/betgpt-forward-accuracy.test.mjs
+      - name: Fetch authenticated production evidence via public live endpoint
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsS --retry 2 --retry-delay 5 --connect-timeout 10 --max-time 75 \
+            -H 'Accept: application/json' -H 'Cache-Control: no-cache' \
+            'https://betgpt.live/api/learning-checkpoint' -o /tmp/forward-checkpoint.json
+      - name: Score only NEW frozen, pre-kickoff matches
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/betgpt-forward-accuracy.mjs /tmp/forward-checkpoint.json 2026-10-24T00:00:00Z > /tmp/forward-accuracy-report.json
+          node -e 'const r=require("/tmp/forward-accuracy-report.json"); if(!r.schema || !r.status) process.exit(1); console.log(r.status,r.metrics.n)'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: betgpt-forward-accuracy
+          path: /tmp/forward-accuracy-report.json
+          retention-days: 30
