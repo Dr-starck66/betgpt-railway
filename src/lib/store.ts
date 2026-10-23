@@ -10,9 +10,34 @@
  */
 export type JsonValue = null | boolean | number | string | JsonValue[] | { [k: string]: JsonValue };
 
+// Bounded process-local caches: bots can generate a new rate-limit key per request.
+// The SQL backend remains authoritative for evicted KV entries.
+const MAX_KV_ENTRIES = 512;
+const MAX_RATE_BUCKETS = 16_384;
+const RATE_SWEEP_INTERVAL_MS = 60_000;
 const mem = new Map<string, unknown>();
-const memHits = new Map<string, number[]>();
+type RateBucket = { hits: number[]; expiresAt: number };
+const memHits = new Map<string, RateBucket>();
+let lastRateSweep = 0;
 let testMemory = false;
+
+function rememberKv(key: string, value: unknown): void {
+  // Refresh insertion order so reads/writes retain the most recently used entries.
+  mem.delete(key);
+  mem.set(key, value);
+  while (mem.size > MAX_KV_ENTRIES) {
+    const oldest = mem.keys().next().value;
+    if (oldest === undefined) break;
+    mem.delete(oldest);
+  }
+}
+
+function sweepExpiredRateBuckets(now: number): void {
+  for (const [key, bucket] of memHits) {
+    if (bucket.expiresAt <= now) memHits.delete(key);
+  }
+  lastRateSweep = now;
+}
 
 type Sql = {
   query<T = Record<string, unknown>>(text: string, params?: unknown[]): Promise<T[]>;
@@ -30,14 +55,18 @@ async function trySql(): Promise<Sql | null> {
 }
 
 export async function kvGet<T>(key: string): Promise<T | null> {
-  if (mem.has(key)) return mem.get(key) as T;
+  if (mem.has(key)) {
+    const value = mem.get(key) as T;
+    rememberKv(key, value);
+    return value;
+  }
   const sql = await trySql();
   if (!sql) return null;
   try {
     const rows = await sql.query<{ v: T }>("select v from kv where k = $1", [key]);
     const v = rows[0]?.v;
     if (v === undefined) return null;
-    mem.set(key, v);
+    rememberKv(key, v);
     return v;
   } catch {
     return null;
@@ -45,7 +74,7 @@ export async function kvGet<T>(key: string): Promise<T | null> {
 }
 
 export async function kvSet(key: string, value: unknown): Promise<void> {
-  mem.set(key, value);
+  rememberKv(key, value);
   const sql = await trySql();
   if (!sql) return;
   try {
@@ -258,19 +287,25 @@ export async function allowKeyed(key: string, max: number, windowMs: number): Pr
       /* fall through */
     }
   }
-  const bucket = memHits.get(key) ?? [];
-  const next = bucket.filter((t) => t > now - windowMs);
+  if (now - lastRateSweep >= RATE_SWEEP_INTERVAL_MS || memHits.size >= MAX_RATE_BUCKETS) {
+    sweepExpiredRateBuckets(now);
+  }
+  const bucket = memHits.get(key);
+  const next = (bucket?.hits ?? []).filter((t) => t > now - windowMs);
   if (next.length >= max) {
-    memHits.set(key, next);
+    memHits.set(key, { hits: next, expiresAt: now + windowMs });
     return false;
   }
+  // Fail closed under unbounded distinct-client cardinality, rather than OOM.
+  if (!bucket && memHits.size >= MAX_RATE_BUCKETS) return false;
   next.push(now);
-  memHits.set(key, next);
+  memHits.set(key, { hits: next, expiresAt: now + windowMs });
   return true;
 }
 
 export function resetStoreForTests(): void {
   mem.clear();
   memHits.clear();
+  lastRateSweep = 0;
   testMemory = true;
 }
