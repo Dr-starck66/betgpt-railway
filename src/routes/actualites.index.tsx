@@ -38,7 +38,19 @@ function ActualitesPage() {
     (section) => (sectionArticles(edition, section.slug)?.length ?? 0) >= SECTION_MIN,
   );
   const [featured, ...rest] = published;
-  const playerFeatures = publishedBlogArticles().filter((article) => article.isNews && article.cluster?.startsWith("joueur-")).reverse();
+  // Scheduled player dossiers are original articles with their own embargo date.
+  // An older newsroom ledger entry must never hide the newest released feature.
+  const playerFeatures = publishedBlogArticles()
+    .filter((article) => article.isNews && article.cluster?.startsWith("joueur-"))
+    .sort((a, b) => Date.parse(b.published) - Date.parse(a.published));
+  const latestPlayer = playerFeatures[0];
+  const newestEditorial = published.reduce<(typeof published)[number] | undefined>(
+    (newest, article) => !newest || Date.parse(article.publishedAt ?? "") > Date.parse(newest.publishedAt ?? "") ? article : newest,
+    undefined,
+  );
+  const newPlayerLead = latestPlayer && (!newestEditorial || Date.parse(latestPlayer.published) > Date.parse(newestEditorial.publishedAt ?? ""))
+    ? latestPlayer
+    : null;
 
   return (
     <div className="mx-auto max-w-[1280px] space-y-8">
@@ -46,7 +58,7 @@ function ActualitesPage() {
         <p className="eyebrow">BetGPT Editorial</p>
         <h1 className="mt-2 font-display text-3xl tracking-tight sm:text-5xl">Actualités football</h1>
         <p className="mt-4 max-w-3xl text-base leading-relaxed text-mist sm:text-lg">
-          Une rédaction sélective pour la France : trois articles ciblés par jour à 08 h 00, 13 h 00 et 19 h 00 (heure de Paris), avec remplacement automatique si un sujet est trop faible.
+          Actualités et analyses originales du football français : jusqu'à trois articles d'actualité par jour lorsqu'ils franchissent nos contrôles, et de nouveaux dossiers joueurs à dates programmées. Aucune publication artificielle pour remplir un créneau.
         </p>
         <div className="mt-5 flex flex-wrap gap-2 text-sm">
           <a href="/actualites-rss.xml" className="chip-pill hover:border-sage/30 hover:text-link">
@@ -95,6 +107,20 @@ function ActualitesPage() {
             </li>
           ))}
         </ul>
+      ) : null}
+
+      {newPlayerLead ? (
+        <section className="surface-card overflow-hidden" aria-label="Dernier dossier publié automatiquement">
+          <Link to="/blog/$slug" params={{ slug: newPlayerLead.slug }} className="grid gap-0 md:grid-cols-[minmax(0,1.4fr)_minmax(250px,0.8fr)]">
+            <div className="p-5 sm:p-7">
+              <p className="text-xs font-bold uppercase tracking-wider text-link">Dernier dossier paru · {formatParis(newPlayerLead.published)}</p>
+              <h2 className="mt-3 text-2xl font-bold leading-snug text-paper sm:text-3xl">{newPlayerLead.h1}</h2>
+              <p className="mt-3 max-w-2xl leading-relaxed text-mist">{newPlayerLead.lead}</p>
+              <p className="mt-4 font-semibold text-link">Lire le dossier →</p>
+            </div>
+            <img src={blogCover(newPlayerLead).src} alt={blogCover(newPlayerLead).alt} width={1200} height={675} className="aspect-video h-full w-full object-cover" loading="eager" />
+          </Link>
+        </section>
       ) : null}
 
       {featured ? (
