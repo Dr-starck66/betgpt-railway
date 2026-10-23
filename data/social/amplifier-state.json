@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-23T10:05:12.343Z",
+      "lastCheckedAt": "2026-10-23T15:01:19.049Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -45,13 +45,13 @@
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-23T10:05:12.897Z",
+      "lastCheckedAt": "2026-10-23T15:01:19.930Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-23T10:05:14.296Z",
+      "lastCheckedAt": "2026-10-23T15:01:22.181Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -68,7 +68,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-23T10:05:14.991Z",
+      "lastCheckedAt": "2026-10-23T15:01:23.180Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -85,20 +85,81 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-23T10:05:15.894Z",
+      "lastCheckedAt": "2026-10-23T15:01:26.560Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-23T10:05:13.413Z",
+      "lastCheckedAt": "2026-10-23T15:01:20.797Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-23T10:05:15.454Z",
-      "seen": {},
+      "lastCheckedAt": "2026-10-23T15:01:24.199Z",
+      "seen": {
+        "c022035f3d7190f6f1": {
+          "url": "https://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/",
+          "date": "Fri, 23 Oct 2026 00:00:00 GMT",
+          "seenAt": "2026-10-23T15:01:24.199Z"
+        },
+        "1d0959ebfd128f825b": {
+          "url": "https://andaluztarija.com/2020/11/21/proponen-industrializar-la-basura-en-tarija-para-reducir-impactos-ambientales/",
+          "date": "Fri, 23 Oct 2026 00:00:00 GMT",
+          "seenAt": "2026-10-23T15:01:24.199Z"
+        },
+        "62a40adf5a22779d87": {
+          "url": "https://andaluztarija.com/2022/05/25/tarijeno-moises-paniagua-viaja-a-paraguay-con-la-sub-17-nacional/",
+          "date": "Fri, 23 Oct 2026 00:00:00 GMT",
+          "seenAt": "2026-10-23T15:01:24.199Z"
+        },
+        "5784f60c6ac000c33a": {
+          "url": "https://andaluztarija.com/2023/06/21/juan-felipe-rodriguez-se-ubica-sexto-en-la-sub-23/",
+          "date": "Fri, 23 Oct 2026 00:00:00 GMT",
+          "seenAt": "2026-10-23T15:01:24.199Z"
+        },
+        "c7566e679b42dc339b": {
+          "url": "https://andaluztarija.com/2021/05/08/mas-alla-y-aca-del-centenario-de-oscar-alfaro/",
+          "date": "Fri, 23 Oct 2026 00:00:00 GMT",
+          "seenAt": "2026-10-23T15:01:24.199Z"
+        },
+        "6dd57c046d2c34533e": {
+          "url": "https://andaluztarija.com/2021/05/29/un-incendio-forestal-afecta-al-parque-nacional-otuquis-en-santa-cruz/",
+          "date": "Fri, 23 Oct 2026 00:00:00 GMT",
+          "seenAt": "2026-10-23T15:01:24.199Z"
+        },
+        "051ee3bae52626b28f": {
+          "url": "https://andaluztarija.com/2023/09/04/el-tipnis-sufre-otra-punalada-la-mineria-ilegal-ingreso-a-la-reserva/",
+          "date": "Fri, 23 Oct 2026 00:00:00 GMT",
+          "seenAt": "2026-10-23T15:01:24.199Z"
+        },
+        "bb83438f480f77d7f7": {
+          "url": "https://andaluztarija.com/2020/11/16/expertos-de-la-cidh-llegaran-a-bolivia-para-realizar-informe-sobre-sacaba-y-senkata/",
+          "date": "Fri, 23 Oct 2026 00:00:00 GMT",
+          "seenAt": "2026-10-23T15:01:24.199Z"
+        },
+        "a80e949c69fce9016d": {
+          "url": "https://andaluztarija.com/2018/05/22/cooperativas-advierten-que-alza-en-electricidad-afectara-tarifas-de-agua/",
+          "date": "Fri, 23 Oct 2026 00:00:00 GMT",
+          "seenAt": "2026-10-23T15:01:24.199Z"
+        },
+        "19d608abeb6350d44e": {
+          "url": "https://andaluztarija.com/2022/09/16/la-paz-recibe-el-rally-illimani-con-50-de-puntaje-extra/",
+          "date": "Fri, 23 Oct 2026 00:00:00 GMT",
+          "seenAt": "2026-10-23T15:01:24.199Z"
+        },
+        "3610483b4803e77a12": {
+          "url": "https://andaluztarija.com/2021/07/29/colegio-medico-confirma-primer-caso-de-hongo-negro-en-bolivia/",
+          "date": "Fri, 23 Oct 2026 00:00:00 GMT",
+          "seenAt": "2026-10-23T15:01:24.199Z"
+        },
+        "9a7be923d2170deb36": {
+          "url": "https://andaluztarija.com/2021/10/26/oscar-montes-en-campana-para-eliminar-la-ley-del-206-a-favor-de-municipios/",
+          "date": "Fri, 23 Oct 2026 00:00:00 GMT",
+          "seenAt": "2026-10-23T15:01:24.199Z"
+        }
+      },
       "sourceStatus": "VERIFIED"
     }
   },
@@ -209,6 +270,342 @@
       "imageUrl": "https://freehotels.info/editorial/premier-inn-whitbread-interim-results-traveller-impact-2026.svg",
       "text": "Premier Inn’s 2026 Turnaround: What Whitbread’s Results Mean for Travellers\nhttps://freehotels.info/news/en/premier-inn-whitbread-interim-results-traveller-impact-2026/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#travel #hotels",
       "createdAt": "2026-10-15T21:54:44.168Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:c022035f3d7190f6f1": {
+      "id": "instagram:c022035f3d7190f6f1",
+      "siteId": "andaluztarija",
+      "network": "instagram",
+      "articleUrl": "https://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/",
+      "imageUrl": null,
+      "text": "Variante Canaletas–Entre Ríos: las mesas técnicas y el traspaso a la ABC en 2021\n\nReconstrucción documental del debate sobre cinco mesas técnicas, conservación vial y transferencia de la Variante Canaletas–Entre Ríos en Tarija.\n\nhttps://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija #noticias #Variante #CanaletasEntre #tecnicas",
+      "createdAt": "2026-10-23T15:01:24.320Z",
+      "status": "WAIT_IMAGE",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:c022035f3d7190f6f1": {
+      "id": "x:c022035f3d7190f6f1",
+      "siteId": "andaluztarija",
+      "network": "x",
+      "articleUrl": "https://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/",
+      "imageUrl": null,
+      "text": "Variante Canaletas–Entre Ríos: las mesas técnicas y el traspaso a la ABC en 2021\nhttps://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija",
+      "createdAt": "2026-10-23T15:01:24.320Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:1d0959ebfd128f825b": {
+      "id": "instagram:1d0959ebfd128f825b",
+      "siteId": "andaluztarija",
+      "network": "instagram",
+      "articleUrl": "https://andaluztarija.com/2020/11/21/proponen-industrializar-la-basura-en-tarija-para-reducir-impactos-ambientales/",
+      "imageUrl": null,
+      "text": "Industrialización de residuos en Tarija: de la propuesta de 2020 a los proyectos posteriores\n\nArchivo temático sobre la gestión de residuos sólidos en Tarija, las propuestas de valorización y las diferencias entre anuncios y ejecución.\n\nhttps://andaluztarija.com/2020/11/21/proponen-industrializar-la-basura-en-tarija-para-reducir-impactos-ambientales/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija #noticias #Industrializacion #residuos #propuesta",
+      "createdAt": "2026-10-23T15:01:24.444Z",
+      "status": "WAIT_IMAGE",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:1d0959ebfd128f825b": {
+      "id": "x:1d0959ebfd128f825b",
+      "siteId": "andaluztarija",
+      "network": "x",
+      "articleUrl": "https://andaluztarija.com/2020/11/21/proponen-industrializar-la-basura-en-tarija-para-reducir-impactos-ambientales/",
+      "imageUrl": null,
+      "text": "Industrialización de residuos en Tarija: de la propuesta de 2020 a los proyect\nhttps://andaluztarija.com/2020/11/21/proponen-industrializar-la-basura-en-tarija-para-reducir-impactos-ambientales/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija",
+      "createdAt": "2026-10-23T15:01:24.444Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:62a40adf5a22779d87": {
+      "id": "instagram:62a40adf5a22779d87",
+      "siteId": "andaluztarija",
+      "network": "instagram",
+      "articleUrl": "https://andaluztarija.com/2022/05/25/tarijeno-moises-paniagua-viaja-a-paraguay-con-la-sub-17-nacional/",
+      "imageUrl": null,
+      "text": "Moisés Paniagua y la selección boliviana juvenil: contexto del viaje de 2022\n\nReconstrucción documental de la histórica ruta sobre Moisés Paniagua y la selección Sub-17 de Bolivia.\n\nhttps://andaluztarija.com/2022/05/25/tarijeno-moises-paniagua-viaja-a-paraguay-con-la-sub-17-nacional/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija #noticias #Moises #Paniagua #seleccion",
+      "createdAt": "2026-10-23T15:01:24.556Z",
+      "status": "WAIT_IMAGE",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:62a40adf5a22779d87": {
+      "id": "x:62a40adf5a22779d87",
+      "siteId": "andaluztarija",
+      "network": "x",
+      "articleUrl": "https://andaluztarija.com/2022/05/25/tarijeno-moises-paniagua-viaja-a-paraguay-con-la-sub-17-nacional/",
+      "imageUrl": null,
+      "text": "Moisés Paniagua y la selección boliviana juvenil: contexto del viaje de 2022\nhttps://andaluztarija.com/2022/05/25/tarijeno-moises-paniagua-viaja-a-paraguay-con-la-sub-17-nacional/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija",
+      "createdAt": "2026-10-23T15:01:24.556Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:5784f60c6ac000c33a": {
+      "id": "instagram:5784f60c6ac000c33a",
+      "siteId": "andaluztarija",
+      "network": "instagram",
+      "articleUrl": "https://andaluztarija.com/2023/06/21/juan-felipe-rodriguez-se-ubica-sexto-en-la-sub-23/",
+      "imageUrl": null,
+      "text": "Juan Felipe Rodríguez en la Vuelta a Colombia 2023: la clasificación Sub-23 contextualizada\n\nArchivo deportivo de la etapa de junio de 2023: Juan Felipe Rodríguez, Pío Rico y la clasificación juvenil de la Vuelta a Colombia.\n\nhttps://andaluztarija.com/2023/06/21/juan-felipe-rodriguez-se-ubica-sexto-en-la-sub-23/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija #noticias #Felipe #Rodriguez #Vuelta",
+      "createdAt": "2026-10-23T15:01:24.670Z",
+      "status": "WAIT_IMAGE",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:5784f60c6ac000c33a": {
+      "id": "x:5784f60c6ac000c33a",
+      "siteId": "andaluztarija",
+      "network": "x",
+      "articleUrl": "https://andaluztarija.com/2023/06/21/juan-felipe-rodriguez-se-ubica-sexto-en-la-sub-23/",
+      "imageUrl": null,
+      "text": "Juan Felipe Rodríguez en la Vuelta a Colombia 2023: la clasificación Sub-23 contextualizada\nhttps://andaluztarija.com/2023/06/21/juan-felipe-rodriguez-se-ubica-sexto-en-la-sub-23/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija",
+      "createdAt": "2026-10-23T15:01:24.670Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:c7566e679b42dc339b": {
+      "id": "instagram:c7566e679b42dc339b",
+      "siteId": "andaluztarija",
+      "network": "instagram",
+      "articleUrl": "https://andaluztarija.com/2021/05/08/mas-alla-y-aca-del-centenario-de-oscar-alfaro/",
+      "imageUrl": null,
+      "text": "Óscar Alfaro: el centenario de 2021 y la memoria cultural de Tarija\n\nContexto del centenario del escritor Óscar Alfaro y debate sobre el valor de los homenajes culturales en Tarija.\n\nhttps://andaluztarija.com/2021/05/08/mas-alla-y-aca-del-centenario-de-oscar-alfaro/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija #noticias #Alfaro #centenario #memoria",
+      "createdAt": "2026-10-23T15:01:24.794Z",
+      "status": "WAIT_IMAGE",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:c7566e679b42dc339b": {
+      "id": "x:c7566e679b42dc339b",
+      "siteId": "andaluztarija",
+      "network": "x",
+      "articleUrl": "https://andaluztarija.com/2021/05/08/mas-alla-y-aca-del-centenario-de-oscar-alfaro/",
+      "imageUrl": null,
+      "text": "Óscar Alfaro: el centenario de 2021 y la memoria cultural de Tarija\nhttps://andaluztarija.com/2021/05/08/mas-alla-y-aca-del-centenario-de-oscar-alfaro/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija",
+      "createdAt": "2026-10-23T15:01:24.794Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:6dd57c046d2c34533e": {
+      "id": "instagram:6dd57c046d2c34533e",
+      "siteId": "andaluztarija",
+      "network": "instagram",
+      "articleUrl": "https://andaluztarija.com/2021/05/29/un-incendio-forestal-afecta-al-parque-nacional-otuquis-en-santa-cruz/",
+      "imageUrl": null,
+      "text": "Incendio en Otuquis en mayo de 2021: una cronología ambiental\n\nRegistro contextual del incendio que afectó al Parque Nacional y ANMI Otuquis en Santa Cruz en mayo de 2021.\n\nhttps://andaluztarija.com/2021/05/29/un-incendio-forestal-afecta-al-parque-nacional-otuquis-en-santa-cruz/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija #noticias #Incendio #Otuquis #cronologia",
+      "createdAt": "2026-10-23T15:01:24.909Z",
+      "status": "WAIT_IMAGE",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:6dd57c046d2c34533e": {
+      "id": "x:6dd57c046d2c34533e",
+      "siteId": "andaluztarija",
+      "network": "x",
+      "articleUrl": "https://andaluztarija.com/2021/05/29/un-incendio-forestal-afecta-al-parque-nacional-otuquis-en-santa-cruz/",
+      "imageUrl": null,
+      "text": "Incendio en Otuquis en mayo de 2021: una cronología ambiental\nhttps://andaluztarija.com/2021/05/29/un-incendio-forestal-afecta-al-parque-nacional-otuquis-en-santa-cruz/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija",
+      "createdAt": "2026-10-23T15:01:24.909Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:051ee3bae52626b28f": {
+      "id": "instagram:051ee3bae52626b28f",
+      "siteId": "andaluztarija",
+      "network": "instagram",
+      "articleUrl": "https://andaluztarija.com/2023/09/04/el-tipnis-sufre-otra-punalada-la-mineria-ilegal-ingreso-a-la-reserva/",
+      "imageUrl": null,
+      "text": "TIPNIS y minería ilegal: qué se denunció en septiembre de 2023\n\nContexto y atribución de las denuncias sobre minería y avasallamientos en el TIPNIS difundidas en 2023.\n\nhttps://andaluztarija.com/2023/09/04/el-tipnis-sufre-otra-punalada-la-mineria-ilegal-ingreso-a-la-reserva/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija #noticias #TIPNIS #mineria #ilegal",
+      "createdAt": "2026-10-23T15:01:25.019Z",
+      "status": "WAIT_IMAGE",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:051ee3bae52626b28f": {
+      "id": "x:051ee3bae52626b28f",
+      "siteId": "andaluztarija",
+      "network": "x",
+      "articleUrl": "https://andaluztarija.com/2023/09/04/el-tipnis-sufre-otra-punalada-la-mineria-ilegal-ingreso-a-la-reserva/",
+      "imageUrl": null,
+      "text": "TIPNIS y minería ilegal: qué se denunció en septiembre de 2023\nhttps://andaluztarija.com/2023/09/04/el-tipnis-sufre-otra-punalada-la-mineria-ilegal-ingreso-a-la-reserva/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija",
+      "createdAt": "2026-10-23T15:01:25.019Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:bb83438f480f77d7f7": {
+      "id": "instagram:bb83438f480f77d7f7",
+      "siteId": "andaluztarija",
+      "network": "instagram",
+      "articleUrl": "https://andaluztarija.com/2020/11/16/expertos-de-la-cidh-llegaran-a-bolivia-para-realizar-informe-sobre-sacaba-y-senkata/",
+      "imageUrl": null,
+      "text": "Investigación internacional sobre Sacaba y Senkata: la misión anunciada en 2020\n\nArchivo documental sobre el anuncio de expertos internacionales que investigarían los hechos de Sacaba y Senkata de 2019.\n\nhttps://andaluztarija.com/2020/11/16/expertos-de-la-cidh-llegaran-a-bolivia-para-realizar-informe-sobre-sacaba-y-senkata/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija #noticias #Investigacion #internacional #Sacaba",
+      "createdAt": "2026-10-23T15:01:25.153Z",
+      "status": "WAIT_IMAGE",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:bb83438f480f77d7f7": {
+      "id": "x:bb83438f480f77d7f7",
+      "siteId": "andaluztarija",
+      "network": "x",
+      "articleUrl": "https://andaluztarija.com/2020/11/16/expertos-de-la-cidh-llegaran-a-bolivia-para-realizar-informe-sobre-sacaba-y-senkata/",
+      "imageUrl": null,
+      "text": "Investigación internacional sobre Sacaba y Senkata: la misión anunciada \nhttps://andaluztarija.com/2020/11/16/expertos-de-la-cidh-llegaran-a-bolivia-para-realizar-informe-sobre-sacaba-y-senkata/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija",
+      "createdAt": "2026-10-23T15:01:25.153Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:a80e949c69fce9016d": {
+      "id": "instagram:a80e949c69fce9016d",
+      "siteId": "andaluztarija",
+      "network": "instagram",
+      "articleUrl": "https://andaluztarija.com/2018/05/22/cooperativas-advierten-que-alza-en-electricidad-afectara-tarifas-de-agua/",
+      "imageUrl": null,
+      "text": "Electricidad y tarifas del agua: la advertencia de cooperativas en mayo de 2018\n\nUna reconstrucción sobre los costes energéticos de las cooperativas de agua potable y las advertencias tarifarias de 2018.\n\nhttps://andaluztarija.com/2018/05/22/cooperativas-advierten-que-alza-en-electricidad-afectara-tarifas-de-agua/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija #noticias #Electricidad #tarifas #advertencia",
+      "createdAt": "2026-10-23T15:01:25.281Z",
+      "status": "WAIT_IMAGE",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:a80e949c69fce9016d": {
+      "id": "x:a80e949c69fce9016d",
+      "siteId": "andaluztarija",
+      "network": "x",
+      "articleUrl": "https://andaluztarija.com/2018/05/22/cooperativas-advierten-que-alza-en-electricidad-afectara-tarifas-de-agua/",
+      "imageUrl": null,
+      "text": "Electricidad y tarifas del agua: la advertencia de cooperativas en mayo de 2018\nhttps://andaluztarija.com/2018/05/22/cooperativas-advierten-que-alza-en-electricidad-afectara-tarifas-de-agua/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija",
+      "createdAt": "2026-10-23T15:01:25.281Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:19d608abeb6350d44e": {
+      "id": "instagram:19d608abeb6350d44e",
+      "siteId": "andaluztarija",
+      "network": "instagram",
+      "articleUrl": "https://andaluztarija.com/2022/09/16/la-paz-recibe-el-rally-illimani-con-50-de-puntaje-extra/",
+      "imageUrl": null,
+      "text": "Rally Illimani 2022: el efecto del 50 % de puntaje adicional\n\nArchivo deportivo de la octava fecha del Campeonato Nacional de Rally en Achocalla, La Paz, en septiembre de 2022.\n\nhttps://andaluztarija.com/2022/09/16/la-paz-recibe-el-rally-illimani-con-50-de-puntaje-extra/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija #noticias #Illimani #efecto #puntaje",
+      "createdAt": "2026-10-23T15:01:25.480Z",
+      "status": "WAIT_IMAGE",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:19d608abeb6350d44e": {
+      "id": "x:19d608abeb6350d44e",
+      "siteId": "andaluztarija",
+      "network": "x",
+      "articleUrl": "https://andaluztarija.com/2022/09/16/la-paz-recibe-el-rally-illimani-con-50-de-puntaje-extra/",
+      "imageUrl": null,
+      "text": "Rally Illimani 2022: el efecto del 50 % de puntaje adicional\nhttps://andaluztarija.com/2022/09/16/la-paz-recibe-el-rally-illimani-con-50-de-puntaje-extra/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija",
+      "createdAt": "2026-10-23T15:01:25.480Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:3610483b4803e77a12": {
+      "id": "instagram:3610483b4803e77a12",
+      "siteId": "andaluztarija",
+      "network": "instagram",
+      "articleUrl": "https://andaluztarija.com/2021/07/29/colegio-medico-confirma-primer-caso-de-hongo-negro-en-bolivia/",
+      "imageUrl": null,
+      "text": "El caso de mucormicosis comunicado en Bolivia en julio de 2021: fuentes y discrepancias\n\nContexto histórico de los anuncios médicos sobre un posible primer caso de mucormicosis en Cochabamba en 2021.\n\nhttps://andaluztarija.com/2021/07/29/colegio-medico-confirma-primer-caso-de-hongo-negro-en-bolivia/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija #noticias #mucormicosis #comunicado #fuentes",
+      "createdAt": "2026-10-23T15:01:25.592Z",
+      "status": "WAIT_IMAGE",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:3610483b4803e77a12": {
+      "id": "x:3610483b4803e77a12",
+      "siteId": "andaluztarija",
+      "network": "x",
+      "articleUrl": "https://andaluztarija.com/2021/07/29/colegio-medico-confirma-primer-caso-de-hongo-negro-en-bolivia/",
+      "imageUrl": null,
+      "text": "El caso de mucormicosis comunicado en Bolivia en julio de 2021: fuentes y discrepancias\nhttps://andaluztarija.com/2021/07/29/colegio-medico-confirma-primer-caso-de-hongo-negro-en-bolivia/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija",
+      "createdAt": "2026-10-23T15:01:25.592Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:9a7be923d2170deb36": {
+      "id": "instagram:9a7be923d2170deb36",
+      "siteId": "andaluztarija",
+      "network": "instagram",
+      "articleUrl": "https://andaluztarija.com/2021/10/26/oscar-montes-en-campana-para-eliminar-la-ley-del-206-a-favor-de-municipios/",
+      "imageUrl": null,
+      "text": "Ley 206 de Tarija: debate de 2021 sobre transferencias a municipios\n\nUna contextualización de las propuestas para modificar o abrogar la ley departamental 206 en Tarija durante 2021.\n\nhttps://andaluztarija.com/2021/10/26/oscar-montes-en-campana-para-eliminar-la-ley-del-206-a-favor-de-municipios/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija #noticias #debate #transferencias #municipios",
+      "createdAt": "2026-10-23T15:01:25.699Z",
+      "status": "WAIT_IMAGE",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:9a7be923d2170deb36": {
+      "id": "x:9a7be923d2170deb36",
+      "siteId": "andaluztarija",
+      "network": "x",
+      "articleUrl": "https://andaluztarija.com/2021/10/26/oscar-montes-en-campana-para-eliminar-la-ley-del-206-a-favor-de-municipios/",
+      "imageUrl": null,
+      "text": "Ley 206 de Tarija: debate de 2021 sobre transferencias a municipios\nhttps://andaluztarija.com/2021/10/26/oscar-montes-en-campana-para-eliminar-la-ley-del-206-a-favor-de-municipios/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija",
+      "createdAt": "2026-10-23T15:01:25.699Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,
