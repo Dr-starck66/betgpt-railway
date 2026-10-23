@@ -105,10 +105,10 @@ export function learnFromErrors(rows: TicketRow[]): ErrorLearn {
       Date.parse(r.recordedAt) < Date.parse(r.kickoff) &&
       !/cl[oô]ture|d[eé]riv[eé]|archive/i.test(r.book || "")
     )
-    .sort((a, b) => a.recordedAt.localeCompare(b.recordedAt) || a.id.localeCompare(b.id));
+    .sort((a, b) => Date.parse(a.recordedAt) - Date.parse(b.recordedAt) || a.id.localeCompare(b.id));
   const byFixtureMarket = new Map<string, TicketRow>();
   for (const r of eligible) {
-    const key = `${r.home.trim().toLowerCase()}|${r.away.trim().toLowerCase()}|${r.kickoff}|${r.market}`;
+    const key = `${r.home.trim().toLowerCase()}|${r.away.trim().toLowerCase()}|${Date.parse(r.kickoff)}|${r.market}`;
     if (!byFixtureMarket.has(key)) byFixtureMarket.set(key, r);
   }
   const settled = [...byFixtureMarket.values()]
