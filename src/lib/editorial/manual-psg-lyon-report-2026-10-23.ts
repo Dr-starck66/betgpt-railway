@@ -12,11 +12,22 @@ export const psgLyonRescheduled20261023: EditorialArticle = {
   "paragraphs": [
     {
       "h2": "PSG–Lyon change de date : la décision confirmée et son effet immédiat",
-      "body": "Le choc entre le Paris Saint-Germain et l’Olympique Lyonnais, initialement attendu au Parc des Princes le dimanche 25 octobre à 20 h 45, se jouera le lundi 26 octobre à 20 h 30. C’est le fait nouveau du vendredi 23 octobre : la Ligue de football professionnel a pris acte de l’interdiction de tenir la rencontre au créneau initial, décidée par la Préfecture de police de Paris. Le diffuseur Ligue 1+ est associé à la nouvelle programmation. Il s’agit bien d’une modification de l’horaire officiel, et non d’un match annulé ou attribué sur tapis vert. L’affiche reste celle de la huitième journée et le lieu annoncé demeure le Parc des Princes. La distinction est essentielle pour un supporter qui consulterait une page de calendrier publiée avant ce vendredi : une ancienne fiche peut encore afficher le dimanche, sans que cette fiche constitue une nouvelle décision de la Ligue. Deux comptes rendus publiés vendredi par So Foot et 20 Minutes décrivent le passage à lundi. Leur convergence rejoint le communiqué de la LFP qu’ils reproduisent et ne doit pas être confondue avec une estimation des conditions futures. La référence utile pour préparer le déplacement est désormais la date du 26 octobre, sous réserve de toute communication officielle ultérieure.",
+      "body": "Le choc entre le Paris Saint-Germain et l’Olympique Lyonnais, initialement attendu au Parc des Princes le dimanche 25 octobre à 20 h 45, se jouera le lundi 26 octobre à 20 h 30. C’est le fait nouveau du vendredi 23 octobre : la Ligue de football professionnel a pris acte de l’interdiction de tenir la rencontre au créneau initial, décidée par la Préfecture de police de Paris. Le diffuseur Ligue 1+ est associé à la nouvelle programmation. Il s’agit bien d’une modification de l’horaire officiel, et non d’un match annulé ou attribué sur tapis vert. L’affiche reste celle de la huitième journée et le lieu annoncé demeure le Parc des Princes.",
       "sourceIds": [
         "sofoot",
         "vingtminutes",
         "olympique-lyonnais"
+      ],
+      "subsections": [
+        {
+          "h3": "L’horaire mis à jour et les anciennes fiches de calendrier",
+          "body": "La distinction est essentielle pour un supporter qui consulterait une page de calendrier publiée avant ce vendredi : une ancienne fiche peut encore afficher le dimanche, sans que cette fiche constitue une nouvelle décision de la Ligue. Deux comptes rendus publiés vendredi par So Foot et 20 Minutes décrivent le passage à lundi. Leur convergence rejoint le communiqué de la LFP qu’ils reproduisent et ne doit pas être confondue avec une estimation des conditions futures. La référence utile pour préparer le déplacement est désormais la date du 26 octobre, sous réserve de toute communication officielle ultérieure.",
+          "sourceIds": [
+            "sofoot",
+            "vingtminutes",
+            "olympique-lyonnais"
+          ]
+        }
       ]
     },
     {
@@ -47,20 +58,42 @@ export const psgLyonRescheduled20261023: EditorialArticle = {
     },
     {
       "h2": "La récupération des joueurs et les informations médicales à recontrôler",
-      "body": "Déplacer une rencontre de dimanche soir à lundi modifie le temps disponible entre deux obligations sportives, mais cela ne donne aucune certitude sur les retours de blessure. Le dossier de la Ligue 1 publié avant la décision présentait plusieurs absences potentielles des deux côtés. Il citait notamment, pour Paris, Ousmane Dembélé, Khvicha Kvaratskhelia, Marquinhos et Nuno Mendes ; côté lyonnais figuraient aussi plusieurs noms sur la liste des indisponibles. Cette photographie éditoriale a une valeur datée : ce n’est pas une feuille de match officielle pour le lundi 26 octobre. Les informations médicales, les retours à l’entraînement et les choix de rotation doivent donc être recherchés dans des communications de club ou des compositions confirmées proches du coup d’envoi. La journée supplémentaire peut être favorable à une récupération, mais elle peut aussi simplement décaler toute la préparation sans modifier la disponibilité d’un joueur. Il serait particulièrement trompeur de qualifier un titulaire de rétabli à partir du seul changement de calendrier. Les supporters doivent séparer trois étages : les absences annoncées auparavant, les points médicaux publiés après le report et la composition réellement officialisée le jour du match.",
+      "body": "Déplacer une rencontre de dimanche soir à lundi modifie le temps disponible entre deux obligations sportives, mais cela ne donne aucune certitude sur les retours de blessure. Le dossier de la Ligue 1 publié avant la décision présentait plusieurs absences potentielles des deux côtés. Il citait notamment, pour Paris, Ousmane Dembélé, Khvicha Kvaratskhelia, Marquinhos et Nuno Mendes ; côté lyonnais figuraient aussi plusieurs noms sur la liste des indisponibles. Cette photographie éditoriale a une valeur datée : ce n’est pas une feuille de match officielle pour le lundi 26 octobre.",
       "sourceIds": [
         "ligue1-preview",
         "ligue1-data",
         "sofoot"
+      ],
+      "subsections": [
+        {
+          "h3": "Ce qui dépend encore des annonces médicales officielles",
+          "body": "Les informations médicales, les retours à l’entraînement et les choix de rotation doivent donc être recherchés dans des communications de club ou des compositions confirmées proches du coup d’envoi. La journée supplémentaire peut être favorable à une récupération, mais elle peut aussi simplement décaler toute la préparation sans modifier la disponibilité d’un joueur. Il serait particulièrement trompeur de qualifier un titulaire de rétabli à partir du seul changement de calendrier. Les supporters doivent séparer trois étages : les absences annoncées auparavant, les points médicaux publiés après le report et la composition réellement officialisée le jour du match.",
+          "sourceIds": [
+            "ligue1-preview",
+            "ligue1-data",
+            "sofoot"
+          ]
+        }
       ]
     },
     {
       "h2": "Les autres matches perturbés expliquent la portée du problème",
-      "body": "PSG–OL n’est pas un épisode complètement isolé. 20 Minutes recense d’autres ajustements de programmation autour du même week-end, notamment Toulouse–Troyes en Ligue 1 et Montpellier–Red Star à l’échelon inférieur. Reuters décrit une période de tension sociale qui mobilise les autorités françaises au-delà du seul arrondissement du Parc des Princes. Cette simultanéité montre pourquoi une grande affiche pouvait devenir difficile à maintenir, même si sa propre enceinte n’avait pas été présentée comme impraticable. Il faut néanmoins distinguer chaque décision : un report d’un match ne signifie pas que tous les rendez-vous de la journée changent de date, et un coup d’envoi repoussé ne prouve pas une fermeture durable du stade. La liste des rencontres doit être contrôlée auprès de chaque organisateur, car des pages de présentation rédigées plusieurs jours plus tôt peuvent demeurer accessibles avec les premiers horaires. Le public doit donc éviter de reconstituer le programme à partir de captures d’écran ou de messages partagés avant la décision préfectorale. Dans un calendrier sportif dense, c’est la date de mise à jour, et pas seulement la notoriété du site, qui permet de trancher entre deux horaires contradictoires.",
+      "body": "PSG–OL n’est pas un épisode complètement isolé. 20 Minutes recense d’autres ajustements de programmation autour du même week-end, notamment Toulouse–Troyes en Ligue 1 et Montpellier–Red Star à l’échelon inférieur. Reuters décrit une période de tension sociale qui mobilise les autorités françaises au-delà du seul arrondissement du Parc des Princes. Cette simultanéité montre pourquoi une grande affiche pouvait devenir difficile à maintenir, même si sa propre enceinte n’avait pas été présentée comme impraticable. Il faut néanmoins distinguer chaque décision : un report d’un match ne signifie pas que tous les rendez-vous de la journée changent de date, et un coup d’envoi repoussé ne prouve pas une fermeture durable du stade.",
       "sourceIds": [
         "vingtminutes",
         "reuters",
         "ligue1-programme"
+      ],
+      "subsections": [
+        {
+          "h3": "Vérifier la programmation de chaque rencontre séparément",
+          "body": "La liste des rencontres doit être contrôlée auprès de chaque organisateur, car des pages de présentation rédigées plusieurs jours plus tôt peuvent demeurer accessibles avec les premiers horaires. Le public doit donc éviter de reconstituer le programme à partir de captures d’écran ou de messages partagés avant la décision préfectorale. Dans un calendrier sportif dense, c’est la date de mise à jour, et pas seulement la notoriété du site, qui permet de trancher entre deux horaires contradictoires.",
+          "sourceIds": [
+            "vingtminutes",
+            "reuters",
+            "ligue1-programme"
+          ]
+        }
       ]
     },
     {
@@ -74,21 +107,44 @@ export const psgLyonRescheduled20261023: EditorialArticle = {
     },
     {
       "h2": "Billets, déplacement et diffusion : les précautions concrètes",
-      "body": "Pour une personne qui avait prévu d’aller au Parc des Princes le dimanche, la première conséquence est immédiate : l’ancienne réservation de transport ou d’hébergement peut ne plus correspondre à la nouvelle heure. Il faut consulter les communications du PSG et des opérateurs concernés plutôt que de supposer un remboursement automatique ou une reconduction sans démarche. Les sources vérifiées ne permettent pas d’établir une règle uniforme applicable à tous les types de billets et de prestations. De même, une ancienne fiche de diffusion indiquant dimanche 20 h 45 ne devrait pas être utilisée comme preuve du nouvel horaire. Les comptes rendus publiés vendredi relaient le maintien de la diffusion en direct sur Ligue 1+ le lundi 26 octobre à 20 h 30. Le stade annoncé ne change pas, mais les informations pratiques pour l’accès, le transport et les horaires d’ouverture doivent être revérifiées à l’approche de la rencontre. Une mention sur un ancien calendrier n’est pas nécessairement mensongère : elle peut simplement être antérieure au changement. Ce réflexe de vérification vaut aussi pour les agrégateurs de scores qui mettent parfois plus de temps à refléter une décision de dernière minute.",
+      "body": "Pour une personne qui avait prévu d’aller au Parc des Princes le dimanche, la première conséquence est immédiate : l’ancienne réservation de transport ou d’hébergement peut ne plus correspondre à la nouvelle heure. Il faut consulter les communications du PSG et des opérateurs concernés plutôt que de supposer un remboursement automatique ou une reconduction sans démarche. Les sources vérifiées ne permettent pas d’établir une règle uniforme applicable à tous les types de billets et de prestations. De même, une ancienne fiche de diffusion indiquant dimanche 20 h 45 ne devrait pas être utilisée comme preuve du nouvel horaire.",
       "sourceIds": [
         "sofoot",
         "olympique-lyonnais",
         "psg-initial"
+      ],
+      "subsections": [
+        {
+          "h3": "Contrôler les billets et les informations d’accès au Parc",
+          "body": "Les comptes rendus publiés vendredi relaient le maintien de la diffusion en direct sur Ligue 1+ le lundi 26 octobre à 20 h 30. Le stade annoncé ne change pas, mais les informations pratiques pour l’accès, le transport et les horaires d’ouverture doivent être revérifiées à l’approche de la rencontre. Une mention sur un ancien calendrier n’est pas nécessairement mensongère : elle peut simplement être antérieure au changement. Ce réflexe de vérification vaut aussi pour les agrégateurs de scores qui mettent parfois plus de temps à refléter une décision de dernière minute.",
+          "sourceIds": [
+            "sofoot",
+            "olympique-lyonnais",
+            "psg-initial"
+          ]
+        }
       ]
     },
     {
       "h2": "Comment s’est construite la chronologie des horaires concurrents",
-      "body": "Le PSG avait d’abord annoncé officiellement une réception de Lyon le dimanche 25 octobre à 20 h 45. Le site de la Ligue 1 présentait le même créneau dans sa programmation de la huitième journée. Ces documents restent utiles pour comprendre l’organisation initiale, mais ils ne peuvent pas prévaloir sur une décision annoncée ensuite. Vendredi 23 octobre, la nouvelle programmation apparaît dans les comptes rendus qui relaient la position de la Ligue : la rencontre est désormais prévue lundi à 20 h 30. En cas de doute, il faut donc donner la priorité à l’information récente et attribuée plutôt qu’effacer toute trace du calendrier précédent. Conserver les deux étapes permet également d’expliquer pourquoi des supporters ou des moteurs de recherche découvrent des réponses contradictoires au cours de la même journée. Les changements d’horaires se propagent à des rythmes différents : sites de clubs, programmes télévisés, fiches de matchs, plateformes de billetterie et agrégateurs n’actualisent pas nécessairement leurs bases en même temps. Cette chronologie documentée donne un moyen simple d’éviter une erreur : toujours comparer la date du communiqué et le créneau que celui-ci entend remplacer.",
+      "body": "Le PSG avait d’abord annoncé officiellement une réception de Lyon le dimanche 25 octobre à 20 h 45. Le site de la Ligue 1 présentait le même créneau dans sa programmation de la huitième journée. Ces documents restent utiles pour comprendre l’organisation initiale, mais ils ne peuvent pas prévaloir sur une décision annoncée ensuite. Vendredi 23 octobre, la nouvelle programmation apparaît dans les comptes rendus qui relaient la position de la Ligue : la rencontre est désormais prévue lundi à 20 h 30. En cas de doute, il faut donc donner la priorité à l’information récente et attribuée plutôt qu’effacer toute trace du calendrier précédent.",
       "sourceIds": [
         "psg-initial",
         "ligue1-programme",
         "sofoot",
         "olympique-lyonnais"
+      ],
+      "subsections": [
+        {
+          "h3": "Pourquoi deux horaires peuvent apparaître simultanément",
+          "body": "Conserver les deux étapes permet également d’expliquer pourquoi des supporters ou des moteurs de recherche découvrent des réponses contradictoires au cours de la même journée. Les changements d’horaires se propagent à des rythmes différents : sites de clubs, programmes télévisés, fiches de matchs, plateformes de billetterie et agrégateurs n’actualisent pas nécessairement leurs bases en même temps. Cette chronologie documentée donne un moyen simple d’éviter une erreur : toujours comparer la date du communiqué et le créneau que celui-ci entend remplacer.",
+          "sourceIds": [
+            "psg-initial",
+            "ligue1-programme",
+            "sofoot",
+            "olympique-lyonnais"
+          ]
+        }
       ]
     },
     {
