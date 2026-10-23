@@ -71,9 +71,16 @@ export function evaluateForwardAccuracy(checkpoint, { from, asOf = new Date().to
     const key = [row.home.trim().toLowerCase(), row.away.trim().toLowerCase(), Date.parse(row.kickoff), row.market].join("|");
     if (!unique.has(key)) unique.set(key, row);
   }
-  const rows = [...unique.values()].sort((a, b) => a.kickoff.localeCompare(b.kickoff));
+  const rows = [...unique.values()].sort((a, b) => Date.parse(a.kickoff) - Date.parse(b.kickoff));
+  // Bets are an independent evidence channel: an earlier NO_BET preview must
+  // never erase a later real BET, or turn that preview into a claimed stake.
+  const betByFixtureMarket = new Map();
+  for (const row of candidates.filter((r) => r.kind === "mise" && r.decision === "BET")) {
+    const key = [row.home.trim().toLowerCase(), row.away.trim().toLowerCase(), Date.parse(row.kickoff), row.market].join("|");
+    if (!betByFixtureMarket.has(key)) betByFixtureMarket.set(key, row);
+  }
   const overall = metrics(rows);
-  const actualBets = metrics(rows.filter((r) => r.kind === "mise" && r.decision === "BET"));
+  const actualBets = metrics([...betByFixtureMarket.values()]);
   const status = overall.n < MIN_HOLDOUT
     ? "COLLECTING_FORWARD_MATCHES"
     : overall.hitRate >= TARGET_HIT_RATE && overall.roiFlat > 0
