@@ -14,7 +14,7 @@ import { personalityBrief } from "./personality.ts";
 import { betgptPrompt } from "./prompt.ts";
 import { buildChallengeUrl, buildFacebookShareUrl, buildShareMoment, buildXShareUrl } from "./share.ts";
 import { renderDailyChatPick, selectDailyChatPick, selectDailyDataFallback } from "./daily-pick.ts";
-import { chatNeedsDesk, isAbsurdScoreClaim, localReply } from "./complete.ts";
+import { chatNeedsDesk, isAbsurdScoreClaim, isTacticalFormationComparison, localReply } from "./complete.ts";
 
 it("forces every legacy or missing mode to Sans filtre", () => {
   assert.equal(parseMode(undefined), "ROAST");
@@ -641,6 +641,17 @@ it("keeps explicit evening discovery requests in the daily-pick route", () => {
 it("skips the live desk for pure conversation and tactics", () => {
   assert.equal(chatNeedsDesk("Pourquoi un 4-4-2 peut souffrir face à un 3-2-5 ?"), false);
   assert.equal(chatNeedsDesk("Salut, tu penses quoi du pressing haut ?"), false);
+});
+
+it("routes 4-4-2 versus 3-2-5 to the precise tactical explanation", () => {
+  const question = "Pourquoi un 4-4-2 peut souffrir face à un 3-2-5 ?";
+  assert.equal(isTacticalFormationComparison(question), true);
+  assert.equal(isTacticalFormationComparison("Quels matchs ce soir ?"), false);
+  assert.equal(isTacticalFormationComparison("Analyse mon 4-4-2"), false);
+  const answer = localReply(question, "", "ROAST").toLowerCase();
+  assert.match(answer, /milieu/);
+  assert.match(answer, /largeur/);
+  assert.match(answer, /demi-espaces/);
 });
 
 it("keeps the live desk for factual current football requests", () => {
