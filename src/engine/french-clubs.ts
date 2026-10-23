@@ -45,10 +45,14 @@ function norm(s: string): string {
     .trim();
 }
 
+const NORMALIZED_TOKENS = TOKENS.map(norm);
+
 export function isFrenchClub(team: { id?: string; name?: string; short?: string; league?: string }): boolean {
   if (team.league === "L1") return true;
-  const blob = norm(`${team.id ?? ""} ${team.name ?? ""} ${team.short ?? ""}`);
-  return TOKENS.some((t) => blob.includes(t));
+  const blob = ` ${norm(`${team.id ?? ""} ${team.name ?? ""} ${team.short ?? ""}`)} `;
+  // Compare normalized whole tokens: names with punctuation/accent variants
+  // must match, but incidental substrings such as "nice" in "Venice" must not.
+  return NORMALIZED_TOKENS.some((token) => blob.includes(` ${token} `));
 }
 
 export function skipEuropeFrenchProno(match: {
