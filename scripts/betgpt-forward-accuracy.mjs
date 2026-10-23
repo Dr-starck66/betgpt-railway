@@ -65,10 +65,10 @@ export function evaluateForwardAccuracy(checkpoint, { from, asOf = new Date().to
     throw Error("LIVE_CHECKPOINT_UNVERIFIED: refuse historical or stale evidence");
   }
   const candidates = checkpoint.tickets.filter((r) => eligible(r, fromMs, asOfMs))
-    .sort((a, b) => a.recordedAt.localeCompare(b.recordedAt) || String(a.id).localeCompare(String(b.id)));
+    .sort((a, b) => Date.parse(a.recordedAt) - Date.parse(b.recordedAt) || String(a.id).localeCompare(String(b.id)));
   const unique = new Map();
   for (const row of candidates) {
-    const key = [row.home.trim().toLowerCase(), row.away.trim().toLowerCase(), row.kickoff, row.market].join("|");
+    const key = [row.home.trim().toLowerCase(), row.away.trim().toLowerCase(), Date.parse(row.kickoff), row.market].join("|");
     if (!unique.has(key)) unique.set(key, row);
   }
   const rows = [...unique.values()].sort((a, b) => a.kickoff.localeCompare(b.kickoff));
