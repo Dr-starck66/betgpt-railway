@@ -94,7 +94,7 @@ describe("ASTRA SOCIAL", () => {
     const external = "https://commons.wikimedia.org/wiki/Special:FilePath/PSG-Lyon_Parc_des_Princes_02.jpg";
     const outside = buildXPublication(article({ image: { ...article().image, src: external } }));
     assert.equal(outside.imageUrl, external);
-    assert.doesNotMatch(outside.imageUrl ?? "", /betgpt\\.livehttps:/);
+    assert.ok(!(outside.imageUrl ?? "").includes("betgpt.livehttps:"));
 
     const local = buildXPublication(article());
     assert.equal(local.imageUrl, "https://betgpt.live/blog/discover/psg-om.jpg");
