@@ -67,3 +67,32 @@ test("repeated losing segments can veto a new bet before positive policy promoti
   const block = adaptiveSafetyBlock({ market: "1X2_H", odds: 2.1, league: "EL" }, report);
   assert.ok(block?.startsWith("league:EL") || block?.startsWith("market:"));
 });
+
+test("simultaneous fixtures cannot disclose each other's result", () => {
+  const first = row(50, false, { kickoff: "2026-10-03T20:00:00Z", recordedAt: "2026-10-03T10:00:00Z" });
+  const second = row(51, true, { kickoff: "2026-10-03T20:00:00Z", recordedAt: "2026-10-03T11:00:00Z" });
+  const baseline = walkForwardTrust([first, second], []);
+  const flipped = walkForwardTrust([{ ...first, result: "win" }, second], []);
+  assert.equal(baseline.find((p) => p.id === second.id)?.trust, flipped.find((p) => p.id === second.id)?.trust);
+});
+
+test("predictions recorded before prior result is settled cannot learn it", () => {
+  const first = row(60, false, { kickoff: "2026-10-03T15:00:00Z", recordedAt: "2026-10-03T10:00:00Z" });
+  const next = row(61, true, { kickoff: "2026-10-04T18:00:00Z", recordedAt: "2026-10-03T17:00:00Z" });
+  const baseline = walkForwardTrust([first, next], []);
+  const flipped = walkForwardTrust([{ ...first, result: "win" }, next], []);
+  assert.equal(baseline.find((p) => p.id === next.id)?.trust, flipped.find((p) => p.id === next.id)?.trust);
+});
+
+test("revisions of a fixture/market cannot double-count out-of-sample accuracy", () => {
+  const first = row(70, true, { kickoff: "2026-10-05T20:00:00Z", recordedAt: "2026-10-05T10:00:00Z" });
+  const revision = { ...first, id: "revision-70", recordedAt: "2026-10-05T12:00:00Z", result: "lose" as const };
+  const points = walkForwardTrust([first, revision], []);
+  assert.equal(points.length, 1);
+  assert.equal(points[0]?.result, "win");
+});
+
+test("post-match observations are not walk-forward proof", () => {
+  const actual = row(71, true, { kickoff: "2026-10-06T20:00:00Z", recordedAt: "2026-10-07T10:00:00Z" });
+  assert.equal(walkForwardTrust([actual], []).length, 0);
+});
