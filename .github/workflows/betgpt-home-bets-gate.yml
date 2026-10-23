@@ -7,8 +7,6 @@ on:
       - "src/lib/home-bets.test.ts"
       - "src/engine/french-clubs.ts"
       - "src/engine/french-clubs.test.ts"
-      - "src/engine/french-clubs.ts"
-      - "src/engine/french-clubs.test.ts"
       - "src/components/home-bets-spotlight.tsx"
       - "src/routes/index.tsx"
       - "src/lib/desk.functions.ts"
@@ -18,6 +16,8 @@ on:
     paths:
       - "src/lib/home-bets.ts"
       - "src/lib/home-bets.test.ts"
+      - "src/engine/french-clubs.ts"
+      - "src/engine/french-clubs.test.ts"
       - "src/components/home-bets-spotlight.tsx"
       - "src/routes/index.tsx"
       - "src/lib/desk.functions.ts"
