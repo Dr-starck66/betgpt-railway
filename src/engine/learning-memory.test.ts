@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { buildLearningMemory, factorsOf } from "./learning-memory.ts";
+import { buildLearningMemory, factorsOf, canonicalRiskState, applyCanonicalRiskBrakeToMarkets } from "./learning-memory.ts";
 import type { TicketRow } from "./ticket-log.ts";
 
 function row(i: number, result: "win" | "lose", odds = 2.1): TicketRow {
@@ -220,4 +220,56 @@ test("international challenger remains collecting below honest sample gate", () 
   assert.equal(maturity?.status, "COLLECTING");
   assert.equal(maturity?.minForShadow, 28);
   assert.equal(maturity?.policyStatus, "SHADOW");
+});
+
+
+test("ROI circuit breaker pauses at 33 honest settled BETs with -16% ROI", () => {
+  const settled = Array.from({ length: 33 }, (_, i) =>
+    row(i, i < 12 ? "win" : "lose", 2.29),
+  );
+  const state = canonicalRiskState(settled);
+  assert.equal(state.settledN, 33);
+  assert.equal(state.wins, 12);
+  assert.equal(state.losses, 21);
+  assert.equal(state.status, "PAUSE");
+  assert.ok((state.roi ?? 0) < -0.16);
+
+  const bets = [
+    { decision: "BET" as const, stakePct: 0.025, premium: true, cover: { odds: 8 }, rejectionReason: "" },
+    { decision: "WATCH" as const, stakePct: 0, premium: false, rejectionReason: "" },
+    { decision: "BET" as const, stakePct: 0.02, premium: false, rejectionReason: "" },
+  ];
+  assert.equal(applyCanonicalRiskBrakeToMarkets(bets, state), 2);
+  assert.equal(bets[0]!.decision, "NO_BET");
+  assert.equal(bets[0]!.stakePct, 0);
+  assert.equal(bets[0]!.premium, false);
+  assert.equal(bets[0]!.cover, undefined);
+  assert.equal(bets[1]!.decision, "WATCH");
+  assert.equal(bets[2]!.decision, "NO_BET");
+  assert.equal(bets[2]!.stakePct, 0);
+});
+
+test("ROI circuit breaker leaves insufficient or positive honest samples untouched", () => {
+  const small = Array.from({ length: 29 }, (_, i) => row(i, "lose", 2.0));
+  const good = Array.from({ length: 33 }, (_, i) => row(i, i < 22 ? "win" : "lose", 2.0));
+  assert.equal(canonicalRiskState(small).status, "CONTINUE");
+  assert.equal(canonicalRiskState(good).status, "CONTINUE");
+  const market = [{ decision: "BET" as const, stakePct: 0.02, premium: true }];
+  assert.equal(applyCanonicalRiskBrakeToMarkets(market, canonicalRiskState(good)), 0);
+  assert.equal(market[0]!.decision, "BET");
+  assert.equal(market[0]!.stakePct, 0.02);
+});
+
+test("ROI safety accounting ignores archived, post-kickoff and observational rows", () => {
+  const settled = Array.from({ length: 33 }, (_, i) =>
+    row(i, i < 12 ? "win" : "lose", 2.29),
+  );
+  const copy = { ...settled[0]!, id: "duplicate-prono", kind: "prono" as const, decision: "WATCH" as const };
+  const archive = { ...row(34, "win", 3.0), id: "archive", book: "clôture" };
+  const hindsight = { ...row(35, "win", 2.9), id: "postmatch", recordedAt: row(35, "win", 2.9).kickoff };
+  const observed = { ...row(36, "win", 2.6), id: "shadow", kind: "prono" as const, decision: "NO_BET" as const };
+  const state = canonicalRiskState([...settled, copy, archive, hindsight, observed]);
+  assert.equal(state.settledN, 33);
+  assert.equal(state.wins, 12);
+  assert.equal(state.status, "PAUSE");
 });
