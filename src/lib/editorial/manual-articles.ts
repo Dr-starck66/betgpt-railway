@@ -1,8 +1,10 @@
 import { cityVerdict20261012 } from "@/lib/editorial/manual-city-verdict-2026-10-12";
+import { psgLyonRescheduled20261023 } from "@/lib/editorial/manual-psg-lyon-report-2026-10-23";
 import { liverpoolManchesterCityPostmatch } from "@/lib/editorial/manual-postmatch-liverpool-city";
 import type { EditorialArticle } from "@/lib/editorial/types";
 
 const ARTICLES: EditorialArticle[] = [
+  psgLyonRescheduled20261023,
   cityVerdict20261012,
   liverpoolManchesterCityPostmatch,
   {
