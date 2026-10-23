@@ -113,7 +113,7 @@ export function HomeBetsSpotlight({
               </div>
               <p className={`mt-3 text-xs ${
                 index === 0 ? "text-muted" : "text-white/70"
-              }`}>Cote non garantie · {market.bestBook.replace(/\\s·\\s.*$/, "")} · 18+</p>
+              }`}>Cote non garantie · {market.bestBook.split(" · ")[0]} · 18+</p>
               <div className="mt-4 flex flex-wrap items-center gap-2">
                 <PrimaryParier
                   links={prediction.bookLinks}
