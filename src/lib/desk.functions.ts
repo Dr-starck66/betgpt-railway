@@ -45,6 +45,8 @@ import { buildEdition, newsCards } from "@/lib/editorial/engine";
 import { readLedgerDurable } from "@/lib/editorial/ledger-store";
 import { calculateLedgerStats, ledgerHealth } from "@/engine/ledger-stats";
 import { betMarket } from "@/lib/markets";
+import { selectHomepageBets } from "@/lib/home-bets";
+import { canonicalRiskState } from "@/engine/learning-memory";
 import { canonicalRoi5Evidence } from "@/engine/canonical-roi5-evidence";
 import {
   eventsFor,
@@ -253,6 +255,15 @@ export const getDesk = createServerFn({ method: "GET" }).handler(async (): Promi
 async function buildHomeDesk() {
   const d = (await getDesk()) ?? emptyDesk();
   const ordered = orderHomeMatches(d.matches);
+  // The spotlight uses the WHOLE desk, not only the first ten calendar cards.
+  const bettingPaused = canonicalRiskState(loadTickets()).status === "PAUSE";
+  const topBets = bettingPaused
+    ? []
+    : selectHomepageBets(d.matches, d.predictions).map(({ match, prediction, market }) => ({
+        match: cardMatch(match),
+        prediction: slimPrediction(prediction),
+        market,
+      }));
   const first = ordered.slice(0, 10);
   const ids = new Set(first.map((m) => m.id));
   if (d.dailyBest?.prediction.matchId) ids.add(d.dailyBest.prediction.matchId);
@@ -277,6 +288,8 @@ async function buildHomeDesk() {
   }
   return {
     summary: d.summary,
+    topBets,
+    bettingPaused,
     dailyBest: d.dailyBest,
     leagues: [...new Set(d.matches.map((m) => m.league))],
     total: ordered.length,

@@ -1,0 +1,43 @@
+name: BetGPT Homepage Betting Picks Gate
+
+on:
+  pull_request:
+    paths:
+      - "src/lib/home-bets.ts"
+      - "src/lib/home-bets.test.ts"
+      - "src/engine/french-clubs.ts"
+      - "src/engine/french-clubs.test.ts"
+      - "src/components/home-bets-spotlight.tsx"
+      - "src/routes/index.tsx"
+      - "src/lib/desk.functions.ts"
+      - ".github/workflows/betgpt-home-bets-gate.yml"
+  push:
+    branches: [main]
+    paths:
+      - "src/lib/home-bets.ts"
+      - "src/lib/home-bets.test.ts"
+      - "src/engine/french-clubs.ts"
+      - "src/engine/french-clubs.test.ts"
+      - "src/components/home-bets-spotlight.tsx"
+      - "src/routes/index.tsx"
+      - "src/lib/desk.functions.ts"
+      - ".github/workflows/betgpt-home-bets-gate.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  homepage-picks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Check honest homepage betting eligibility
+        run: node --experimental-strip-types --test src/lib/home-bets.test.ts src/engine/french-clubs.test.ts
+      - name: Check all TypeScript and React contracts
+        run: npm run typecheck

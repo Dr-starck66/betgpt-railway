@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Activity, ArrowRight, Newspaper, ShieldCheck, Sparkles, Trophy } from "lucide-react";
-import { DailyBest } from "@/components/daily-best";
+import { HomeBetsSpotlight } from "@/components/home-bets-spotlight";
 import { LatestNews } from "@/components/latest-news";
 import { LiveScore } from "@/components/live-score";
 import { MatchCard } from "@/components/match-card";
@@ -121,6 +121,7 @@ function Home() {
           ),
         }}
       />
+      <HomeBetsSpotlight bets={data.topBets} bettingPaused={data.bettingPaused} />
       <NoticesBar matches={matches} />
       <FollowedHome matches={matches} />
 
@@ -329,8 +330,6 @@ function Home() {
           </div>
         ) : null}
       </section>
-
-      {data.dailyBest ? <DailyBest prediction={data.dailyBest.prediction} market={data.dailyBest.market} /> : null}
 
       <div className="html-first-defer-paint">
         <CoconMesh {...meshHub("/", "Accueil football", matches, "prono")} />
