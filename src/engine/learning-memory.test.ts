@@ -234,7 +234,7 @@ test("ROI circuit breaker pauses at 33 honest settled BETs with -16% ROI", () =>
   assert.equal(state.status, "PAUSE");
   assert.ok((state.roi ?? 0) < -0.16);
 
-  const bets = [
+  const bets: Array<{ decision: "BET" | "WATCH" | "NO_BET"; stakePct: number; premium: boolean; cover?: unknown; rejectionReason?: string }> = [
     { decision: "BET" as const, stakePct: 0.025, premium: true, cover: { odds: 8 }, rejectionReason: "" },
     { decision: "WATCH" as const, stakePct: 0, premium: false, rejectionReason: "" },
     { decision: "BET" as const, stakePct: 0.02, premium: false, rejectionReason: "" },
