@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T20:37:17.528Z",
+      "lastCheckedAt": "2026-10-24T21:55:50.180Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -54,19 +54,24 @@
           "url": "https://betgpt.live/actualites/aston-villa-manchester-city-2-1-double-jackson-analyse-24-octobre-2026",
           "date": "2026-10-24T17:00:00.000Z",
           "seenAt": "2026-10-24T17:24:51.867Z"
+        },
+        "5b21394b0e6c6d02fe": {
+          "url": "https://betgpt.live/actualites/arsenal-everton-2-0-konsa-gabriel-course-titre-24-octobre-2026",
+          "date": "2026-10-24T20:29:00.000Z",
+          "seenAt": "2026-10-24T21:55:50.180Z"
         }
       },
       "sourceStatus": "VERIFIED"
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T20:37:17.889Z",
+      "lastCheckedAt": "2026-10-24T21:55:54.699Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T20:37:18.886Z",
+      "lastCheckedAt": "2026-10-24T21:55:55.500Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -83,7 +88,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T20:37:19.220Z",
+      "lastCheckedAt": "2026-10-24T21:55:55.912Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -115,19 +120,19 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T20:37:19.922Z",
+      "lastCheckedAt": "2026-10-24T21:55:56.516Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T20:37:18.314Z",
+      "lastCheckedAt": "2026-10-24T21:55:55.065Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T20:37:19.612Z",
+      "lastCheckedAt": "2026-10-24T21:55:56.220Z",
       "seen": {
         "c022035f3d7190f6f1": {
           "url": "https://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/",
@@ -804,6 +809,34 @@
       "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Birmingham_aston_villa_park_stadium.jpg?width=1600",
       "text": "Aston Villa–Manchester City 2-1 : Jackson, Suzuki et la fin de série | BetGPT\nhttps://betgpt.live/actualites/aston-villa-manchester-city-2-1-double-jackson-analyse-24-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
       "createdAt": "2026-10-24T17:24:53.988Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:5b21394b0e6c6d02fe": {
+      "id": "instagram:5b21394b0e6c6d02fe",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/arsenal-everton-2-0-konsa-gabriel-course-titre-24-octobre-2026",
+      "imageUrl": "https://betgpt.live/blog/discover/inline-shot.jpg",
+      "text": "Arsenal–Everton 2-0 : Konsa, Gabriel et 21 points, l&#x27;analyse de la victoire | BetGPT\n\nArsenal a battu Everton 2-0 à l&#x27;Emirates Stadium samedi 24 octobre 2026. Ezri Konsa a ouvert la marque à la 7e minute après un corner et Gabriel Magalhães a inscrit le second but à la 68e, sur un centre de Ben White. Les Gunners rejoignent Manchester City avec 21 points en huit journées, après la défaite de City à Aston Villa. Au-delà des deux défenseurs buteurs, l&#x27;analyse des occasions et des réponses d&#x27;Everton permet de comprendre pourquoi ce résultat compte \n\nhttps://betgpt.live/actualites/arsenal-everton-2-0-konsa-gabriel-course-titre-24-octobre-2026?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #ArsenalEverton #Konsa #Gabriel",
+      "createdAt": "2026-10-24T21:55:54.354Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:5b21394b0e6c6d02fe": {
+      "id": "x:5b21394b0e6c6d02fe",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/arsenal-everton-2-0-konsa-gabriel-course-titre-24-octobre-2026",
+      "imageUrl": "https://betgpt.live/blog/discover/inline-shot.jpg",
+      "text": "Arsenal–Everton 2-0 : Konsa, Gabriel et 21 points, l&#x27;analyse de la victoire | BetGPT\nhttps://betgpt.live/actualites/arsenal-everton-2-0-konsa-gabriel-course-titre-24-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-24T21:55:54.354Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,
