@@ -2,6 +2,7 @@ import { contextualAuthorityGate } from "../src/lib/editorial/authority-citation
 import { sourceIntegrityGate } from "../src/lib/editorial/source-integrity.ts";
 import { discoverLaunchpadStaticAudit, recentDiscoverCandidates } from "../src/lib/editorial/discover-launchpad.ts";
 import { editionFromDesk } from "../src/lib/editorial/run.server.ts";
+import { parisDate } from "../src/lib/editorial/time.ts";
 import { isPublicArticle } from "../src/lib/editorial/types.ts";
 import { writeLedger } from "../src/lib/editorial/ledger-store.ts";
 import { syncPublishedArticlesToSocial } from "../src/lib/social/run.server.ts";
@@ -64,6 +65,25 @@ console.log("ASTRA_PREPUBLICATION_PROOF", JSON.stringify({
 
 const persisted = writeLedger(published);
 const social = await syncPublishedArticlesToSocial(published, now);
+// Source-of-truth publishing metric: a successful ledger write is NOT a new publication.
+const autoIds = new Set(["morning", "noon", "evening"].map((slot) => `ed-${edition.parisDate}-${slot}`));
+const autoToday = published.filter((article) =>
+  article.parisDate === edition.parisDate &&
+  article.publishedAt &&
+  Number.isFinite(Date.parse(article.publishedAt)) &&
+  parisDate(new Date(article.publishedAt)) === edition.parisDate &&
+  autoIds.has(article.id) &&
+  isPublicArticle(article),
+);
+const absentSlots = ["morning", "noon", "evening"].filter((slot) =>
+  !autoToday.some((article) => article.slot === slot),
+);
+const generationStatus = absentSlots.length
+  ? "DEGRADED_AUTOMATED_ARTICLE_QUOTA"
+  : "PASS_THREE_AUTOMATED_ARTICLES";
+if (absentSlots.length) {
+  console.warn(`::warning::ASTRA_AUTO_PUBLICATION_DEGRADED day=${edition.parisDate} published=${autoToday.length}/3 missing=${absentSlots.join(",")}`);
+}
 
 console.log("ASTRA_PUBLICATION_PERSISTENCE_PROOF", JSON.stringify({
   schema: "astra-editorial-persistence-proof/v1",
@@ -72,8 +92,12 @@ console.log("ASTRA_PUBLICATION_PERSISTENCE_PROOF", JSON.stringify({
   articleLedgerPersisted: persisted,
   socialQueuePersisted: social.persisted,
   socialDeliveryAttempts: social.publishAttempts,
-  status: persisted && social.persisted ? "PASS_LEDGER_ONLY" : "FAIL",
-  note: "Social queue persistence is not proof of an external post or Google indexing",
+  status: persisted && social.persisted ? "PASS_PERSISTENCE_ONLY" : "FAIL",
+  generationStatus,
+  automaticArticlesToday: autoToday.map((article) => ({ slug: article.slug, slot: article.slot })),
+  automaticCountToday: autoToday.length,
+  missingAutomaticSlots: absentSlots,
+  note: "Passing ledger persistence does not prove new daily articles, HTTP 200, Google indexing or social delivery.",
 }));
 
 console.log(
@@ -84,6 +108,9 @@ console.log(
       parisDate: edition.parisDate,
       targetPerDay: edition.targetPerDay,
       targetStatus: edition.targetStatus,
+      generationStatus,
+      automaticCountToday: autoToday.length,
+      missingAutomaticSlots: absentSlots,
       published: published.map((article) => ({
         id: article.id,
         slug: article.slug,
