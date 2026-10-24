@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T11:13:15.503Z",
+      "lastCheckedAt": "2026-10-24T11:23:46.442Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -44,19 +44,24 @@
           "url": "https://betgpt.live/actualites/psg-lyon-reporte-lundi-26-octobre-2026",
           "date": "2026-10-23T15:05:43.893Z",
           "seenAt": "2026-10-23T19:09:47.150Z"
+        },
+        "9e06aa576d1f2af868": {
+          "url": "https://betgpt.live/actualites/aston-villa-manchester-city-compositions-record-24-octobre-2026",
+          "date": "2026-10-24T11:03:22.000Z",
+          "seenAt": "2026-10-24T11:23:46.442Z"
         }
       },
       "sourceStatus": "VERIFIED"
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T11:13:15.937Z",
+      "lastCheckedAt": "2026-10-24T11:23:50.373Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T11:13:17.336Z",
+      "lastCheckedAt": "2026-10-24T11:23:52.606Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -73,7 +78,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T11:13:17.922Z",
+      "lastCheckedAt": "2026-10-24T11:23:53.590Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -105,19 +110,19 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T11:13:19.110Z",
+      "lastCheckedAt": "2026-10-24T11:23:55.312Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T11:13:16.622Z",
+      "lastCheckedAt": "2026-10-24T11:23:51.238Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T11:13:18.639Z",
+      "lastCheckedAt": "2026-10-24T11:23:54.472Z",
       "seen": {
         "c022035f3d7190f6f1": {
           "url": "https://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/",
@@ -738,6 +743,34 @@
       "imageUrl": "https://freehotels.info/editorial/ihg-europe-1000-2026.svg",
       "text": "IHG franchit 1 000 hôtels ouverts en Europe : ce que cela change pour les voyageurs\nhttps://freehotels.info/news/fr/ihg-1000-hotels-europe-2026/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#travel #hotels",
       "createdAt": "2026-10-23T19:09:53.320Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:9e06aa576d1f2af868": {
+      "id": "instagram:9e06aa576d1f2af868",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/aston-villa-manchester-city-compositions-record-24-octobre-2026",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Birmingham_aston_villa_park_stadium.jpg",
+      "text": "Aston Villa–Manchester City : titulaires, Haaland et record en jeu le 24 octobre | BetGPT\n\nÀ Villa Park ce samedi 24 octobre 2026, Manchester City peut signer une huitième victoire consécutive en Premier League. Haaland, Doku, Guéhi et Ndiaye sont titulaires ; Foden débute sur le banc. Mais Aston Villa a remporté ses trois dernières réceptions de City en championnat. Les compositions vérifiées, les chiffres Opta et les enjeux réels, avant le coup d’envoi de 13 h 30 à Paris.\n\nhttps://betgpt.live/actualites/aston-villa-manchester-city-compositions-record-24-octobre-2026?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #VillaManchester #titulaires #Haaland",
+      "createdAt": "2026-10-24T11:23:49.663Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:9e06aa576d1f2af868": {
+      "id": "x:9e06aa576d1f2af868",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/aston-villa-manchester-city-compositions-record-24-octobre-2026",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Birmingham_aston_villa_park_stadium.jpg",
+      "text": "Aston Villa–Manchester City : titulaires, Haaland et record en jeu le 24 octobre | BetGPT\nhttps://betgpt.live/actualites/aston-villa-manchester-city-compositions-record-24-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-24T11:23:49.663Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,
