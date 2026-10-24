@@ -1,5 +1,5 @@
 import type { EditorialArticle, EditorialNewsSignal, EditorialParagraph, EditorialSource, SlotId } from "./types.ts";
-import { collectFootballNewsSignals } from "./news-scout.server.ts";
+import { collectFootballNewsSignals, detectEntities } from "./news-scout.server.ts";
 import { clusterSignals } from "./news-cluster.ts";
 import { readLedgerDurable, writeLedgerDurable } from "./ledger-store.ts";
 import { manualEditorialArticles } from "./manual-articles.ts";
@@ -172,7 +172,7 @@ function assemble(
     title, h1: model.h1, lead: model.lead, paragraphs,
     createdAt: nowIso, publishedAt: nowIso, modifiedAt: nowIso, parisDate: day,
     scheduledTime: DEFAULT_TIMES[slot], category: "Actualité football", section: "football",
-    league: null, teams: [], matchId: null, competition: "Football",
+    league: null, teams: detectEntities(model.h1), matchId: null, competition: "Football",
     sources, newsworthiness: 90,
     discoverOpportunity: { freshness: 20, frenchInterest: 20, entityStrength: 15, novelty: 15, visual: 10, sourceQuality: 10, editorialAngle: 10, total: 100, decision: "PUBLISH", reasons: [] },
     discoverChecks: { ...checks }, discoverReadiness: readinessScore(checks),
@@ -186,13 +186,18 @@ function assemble(
   const gold = editorialGoldStandardGate(article);
   const integrity = sourceIntegrityGate(article);
   const authority = contextualAuthorityGate(article);
+  const reasons = [...gate.reasons, ...gold.reasons, ...integrity.reasons, ...authority.reasons];
+  // discoverChecks explicitly depends on quality.pass and duplicateScore.
+  // Compute the independent quality verdict BEFORE evaluating Discover.
+  article.quality = { pass: reasons.length === 0, reasons };
+  article.duplicateScore = gate.duplicateScore;
   const actualChecks = discoverChecks(article);
   article.discoverChecks = actualChecks;
   article.discoverReadiness = readinessScore(actualChecks);
-  const reasons = [...gate.reasons, ...gold.reasons, ...integrity.reasons, ...authority.reasons];
-  if (!Object.values(actualChecks).every(Boolean)) reasons.push("Discover prerequisites not met");
-  article.quality = { pass: reasons.length === 0, reasons };
-  article.duplicateScore = gate.duplicateScore;
+  if (!Object.values(actualChecks).every(Boolean)) {
+    reasons.push("Discover prerequisites not met");
+    article.quality = { pass: false, reasons };
+  }
   if (!article.quality.pass) return { article: null, reason: reasons.slice(0, 5).join(" | "), words: gold.words };
   const staticAudit = discoverLaunchpadStaticAudit(article, now);
   if (!staticAudit.hardPass) return { article: null, reason: staticAudit.failures.join(" | "), words: gold.words };
