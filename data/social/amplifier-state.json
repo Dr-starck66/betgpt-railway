@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T17:14:39.328Z",
+      "lastCheckedAt": "2026-10-24T17:24:51.867Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -49,19 +49,24 @@
           "url": "https://betgpt.live/actualites/aston-villa-manchester-city-compositions-record-24-octobre-2026",
           "date": "2026-10-24T11:03:22.000Z",
           "seenAt": "2026-10-24T11:23:46.442Z"
+        },
+        "3817f06c0ca612c3e5": {
+          "url": "https://betgpt.live/actualites/aston-villa-manchester-city-2-1-double-jackson-analyse-24-octobre-2026",
+          "date": "2026-10-24T17:00:00.000Z",
+          "seenAt": "2026-10-24T17:24:51.867Z"
         }
       },
       "sourceStatus": "VERIFIED"
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T17:14:39.749Z",
+      "lastCheckedAt": "2026-10-24T17:24:54.382Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T17:14:40.741Z",
+      "lastCheckedAt": "2026-10-24T17:24:55.222Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -78,7 +83,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T17:14:41.132Z",
+      "lastCheckedAt": "2026-10-24T17:24:55.575Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -110,19 +115,19 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T17:14:41.886Z",
+      "lastCheckedAt": "2026-10-24T17:24:56.226Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T17:14:40.220Z",
+      "lastCheckedAt": "2026-10-24T17:24:54.705Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T17:14:41.549Z",
+      "lastCheckedAt": "2026-10-24T17:24:55.858Z",
       "seen": {
         "c022035f3d7190f6f1": {
           "url": "https://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/",
@@ -771,6 +776,34 @@
       "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Birmingham_aston_villa_park_stadium.jpg",
       "text": "Aston Villa–Manchester City : titulaires, Haaland et record en jeu le 24 octobre | BetGPT\nhttps://betgpt.live/actualites/aston-villa-manchester-city-compositions-record-24-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
       "createdAt": "2026-10-24T11:23:49.663Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:3817f06c0ca612c3e5": {
+      "id": "instagram:3817f06c0ca612c3e5",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/aston-villa-manchester-city-2-1-double-jackson-analyse-24-octobre-2026",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Birmingham_aston_villa_park_stadium.jpg?width=1600",
+      "text": "Aston Villa–Manchester City 2-1 : Jackson, Suzuki et la fin de série | BetGPT\n\nManchester City a perdu 2-1 à Villa Park samedi 24 octobre 2026 après sept victoires consécutives en Premier League. Nicolas Jackson a marqué à la 6e et à la 60e minute pour Aston Villa, malgré l&#x27;égalisation d&#x27;Erling Haaland à la 52e. Pourquoi City a-t-il perdu avec sept tirs cadrés contre deux, et quel rôle ont joué les arrêts de Zion Suzuki ? Analyse originale et sourcée du résultat, des décisions tactiques et des conséquences.\n\nhttps://betgpt.live/actualites/aston-villa-manchester-city-2-1-double-jackson-analyse-24-octobre-2026?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #VillaManchester #Jackson #Suzuki",
+      "createdAt": "2026-10-24T17:24:53.988Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:3817f06c0ca612c3e5": {
+      "id": "x:3817f06c0ca612c3e5",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/aston-villa-manchester-city-2-1-double-jackson-analyse-24-octobre-2026",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Birmingham_aston_villa_park_stadium.jpg?width=1600",
+      "text": "Aston Villa–Manchester City 2-1 : Jackson, Suzuki et la fin de série | BetGPT\nhttps://betgpt.live/actualites/aston-villa-manchester-city-2-1-double-jackson-analyse-24-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-24T17:24:53.988Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,
