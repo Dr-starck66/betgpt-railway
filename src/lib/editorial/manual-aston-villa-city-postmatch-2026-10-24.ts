@@ -102,7 +102,8 @@ export const astonVillaCityPostmatch20261024: EditorialArticle = {
       "sourceIds": [
         "city-report",
         "reuters-report",
-        "villa-context"
+        "villa-context",
+        "villa-fixtures"
       ]
     }
   ],
@@ -155,6 +156,13 @@ export const astonVillaCityPostmatch20261024: EditorialArticle = {
       "status": "CORROBORATED",
       "note": "Aston Villa Manchester City 2-1 le 24 octobre 2026 : Jackson deux buts, Haaland, feuille de match et remplacements.",
       "url": "https://www.skysports.com/football/aston-villa-vs-manchester-city/teams/7459185582766213232"
+    },
+    {
+      "id": "villa-fixtures",
+      "label": "Aston Villa — programme officiel et déplacement à Bournemouth",
+      "status": "OFFICIAL",
+      "note": "Aston Villa : calendrier officiel du 24 octobre 2026 indiquant le déplacement à Bournemouth le mercredi 28 octobre.",
+      "url": "https://next.avfc.co.uk/"
     }
   ],
   "newsworthiness": 96,
