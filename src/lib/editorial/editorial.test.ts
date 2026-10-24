@@ -89,7 +89,7 @@ describe("publisher evidence diversity under a bounded quota", () => {
   it("does not starve late independent editorial outlets behind high-volume feeds", () => {
     const make = (publisher: string, index: number): EditorialNewsSignal => ({
       id: publisher + "-" + index,
-      title: "Actualité football vérifiée " + publisher,
+      title: "Actualité football vérifiée " + publisher + " événement distinct numéro " + index,
       url: "https://" + publisher.toLowerCase() + ".example/football/article-" + index,
       sourceName: publisher,
       sourceUrl: "https://" + publisher.toLowerCase() + ".example",
