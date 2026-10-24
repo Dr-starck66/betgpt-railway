@@ -3,23 +3,27 @@ import { jaccard } from "@/lib/editorial/quality";
 
 
 const MATERIAL_DEVELOPMENT =
-  /\b(finalement|autorisé|autorisee?|autorisation|accord(?:é|e)?|confirmé|confirmee?|démenti?|dément|refusé|refusee?|refus|officiel(?:lement)?|verdict|décision|annonce|renonce|annulé|annulee?|suspendu|forfait confirmé|opéré|operation)\b/i;
+  /\b(finalement|autorisé|autorisee?|autorisation|accord(?:é|e)?|confirmé|confirmee?|démenti?|dément|refusé|refusee?|refus|officiel(?:lement)?|verdict|décision|annonce|renonce|annulé|annulee?|suspendu|forfait confirmé|opéré|operation|confirmed?|official(?:ly)?|announced?|approved?|rejected?|denied|sacked|postponed|cancelled|ruled out|signed)\b/i;
 
 export function isMaterialDevelopment(text: string): boolean {
   return MATERIAL_DEVELOPMENT.test(text);
 }
 
-const NEWSWORTHY = /blessure|blessé|forfait|absent|suspendu|transfert|mercato|accord|signature|prolong|licenci|limog|entra[iî]neur|coach|composition|compo|titulaire|banc|record|qualification|qualifié|élimin|victoire|défaite|exploit|retour|sanction|décision|communiqué|officiel|annonce|nommé|nomination|rupture|contrat|derby|classique|finale/i;
+const NEWSWORTHY = /blessure|blessé|forfait|absent|suspendu|transfert|mercato|accord|signature|prolong|licenci|limog|entra[iî]neur|coach|composition|compo|titulaire|banc|record|qualification|qualifié|élimin|victoire|défaite|exploit|retour|sanction|décision|communiqué|officiel|annonce|nommé|nomination|rupture|contrat|derby|classique|finale|\b(?:injur(?:y|ed)|ruled out|suspension|suspended|transfer|signing|contract|extension|sacked|manager|line-?up|starting eleven|qualif(?:y|ied|ication)|eliminated|victory|defeat|wins?|beaten|returns?|sanction|decision|official|confirmed|announced|appointed|postponed|cancelled|final)\b/i;
 
+// The verified publisher feeds include BBC, Sky Sports and Guardian articles in
+// English. Their vocabulary must map to the SAME event families as French news.
+// Keep entity/time overlap mandatory; a generic "manager" or "transfer" alone
+// must never serve as independent corroboration of another story.
 const EVENT_FAMILIES: [RegExp, string][] = [
-  [/blessure|blessé|forfait|absent|indisponible/i, "availability"],
-  [/transfert|mercato|accord|signature|prolong|contrat/i, "transfer"],
-  [/licenci|limog|entra[iî]neur|coach|nommé|nomination/i, "coach"],
-  [/composition|compo|titulaire|banc|groupe|sélection/i, "lineup"],
-  [/record|exploit|historique/i, "record"],
-  [/qualification|qualifié|élimin/i, "qualification"],
-  [/sanction|suspendu|décision|communiqué|officiel|annonce/i, "official-decision"],
-  [/victoire|défaite|score|résultat|retour|remontée/i, "result"],
+  [/blessure|blessé|forfait|absent|indisponible|\b(?:injur(?:y|ed)|ruled out|unavailable)\b/i, "availability"],
+  [/transfert|mercato|accord|signature|prolong|contrat|\b(?:transfer|signing|contract|extension|deal agreed)\b/i, "transfer"],
+  [/licenci|limog|entra[iî]neur|coach|nommé|nomination|\b(?:manager|sacked|dismissed|appointed)\b/i, "coach"],
+  [/composition|compo|titulaire|banc|groupe|sélection|\b(?:line-?up|starting eleven|squad|selected)\b/i, "lineup"],
+  [/record|exploit|historique|\b(?:record|milestone)\b/i, "record"],
+  [/qualification|qualifié|élimin|\b(?:qualif(?:y|ied|ication)|eliminated|knocked out)\b/i, "qualification"],
+  [/sanction|suspendu|décision|communiqué|officiel|annonce|\b(?:sanction|suspended|decision|official|confirmed|announced|postponed|cancelled)\b/i, "official-decision"],
+  [/victoire|défaite|score|résultat|retour|remontée|\b(?:victory|defeat|score|result|wins?|beaten|returns?|comeback)\b/i, "result"],
 ];
 
 function eventFamilies(text: string): string[] {
