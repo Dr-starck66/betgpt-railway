@@ -93,8 +93,25 @@ function scaleFromHit(hit: number, n: number, base = 1): number {
 }
 
 export function learnFromErrors(rows: TicketRow[]): ErrorLearn {
-  const settled = rows
-    .filter((r) => (r.result === "win" || r.result === "lose") && r.modelProb > 0.05)
+  // Only genuinely pre-match predictions may recalibrate probabilities.
+  // Discard post-match imports, closing prices and duplicate fixture/market
+  // observations (keep the earliest prediction made before kickoff).
+  const eligible = rows
+    .filter((r) =>
+      (r.result === "win" || r.result === "lose") &&
+      Number.isFinite(r.modelProb) && r.modelProb > 0.05 && r.modelProb < 1 &&
+      Number.isFinite(Date.parse(r.recordedAt)) &&
+      Number.isFinite(Date.parse(r.kickoff)) &&
+      Date.parse(r.recordedAt) < Date.parse(r.kickoff) &&
+      !/cl[oô]ture|d[eé]riv[eé]|archive/i.test(r.book || "")
+    )
+    .sort((a, b) => Date.parse(a.recordedAt) - Date.parse(b.recordedAt) || a.id.localeCompare(b.id));
+  const byFixtureMarket = new Map<string, TicketRow>();
+  for (const r of eligible) {
+    const key = `${r.home.trim().toLowerCase()}|${r.away.trim().toLowerCase()}|${Date.parse(r.kickoff)}|${r.market}`;
+    if (!byFixtureMarket.has(key)) byFixtureMarket.set(key, r);
+  }
+  const settled = [...byFixtureMarket.values()]
     .sort((a, b) => a.kickoff.localeCompare(b.kickoff));
   // Calibration learns from every settled pre-match 1X2 observation, including
   // short-priced favorites. Betting KPI/safety remains isolated: short-priced

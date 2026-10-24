@@ -100,3 +100,25 @@ test("secondary-market losses never tighten canonical 1X2 controls", () => {
   assert.equal(mixed.banDrawBet, baseline.banDrawBet);
   assert.equal(mixed.hitRate, baseline.hitRate);
 });
+
+test("calibration excludes post-match outcomes and archive closing prices", () => {
+  const honest = Array.from({ length: 8 }, (_, i) => lowOddsProno(i, i < 5 ? "win" : "lose"));
+  const leaked = honest.map((r, i) => ({
+    ...r, id: `leak-${i}`, home: `LeakHome ${i}`, away: `LeakAway ${i}`,
+    book: "clôture", recordedAt: r.kickoff, result: "lose" as const,
+  }));
+  const baseline = learnFromErrors(honest);
+  const result = learnFromErrors([...honest, ...leaked]);
+  assert.equal(result.n, baseline.n);
+  assert.equal(result.hitRate, baseline.hitRate);
+  assert.deepEqual(result.platt, baseline.platt);
+});
+
+test("revised snapshots of one fixture do not exaggerate precision", () => {
+  const honest = Array.from({ length: 8 }, (_, i) => lowOddsProno(i, i < 5 ? "win" : "lose"));
+  const revision = { ...honest[0]!, id: "revision-0", recordedAt: new Date(Date.parse(honest[0]!.recordedAt) + 1000).toISOString(), result: "lose" as const };
+  const baseline = learnFromErrors(honest);
+  const result = learnFromErrors([...honest, revision]);
+  assert.equal(result.n, baseline.n);
+  assert.equal(result.hitRate, baseline.hitRate);
+});

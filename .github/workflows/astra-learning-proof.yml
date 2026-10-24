@@ -74,6 +74,8 @@ jobs:
           server/api/result-recovery-plan.test.ts
           src/engine/roi5-continuous-learning.test.ts
           src/engine/adaptive-learning.test.ts
+      - name: Validate frozen forward-match accuracy audit
+        run: node --test scripts/betgpt-forward-accuracy.test.mjs
       - name: Typecheck
         run: npm run typecheck
       - name: Full candidate release gate
