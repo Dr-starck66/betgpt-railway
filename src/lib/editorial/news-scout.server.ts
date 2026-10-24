@@ -13,6 +13,8 @@ const DIRECT_PUBLISHER_FEEDS = [
   { url: "https://www.lfp.fr/rss", sourceName: "LFP", origin: "https://www.lfp.fr", tier: "OFFICIAL" },
   { url: "https://feeds.bbci.co.uk/sport/football/rss.xml", sourceName: "BBC Sport", origin: "https://www.bbc.com", tier: "TIER1" },
   { url: "https://www.theguardian.com/football/rss", sourceName: "The Guardian", origin: "https://www.theguardian.com", tier: "TIER1" },
+  { url: "https://www.skysports.com/rss/11095", sourceName: "Sky Sports", origin: "https://www.skysports.com", tier: "TIER1" },
+  { url: "https://www.7sur7.be/football/rss.xml", sourceName: "7sur7", origin: "https://www.7sur7.be", tier: "TIER1" },
   { url: "https://www.espn.com/espn/rss/soccer/news", sourceName: "ESPN", origin: "https://www.espn.com", tier: "TIER1" },
   { url: "https://www.franceinfo.fr/sports/foot.rss", sourceName: "Franceinfo", origin: "https://www.franceinfo.fr", tier: "TIER1" },
   { url: "https://france3-regions.franceinfo.fr/sport/football/ligue-1/rss", sourceName: "France 3 Régions", origin: "https://france3-regions.franceinfo.fr", tier: "TIER1" },
@@ -254,7 +256,11 @@ export function parsePublisherRss(
     if (published < ageLimit || published > now.getTime() + 5 * 60_000) continue;
     let clean: URL;
     try { clean = new URL(link); } catch { continue; }
-    if (clean.protocol !== "https:" || !hostMatches(clean.hostname.toLowerCase(), [publisherHost])) continue;
+    // BBC syndicates its official sport articles across bbc.com and bbc.co.uk.
+    // Explicit publisher-owned alternate only; never accept arbitrary off-site redirects.
+    const allowedPublisherHosts = publisherHost === "bbc.com" || publisherHost === "bbc.co.uk"
+      ? ["bbc.com", "bbc.co.uk"] : [publisherHost];
+    if (clean.protocol !== "https:" || !hostMatches(clean.hostname.toLowerCase(), allowedPublisherHosts)) continue;
     if (clean.pathname === "/" || clean.pathname.length < 6) continue;
     const description = stripHtml(tag(item, "description")).slice(0, 900);
     out.push({
