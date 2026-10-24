@@ -67,22 +67,66 @@ type Evidence = {
   text: string;
 };
 
+// Only follow a bounded first-party canonical redirect. This excludes
+// publisher-to-aggregator, paywall-provider, login and arbitrary/off-host hops.
+function samePublisherHost(from: string, to: string): boolean {
+  const a = host(from);
+  const b = host(to);
+  return a === b || (["bbc.com", "bbc.co.uk"].includes(a) && ["bbc.com", "bbc.co.uk"].includes(b));
+}
+
+function logEvidenceFailure(signal: EditorialNewsSignal, reason: string, status?: number): void {
+  console.info("ASTRA_EDITORIAL_SOURCE_EVIDENCE", JSON.stringify({
+    publisher: signal.sourceName, host: host(signal.url), reason,
+    ...(status == null ? {} : { httpStatus: status }),
+  }));
+}
+
 async function loadEvidence(signal: EditorialNewsSignal): Promise<Evidence | null> {
   if (!publisherUrl(signal.url)) return null;
   try {
-    const response = await fetch(signal.url, {
-      signal: AbortSignal.timeout(FETCH_TIMEOUT),
-      redirect: "error",
-      headers: { "user-agent": "BetGPTEditorialEvidence/1.0 (+https://betgpt.live)" },
-    });
-    if (!response.ok || !publisherUrl(response.url) || host(response.url) !== host(signal.url)) return null;
-    if (!(response.headers.get("content-type") ?? "").includes("text/html")) return null;
-    const html = (await response.text()).slice(0, 800000);
-    const text = extractPublicArticle(html);
-    return text.length >= MIN_BODY_CHARS ? { signal, text } : null;
+    let current = signal.url;
+    for (let redirects = 0; redirects <= 2; redirects += 1) {
+      const response = await fetch(current, {
+        signal: AbortSignal.timeout(FETCH_TIMEOUT),
+        redirect: "manual",
+        headers: { "user-agent": "BetGPTEditorialEvidence/1.0 (+https://betgpt.live)" },
+      });
+      if ([301, 302, 303, 307, 308].includes(response.status)) {
+        const location = response.headers.get("location");
+        if (!location || redirects === 2) {
+          logEvidenceFailure(signal, "REDIRECT_LIMIT_OR_MISSING_LOCATION", response.status);
+          return null;
+        }
+        const next = new URL(location, current).href;
+        if (!publisherUrl(next) || !samePublisherHost(signal.url, next)) {
+          logEvidenceFailure(signal, "REDIRECT_OUTSIDE_PUBLISHER", response.status);
+          return null;
+        }
+        current = next;
+        continue;
+      }
+      if (!response.ok) { logEvidenceFailure(signal, "SOURCE_HTTP_BLOCKED", response.status); return null; }
+      if (!publisherUrl(response.url) || !samePublisherHost(signal.url, response.url)) {
+        logEvidenceFailure(signal, "UNEXPECTED_FINAL_SOURCE");
+        return null;
+      }
+      if (!(response.headers.get("content-type") ?? "").includes("text/html")) {
+        logEvidenceFailure(signal, "NON_HTML_SOURCE", response.status);
+        return null;
+      }
+      const html = (await response.text()).slice(0, 800000);
+      const text = extractPublicArticle(html);
+      if (text.length < MIN_BODY_CHARS) {
+        logEvidenceFailure(signal, "INSUFFICIENT_PUBLIC_TEXT", response.status);
+        return null;
+      }
+      return { signal, text };
+    }
   } catch {
-    return null; // No paywall, login, protected page, or network restriction bypass.
+    logEvidenceFailure(signal, "SOURCE_UNAVAILABLE");
   }
+  return null; // No login, paywall, or network restriction bypass.
 }
 
 function parseModelJson(value: string): { h1: string; lead: string; paragraphs: EditorialParagraph[] } | null {
