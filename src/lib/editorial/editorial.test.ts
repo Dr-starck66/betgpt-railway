@@ -7,7 +7,7 @@ import { manualEditorialArticles } from "./manual-articles.ts";
 import { editorialGoldStandardGate } from "./gold-standard.ts";
 import { optimizeTimes, parisDate, slotInstant } from "./time.ts";
 import type { ArticleType, EditorialMatch, EditorialNewsSignal, SlotId } from "./types.ts";
-import { autoPublishableCluster, clusterSignals, parseGoogleNewsRss, sourceTier } from "./news-scout.server.ts";
+import { autoPublishableCluster, clusterSignals, parseGoogleNewsRss, parsePublisherRss, sourceTier } from "./news-scout.server.ts";
 
 function match(over: Partial<EditorialMatch> & Pick<EditorialMatch, "id" | "home" | "away" | "kickoff">): EditorialMatch {
   return {
@@ -59,6 +59,30 @@ function board(): EditorialMatch[] {
     }),
   ];
 }
+
+describe("publisher source provenance", () => {
+  it("only accepts fresh HTTPS deep links on the publisher's real domain", () => {
+    const now = new Date("2026-10-24T08:00:00.000Z");
+    const pub = '<pubDate>Sat, 24 Oct 2026 07:20:00 GMT</pubDate>';
+    const mk = (link: string, title: string) => '<item><title><![CDATA[' + title +
+      ']]></title><link>' + link + '</link>' + pub +
+      '<description><![CDATA[PSG et Lyon : la ligue publie une décision sur le calendrier.]]></description></item>';
+    const rss = '<rss><channel>' +
+      mk('https://www.lfp.fr/article/decision-officielle-psg-lyon', 'PSG et Lyon : décision officielle') +
+      mk('https://news.google.com/rss/articles/something', 'PSG et Lyon : page agrégateur') +
+      mk('https://lfp.fr.evil.example/article/psg-lyon', 'PSG et Lyon : imitation') +
+      mk('https://www.lfp.fr/', 'PSG et Lyon : page accueil') +
+      mk('http://www.lfp.fr/article/redirect', 'PSG et Lyon : HTTP refusé') +
+      '</channel></rss>';
+    const rows = parsePublisherRss(rss, now, {
+      sourceName: "LFP", origin: "https://www.lfp.fr", tier: "OFFICIAL",
+    });
+    assert.equal(rows.length, 1, "Only a real publisher HTTPS article is citable");
+    assert.equal(rows[0]?.url, 'https://www.lfp.fr/article/decision-officielle-psg-lyon');
+    assert.equal(rows[0]?.sourceTier, "OFFICIAL");
+    assert.equal(rows[0]?.sourceName, "LFP");
+  });
+});
 
 describe("news auto-authoring guard", () => {
   it("creates seven distinct cited sections but refuses to treat thin RSS as Gold Standard content", () => {
