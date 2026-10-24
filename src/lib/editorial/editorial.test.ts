@@ -9,6 +9,7 @@ import { optimizeTimes, parisDate, slotInstant } from "./time.ts";
 import type { ArticleType, EditorialMatch, EditorialNewsSignal, SlotId } from "./types.ts";
 import { autoPublishableCluster, clusterSignals, parseGoogleNewsRss, parsePublisherRss, sourceTier } from "./news-scout.server.ts";
 import { publisherUrl } from "./auto-reporter.server.ts";
+import { clusterSignals as clusterAutoReporterSignals, isMaterialDevelopment as isAutoReporterMaterial } from "./news-cluster.ts";
 
 function match(over: Partial<EditorialMatch> & Pick<EditorialMatch, "id" | "home" | "away" | "kickoff">): EditorialMatch {
   return {
@@ -732,5 +733,37 @@ describe("automatic publisher zero-cost evidence safety", () => {
     assert.equal(publisherUrl("https://127.0.0.1/article/123"), false);
     assert.equal(publisherUrl("https://localhost/article/123"), false);
     assert.equal(publisherUrl("https://example.com:8443/article/123"), false);
+  });
+});
+
+describe("automatic publisher multilingual event correlation", () => {
+  it("correlates English publisher stories into one sourced event without lowering source-count gates", () => {
+    const date = "2026-10-24T09:15:00.000Z";
+    const story = (id: string, title: string, source: string): EditorialNewsSignal => ({
+      id,
+      title,
+      url: "https://" + source + "/football/arsenal-manager-report",
+      sourceName: source,
+      sourceUrl: "https://" + source,
+      publishedAt: date,
+      description: "Arsenal manager dismissal confirmed after Chelsea defeat.",
+      sourceTier: "TIER1",
+      entities: ["Arsenal", "Chelsea"],
+      language: "en",
+    });
+    const rows = [
+      story("bbc", "Arsenal manager sacked after Chelsea defeat", "bbc.com"),
+      story("sky", "Arsenal sack manager after defeat to Chelsea", "skysports.com"),
+      story("guardian", "Arsenal manager departure confirmed following Chelsea defeat", "theguardian.com"),
+      { ...story("unrelated", "Liverpool transfer deal approved", "reuters.com"), entities: ["Liverpool"] },
+    ];
+    const clusters = clusterAutoReporterSignals(rows);
+    const arsenal = clusters.find((cluster) => cluster.entities.includes("Arsenal"));
+    assert.ok(arsenal, "English-language reporting must not be invisible to the publisher");
+    assert.equal(arsenal.distinctSources, 3, "Three genuinely separate publisher names are required");
+    assert.equal(arsenal.signals.length, 3, "An unrelated story must remain separate");
+    assert.equal(arsenal.newsworthy, true);
+    assert.equal(isAutoReporterMaterial("Arsenal manager departure confirmed"), true);
+    assert.equal(clusters.reduce((sum, cluster) => sum + cluster.signals.length, 0), 4);
   });
 });
