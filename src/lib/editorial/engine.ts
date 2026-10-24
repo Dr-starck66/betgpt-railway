@@ -557,7 +557,7 @@ function newsConsequenceLine(text: string, subject: string): string {
   return `Pour ${subject}, la suite utile dépend d'un fait supplémentaire attribuable : déclaration, décision, résultat, liste officielle ou nouvelle donnée de match. Sans élément nouveau, aucune dépêche supplémentaire n'est créée.`;
 }
 
-function composeNews(
+export function composeNews(
   cluster: NewsCluster,
   matches: EditorialMatch[],
   slot: SlotId,
@@ -634,7 +634,7 @@ function composeNews(
   const paragraphs = [
     paragraph(
       "Le fait nouveau qui fait basculer le dossier",
-      `${leadSignal.sourceName} rapporte ${mainClaim}. ${material ? "Ce nouvel élément modifie l'état du dossier par rapport aux informations qui circulaient auparavant." : "L'information devient pertinente parce qu'elle précise un dossier déjà suivi, sans transformer une hypothèse en certitude."} ${corroborated ? `Au total, ${cluster.distinctSources} rédactions ou sources distinctes alimentent ce cluster d'actualité.` : "À ce stade, une seule source forte porte encore l'essentiel du fait nouveau."} Les détails complémentaires sont attribués séparément dans la section suivante afin d'éviter de transformer une reprise en confirmation indépendante.`.replace(/\s+/g, " ").trim(),
+      `${leadSignal.sourceName} rapporte ${mainClaim}. ${material ? "Ce nouvel élément modifie l'état du dossier par rapport aux informations qui circulaient auparavant." : "L'information devient pertinente parce qu'elle précise un dossier déjà suivi, sans transformer une hypothèse en certitude."} ${corroborated ? `Au total, ${cluster.distinctSources} rédactions ou sources distinctes évoquent cette actualité.` : "À ce stade, une seule source forte porte encore l'essentiel du fait nouveau."} Les détails complémentaires sont attribués séparément dans la section suivante afin d'éviter de transformer une reprise en confirmation indépendante.`.replace(/\s+/g, " ").trim(),
       [leadSignal.id],
     ),
     paragraph(
@@ -643,19 +643,24 @@ function composeNews(
       usefulSignals.length ? usefulSignals.map((signal) => signal.id) : [leadSignal.id],
     ),
     paragraph(
-      "La chronologie des publications",
+      "La suite des annonces et confirmations datées",
       `${chronology || `${leadSignal.sourceName} publie le premier signal exploitable ${formatParis(leadSignal.publishedAt)}.`} Cette chronologie permet de distinguer le fait initial, les reprises et les éventuelles confirmations plus tardives. Elle évite surtout de présenter comme simultanées des informations qui ont pu évoluer au fil de la journée.`,
       citedSignals.map((signal) => signal.id),
     ),
     paragraph(
-      contextMatch ? "Le repère sportif concret autour de cette information" : "Pourquoi BetGPT ne force pas un contexte de match",
-      `${contextLine} ${entities.length ? `Les entités explicitement détectées dans les sources sont : ${entities.join(", ")}.` : "Aucune entité sportive supplémentaire n'est ajoutée à partir de mémoire ou de suppositions."}`,
+      contextMatch ? "Le repère sportif concret autour de cette information" : "La situation sportive établie par les sources",
+      `${contextLine} ${entities.length ? `Les personnes et équipes nommées par les sources sont : ${entities.join(", ")}.` : "Aucune entité sportive supplémentaire n'est ajoutée à partir de mémoire ou de suppositions."}`,
       contextSourceId ? [contextSourceId, leadSignal.id] : [leadSignal.id],
     ),
     paragraph(
       "Ce qui est établi, corroboré ou encore fragile",
-      `Le cluster contient ${officialSignals.length} source${officialSignals.length > 1 ? "s" : ""} officielle${officialSignals.length > 1 ? "s" : ""}, ${tier1Signals.length} source${tier1Signals.length > 1 ? "s" : ""} de premier niveau journalistique et ${otherSignals.length} autre${otherSignals.length > 1 ? "s" : ""} source${otherSignals.length > 1 ? "s" : ""}. ${officialSignals.length ? "Les éléments issus d'une source officielle sont distingués des reprises de presse." : "Aucune déclaration officielle n'est ajoutée artificiellement si elle n'existe pas dans le flux."} ${corroborated ? "Les points communs entre plusieurs sources sont présentés comme corroborés ; les détails isolés restent attribués." : "Les détails non corroborés restent explicitement attachés à leur source d'origine."}`,
+      `Le dossier réunit ${officialSignals.length} source${officialSignals.length > 1 ? "s" : ""} officielle${officialSignals.length > 1 ? "s" : ""}, ${tier1Signals.length} source${tier1Signals.length > 1 ? "s" : ""} de premier niveau journalistique et ${otherSignals.length} autre${otherSignals.length > 1 ? "s" : ""} source${otherSignals.length > 1 ? "s" : ""}. ${officialSignals.length ? "Les éléments issus d'une source officielle sont distingués des reprises de presse." : "Les éléments non confirmés ne sont pas présentés comme des déclarations officielles."} ${corroborated ? "Les points communs entre plusieurs sources sont présentés comme corroborés ; les détails isolés restent attribués." : "Les détails non corroborés restent explicitement attachés à leur source d'origine."}`,
       citedSignals.map((signal) => signal.id),
+    ),
+    paragraph(
+      "Les confirmations indispensables avant toute conséquence sportive",
+      `Les informations attribuées à ${citedSignals.map((row) => row.sourceName).slice(0, 3).join(", ")} ne donnent pas automatiquement une composition d'équipe, une durée d'indisponibilité ou une date de retour. ${contextMatch ? `Le calendrier évoque ${contextMatch.home.name} – ${contextMatch.away.name}, prévu le ${formatParis(contextMatch.kickoff)} ; cet horaire ne constitue pas une preuve de présence ou d'absence pour les joueurs concernés.` : "En l'absence d'un calendrier sportif relié de façon sûre à cette information, aucune rencontre précise n'est avancée comme conséquence."} Une mise à jour du dossier exige une annonce identifiable et datée : le texte de l'organisme concerné, une liste de groupe publiée, un compte rendu médical rendu public ou un résultat constaté. La date, la provenance et la portée de cette annonce devront être citées dans le passage modifié.`,
+      citedSignals.slice(0, 3).map((row) => row.id),
     ),
     paragraph(
       "Le prochain élément qui permettra de mettre l'article à jour",
