@@ -1,5 +1,8 @@
 import { defineEventHandler, getHeader, setResponseStatus } from "h3";
 import { editionFromDesk } from "../../../src/lib/editorial/run.server";
+import { runAutomaticPublishing } from "../../../src/lib/editorial/auto-reporter.server";
+import { readLedgerDurable } from "../../../src/lib/editorial/ledger-store";
+import { parisDate } from "../../../src/lib/editorial/time";
 
 export default defineEventHandler(async (event) => {
   const secret = (process.env.BETGPT_EDITORIAL_CRON_TOKEN ?? "").trim();
@@ -9,7 +12,16 @@ export default defineEventHandler(async (event) => {
     return { ok: false, error: "unauthorized" };
   }
   try {
-    const { edition, durable, liveDataStatus } = await editionFromDesk(new Date());
+    const now = new Date();
+    const autoReport = await runAutomaticPublishing(now);
+    const { edition, durable, liveDataStatus } = await editionFromDesk(now);
+    const stored = await readLedgerDurable();
+    const autoToday = stored.filter((article) => article.id === `ed-${edition.parisDate}-${article.slot}` &&
+      article.parisDate === edition.parisDate && article.publishedAt &&
+      parisDate(new Date(article.publishedAt)) === edition.parisDate &&
+      (article.status === "PUBLISHED" || article.status === "UPDATED"));
+    const missingAutomaticSlots = (["morning", "noon", "evening"] as const)
+      .filter((slot) => !autoToday.some((article) => article.slot === slot));
     const published = edition.articles.filter(
       (article) => article.status === "PUBLISHED" || article.status === "UPDATED",
     );
@@ -19,6 +31,10 @@ export default defineEventHandler(async (event) => {
       durable,
       liveDataStatus,
       targetPerDay: 3,
+      automaticCountToday: autoToday.length,
+      missingAutomaticSlots,
+      automaticPublicationStatus: missingAutomaticSlots.length ? "DEGRADED_AUTOMATED_ARTICLE_QUOTA" : "PASS_THREE_AUTOMATED_ARTICLES",
+      autoReporter: autoReport,
       plannedCount: edition.plannedCount,
       targetStatus: edition.targetStatus,
       published: published.length,

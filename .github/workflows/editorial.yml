@@ -60,6 +60,10 @@ jobs:
         if: github.event_name == 'pull_request'
         run: npm run release:preflight
 
+      - name: Sync sourced articles already published on Railway into durable ledger
+        if: github.event_name != 'pull_request'
+        run: node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/pull-editorial-snapshot.ts
+
       - name: Transactional editorial publication gate
         id: editorial_gate
         if: github.event_name != 'pull_request'

@@ -11,6 +11,9 @@ const MAX_SIGNALS = 90;
 // reproduce an article's full text or bypass the Gold Standard newsroom gate.
 const DIRECT_PUBLISHER_FEEDS = [
   { url: "https://www.lfp.fr/rss", sourceName: "LFP", origin: "https://www.lfp.fr", tier: "OFFICIAL" },
+  { url: "https://feeds.bbci.co.uk/sport/football/rss.xml", sourceName: "BBC Sport", origin: "https://www.bbc.com", tier: "TIER1" },
+  { url: "https://www.theguardian.com/football/rss", sourceName: "The Guardian", origin: "https://www.theguardian.com", tier: "TIER1" },
+  { url: "https://www.espn.com/espn/rss/soccer/news", sourceName: "ESPN", origin: "https://www.espn.com", tier: "TIER1" },
   { url: "https://www.franceinfo.fr/sports/foot.rss", sourceName: "Franceinfo", origin: "https://www.franceinfo.fr", tier: "TIER1" },
   { url: "https://france3-regions.franceinfo.fr/sport/football/ligue-1/rss", sourceName: "France 3 Régions", origin: "https://france3-regions.franceinfo.fr", tier: "TIER1" },
 ] as const;

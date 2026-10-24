@@ -8,6 +8,7 @@ import { editorialGoldStandardGate } from "./gold-standard.ts";
 import { optimizeTimes, parisDate, slotInstant } from "./time.ts";
 import type { ArticleType, EditorialMatch, EditorialNewsSignal, SlotId } from "./types.ts";
 import { autoPublishableCluster, clusterSignals, parseGoogleNewsRss, parsePublisherRss, sourceTier } from "./news-scout.server.ts";
+import { publisherUrl } from "./auto-reporter.server.ts";
 
 function match(over: Partial<EditorialMatch> & Pick<EditorialMatch, "id" | "home" | "away" | "kickoff">): EditorialMatch {
   return {
@@ -717,4 +718,17 @@ it("late live provider failures stay handled after the editorial deadline", asyn
   assert.equal((await editorialLiveWithinBudget(() => pending, 10)).status, "TIMEOUT");
   reject(new Error("late provider failure"));
   await new Promise((resolve) => setImmediate(resolve));
+});
+
+
+describe("automatic publisher zero-cost evidence safety", () => {
+  it("rejects aggregators, homepages and non-HTTPS links as attributable evidence", () => {
+    assert.equal(publisherUrl("https://www.bbc.com/sport/football/articles/c1234"), true);
+    assert.equal(publisherUrl("https://news.google.com/rss/articles/123"), false);
+    assert.equal(publisherUrl("https://example.com/"), false);
+    assert.equal(publisherUrl("http://example.com/article/123"), false);
+    assert.equal(publisherUrl("https://127.0.0.1/article/123"), false);
+    assert.equal(publisherUrl("https://localhost/article/123"), false);
+    assert.equal(publisherUrl("https://example.com:8443/article/123"), false);
+  });
 });
