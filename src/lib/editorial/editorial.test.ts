@@ -8,7 +8,7 @@ import { editorialGoldStandardGate } from "./gold-standard.ts";
 import { optimizeTimes, parisDate, slotInstant } from "./time.ts";
 import type { ArticleType, EditorialMatch, EditorialNewsSignal, SlotId } from "./types.ts";
 import { autoPublishableCluster, clusterSignals, fairPublisherSignals, parseGoogleNewsRss, parsePublisherRss, sourceTier } from "./news-scout.server.ts";
-import { extractPublicArticle, publisherUrl } from "./auto-reporter.server.ts";
+import { extractPublicArticle, publicPublisherRssEvidence, publisherUrl } from "./auto-reporter.server.ts";
 import { clusterSignals as clusterAutoReporterSignals, isMaterialDevelopment as isAutoReporterMaterial } from "./news-cluster.ts";
 
 function match(over: Partial<EditorialMatch> & Pick<EditorialMatch, "id" | "home" | "away" | "kickoff">): EditorialMatch {
@@ -62,6 +62,32 @@ function board(): EditorialMatch[] {
   ];
 }
 
+
+describe("first-party full-text RSS evidence", () => {
+  it("accepts publisher-owned content:encoded only for verified canonical publisher URLs", () => {
+    const now = new Date("2026-10-24T18:00:00.000Z");
+    const body = "<p>" + "Compte rendu officiel public avec des faits détaillés et des citations vérifiables. ".repeat(13) + "</p>";
+    const rss = '<rss><channel><item><title>Événement vérifié</title><link>https://www.sofoot.com/football/evenement-verifie</link>' +
+      '<pubDate>Sat, 24 Oct 2026 17:00:00 GMT</pubDate><description>Résumé court</description>' +
+      '<content:encoded><![CDATA[' + body + ']]></content:encoded></item></channel></rss>';
+    const signals = parsePublisherRss(rss, now, { sourceName: "So Foot", origin: "https://www.sofoot.com", tier: "TIER1" });
+    assert.equal(signals.length, 1);
+    assert.ok((signals[0]?.publisherRssBody?.length ?? 0) >= 750);
+    assert.ok(publicPublisherRssEvidence(signals[0]!)?.text.length);
+  });
+  it("rejects a short snippet, aggregator pointer and missing full feed body", () => {
+    const now = new Date("2026-10-24T18:00:00.000Z");
+    const rss = '<rss><channel><item><title>Actualité</title><link>https://news.google.com/rss/articles/abc123</link>' +
+      '<pubDate>Sat, 24 Oct 2026 17:00:00 GMT</pubDate><content:encoded><![CDATA[' +
+      "Faits divers. ".repeat(110) + ']]></content:encoded></item></channel></rss>';
+    assert.equal(parsePublisherRss(rss, now, { sourceName: "So Foot", origin: "https://www.sofoot.com", tier: "TIER1" }).length, 0);
+    const valid = parsePublisherRss(rss.replace("https://news.google.com/rss/articles/abc123",
+      "https://www.sofoot.com/football/article-reel"), now,
+      { sourceName: "So Foot", origin: "https://www.sofoot.com", tier: "TIER1" })[0]!;
+    assert.ok(publicPublisherRssEvidence(valid));
+    assert.equal(publicPublisherRssEvidence({ ...valid, publisherRssBody: "Résumé trop court" }), null);
+  });
+});
 
 describe("first-party article evidence extraction", () => {
   it("recovers public NewsArticle JSON-LD from a publisher's client-rendered article", () => {
