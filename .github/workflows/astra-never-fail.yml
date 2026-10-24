@@ -4,6 +4,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # GitHub App merges can leave the push-to-main candidate without a recorded
+  # run. Trusted owner command on one audited PR provides a bounded, explicit
+  # dispatch with no new token, secret, paid runner or external webhook.
+  issue_comment:
+    types: [created]
 
 concurrency:
   group: astra-never-fail-${{ github.ref }}
@@ -16,6 +21,11 @@ permissions:
 jobs:
   candidate-gate:
     name: Candidate gate
+    if: >-
+      github.event_name != 'issue_comment' ||
+      (github.actor == 'Dr-starck66' &&
+       github.event.issue.number == 99 &&
+       github.event.comment.body == '/astra-green-candidate')
     runs-on: ubuntu-latest
     timeout-minutes: 35
     steps:
