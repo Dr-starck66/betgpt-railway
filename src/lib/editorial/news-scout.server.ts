@@ -14,6 +14,11 @@ const DIRECT_PUBLISHER_FEEDS = [
   { url: "https://feeds.bbci.co.uk/sport/football/rss.xml", sourceName: "BBC Sport", origin: "https://www.bbc.com", tier: "TIER1" },
   { url: "https://www.theguardian.com/football/rss", sourceName: "The Guardian", origin: "https://www.theguardian.com", tier: "TIER1" },
   { url: "https://www.skysports.com/rss/11095", sourceName: "Sky Sports", origin: "https://www.skysports.com", tier: "TIER1" },
+  // Current first-party RSS feeds verified by independent RSS monitoring,
+  // not Google News redirect pointers. Full-text source checks still apply.
+  { url: "https://www.nytimes.com/athletic/rss/football/", sourceName: "The Athletic", origin: "https://www.nytimes.com", tier: "TIER1" },
+  { url: "https://www.cbssports.com/rss/headlines/", sourceName: "CBS Sports", origin: "https://www.cbssports.com", tier: "TIER1" },
+  { url: "https://sports.yahoo.com/rss/", sourceName: "Yahoo Sports", origin: "https://sports.yahoo.com", tier: "TIER1" },
   { url: "https://www.7sur7.be/football/rss.xml", sourceName: "7sur7", origin: "https://www.7sur7.be", tier: "TIER1" },
   { url: "https://www.espn.com/espn/rss/soccer/news", sourceName: "ESPN", origin: "https://www.espn.com", tier: "TIER1" },
   { url: "https://www.franceinfo.fr/sports/foot.rss", sourceName: "Franceinfo", origin: "https://www.franceinfo.fr", tier: "TIER1" },
@@ -299,7 +304,7 @@ async function fetchText(url: string, fetchImpl: typeof fetch): Promise<string> 
   }
 }
 
-function uniqSignals(signals: EditorialNewsSignal[]): EditorialNewsSignal[] {
+function uniqSignals(signals: EditorialNewsSignal[], limit = MAX_SIGNALS): EditorialNewsSignal[] {
   const seen = new Set<string>();
   return signals
     .slice()
@@ -310,7 +315,7 @@ function uniqSignals(signals: EditorialNewsSignal[]): EditorialNewsSignal[] {
       seen.add(key);
       return true;
     })
-    .slice(0, MAX_SIGNALS);
+    .slice(0, limit);
 }
 
 export type NewsCluster = {
@@ -422,12 +427,28 @@ export async function collectFootballNewsSignals(now = new Date(), fetchImpl: ty
   // structurally impossible despite available first-party feeds.
   const results = fetched.map((result) => result.status === "fulfilled" ? result.value : []);
   const google = uniqSignals(results.slice(0, urls.length).flat());
-  const publisher = uniqSignals(results.slice(urls.length).flat());
+  // Preserve coverage across independent outlets instead of letting the
+  // newest few publisher feeds monopolize the 90 direct-evidence slots.
+  const publisherCandidates = uniqSignals(results.slice(urls.length).flat(), MAX_SIGNALS * DIRECT_PUBLISHER_FEEDS.length);
+  const perPublisherLimit = 16;
+  const perPublisherSeen = new Map<string, number>();
+  const publisher = publisherCandidates.filter((signal) => {
+    const key = signal.sourceName.toLowerCase();
+    const count = perPublisherSeen.get(key) ?? 0;
+    if (count >= perPublisherLimit) return false;
+    perPublisherSeen.set(key, count + 1);
+    return true;
+  }).slice(0, MAX_SIGNALS);
   const signals = [...publisher, ...google].slice(0, MAX_SIGNALS * 2);
   console.info("ASTRA_EDITORIAL_EVIDENCE_RSS", JSON.stringify({
     directPublisherSignals: publisher.length,
     googleDiscoverySignals: google.length,
     usableSignals: signals.length,
+    directPublisherBreakdown: [...new Set(publisher.map((s) => s.sourceName))].map((name) => ({
+      publisher: name,
+      articles: publisher.filter((s) => s.sourceName === name).length,
+    })),
+    configuredPublisherFeeds: DIRECT_PUBLISHER_FEEDS.length,
   }));
   cache = { at: now.getTime(), signals };
   return signals;
