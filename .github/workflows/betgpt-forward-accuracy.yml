@@ -2,6 +2,12 @@ name: BetGPT Ω — Forward Prediction Accuracy (shadow-only)
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/betgpt-forward-accuracy.yml"
+      - "scripts/betgpt-forward-accuracy.mjs"
+      - "scripts/betgpt-forward-accuracy.test.mjs"
   schedule:
     - cron: "17 8 * * *"
 
@@ -23,18 +29,20 @@ jobs:
           node-version: "22"
       - name: Verify evaluation regression tests
         run: node --test scripts/betgpt-forward-accuracy.test.mjs
-      - name: Fetch authenticated production evidence via public live endpoint
+      - name: Fetch production evidence from live endpoint
         shell: bash
         run: |
           set -euo pipefail
           curl -fsS --retry 2 --retry-delay 5 --connect-timeout 10 --max-time 75 \
             -H 'Accept: application/json' -H 'Cache-Control: no-cache' \
             'https://betgpt.live/api/learning-checkpoint' -o /tmp/forward-checkpoint.json
-      - name: Score only NEW frozen, pre-kickoff matches
+      - name: Score only NEW pre-kickoff forecasts after confirmed live revision
         shell: bash
         run: |
           set -euo pipefail
-          node scripts/betgpt-forward-accuracy.mjs /tmp/forward-checkpoint.json 2026-10-24T00:00:00Z > /tmp/forward-accuracy-report.json
+          # First public proof of a8b614c: 2026-10-24T08:17:03.739Z.
+          # Exclude prior-version forecasts instead of attributing them to the challenger.
+          node scripts/betgpt-forward-accuracy.mjs /tmp/forward-checkpoint.json 2026-10-24T08:17:04Z > /tmp/forward-accuracy-report.json
           node -e 'const r=require("/tmp/forward-accuracy-report.json"); if(!r.schema || !r.status) process.exit(1); console.log(r.status,r.metrics.n)'
       - uses: actions/upload-artifact@v4
         with:
