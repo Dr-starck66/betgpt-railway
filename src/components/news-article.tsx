@@ -121,7 +121,8 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
           className="aspect-video w-full object-cover"
         />
         <figcaption className="border-t border-line px-4 py-3 text-xs text-muted sm:px-6">
-          {heroImageCopy.caption}
+          <span className="block">{heroImageCopy.caption}</span>
+          <span className="mt-1 block break-words">{article.image.credit}</span>
         </figcaption>
       </figure>
 
