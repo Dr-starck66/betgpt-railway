@@ -51,15 +51,43 @@ function decodeHtml(text: string): string {
     .replace(/&#(\d+);/g, (_m, n: string) => String.fromCodePoint(Number(n)));
 }
 
-function extractPublicArticle(html: string): string {
-  const article = html.match(/<article\b[^>]*>([\s\S]*?)<\/article>/i)?.[1] ?? html;
-  const clean = article.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
-    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
-    .replace(/<(?:nav|footer|aside|form)\b[^>]*>[\s\S]*?<\/(?:nav|footer|aside|form)>/gi, " ");
-  const pieces = [...clean.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/gi)]
-    .map((m) => decodeHtml(m[1]!.replace(/<[^>]*>/g, " ")).replace(/\s+/g, " ").trim())
-    .filter((line) => line.length >= 65 && line.length <= 3000);
-  return [...new Set(pieces)].join("\n").slice(0, 7000);
+export function extractPublicArticle(html: string): string {
+  // Public editorial evidence only: publisher HTML paragraphs or a publisher-owned
+  // Schema.org articleBody. Never use RSS snippets, menu text, or arbitrary script data.
+  const paragraphsFrom = (fragment: string): string => {
+    const clean = fragment.replace(/<(?:script|style|nav|footer|aside|form)\b[^>]*>[\s\S]*?<\/(?:script|style|nav|footer|aside|form)>/gi, " ");
+    const paragraphs = [...clean.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/gi)]
+      .map((match) => decodeHtml((match[1] ?? "").replace(/<[^>]*>/g, " ")).replace(/\s+/g, " ").trim())
+      .filter((line) => line.length >= 65 && line.length <= 3000);
+    return [...new Set(paragraphs)].join("\n");
+  };
+  const candidates: string[] = [];
+  const article = html.match(/<article\b[^>]*>([\s\S]*?)<\/article>/i);
+  if (article?.[1]) candidates.push(paragraphsFrom(article[1]));
+  const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i);
+  if (main?.[1]) candidates.push(paragraphsFrom(main[1]));
+  const visit = (value: unknown, depth = 0): void => {
+    if (depth > 4 || value == null || typeof value !== "object") return;
+    if (Array.isArray(value)) {
+      for (const entry of value.slice(0, 30)) visit(entry, depth + 1);
+      return;
+    }
+    const record = value as Record<string, unknown>;
+    const types = Array.isArray(record["@type"]) ? record["@type"] : [record["@type"]];
+    const isArticle = types.some((kind) =>
+      typeof kind === "string" && /^(?:https?:\/\/schema\.org\/)?(?:NewsArticle|Article|BlogPosting|ReportageNewsArticle|AnalysisNewsArticle)$/i.test(kind)
+    );
+    if (isArticle && typeof record.articleBody === "string") {
+      const body = decodeHtml(record.articleBody.replace(/<[^>]*>/g, " ")).replace(/\s+/g, " ").trim();
+      if (body.length >= MIN_BODY_CHARS) candidates.push(body);
+    }
+    if (record["@graph"]) visit(record["@graph"], depth + 1);
+  };
+  for (const match of html.matchAll(/<script\b[^>]*\btype\s*=\s*["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
+    try { visit(JSON.parse((match[1] ?? "").trim())); } catch { /* Invalid JSON-LD is not evidence. */ }
+  }
+  return (candidates.filter((part) => part.length >= MIN_BODY_CHARS)
+    .sort((a, b) => b.length - a.length)[0] ?? "").slice(0, 10000);
 }
 
 type Evidence = {
@@ -67,22 +95,66 @@ type Evidence = {
   text: string;
 };
 
+// Only follow a bounded first-party canonical redirect. This excludes
+// publisher-to-aggregator, paywall-provider, login and arbitrary/off-host hops.
+function samePublisherHost(from: string, to: string): boolean {
+  const a = host(from);
+  const b = host(to);
+  return a === b || (["bbc.com", "bbc.co.uk"].includes(a) && ["bbc.com", "bbc.co.uk"].includes(b));
+}
+
+function logEvidenceFailure(signal: EditorialNewsSignal, reason: string, status?: number): void {
+  console.info("ASTRA_EDITORIAL_SOURCE_EVIDENCE", JSON.stringify({
+    publisher: signal.sourceName, host: host(signal.url), reason,
+    ...(status == null ? {} : { httpStatus: status }),
+  }));
+}
+
 async function loadEvidence(signal: EditorialNewsSignal): Promise<Evidence | null> {
   if (!publisherUrl(signal.url)) return null;
   try {
-    const response = await fetch(signal.url, {
-      signal: AbortSignal.timeout(FETCH_TIMEOUT),
-      redirect: "error",
-      headers: { "user-agent": "BetGPTEditorialEvidence/1.0 (+https://betgpt.live)" },
-    });
-    if (!response.ok || !publisherUrl(response.url) || host(response.url) !== host(signal.url)) return null;
-    if (!(response.headers.get("content-type") ?? "").includes("text/html")) return null;
-    const html = (await response.text()).slice(0, 800000);
-    const text = extractPublicArticle(html);
-    return text.length >= MIN_BODY_CHARS ? { signal, text } : null;
+    let current = signal.url;
+    for (let redirects = 0; redirects <= 2; redirects += 1) {
+      const response = await fetch(current, {
+        signal: AbortSignal.timeout(FETCH_TIMEOUT),
+        redirect: "manual",
+        headers: { "user-agent": "BetGPTEditorialEvidence/1.0 (+https://betgpt.live)" },
+      });
+      if ([301, 302, 303, 307, 308].includes(response.status)) {
+        const location = response.headers.get("location");
+        if (!location || redirects === 2) {
+          logEvidenceFailure(signal, "REDIRECT_LIMIT_OR_MISSING_LOCATION", response.status);
+          return null;
+        }
+        const next = new URL(location, current).href;
+        if (!publisherUrl(next) || !samePublisherHost(signal.url, next)) {
+          logEvidenceFailure(signal, "REDIRECT_OUTSIDE_PUBLISHER", response.status);
+          return null;
+        }
+        current = next;
+        continue;
+      }
+      if (!response.ok) { logEvidenceFailure(signal, "SOURCE_HTTP_BLOCKED", response.status); return null; }
+      if (!publisherUrl(response.url) || !samePublisherHost(signal.url, response.url)) {
+        logEvidenceFailure(signal, "UNEXPECTED_FINAL_SOURCE");
+        return null;
+      }
+      if (!(response.headers.get("content-type") ?? "").includes("text/html")) {
+        logEvidenceFailure(signal, "NON_HTML_SOURCE", response.status);
+        return null;
+      }
+      const html = (await response.text()).slice(0, 800000);
+      const text = extractPublicArticle(html);
+      if (text.length < MIN_BODY_CHARS) {
+        logEvidenceFailure(signal, "INSUFFICIENT_PUBLIC_TEXT", response.status);
+        return null;
+      }
+      return { signal, text };
+    }
   } catch {
-    return null; // No paywall, login, protected page, or network restriction bypass.
+    logEvidenceFailure(signal, "SOURCE_UNAVAILABLE");
   }
+  return null; // No login, paywall, or network restriction bypass.
 }
 
 function parseModelJson(value: string): { h1: string; lead: string; paragraphs: EditorialParagraph[] } | null {

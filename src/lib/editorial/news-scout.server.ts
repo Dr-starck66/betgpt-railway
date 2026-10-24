@@ -11,9 +11,24 @@ const MAX_SIGNALS = 90;
 // reproduce an article's full text or bypass the Gold Standard newsroom gate.
 const DIRECT_PUBLISHER_FEEDS = [
   { url: "https://www.lfp.fr/rss", sourceName: "LFP", origin: "https://www.lfp.fr", tier: "OFFICIAL" },
+  // French football first-party feeds: official Foot Mercato RSS endpoint and
+  // RMC Sport football RSS. Only independent, readable publisher articles may
+  // subsequently count as evidence; no syndication or content republishing.
+  { url: "https://www.footmercato.net/flux-rss", sourceName: "Foot Mercato", origin: "https://www.footmercato.net", tier: "TIER1" },
+  { url: "https://rmcsport.bfmtv.com/rss/football/", sourceName: "RMC Sport", origin: "https://rmcsport.bfmtv.com", tier: "TIER1" },
+  // Independent public editorial feeds, verified working on 24 October 2026.
+  // Only first-party deep links enter the evidence pipeline; article text still
+  // must pass the same host, length, corroboration and Gold Standard checks.
+  { url: "https://www.sofoot.com/rss", sourceName: "So Foot", origin: "https://www.sofoot.com", tier: "TIER1" },
+  { url: "https://www.football365.com/rss", sourceName: "Football365", origin: "https://www.football365.com", tier: "TIER1" },
   { url: "https://feeds.bbci.co.uk/sport/football/rss.xml", sourceName: "BBC Sport", origin: "https://www.bbc.com", tier: "TIER1" },
   { url: "https://www.theguardian.com/football/rss", sourceName: "The Guardian", origin: "https://www.theguardian.com", tier: "TIER1" },
   { url: "https://www.skysports.com/rss/11095", sourceName: "Sky Sports", origin: "https://www.skysports.com", tier: "TIER1" },
+  // Current first-party RSS feeds verified by independent RSS monitoring,
+  // not Google News redirect pointers. Full-text source checks still apply.
+  { url: "https://www.nytimes.com/athletic/rss/football/", sourceName: "The Athletic", origin: "https://www.nytimes.com", tier: "TIER1" },
+  { url: "https://www.cbssports.com/rss/headlines/", sourceName: "CBS Sports", origin: "https://www.cbssports.com", tier: "TIER1" },
+  { url: "https://sports.yahoo.com/rss/", sourceName: "Yahoo Sports", origin: "https://sports.yahoo.com", tier: "TIER1" },
   { url: "https://www.7sur7.be/football/rss.xml", sourceName: "7sur7", origin: "https://www.7sur7.be", tier: "TIER1" },
   { url: "https://www.espn.com/espn/rss/soccer/news", sourceName: "ESPN", origin: "https://www.espn.com", tier: "TIER1" },
   { url: "https://www.franceinfo.fr/sports/foot.rss", sourceName: "Franceinfo", origin: "https://www.franceinfo.fr", tier: "TIER1" },
@@ -299,7 +314,7 @@ async function fetchText(url: string, fetchImpl: typeof fetch): Promise<string> 
   }
 }
 
-function uniqSignals(signals: EditorialNewsSignal[]): EditorialNewsSignal[] {
+function uniqSignals(signals: EditorialNewsSignal[], limit = MAX_SIGNALS): EditorialNewsSignal[] {
   const seen = new Set<string>();
   return signals
     .slice()
@@ -310,7 +325,7 @@ function uniqSignals(signals: EditorialNewsSignal[]): EditorialNewsSignal[] {
       seen.add(key);
       return true;
     })
-    .slice(0, MAX_SIGNALS);
+    .slice(0, limit);
 }
 
 export type NewsCluster = {
@@ -402,6 +417,29 @@ export function autoPublishableCluster(cluster: NewsCluster): boolean {
   return cluster.distinctSources >= 2 && new Set(strong.map((signal) => signal.sourceName.toLowerCase())).size >= 2;
 }
 
+
+/** Bounded, deterministic independent-publisher sampling; never weakens the
+ * direct-link, deep-page or editorial evidence gate. */
+export function fairPublisherSignals(
+  pools: EditorialNewsSignal[][],
+  limit = MAX_SIGNALS,
+  perPublisherLimit = 16,
+): EditorialNewsSignal[] {
+  const unique = pools.map((pool) => uniqSignals(pool).slice(0,perPublisherLimit));
+  const seenUrls = new Set<string>();
+  const selected: EditorialNewsSignal[] = [];
+  for (let rank = 0; rank < perPublisherLimit && selected.length < limit; rank++) {
+    for (const pool of unique) {
+      const signal = pool[rank];
+      if (!signal || seenUrls.has(signal.url)) continue;
+      seenUrls.add(signal.url);
+      selected.push(signal);
+      if (selected.length >= limit) break;
+    }
+  }
+  return selected;
+}
+
 export async function collectFootballNewsSignals(now = new Date(), fetchImpl: typeof fetch = fetch): Promise<EditorialNewsSignal[]> {
   if (cache && now.getTime() - cache.at < CACHE_TTL_MS) return cache.signals;
   const custom = (process.env.BETGPT_NEWS_RSS_URLS ?? "")
@@ -422,12 +460,20 @@ export async function collectFootballNewsSignals(now = new Date(), fetchImpl: ty
   // structurally impossible despite available first-party feeds.
   const results = fetched.map((result) => result.status === "fulfilled" ? result.value : []);
   const google = uniqSignals(results.slice(0, urls.length).flat());
-  const publisher = uniqSignals(results.slice(urls.length).flat());
+  // Fairly preserve independent publisher evidence: the old flattened cap
+  // filled 90 slots from the first feeds before late sources could contribute.
+  // One item per publisher per round prevents this silent publisher starvation.
+  const publisher = fairPublisherSignals(results.slice(urls.length), MAX_SIGNALS);
   const signals = [...publisher, ...google].slice(0, MAX_SIGNALS * 2);
   console.info("ASTRA_EDITORIAL_EVIDENCE_RSS", JSON.stringify({
     directPublisherSignals: publisher.length,
     googleDiscoverySignals: google.length,
     usableSignals: signals.length,
+    directPublisherBreakdown: [...new Set(publisher.map((s) => s.sourceName))].map((name) => ({
+      publisher: name,
+      articles: publisher.filter((s) => s.sourceName === name).length,
+    })),
+    configuredPublisherFeeds: DIRECT_PUBLISHER_FEEDS.length,
   }));
   cache = { at: now.getTime(), signals };
   return signals;
