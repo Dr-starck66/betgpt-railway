@@ -9,6 +9,8 @@ on:
   # dispatch with no new token, secret, paid runner or external webhook.
   issue_comment:
     types: [created]
+  issues:
+    types: [opened]
 
 concurrency:
   group: astra-never-fail-${{ github.ref }}
@@ -22,10 +24,13 @@ jobs:
   candidate-gate:
     name: Candidate gate
     if: >-
-      github.event_name != 'issue_comment' ||
+      (github.event_name != 'issue_comment' && github.event_name != 'issues') ||
       (github.actor == 'Dr-starck66' &&
-       github.event.issue.number == 99 &&
-       github.event.comment.body == '/astra-green-candidate')
+       ((github.event_name == 'issue_comment' &&
+         github.event.issue.number == 99 &&
+         github.event.comment.body == '/astra-green-candidate') ||
+        (github.event_name == 'issues' &&
+         github.event.issue.title == 'ASTRA-GREEN-CANDIDATE-MAINTENANCE-20261024')))
     runs-on: ubuntu-latest
     timeout-minutes: 35
     steps:
