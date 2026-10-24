@@ -53,25 +53,27 @@ export async function readLedgerDurable(): Promise<EditorialArticle[]> {
     return readLedger();
   }
 
+  // Preserve historic Git-backed articles while independently loading the
+  // durable database. Database rows win when the public Git ledger is stale.
+  if (memory.size && Date.now() - lastRemoteRead < REMOTE_TTL_MS && hydratedFromDatabase) {
+    return [...memory.values()];
+  }
+  const remote = await readRemoteLedger();
   if (dbSource === "neon") {
-    if (hydratedFromDatabase && memory.size) return [...memory.values()];
     try {
       const sql = await getSql();
       const rows = await sql.query<{ payload: EditorialArticle }>(
         "select payload from editorial_articles order by coalesce(published_at, updated_at) desc limit 250",
       );
       hydratedFromDatabase = true;
-      if (rows.length) return remember(rows.map((row) => row.payload));
-    } catch {
-      // Database unavailable: use the Git-backed ledger below.
+      return remember([...remote, ...rows.map((row) => row.payload)]);
+    } catch (error) {
+      hydratedFromDatabase = false;
+      console.error("ASTRA_EDITORIAL_DURABLE_READ_FAILED", String(error).slice(0, 180));
+      // Historic public content remains available, but writes must fail closed.
     }
   }
-
-  if (memory.size && Date.now() - lastRemoteRead < REMOTE_TTL_MS) {
-    return [...memory.values()];
-  }
-  const remote = await readRemoteLedger();
-  if (remote.length) return remote;
+  if (remote.length) return remember(remote);
   return readLedger();
 }
 
@@ -87,9 +89,7 @@ export function writeLedger(articles: EditorialArticle[]): boolean {
 }
 
 export async function writeLedgerDurable(articles: EditorialArticle[]): Promise<boolean> {
-  remember(articles);
   if (!articles.length) return true;
-
   if (dbSource === "neon") {
     try {
       const sql = await getSql();
@@ -106,22 +106,37 @@ export async function writeLedgerDurable(articles: EditorialArticle[]): Promise<
              payload = excluded.payload,
              updated_at = now()`,
           [
-            article.id,
-            article.parisDate,
-            article.slot,
-            article.status,
-            article.publishedAt,
-            article.modifiedAt,
-            JSON.stringify(article),
+            article.id, article.parisDate, article.slot, article.status,
+            article.publishedAt, article.modifiedAt, JSON.stringify(article),
           ],
         );
       }
+      // A commit/ack without a database readback is not proof of persistence.
+      const ids = articles.map((article) => article.id);
+      const persisted = await sql.query<{ id: string; payload: EditorialArticle }>(
+        "select id, payload from editorial_articles where id = ANY($1::text[])", [ids],
+      );
+      const proven = new Map(persisted.map((row) => [row.id, row.payload]));
+      if (!articles.every((article) =>
+        proven.get(article.id)?.slug === article.slug &&
+        proven.get(article.id)?.publishedAt === article.publishedAt
+      )) {
+        console.error("ASTRA_EDITORIAL_DURABLE_READBACK_FAILED", JSON.stringify({ count: articles.length }));
+        return false;
+      }
+      remember(articles);
       hydratedFromDatabase = true;
+      console.info("ASTRA_EDITORIAL_DURABLE_WRITE_PASS", JSON.stringify({ count: articles.length, ids }));
       return true;
-    } catch {
-      // Fall through to the Git/file ledger.
+    } catch (error) {
+      console.error("ASTRA_EDITORIAL_DURABLE_WRITE_FAILED", String(error).slice(0, 180));
+      return false;
     }
   }
-
+  if (process.env.RAILWAY_ENVIRONMENT_ID || (process.env.NODE_ENV === "production" && process.env.CI !== "true")) {
+    console.error("ASTRA_EDITORIAL_DURABLE_WRITE_BLOCKED", "DATABASE_URL required for production");
+    return false;
+  }
+  // Development-only file cache. Never count it as a durable production write.
   return writeLedger(articles);
 }
