@@ -31,7 +31,7 @@ export type EditorialNewsSignal = {
   description?: string;
   sourceTier: NewsSourceTier;
   entities: string[];
-  language: "fr";
+  language: "fr" | "en";
 };
 
 export type EditorialImage = {
