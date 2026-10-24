@@ -11,6 +11,11 @@ const MAX_SIGNALS = 90;
 // reproduce an article's full text or bypass the Gold Standard newsroom gate.
 const DIRECT_PUBLISHER_FEEDS = [
   { url: "https://www.lfp.fr/rss", sourceName: "LFP", origin: "https://www.lfp.fr", tier: "OFFICIAL" },
+  // French football first-party feeds: official Foot Mercato RSS endpoint and
+  // RMC Sport football RSS. Only independent, readable publisher articles may
+  // subsequently count as evidence; no syndication or content republishing.
+  { url: "https://www.footmercato.net/flux-rss", sourceName: "Foot Mercato", origin: "https://www.footmercato.net", tier: "TIER1" },
+  { url: "https://rmcsport.bfmtv.com/rss/football/", sourceName: "RMC Sport", origin: "https://rmcsport.bfmtv.com", tier: "TIER1" },
   { url: "https://feeds.bbci.co.uk/sport/football/rss.xml", sourceName: "BBC Sport", origin: "https://www.bbc.com", tier: "TIER1" },
   { url: "https://www.theguardian.com/football/rss", sourceName: "The Guardian", origin: "https://www.theguardian.com", tier: "TIER1" },
   { url: "https://www.skysports.com/rss/11095", sourceName: "Sky Sports", origin: "https://www.skysports.com", tier: "TIER1" },
