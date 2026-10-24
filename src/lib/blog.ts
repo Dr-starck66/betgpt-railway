@@ -1,4 +1,5 @@
 import { allPlayerCocoonArticles, PLAYER_PROFILES } from "@/lib/player-cocoons";
+import { lumistadeCocoonArticles } from "@/lib/lumistade-cocoon";
 
 export type BlogArticle = {
   slug: string;
@@ -1144,6 +1145,12 @@ export const BLOG: BlogArticle[] = [
 ];
 
 // Ten topic clusters: 1 pillar + 3 distinct satellites apiece.
+BLOG.push(...lumistadeCocoonArticles);
+CLUSTERS.lumistade = {
+  title: "Lumistade — stades 3D de football",
+  pillar: "lumistade",
+  pillarH1: "Lumistade : que vaut le concept des stades de football 3D lumineux ?",
+};
 BLOG.push(...allPlayerCocoonArticles());
 for (const p of PLAYER_PROFILES) {
   CLUSTERS["joueur-" + p.slug] = {
