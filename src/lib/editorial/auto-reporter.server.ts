@@ -224,7 +224,19 @@ async function publish(now: Date): Promise<AutoPublishReport> {
     return report;
   }
   const signals = await collectFootballNewsSignals(now);
-  const clusters = clusterSignals(signals).filter((c) => c.newsworthy && c.distinctSources >= 3);
+  const allClusters = clusterSignals(signals);
+  const clusters = allClusters.filter((c) => c.newsworthy && c.distinctSources >= 3);
+  console.info("ASTRA_AUTO_PUBLICATION_CLUSTER_DIAGNOSTIC", JSON.stringify({
+    date: day,
+    signals: signals.length,
+    clusters: allClusters.length,
+    newsworthy: allClusters.filter((c) => c.newsworthy).length,
+    threeDistinctSources: allClusters.filter((c) => c.distinctSources >= 3).length,
+    eligibleClusters: clusters.length,
+    publisherEligible: clusters.filter((c) => new Set(c.signals.filter((s) =>
+      (s.sourceTier === "TIER1" || s.sourceTier === "OFFICIAL") && publisherUrl(s.url)
+    ).map((s) => host(s.url))).size >= 3).length,
+  }));
   const usedIds = new Set(previous.filter((a) => a.parisDate === day).flatMap((a) => a.sources.map((s) => s.id)));
   const evidenceByUrl = new Map<string, Promise<Evidence | null>>();
   for (const slot of missing) {
@@ -232,25 +244,33 @@ async function publish(now: Date): Promise<AutoPublishReport> {
     if (Date.now() - (lastAttempts.get(retryKey) ?? 0) < 45 * 60000) continue;
     lastAttempts.set(retryKey, Date.now());
     let wrote = false;
+    const stage = { considered: 0, threePublisherHosts: 0, evidenceFetched: 0,
+      evidenceThresholdPassed: 0, modelCompleted: 0, qualityApproved: 0 };
     for (const cluster of clusters.slice(0, 12)) {
+      stage.considered += 1;
       const strong = cluster.signals.filter((s) => !usedIds.has(s.id) &&
         (s.sourceTier === "TIER1" || s.sourceTier === "OFFICIAL") && publisherUrl(s.url));
       const unique = new Map<string, EditorialNewsSignal>();
       for (const signal of strong) if (!unique.has(host(signal.url))) unique.set(host(signal.url), signal);
       if (unique.size < 3) continue;
+      stage.threePublisherHosts += 1;
       const best = [...unique.values()].slice(0, 6);
       const proofs = (await Promise.all(best.map((s) => {
         if (!evidenceByUrl.has(s.url)) evidenceByUrl.set(s.url, loadEvidence(s));
         return evidenceByUrl.get(s.url)!;
       }))).filter((x): x is Evidence => Boolean(x));
+      stage.evidenceFetched += proofs.length;
       const official = proofs.some((e) => e.signal.sourceTier === "OFFICIAL");
       const requiredCount = official ? 3 : 4;
       if (new Set(proofs.map((e) => host(e.signal.url))).size < requiredCount) continue;
+      stage.evidenceThresholdPassed += 1;
       const selected = proofs.slice(0, requiredCount);
       const draft = await draftWithLocalModel(selected);
       if (!draft) { report.rejected.push({ slot, reason: "MODEL_UNAVAILABLE_OR_INSUFFICIENT_EVIDENCE" }); continue; }
+      stage.modelCompleted += 1;
       const checked = assemble(draft, selected, day, slot, now, merged);
       if (!checked.article) { report.rejected.push({ slot, reason: checked.reason }); continue; }
+      stage.qualityApproved += 1;
       if (merged.some((a) => a.slug === checked.article!.slug || a.h1 === checked.article!.h1)) continue;
       const candidate = checked.article;
       const durable = await writeLedgerDurable([candidate]);
@@ -263,7 +283,12 @@ async function publish(now: Date): Promise<AutoPublishReport> {
       wrote = true;
       break;
     }
-    if (!wrote && !report.rejected.some((row) => row.slot === slot)) report.rejected.push({ slot, reason: "NO_QUALIFIED_THREE_SOURCE_EVENT" });
+    if (!wrote) {
+      console.warn("ASTRA_AUTO_PUBLICATION_STAGE_DIAGNOSTIC", JSON.stringify({ day, slot, ...stage }));
+      if (!report.rejected.some((row) => row.slot === slot)) {
+        report.rejected.push({ slot, reason: "NO_QUALIFIED_THREE_SOURCE_EVENT" });
+      }
+    }
   }
   if (SLOTS.every((slot) => publishedSlots.has(slot))) report.status = "PASS_THREE_AUTOMATED_ARTICLES";
   if (report.status !== "PASS_THREE_AUTOMATED_ARTICLES") console.warn("ASTRA_AUTO_PUBLICATION_DEGRADED", JSON.stringify(report));
