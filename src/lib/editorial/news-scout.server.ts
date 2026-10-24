@@ -242,7 +242,7 @@ export function parsePublisherRss(
   const out: EditorialNewsSignal[] = [];
   const ageLimit = now.getTime() - MAX_AGE_MS;
   const publisherHost = hostname(publisher.origin);
-  for (const item of xml.match(/<item>[\\s\\S]*?<\\/item>/gi) ?? []) {
+  for (const item of xml.match(/<item>[\s\S]*?<\/item>/gi) ?? []) {
     const title = stripHtml(tag(item, "title"));
     const link = stripHtml(tag(item, "link"));
     const rawDate = stripHtml(tag(item, "pubDate") || tag(item, "dc:date"));
