@@ -110,8 +110,24 @@ function logEvidenceFailure(signal: EditorialNewsSignal, reason: string, status?
   }));
 }
 
+export function publicPublisherRssEvidence(signal: EditorialNewsSignal): Evidence | null {
+  // The publisher-owned feed's full body is public evidence; snippets,
+  // aggregator feeds and publisher-domain-mismatched links cannot qualify.
+  const body = signal.publisherRssBody?.trim();
+  if (!body || body.length < MIN_BODY_CHARS || !publisherUrl(signal.url)) return null;
+  return { signal, text: body.slice(0, 10000) };
+}
+
 async function loadEvidence(signal: EditorialNewsSignal): Promise<Evidence | null> {
   if (!publisherUrl(signal.url)) return null;
+  const publicRssEvidence = publicPublisherRssEvidence(signal);
+  const rssFallback = (): Evidence | null => {
+    if (publicRssEvidence) console.info("ASTRA_EDITORIAL_PUBLIC_RSS_BODY_PASS", JSON.stringify({
+      publisher: signal.sourceName, host: host(signal.url), chars: publicRssEvidence.text.length,
+      origin: "first_party_content_encoded", url: signal.url,
+    }));
+    return publicRssEvidence;
+  };
   try {
     let current = signal.url;
     for (let redirects = 0; redirects <= 2; redirects += 1) {
@@ -124,37 +140,37 @@ async function loadEvidence(signal: EditorialNewsSignal): Promise<Evidence | nul
         const location = response.headers.get("location");
         if (!location || redirects === 2) {
           logEvidenceFailure(signal, "REDIRECT_LIMIT_OR_MISSING_LOCATION", response.status);
-          return null;
+          return rssFallback();
         }
         const next = new URL(location, current).href;
         if (!publisherUrl(next) || !samePublisherHost(signal.url, next)) {
           logEvidenceFailure(signal, "REDIRECT_OUTSIDE_PUBLISHER", response.status);
-          return null;
+          return rssFallback();
         }
         current = next;
         continue;
       }
-      if (!response.ok) { logEvidenceFailure(signal, "SOURCE_HTTP_BLOCKED", response.status); return null; }
+      if (!response.ok) { logEvidenceFailure(signal, "SOURCE_HTTP_BLOCKED", response.status); return rssFallback(); }
       if (!publisherUrl(response.url) || !samePublisherHost(signal.url, response.url)) {
         logEvidenceFailure(signal, "UNEXPECTED_FINAL_SOURCE");
-        return null;
+        return rssFallback();
       }
       if (!(response.headers.get("content-type") ?? "").includes("text/html")) {
         logEvidenceFailure(signal, "NON_HTML_SOURCE", response.status);
-        return null;
+        return rssFallback();
       }
       const html = (await response.text()).slice(0, 800000);
       const text = extractPublicArticle(html);
       if (text.length < MIN_BODY_CHARS) {
         logEvidenceFailure(signal, "INSUFFICIENT_PUBLIC_TEXT", response.status);
-        return null;
+        return rssFallback();
       }
       return { signal, text };
     }
   } catch {
     logEvidenceFailure(signal, "SOURCE_UNAVAILABLE");
   }
-  return null; // No login, paywall, or network restriction bypass.
+  return rssFallback(); // No login, paywall, or network restriction bypass.
 }
 
 function parseModelJson(value: string): { h1: string; lead: string; paragraphs: EditorialParagraph[] } | null {

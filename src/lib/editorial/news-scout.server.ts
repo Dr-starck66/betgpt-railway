@@ -278,6 +278,10 @@ export function parsePublisherRss(
     if (clean.protocol !== "https:" || !hostMatches(clean.hostname.toLowerCase(), allowedPublisherHosts)) continue;
     if (clean.pathname === "/" || clean.pathname.length < 6) continue;
     const description = stripHtml(tag(item, "description")).slice(0, 900);
+    // content:encoded is a full-text body made PUBLIC by the original publisher
+    // over the configured HTTPS RSS endpoint. Description is NOT sufficient.
+    const fullBody = stripHtml(tag(item, "content:encoded")).slice(0, 10000);
+    const publisherRssBody = fullBody.length >= 750 ? fullBody : undefined;
     out.push({
       id: signalId(title, publisher.sourceName, new Date(published).toISOString()),
       title,
@@ -286,6 +290,7 @@ export function parsePublisherRss(
       sourceUrl: publisher.origin,
       publishedAt: new Date(published).toISOString(),
       description: description || undefined,
+      ...(publisherRssBody ? { publisherRssBody } : {}),
       sourceTier: publisher.tier,
       entities: detectEntities(title + " " + description),
       language: "fr",

@@ -29,6 +29,8 @@ export type EditorialNewsSignal = {
   sourceUrl?: string;
   publishedAt: string;
   description?: string;
+  /** Full public body only from an explicitly configured first-party publisher RSS feed. */
+  publisherRssBody?: string;
   sourceTier: NewsSourceTier;
   entities: string[];
   language: "fr" | "en";
