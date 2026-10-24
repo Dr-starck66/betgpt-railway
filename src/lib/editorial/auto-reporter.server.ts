@@ -1,15 +1,15 @@
-import type { EditorialArticle, EditorialNewsSignal, EditorialParagraph, EditorialSource, SlotId } from "./types";
-import { collectFootballNewsSignals } from "./news-scout.server";
-import { clusterSignals } from "./news-cluster";
-import { readLedgerDurable, writeLedgerDurable } from "./ledger-store";
-import { manualEditorialArticles } from "./manual-articles";
-import { editorialGoldStandardGate } from "./gold-standard";
-import { qualityGate, discoverChecks, readinessScore, factHash } from "./quality";
-import { contextualAuthorityGate } from "./authority-citations";
-import { sourceIntegrityGate } from "./source-integrity";
-import { discoverLaunchpadStaticAudit } from "./discover-launchpad";
-import { imageFor } from "./images";
-import { DEFAULT_TIMES, parisDate, slotInstant } from "./time";
+import type { EditorialArticle, EditorialNewsSignal, EditorialParagraph, EditorialSource, SlotId } from "./types.ts";
+import { collectFootballNewsSignals } from "./news-scout.server.ts";
+import { clusterSignals } from "./news-cluster.ts";
+import { readLedgerDurable, writeLedgerDurable } from "./ledger-store.ts";
+import { manualEditorialArticles } from "./manual-articles.ts";
+import { editorialGoldStandardGate } from "./gold-standard.ts";
+import { qualityGate, discoverChecks, readinessScore, factHash } from "./quality.ts";
+import { contextualAuthorityGate } from "./authority-citations.ts";
+import { sourceIntegrityGate } from "./source-integrity.ts";
+import { discoverLaunchpadStaticAudit } from "./discover-launchpad.ts";
+import { imageFor } from "./images.ts";
+import { DEFAULT_TIMES, parisDate, slotInstant } from "./time.ts";
 
 const SLOTS = ["morning", "noon", "evening"] as const;
 const MIN_BODY_CHARS = 750;
@@ -72,7 +72,7 @@ async function loadEvidence(signal: EditorialNewsSignal): Promise<Evidence | nul
   try {
     const response = await fetch(signal.url, {
       signal: AbortSignal.timeout(FETCH_TIMEOUT),
-      redirect: "follow",
+      redirect: "error",
       headers: { "user-agent": "BetGPTEditorialEvidence/1.0 (+https://betgpt.live)" },
     });
     if (!response.ok || !publisherUrl(response.url) || host(response.url) !== host(signal.url)) return null;
