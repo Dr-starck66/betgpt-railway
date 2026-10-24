@@ -82,6 +82,8 @@ describe("publisher source provenance", () => {
     assert.equal(rows[0]?.url, 'https://www.lfp.fr/article/decision-officielle-psg-lyon');
     assert.equal(rows[0]?.sourceTier, "OFFICIAL");
     assert.equal(rows[0]?.sourceName, "LFP");
+    const bbc = parsePublisherRss('<rss><channel><item><title>Arsenal and Chelsea news</title><link>https://www.bbc.co.uk/sport/football/articles/example</link><pubDate>Sat, 24 Oct 2026 07:20:00 GMT</pubDate></item></channel></rss>', now, { sourceName: "BBC Sport", origin: "https://www.bbc.com", tier: "TIER1" });
+    assert.equal(bbc.length, 1, "BBC UK and COM are both verified BBC editorial domains");
   });
 });
 
