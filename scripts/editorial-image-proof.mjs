@@ -3,6 +3,9 @@
 import fs from "node:fs";
 import path from "node:path";
 import { manualEditorialArticles } from "../src/lib/editorial/manual-articles.ts";
+import { sourceIntegrityGate } from "../src/lib/editorial/source-integrity.ts";
+import { contextualAuthorityGate } from "../src/lib/editorial/authority-citations.ts";
+import { editorialGoldStandardGate } from "../src/lib/editorial/gold-standard.ts";
 
 function jpegDimensions(filename) {
   const data = fs.readFileSync(filename);
@@ -52,3 +55,16 @@ for (const slug of required) {
   if (!current.some(a=>a.slug===slug)) throw new Error("missing required match story "+slug);
 }
 console.log("ASTRA_EDITORIAL_IMAGE_PROOF_PASS",JSON.stringify({checked:current.length,localVerified:used.size,unique:used.size,dimensions:"real JPEG",rule:"1200px+, landscape, distinct"}));
+
+// The third article must be original and satisfy the same fail-closed
+// attribution and long-form checks as a fresh generated newsroom story.
+const arsenal = articles.find((a) => a.slug === "arsenal-everton-2-0-konsa-gabriel-course-titre-24-octobre-2026");
+if (!arsenal || arsenal.parisDate !== "2026-10-24") throw new Error("third genuine 24 October article missing");
+for (const [kind, gate] of [
+  ["source", sourceIntegrityGate(arsenal)],
+  ["authority", contextualAuthorityGate(arsenal)],
+  ["gold", editorialGoldStandardGate(arsenal)],
+]) {
+  if (!gate.pass) throw new Error("ARSENAL_ARTICLE_" + kind + "_FAIL " + JSON.stringify(gate.reasons));
+}
+console.log("ASTRA_THIRD_EDITORIAL_ARTICLE_PASS", JSON.stringify({slug:arsenal.slug,words:editorialGoldStandardGate(arsenal).words,sections:arsenal.paragraphs.length,distinctSources:arsenal.sources.length}));
