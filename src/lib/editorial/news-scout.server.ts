@@ -6,6 +6,15 @@ const MAX_AGE_MS = 24 * 60 * 60 * 1000;
 const FETCH_TIMEOUT_MS = 3200;
 const MAX_SIGNALS = 90;
 
+// Complement Google News pointers with publisher-owned direct article links.
+// Publisher RSS is used only for attribution and short factual leads; never
+// reproduce an article's full text or bypass the Gold Standard newsroom gate.
+const DIRECT_PUBLISHER_FEEDS = [
+  { url: "https://www.lfp.fr/rss", sourceName: "LFP", origin: "https://www.lfp.fr", tier: "OFFICIAL" },
+  { url: "https://www.franceinfo.fr/sports/foot.rss", sourceName: "Franceinfo", origin: "https://www.franceinfo.fr", tier: "TIER1" },
+  { url: "https://france3-regions.franceinfo.fr/sport/football/ligue-1/rss", sourceName: "France 3 Régions", origin: "https://france3-regions.franceinfo.fr", tier: "TIER1" },
+] as const;
+
 const GOOGLE_NEWS_QUERIES = [
   "football France when:1d",
   '"Ligue 1" football when:1d',
@@ -223,6 +232,44 @@ export function parseGoogleNewsRss(xml: string, now = new Date()): EditorialNews
   return out;
 }
 
+/** Publisher RSS has genuine article links, unlike news.google.com RSS pointers.
+ * Reject any off-publisher or home-page link before counting a source. */
+export function parsePublisherRss(
+  xml: string,
+  now: Date,
+  publisher: { sourceName: string; origin: string; tier: NewsSourceTier },
+): EditorialNewsSignal[] {
+  const out: EditorialNewsSignal[] = [];
+  const ageLimit = now.getTime() - MAX_AGE_MS;
+  const publisherHost = hostname(publisher.origin);
+  for (const item of xml.match(/<item>[\s\S]*?<\/item>/gi) ?? []) {
+    const title = stripHtml(tag(item, "title"));
+    const link = stripHtml(tag(item, "link"));
+    const rawDate = stripHtml(tag(item, "pubDate") || tag(item, "dc:date"));
+    const published = Date.parse(rawDate);
+    if (!title || !link || !Number.isFinite(published)) continue;
+    if (published < ageLimit || published > now.getTime() + 5 * 60_000) continue;
+    let clean: URL;
+    try { clean = new URL(link); } catch { continue; }
+    if (clean.protocol !== "https:" || !hostMatches(clean.hostname.toLowerCase(), [publisherHost])) continue;
+    if (clean.pathname === "/" || clean.pathname.length < 6) continue;
+    const description = stripHtml(tag(item, "description")).slice(0, 900);
+    out.push({
+      id: signalId(title, publisher.sourceName, new Date(published).toISOString()),
+      title,
+      url: clean.href,
+      sourceName: publisher.sourceName,
+      sourceUrl: publisher.origin,
+      publishedAt: new Date(published).toISOString(),
+      description: description || undefined,
+      sourceTier: publisher.tier,
+      entities: detectEntities(title + " " + description),
+      language: "fr",
+    });
+  }
+  return out;
+}
+
 function queryUrl(query: string): string {
   const qs = new URLSearchParams({ q: query, hl: "fr", gl: "FR", ceid: "FR:fr" });
   return `https://news.google.com/rss/search?${qs.toString()}`;
@@ -353,9 +400,15 @@ export async function collectFootballNewsSignals(now = new Date(), fetchImpl: ty
     .map((value) => value.trim())
     .filter((value) => /^https:\/\//i.test(value));
   const urls = custom.length ? custom : GOOGLE_NEWS_QUERIES.map(queryUrl);
-  const settled = await Promise.allSettled(urls.map((url) => fetchText(url, fetchImpl)));
+  const fetched = await Promise.allSettled([
+    ...urls.map(async (url) => parseGoogleNewsRss(await fetchText(url, fetchImpl), now)),
+    ...DIRECT_PUBLISHER_FEEDS.map(async (feed) =>
+      parsePublisherRss(await fetchText(feed.url, fetchImpl), now, {
+        sourceName: feed.sourceName, origin: feed.origin, tier: feed.tier,
+      })),
+  ]);
   const signals = uniqSignals(
-    settled.flatMap((result) => (result.status === "fulfilled" ? parseGoogleNewsRss(result.value, now) : [])),
+    fetched.flatMap((result) => result.status === "fulfilled" ? result.value : []),
   );
   cache = { at: now.getTime(), signals };
   return signals;

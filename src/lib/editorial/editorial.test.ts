@@ -1,13 +1,13 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { buildEdition, applyEventOverride } from "./engine.ts";
+import { buildEdition, applyEventOverride, composeNews } from "./engine.ts";
 import { newsEntries, learnTopics, renderNewsSitemap } from "./feed.ts";
 import { qualityGate } from "./quality.ts";
 import { manualEditorialArticles } from "./manual-articles.ts";
 import { editorialGoldStandardGate } from "./gold-standard.ts";
 import { optimizeTimes, parisDate, slotInstant } from "./time.ts";
 import type { ArticleType, EditorialMatch, EditorialNewsSignal, SlotId } from "./types.ts";
-import { autoPublishableCluster, clusterSignals, parseGoogleNewsRss, sourceTier } from "./news-scout.server.ts";
+import { autoPublishableCluster, clusterSignals, parseGoogleNewsRss, parsePublisherRss, sourceTier } from "./news-scout.server.ts";
 
 function match(over: Partial<EditorialMatch> & Pick<EditorialMatch, "id" | "home" | "away" | "kickoff">): EditorialMatch {
   return {
@@ -59,6 +59,76 @@ function board(): EditorialMatch[] {
     }),
   ];
 }
+
+describe("publisher source provenance", () => {
+  it("only accepts fresh HTTPS deep links on the publisher's real domain", () => {
+    const now = new Date("2026-10-24T08:00:00.000Z");
+    const pub = '<pubDate>Sat, 24 Oct 2026 07:20:00 GMT</pubDate>';
+    const mk = (link: string, title: string) => '<item><title><![CDATA[' + title +
+      ']]></title><link>' + link + '</link>' + pub +
+      '<description><![CDATA[PSG et Lyon : la ligue publie une décision sur le calendrier.]]></description></item>';
+    const rss = '<rss><channel>' +
+      mk('https://www.lfp.fr/article/decision-officielle-psg-lyon', 'PSG et Lyon : décision officielle') +
+      mk('https://news.google.com/rss/articles/something', 'PSG et Lyon : page agrégateur') +
+      mk('https://lfp.fr.evil.example/article/psg-lyon', 'PSG et Lyon : imitation') +
+      mk('https://www.lfp.fr/', 'PSG et Lyon : page accueil') +
+      mk('http://www.lfp.fr/article/redirect', 'PSG et Lyon : HTTP refusé') +
+      '</channel></rss>';
+    const rows = parsePublisherRss(rss, now, {
+      sourceName: "LFP", origin: "https://www.lfp.fr", tier: "OFFICIAL",
+    });
+    assert.equal(rows.length, 1, "Only a real publisher HTTPS article is citable");
+    assert.equal(rows[0]?.url, 'https://www.lfp.fr/article/decision-officielle-psg-lyon');
+    assert.equal(rows[0]?.sourceTier, "OFFICIAL");
+    assert.equal(rows[0]?.sourceName, "LFP");
+  });
+});
+
+describe("news auto-authoring guard", () => {
+  it("creates seven distinct cited sections but refuses to treat thin RSS as Gold Standard content", () => {
+    const date = "2026-10-24T07:30:00.000Z";
+    const signal = (id: string, name: string, url: string, tier: EditorialNewsSignal["sourceTier"]): EditorialNewsSignal => ({
+      id,
+      title: "PSG et Lyon : décision confirmée sur la programmation du championnat",
+      url,
+      sourceName: name,
+      sourceUrl: new URL(url).origin,
+      publishedAt: date,
+      description: "Une décision annoncée ce matin modifie la programmation de la rencontre et doit être vérifiée auprès des organisateurs.",
+      sourceTier: tier,
+      entities: ["PSG", "Lyon"],
+      language: "fr",
+    });
+    const signals = [
+      signal("fff", "FFF", "https://www.fff.fr/article/decision", "OFFICIAL"),
+      signal("sports", "L'Équipe", "https://www.lequipe.fr/Football/decision", "TIER1"),
+      signal("press", "Reuters", "https://www.reuters.com/world/decision", "TIER1"),
+    ];
+    const cluster = {
+      id: "validated-editorial-cluster",
+      signals,
+      title: "PSG et Lyon : décision confirmée sur la programmation du championnat",
+      entities: ["PSG", "Lyon"],
+      official: true,
+      distinctSources: 3,
+      publishedAt: date,
+      newsworthy: true,
+    };
+    const draft = composeNews(cluster, [], "noon", "2026-10-24", date, true);
+    assert.equal(draft.paragraphs.length, 7, "Seven materially different H2 are required");
+    assert.equal(new Set(draft.paragraphs.map((p) => p.h2)).size, 7);
+    assert.ok(draft.paragraphs.every((p) => p.sourceIds?.length), "Every H2 must cite actual evidence");
+    const body = [draft.h1, draft.lead, ...draft.paragraphs.map((p) => p.h2 + " " + p.body)].join(" ");
+    assert.doesNotMatch(body, /le cluster contient|les entités explicitement détectées|la chronologie des publications|pourquoi BetGPT ne force pas un contexte de match|aucune déclaration officielle n.est ajoutée artificiellement|alimentent ce cluster/i);
+    const gold = editorialGoldStandardGate({
+      ...draft,
+      image: {src: "/blog/discover/inline-crowd.jpg", alt: "Tribunes du stade", width: 1200, height: 675, credit: "Illustration créditée"},
+    });
+    assert.equal(gold.pass, false, "Three brief RSS summaries cannot justify a 1500-word story");
+    assert.ok(gold.reasons.some((r) => /minimum 1500/.test(r)), JSON.stringify(gold.reasons));
+    assert.ok(!gold.reasons.some((r) => /minimum 7/.test(r)), JSON.stringify(gold.reasons));
+  });
+});
 
 describe("editorial engine", () => {
   it("keeps Paris slots closed and refuses shallow match templates instead of force-publishing", () => {
