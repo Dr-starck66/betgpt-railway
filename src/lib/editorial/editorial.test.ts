@@ -8,7 +8,7 @@ import { editorialGoldStandardGate } from "./gold-standard.ts";
 import { optimizeTimes, parisDate, slotInstant } from "./time.ts";
 import type { ArticleType, EditorialMatch, EditorialNewsSignal, SlotId } from "./types.ts";
 import { autoPublishableCluster, clusterSignals, parseGoogleNewsRss, parsePublisherRss, sourceTier } from "./news-scout.server.ts";
-import { publisherUrl } from "./auto-reporter.server.ts";
+import { extractPublicArticle, publisherUrl } from "./auto-reporter.server.ts";
 import { clusterSignals as clusterAutoReporterSignals, isMaterialDevelopment as isAutoReporterMaterial } from "./news-cluster.ts";
 
 function match(over: Partial<EditorialMatch> & Pick<EditorialMatch, "id" | "home" | "away" | "kickoff">): EditorialMatch {
@@ -61,6 +61,28 @@ function board(): EditorialMatch[] {
     }),
   ];
 }
+
+
+describe("first-party article evidence extraction", () => {
+  it("recovers public NewsArticle JSON-LD from a publisher's client-rendered article", () => {
+    const body = "Le communiqué précise la décision, sa chronologie et les conséquences sportives documentées. ".repeat(17).trim();
+    const html = '<script type="application/ld+json">' +
+      JSON.stringify({ "@graph": [{ "@type": "NewsArticle", articleBody: body }] }) +
+      '</script><article><div id="client-render"></div></article>';
+    assert.equal(extractPublicArticle(html), body);
+  });
+  it("refuses navigation padding and unrelated JSON-LD", () => {
+    const filler = "Le menu de navigation ne prouve aucun événement journalistique et doit être rejeté. ".repeat(20);
+    const html = '<nav><p>' + filler + '</p></nav><script type="application/ld+json">' +
+      JSON.stringify({ "@type": "WebSite", articleBody: filler }) + '</script><article><p>Une dépêche courte.</p></article>';
+    assert.equal(extractPublicArticle(html), "");
+  });
+  it("accepts long first-party article paragraphs without JSON-LD", () => {
+    const p = "Le club précise son calendrier et communique une information officielle détaillée concernant la rencontre. ";
+    const html = '<article>' + Array.from({ length: 10 }, (_v, n) => '<p>' + n + ' ' + p + '</p>').join("") + '</article>';
+    assert.ok(extractPublicArticle(html).length >= 750);
+  });
+});
 
 describe("publisher source provenance", () => {
   it("only accepts fresh HTTPS deep links on the publisher's real domain", () => {

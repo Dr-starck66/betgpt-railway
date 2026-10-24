@@ -51,15 +51,43 @@ function decodeHtml(text: string): string {
     .replace(/&#(\d+);/g, (_m, n: string) => String.fromCodePoint(Number(n)));
 }
 
-function extractPublicArticle(html: string): string {
-  const article = html.match(/<article\b[^>]*>([\s\S]*?)<\/article>/i)?.[1] ?? html;
-  const clean = article.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ")
-    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, " ")
-    .replace(/<(?:nav|footer|aside|form)\b[^>]*>[\s\S]*?<\/(?:nav|footer|aside|form)>/gi, " ");
-  const pieces = [...clean.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/gi)]
-    .map((m) => decodeHtml(m[1]!.replace(/<[^>]*>/g, " ")).replace(/\s+/g, " ").trim())
-    .filter((line) => line.length >= 65 && line.length <= 3000);
-  return [...new Set(pieces)].join("\n").slice(0, 7000);
+export function extractPublicArticle(html: string): string {
+  // Public editorial evidence only: publisher HTML paragraphs or a publisher-owned
+  // Schema.org articleBody. Never use RSS snippets, menu text, or arbitrary script data.
+  const paragraphsFrom = (fragment: string): string => {
+    const clean = fragment.replace(/<(?:script|style|nav|footer|aside|form)\b[^>]*>[\s\S]*?<\/(?:script|style|nav|footer|aside|form)>/gi, " ");
+    const paragraphs = [...clean.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/gi)]
+      .map((match) => decodeHtml((match[1] ?? "").replace(/<[^>]*>/g, " ")).replace(/\s+/g, " ").trim())
+      .filter((line) => line.length >= 65 && line.length <= 3000);
+    return [...new Set(paragraphs)].join("\n");
+  };
+  const candidates: string[] = [];
+  const article = html.match(/<article\b[^>]*>([\s\S]*?)<\/article>/i);
+  if (article?.[1]) candidates.push(paragraphsFrom(article[1]));
+  const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i);
+  if (main?.[1]) candidates.push(paragraphsFrom(main[1]));
+  const visit = (value: unknown, depth = 0): void => {
+    if (depth > 4 || value == null || typeof value !== "object") return;
+    if (Array.isArray(value)) {
+      for (const entry of value.slice(0, 30)) visit(entry, depth + 1);
+      return;
+    }
+    const record = value as Record<string, unknown>;
+    const types = Array.isArray(record["@type"]) ? record["@type"] : [record["@type"]];
+    const isArticle = types.some((kind) =>
+      typeof kind === "string" && /^(?:https?:\/\/schema\.org\/)?(?:NewsArticle|Article|BlogPosting|ReportageNewsArticle|AnalysisNewsArticle)$/i.test(kind)
+    );
+    if (isArticle && typeof record.articleBody === "string") {
+      const body = decodeHtml(record.articleBody.replace(/<[^>]*>/g, " ")).replace(/\s+/g, " ").trim();
+      if (body.length >= MIN_BODY_CHARS) candidates.push(body);
+    }
+    if (record["@graph"]) visit(record["@graph"], depth + 1);
+  };
+  for (const match of html.matchAll(/<script\b[^>]*\btype\s*=\s*["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
+    try { visit(JSON.parse((match[1] ?? "").trim())); } catch { /* Invalid JSON-LD is not evidence. */ }
+  }
+  return (candidates.filter((part) => part.length >= MIN_BODY_CHARS)
+    .sort((a, b) => b.length - a.length)[0] ?? "").slice(0, 10000);
 }
 
 type Evidence = {
