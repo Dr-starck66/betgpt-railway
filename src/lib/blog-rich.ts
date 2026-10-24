@@ -280,13 +280,53 @@ const COVERS: Record<string, CoverSpec> = {
   },
 };
 
+/** ASTRA IMAGE INTEGRITY Ω — unique on-topic original editorial visuals, 1600×900.
+ * Concept illustrations only. Never claim these depict Lumistade's physical products. */
+const LUMISTADE_VISUALS: Record<string, { hero: string; detail: string; heroAlt: string; detailAlt: string }> = {
+  lumistade: {
+    hero: "lumistade-presentation", detail: "lumistade-presentation-detail",
+    heroAlt: "Illustration éditoriale d'une maquette murale de stade de football illuminée par LED dans un salon",
+    detailAlt: "Illustration d'une réplique de stade en relief montrant les gradins et le cercle LED",
+  },
+  "lumistade-avis": {
+    hero: "lumistade-avis", detail: "lumistade-avis-controle",
+    heroAlt: "Illustration d'un examen visuel d'une décoration de stade LED avec loupe de contrôle",
+    detailAlt: "Illustration des points de contrôle qualité pour une décoration murale de stade lumineux",
+  },
+  "lumistade-prix-livraison": {
+    hero: "lumistade-prix-livraison", detail: "lumistade-prix-comparatif",
+    heroAlt: "Illustration de la livraison d'une décoration de stade lumineux et de son colis",
+    detailAlt: "Illustration d'une facture et d'une décoration de stade football à éclairage LED",
+  },
+  "lumistade-stades-psg-om": {
+    hero: "lumistade-psg-om", detail: "lumistade-stades-architecture",
+    heroAlt: "Illustration comparative de deux maquettes de stades lumineux aux ambiances bleue et rouge",
+    detailAlt: "Illustration de deux architectures de stades en relief éclairées par LED",
+  },
+  "lumistade-stade-3d-cadeau-foot": {
+    hero: "lumistade-cadeau", detail: "lumistade-cadeau-deco",
+    heroAlt: "Illustration d'un cadeau football avec coffret et décoration murale de stade lumineux",
+    detailAlt: "Illustration d'un coin décoration football et d'un stade en relief LED à offrir",
+  },
+};
+
+function lumistadeVisual(a: BlogArticle, kind: "hero" | "detail"): BlogImg | null {
+  const visual = LUMISTADE_VISUALS[a.slug];
+  if (!visual) return null;
+  const name = kind === "hero" ? visual.hero : visual.detail;
+  const alt = kind === "hero" ? visual.heroAlt : visual.detailAlt;
+  return {
+    ...blogImageSeo(
+      `/blog/discover/lumistade/${name}.jpg`, alt,
+      "Illustration originale BetGPT — représentation conceptuelle, et non photographie d'un produit Lumistade réellement testé ou reçu.",
+    ),
+    width: 1600,
+    height: 900,
+  };
+}
+
 export function blogCover(a: BlogArticle): BlogImg {
-  // Use existing licensed football-stadium art: never present it as a Lumistade product photograph.
-  if (a.cluster === "lumistade") return blogImageSeo(
-    "/blog/discover/xg-ligue-1.jpg",
-    "Stade de football vu du ciel — illustration générique, pas une photo du produit Lumistade",
-    "Illustration sportive indépendante : cet article est un examen documentaire, pas un test de produit.",
-  );
+  if (a.cluster === "lumistade") return lumistadeVisual(a, "hero")!;
   const photo = a.cluster?.startsWith("joueur-") ? playerPhoto(a.cluster.slice(7)) : undefined;
   if (photo) return {
     ...blogImageSeo(photo.src, photo.description, `Photo de ${photo.player} : ${photo.credit} / Wikimedia Commons (${photo.license}).`),
@@ -310,6 +350,7 @@ export function blogCover(a: BlogArticle): BlogImg {
 }
 
 export function blogInline(a: BlogArticle): BlogImg {
+  if (a.cluster === "lumistade") return lumistadeVisual(a, "detail")!;
   const spec = COVERS[a.slug];
   const key = spec?.inline ?? "inline-action";
   const meta = INLINES[key] ?? INLINES["inline-action"];
