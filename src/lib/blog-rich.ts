@@ -281,6 +281,12 @@ const COVERS: Record<string, CoverSpec> = {
 };
 
 export function blogCover(a: BlogArticle): BlogImg {
+  // Use existing licensed football-stadium art: never present it as a Lumistade product photograph.
+  if (a.cluster === "lumistade") return blogImageSeo(
+    "/blog/discover/xg-ligue-1.jpg",
+    "Stade de football vu du ciel — illustration générique, pas une photo du produit Lumistade",
+    "Illustration sportive indépendante : cet article est un examen documentaire, pas un test de produit.",
+  );
   const photo = a.cluster?.startsWith("joueur-") ? playerPhoto(a.cluster.slice(7)) : undefined;
   if (photo) return {
     ...blogImageSeo(photo.src, photo.description, `Photo de ${photo.player} : ${photo.credit} / Wikimedia Commons (${photo.license}).`),
