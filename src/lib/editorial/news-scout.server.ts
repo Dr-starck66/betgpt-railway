@@ -416,9 +416,19 @@ export async function collectFootballNewsSignals(now = new Date(), fetchImpl: ty
         sourceName: feed.sourceName, origin: feed.origin, tier: feed.tier,
       })),
   ]);
-  const signals = uniqSignals(
-    fetched.flatMap((result) => result.status === "fulfilled" ? result.value : []),
-  );
+  // Preserve first-party publisher articles independently of the high-volume
+  // Google News discovery pointers. Previously the global newest-90 cutoff
+  // silently discarded direct publisher proof and made three-source reporting
+  // structurally impossible despite available first-party feeds.
+  const results = fetched.map((result) => result.status === "fulfilled" ? result.value : []);
+  const google = uniqSignals(results.slice(0, urls.length).flat());
+  const publisher = uniqSignals(results.slice(urls.length).flat());
+  const signals = [...publisher, ...google].slice(0, MAX_SIGNALS * 2);
+  console.info("ASTRA_EDITORIAL_EVIDENCE_RSS", JSON.stringify({
+    directPublisherSignals: publisher.length,
+    googleDiscoverySignals: google.length,
+    usableSignals: signals.length,
+  }));
   cache = { at: now.getTime(), signals };
   return signals;
 }
