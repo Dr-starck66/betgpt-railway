@@ -423,6 +423,18 @@
         "run": "node --test scripts/astra-semantic-flow-autorepair.test.mjs scripts/astra-seo-self-heal.test.mjs",
         "timeoutMs": 120000
       }
+    ],
+    "ASTRA_CONTENT_BULKER": [
+      {
+        "type": "command",
+        "run": "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/astra-content-omega-proof.mjs",
+        "timeoutMs": 90000
+      },
+      {
+        "type": "command",
+        "run": "npm run editorial:corpus-audit",
+        "timeoutMs": 120000
+      }
     ]
   }
 }

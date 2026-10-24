@@ -227,11 +227,11 @@ export const astonVillaCityPostmatch20261024: EditorialArticle = {
   "discoverReadiness": 97,
   "topStories": "TOP_STORIES_ELIGIBILITY_READY",
   "image": {
-    "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Birmingham_aston_villa_park_stadium.jpg?width=1600",
-    "alt": "Villa Park à Birmingham, stade d'Aston Villa–Manchester City ; photographie d'illustration de 2023",
-    "width": 1600,
-    "height": 1198,
-    "credit": "Photo : Arne Müseler / arne-mueseler.com / CC BY-SA 3.0 DE — https://creativecommons.org/licenses/by-sa/3.0/de/deed.fr — https://commons.wikimedia.org/wiki/File:Birmingham_aston_villa_park_stadium.jpg (prise en 2023 ; redimensionnée à 1600 px)."
+    "src": "/blog/discover/inline-action.jpg",
+    "alt": "Joueurs en action sur un terrain de football : illustration de l'analyse Aston Villa–Manchester City, pas une photographie de la rencontre",
+    "width": 1200,
+    "height": 675,
+    "credit": "Photographie de football sous licence Unsplash/Pexels, recadrée en 1200 × 675 ; crédits : /blog/CREDITS.txt. Image d'illustration, pas du match du 24 octobre 2026."
   },
   "links": [
     {
