@@ -2,6 +2,7 @@ import { contextualAuthorityGate } from "../src/lib/editorial/authority-citation
 import { sourceIntegrityGate } from "../src/lib/editorial/source-integrity.ts";
 import { discoverLaunchpadStaticAudit, recentDiscoverCandidates } from "../src/lib/editorial/discover-launchpad.ts";
 import { editionFromDesk } from "../src/lib/editorial/run.server.ts";
+import { parisDate } from "../src/lib/editorial/time.ts";
 import { isPublicArticle } from "../src/lib/editorial/types.ts";
 import { writeLedger } from "../src/lib/editorial/ledger-store.ts";
 import { syncPublishedArticlesToSocial } from "../src/lib/social/run.server.ts";
@@ -69,6 +70,8 @@ const autoIds = new Set(["morning", "noon", "evening"].map((slot) => `ed-${editi
 const autoToday = published.filter((article) =>
   article.parisDate === edition.parisDate &&
   article.publishedAt &&
+  Number.isFinite(Date.parse(article.publishedAt)) &&
+  parisDate(new Date(article.publishedAt)) === edition.parisDate &&
   autoIds.has(article.id) &&
   isPublicArticle(article),
 );
