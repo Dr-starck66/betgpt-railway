@@ -78,32 +78,68 @@ export const astonVillaCityPostmatch20261024: EditorialArticle = {
     },
     {
       "h2": "Le plan d'Unai Emery : résister puis accélérer au moment décisif",
-      "body": "Unai Emery a obtenu un résultat qui ne découle pas d'une domination continue de son équipe. Villa a démarré avec intensité, puis s'est retrouvé longtemps à défendre face à des séquences mancuniennes soutenues. Le Guardian relève notamment les efforts des joueurs de couloir pour doubler la couverture contre les ailiers adverses. City a malgré tout trouvé des tirs dangereux : l'organisation locale n'était donc pas imperméable. La réussite du plan tient davantage à la capacité de Villa à traverser ces périodes difficiles sans abandonner ses sorties rapides. Jackson a servi de point d'appui et de cible dans la profondeur. Le remplacement qui amène Mbaye sur le terrain a offert une nouvelle accélération sur la droite au moment où les visiteurs semblaient prendre le dessus. Emery a ensuite demandé à son groupe de protéger l'avantage. Reuters rapporte que l'entraîneur voit dans ce succès une étape positive pour une équipe profondément remaniée. Cette formulation paraît plus juste qu'une conclusion définitive sur le niveau de Villa. La victoire montre des progrès tactiques et mentaux, mais deux tirs cadrés ne suffisent pas à démontrer que toutes les difficultés offensives du début de saison sont réglées.",
+      "body": "Unai Emery a obtenu un résultat qui ne découle pas d'une domination continue de son équipe. Villa a démarré avec intensité, puis s'est retrouvé longtemps à défendre face à des séquences mancuniennes soutenues. Le Guardian relève notamment les efforts des joueurs de couloir pour doubler la couverture contre les ailiers adverses. City a malgré tout trouvé des tirs dangereux : l'organisation locale n'était donc pas imperméable.",
       "sourceIds": [
         "guardian-report",
         "reuters-report",
         "city-report",
         "villa-context"
+      ],
+      "subsections": [
+        {
+          "h3": "Le basculement après l'égalisation et l'apport du banc",
+          "body": "La réussite du plan tient davantage à la capacité de Villa à traverser ces périodes difficiles sans abandonner ses sorties rapides. Jackson a servi de point d'appui et de cible dans la profondeur. Le remplacement qui amène Mbaye sur le terrain a offert une nouvelle accélération sur la droite au moment où les visiteurs semblaient prendre le dessus. Emery a ensuite demandé à son groupe de protéger l'avantage. Reuters rapporte que l'entraîneur voit dans ce succès une étape positive pour une équipe profondément remaniée. Cette formulation paraît plus juste qu'une conclusion définitive sur le niveau de Villa. La victoire montre des progrès tactiques et mentaux, mais deux tirs cadrés ne suffisent pas à démontrer que toutes les difficultés offensives du début de saison sont réglées.",
+          "sourceIds": [
+            "guardian-report",
+            "reuters-report",
+            "city-report",
+            "villa-context"
+          ]
+        }
       ]
     },
     {
       "h2": "Une quatrième défaite de City à Villa Park et un classement encore provisoire",
-      "body": "Manchester City avait gagné ses sept premières rencontres de Premier League 2026-2027. Sa défaite à Villa Park interrompt cette série et empêche un huitième succès d'entrée. Le club termine son huitième match avec vingt et un points. Dans son compte rendu publié après la rencontre, City indique rester en tête du classement, Arsenal ayant alors encore un match à disputer. Ce classement doit être considéré comme provisoire tant que toutes les équipes n'ont pas joué. Villa atteint onze points en huit rencontres selon le suivi du match du Guardian. L'histoire des confrontations ajoute un autre élément : City vient de perdre quatre déplacements consécutifs en championnat à Villa Park. Le Guardian note également qu'Aston Villa a remporté trois matches successifs de Premier League face à Manchester City, domicile et extérieur confondus. Les deux séries ne décrivent pas la même chose et ne doivent pas être confondues. Elles illustrent néanmoins la difficulté particulière de ce déplacement pour les Mancuniens, malgré leur excellent début de saison. Une série historique n'est pas une garantie pour le futur, mais elle donne un contexte utile au résultat du jour et à la progression du groupe d'Emery.",
+      "body": "Manchester City avait gagné ses sept premières rencontres de Premier League 2026-2027. Sa défaite à Villa Park interrompt cette série et empêche un huitième succès d'entrée. Le club termine son huitième match avec vingt et un points. Dans son compte rendu publié après la rencontre, City indique rester en tête du classement, Arsenal ayant alors encore un match à disputer. Ce classement doit être considéré comme provisoire tant que toutes les équipes n'ont pas joué. Villa atteint onze points en huit rencontres selon le suivi du match du Guardian.",
       "sourceIds": [
         "city-report",
         "guardian-report",
         "reuters-report",
         "villa-context"
+      ],
+      "subsections": [
+        {
+          "h3": "Pourquoi Villa Park reste un déplacement difficile",
+          "body": "L'histoire des confrontations ajoute un autre élément : City vient de perdre quatre déplacements consécutifs en championnat à Villa Park. Le Guardian note également qu'Aston Villa a remporté trois matches successifs de Premier League face à Manchester City, domicile et extérieur confondus. Les deux séries ne décrivent pas la même chose et ne doivent pas être confondues. Elles illustrent néanmoins la difficulté particulière de ce déplacement pour les Mancuniens, malgré leur excellent début de saison. Une série historique n'est pas une garantie pour le futur, mais elle donne un contexte utile au résultat du jour et à la progression du groupe d'Emery.",
+          "sourceIds": [
+            "city-report",
+            "guardian-report",
+            "reuters-report",
+            "villa-context"
+          ]
+        }
       ]
     },
     {
       "h2": "La suite : Brighton pour City, Bournemouth pour Villa et trois questions concrètes",
-      "body": "Manchester City doit rapidement préparer deux confrontations avec Brighton. Le calendrier officiel annonce un quatrième tour de Coupe de la Ligue à l'Etihad Stadium mercredi 28 octobre, puis un match de Premier League contre le même adversaire le samedi suivant. Pour Aston Villa, le calendrier du club affiche un déplacement à Bournemouth le 28 octobre. Ces échéances permettent de formuler des questions sportives vérifiables sans fabriquer de pronostic. City parviendra-t-il à sécuriser ses premières relances face à une pression agressive ? Sa production d'occasions se traduira-t-elle par davantage de buts ? Villa réussira-t-il à reproduire ses transitions et à défendre efficacement face à un adversaire différent ? Le match du 24 octobre ne fournit pas encore ces réponses. Deux tirs cadrés transformés en deux buts représentent une efficacité remarquable sur une rencontre, pas une moyenne que l'on peut projeter mécaniquement. Sept tirs cadrés et une défaite ne suffisent pas non plus à annoncer une crise durable de Manchester City. Les certitudes sont plus limitées et plus solides : Villa a gagné 2-1, Jackson a inscrit un doublé, Haaland a marqué, Suzuki a effectué des arrêts importants et le départ parfait de City a pris fin.",
+      "body": "Manchester City doit rapidement préparer deux confrontations avec Brighton. Le calendrier officiel annonce un quatrième tour de Coupe de la Ligue à l'Etihad Stadium mercredi 28 octobre, puis un match de Premier League contre le même adversaire le samedi suivant. Pour Aston Villa, le calendrier du club affiche un déplacement à Bournemouth le 28 octobre.",
       "sourceIds": [
         "city-report",
         "reuters-report",
         "villa-context",
         "villa-fixtures"
+      ],
+      "subsections": [
+        {
+          "h3": "Les indicateurs utiles pour juger la réaction des équipes",
+          "body": "Ces échéances permettent de formuler des questions sportives vérifiables sans fabriquer de pronostic. City parviendra-t-il à sécuriser ses premières relances face à une pression agressive ? Sa production d'occasions se traduira-t-elle par davantage de buts ? Villa réussira-t-il à reproduire ses transitions et à défendre efficacement face à un adversaire différent ? Le match du 24 octobre ne fournit pas encore ces réponses. Deux tirs cadrés transformés en deux buts représentent une efficacité remarquable sur une rencontre, pas une moyenne que l'on peut projeter mécaniquement. Sept tirs cadrés et une défaite ne suffisent pas non plus à annoncer une crise durable de Manchester City. Les certitudes sont plus limitées et plus solides : Villa a gagné 2-1, Jackson a inscrit un doublé, Haaland a marqué, Suzuki a effectué des arrêts importants et le départ parfait de City a pris fin.",
+          "sourceIds": [
+            "city-report",
+            "reuters-report",
+            "villa-context",
+            "villa-fixtures"
+          ]
+        }
       ]
     }
   ],
