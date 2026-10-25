@@ -148,7 +148,7 @@ export function MatchLineups({ matchId, homeName, awayName, homeFormation, awayF
           <h2 className="mt-1 text-xl font-bold tracking-tight text-paper sm:text-2xl">Compositions et terrain tactique</h2>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-mist">
             {confirmed
-              ? "Les 11 titulaires des deux équipes sont vérifiés : feuilles confirmées par le fournisseur, jamais remplacées par une composition probable."
+              ? "Pour ce match, les 11 titulaires des deux équipes sont vérifiés : feuilles confirmées par le fournisseur, jamais remplacées par une composition probable."
               : done
                 ? "Les 11 titulaires des deux équipes ne sont pas tous vérifiés : les informations absentes restent explicitement indisponibles."
                 : "Récupération indépendante des feuilles officielles, sans bloquer l’analyse et les pronostics."}
