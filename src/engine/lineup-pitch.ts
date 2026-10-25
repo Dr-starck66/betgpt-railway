@@ -2,9 +2,25 @@ import type { OfficialLineupPlayer, OfficialTeamLineup } from "./official-lineup
 
 export type VerifiedPitchLayout = {
   formation: string;
-  /** From goalkeeper to attack; ordering inside a line is indicative, not tracking data. */
+  /** From goalkeeper to attack; horizontal positions are illustrative, not tracking data. */
   lines: OfficialLineupPlayer[][];
 };
+
+export type SchematicPitchLayout = {
+  formation: string;
+  /** An anonymous, illustrative formation, never a verified starting XI. */
+  lines: number[];
+};
+
+/** Works on every match route, even before the lineups provider answers. */
+export function buildSchematicPitchLayout(value?: string | null): SchematicPitchLayout | null {
+  const formation = (value ?? "").trim();
+  if (!/^\d(?:-\d){1,4}$/.test(formation)) return null;
+  const counts = formation.split("-").map(Number);
+  if (counts.some((count) => count < 1 || count > 6)) return null;
+  if (counts.reduce((total, count) => total + count, 0) !== 10) return null;
+  return { formation, lines: [1, ...counts] };
+}
 
 function roleRank(position?: string): number {
   const p = (position ?? "").trim().toUpperCase();
@@ -15,13 +31,11 @@ function roleRank(position?: string): number {
   return 4;
 }
 
-/** Never infer a formation or a confirmed XI from missing data. */
+/** Confirmed rosters require 11 unique source starters, without made-up players. */
 export function buildVerifiedPitchLayout(lineup: OfficialTeamLineup): VerifiedPitchLayout | null {
   if (lineup.starters.length !== 11) return null;
-  const formation = (lineup.formation ?? "").trim();
-  if (!/^\d(?:-\d){1,4}$/.test(formation)) return null;
-  const counts = formation.split("-").map(Number);
-  if (counts.some((n) => n < 1 || n > 6) || counts.reduce((n, next) => n + next, 0) !== 10) return null;
+  const schematic = buildSchematicPitchLayout(lineup.formation);
+  if (!schematic) return null;
 
   const players = lineup.starters;
   const goalkeeper = players.find((p) => roleRank(p.position) === 0) ?? players[0];
@@ -34,10 +48,10 @@ export function buildVerifiedPitchLayout(lineup: OfficialTeamLineup): VerifiedPi
 
   const lines: OfficialLineupPlayer[][] = [[goalkeeper]];
   let offset = 0;
-  for (const size of counts) {
+  for (const size of schematic.lines.slice(1)) {
     lines.push(outfield.slice(offset, offset + size));
     offset += size;
   }
   if (lines.reduce((n, line) => n + line.length, 0) !== 11) return null;
-  return { formation, lines };
+  return { formation: schematic.formation, lines };
 }
