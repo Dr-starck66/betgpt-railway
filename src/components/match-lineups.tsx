@@ -204,8 +204,8 @@ export function MatchLineups({ matchId, homeName, awayName, homeFormation, awayF
           </h2>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-mist">
             {confirmed
-              ? "Les deux terrains montrent uniquement les titulaires identifiés par la feuille officielle, avec leurs numéros et leurs postes lorsqu'ils sont disponibles."
-              : "Les terrains avec les noms des joueurs apparaissent uniquement lorsque les deux XI sont confirmés. Pas de maillots anonymes présentés comme une composition réelle."}
+              ? "Pour ce match, les 11 titulaires des deux équipes sont vérifiés : feuilles confirmées par le fournisseur, jamais remplacées par une composition probable. Les terrains affichent les noms et numéros transmis."
+              : "Lorsque les 11 titulaires des deux équipes ne sont pas tous vérifiés, BetGPT réserve les terrains aux compositions confirmées. Aucun maillot anonyme n'est présenté comme une composition réelle."}
           </p>
         </div>
         <span className="rounded-full border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-900">
