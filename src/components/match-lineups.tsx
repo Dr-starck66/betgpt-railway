@@ -203,20 +203,60 @@ export function MatchLineups({ matchId, homeName, awayName, homeFormation, awayF
             Compositions et tactiques sur le terrain
           </h2>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-mist">
-            Deux terrains pour comparer les systèmes de jeu, sur toutes les fiches match.
             {confirmed
-              ? " Pour ce match, les 11 titulaires des deux équipes sont vérifiés : feuilles confirmées par le fournisseur, jamais remplacées par une composition probable."
-              : " Les 11 titulaires des deux équipes ne sont pas tous vérifiés : les maillots anonymes illustrent uniquement un schéma tactique."}
+              ? "Les deux terrains montrent uniquement les titulaires identifiés par la feuille officielle, avec leurs numéros et leurs postes lorsqu'ils sont disponibles."
+              : "Les terrains avec les noms des joueurs apparaissent uniquement lorsque les deux XI sont confirmés. Pas de maillots anonymes présentés comme une composition réelle."}
           </p>
         </div>
         <span className="rounded-full border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-900">
           {confirmed ? "XI officiels vérifiés" : status === "PARTIAL" ? "Données partielles" : done ? "XI non vérifiés" : "Terrain disponible · XI en vérification"}
         </span>
       </div>
-      <div className="grid gap-4 lg:grid-cols-2" data-pitch-pair="true">
-        <MatchPitch name={homeName} formation={homeFormation ?? data?.home?.formation} lineup={data?.home} status={status} />
-        <MatchPitch name={awayName} formation={awayFormation ?? data?.away?.formation} lineup={data?.away} status={status} alternate />
-      </div>
+      {confirmed ? (
+        <div className="grid gap-4 lg:grid-cols-2" data-pitch-pair="true" data-lineups-proof="official-only">
+          <MatchPitch name={homeName} formation={data?.home?.formation ?? homeFormation} lineup={data?.home} status={status} />
+          <MatchPitch name={awayName} formation={data?.away?.formation ?? awayFormation} lineup={data?.away} status={status} alternate />
+        </div>
+      ) : (
+        <div className="relative overflow-hidden rounded-[1.6rem] border border-slate-800 bg-gradient-to-br from-[#0b1729] via-[#123149] to-[#075a45] p-5 text-white shadow-lg sm:p-8" data-lineups-placeholder="verified-only">
+          <div className="pointer-events-none absolute -right-12 -top-16 h-56 w-56 rounded-full border-[35px] border-white/5" aria-hidden="true" />
+          <p className="relative text-[11px] font-black uppercase tracking-[0.15em] text-emerald-200">
+            Composition officielle · {status === "LOADING" ? "Vérification en cours" : status === "PARTIAL" ? "Données incomplètes" : "Non publiée"}
+          </p>
+          <h3 className="relative mt-2 text-xl font-extrabold text-white sm:text-2xl">Les deux onze de départ ne sont pas encore confirmés</h3>
+          <p className="relative mt-2 max-w-2xl text-sm leading-relaxed text-slate-200">
+            BetGPT affichera les joueurs sur leurs terrains dès que les 22 titulaires seront validés par la source.
+            Aucun onze fictif ni photo sans provenance n'est utilisé pour remplir l'espace.
+          </p>
+          <div className="relative mt-6 grid gap-3 sm:grid-cols-2">
+            {([
+              { name: homeName, team: data?.home },
+              { name: awayName, team: data?.away },
+            ] as const).map(({ name, team }) => (
+              <div key={name} className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur-sm">
+                <div className="flex items-center gap-3">
+                  <span className="rounded-xl bg-white p-2"><Crest name={name} short={name.slice(0, 3).toUpperCase()} size={42} /></span>
+                  <div className="min-w-0">
+                    <p className="font-bold text-white">{name}</p>
+                    <p className="text-xs text-emerald-100">
+                      {team?.starters.length ? team.starters.length + " joueur(s) signalé(s) · XI non confirmé" : "Feuille de match attendue"}
+                    </p>
+                  </div>
+                </div>
+                {team?.starters.length ? (
+                  <ul className="mt-4 flex flex-wrap gap-2" aria-label={"Joueurs signalés pour " + name}>
+                    {team.starters.map((player) => (
+                      <li key={player.id ?? player.name} className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs text-white">
+                        {player.number ? player.number + " · " : ""}{player.name}
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
       {done && data?.reason ? <p className="mt-3 text-xs text-muted">{data.reason}</p> : null}
       {data?.sourceUrl ? (
         <p className="mt-3 text-xs text-muted">
