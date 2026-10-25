@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T17:37:38.415Z",
+      "lastCheckedAt": "2026-10-25T18:19:56.291Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -75,13 +75,13 @@
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T17:37:39.172Z",
+      "lastCheckedAt": "2026-10-25T18:19:56.682Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T17:37:41.339Z",
+      "lastCheckedAt": "2026-10-25T18:19:57.784Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -98,7 +98,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T17:37:42.369Z",
+      "lastCheckedAt": "2026-10-25T18:19:58.143Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -130,19 +130,19 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T17:37:50.675Z",
+      "lastCheckedAt": "2026-10-25T18:20:02.425Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T17:37:40.063Z",
+      "lastCheckedAt": "2026-10-25T18:19:57.140Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T17:37:43.314Z",
+      "lastCheckedAt": "2026-10-25T18:19:58.471Z",
       "seen": {
         "c022035f3d7190f6f1": {
           "url": "https://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/",
@@ -208,6 +208,11 @@
           "url": "https://andaluztarija.com/diario/futbol-ciclon-mas-ligueros/",
           "date": "Sun, 25 Oct 2026 00:00:00 GMT",
           "seenAt": "2026-10-25T17:37:43.314Z"
+        },
+        "91178d2d646296a3ea": {
+          "url": "https://andaluztarija.com/2018/11/26/bernardo-leon-de-glas-casa-real-termino-segundo-en-la-vuelta-a-cochabamba/",
+          "date": "Sun, 25 Oct 2026 00:00:00 GMT",
+          "seenAt": "2026-10-25T18:19:58.471Z"
         }
       },
       "sourceStatus": "VERIFIED"
@@ -936,6 +941,34 @@
       "imageUrl": null,
       "text": "Atlético Ciclón: los refuerzos ligueros y la reconstrucción del plantel de 2014\nhttps://andaluztarija.com/diario/futbol-ciclon-mas-ligueros/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija",
       "createdAt": "2026-10-25T17:37:43.422Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:91178d2d646296a3ea": {
+      "id": "instagram:91178d2d646296a3ea",
+      "siteId": "andaluztarija",
+      "network": "instagram",
+      "articleUrl": "https://andaluztarija.com/2018/11/26/bernardo-leon-de-glas-casa-real-termino-segundo-en-la-vuelta-a-cochabamba/",
+      "imageUrl": null,
+      "text": "Bernardo León fue segundo en la Vuelta a Cochabamba de 2018: clasificación y contexto\n\nResultados de la Vuelta a Cochabamba 2018: Bernardo León, del equipo Glas Casa Real, concluyó segundo en la general, a 15 segundos de Javier Arando.\n\nhttps://andaluztarija.com/2018/11/26/bernardo-leon-de-glas-casa-real-termino-segundo-en-la-vuelta-a-cochabamba/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija #noticias #Bernardo #segundo #Vuelta",
+      "createdAt": "2026-10-25T18:20:02.115Z",
+      "status": "WAIT_IMAGE",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:91178d2d646296a3ea": {
+      "id": "x:91178d2d646296a3ea",
+      "siteId": "andaluztarija",
+      "network": "x",
+      "articleUrl": "https://andaluztarija.com/2018/11/26/bernardo-leon-de-glas-casa-real-termino-segundo-en-la-vuelta-a-cochabamba/",
+      "imageUrl": null,
+      "text": "Bernardo León fue segundo en la Vuelta a Cochabamba de 2018: clasificación y conte\nhttps://andaluztarija.com/2018/11/26/bernardo-leon-de-glas-casa-real-termino-segundo-en-la-vuelta-a-cochabamba/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija",
+      "createdAt": "2026-10-25T18:20:02.115Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,
