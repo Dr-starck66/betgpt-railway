@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import type { Absence, MatchInput, PredictionRecord } from "@/engine/types";
@@ -67,6 +67,7 @@ export function MatchDetail({
   versions = [],
   liveAsOf = null,
   video = null,
+  lineups = null,
 }: {
   match: MatchInput;
   prediction: PredictionRecord;
@@ -75,6 +76,7 @@ export function MatchDetail({
   versions?: PredictionVersion[];
   liveAsOf?: string | null;
   video?: CuratedVideo | null;
+  lineups?: ReactNode;
 }) {
   const [tab, setTab] = useState<TabId>("pronostics");
   const best = headlineMarket(prediction.markets);
@@ -177,6 +179,8 @@ export function MatchDetail({
         </p>
       </header>
 
+      {lineups}
+
       {match.status === "live" || match.status === "finished" ? <LiveRecap match={match} /> : null}
       {match.status === "live" && prediction.liveSuper ? <LiveSuperCard bet={prediction.liveSuper} /> : null}
 
@@ -264,7 +268,6 @@ function PronosticsTab({
       </section>
 
       <FormSection match={match} />
-      <CompoSection match={match} />
       <AbsencesSection match={match} />
 
       {!mute && listed1x2 ? (
@@ -521,29 +524,6 @@ function FormCard({
         <p className="mt-2 text-sm text-mist">Forme récente non observée. Aucune série n’est inventée.</p>
       )}
     </div>
-  );
-}
-
-function CompoSection({ match }: { match: MatchInput }) {
-  return (
-    <section className="surface-card p-5 sm:p-6">
-      <h2 className="text-lg font-semibold tracking-tight">
-        Composition {matchPair(match.home.name, match.away.name)}
-      </h2>
-      <p className="mt-1 text-xs text-muted">Schémas listés. Les noms de titulaires ne sont publiés que s’ils arrivent du feed — ici, formation seulement.</p>
-      <div className="mt-4 grid gap-3 sm:grid-cols-2">
-        <div className="rounded-md border border-line bg-pitch px-4 py-4 text-center">
-          <p className="text-sm font-semibold text-paper">{match.home.name}</p>
-          <p className="mt-1 text-xs uppercase tracking-wider text-muted">Formation</p>
-          <p className="mt-1 font-mono text-2xl font-bold tabular text-paper">{match.home.formation || "—"}</p>
-        </div>
-        <div className="rounded-md border border-line bg-pitch px-4 py-4 text-center">
-          <p className="text-sm font-semibold text-paper">{match.away.name}</p>
-          <p className="mt-1 text-xs uppercase tracking-wider text-muted">Formation</p>
-          <p className="mt-1 font-mono text-2xl font-bold tabular text-paper">{match.away.formation || "—"}</p>
-        </div>
-      </div>
-    </section>
   );
 }
 
