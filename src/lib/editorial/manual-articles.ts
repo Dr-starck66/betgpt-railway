@@ -1,3 +1,4 @@
+import { clasicoMorning20261025 } from "@/lib/editorial/manual-clasico-morning-2026-10-25";
 import { arsenalEverton20261024 } from "@/lib/editorial/manual-arsenal-everton-2026-10-24";
 import { astonVillaCityPostmatch20261024 } from "@/lib/editorial/manual-aston-villa-city-postmatch-2026-10-24";
 import { cityVerdict20261012 } from "@/lib/editorial/manual-city-verdict-2026-10-12";
@@ -7,6 +8,7 @@ import { liverpoolManchesterCityPostmatch } from "@/lib/editorial/manual-postmat
 import type { EditorialArticle } from "@/lib/editorial/types";
 
 const ARTICLES: EditorialArticle[] = [
+  clasicoMorning20261025,
   arsenalEverton20261024,
   astonVillaCityPostmatch20261024,
   astonVillaCityLineups20261024,
