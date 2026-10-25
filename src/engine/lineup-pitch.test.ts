@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { buildVerifiedPitchLayout } from "./lineup-pitch.ts";
+import { buildSchematicPitchLayout, buildVerifiedPitchLayout } from "./lineup-pitch.ts";
 import type { OfficialTeamLineup } from "./official-lineups.ts";
 
 function lineup(formation = "4-2-3-1", count = 11): OfficialTeamLineup {
@@ -35,4 +35,32 @@ test("gardien identifié même si sa place dans le flux n'est pas la première",
   const keeper = input.starters.shift()!;
   input.starters.push(keeper);
   assert.equal(buildVerifiedPitchLayout(input)?.lines[0][0].name, "Joueur 0");
+});
+
+test("la formation 4-3-3 donne un vrai schéma visuel anonyme, même si le XI manque", () => {
+  const result = buildSchematicPitchLayout("4-3-3");
+  assert.deepEqual(result?.lines, [1, 4, 3, 3]);
+  assert.equal(result?.formation, "4-3-3");
+});
+
+test("tous les schémas historiques et futurs connus utilisent le même calcul", () => {
+  const examples: Record<string, number[]> = {
+    "4-2-3-1": [1, 4, 2, 3, 1],
+    "3-5-2": [1, 3, 5, 2],
+    "4-4-2": [1, 4, 4, 2],
+    "5-3-2": [1, 5, 3, 2],
+    "4-3-3": [1, 4, 3, 3],
+    "3-4-2-1": [1, 3, 4, 2, 1],
+  };
+  for (const [formation, rows] of Object.entries(examples)) {
+    assert.deepEqual(buildSchematicPitchLayout(formation)?.lines, rows);
+  }
+});
+
+test("un schéma absent ou incohérent affiche un terrain neutre, jamais onze joueurs inventés", () => {
+  assert.equal(buildSchematicPitchLayout(undefined), null);
+  assert.equal(buildSchematicPitchLayout(""), null);
+  assert.equal(buildSchematicPitchLayout("4-4-3"), null);
+  assert.equal(buildSchematicPitchLayout("4-2-0-4"), null);
+  assert.equal(buildSchematicPitchLayout("undefined"), null);
 });
