@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T07:08:24.947Z",
+      "lastCheckedAt": "2026-10-25T09:46:46.322Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -59,19 +59,24 @@
           "url": "https://betgpt.live/actualites/arsenal-everton-2-0-konsa-gabriel-course-titre-24-octobre-2026",
           "date": "2026-10-24T20:29:00.000Z",
           "seenAt": "2026-10-24T21:55:50.180Z"
+        },
+        "148fc6f27d38b24aa1": {
+          "url": "https://betgpt.live/actualites/barcelone-real-madrid-clasico-25-octobre-2026-kounde-vinicius-enjeux",
+          "date": "2026-10-25T07:00:00.000Z",
+          "seenAt": "2026-10-25T09:46:46.322Z"
         }
       },
       "sourceStatus": "VERIFIED"
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T07:08:25.649Z",
+      "lastCheckedAt": "2026-10-25T09:46:51.955Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T07:08:27.766Z",
+      "lastCheckedAt": "2026-10-25T09:46:53.496Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -88,7 +93,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T07:08:28.707Z",
+      "lastCheckedAt": "2026-10-25T09:46:54.301Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -120,19 +125,19 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T07:08:30.366Z",
+      "lastCheckedAt": "2026-10-25T09:46:55.267Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T07:08:26.496Z",
+      "lastCheckedAt": "2026-10-25T09:46:52.525Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T07:08:29.582Z",
+      "lastCheckedAt": "2026-10-25T09:46:54.728Z",
       "seen": {
         "c022035f3d7190f6f1": {
           "url": "https://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/",
@@ -837,6 +842,34 @@
       "imageUrl": "https://betgpt.live/blog/discover/inline-shot.jpg",
       "text": "Arsenal–Everton 2-0 : Konsa, Gabriel et 21 points, l&#x27;analyse de la victoire | BetGPT\nhttps://betgpt.live/actualites/arsenal-everton-2-0-konsa-gabriel-course-titre-24-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
       "createdAt": "2026-10-24T21:55:54.354Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:148fc6f27d38b24aa1": {
+      "id": "instagram:148fc6f27d38b24aa1",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/barcelone-real-madrid-clasico-25-octobre-2026-kounde-vinicius-enjeux",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Camp_nou_FC_Barcelona.jpg?width=1600",
+      "text": "Barcelone–Real Madrid : Koundé et Vinícius absents, les enjeux du Clásico 2026 | BetGPT\n\nBarcelone accueille le Real Madrid dimanche 25 octobre 2026 à 21 heures au Spotify Camp Nou. Le Barça a remporté ses neuf premiers matches de Liga, mais reste sur une défaite 4-2 face au PSG. Jules Koundé, Dani Olmo et Eric Garcia manquent à l&#x27;appel côté catalan, tandis que Vinícius Júnior est suspendu pour Madrid. Entre six points d&#x27;écart, retour de Mourinho et renouvellement des effectifs, voici les enjeux vérifiés et les clés tactiques sans inventer les compositi\n\nhttps://betgpt.live/actualites/barcelone-real-madrid-clasico-25-octobre-2026-kounde-vinicius-enjeux?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #BarceloneReal #Madrid #Kounde",
+      "createdAt": "2026-10-25T09:46:51.386Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:148fc6f27d38b24aa1": {
+      "id": "x:148fc6f27d38b24aa1",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/barcelone-real-madrid-clasico-25-octobre-2026-kounde-vinicius-enjeux",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Camp_nou_FC_Barcelona.jpg?width=1600",
+      "text": "Barcelone–Real Madrid : Koundé et Vinícius absents, les enjeux du Clásico 2026 | BetGPT\nhttps://betgpt.live/actualites/barcelone-real-madrid-clasico-25-octobre-2026-kounde-vinicius-enjeux?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-25T09:46:51.387Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,
