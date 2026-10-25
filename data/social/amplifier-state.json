@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T12:09:11.336Z",
+      "lastCheckedAt": "2026-10-25T12:33:01.775Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -64,19 +64,24 @@
           "url": "https://betgpt.live/actualites/barcelone-real-madrid-clasico-25-octobre-2026-kounde-vinicius-enjeux",
           "date": "2026-10-25T07:00:00.000Z",
           "seenAt": "2026-10-25T09:46:46.322Z"
+        },
+        "d383bfbc3bf688899b": {
+          "url": "https://betgpt.live/actualites/liverpool-brighton-maintenu-tempete-boelo-25-octobre-2026-absences-analyse",
+          "date": "2026-10-25T12:00:00.000Z",
+          "seenAt": "2026-10-25T12:33:01.775Z"
         }
       },
       "sourceStatus": "VERIFIED"
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T12:09:11.825Z",
+      "lastCheckedAt": "2026-10-25T12:33:06.477Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T12:09:13.211Z",
+      "lastCheckedAt": "2026-10-25T12:33:08.602Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -93,7 +98,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T12:09:13.828Z",
+      "lastCheckedAt": "2026-10-25T12:33:09.667Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -125,19 +130,19 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T12:09:14.999Z",
+      "lastCheckedAt": "2026-10-25T12:33:11.238Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T12:09:12.423Z",
+      "lastCheckedAt": "2026-10-25T12:33:07.396Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T12:09:14.467Z",
+      "lastCheckedAt": "2026-10-25T12:33:10.522Z",
       "seen": {
         "c022035f3d7190f6f1": {
           "url": "https://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/",
@@ -870,6 +875,34 @@
       "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Camp_nou_FC_Barcelona.jpg?width=1600",
       "text": "Barcelone–Real Madrid : Koundé et Vinícius absents, les enjeux du Clásico 2026 | BetGPT\nhttps://betgpt.live/actualites/barcelone-real-madrid-clasico-25-octobre-2026-kounde-vinicius-enjeux?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
       "createdAt": "2026-10-25T09:46:51.387Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:d383bfbc3bf688899b": {
+      "id": "instagram:d383bfbc3bf688899b",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/liverpool-brighton-maintenu-tempete-boelo-25-octobre-2026-absences-analyse",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Anfield_Stadium.jpg?width=1600",
+      "text": "Liverpool–Brighton maintenu malgré Boelo : horaire, absences et clés du match | BetGPT\n\nLiverpool a confirmé dimanche 25 octobre 2026 le maintien de son match contre Brighton malgré les vents de la tempête Boelo. Coup d&#x27;envoi annoncé à 15 heures, heure de Paris. Au-delà de l&#x27;alerte météo, Brighton arrive avec quatre succès de championnat consécutifs sans encaisser de but et Liverpool doit composer sans Dominik Szoboszlai. Voici ce qui est officiellement établi, les incertitudes d&#x27;effectif et les enjeux tactiques, sans inventer de compositions ni d\n\nhttps://betgpt.live/actualites/liverpool-brighton-maintenu-tempete-boelo-25-octobre-2026-absences-analyse?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #LiverpoolBrighton #maintenu #malgre",
+      "createdAt": "2026-10-25T12:33:05.684Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:d383bfbc3bf688899b": {
+      "id": "x:d383bfbc3bf688899b",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/liverpool-brighton-maintenu-tempete-boelo-25-octobre-2026-absences-analyse",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Anfield_Stadium.jpg?width=1600",
+      "text": "Liverpool–Brighton maintenu malgré Boelo : horaire, absences et clés du match | Bet\nhttps://betgpt.live/actualites/liverpool-brighton-maintenu-tempete-boelo-25-octobre-2026-absences-analyse?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-25T12:33:05.685Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,
