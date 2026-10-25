@@ -75,11 +75,15 @@ function MatchPage() {
         versions={data.versions ?? []}
         liveAsOf={data.liveAsOf ?? null}
         video={data.video ?? null}
-      />
-      <MatchLineups
-        matchId={data.match.slug ?? data.match.id}
-        homeName={data.match.home.name}
-        awayName={data.match.away.name}
+        lineups={
+          <MatchLineups
+            matchId={data.match.slug ?? data.match.id}
+            homeName={data.match.home.name}
+            awayName={data.match.away.name}
+            homeFormation={data.match.home.formation}
+            awayFormation={data.match.away.formation}
+          />
+        }
       />
       <MatchHunter matchId={data.match.id} />
     </div>
