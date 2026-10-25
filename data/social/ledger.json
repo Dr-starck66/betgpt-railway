@@ -575,5 +575,26 @@
     "remotePostUrl": null,
     "error": null,
     "retryCount": 0
+  },
+  {
+    "id": "x:ed-2026-10-25-morning:v1",
+    "articleId": "ed-2026-10-25-morning",
+    "articleSlug": "barcelone-real-madrid-clasico-25-octobre-2026-kounde-vinicius-enjeux",
+    "articleTitle": "Barcelone–Real Madrid : neuf victoires, Koundé et Vinícius absents, les vraies clés du Clásico",
+    "articleUrl": "https://betgpt.live/actualites/barcelone-real-madrid-clasico-25-octobre-2026-kounde-vinicius-enjeux",
+    "trackedUrl": "https://betgpt.live/actualites/barcelone-real-madrid-clasico-25-octobre-2026-kounde-vinicius-enjeux?utm_source=x&utm_medium=social&utm_campaign=editorial_auto&utm_content=barcelone-real-madrid-clasico-25-octobre-2026-kounde-vinicius-enjeux",
+    "network": "x",
+    "text": "🔴 Barcelone–Real Madrid : neuf victoires, Koundé et Vinícius absents, les vraies clés du Clásico\n\nÀ lire sur BetGPT 👇\n\nhttps://betgpt.live/actualites/barcelone-real-madrid-clasico-25-octobre-2026-kounde-vinicius-enjeux?utm_source=x&utm_medium=social&utm_campaign=editorial_auto&",
+    "hashtags": [],
+    "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Camp_nou_FC_Barcelona.jpg?width=1600",
+    "createdAt": "2026-10-25T07:07:27.708Z",
+    "scheduledAt": "2026-10-25T07:00:00.000Z",
+    "attemptedAt": null,
+    "publishedAt": null,
+    "status": "READY_TO_X",
+    "remotePostId": null,
+    "remotePostUrl": null,
+    "error": null,
+    "retryCount": 0
   }
 ]
