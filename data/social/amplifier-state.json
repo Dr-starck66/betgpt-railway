@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T14:01:15.591Z",
+      "lastCheckedAt": "2026-10-25T17:37:38.415Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -75,13 +75,13 @@
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T14:01:16.194Z",
+      "lastCheckedAt": "2026-10-25T17:37:39.172Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T14:01:17.522Z",
+      "lastCheckedAt": "2026-10-25T17:37:41.339Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -98,7 +98,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T14:01:18.079Z",
+      "lastCheckedAt": "2026-10-25T17:37:42.369Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -130,19 +130,19 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T14:01:19.269Z",
+      "lastCheckedAt": "2026-10-25T17:37:50.675Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T14:01:16.731Z",
+      "lastCheckedAt": "2026-10-25T17:37:40.063Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-25T14:01:18.800Z",
+      "lastCheckedAt": "2026-10-25T17:37:43.314Z",
       "seen": {
         "c022035f3d7190f6f1": {
           "url": "https://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/",
@@ -203,6 +203,11 @@
           "url": "https://andaluztarija.com/2021/10/26/oscar-montes-en-campana-para-eliminar-la-ley-del-206-a-favor-de-municipios/",
           "date": "Fri, 23 Oct 2026 00:00:00 GMT",
           "seenAt": "2026-10-23T15:01:24.199Z"
+        },
+        "3c6bcb2a605cd33fb7": {
+          "url": "https://andaluztarija.com/diario/futbol-ciclon-mas-ligueros/",
+          "date": "Sun, 25 Oct 2026 00:00:00 GMT",
+          "seenAt": "2026-10-25T17:37:43.314Z"
         }
       },
       "sourceStatus": "VERIFIED"
@@ -903,6 +908,34 @@
       "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Anfield_Stadium.jpg?width=1600",
       "text": "Liverpool–Brighton maintenu malgré Boelo : horaire, absences et clés du match | Bet\nhttps://betgpt.live/actualites/liverpool-brighton-maintenu-tempete-boelo-25-octobre-2026-absences-analyse?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
       "createdAt": "2026-10-25T12:33:05.685Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:3c6bcb2a605cd33fb7": {
+      "id": "instagram:3c6bcb2a605cd33fb7",
+      "siteId": "andaluztarija",
+      "network": "instagram",
+      "articleUrl": "https://andaluztarija.com/diario/futbol-ciclon-mas-ligueros/",
+      "imageUrl": null,
+      "text": "Atlético Ciclón: los refuerzos ligueros y la reconstrucción del plantel de 2014\n\nArchivo temático documentado: Félix Candía, Kevin Morales y la preparación de Ciclón para el Nacional B 2014-2015, con fuentes identificadas.\n\nhttps://andaluztarija.com/diario/futbol-ciclon-mas-ligueros/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija #noticias #Atletico #Ciclon #refuerzos",
+      "createdAt": "2026-10-25T17:37:43.422Z",
+      "status": "WAIT_IMAGE",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:3c6bcb2a605cd33fb7": {
+      "id": "x:3c6bcb2a605cd33fb7",
+      "siteId": "andaluztarija",
+      "network": "x",
+      "articleUrl": "https://andaluztarija.com/diario/futbol-ciclon-mas-ligueros/",
+      "imageUrl": null,
+      "text": "Atlético Ciclón: los refuerzos ligueros y la reconstrucción del plantel de 2014\nhttps://andaluztarija.com/diario/futbol-ciclon-mas-ligueros/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija",
+      "createdAt": "2026-10-25T17:37:43.422Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,
