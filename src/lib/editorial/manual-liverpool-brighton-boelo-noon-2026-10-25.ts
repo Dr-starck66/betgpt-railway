@@ -289,11 +289,11 @@ export const liverpoolBrightonBoeloNoon20261025: EditorialArticle = {
     "freshness": 20,
     "frenchInterest": 15,
     "entityStrength": 18,
-    "novelty": 19,
+    "novelty": 17,
     "visual": 10,
     "sourceQuality": 10,
     "editorialAngle": 10,
-    "total": 102,
+    "total": 100,
     "decision": "PUBLISH",
     "reasons": []
   },
