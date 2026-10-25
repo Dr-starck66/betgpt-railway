@@ -1,3 +1,4 @@
+import { evergreenOmega20261025 } from "@/lib/evergreen-omega-20261025";
 import { allPlayerCocoonArticles, PLAYER_PROFILES } from "@/lib/player-cocoons";
 import { lumistadeCocoonArticles } from "@/lib/lumistade-cocoon";
 
@@ -1144,6 +1145,10 @@ export const BLOG: BlogArticle[] = [
   },
 ];
 
+// New evergreen articles join the same blog, route and sitemap as existing pages.
+BLOG.push(...evergreenOmega20261025);
+CLUSTERS["evergreen-stats"] = { title: "Statistiques et analyse du football", pillar: "statistiques-football-analyser-match", pillarH1: "Statistiques football : comment analyser un match" };
+CLUSTERS["evergreen-marches"] = { title: "Comprendre les marchés de paris football", pillar: "btts-signification-pari-football", pillarH1: "BTTS : les deux équipes marquent" };
 // Ten topic clusters: 1 pillar + 3 distinct satellites apiece.
 BLOG.push(...lumistadeCocoonArticles);
 CLUSTERS.lumistade = {

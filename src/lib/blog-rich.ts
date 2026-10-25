@@ -326,6 +326,7 @@ function lumistadeVisual(a: BlogArticle, kind: "hero" | "detail"): BlogImg | nul
 }
 
 export function blogCover(a: BlogArticle): BlogImg {
+  if (a.cluster?.startsWith("evergreen-") && a.cover) return { ...blogImageSeo(a.cover, "Infographie originale BetGPT : " + a.h1, "Schéma pédagogique créé pour cet article, sans photographie fictive."), width: 1600, height: 900 };
   if (a.cluster === "lumistade") return lumistadeVisual(a, "hero")!;
   const photo = a.cluster?.startsWith("joueur-") ? playerPhoto(a.cluster.slice(7)) : undefined;
   if (photo) return {
@@ -350,6 +351,7 @@ export function blogCover(a: BlogArticle): BlogImg {
 }
 
 export function blogInline(a: BlogArticle): BlogImg {
+  if (a.cluster?.startsWith("evergreen-")) return { ...blogImageSeo("/blog/evergreen/" + a.slug + "-detail.svg", "Schéma complémentaire original : " + a.h1, "Illustration explicative BetGPT : exemples et points de méthode."), width: 1600, height: 900 };
   if (a.cluster === "lumistade") return lumistadeVisual(a, "detail")!;
   const spec = COVERS[a.slug];
   const key = spec?.inline ?? "inline-action";
