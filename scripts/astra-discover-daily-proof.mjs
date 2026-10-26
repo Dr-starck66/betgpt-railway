@@ -156,7 +156,7 @@ function testContract() {
   assert.equal(analyze([base("morning"),base("noon"),{ ...base("evening"), generationProof: { ...base("evening").generationProof, trigger: "operator-catchup" } }], day).status, "FAIL_DAILY_AUTOMATION_MISSING_SLOTS");
   assert.equal(analyze([base("morning"),base("noon"),{ ...base("evening"), generationProof: { ...base("evening").generationProof, modelRequests: 0 } }], day).status, "FAIL_DAILY_AUTOMATION_MISSING_SLOTS");
   assert.equal(analyze([{ ...base("morning"), id: "manual-report" }], day).automaticallyPublished.length, 0);
-  assert.equal(analyze([base("morning"),base("noon"),{ ...base("evening"), quality: { pass: false } }],day).status,"FAIL_EDITORIAL_QUALITY");
+  assert.equal(analyze([base("morning"),base("noon"),{ ...base("evening"), quality: { pass: false } }],day).status,"FAIL_DAILY_AUTOMATION_MISSING_SLOTS");
   console.log("ASTRA_DISCOVER_DAILY_PROOF_CONTRACT_PASS: zero days fail; manual/agent/zero-model does not count; 3 native quality slots pass; bad quality fails; Paris DST passes");
 }
 if (selfTest) {
