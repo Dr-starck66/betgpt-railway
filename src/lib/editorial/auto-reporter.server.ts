@@ -300,8 +300,10 @@ async function draftWithLocalModel(evidence: Evidence[]): Promise<ReturnType<typ
     try {
       const clean = raw.trim().replace(/^\x60{3}(?:json)?\s*/i, "").replace(/\s*\x60{3}$/, "");
       const parsed = JSON.parse(clean) as Record<string, unknown>;
-      if ("subsection" in parsed && !("subsections" in parsed)) {
-        console.warn("ASTRA_AUTO_REPORTER_MODEL_SCHEMA_ALIAS_REJECTED", JSON.stringify({ section: i + 1, key: "subsection" }));
+      if (!("subsections" in parsed) && parsed.subsection && typeof parsed.subsection === "object" && !Array.isArray(parsed.subsection)) {
+        parsed.subsections = [parsed.subsection];
+        delete parsed.subsection;
+        console.info("ASTRA_AUTO_REPORTER_MODEL_SCHEMA_ALIAS_NORMALIZED", JSON.stringify({ section: i + 1, from: "subsection", to: "subsections" }));
       }
       if (parsed.insufficient_evidence === true) {
         console.warn("ASTRA_AUTO_REPORTER_INSUFFICIENT_EVIDENCE", i + 1);
