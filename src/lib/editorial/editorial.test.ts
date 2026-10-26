@@ -864,7 +864,7 @@ describe("ASTRA editorial local model context budget", () => {
     assert.equal(hasAutomaticProof(article), false);
     const proof = { generator: "astra-auto-reporter-v2" as const, runId: "run-test", generatedAt: "2026-10-26T13:00:00Z", modelRequests: 7 };
     assert.equal(hasAutomaticProof({ ...article, generationProof: { ...proof, trigger: "operator-catchup" } }), false);
-    assert.equal(hasAutomaticProof({ ...article, generationProof: { ...proof, trigger: "scheduler" }, status: "PUBLISHED" }), true);
+    assert.equal(hasAutomaticProof({ ...article, generationProof: { ...proof, trigger: "scheduler" }, status: "PUBLISHED" }), false, "A manual article cannot gain native provenance by adding seven-call metadata");
     assert.equal(hasAutomaticProof({ ...article, generationProof: { ...proof, trigger: "scheduler" }, status: "SCHEDULED" }), false);
   });
   it("counts a scheduled-agent catchup toward the three-page cap without spoofing native proof", () => {
