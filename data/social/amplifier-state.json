@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-26T07:03:28.189Z",
+      "lastCheckedAt": "2026-10-26T10:36:51.720Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -69,19 +69,24 @@
           "url": "https://betgpt.live/actualites/liverpool-brighton-maintenu-tempete-boelo-25-octobre-2026-absences-analyse",
           "date": "2026-10-25T12:00:00.000Z",
           "seenAt": "2026-10-25T12:33:01.775Z"
+        },
+        "7c6a7f4ce0831f6659": {
+          "url": "https://betgpt.live/actualites/manchester-united-bournemouth-0-3-carrick-fernandes-analyse-26-octobre-2026",
+          "date": "2026-10-26T07:00:00.000Z",
+          "seenAt": "2026-10-26T10:36:51.720Z"
         }
       },
       "sourceStatus": "VERIFIED"
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-26T07:03:28.712Z",
+      "lastCheckedAt": "2026-10-26T10:36:56.727Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-26T07:03:30.051Z",
+      "lastCheckedAt": "2026-10-26T10:36:58.142Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -98,7 +103,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-26T07:03:30.578Z",
+      "lastCheckedAt": "2026-10-26T10:36:58.773Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -130,19 +135,19 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-26T07:03:31.483Z",
+      "lastCheckedAt": "2026-10-26T10:36:59.976Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-26T07:03:29.223Z",
+      "lastCheckedAt": "2026-10-26T10:36:57.388Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-26T07:03:31.076Z",
+      "lastCheckedAt": "2026-10-26T10:36:59.433Z",
       "seen": {
         "c022035f3d7190f6f1": {
           "url": "https://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/",
@@ -969,6 +974,34 @@
       "imageUrl": null,
       "text": "Bernardo León fue segundo en la Vuelta a Cochabamba de 2018: clasificación y conte\nhttps://andaluztarija.com/2018/11/26/bernardo-leon-de-glas-casa-real-termino-segundo-en-la-vuelta-a-cochabamba/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija",
       "createdAt": "2026-10-25T18:20:02.115Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:7c6a7f4ce0831f6659": {
+      "id": "instagram:7c6a7f4ce0831f6659",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/manchester-united-bournemouth-0-3-carrick-fernandes-analyse-26-octobre-2026",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Old_Trafford,_view_from_Stretford_End_4.jpg?width=1600",
+      "text": "Manchester United–Bournemouth 0-3 : Carrick, Fernandes et les clés du naufrage | BetGPT\n\nBournemouth a battu Manchester United 3-0 à Old Trafford dimanche 25 octobre 2026 grâce à Rayan, Marcus Tavernier et Evanilson. Au lendemain de cette défaite, l&#x27;absence de Bruno Fernandes du onze, les trois séquences défensives décisives et l&#x27;avenir incertain de Michael Carrick méritent une analyse sourcée. Voici ce que confirment les clubs et les médias, sans annoncer de départ non officiel ni inventer de statistiques.\n\nhttps://betgpt.live/actualites/manchester-united-bournemouth-0-3-carrick-fernandes-analyse-26-octobre-2026?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #Manchester #UnitedBournemouth #Carrick",
+      "createdAt": "2026-10-26T10:36:56.211Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:7c6a7f4ce0831f6659": {
+      "id": "x:7c6a7f4ce0831f6659",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/manchester-united-bournemouth-0-3-carrick-fernandes-analyse-26-octobre-2026",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Old_Trafford,_view_from_Stretford_End_4.jpg?width=1600",
+      "text": "Manchester United–Bournemouth 0-3 : Carrick, Fernandes et les clés du naufrage | B\nhttps://betgpt.live/actualites/manchester-united-bournemouth-0-3-carrick-fernandes-analyse-26-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-26T10:36:56.211Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,
