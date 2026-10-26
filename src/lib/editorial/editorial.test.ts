@@ -8,7 +8,7 @@ import { editorialGoldStandardGate } from "./gold-standard.ts";
 import { optimizeTimes, parisDate, slotInstant } from "./time.ts";
 import type { ArticleType, EditorialMatch, EditorialNewsSignal, SlotId } from "./types.ts";
 import { autoPublishableCluster, clusterSignals, fairPublisherSignals, parseGoogleNewsRss, parsePublisherRss, sourceTier } from "./news-scout.server.ts";
-import { hasAutomaticProof, boundedEvidenceSlices, extractPublicArticle, publicPublisherRssEvidence, publisherUrl } from "./auto-reporter.server.ts";
+import { hasAutomaticProof, publishedTodayForQuota, boundedEvidenceSlices, extractPublicArticle, publicPublisherRssEvidence, publisherUrl } from "./auto-reporter.server.ts";
 import { clusterSignals as clusterAutoReporterSignals, isMaterialDevelopment as isAutoReporterMaterial } from "./news-cluster.ts";
 
 function match(over: Partial<EditorialMatch> & Pick<EditorialMatch, "id" | "home" | "away" | "kickoff">): EditorialMatch {
@@ -866,6 +866,21 @@ describe("ASTRA editorial local model context budget", () => {
     assert.equal(hasAutomaticProof({ ...article, generationProof: { ...proof, trigger: "operator-catchup" } }), false);
     assert.equal(hasAutomaticProof({ ...article, generationProof: { ...proof, trigger: "scheduler" }, status: "PUBLISHED" }), true);
     assert.equal(hasAutomaticProof({ ...article, generationProof: { ...proof, trigger: "scheduler" }, status: "SCHEDULED" }), false);
+  });
+  it("counts a scheduled-agent catchup toward the three-page cap without spoofing native proof", () => {
+    const seed = manualEditorialArticles().find((a) => a.parisDate === "2026-10-26")!;
+    assert.ok(seed);
+    const morning = { ...seed, id: "ed-2026-10-26-morning", slug: "quota-morning", slot: "morning" as const, status: "PUBLISHED" as const };
+    const noon = { ...seed, id: "ed-2026-10-26-noon", slug: "quota-noon", slot: "noon" as const, status: "PUBLISHED" as const };
+    const fallback = { ...seed, id: "manual-agent-catchup-2026-10-26-evening", slug: "quota-evening", slot: "evening" as const, status: "PUBLISHED" as const, generationProof: undefined };
+    const duplicate = { ...fallback, id: "manual-duplicate" };
+    const scheduled = { ...fallback, slug: "not-yet-public", status: "SCHEDULED" as const };
+    const old = { ...fallback, slug: "yesterday", parisDate: "2026-10-25" };
+    const publicToday = publishedTodayForQuota([morning, noon, fallback, duplicate, scheduled, old], "2026-10-26");
+    assert.equal(publicToday.length, 3, "A fallback must consume the final daily publication slot");
+    assert.deepEqual(publicToday.map((a) => a.slot).sort(), ["evening", "morning", "noon"]);
+    assert.equal(hasAutomaticProof(fallback), false, "Fallback is not native Qwen output");
+    assert.equal(Math.max(0, 3 - publicToday.length), 0, "No fourth article may be generated");
   });
   it("bounds publisher evidence for llama.cpp 2048-token requests without losing attribution", () => {
     const evidence = Array.from({ length: 4 }, (_, index) => ({
