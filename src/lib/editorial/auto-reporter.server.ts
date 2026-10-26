@@ -14,12 +14,15 @@ import { DEFAULT_TIMES, parisDate, slotInstant } from "./time.ts";
 const SLOTS = ["morning", "noon", "evening"] as const;
 const MIN_BODY_CHARS = 750;
 const FETCH_TIMEOUT = 9000;
-const MODEL_TIMEOUT = 180000;
+const MODEL_TIMEOUT = 240000;
 const EXCLUDED_HOSTS = ["news.google.com", "google.com", "www.google.com", "youtube.com"];
 let running: Promise<AutoPublishReport> | null = null;
 const lastAttempts = new Map<string, number>();
 
 export type AutoPublishReport = {
+  runId: string;
+  trigger: "scheduler" | "cron-api" | "operator-catchup";
+  automaticCount: number;
   parisDate: string;
   eligibleSlots: SlotId[];
   alreadyPublished: SlotId[];
@@ -191,11 +194,10 @@ function parseModelJson(value: string): { h1: string; lead: string; paragraphs: 
 
 
 /** Keep attributable publisher context bounded for the existing 2048-token llama.cpp server. */
-export function boundedEvidenceSlices(evidence: Evidence[], section: number): string {
+export function boundedEvidenceSlices(evidence: Evidence[], section: number, width = 500): string {
   const i = Math.min(6, Math.max(0, Math.trunc(section)));
   return evidence.map(({ signal, text }, index) => {
     const clean = text.replace(/\s+/g, " ").trim();
-    const width = 500;
     const start = Math.floor(Math.max(0, clean.length - width) * i / 6);
     return "[SOURCE " + (index + 1) + ": id=" + signal.id +
       "; média=" + signal.sourceName + "; date=" + signal.publishedAt +
@@ -205,7 +207,7 @@ export function boundedEvidenceSlices(evidence: Evidence[], section: number): st
   }).join("\n\n");
 }
 
-/** Seven bounded model requests instead of one over-context 5363-token prompt. */
+/** Seven bounded model requests within the configured 12288-token context. */
 async function draftWithLocalModel(evidence: Evidence[]): Promise<ReturnType<typeof parseModelJson>> {
   const base = (process.env.ASTRA_LOCAL_CHAT_BASE || process.env.RAILWAY_SERVICE_BETGPT_CHAT_MODEL_URL || "").trim();
   if (!base) {
@@ -238,7 +240,8 @@ async function draftWithLocalModel(evidence: Evidence[]): Promise<ReturnType<typ
       first
         ? 'JSON strict uniquement : {"h1":"titre original","lead":"introduction courte","h2":"...","body":"...","sourceIds":["id"],"subsections":[{"h3":"...","body":"...","sourceIds":["id"]}]}'
         : 'JSON strict uniquement : {"h2":"...","body":"...","sourceIds":["id"],"subsections":[{"h3":"...","body":"...","sourceIds":["id"]}]}',
-      "SOURCES ATTRIBUABLES :\n" + boundedEvidenceSlices(evidence, i),
+      "Ne répète pas les sections précédentes : " + sections.map((s) => s.h2).join(" ; "),
+      "SOURCES ATTRIBUABLES :\n" + boundedEvidenceSlices(evidence, i, 1800),
     ].join("\n");
     let raw = "";
     try {
@@ -249,7 +252,8 @@ async function draftWithLocalModel(evidence: Evidence[]): Promise<ReturnType<typ
         body: JSON.stringify({
           model,
           messages: [{ role: "system", content: "Journalisme factuel en français. JSON strict ou insufficient_evidence, jamais d'invention." }, { role: "user", content: prompt }],
-          temperature: 0.15, max_tokens: first ? 540 : 500, stream: false,
+          response_format: { type: "json_object" },
+          temperature: 0.15, repeat_penalty: 1.1, max_tokens: 1100, stream: false,
         }),
       });
       if (!response.ok) {
@@ -257,8 +261,13 @@ async function draftWithLocalModel(evidence: Evidence[]): Promise<ReturnType<typ
         console.warn("ASTRA_AUTO_REPORTER_MODEL_HTTP", JSON.stringify({ section: i + 1, status: response.status, detail }));
         return null;
       }
-      const json = await response.json() as { choices?: { message?: { content?: string } }[] };
+      const json = await response.json() as { choices?: { finish_reason?: string; message?: { content?: string } }[] };
+      if (json.choices?.[0]?.finish_reason === "length") {
+        console.warn("ASTRA_AUTO_REPORTER_MODEL_TRUNCATED", JSON.stringify({ section: i + 1 }));
+        return null;
+      }
       raw = json.choices?.[0]?.message?.content ?? "";
+      console.info("ASTRA_AUTO_REPORTER_MODEL_SECTION", JSON.stringify({ section: i + 1, chars: raw.length, finishReason: json.choices?.[0]?.finish_reason }));
     } catch (error) {
       console.warn("ASTRA_AUTO_REPORTER_MODEL_UNAVAILABLE", JSON.stringify({ section: i + 1, error: String(error).slice(0, 180) }));
       return null;
@@ -329,7 +338,7 @@ function assemble(
     status: signal.sourceTier === "OFFICIAL" ? "OFFICIAL" : "HIGH_CONFIDENCE",
   }));
   const nowIso = now.toISOString();
-  const image = imageFor("news", null, model.h1 + day + slot, new Set(previous.map((a) => a.image.src)));
+  const image = imageFor("news", null, model.h1 + day + slot, new Set(previous.filter((a) => a.parisDate === day).map((a) => a.image.src)));
   const title = model.h1.slice(0, 180) + " | BetGPT";
   const slug = slugify(model.h1) + "-" + day;
   const checks = { INDEXABLE: true, LARGE_IMAGE: true, IMAGE_GE_1200: true, MAX_IMAGE_PREVIEW_LARGE: true, HELPFUL_CONTENT: true, NON_CLICKBAIT_TITLE: true, ORIGINAL_VALUE: true, MOBILE_TEMPLATE: true } as const;
@@ -370,9 +379,16 @@ function assemble(
   return { article, reason: "PASS", words: gold.words };
 }
 
-async function publish(now: Date): Promise<AutoPublishReport> {
+export function hasAutomaticProof(article: EditorialArticle): boolean {
+  return article.generationProof?.generator === "astra-auto-reporter-v2" &&
+    Boolean(article.generationProof.runId) && article.generationProof.modelRequests === 7 &&
+    article.generationProof.trigger !== "operator-catchup" &&
+    (article.status === "PUBLISHED" || article.status === "UPDATED");
+}
+
+async function publish(now: Date, options: { trigger?: AutoPublishReport["trigger"]; catchup?: boolean }): Promise<AutoPublishReport> {
   const day = parisDate(now);
-  const due = SLOTS.filter((slot) => now.getTime() >= slotInstant(day, DEFAULT_TIMES[slot]).getTime());
+  const due = SLOTS.filter((slot) => options.catchup || now.getTime() >= slotInstant(day, DEFAULT_TIMES[slot]).getTime());
   const previous = await readLedgerDurable();
   const seeded = manualEditorialArticles();
   const merged = [...seeded, ...previous.filter((a) => !seeded.some((m) => m.id === a.id))];
@@ -381,12 +397,14 @@ async function publish(now: Date): Promise<AutoPublishReport> {
       .map((a) => a.slot)
   );
   const report: AutoPublishReport = {
+    runId: crypto.randomUUID(), trigger: options.trigger ?? "scheduler",
+    automaticCount: previous.filter((a) => a.parisDate === day && hasAutomaticProof(a)).length,
     parisDate: day, eligibleSlots: [...due], alreadyPublished: [...publishedSlots],
     newlyPublished: [], rejected: [], status: "DEGRADED_AUTOMATED_ARTICLE_QUOTA",
   };
   const missing = due.filter((slot) => !publishedSlots.has(slot));
   if (!missing.length) {
-    report.status = SLOTS.every((slot) => publishedSlots.has(slot)) ? "PASS_THREE_AUTOMATED_ARTICLES" : report.status;
+    report.status = report.automaticCount === 3 ? "PASS_THREE_AUTOMATED_ARTICLES" : report.status;
     return report;
   }
   const signals = await collectFootballNewsSignals(now);
@@ -439,13 +457,18 @@ async function publish(now: Date): Promise<AutoPublishReport> {
       stage.qualityApproved += 1;
       if (merged.some((a) => a.slug === checked.article!.slug || a.h1 === checked.article!.h1)) continue;
       const candidate = checked.article;
+      candidate.generationProof = {
+        generator: "astra-auto-reporter-v2", runId: report.runId, trigger: report.trigger,
+        generatedAt: new Date().toISOString(), modelRequests: 7,
+      };
       const durable = await writeLedgerDurable([candidate]);
       if (!durable) { report.rejected.push({ slot, reason: "LEDGER_PERSISTENCE_FAILED" }); break; }
       merged.push(candidate);
       for (const proof of selected) usedIds.add(proof.signal.id);
       publishedSlots.add(slot);
       report.newlyPublished.push({ slot, slug: candidate.slug, words: checked.words });
-      console.info("ASTRA_AUTO_PUBLISHED", JSON.stringify({ slot, slug: candidate.slug, words: checked.words, sources: selected.map((e) => e.signal.url), persisted: durable }));
+      if (hasAutomaticProof(candidate)) report.automaticCount += 1;
+      console.info("ASTRA_AUTO_PUBLISHED", JSON.stringify({ runId: report.runId, trigger: report.trigger, slot, slug: candidate.slug, words: checked.words, sources: selected.map((e) => e.signal.url), persisted: durable }));
       wrote = true;
       break;
     }
@@ -456,13 +479,13 @@ async function publish(now: Date): Promise<AutoPublishReport> {
       }
     }
   }
-  if (SLOTS.every((slot) => publishedSlots.has(slot))) report.status = "PASS_THREE_AUTOMATED_ARTICLES";
+  if (report.automaticCount === 3) report.status = "PASS_THREE_AUTOMATED_ARTICLES";
   if (report.status !== "PASS_THREE_AUTOMATED_ARTICLES") console.warn("ASTRA_AUTO_PUBLICATION_DEGRADED", JSON.stringify(report));
   return report;
 }
 
-export function runAutomaticPublishing(now = new Date()): Promise<AutoPublishReport> {
+export function runAutomaticPublishing(now = new Date(), options: { trigger?: AutoPublishReport["trigger"]; catchup?: boolean } = {}): Promise<AutoPublishReport> {
   if (running) return running;
-  running = publish(now).finally(() => { running = null; });
+  running = publish(now, options).finally(() => { running = null; });
   return running;
 }

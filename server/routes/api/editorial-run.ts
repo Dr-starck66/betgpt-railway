@@ -1,6 +1,6 @@
-import { defineEventHandler, getHeader, setResponseStatus } from "h3";
+import { defineEventHandler, getHeader, getQuery, setResponseStatus } from "h3";
 import { editionFromDesk } from "../../../src/lib/editorial/run.server";
-import { runAutomaticPublishing } from "../../../src/lib/editorial/auto-reporter.server";
+import { hasAutomaticProof, runAutomaticPublishing } from "../../../src/lib/editorial/auto-reporter.server";
 import { readLedgerDurable } from "../../../src/lib/editorial/ledger-store";
 import { parisDate } from "../../../src/lib/editorial/time";
 
@@ -13,13 +13,14 @@ export default defineEventHandler(async (event) => {
   }
   try {
     const now = new Date();
-    const autoReport = await runAutomaticPublishing(now);
+    const catchup = getQuery(event).catchup === "1";
+    const autoReport = await runAutomaticPublishing(now, { trigger: catchup ? "operator-catchup" : "cron-api", catchup });
     const { edition, durable, liveDataStatus } = await editionFromDesk(now);
     const stored = await readLedgerDurable();
     const autoToday = stored.filter((article) => article.id === `ed-${edition.parisDate}-${article.slot}` &&
       article.parisDate === edition.parisDate && article.publishedAt &&
       parisDate(new Date(article.publishedAt)) === edition.parisDate &&
-      (article.status === "PUBLISHED" || article.status === "UPDATED"));
+      hasAutomaticProof(article));
     const missingAutomaticSlots = (["morning", "noon", "evening"] as const)
       .filter((slot) => !autoToday.some((article) => article.slot === slot));
     const published = edition.articles.filter(

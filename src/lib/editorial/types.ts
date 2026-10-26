@@ -79,6 +79,13 @@ export type DiscoverCheck =
   | "MOBILE_TEMPLATE";
 
 export type EditorialArticle = {
+  generationProof?: {
+    generator: "astra-auto-reporter-v2";
+    runId: string;
+    trigger: "scheduler" | "cron-api" | "operator-catchup";
+    generatedAt: string;
+    modelRequests: number;
+  };
   id: string;
   slug: string;
   slot: SlotId;

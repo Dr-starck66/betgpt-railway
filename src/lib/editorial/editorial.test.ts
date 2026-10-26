@@ -8,7 +8,7 @@ import { editorialGoldStandardGate } from "./gold-standard.ts";
 import { optimizeTimes, parisDate, slotInstant } from "./time.ts";
 import type { ArticleType, EditorialMatch, EditorialNewsSignal, SlotId } from "./types.ts";
 import { autoPublishableCluster, clusterSignals, fairPublisherSignals, parseGoogleNewsRss, parsePublisherRss, sourceTier } from "./news-scout.server.ts";
-import { boundedEvidenceSlices, extractPublicArticle, publicPublisherRssEvidence, publisherUrl } from "./auto-reporter.server.ts";
+import { hasAutomaticProof, boundedEvidenceSlices, extractPublicArticle, publicPublisherRssEvidence, publisherUrl } from "./auto-reporter.server.ts";
 import { clusterSignals as clusterAutoReporterSignals, isMaterialDevelopment as isAutoReporterMaterial } from "./news-cluster.ts";
 
 function match(over: Partial<EditorialMatch> & Pick<EditorialMatch, "id" | "home" | "away" | "kickoff">): EditorialMatch {
@@ -845,6 +845,14 @@ describe("automatic publisher multilingual event correlation", () => {
 
 
 describe("ASTRA editorial local model context budget", () => {
+  it("never treats a seeded slot ID or an operator catchup as scheduled generation proof", () => {
+    const article = manualEditorialArticles()[0]!;
+    assert.equal(hasAutomaticProof(article), false);
+    const proof = { generator: "astra-auto-reporter-v2" as const, runId: "run-test", generatedAt: "2026-10-26T13:00:00Z", modelRequests: 7 };
+    assert.equal(hasAutomaticProof({ ...article, generationProof: { ...proof, trigger: "operator-catchup" } }), false);
+    assert.equal(hasAutomaticProof({ ...article, generationProof: { ...proof, trigger: "scheduler" }, status: "PUBLISHED" }), true);
+    assert.equal(hasAutomaticProof({ ...article, generationProof: { ...proof, trigger: "scheduler" }, status: "SCHEDULED" }), false);
+  });
   it("bounds publisher evidence for llama.cpp 2048-token requests without losing attribution", () => {
     const evidence = Array.from({ length: 4 }, (_, index) => ({
       signal: {
