@@ -8,7 +8,7 @@ import { editorialGoldStandardGate } from "./gold-standard.ts";
 import { optimizeTimes, parisDate, slotInstant } from "./time.ts";
 import type { ArticleType, EditorialMatch, EditorialNewsSignal, SlotId } from "./types.ts";
 import { autoPublishableCluster, clusterSignals, fairPublisherSignals, parseGoogleNewsRss, parsePublisherRss, sourceTier } from "./news-scout.server.ts";
-import { extractPublicArticle, publicPublisherRssEvidence, publisherUrl } from "./auto-reporter.server.ts";
+import { boundedEvidenceSlices, extractPublicArticle, publicPublisherRssEvidence, publisherUrl } from "./auto-reporter.server.ts";
 import { clusterSignals as clusterAutoReporterSignals, isMaterialDevelopment as isAutoReporterMaterial } from "./news-cluster.ts";
 
 function match(over: Partial<EditorialMatch> & Pick<EditorialMatch, "id" | "home" | "away" | "kickoff">): EditorialMatch {
@@ -840,5 +840,31 @@ describe("automatic publisher multilingual event correlation", () => {
     assert.equal(arsenal.newsworthy, true);
     assert.equal(isAutoReporterMaterial("Arsenal manager departure confirmed"), true);
     assert.equal(clusters.reduce((sum, cluster) => sum + cluster.signals.length, 0), 4);
+  });
+});
+
+
+describe("ASTRA editorial local model context budget", () => {
+  it("bounds publisher evidence for llama.cpp 2048-token requests without losing attribution", () => {
+    const evidence = Array.from({ length: 4 }, (_, index) => ({
+      signal: {
+        id: "publisher-" + index,
+        sourceName: "Official Publisher " + index,
+        title: "Verified football news " + index,
+        publishedAt: "2026-10-26T08:00:00Z",
+        url: "https://publisher" + index + ".example.com/football/verified-report",
+        sourceTier: "TIER1",
+      } as EditorialNewsSignal,
+      text: Array.from({ length: 80 }, (_, n) => "Verified passage " + n + " publisher " + index + ".").join(" "),
+    }));
+    const first = boundedEvidenceSlices(evidence, 0);
+    const last = boundedEvidenceSlices(evidence, 6);
+    assert.ok(first.length < 3400, "The model must not receive the former 20,000-character evidence prompt");
+    assert.ok(last.length < 3400);
+    assert.notEqual(first, last, "Each section must read a different part of the genuine publisher body");
+    for (let n = 0; n < 4; n += 1) {
+      assert.ok(first.includes("id=publisher-" + n), "Publisher attribution must be retained");
+      assert.ok(last.includes("id=publisher-" + n));
+    }
   });
 });
