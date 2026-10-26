@@ -275,7 +275,8 @@ async function draftWithLocalModel(evidence: Evidence[]): Promise<ReturnType<typ
         body: JSON.stringify({
           model,
           messages: [{ role: "system", content: "Journalisme factuel en français. JSON strict ou insufficient_evidence, jamais d'invention." }, { role: "user", content: prompt }],
-          response_format: { type: "json_object", schema: sectionResponseSchema(evidence.map((e) => e.signal.id), first) },
+          // llama.cpp json_object does not reliably enforce nested oneOf schemas. Validate the full section locally instead.
+          response_format: { type: "json_object" },
           temperature: 0.15, repeat_penalty: 1.1, max_tokens: 1100, stream: false,
         }),
       });
@@ -302,22 +303,27 @@ async function draftWithLocalModel(evidence: Evidence[]): Promise<ReturnType<typ
         console.warn("ASTRA_AUTO_REPORTER_INSUFFICIENT_EVIDENCE", i + 1);
         return null;
       }
-      if (typeof parsed.h2 !== "string" || typeof parsed.body !== "string" ||
-          !Array.isArray(parsed.sourceIds) || parsed.sourceIds.length === 0 ||
-          !Array.isArray(parsed.subsections) || parsed.subsections.length === 0) {
+      if (typeof parsed.h2 !== "string" || parsed.h2.trim().length < 12 ||
+          typeof parsed.body !== "string" || parsed.body.trim().length < 800 ||
+          !Array.isArray(parsed.sourceIds) || parsed.sourceIds.length < 1 || parsed.sourceIds.length > 3 ||
+          parsed.sourceIds.some((id) => typeof id !== "string" || !evidence.some((e) => e.signal.id === id)) ||
+          !Array.isArray(parsed.subsections) || parsed.subsections.length !== 1) {
         throw new Error("invalid_section_schema:" + Object.keys(parsed).join(","));
       }
       for (const sub of parsed.subsections) {
         if (!sub || typeof sub !== "object") throw new Error("invalid_subsection");
         const row = sub as Record<string, unknown>;
-        if (typeof row.h3 !== "string" || typeof row.body !== "string" ||
-            !Array.isArray(row.sourceIds) || row.sourceIds.length === 0) throw new Error("invalid_subsection_schema");
+        if (typeof row.h3 !== "string" || row.h3.trim().length < 12 ||
+            typeof row.body !== "string" || row.body.trim().length < 600 ||
+            !Array.isArray(row.sourceIds) || row.sourceIds.length < 1 || row.sourceIds.length > 3 ||
+            row.sourceIds.some((id) => typeof id !== "string" || !evidence.some((e) => e.signal.id === id))) throw new Error("invalid_subsection_schema");
       }
       if (sections.some((part) => part.h2.trim().toLowerCase() === (parsed.h2 as string).trim().toLowerCase())) {
         throw new Error("duplicate_h2");
       }
       if (first) {
-        if (typeof parsed.h1 !== "string" || typeof parsed.lead !== "string") throw new Error("missing_h1_or_lead");
+        if (typeof parsed.h1 !== "string" || parsed.h1.trim().length < 38 ||
+          typeof parsed.lead !== "string" || parsed.lead.trim().length < 120) throw new Error("missing_h1_or_lead");
         h1 = parsed.h1; lead = parsed.lead;
       }
       sections.push({
