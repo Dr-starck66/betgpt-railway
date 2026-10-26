@@ -82,7 +82,7 @@ function articleFailures(article, day) {
 function analyze(ledger, day) {
   const rows = ledger.filter((a) => a && a.publishedAt && Number.isFinite(Date.parse(a.publishedAt)) &&
     parisDay(new Date(a.publishedAt)) === day && ["PUBLISHED", "UPDATED"].includes(a.status));
-  const claimedAuto = rows.filter((a) => /^ed-\\d{4}-\\d{2}-\\d{2}-(morning|noon|evening)$/.test(a.id) && a.parisDate === day);
+  const claimedAuto = rows.filter((a) => /^ed-\d{4}-\d{2}-\d{2}-(morning|noon|evening)$/.test(a.id) && a.parisDate === day);
   const auto = claimedAuto.filter((a) => hasNativeGenerationProof(a, day));
   const bySlot = new Map(SLOTS.map((slot) => [slot, auto.filter((a) => a.slot === slot)]));
   const missingSlots = SLOTS.filter((slot) => (bySlot.get(slot) ?? []).length !== 1);
