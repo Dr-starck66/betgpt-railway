@@ -310,11 +310,11 @@ export const liverpoolBrightonBoeloNoon20261025: EditorialArticle = {
   "discoverReadiness": 93,
   "topStories": "TOP_STORIES_ELIGIBILITY_READY",
   "image": {
-    "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Anfield_Stadium.jpg?width=1600",
-    "alt": "Photographie du stade Anfield à Liverpool prise en avril 2023, illustration du lieu de Liverpool–Brighton et non du match du 25 octobre 2026",
-    "width": 1600,
-    "height": 1200,
-    "credit": "Vojta.zurek, Wikimedia Commons, CC BY-SA 4.0 — photo du 27 avril 2023 : https://commons.wikimedia.org/wiki/File:Anfield_Stadium.jpg ; licence https://creativecommons.org/licenses/by-sa/4.0/"
+    "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Panorama_of_Anfield_with_new_main_stand_%2829676137824%29.jpg",
+    "alt": "Vue panoramique d'Anfield depuis la Centenary Stand, photographie de 2016 illustrant le stade et non le match du 25 octobre 2026",
+    "width": 3148,
+    "height": 2143,
+    "credit": "Ruaraidh Gillies, Wikimedia Commons, CC BY-SA 2.0 — photographie prise le 10 septembre 2016 : https://commons.wikimedia.org/wiki/File:Panorama_of_Anfield_with_new_main_stand_(29676137824).jpg ; licence https://creativecommons.org/licenses/by-sa/2.0/"
   },
   "links": [
     {
