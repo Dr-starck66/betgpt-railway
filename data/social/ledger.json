@@ -617,5 +617,26 @@
     "remotePostUrl": null,
     "error": null,
     "retryCount": 0
+  },
+  {
+    "id": "x:manual-agent-catchup-2026-10-26-evening-clasico-postmatch:v1",
+    "articleId": "manual-agent-catchup-2026-10-26-evening-clasico-postmatch",
+    "articleSlug": "barcelone-real-madrid-1-2-mbappe-double-clasico-analyse-26-octobre-2026",
+    "articleTitle": "Barcelone–Real Madrid 1-2 : le doublé de Mbappé, les tournants du Clásico et la Liga relancée",
+    "articleUrl": "https://betgpt.live/actualites/barcelone-real-madrid-1-2-mbappe-double-clasico-analyse-26-octobre-2026",
+    "trackedUrl": "https://betgpt.live/actualites/barcelone-real-madrid-1-2-mbappe-double-clasico-analyse-26-octobre-2026?utm_source=x&utm_medium=social&utm_campaign=editorial_auto&utm_content=barcelone-real-madrid-1-2-mbappe-double-clasico-analyse-26-octobre-2026",
+    "network": "x",
+    "text": "🔴 Barcelone–Real Madrid 1-2 : le doublé de Mbappé, les tournants du Clásico et la Liga relancée\n\nÀ lire sur BetGPT 👇\n\nhttps://betgpt.live/actualites/barcelone-real-madrid-1-2-mbappe-double-clasico-analyse-26-octobre-2026?utm_source=x&utm_medium=social&utm_campaign=editorial_aut",
+    "hashtags": [],
+    "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Kylian_Mbappe_France_v_Spain_7.24.26-135.jpg?width=1600",
+    "createdAt": "2026-10-26T14:32:21.872Z",
+    "scheduledAt": "2026-10-26T14:29:06.358Z",
+    "attemptedAt": null,
+    "publishedAt": null,
+    "status": "READY_TO_X",
+    "remotePostId": null,
+    "remotePostUrl": null,
+    "error": null,
+    "retryCount": 0
   }
 ]
