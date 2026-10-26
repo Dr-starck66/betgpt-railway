@@ -409,23 +409,38 @@ export function hasAutomaticProof(article: EditorialArticle): boolean {
     (article.status === "PUBLISHED" || article.status === "UPDATED");
 }
 
+/** Count real dated public pages for the daily cap, including scheduled-agent fallback.
+ * This is deliberately independent of hasAutomaticProof: a manual/agent page
+ * consumes capacity but NEVER proves a native Railway/Qwen generation. */
+export function publishedTodayForQuota(articles: EditorialArticle[], day: string): EditorialArticle[] {
+  const bySlug = new Map<string, EditorialArticle>();
+  for (const article of articles) {
+    if (article.parisDate !== day || !article.publishedAt ||
+        !Number.isFinite(Date.parse(article.publishedAt)) ||
+        parisDate(new Date(article.publishedAt)) !== day ||
+        (article.status !== "PUBLISHED" && article.status !== "UPDATED")) continue;
+    if (!bySlug.has(article.slug)) bySlug.set(article.slug, article);
+  }
+  return [...bySlug.values()];
+}
+
 async function publish(now: Date, options: { trigger?: AutoPublishReport["trigger"]; catchup?: boolean }): Promise<AutoPublishReport> {
   const day = parisDate(now);
   const due = SLOTS.filter((slot) => options.catchup || now.getTime() >= slotInstant(day, DEFAULT_TIMES[slot]).getTime());
   const previous = await readLedgerDurable();
   const seeded = manualEditorialArticles();
   const merged = [...seeded, ...previous.filter((a) => !seeded.some((m) => m.id === a.id))];
-  const publishedSlots = new Set(
-    previous.filter((a) => a.id === `ed-${day}-${a.slot}` && a.parisDate === day && a.publishedAt && parisDate(new Date(a.publishedAt)) === day)
-      .map((a) => a.slot)
-  );
+  // Cap all distinct public pages, not only native-generated ed-DATE-slot IDs.
+  // Keep native automaticCount separate: fallback articles never receive model provenance.
+  const publishedToday = publishedTodayForQuota(merged, day);
+  const publishedSlots = new Set(publishedToday.map((a) => a.slot));
   const report: AutoPublishReport = {
     runId: crypto.randomUUID(), trigger: options.trigger ?? "scheduler",
     automaticCount: previous.filter((a) => a.parisDate === day && hasAutomaticProof(a)).length,
     parisDate: day, eligibleSlots: [...due], alreadyPublished: [...publishedSlots],
     newlyPublished: [], rejected: [], status: "DEGRADED_AUTOMATED_ARTICLE_QUOTA",
   };
-  const missing = due.filter((slot) => !publishedSlots.has(slot));
+  const missing = due.filter((slot) => !publishedSlots.has(slot)).slice(0, Math.max(0, 3 - publishedToday.length));
   if (!missing.length) {
     report.status = report.automaticCount === 3 ? "PASS_THREE_AUTOMATED_ARTICLES" : report.status;
     return report;
