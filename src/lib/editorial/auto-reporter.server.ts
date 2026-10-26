@@ -48,6 +48,11 @@ function host(url: string): string {
   return new URL(url).hostname.toLowerCase().replace(/^www\./, "");
 }
 
+function sourceUrlKey(value: string): string {
+  try { const u = new URL(value); return u.hostname.replace(/^www\./, "") + u.pathname.replace(/\/$/, ""); }
+  catch { return value; }
+}
+
 function decodeHtml(text: string): string {
   return text.replace(/&nbsp;|&#160;/gi, " ").replace(/&amp;/gi, "&").replace(/&quot;/gi, '"')
     .replace(/&#39;|&apos;/gi, "'").replace(/&lt;/gi, "<").replace(/&gt;/gi, ">")
@@ -108,7 +113,7 @@ function samePublisherHost(from: string, to: string): boolean {
 
 function logEvidenceFailure(signal: EditorialNewsSignal, reason: string, status?: number): void {
   console.info("ASTRA_EDITORIAL_SOURCE_EVIDENCE", JSON.stringify({
-    publisher: signal.sourceName, host: host(signal.url), reason,
+    publisher: signal.sourceName, host: host(signal.url), url: signal.url, reason,
     ...(status == null ? {} : { httpStatus: status }),
   }));
 }
@@ -409,7 +414,9 @@ async function publish(now: Date, options: { trigger?: AutoPublishReport["trigge
   }
   const signals = await collectFootballNewsSignals(now);
   const allClusters = clusterSignals(signals);
-  const clusters = allClusters.filter((c) => c.newsworthy && c.distinctSources >= 3);
+  const usedUrls = new Set(previous.filter((a) => a.parisDate === day).flatMap((a) => a.sources.map((s) => sourceUrlKey(s.url ?? ""))));
+  const clusters = allClusters.filter((c) => c.newsworthy && c.distinctSources >= 3)
+    .sort((a, b) => a.signals.filter((s) => usedUrls.has(sourceUrlKey(s.url))).length - b.signals.filter((s) => usedUrls.has(sourceUrlKey(s.url))).length);
   console.info("ASTRA_AUTO_PUBLICATION_CLUSTER_DIAGNOSTIC", JSON.stringify({
     date: day,
     signals: signals.length,
@@ -432,16 +439,27 @@ async function publish(now: Date, options: { trigger?: AutoPublishReport["trigge
       evidenceThresholdPassed: 0, modelCompleted: 0, qualityApproved: 0 };
     for (const cluster of clusters.slice(0, 12)) {
       stage.considered += 1;
-      const strong = cluster.signals.filter((s) => !usedIds.has(s.id) &&
+      const strong = cluster.signals.filter((s) => !usedIds.has(s.id) && !usedUrls.has(sourceUrlKey(s.url)) &&
         (s.sourceTier === "TIER1" || s.sourceTier === "OFFICIAL") && publisherUrl(s.url));
-      const unique = new Map<string, EditorialNewsSignal>();
-      for (const signal of strong) if (!unique.has(host(signal.url))) unique.set(host(signal.url), signal);
+      const unique = new Map<string, EditorialNewsSignal[]>();
+      for (const signal of strong) {
+        const key = host(signal.url);
+        const group = unique.get(key) ?? [];
+        if (group.length < 3 && !group.some((s) => s.url === signal.url)) group.push(signal);
+        unique.set(key, group);
+      }
       if (unique.size < 3) continue;
       stage.threePublisherHosts += 1;
-      const best = [...unique.values()].slice(0, 6);
-      const proofs = (await Promise.all(best.map((s) => {
-        if (!evidenceByUrl.has(s.url)) evidenceByUrl.set(s.url, loadEvidence(s));
-        return evidenceByUrl.get(s.url)!;
+      // A publisher's first hit may be a short video. Try its other genuine
+      // article URLs before rejecting the publisher; count it only once.
+      const groups = [...unique.values()].slice(0, 6);
+      const proofs = (await Promise.all(groups.map(async (group) => {
+        for (const s of group) {
+          if (!evidenceByUrl.has(s.url)) evidenceByUrl.set(s.url, loadEvidence(s));
+          const proof = await evidenceByUrl.get(s.url)!;
+          if (proof) return proof;
+        }
+        return null;
       }))).filter((x): x is Evidence => Boolean(x));
       stage.evidenceFetched += proofs.length;
       const official = proofs.some((e) => e.signal.sourceTier === "OFFICIAL");
@@ -464,7 +482,7 @@ async function publish(now: Date, options: { trigger?: AutoPublishReport["trigge
       const durable = await writeLedgerDurable([candidate]);
       if (!durable) { report.rejected.push({ slot, reason: "LEDGER_PERSISTENCE_FAILED" }); break; }
       merged.push(candidate);
-      for (const proof of selected) usedIds.add(proof.signal.id);
+      for (const proof of selected) { usedIds.add(proof.signal.id); usedUrls.add(sourceUrlKey(proof.signal.url)); }
       publishedSlots.add(slot);
       report.newlyPublished.push({ slot, slug: candidate.slug, words: checked.words });
       if (hasAutomaticProof(candidate)) report.automaticCount += 1;

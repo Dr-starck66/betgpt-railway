@@ -30,6 +30,15 @@ function eventFamilies(text: string): string[] {
   return EVENT_FAMILIES.filter(([pattern]) => pattern.test(text)).map(([, label]) => label);
 }
 
+/** Explicit named events prevent both multilingual fragmentation and topic drift. */
+function namedEvent(title: string): string | null {
+  const folded = title.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  if (/ballon.{0,4}or/.test(folded)) return "ballon-dor";
+  if (/clasico|classico/.test(folded) ||
+      ((/barcelon|barca/.test(folded)) && /\breal\b/.test(folded))) return "clasico";
+  return null;
+}
+
 export type NewsCluster = {
   id: string;
   signals: EditorialNewsSignal[];
@@ -71,9 +80,14 @@ export function clusterSignals(signals: EditorialNewsSignal[]): NewsCluster[] {
         clusterMaterial &&
         deltaHours <= 12 &&
         sharedEntityCount >= Math.min(2, Math.max(1, Math.min(signal.entities.length, cluster.entities.length)));
+      const incomingEvent = namedEvent(signal.title);
+      const clusterEvents = new Set(cluster.signals.map((row) => namedEvent(row.title)).filter(Boolean));
+      const eventCompatible = incomingEvent ? clusterEvents.size === 0 || clusterEvents.has(incomingEvent) : clusterEvents.size === 0;
+      const sameNamedEvent = Boolean(incomingEvent && clusterEvents.has(incomingEvent) && deltaHours <= 24 && entityOverlap);
       const sameStory =
         !materialStateChange &&
-        (score >= 0.34 ||
+        eventCompatible &&
+        (sameNamedEvent || score >= 0.34 ||
           (entityOverlap && score >= 0.24) ||
           (entityOverlap && familyOverlap && deltaHours <= 12) ||
           sameMaterialDevelopment);

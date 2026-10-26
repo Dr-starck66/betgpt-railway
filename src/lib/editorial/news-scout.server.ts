@@ -5,6 +5,7 @@ const CACHE_TTL_MS = 5 * 60 * 1000;
 const MAX_AGE_MS = 24 * 60 * 60 * 1000;
 const FETCH_TIMEOUT_MS = 3200;
 const MAX_SIGNALS = 90;
+const MAX_DIRECT_SIGNALS = 240;
 
 // Complement Google News pointers with publisher-owned direct article links.
 // Publisher RSS is used only for attribution and short factual leads; never
@@ -468,8 +469,8 @@ export async function collectFootballNewsSignals(now = new Date(), fetchImpl: ty
   // Fairly preserve independent publisher evidence: the old flattened cap
   // filled 90 slots from the first feeds before late sources could contribute.
   // One item per publisher per round prevents this silent publisher starvation.
-  const publisher = fairPublisherSignals(results.slice(urls.length), MAX_SIGNALS);
-  const signals = [...publisher, ...google].slice(0, MAX_SIGNALS * 2);
+  const publisher = fairPublisherSignals(results.slice(urls.length), MAX_DIRECT_SIGNALS);
+  const signals = [...publisher, ...google].slice(0, MAX_DIRECT_SIGNALS + MAX_SIGNALS);
   console.info("ASTRA_EDITORIAL_EVIDENCE_RSS", JSON.stringify({
     directPublisherSignals: publisher.length,
     googleDiscoverySignals: google.length,

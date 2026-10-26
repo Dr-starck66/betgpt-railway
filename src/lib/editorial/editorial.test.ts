@@ -845,6 +845,20 @@ describe("automatic publisher multilingual event correlation", () => {
 
 
 describe("ASTRA editorial local model context budget", () => {
+  it("joins the same named Clasico across languages without counting unrelated Real Madrid mentions", () => {
+    const signal = (id: string, title: string, entities: string[], date: string) => ({ id, title, entities, publishedAt: date, sourceName: id, sourceTier: "TIER1", url: "https://"+id+".example.com/report", language: "en" } as EditorialNewsSignal);
+    const rows = [
+      signal("guardian", "Mbappé double secures Real Madrid late victory at Barcelona", ["Real Madrid", "Barcelone", "Kylian Mbappé"], "2026-10-25T22:00:00Z"),
+      signal("rmc", "Barça-Real Madrid : le Real remporte le Clasico", ["Real Madrid", "Barcelone"], "2026-10-26T12:30:00Z"),
+      signal("sky", "Mbappe's late strike earns Real Clasico glory at Barca", ["Real Madrid", "Barcelone"], "2026-10-26T09:00:00Z"),
+      signal("unrelated", "Alex Freeman scores as Villarreal win", ["Real Madrid"], "2026-10-26T10:00:00Z"),
+      signal("award", "Ballon d'Or : Real Madrid and Mbappé await the decision", ["Real Madrid", "Kylian Mbappé"], "2026-10-26T10:00:00Z"),
+    ];
+    const clusters = clusterAutoReporterSignals(rows);
+    const clasico = clusters.find((c) => c.signals.some((s) => s.id === "guardian"))!;
+    assert.equal(clasico.distinctSources, 3);
+    assert.deepEqual(clasico.signals.map((s) => s.id).sort(), ["guardian", "rmc", "sky"]);
+  });
   it("never treats a seeded slot ID or an operator catchup as scheduled generation proof", () => {
     const article = manualEditorialArticles()[0]!;
     assert.equal(hasAutomaticProof(article), false);
