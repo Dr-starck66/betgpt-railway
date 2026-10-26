@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-26T14:33:34.514Z",
+      "lastCheckedAt": "2026-10-26T14:44:29.301Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -79,19 +79,24 @@
           "url": "https://betgpt.live/actualites/ballon-dor-2026-kane-yamal-mbappe-ceremonie-londres-26-octobre",
           "date": "2026-10-26T12:00:00.000Z",
           "seenAt": "2026-10-26T13:23:30.657Z"
+        },
+        "90f72f0efc2ac1b772": {
+          "url": "https://betgpt.live/actualites/barcelone-real-madrid-1-2-mbappe-double-clasico-analyse-26-octobre-2026",
+          "date": "2026-10-26T14:29:06.358Z",
+          "seenAt": "2026-10-26T14:44:29.301Z"
         }
       },
       "sourceStatus": "VERIFIED"
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-26T14:33:35.321Z",
+      "lastCheckedAt": "2026-10-26T14:44:30.473Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-26T14:33:37.414Z",
+      "lastCheckedAt": "2026-10-26T14:44:32.560Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -108,7 +113,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-26T14:33:38.509Z",
+      "lastCheckedAt": "2026-10-26T14:44:33.710Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -140,19 +145,19 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-26T14:33:40.202Z",
+      "lastCheckedAt": "2026-10-26T14:44:35.418Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-26T14:33:36.164Z",
+      "lastCheckedAt": "2026-10-26T14:44:31.335Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-26T14:33:39.424Z",
+      "lastCheckedAt": "2026-10-26T14:44:34.618Z",
       "seen": {
         "c022035f3d7190f6f1": {
           "url": "https://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/",
@@ -1035,6 +1040,34 @@
       "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/FIFA_Ballon_D%E2%80%98OR_Awards%2C_FIFA_Museum_%28_Ank_Kumar%2C_Infosys%29_08.jpg?width=1600",
       "text": "Ballon d’Or 2026 : Kane, Yamal, Mbappé, horaires et enjeux de la cérémonie | BetGPT\nhttps://betgpt.live/actualites/ballon-dor-2026-kane-yamal-mbappe-ceremonie-londres-26-octobre?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
       "createdAt": "2026-10-26T13:23:35.558Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:90f72f0efc2ac1b772": {
+      "id": "instagram:90f72f0efc2ac1b772",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/barcelone-real-madrid-1-2-mbappe-double-clasico-analyse-26-octobre-2026",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Kylian_Mbappe_France_v_Spain_7.24.26-135.jpg?width=1600",
+      "text": "Barcelone–Real Madrid 1-2 : Mbappé décisif, les clés du Clásico | BetGPT\n\nLe Real Madrid s&#x27;est imposé 2-1 au Camp Nou le 25 octobre 2026 et a mis fin aux neuf victoires initiales du Barça en Liga. Kylian Mbappé a marqué aux 41e et 87e minutes, Raphinha a égalisé à la 61e. Au-delà du score, l&#x27;analyse croisée des feuilles de match officielles, de Reuters, du Guardian, de Sky Sports et des données Opta éclaire le pressing, les transitions, l&#x27;arrêt décisif de Lunin et les conséquences au classement.\n\nhttps://betgpt.live/actualites/barcelone-real-madrid-1-2-mbappe-double-clasico-analyse-26-octobre-2026?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #BarceloneReal #Madrid #Mbappe",
+      "createdAt": "2026-10-26T14:44:29.689Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:90f72f0efc2ac1b772": {
+      "id": "x:90f72f0efc2ac1b772",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/barcelone-real-madrid-1-2-mbappe-double-clasico-analyse-26-octobre-2026",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Kylian_Mbappe_France_v_Spain_7.24.26-135.jpg?width=1600",
+      "text": "Barcelone–Real Madrid 1-2 : Mbappé décisif, les clés du Clásico | BetGPT\nhttps://betgpt.live/actualites/barcelone-real-madrid-1-2-mbappe-double-clasico-analyse-26-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-26T14:44:29.689Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,
