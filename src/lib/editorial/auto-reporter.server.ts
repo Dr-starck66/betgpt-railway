@@ -302,6 +302,16 @@ async function draftWithLocalModel(evidence: Evidence[]): Promise<ReturnType<typ
         console.warn("ASTRA_AUTO_REPORTER_INSUFFICIENT_EVIDENCE", i + 1);
         return null;
       }
+      // Qwen occasionally emits singular "subsection" for the single requested H3.
+      // Lossless canonicalization only: retain ALL H3 body/source IDs; reject conflicting
+      // forms or invalid shapes. Gold Standard, word count and source gates remain intact.
+      if (parsed.subsections === undefined && parsed.subsection !== undefined) {
+        if (parsed.subsection && typeof parsed.subsection === "object" && !Array.isArray(parsed.subsection)) {
+          parsed.subsections = [parsed.subsection];
+          delete parsed.subsection;
+          console.info("ASTRA_AUTO_REPORTER_SCHEMA_RECOVERED", JSON.stringify({ section: i + 1, normalization: "singular_H3_to_array" }));
+        }
+      }
       if (typeof parsed.h2 !== "string" || typeof parsed.body !== "string" ||
           !Array.isArray(parsed.sourceIds) || parsed.sourceIds.length === 0 ||
           !Array.isArray(parsed.subsections) || parsed.subsections.length === 0) {
