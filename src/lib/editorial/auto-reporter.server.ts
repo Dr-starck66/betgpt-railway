@@ -259,6 +259,7 @@ async function draftWithLocalModel(evidence: Evidence[]): Promise<ReturnType<typ
       "Rédige exclusivement la section " + (i + 1) + "/7 d'une analyse originale du même événement, sous l'angle : " + angles[i] + ".",
       "Environ 220 à 270 mots d'information factuelle dans cette section, avec un H2, un paragraphe et un H3 avec son paragraphe.",
       "Chaque paragraphe cite 1 à 3 sourceIds EXACTS. Rien d'inventé, pas de répétition, pas de citation textuelle de plus de 15 mots.",
+      "La clé subsections est OBLIGATOIRE : tableau JSON de longueur exactement 1. Ne jamais utiliser la clé subsection au singulier.",
       "Si l'angle n'est pas suffisamment documenté, réponds uniquement {\"insufficient_evidence\":true}. Ne remplis jamais avec des généralités.",
       first
         ? 'JSON strict uniquement : {"h1":"titre original","lead":"introduction courte","h2":"...","body":"...","sourceIds":["id"],"subsections":[{"h3":"...","body":"...","sourceIds":["id"]}]}'
@@ -299,6 +300,9 @@ async function draftWithLocalModel(evidence: Evidence[]): Promise<ReturnType<typ
     try {
       const clean = raw.trim().replace(/^\x60{3}(?:json)?\s*/i, "").replace(/\s*\x60{3}$/, "");
       const parsed = JSON.parse(clean) as Record<string, unknown>;
+      if ("subsection" in parsed && !("subsections" in parsed)) {
+        console.warn("ASTRA_AUTO_REPORTER_MODEL_SCHEMA_ALIAS_REJECTED", JSON.stringify({ section: i + 1, key: "subsection" }));
+      }
       if (parsed.insufficient_evidence === true) {
         console.warn("ASTRA_AUTO_REPORTER_INSUFFICIENT_EVIDENCE", i + 1);
         return null;
