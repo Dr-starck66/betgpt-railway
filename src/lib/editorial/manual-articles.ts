@@ -1,3 +1,4 @@
+import { ballonDorNoon20261026 } from "@/lib/editorial/manual-ballon-dor-noon-2026-10-26";
 import { manutdBournemouthMorning20261026 } from "@/lib/editorial/manual-manutd-bournemouth-morning-2026-10-26";
 import { liverpoolBrightonBoeloNoon20261025 } from "@/lib/editorial/manual-liverpool-brighton-boelo-noon-2026-10-25";
 import { clasicoMorning20261025 } from "@/lib/editorial/manual-clasico-morning-2026-10-25";
@@ -10,6 +11,7 @@ import { liverpoolManchesterCityPostmatch } from "@/lib/editorial/manual-postmat
 import type { EditorialArticle } from "@/lib/editorial/types";
 
 const ARTICLES: EditorialArticle[] = [
+  ballonDorNoon20261026,
   manutdBournemouthMorning20261026,
   liverpoolBrightonBoeloNoon20261025,
   clasicoMorning20261025,
