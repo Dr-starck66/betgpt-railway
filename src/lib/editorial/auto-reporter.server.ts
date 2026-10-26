@@ -264,7 +264,7 @@ async function draftWithLocalModel(evidence: Evidence[]): Promise<ReturnType<typ
         ? 'JSON strict uniquement : {"h1":"titre original","lead":"introduction courte","h2":"...","body":"...","sourceIds":["id"],"subsections":[{"h3":"...","body":"...","sourceIds":["id"]}]}'
         : 'JSON strict uniquement : {"h2":"...","body":"...","sourceIds":["id"],"subsections":[{"h3":"...","body":"...","sourceIds":["id"]}]}',
       "Ne répète pas les sections précédentes : " + sections.map((s) => s.h2).join(" ; "),
-      "SOURCES ATTRIBUABLES :\n" + boundedEvidenceSlices(evidence, i, 1800),
+      "SOURCES ATTRIBUABLES :\n" + boundedEvidenceSlices(evidence, i, 500),
     ].join("\n");
     let raw = "";
     try {
