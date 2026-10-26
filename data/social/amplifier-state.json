@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-26T12:14:43.251Z",
+      "lastCheckedAt": "2026-10-26T13:23:30.657Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -74,19 +74,24 @@
           "url": "https://betgpt.live/actualites/manchester-united-bournemouth-0-3-carrick-fernandes-analyse-26-octobre-2026",
           "date": "2026-10-26T07:00:00.000Z",
           "seenAt": "2026-10-26T10:36:51.720Z"
+        },
+        "466d881f783fce76fb": {
+          "url": "https://betgpt.live/actualites/ballon-dor-2026-kane-yamal-mbappe-ceremonie-londres-26-octobre",
+          "date": "2026-10-26T12:00:00.000Z",
+          "seenAt": "2026-10-26T13:23:30.657Z"
         }
       },
       "sourceStatus": "VERIFIED"
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-26T12:14:43.973Z",
+      "lastCheckedAt": "2026-10-26T13:23:35.915Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-26T12:14:45.859Z",
+      "lastCheckedAt": "2026-10-26T13:23:36.906Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -103,7 +108,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-26T12:14:46.872Z",
+      "lastCheckedAt": "2026-10-26T13:23:37.287Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -135,19 +140,19 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-26T12:14:48.318Z",
+      "lastCheckedAt": "2026-10-26T13:23:37.941Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-26T12:14:44.715Z",
+      "lastCheckedAt": "2026-10-26T13:23:36.270Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-26T12:14:47.671Z",
+      "lastCheckedAt": "2026-10-26T13:23:37.645Z",
       "seen": {
         "c022035f3d7190f6f1": {
           "url": "https://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/",
@@ -1002,6 +1007,34 @@
       "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Old_Trafford,_view_from_Stretford_End_4.jpg?width=1600",
       "text": "Manchester United–Bournemouth 0-3 : Carrick, Fernandes et les clés du naufrage | B\nhttps://betgpt.live/actualites/manchester-united-bournemouth-0-3-carrick-fernandes-analyse-26-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
       "createdAt": "2026-10-26T10:36:56.211Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:466d881f783fce76fb": {
+      "id": "instagram:466d881f783fce76fb",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/ballon-dor-2026-kane-yamal-mbappe-ceremonie-londres-26-octobre",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/FIFA_Ballon_D%E2%80%98OR_Awards%2C_FIFA_Museum_%28_Ank_Kumar%2C_Infosys%29_08.jpg?width=1600",
+      "text": "Ballon d’Or 2026 : Kane, Yamal, Mbappé, horaires et enjeux de la cérémonie | BetGPT\n\nCe lundi 26 octobre 2026, le Ballon d’Or fête ses 70 ans au London Palladium. Harry Kane est cité comme favori par la presse britannique, tandis que Lamine Yamal et Kylian Mbappé avancent des arguments sportifs différents. À 13 heures, aucun gagnant n’est officiellement annoncé : voici le guide sourcé de la cérémonie de 21 heures à Paris, des trente nommés masculins et féminins et des critères à ne pas confondre avec les pronostics.\n\nhttps://betgpt.live/actualites/ballon-dor-2026-kane-yamal-mbappe-ceremonie-londres-26-octobre?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #Ballon #Yamal #Mbappe",
+      "createdAt": "2026-10-26T13:23:35.558Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:466d881f783fce76fb": {
+      "id": "x:466d881f783fce76fb",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/ballon-dor-2026-kane-yamal-mbappe-ceremonie-londres-26-octobre",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/FIFA_Ballon_D%E2%80%98OR_Awards%2C_FIFA_Museum_%28_Ank_Kumar%2C_Infosys%29_08.jpg?width=1600",
+      "text": "Ballon d’Or 2026 : Kane, Yamal, Mbappé, horaires et enjeux de la cérémonie | BetGPT\nhttps://betgpt.live/actualites/ballon-dor-2026-kane-yamal-mbappe-ceremonie-londres-26-octobre?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-26T13:23:35.558Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,
