@@ -310,22 +310,25 @@ async function draftWithLocalModel(evidence: Evidence[]): Promise<ReturnType<typ
         console.warn("ASTRA_AUTO_REPORTER_INSUFFICIENT_EVIDENCE", i + 1);
         return null;
       }
-      if (typeof parsed.h2 !== "string" || typeof parsed.body !== "string" ||
-          !Array.isArray(parsed.sourceIds) || parsed.sourceIds.length === 0 ||
-          !Array.isArray(parsed.subsections) || parsed.subsections.length === 0) {
+      if (typeof parsed.h2 !== "string" || parsed.h2.length < 12 ||
+          typeof parsed.body !== "string" || parsed.body.length < 800 ||
+          !Array.isArray(parsed.sourceIds) || parsed.sourceIds.length < 1 ||
+          !Array.isArray(parsed.subsections) || parsed.subsections.length !== 1) {
         throw new Error("invalid_section_schema:" + Object.keys(parsed).join(","));
       }
       for (const sub of parsed.subsections) {
         if (!sub || typeof sub !== "object") throw new Error("invalid_subsection");
         const row = sub as Record<string, unknown>;
-        if (typeof row.h3 !== "string" || typeof row.body !== "string" ||
-            !Array.isArray(row.sourceIds) || row.sourceIds.length === 0) throw new Error("invalid_subsection_schema");
+        if (typeof row.h3 !== "string" || row.h3.length < 12 ||
+            typeof row.body !== "string" || row.body.length < 600 ||
+            !Array.isArray(row.sourceIds) || row.sourceIds.length < 1) throw new Error("invalid_subsection_schema");
       }
       if (sections.some((part) => part.h2.trim().toLowerCase() === (parsed.h2 as string).trim().toLowerCase())) {
         throw new Error("duplicate_h2");
       }
       if (first) {
-        if (typeof parsed.h1 !== "string" || typeof parsed.lead !== "string") throw new Error("missing_h1_or_lead");
+        if (typeof parsed.h1 !== "string" || parsed.h1.length < 38 ||
+            typeof parsed.lead !== "string" || parsed.lead.length < 120) throw new Error("missing_or_short_h1_or_lead");
         h1 = parsed.h1; lead = parsed.lead;
       }
       sections.push({
@@ -338,6 +341,10 @@ async function draftWithLocalModel(evidence: Evidence[]): Promise<ReturnType<typ
       return null;
     }
   }
+  // Only seven fully validated model responses can produce a native proof.
+  console.info("ASTRA_AUTO_REPORTER_MODEL_SEVEN_SECTIONS_PASS", JSON.stringify({
+    sections: sections.length, h2: sections.map((row) => row.h2),
+  }));
   // The original image, source-integrity, authority and Discover gates still run in assemble().
   return parseModelJson(JSON.stringify({ h1, lead, paragraphs: sections }));
 }
