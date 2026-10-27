@@ -150,8 +150,8 @@ export const liverpoolChelseaNoonAgent20261027: EditorialArticle = {
     }
   ],
   "createdAt": "2026-10-27T12:05:00.000Z",
-  "publishedAt": "2026-10-27T16:07:16.000Z",
-  "modifiedAt": "2026-10-27T16:07:16.000Z",
+  "publishedAt": "2026-10-27T16:14:18.648Z",
+  "modifiedAt": "2026-10-27T16:14:18.648Z",
   "parisDate": "2026-10-27",
   "scheduledTime": "13:00",
   "category": "Actualité football",
