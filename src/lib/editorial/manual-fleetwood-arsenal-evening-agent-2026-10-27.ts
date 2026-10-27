@@ -276,7 +276,7 @@ export const fleetwoodArsenalEveningAgent20261027: EditorialArticle = {
   "sourceChanges": [
     {
       "at": "2026-10-27T18:03:39.000Z",
-      "note": "Avant-match original produit par agent lors du créneau planifié du 27 octobre 2026 à 19 h 03 heure de Paris. Candidat uniquement : status SCHEDULED, publishedAt null. Génération par agent autonome, distincte du générateur natif Qwen Railway ; aucun generationProof natif revendiqué. Publication conditionnée à la vérification d’absence de doublon, Candidate Gate immuable GREEN et promotion ASTRA sécurisée."
+      "note": "Avant-match original produit par agent lors du run réel de l’automatisation BetGPT publication éditoriale : runId cc07a9ef-0784-8331-9a53-e49a51d8aca1, scheduled_for 2026-10-27T18:00:00Z, started_at 2026-10-27T18:03:37.989548Z (19 h 03 Europe/Paris). Candidat uniquement : status SCHEDULED, publishedAt null. Génération par agent autonome, distincte du générateur natif Qwen Railway ; aucun generationProof natif revendiqué. Publication conditionnée à la vérification d’absence de doublon, Candidate Gate immuable GREEN et promotion ASTRA sécurisée."
     }
   ],
   "factHash": "fleetwood-arsenal-carabao-20261027-agent-evening-v1",
