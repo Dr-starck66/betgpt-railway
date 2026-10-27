@@ -277,7 +277,7 @@ export const liverpoolChelseaNoonAgent20261027: EditorialArticle = {
   "sourceChanges": [
     {
       "at": "2026-10-27T12:05:00.000Z",
-      "note": "Avant-première originale préparée par la tâche éditoriale planifiée du 27 octobre 2026, créneau midi, distincte de la génération native Qwen Railway. Statut SCHEDULED et publishedAt null tant que la promotion ASTRA et la publication HTTP 200 ne sont pas prouvées. Ne revendique aucune generationProof native."
+      "note": "Avant-première originale préparée dans l'exécution réelle de l'automatisation BetGPT publication éditoriale, runId 9e7710a7-3e08-832b-b929-3d0ba204fc06, scheduled_for 2026-10-27T12:00:00Z, started_at 2026-10-27T12:01:59.907337Z. Génération par agent planifié, distincte du générateur natif Qwen Railway. Statut SCHEDULED et publishedAt null tant que la promotion ASTRA et la publication HTTP 200 ne sont pas prouvées. Ne revendique aucune generationProof native."
     }
   ],
   "factHash": "liverpool-chelsea-carabao-cup-20261027-agent-noon-v1",
