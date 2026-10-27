@@ -247,11 +247,11 @@ export const liverpoolChelseaNoonAgent20261027: EditorialArticle = {
   "discoverReadiness": 90,
   "topStories": "TOP_STORIES_ELIGIBILITY_READY",
   "image": {
-    "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Anfield_stadium_in_May_2024.jpg?width=1600",
-    "alt": "Vue panoramique d'Anfield photographiée en mai 2024, illustration d'archive du stade du match Liverpool–Chelsea du 28 octobre 2026",
+    "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Anfield%2C_Liverpool_Football_Club_-_geograph.org.uk_-_7681752.jpg?width=1600",
+    "alt": "Vue du stade Anfield photographiée en novembre 2022, illustration d'archive du stade du match Liverpool–Chelsea du 28 octobre 2026",
     "width": 1600,
-    "height": 1200,
-    "credit": "FYI2023, Anfield stadium in May 2024, Wikimedia Commons, CC0 1.0 (domaine public volontaire). Image d'archive de mai 2024, non prise lors de Liverpool–Chelsea 2026. Source : https://commons.wikimedia.org/wiki/File:Anfield_stadium_in_May_2024.jpg ; licence : https://creativecommons.org/publicdomain/zero/1.0/"
+    "height": 900,
+    "credit": "Eirian Evans, Anfield, Liverpool Football Club (9 novembre 2022), Geograph / Wikimedia Commons, CC BY-SA 2.0. Photo d'archive, non prise lors de Liverpool–Chelsea 2026. Source : https://commons.wikimedia.org/wiki/File:Anfield,_Liverpool_Football_Club_-_geograph.org.uk_-_7681752.jpg ; licence : https://creativecommons.org/licenses/by-sa/2.0/"
   },
   "links": [
     {
