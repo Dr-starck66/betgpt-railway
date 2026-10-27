@@ -193,6 +193,7 @@ export const psgLyonMorningAgent20261027: EditorialArticle = {
       "url": "https://www.foot-sur7.fr/789889-psg-lyon-notes-ligue-1"
     }
   ],
+  "newsworthiness": 95,
   "discoverOpportunity": {
     "freshness": 20,
     "frenchInterest": 18,
