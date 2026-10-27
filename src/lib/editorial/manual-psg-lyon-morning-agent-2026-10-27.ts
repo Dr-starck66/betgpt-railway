@@ -150,8 +150,8 @@ export const psgLyonMorningAgent20261027: EditorialArticle = {
     }
   ],
   "createdAt": "2026-10-27T07:00:00.000Z",
-  "publishedAt": "2026-10-27T07:00:00.000Z",
-  "modifiedAt": "2026-10-27T07:00:00.000Z",
+  "publishedAt": "2026-10-27T07:59:00.000Z",
+  "modifiedAt": "2026-10-27T07:59:00.000Z",
   "parisDate": "2026-10-27",
   "scheduledTime": "08:00",
   "category": "Actualité football",
@@ -219,7 +219,7 @@ export const psgLyonMorningAgent20261027: EditorialArticle = {
   "topStories": "TOP_STORIES_ELIGIBILITY_READY",
   "image": {
     "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Match_Football_Paris_SG_x_AS_Saint_%C3%89tienne_Stade_Parc_Princes_-_Paris_XVI_(FR75)_-_2025-01-12_-_33.jpg?width=1600",
-    "alt": "Senny Mayulu en action avec le PSG face à Saint-Étienne en janvier 2025, photo d’illustration historique et non cliché du match contre Lyon",
+    "alt": "Photographie du match PSG–Saint-Étienne au Parc des Princes en janvier 2025, illustration historique et non cliché du match contre Lyon",
     "width": 1600,
     "height": 1200,
     "credit": "Chabe01, Wikimedia Commons, CC BY-SA 4.0. Photo prise le 12 janvier 2025 et non lors de PSG-Lyon du 26 octobre 2026. Source : https://commons.wikimedia.org/wiki/File:Match_Football_Paris_SG_x_AS_Saint_%C3%89tienne_Stade_Parc_Princes_-_Paris_XVI_(FR75)_-_2025-01-12_-_33.jpg ; licence : https://creativecommons.org/licenses/by-sa/4.0/"
@@ -247,7 +247,7 @@ export const psgLyonMorningAgent20261027: EditorialArticle = {
   "corrections": [],
   "sourceChanges": [
     {
-      "at": "2026-10-27T07:00:00.000Z",
+      "at": "2026-10-27T07:59:00.000Z",
       "note": "Article de secours original préparé dans le run planifié ChatGPT 3a1f1b56-704c-832e-b63a-3015e623c02c, distinct du générateur natif Qwen Railway. Aucune generationProof native revendiquée. Publication effective et date réelle à confirmer en production ; le fichier source ne constitue pas un reçu de déploiement."
     }
   ],
