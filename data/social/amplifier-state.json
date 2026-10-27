@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-27T16:13:58.424Z",
+      "lastCheckedAt": "2026-10-27T16:22:06.076Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -89,19 +89,24 @@
           "url": "https://betgpt.live/actualites/psg-lyon-2-0-mayulu-godts-analyse-27-octobre-2026",
           "date": "2026-10-27T07:59:00.000Z",
           "seenAt": "2026-10-27T16:09:16.652Z"
+        },
+        "c85bb1b5269a863c0b": {
+          "url": "https://betgpt.live/actualites/liverpool-chelsea-carabao-cup-28-octobre-2026-analyse-avant-match",
+          "date": "2026-10-27T16:07:16.000Z",
+          "seenAt": "2026-10-27T16:22:06.076Z"
         }
       },
       "sourceStatus": "VERIFIED"
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-27T16:13:58.802Z",
+      "lastCheckedAt": "2026-10-27T16:22:07.313Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-27T16:13:59.731Z",
+      "lastCheckedAt": "2026-10-27T16:22:09.536Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -118,7 +123,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-27T16:14:00.076Z",
+      "lastCheckedAt": "2026-10-27T16:22:10.556Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -150,19 +155,19 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-27T16:14:00.689Z",
+      "lastCheckedAt": "2026-10-27T16:22:12.297Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-27T16:13:59.203Z",
+      "lastCheckedAt": "2026-10-27T16:22:08.253Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-27T16:14:00.379Z",
+      "lastCheckedAt": "2026-10-27T16:22:11.501Z",
       "seen": {
         "c022035f3d7190f6f1": {
           "url": "https://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/",
@@ -1101,6 +1106,34 @@
       "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Match_Football_Paris_SG_x_AS_Saint_%C3%89tienne_Stade_Parc_Princes_-_Paris_XVI_(FR75)_-_2025-01-12_-_33.jpg?width=1600",
       "text": "PSG-Lyon 2-0 : Mayulu, Godts et les clés du succès | BetGPT\nhttps://betgpt.live/actualites/psg-lyon-2-0-mayulu-godts-analyse-27-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
       "createdAt": "2026-10-27T16:09:20.466Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:c85bb1b5269a863c0b": {
+      "id": "instagram:c85bb1b5269a863c0b",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/liverpool-chelsea-carabao-cup-28-octobre-2026-analyse-avant-match",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Anfield%2C_Liverpool_Football_Club_-_geograph.org.uk_-_7681752.jpg?width=1600",
+      "text": "Liverpool–Chelsea : horaire, enjeux et clés du choc en Carabao Cup | BetGPT\n\nLiverpool reçoit Chelsea mercredi 28 octobre 2026 à Anfield en huitième de finale de la Carabao Cup. Horaire confirmé, historique, statistiques officielles de l&#x27;EFL et enjeux tactiques : une avant-première documentée sans composition ni pronostic inventé.\n\nhttps://betgpt.live/actualites/liverpool-chelsea-carabao-cup-28-octobre-2026-analyse-avant-match?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #LiverpoolChelsea #horaire #enjeux",
+      "createdAt": "2026-10-27T16:22:06.439Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:c85bb1b5269a863c0b": {
+      "id": "x:c85bb1b5269a863c0b",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/liverpool-chelsea-carabao-cup-28-octobre-2026-analyse-avant-match",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Anfield%2C_Liverpool_Football_Club_-_geograph.org.uk_-_7681752.jpg?width=1600",
+      "text": "Liverpool–Chelsea : horaire, enjeux et clés du choc en Carabao Cup | BetGPT\nhttps://betgpt.live/actualites/liverpool-chelsea-carabao-cup-28-octobre-2026-analyse-avant-match?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-27T16:22:06.439Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,
