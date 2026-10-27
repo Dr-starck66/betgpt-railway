@@ -659,5 +659,26 @@
     "remotePostUrl": null,
     "error": null,
     "retryCount": 0
+  },
+  {
+    "id": "x:manual-agent-scheduled-2026-10-27-evening-fleetwood-arsenal:v1",
+    "articleId": "manual-agent-scheduled-2026-10-27-evening-fleetwood-arsenal",
+    "articleSlug": "fleetwood-arsenal-carabao-cup-27-octobre-2026-avant-match",
+    "articleTitle": "Fleetwood–Arsenal : pourquoi le choc de Carabao Cup du 27 octobre est historique",
+    "articleUrl": "https://betgpt.live/actualites/fleetwood-arsenal-carabao-cup-27-octobre-2026-avant-match",
+    "trackedUrl": "https://betgpt.live/actualites/fleetwood-arsenal-carabao-cup-27-octobre-2026-avant-match?utm_source=x&utm_medium=social&utm_campaign=editorial_auto&utm_content=fleetwood-arsenal-carabao-cup-27-octobre-2026-avant-match",
+    "network": "x",
+    "text": "👀 Fleetwood–Arsenal : pourquoi le choc de Carabao Cup du 27 octobre est historique\n\nÀ lire sur BetGPT 👇\n\nhttps://betgpt.live/actualites/fleetwood-arsenal-carabao-cup-27-octobre-2026-avant-match?utm_source=x&utm_medium=social&utm_campaign=editorial_auto&utm_content=fleetwood-ars",
+    "hashtags": [],
+    "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/The_BES_Parkside_Stand_in_Highbury_Stadium_-_geograph.org.uk_-_5590434.jpg?width=1600",
+    "createdAt": "2026-10-27T18:24:08.816Z",
+    "scheduledAt": "2026-10-27T18:20:52.636Z",
+    "attemptedAt": null,
+    "publishedAt": null,
+    "status": "READY_TO_X",
+    "remotePostId": null,
+    "remotePostUrl": null,
+    "error": null,
+    "retryCount": 0
   }
 ]
