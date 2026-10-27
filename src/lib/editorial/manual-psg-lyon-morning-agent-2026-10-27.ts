@@ -219,11 +219,11 @@ export const psgLyonMorningAgent20261027: EditorialArticle = {
   "discoverReadiness": 95,
   "topStories": "TOP_STORIES_ELIGIBILITY_READY",
   "image": {
-    "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Match_Football_Paris_SG_x_AS_Saint_%C3%89tienne_Stade_Parc_Princes_-_Paris_XVI_(FR75)_-_2025-01-12_-_33.jpg?width=1600",
-    "alt": "Photographie du match PSG–Saint-Étienne au Parc des Princes en janvier 2025, illustration historique et non cliché du match contre Lyon",
+    "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Parc_des_Princes_Paris_Saint_Germain_z_32.jpg?width=1600",
+    "alt": "Vue panoramique du Parc des Princes lors d’un match du Paris Saint-Germain en décembre 2021, illustration d’archive et non photo de PSG–Lyon 2026",
     "width": 1600,
-    "height": 1200,
-    "credit": "Chabe01, Wikimedia Commons, CC BY-SA 4.0. Photo prise le 12 janvier 2025 et non lors de PSG-Lyon du 26 octobre 2026. Source : https://commons.wikimedia.org/wiki/File:Match_Football_Paris_SG_x_AS_Saint_%C3%89tienne_Stade_Parc_Princes_-_Paris_XVI_(FR75)_-_2025-01-12_-_33.jpg ; licence : https://creativecommons.org/licenses/by-sa/4.0/"
+    "height": 900,
+    "credit": "Zakarie Faibis, Parc des Princes Paris Saint Germain z 32 (1er décembre 2021), Wikimedia Commons, CC BY-SA 4.0. Photo d’archive, non prise lors de PSG–Lyon 2026. Source : https://commons.wikimedia.org/wiki/File:Parc_des_Princes_Paris_Saint_Germain_z_32.jpg ; licence : https://creativecommons.org/licenses/by-sa/4.0/"
   },
   "links": [
     {
