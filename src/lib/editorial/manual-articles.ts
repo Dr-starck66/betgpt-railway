@@ -1,3 +1,4 @@
+import { fleetwoodArsenalEveningAgent20261027 } from "@/lib/editorial/manual-fleetwood-arsenal-evening-agent-2026-10-27";
 import { liverpoolChelseaNoonAgent20261027 } from "@/lib/editorial/manual-liverpool-chelsea-noon-agent-2026-10-27";
 import { psgLyonMorningAgent20261027 } from "@/lib/editorial/manual-psg-lyon-morning-agent-2026-10-27";
 import { clasicoPostmatchAgentCatchup20261026 } from "@/lib/editorial/manual-clasico-postmatch-agent-catchup-2026-10-26";
@@ -14,6 +15,7 @@ import { liverpoolManchesterCityPostmatch } from "@/lib/editorial/manual-postmat
 import type { EditorialArticle } from "@/lib/editorial/types";
 
 const ARTICLES: EditorialArticle[] = [
+  fleetwoodArsenalEveningAgent20261027,
   liverpoolChelseaNoonAgent20261027,
   psgLyonMorningAgent20261027,
   clasicoPostmatchAgentCatchup20261026,
