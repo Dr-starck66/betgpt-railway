@@ -162,7 +162,7 @@ export const fleetwoodArsenalEveningAgent20261027: EditorialArticle = {
   "scheduledTime": "19:00",
   "category": "Actualité football",
   "section": "football-international",
-  "league": "EFL Cup",
+  "league": null,
   "teams": [
     "Fleetwood Town",
     "Arsenal"
