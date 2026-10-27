@@ -150,8 +150,8 @@ export const psgLyonMorningAgent20261027: EditorialArticle = {
     }
   ],
   "createdAt": "2026-10-27T07:00:00.000Z",
-  "publishedAt": "2026-10-27T07:59:00.000Z",
-  "modifiedAt": "2026-10-27T07:59:00.000Z",
+  "publishedAt": "2026-10-27T09:52:16.671Z",
+  "modifiedAt": "2026-10-27T09:52:16.671Z",
   "parisDate": "2026-10-27",
   "scheduledTime": "08:00",
   "category": "Actualité football",
