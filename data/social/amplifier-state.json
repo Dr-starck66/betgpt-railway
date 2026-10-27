@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-27T16:06:21.983Z",
+      "lastCheckedAt": "2026-10-27T16:09:16.652Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -84,19 +84,24 @@
           "url": "https://betgpt.live/actualites/barcelone-real-madrid-1-2-mbappe-double-clasico-analyse-26-octobre-2026",
           "date": "2026-10-26T14:29:06.358Z",
           "seenAt": "2026-10-26T14:44:29.301Z"
+        },
+        "55c257679ce7b4f751": {
+          "url": "https://betgpt.live/actualites/psg-lyon-2-0-mayulu-godts-analyse-27-octobre-2026",
+          "date": "2026-10-27T07:59:00.000Z",
+          "seenAt": "2026-10-27T16:09:16.652Z"
         }
       },
       "sourceStatus": "VERIFIED"
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-27T16:06:29.333Z",
+      "lastCheckedAt": "2026-10-27T16:09:21.071Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-27T16:06:31.453Z",
+      "lastCheckedAt": "2026-10-27T16:09:22.744Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -113,7 +118,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-27T16:06:32.395Z",
+      "lastCheckedAt": "2026-10-27T16:09:23.388Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -145,19 +150,19 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-27T16:06:34.989Z",
+      "lastCheckedAt": "2026-10-27T16:09:24.609Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-27T16:06:30.274Z",
+      "lastCheckedAt": "2026-10-27T16:09:21.809Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-27T16:06:33.596Z",
+      "lastCheckedAt": "2026-10-27T16:09:24.082Z",
       "seen": {
         "c022035f3d7190f6f1": {
           "url": "https://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/",
@@ -1068,6 +1073,34 @@
       "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Kylian_Mbappe_France_v_Spain_7.24.26-135.jpg?width=1600",
       "text": "Barcelone–Real Madrid 1-2 : Mbappé décisif, les clés du Clásico | BetGPT\nhttps://betgpt.live/actualites/barcelone-real-madrid-1-2-mbappe-double-clasico-analyse-26-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
       "createdAt": "2026-10-26T14:44:29.689Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:55c257679ce7b4f751": {
+      "id": "instagram:55c257679ce7b4f751",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/psg-lyon-2-0-mayulu-godts-analyse-27-octobre-2026",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Match_Football_Paris_SG_x_AS_Saint_%C3%89tienne_Stade_Parc_Princes_-_Paris_XVI_(FR75)_-_2025-01-12_-_33.jpg?width=1600",
+      "text": "PSG-Lyon 2-0 : Mayulu, Godts et les clés du succès | BetGPT\n\nLe PSG a battu Lyon 2-0 lundi 26 octobre 2026 au Parc des Princes. Les entrants Senny Mayulu (72e) et Mika Godts (84e) ont fait la différence après une longue résistance lyonnaise et plusieurs arrêts des gardiens. Analyse de la chronologie, des changements de Luis Enrique, des occasions de l’OL et du classement, à partir du PSG, de Reuters et de médias indépendants.\n\nhttps://betgpt.live/actualites/psg-lyon-2-0-mayulu-godts-analyse-27-octobre-2026?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #PSGLyon #Mayulu #succes",
+      "createdAt": "2026-10-27T16:09:20.466Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:55c257679ce7b4f751": {
+      "id": "x:55c257679ce7b4f751",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/psg-lyon-2-0-mayulu-godts-analyse-27-octobre-2026",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Match_Football_Paris_SG_x_AS_Saint_%C3%89tienne_Stade_Parc_Princes_-_Paris_XVI_(FR75)_-_2025-01-12_-_33.jpg?width=1600",
+      "text": "PSG-Lyon 2-0 : Mayulu, Godts et les clés du succès | BetGPT\nhttps://betgpt.live/actualites/psg-lyon-2-0-mayulu-godts-analyse-27-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-27T16:09:20.466Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,
