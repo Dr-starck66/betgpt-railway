@@ -180,16 +180,16 @@ export const psgLyonMorningAgent20261027: EditorialArticle = {
     },
     {
       "id": "vingtminutes",
-      "label": "20 Minutes — PSG-OL, direct du 26 octobre",
+      "label": "20 Minutes — PSG Lyon 2-0, Mayulu et Godts, direct du 26 octobre",
       "status": "CORROBORATED",
-      "note": "Déroulement et résultat du match",
+      "note": "PSG Lyon 2-0, Mayulu et Godts : déroulement et résultat du match",
       "url": "https://www.20minutes.fr/sport/football/ligue-1/4256919-20261026-direct-psg-ol-lyon-fait-mieux-tenir-choc-greif-safonov-tirent-bourre"
     },
     {
       "id": "footsur7",
-      "label": "Foot Sur 7 — notes PSG-Lyon du 26 octobre",
+      "label": "Foot Sur 7 — PSG Lyon 2-0, Mayulu et Godts, notes du 26 octobre",
       "status": "CORROBORATED",
-      "note": "Défense lyonnaise, arrêts des gardiens et contribution des remplaçants",
+      "note": "PSG Lyon : Mayulu et Godts décisifs, arrêts des gardiens et contribution des remplaçants",
       "url": "https://www.foot-sur7.fr/789889-psg-lyon-notes-ligue-1"
     }
   ],
