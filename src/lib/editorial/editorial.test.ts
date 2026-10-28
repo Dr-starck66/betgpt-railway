@@ -22,6 +22,19 @@ describe("native Qwen H2 uniqueness", () => {
     assert.equal(second.oneOf[1]!.properties.subsections?.minItems, 1);
     assert.deepEqual(second.oneOf[1]!.properties.sourceIds?.items?.enum, ["source-1", "source-2"]);
   });
+  it("constrains native H3 headings while preserving the 600-character minimum and evidence source IDs", () => {
+    const schema = sectionResponseSchema(["source-1", "source-2"], false, "Le contexte sportif vérifiable", "Les repères sportifs effectivement documentés") as {
+      oneOf: Array<{ properties: { subsections: { items: { properties: {
+        h3: { const: string; minLength: number }; body: { minLength: number };
+        sourceIds: { items: { enum: string[] } };
+      } } } } }>;
+    };
+    const sub = schema.oneOf[1]!.properties.subsections.items.properties;
+    assert.equal(sub.h3.const, "Les repères sportifs effectivement documentés");
+    assert.equal(sub.h3.minLength, 12);
+    assert.equal(sub.body.minLength, 600);
+    assert.deepEqual(sub.sourceIds.items.enum, ["source-1", "source-2"]);
+  });
 });
 
 function match(over: Partial<EditorialMatch> & Pick<EditorialMatch, "id" | "home" | "away" | "kickoff">): EditorialMatch {
