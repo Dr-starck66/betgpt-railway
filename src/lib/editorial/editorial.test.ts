@@ -968,7 +968,7 @@ describe("verified image attachment in native article pipeline", () => {
     const original = sections.map((s) => ({ ...s }));
     const result = attachVerifiedInlineImages(original, "Bayern Munich - Real Madrid féminin", sourceTitles, "2026-10-28");
     assert.equal(result.filter((s) => s.inlineImage).length, 2);
-    assert.equal(original.some((s) => s.inlineImage), false);
+    assert.deepEqual(original, sections);
     const proof = inlineImageProof({
       image: { src: "/cover.jpg", alt: "Couverture", width: 1200, height: 675, credit: "Illustration" },
       paragraphs: result,
