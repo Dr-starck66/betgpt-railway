@@ -33,7 +33,7 @@ test("selects the highest French licensed operator's REAL away quote", () => {
   const best = bestFreshMainQuote(fixtures[0]!.books, "1X2_A", { nowMs: now });
   assert.equal(best?.book, "Winamax");
   assert.equal(best?.odds, 2.18);
-  assert.equal(best?.observedAt, fresh);
+  assert.equal(best?.observedAt, new Date(fresh).toISOString());
 });
 
 test("no key means no API request and no modelled fallback", async () => {
