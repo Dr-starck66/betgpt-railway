@@ -76,7 +76,7 @@ export function extractPublicArticle(html: string): string {
   if (main?.[1]) candidates.push(paragraphsFrom(main[1]));
   // Recover first-party story paragraphs rendered under an explicit body container.
   // Keep the existing 750-character evidence threshold and never count page chrome.
-  const publisherBody = html.match(/<(?:div|section)\\b(?=[^>]*(?:data-testid|id|class)\\s*=\\s*["'][^"']*(?:article-body|story-body|article__body)[^"']*["'])[^>]*>([\\s\\S]*?)<\\/(?:div|section)>/i);
+  const publisherBody = html.match(/<(?:div|section)\b(?=[^>]*(?:data-testid|id|class)\s*=\s*["'][^"']*(?:article-body|story-body|article__body)[^"']*["'])[^>]*>([\s\S]*?)<\/(?:div|section)>/i);
   if (publisherBody?.[1]) candidates.push(paragraphsFrom(publisherBody[1]));
   const visit = (value: unknown, depth = 0): void => {
     if (depth > 4 || value == null || typeof value !== "object") return;
