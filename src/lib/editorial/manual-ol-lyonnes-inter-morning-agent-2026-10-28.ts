@@ -226,11 +226,11 @@ export const olLyonnesInterMorningAgent20261028: EditorialArticle = {
   "discoverReadiness": 90,
   "topStories": "TOP_STORIES_ELIGIBILITY_READY",
   "image": {
-    "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Groupama_Stadium_4.jpg?width=1600",
-    "alt": "Vue du Groupama Stadium de Lyon en 2017, illustration d’archive du lieu d’OL Lyonnes–Inter, pas du match du 28 octobre 2026",
-    "width": 1600,
-    "height": 1200,
-    "credit": "Zakarie Faibis, Groupama Stadium 4, 19 août 2017, Wikimedia Commons, CC BY-SA 4.0. Photographie d’archive, pas du match de 2026. Source : https://commons.wikimedia.org/wiki/File:Groupama_Stadium_4.jpg ; licence : https://creativecommons.org/licenses/by-sa/4.0/"
+    "src": "https://commons.wikimedia.org/wiki/Special:FilePath/OL-Stade_Rennais_saison_2022-2023_Groupama_Stadium_08.jpg",
+    "alt": "Vue du Groupama Stadium de Lyon lors d’un match OL–Rennes en avril 2023, illustration d’archive du stade, pas du match OL Lyonnes–Inter de 2026",
+    "width": 2731,
+    "height": 1536,
+    "credit": "Zakarie Faibis (Randy110912), OL-Stade Rennais saison 2022-2023 Groupama Stadium 08, 9 avril 2023, Wikimedia Commons, CC BY-SA 4.0. Photographie d’archive du stade, pas du match OL Lyonnes–Inter 2026. Source : https://commons.wikimedia.org/wiki/File:OL-Stade_Rennais_saison_2022-2023_Groupama_Stadium_08.jpg ; licence : https://creativecommons.org/licenses/by-sa/4.0/"
   },
   "links": [
     {
@@ -261,6 +261,10 @@ export const olLyonnesInterMorningAgent20261028: EditorialArticle = {
     {
       "at": "2026-10-28T07:15:23.504Z",
       "note": "Horodatage réel de préparation de la promotion du candidat agent, sans antidater le créneau 08 h. La présence du statut PUBLISHED dans cette branche ne prouve pas la mise en ligne ; nouvelle validation Candidate Gate et promotion sécurisée ASTRA obligatoires. Aucun generationProof natif."
+    },
+    {
+      "at": "2026-10-28T07:19:36.159Z",
+      "note": "Correction vérifiable sans assouplir les contrôles : image initiale 4:3 rejetée par ASTRA_DAILY_IMAGE_FAIL IMAGE_FORMAT dans le workflow editorial-publish 40649157390. Remplacement par une photographie Wikimedia Commons du Groupama Stadium réellement 2731×1536, ratio 1,778, CC BY-SA 4.0, attribution explicite. Nouvelle validation immuable requise avant promotion."
     }
   ],
   "factHash": "ol-lyonnes-inter-uwcl-20261028-agent-morning-v1",
