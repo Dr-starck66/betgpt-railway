@@ -42,6 +42,11 @@ export type EditorialImage = {
   width: number;
   height: number;
   credit: string;
+  /** Description displayed below an inline photo; separate from the cover. */
+  caption?: string;
+  /** Per-file provenance, not a blanket site-wide licence statement. */
+  sourceUrl?: string;
+  licenseUrl?: string;
 };
 
 export type EditorialLink = { href: string; label: string };
@@ -62,6 +67,8 @@ export type EditorialSubsection = {
 export type EditorialParagraph = {
   h2: string;
   body: string;
+  /** Optional verified image displayed inside this H2 section, not the hero. */
+  inlineImage?: EditorialImage;
   sourceIds?: string[];
   subsections?: EditorialSubsection[];
 };
