@@ -74,6 +74,15 @@ export function clusterSignals(signals: EditorialNewsSignal[]): NewsCluster[] {
         !clusterMaterial &&
         deltaHours >= 0.35;
       const sharedEntityCount = signal.entities.filter((entity) => cluster.entities.includes(entity)).length;
+      // Opposing named-event participants must not be mixed into one story:
+      // Arsenal–Fleetwood and Arsenal–Chelsea share Arsenal and result vocabulary
+      // but are different matches. Preserve single-entity/player stories and
+      // multilingual coverage when the actual named participants agree.
+      const conflictingParticipants =
+        signal.entities.length >= 2 && cluster.entities.length >= 2 &&
+        sharedEntityCount < 2 &&
+        signal.entities.some((entity) => !cluster.entities.includes(entity)) &&
+        cluster.entities.some((entity) => !signal.entities.includes(entity));
       const sameMaterialDevelopment =
         entityOverlap &&
         incomingMaterial &&
@@ -85,6 +94,7 @@ export function clusterSignals(signals: EditorialNewsSignal[]): NewsCluster[] {
       const eventCompatible = incomingEvent ? clusterEvents.size === 0 || clusterEvents.has(incomingEvent) : clusterEvents.size === 0;
       const sameNamedEvent = Boolean(incomingEvent && clusterEvents.has(incomingEvent) && deltaHours <= 24 && entityOverlap);
       const sameStory =
+        !conflictingParticipants &&
         !materialStateChange &&
         eventCompatible &&
         (sameNamedEvent || score >= 0.34 ||
