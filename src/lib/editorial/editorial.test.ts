@@ -8,7 +8,7 @@ import { editorialGoldStandardGate } from "./gold-standard.ts";
 import { optimizeTimes, parisDate, slotInstant } from "./time.ts";
 import type { ArticleType, EditorialMatch, EditorialNewsSignal, SlotId } from "./types.ts";
 import { autoPublishableCluster, clusterSignals, fairPublisherSignals, parseGoogleNewsRss, parsePublisherRss, sourceTier } from "./news-scout.server.ts";
-import { hasAutomaticProof, publishedTodayForQuota, boundedEvidenceSlices, extractPublicArticle, publicPublisherRssEvidence, publisherUrl } from "./auto-reporter.server.ts";
+import { hasAutomaticProof, publishedTodayForQuota, eligiblePublishingSlots, boundedEvidenceSlices, extractPublicArticle, publicPublisherRssEvidence, publisherUrl } from "./auto-reporter.server.ts";
 import { clusterSignals as clusterAutoReporterSignals, isMaterialDevelopment as isAutoReporterMaterial } from "./news-cluster.ts";
 
 function match(over: Partial<EditorialMatch> & Pick<EditorialMatch, "id" | "home" | "away" | "kickoff">): EditorialMatch {
@@ -941,5 +941,16 @@ describe("ASTRA editorial local model context budget", () => {
       assert.ok(first.includes("id=publisher-" + n), "Publisher attribution must be retained");
       assert.ok(last.includes("id=publisher-" + n));
     }
+  });
+});
+
+
+describe("catch-up slot safety in Europe/Paris", () => {
+  it("never makes 13 h or 19 h eligible before their actual deadline", () => {
+    assert.deepEqual(eligiblePublishingSlots(new Date("2026-10-28T06:59:59Z")), []);
+    assert.deepEqual(eligiblePublishingSlots(new Date("2026-10-28T07:00:00Z")), ["morning"]);
+    assert.deepEqual(eligiblePublishingSlots(new Date("2026-10-28T10:05:00Z")), ["morning"]);
+    assert.deepEqual(eligiblePublishingSlots(new Date("2026-10-28T12:00:00Z")), ["morning", "noon"]);
+    assert.deepEqual(eligiblePublishingSlots(new Date("2026-10-28T18:00:00Z")), ["morning", "noon", "evening"]);
   });
 });
