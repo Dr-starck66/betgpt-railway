@@ -9,6 +9,7 @@ import { contextualAuthorityGate } from "./authority-citations.ts";
 import { sourceIntegrityGate } from "./source-integrity.ts";
 import { discoverLaunchpadStaticAudit } from "./discover-launchpad.ts";
 import { imageFor } from "./images.ts";
+import { inlineImageProof } from "./inline-image-proof.ts";
 import { DEFAULT_TIMES, parisDate, slotInstant } from "./time.ts";
 
 const SLOTS = ["morning", "noon", "evening"] as const;
@@ -402,9 +403,10 @@ function assemble(
   };
   const gate = qualityGate(article, previous.map((a) => a.h1 + " " + a.lead));
   const gold = editorialGoldStandardGate(article);
+  const inlineProof = inlineImageProof(article);
   const integrity = sourceIntegrityGate(article);
   const authority = contextualAuthorityGate(article);
-  const reasons = [...gate.reasons, ...gold.reasons, ...integrity.reasons, ...authority.reasons];
+  const reasons = [...gate.reasons, ...gold.reasons, ...inlineProof.reasons, ...integrity.reasons, ...authority.reasons];
   // discoverChecks explicitly depends on quality.pass and duplicateScore.
   // Compute the independent quality verdict BEFORE evaluating Discover.
   article.quality = { pass: reasons.length === 0, reasons };
