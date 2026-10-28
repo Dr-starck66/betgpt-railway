@@ -5,7 +5,7 @@ export const olLyonnesInterMorningAgent20261028: EditorialArticle = {
   "slug": "ol-lyonnes-inter-ligue-champions-feminine-28-octobre-2026-analyse",
   "slot": "morning",
   "articleType": "preview",
-  "status": "SCHEDULED",
+  "status": "PUBLISHED",
   "title": "OL Lyonnes–Inter : forme, enjeux et faits confirmés avant le match du 28 octobre | BetGPT",
   "h1": "OL Lyonnes–Inter : les enjeux vérifiables de la troisième journée européenne du 28 octobre",
   "lead": "OL Lyonnes reçoit l’Inter Milan mercredi 28 octobre 2026 à 21 heures au Groupama Stadium pour la troisième journée de Ligue des champions féminine. Les deux équipes ont quatre points, mais leurs parcours et leurs prochains adversaires diffèrent. Voici une analyse factuelle, sans score ni composition inventés.",
@@ -150,8 +150,8 @@ export const olLyonnesInterMorningAgent20261028: EditorialArticle = {
     }
   ],
   "createdAt": "2026-10-28T07:04:44.000Z",
-  "publishedAt": null,
-  "modifiedAt": null,
+  "publishedAt": "2026-10-28T07:15:23.504Z",
+  "modifiedAt": "2026-10-28T07:15:23.504Z",
   "parisDate": "2026-10-28",
   "scheduledTime": "08:00",
   "category": "Actualité football féminin",
@@ -257,6 +257,10 @@ export const olLyonnesInterMorningAgent20261028: EditorialArticle = {
     {
       "at": "2026-10-28T07:09:05.000Z",
       "note": "Candidat de secours du contrôle planifié du 28 octobre 2026, créneau 08 h Europe/Paris, exécuté à partir de 08 h 04 (tour 11). Génération par agent, pas par Qwen Railway ; aucun generationProof natif. Reçu cron-api 8e42df1f-a57d-4bae-b516-81bfb15f4fe7 : morning éligible, 0 publication, rejet NO_QUALIFIED_THREE_SOURCE_EVENT. Candidat SCHEDULED, publishedAt null. Publication conditionnée à Candidate Gate GREEN, promotion ASTRA sécurisée et preuves HTTP/canonique/sitemap."
+    },
+    {
+      "at": "2026-10-28T07:15:23.504Z",
+      "note": "Horodatage réel de préparation de la promotion du candidat agent, sans antidater le créneau 08 h. La présence du statut PUBLISHED dans cette branche ne prouve pas la mise en ligne ; nouvelle validation Candidate Gate et promotion sécurisée ASTRA obligatoires. Aucun generationProof natif."
     }
   ],
   "factHash": "ol-lyonnes-inter-uwcl-20261028-agent-morning-v1",
