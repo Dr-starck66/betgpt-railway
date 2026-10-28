@@ -133,6 +133,30 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
               <h2 className="text-2xl font-semibold tracking-tight">{part.h2}</h2>
               <p className="readable-prose"><BroadcasterText text={part.body} /></p>
               <SourceCitations sourceIds={part.sourceIds} sources={article.sources} />
+              {part.inlineImage ? (
+                <figure className="overflow-hidden rounded-xl border border-line">
+                  <img
+                    src={part.inlineImage.src}
+                    alt={part.inlineImage.alt}
+                    width={part.inlineImage.width}
+                    height={part.inlineImage.height}
+                    loading="lazy"
+                    decoding="async"
+                    className="aspect-video w-full object-cover"
+                  />
+                  <figcaption className="space-y-1 border-t border-line px-4 py-3 text-xs text-muted">
+                    <span className="block">{part.inlineImage.caption}</span>
+                    <span className="block">{part.inlineImage.credit}</span>
+                    {part.inlineImage.sourceUrl && part.inlineImage.licenseUrl ? (
+                      <span className="block">
+                        <a href={part.inlineImage.sourceUrl} rel="noopener noreferrer" className="text-link hover:underline">Source de la photographie</a>
+                        {" · "}
+                        <a href={part.inlineImage.licenseUrl} rel="noopener noreferrer" className="text-link hover:underline">Licence</a>
+                      </span>
+                    ) : null}
+                  </figcaption>
+                </figure>
+              ) : null}
 
               {part.subsections?.length ? (
                 <div className="space-y-6 border-t border-line pt-5">
