@@ -14,7 +14,10 @@ import { DEFAULT_TIMES, parisDate, slotInstant } from "./time.ts";
 const SLOTS = ["morning", "noon", "evening"] as const;
 const MIN_BODY_CHARS = 750;
 const FETCH_TIMEOUT = 9000;
-const MODEL_TIMEOUT = 240000;
+// CPU-only Qwen emits ~4–5 tokens/s in Railway production. A 240 s deadline
+// can abort a valid 800+600-character section after ~40 s prompt evaluation.
+// Keep all content/quality minima; allow the same seven native requests to finish.
+const MODEL_TIMEOUT = 360000;
 const EXCLUDED_HOSTS = ["news.google.com", "google.com", "www.google.com", "youtube.com"];
 let running: Promise<AutoPublishReport> | null = null;
 const lastAttempts = new Map<string, number>();
