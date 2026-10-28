@@ -10,6 +10,7 @@ import { sourceIntegrityGate } from "./source-integrity.ts";
 import { discoverLaunchpadStaticAudit } from "./discover-launchpad.ts";
 import { imageFor } from "./images.ts";
 import { inlineImageProof } from "./inline-image-proof.ts";
+import { attachVerifiedInlineImages } from "./verified-inline-images.ts";
 import { DEFAULT_TIMES, parisDate, slotInstant } from "./time.ts";
 
 const SLOTS = ["morning", "noon", "evening"] as const;
@@ -369,7 +370,7 @@ function assemble(
   previous: EditorialArticle[],
 ): { article: EditorialArticle | null; reason: string; words: number } {
   const allowed = new Set(evidence.map((e) => e.signal.id));
-  const paragraphs = model.paragraphs;
+  const paragraphs = attachVerifiedInlineImages(model.paragraphs, model.h1, evidence.map((e) => e.signal.title), day);
   for (const part of paragraphs) {
     if (!(part.sourceIds?.length) || part.sourceIds.some((id) => !allowed.has(id))) return { article: null, reason: "unknown source id in H2", words: 0 };
     for (const sub of part.subsections ?? []) {
