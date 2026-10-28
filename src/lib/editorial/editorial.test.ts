@@ -111,6 +111,22 @@ describe("first-party article evidence extraction", () => {
 });
 
 
+describe("publisher article body recovery (strict 750-character gate)", () => {
+  it("retains first-party short paragraphs without lowering the evidence threshold", () => {
+    const p = "Le club confirme un nouveau fait précis sur ce match.";
+    const html = "<article>" + Array.from({ length: 20 }, (_, i) => "<p>" + i + " " + p + "</p>").join("") + "</article>";
+    assert.ok(extractPublicArticle(html).length >= 750);
+    assert.equal(extractPublicArticle("<article><p>" + p + "</p></article>"), "");
+  });
+  it("accepts explicit publisher article-body containers, not arbitrary page filler", () => {
+    const line = "Le rapport officiel précise le score et la chronologie vérifiée de la rencontre.";
+    const body = Array.from({ length: 13 }, (_, i) => "<p>" + i + " " + line + "</p>").join("");
+    assert.ok(extractPublicArticle('<nav>' + body + '</nav><div data-testid="article-body">' + body + '</div>').length >= 750);
+    assert.equal(extractPublicArticle('<nav>' + body + '</nav><div class="navigation-menu">' + body + '</div>'), "");
+  });
+});
+
+
 describe("publisher evidence diversity under a bounded quota", () => {
   it("does not starve late independent editorial outlets behind high-volume feeds", () => {
     const make = (publisher: string, index: number): EditorialNewsSignal => ({
