@@ -466,9 +466,15 @@ export function automaticPublicationsForDay(articles: EditorialArticle[], day: s
   });
 }
 
+/** Catch-up may retry missed slots but must never pre-publish a future Paris slot. */
+export function eligiblePublishingSlots(now: Date): SlotId[] {
+  const day = parisDate(now);
+  return SLOTS.filter((slot) => now.getTime() >= slotInstant(day, DEFAULT_TIMES[slot]).getTime());
+}
+
 async function publish(now: Date, options: { trigger?: AutoPublishReport["trigger"]; catchup?: boolean }): Promise<AutoPublishReport> {
   const day = parisDate(now);
-  const due = SLOTS.filter((slot) => options.catchup || now.getTime() >= slotInstant(day, DEFAULT_TIMES[slot]).getTime());
+  const due = eligiblePublishingSlots(now);
   const previous = await readLedgerDurable();
   const seeded = manualEditorialArticles();
   const merged = [...seeded, ...previous.filter((a) => !seeded.some((m) => m.id === a.id))];
