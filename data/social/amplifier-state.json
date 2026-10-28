@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-28T09:26:17.069Z",
+      "lastCheckedAt": "2026-10-28T09:26:41.682Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -99,19 +99,24 @@
           "url": "https://betgpt.live/actualites/fleetwood-arsenal-carabao-cup-27-octobre-2026-avant-match",
           "date": "2026-10-27T18:20:52.636Z",
           "seenAt": "2026-10-27T20:43:20.817Z"
+        },
+        "5259c291a211ef8403": {
+          "url": "https://betgpt.live/actualites/ol-lyonnes-inter-ligue-champions-feminine-28-octobre-2026-analyse",
+          "date": "2026-10-28T07:15:23.504Z",
+          "seenAt": "2026-10-28T09:26:41.682Z"
         }
       },
       "sourceStatus": "VERIFIED"
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-28T09:26:23.963Z",
+      "lastCheckedAt": "2026-10-28T09:26:42.491Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-28T09:26:24.943Z",
+      "lastCheckedAt": "2026-10-28T09:26:43.928Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -128,7 +133,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-28T09:26:25.293Z",
+      "lastCheckedAt": "2026-10-28T09:26:44.518Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -160,19 +165,19 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-28T09:26:26.029Z",
+      "lastCheckedAt": "2026-10-28T09:26:45.446Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-28T09:26:24.427Z",
+      "lastCheckedAt": "2026-10-28T09:26:43.055Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-28T09:26:25.676Z",
+      "lastCheckedAt": "2026-10-28T09:26:44.964Z",
       "seen": {
         "c022035f3d7190f6f1": {
           "url": "https://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/",
@@ -1167,6 +1172,34 @@
       "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/The_BES_Parkside_Stand_in_Highbury_Stadium_-_geograph.org.uk_-_5590434.jpg?width=1600",
       "text": "Fleetwood–Arsenal : horaire, enjeu historique et clés du match de Carabao Cup | BetGPT\nhttps://betgpt.live/actualites/fleetwood-arsenal-carabao-cup-27-octobre-2026-avant-match?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
       "createdAt": "2026-10-27T20:43:26.763Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:5259c291a211ef8403": {
+      "id": "instagram:5259c291a211ef8403",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/ol-lyonnes-inter-ligue-champions-feminine-28-octobre-2026-analyse",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/OL-Stade_Rennais_saison_2022-2023_Groupama_Stadium_08.jpg",
+      "text": "OL Lyonnes–Inter : forme, enjeux et faits confirmés avant le match du 28 octobre | BetGPT\n\nOL Lyonnes reçoit l’Inter Milan mercredi 28 octobre 2026 à 21 heures au Groupama Stadium pour la troisième journée de Ligue des champions féminine. Les deux équipes ont quatre points, mais leurs parcours et leurs prochains adversaires diffèrent. Voici une analyse factuelle, sans score ni composition inventés.\n\nhttps://betgpt.live/actualites/ol-lyonnes-inter-ligue-champions-feminine-28-octobre-2026-analyse?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #LyonnesInter #forme #enjeux",
+      "createdAt": "2026-10-28T09:26:41.958Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:5259c291a211ef8403": {
+      "id": "x:5259c291a211ef8403",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/ol-lyonnes-inter-ligue-champions-feminine-28-octobre-2026-analyse",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/OL-Stade_Rennais_saison_2022-2023_Groupama_Stadium_08.jpg",
+      "text": "OL Lyonnes–Inter : forme, enjeux et faits confirmés avant le match du 28 octobre | BetGPT\nhttps://betgpt.live/actualites/ol-lyonnes-inter-ligue-champions-feminine-28-octobre-2026-analyse?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-28T09:26:41.958Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,
