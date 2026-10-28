@@ -1,3 +1,16 @@
+describe("native Qwen H2 uniqueness", () => {
+  it("constrains each of the seven model responses to a different predetermined H2 without relaxing length or source guards", () => {
+    const first = sectionResponseSchema(["source-1", "source-2"], true, "Les faits confirmés et leur importance immédiate") as { oneOf: Array<{ properties: Record<string, any> }> };
+    const second = sectionResponseSchema(["source-1", "source-2"], false, "La chronologie établie par les sources") as { oneOf: Array<{ properties: Record<string, any> }> };
+    assert.equal(first.oneOf[1]!.properties.h2.const, "Les faits confirmés et leur importance immédiate");
+    assert.equal(second.oneOf[1]!.properties.h2.const, "La chronologie établie par les sources");
+    assert.notEqual(first.oneOf[1]!.properties.h2.const, second.oneOf[1]!.properties.h2.const);
+    assert.equal(first.oneOf[1]!.properties.body.minLength, 800);
+    assert.equal(second.oneOf[1]!.properties.subsections.minItems, 1);
+    assert.deepEqual(second.oneOf[1]!.properties.sourceIds.items.enum, ["source-1", "source-2"]);
+  });
+});
+
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { buildEdition, applyEventOverride, composeNews } from "./engine.ts";
@@ -8,7 +21,7 @@ import { editorialGoldStandardGate } from "./gold-standard.ts";
 import { optimizeTimes, parisDate, slotInstant } from "./time.ts";
 import type { ArticleType, EditorialMatch, EditorialNewsSignal, SlotId } from "./types.ts";
 import { autoPublishableCluster, clusterSignals, fairPublisherSignals, parseGoogleNewsRss, parsePublisherRss, sourceTier } from "./news-scout.server.ts";
-import { hasAutomaticProof, publishedTodayForQuota, eligiblePublishingSlots, boundedEvidenceSlices, extractPublicArticle, publicPublisherRssEvidence, publisherUrl } from "./auto-reporter.server.ts";
+import { hasAutomaticProof, publishedTodayForQuota, eligiblePublishingSlots, sectionResponseSchema, boundedEvidenceSlices, extractPublicArticle, publicPublisherRssEvidence, publisherUrl } from "./auto-reporter.server.ts";
 import { clusterSignals as clusterAutoReporterSignals, isMaterialDevelopment as isAutoReporterMaterial } from "./news-cluster.ts";
 
 function match(over: Partial<EditorialMatch> & Pick<EditorialMatch, "id" | "home" | "away" | "kickoff">): EditorialMatch {
