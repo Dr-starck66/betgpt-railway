@@ -127,6 +127,28 @@ describe("publisher article body recovery (strict 750-character gate)", () => {
 });
 
 
+describe("event-level source corroboration stays fail-closed", () => {
+  it("separates unrelated same-team results despite generic shared result language", () => {
+    const row = (id: string, title: string, entities: string[]): EditorialNewsSignal => ({
+      id, title, url: "https://" + id + ".example.com/football/story",
+      sourceName: id, sourceUrl: "https://" + id + ".example.com",
+      publishedAt: "2026-10-28T08:00:00.000Z", sourceTier: "TIER1",
+      entities, language: "en",
+    });
+    const rows = [
+      row("bbc", "Arsenal knocked out by Fleetwood in League Cup", ["Arsenal", "Fleetwood"]),
+      row("sky", "Fleetwood eliminate Arsenal on penalties", ["Arsenal", "Fleetwood"]),
+      row("unrelated", "Arsenal lose historic match to Chelsea in Premier League", ["Arsenal", "Chelsea"]),
+    ];
+    const clusters = clusterAutoReporterSignals(rows);
+    const fleetwood = clusters.find((c) => c.signals.some((s) => s.id === "bbc"))!;
+    assert.deepEqual(fleetwood.signals.map((s) => s.id).sort(), ["bbc", "sky"]);
+    assert.equal(clusters.reduce((n, c) => n + c.signals.length, 0), 3);
+    assert.equal(clusters.length, 2);
+  });
+});
+
+
 describe("publisher evidence diversity under a bounded quota", () => {
   it("does not starve late independent editorial outlets behind high-volume feeds", () => {
     const make = (publisher: string, index: number): EditorialNewsSignal => ({
