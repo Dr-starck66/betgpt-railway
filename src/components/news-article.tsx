@@ -142,7 +142,7 @@ export function NewsArticleView({ article }: { article: EditorialArticle }) {
                     height={part.inlineImage.height}
                     loading="lazy"
                     decoding="async"
-                    className="aspect-video w-full object-cover"
+                    className="w-full h-auto object-contain"
                   />
                   <figcaption className="space-y-1 border-t border-line px-4 py-3 text-xs text-muted">
                     <span className="block">{part.inlineImage.caption}</span>
