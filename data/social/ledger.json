@@ -680,5 +680,26 @@
     "remotePostUrl": null,
     "error": null,
     "retryCount": 0
+  },
+  {
+    "id": "x:manual-agent-scheduled-2026-10-28-morning-ol-lyonnes-inter:v1",
+    "articleId": "manual-agent-scheduled-2026-10-28-morning-ol-lyonnes-inter",
+    "articleSlug": "ol-lyonnes-inter-ligue-champions-feminine-28-octobre-2026-analyse",
+    "articleTitle": "OL Lyonnes–Inter : les enjeux vérifiables de la troisième journée européenne du 28 octobre",
+    "articleUrl": "https://betgpt.live/actualites/ol-lyonnes-inter-ligue-champions-feminine-28-octobre-2026-analyse",
+    "trackedUrl": "https://betgpt.live/actualites/ol-lyonnes-inter-ligue-champions-feminine-28-octobre-2026-analyse?utm_source=x&utm_medium=social&utm_campaign=editorial_auto&utm_content=ol-lyonnes-inter-ligue-champions-feminine-28-octobre-2026-analyse",
+    "network": "x",
+    "text": "👀 OL Lyonnes–Inter : les enjeux vérifiables de la troisième journée européenne du 28 octobre\n\nÀ lire sur BetGPT 👇\n\nhttps://betgpt.live/actualites/ol-lyonnes-inter-ligue-champions-feminine-28-octobre-2026-analyse?utm_source=x&utm_medium=social&utm_campaign=editorial_auto&utm_con",
+    "hashtags": [],
+    "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/OL-Stade_Rennais_saison_2022-2023_Groupama_Stadium_08.jpg",
+    "createdAt": "2026-10-28T08:06:27.730Z",
+    "scheduledAt": "2026-10-28T07:15:23.504Z",
+    "attemptedAt": null,
+    "publishedAt": null,
+    "status": "READY_TO_X",
+    "remotePostId": null,
+    "remotePostUrl": null,
+    "error": null,
+    "retryCount": 0
   }
 ]
