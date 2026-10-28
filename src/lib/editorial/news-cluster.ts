@@ -89,7 +89,7 @@ export function clusterSignals(signals: EditorialNewsSignal[]): NewsCluster[] {
         eventCompatible &&
         (sameNamedEvent || score >= 0.34 ||
           (entityOverlap && score >= 0.24) ||
-          (entityOverlap && familyOverlap && deltaHours <= 12) ||
+          // A shared team plus a generic injury/result/coach vocabulary does not\n          // establish the same event. Require two shared named entities or\n          // independently overlapping headline terms before combining sources.\n          (entityOverlap && familyOverlap && deltaHours <= 12 &&\n            (sharedEntityCount >= 2 || score >= 0.15)) ||
           sameMaterialDevelopment);
       if (sameStory && (score > bestScore || (best == null && (familyOverlap || sameMaterialDevelopment)))) {
         best = cluster;
