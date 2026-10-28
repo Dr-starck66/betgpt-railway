@@ -15,12 +15,12 @@ describe("native Qwen H2 uniqueness", () => {
   it("constrains each of the seven model responses to a different predetermined H2 without relaxing length or source guards", () => {
     const first = sectionResponseSchema(["source-1", "source-2"], true, "Les faits confirmés et leur importance immédiate") as { oneOf: Array<{ properties: Record<string, { const?: string; minLength?: number; minItems?: number; items?: { enum?: string[] } }> }> };
     const second = sectionResponseSchema(["source-1", "source-2"], false, "La chronologie établie par les sources") as { oneOf: Array<{ properties: Record<string, { const?: string; minLength?: number; minItems?: number; items?: { enum?: string[] } }> }> };
-    assert.equal(first.oneOf[1]!.properties.h2.const, "Les faits confirmés et leur importance immédiate");
-    assert.equal(second.oneOf[1]!.properties.h2.const, "La chronologie établie par les sources");
-    assert.notEqual(first.oneOf[1]!.properties.h2.const, second.oneOf[1]!.properties.h2.const);
-    assert.equal(first.oneOf[1]!.properties.body.minLength, 800);
-    assert.equal(second.oneOf[1]!.properties.subsections.minItems, 1);
-    assert.deepEqual(second.oneOf[1]!.properties.sourceIds.items.enum, ["source-1", "source-2"]);
+    assert.equal(first.oneOf[1]!.properties.h2?.const, "Les faits confirmés et leur importance immédiate");
+    assert.equal(second.oneOf[1]!.properties.h2?.const, "La chronologie établie par les sources");
+    assert.notEqual(first.oneOf[1]!.properties.h2?.const, second.oneOf[1]!.properties.h2?.const);
+    assert.equal(first.oneOf[1]!.properties.body?.minLength, 800);
+    assert.equal(second.oneOf[1]!.properties.subsections?.minItems, 1);
+    assert.deepEqual(second.oneOf[1]!.properties.sourceIds?.items?.enum, ["source-1", "source-2"]);
   });
 });
 
