@@ -1,11 +1,11 @@
 import type { EditorialArticle } from "@/lib/editorial/types";
-/** Scheduled-agent fallback candidate; NOT native Qwen. SCHEDULED pending immutable GREEN and secure promotion. */
+/** Scheduled-agent fallback candidate; NOT native Qwen. Approved candidate; source PUBLISHED only after immutable GREEN, public status remains UNVERIFIED until secure deployment. */
 export const genoaJuventusEveningAgent20261029: EditorialArticle = {
   "id": "manual-agent-scheduled-2026-10-29-evening-genoa-juventus",
   "slug": "genoa-juventus-2-0-baldanzi-ehizibue-analyse-29-octobre-2026",
   "slot": "evening",
   "articleType": "postmatch",
-  "status": "SCHEDULED",
+  "status": "PUBLISHED",
   "title": "Genoa–Juventus 2-0 : Baldanzi et Ehizibue, l'analyse du revers turinois | BetGPT",
   "h1": "Genoa–Juventus 2-0 : pourquoi Baldanzi et Ehizibue ont fait basculer le match",
   "lead": "Le Genoa a battu la Juventus 2-0 le 28 octobre 2026 au stade Luigi-Ferraris, avec des buts de Kingsley Ehizibue (12e) et Tommaso Baldanzi (28e). Retour sur les actions décisives, les changements de Spalletti, la résistance génoise et les conséquences au classement, à partir de la Lega Serie A, de la Juventus et de plusieurs rédactions indépendantes.",
@@ -201,8 +201,8 @@ export const genoaJuventusEveningAgent20261029: EditorialArticle = {
     }
   ],
   "createdAt": "2026-10-29T18:23:10.000Z",
-  "publishedAt": null,
-  "modifiedAt": null,
+  "publishedAt": "2026-10-29T18:29:52.182Z",
+  "modifiedAt": "2026-10-29T18:29:52.182Z",
   "parisDate": "2026-10-29",
   "scheduledTime": "19:00",
   "category": "Serie A",
@@ -331,7 +331,7 @@ export const genoaJuventusEveningAgent20261029: EditorialArticle = {
   "corrections": [
     {
       "at": "2026-10-29T18:23:10.000Z",
-      "note": "Candidat de secours créé par la tâche planifiée existante, run vérifié 66cab937-e67c-8329-a299-1e77885687e9. Générateur Railway natif essayé d'abord : run 896fbe6d-1e7f-4fc9-be0b-1b1acfb1820f, ASTRA_AUTO_REPORTER_MODEL_TRUNCATED section 1, aucune publication Qwen. Ce fichier SCHEDULED n'est pas une page publiée et ne comporte aucun generationProof natif."
+      "note": "Candidat de secours créé par la tâche planifiée existante, run vérifié 66cab937-e67c-8329-a299-1e77885687e9. Générateur Railway natif essayé d'abord : run 896fbe6d-1e7f-4fc9-be0b-1b1acfb1820f, ASTRA_AUTO_REPORTER_MODEL_TRUNCATED section 1, aucune publication Qwen. Candidat validé GREEN en source, sans preuve de déploiement public ni generationProof natif."
     }
   ],
   "sourceChanges": [],
