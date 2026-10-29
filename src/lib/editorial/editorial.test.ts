@@ -8,8 +8,36 @@ import { editorialGoldStandardGate } from "./gold-standard.ts";
 import { optimizeTimes, parisDate, slotInstant } from "./time.ts";
 import type { ArticleType, EditorialMatch, EditorialNewsSignal, SlotId } from "./types.ts";
 import { autoPublishableCluster, clusterSignals, fairPublisherSignals, parseGoogleNewsRss, parsePublisherRss, sourceTier } from "./news-scout.server.ts";
-import { hasAutomaticProof, publishedTodayForQuota, eligiblePublishingSlots, boundedEvidenceSlices, extractPublicArticle, publicPublisherRssEvidence, publisherUrl } from "./auto-reporter.server.ts";
+import { hasAutomaticProof, publishedTodayForQuota, eligiblePublishingSlots, sectionResponseSchema, boundedEvidenceSlices, extractPublicArticle, publicPublisherRssEvidence, publisherUrl } from "./auto-reporter.server.ts";
 import { clusterSignals as clusterAutoReporterSignals, isMaterialDevelopment as isAutoReporterMaterial } from "./news-cluster.ts";
+import { attachVerifiedInlineImages } from "./verified-inline-images.ts";
+import { inlineImageProof } from "./inline-image-proof.ts";
+
+describe("native Qwen H2 uniqueness", () => {
+  it("constrains each of the seven model responses to a different predetermined H2 without relaxing length or source guards", () => {
+    const first = sectionResponseSchema(["source-1", "source-2"], true, "Les faits confirmés et leur importance immédiate") as { oneOf: Array<{ properties: Record<string, { const?: string; minLength?: number; minItems?: number; items?: { enum?: string[] } }> }> };
+    const second = sectionResponseSchema(["source-1", "source-2"], false, "La chronologie établie par les sources") as { oneOf: Array<{ properties: Record<string, { const?: string; minLength?: number; minItems?: number; items?: { enum?: string[] } }> }> };
+    assert.equal(first.oneOf[1]!.properties.h2?.const, "Les faits confirmés et leur importance immédiate");
+    assert.equal(second.oneOf[1]!.properties.h2?.const, "La chronologie établie par les sources");
+    assert.notEqual(first.oneOf[1]!.properties.h2?.const, second.oneOf[1]!.properties.h2?.const);
+    assert.equal(first.oneOf[1]!.properties.body?.minLength, 800);
+    assert.equal(second.oneOf[1]!.properties.subsections?.minItems, 1);
+    assert.deepEqual(second.oneOf[1]!.properties.sourceIds?.items?.enum, ["source-1", "source-2"]);
+  });
+  it("constrains native H3 headings while preserving the 600-character minimum and evidence source IDs", () => {
+    const schema = sectionResponseSchema(["source-1", "source-2"], false, "Le contexte sportif vérifiable", "Les repères sportifs effectivement documentés") as {
+      oneOf: Array<{ properties: { subsections: { items: { properties: {
+        h3: { const: string; minLength: number }; body: { minLength: number };
+        sourceIds: { items: { enum: string[] } };
+      } } } } }>;
+    };
+    const sub = schema.oneOf[1]!.properties.subsections.items.properties;
+    assert.equal(sub.h3.const, "Les repères sportifs effectivement documentés");
+    assert.equal(sub.h3.minLength, 12);
+    assert.equal(sub.body.minLength, 600);
+    assert.deepEqual(sub.sourceIds.items.enum, ["source-1", "source-2"]);
+  });
+});
 
 function match(over: Partial<EditorialMatch> & Pick<EditorialMatch, "id" | "home" | "away" | "kickoff">): EditorialMatch {
   return {
@@ -952,5 +980,31 @@ describe("catch-up slot safety in Europe/Paris", () => {
     assert.deepEqual(eligiblePublishingSlots(new Date("2026-10-28T10:05:00Z")), ["morning"]);
     assert.deepEqual(eligiblePublishingSlots(new Date("2026-10-28T12:00:00Z")), ["morning", "noon"]);
     assert.deepEqual(eligiblePublishingSlots(new Date("2026-10-28T18:00:00Z")), ["morning", "noon", "evening"]);
+  });
+});
+
+
+describe("verified image attachment in native article pipeline", () => {
+  const sections = Array.from({ length: 7 }, (_, i) => ({ h2: "Section " + i, body: "Factuel" }));
+  const sourceTitles = [
+    "Bayern Munich vs Real Madrid Women UEFA Champions League",
+    "FC Bayern Women face Real Madrid at Unterhaching",
+  ];
+  it("adds two source-scoped Commons archives to separate H2, not to the cover", () => {
+    const original = sections.map((s) => ({ ...s }));
+    const result = attachVerifiedInlineImages(original, "Bayern Munich - Real Madrid féminin", sourceTitles, "2026-10-28");
+    assert.equal(result.filter((s) => s.inlineImage).length, 2);
+    assert.deepEqual(original, sections);
+    const proof = inlineImageProof({
+      image: { src: "/cover.jpg", alt: "Couverture", width: 1200, height: 675, credit: "Illustration" },
+      paragraphs: result,
+    });
+    assert.equal(proof.pass, true);
+    assert.equal(proof.count, 2);
+  });
+  it("fails closed for unrelated match, wrong date and inadequate sources", () => {
+    assert.equal(attachVerifiedInlineImages(sections, "Arsenal - Chelsea", sourceTitles, "2026-10-28").some((s) => s.inlineImage), false);
+    assert.equal(attachVerifiedInlineImages(sections, "Bayern - Real Madrid", sourceTitles, "2026-10-29").some((s) => s.inlineImage), false);
+    assert.equal(attachVerifiedInlineImages(sections, "Bayern - Real Madrid", [sourceTitles[0]!], "2026-10-28").some((s) => s.inlineImage), false);
   });
 });
