@@ -20,7 +20,7 @@ function audit(a) {
  if([a.image,...inline].some(x=>x.width<1200||!x.alt||!x.credit||!x.sourceUrl||!x.licenseUrl))errors.push("image_rights");
  if(inline.some(x=>!x.caption))errors.push("image_captions");
  if(a.image.width/a.image.height<1.45||a.image.width/a.image.height>2.05)errors.push("cover_ratio");
- if(a.status!=="SCHEDULED"||a.publishedAt!==null)errors.push("premature_publication");
+ if(a.status!=="PUBLISHED"||!Number.isFinite(Date.parse(a.publishedAt)))errors.push("unapproved_publication");
  if(a.generationProof)errors.push("false_qwen_provenance");
  if(a.slot!=="evening"||a.parisDate!=="2026-10-29"||a.id.startsWith("ed-"))errors.push("bad_slot");
  if(!a.corrections.some(c=>c.note.includes("66cab937-e67c-8329-a299-1e77885687e9")))errors.push("scheduled_run_proof_missing");
@@ -29,5 +29,5 @@ function audit(a) {
 test("original evening candidate has full immutable quality requirements",()=>{const r=audit(article);assert.deepEqual(r.errors,[]);assert.ok(r.words>=1500);});
 test("reject missing second image",()=>{const a=structuredClone(article);delete a.paragraphs[4].inlineImage;assert.ok(audit(a).errors.includes("inline_images"));});
 test("reject false native proof",()=>{const a=structuredClone(article);a.generationProof={generator:"astra-auto-reporter-v2",modelRequests:7};assert.ok(audit(a).errors.includes("false_qwen_provenance"));});
-test("reject premature publication",()=>{const a=structuredClone(article);a.status="PUBLISHED";assert.ok(audit(a).errors.includes("premature_publication"));});
+test("reject unapproved publication",()=>{const a=structuredClone(article);a.status="SCHEDULED";assert.ok(audit(a).errors.includes("unapproved_publication"));});
 test("reject unlicensed image",()=>{const a=structuredClone(article);delete a.paragraphs[2].inlineImage.licenseUrl;assert.ok(audit(a).errors.includes("image_rights"));});
