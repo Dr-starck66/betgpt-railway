@@ -7,7 +7,7 @@ const article = JSON.parse(raw.slice(raw.indexOf(" = {") + 3, raw.lastIndexOf(";
 function audit(candidate) {
   const reasons = [];
   const text = [candidate.lead, ...candidate.paragraphs.flatMap((p) => [p.body, ...(p.subsections || []).map((s) => s.body)])].join(" ");
-  const words = text.split(/\\s+/u).filter(Boolean).length;
+  const words = text.split(/\s+/u).filter(Boolean).length;
   if (words < 1500) reasons.push("under_1500_words");
   if (candidate.paragraphs.length < 7) reasons.push("under_7_sections");
   if (new Set(candidate.paragraphs.map((p) => p.h2.toLocaleLowerCase("fr"))).size !== candidate.paragraphs.length) reasons.push("duplicate_h2");
