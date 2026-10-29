@@ -701,5 +701,26 @@
     "remotePostUrl": null,
     "error": null,
     "retryCount": 0
+  },
+  {
+    "id": "x:manual-agent-scheduled-2026-10-29-morning-arsenal-benfica:v1",
+    "articleId": "manual-agent-scheduled-2026-10-29-morning-arsenal-benfica",
+    "articleSlug": "arsenal-benfica-3-0-russo-triple-record-analyse-29-octobre-2026",
+    "articleTitle": "Arsenal–Benfica 3-0 : comment le triplé de Russo a changé la troisième journée européenne",
+    "articleUrl": "https://betgpt.live/actualites/arsenal-benfica-3-0-russo-triple-record-analyse-29-octobre-2026",
+    "trackedUrl": "https://betgpt.live/actualites/arsenal-benfica-3-0-russo-triple-record-analyse-29-octobre-2026?utm_source=x&utm_medium=social&utm_campaign=editorial_auto&utm_content=arsenal-benfica-3-0-russo-triple-record-analyse-29-octobre-2026",
+    "network": "x",
+    "text": "⚽ Arsenal–Benfica 3-0 : comment le triplé de Russo a changé la troisième journée européenne\n\nÀ lire sur BetGPT 👇\n\nhttps://betgpt.live/actualites/arsenal-benfica-3-0-russo-triple-record-analyse-29-octobre-2026?utm_source=x&utm_medium=social&utm_campaign=editorial_auto&utm_content",
+    "hashtags": [],
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/38/Valerenga-Arsenal_WUCL_12-12-2024_CG3A4421_08.jpg",
+    "createdAt": "2026-10-29T10:07:38.540Z",
+    "scheduledAt": "2026-10-29T10:01:23.104Z",
+    "attemptedAt": null,
+    "publishedAt": null,
+    "status": "READY_TO_X",
+    "remotePostId": null,
+    "remotePostUrl": null,
+    "error": null,
+    "retryCount": 0
   }
 ]
