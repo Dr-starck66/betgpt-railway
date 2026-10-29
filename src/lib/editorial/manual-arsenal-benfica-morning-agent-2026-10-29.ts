@@ -259,7 +259,7 @@ export const arsenalBenficaMorningAgent20261029: EditorialArticle = {
   "discoverReadiness": 95,
   "topStories": "TOP_STORIES_ELIGIBILITY_READY",
   "image": {
-    "src": "https://upload.wikimedia.org/wikipedia/commons/8/8b/Valerenga-Arsenal_WUCL_12-12-2024_CG3A4421_08.jpg",
+    "src": "https://upload.wikimedia.org/wikipedia/commons/3/38/Valerenga-Arsenal_WUCL_12-12-2024_CG3A4421_08.jpg",
     "width": 6090,
     "height": 4060,
     "alt": "Joueuse d'Arsenal lors du match européen contre Vålerenga en décembre 2024, photo d'archive",
