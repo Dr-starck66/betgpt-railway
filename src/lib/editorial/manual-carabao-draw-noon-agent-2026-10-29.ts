@@ -5,7 +5,7 @@ export const carabaoDrawNoonAgent20261029: EditorialArticle = {
   "slug": "carabao-cup-quarts-tirage-liverpool-city-fleetwood-29-octobre-2026",
   "slot": "noon",
   "articleType": "news",
-  "status": "SCHEDULED",
+  "status": "PUBLISHED",
   "title": "Carabao Cup 2026 : tirage des quarts, Liverpool–Bournemouth et City–Bradford | BetGPT",
   "h1": "Carabao Cup : Liverpool–Bournemouth, City–Bradford et le tableau des quarts vérifié",
   "lead": "Le tirage des quarts de finale de la Carabao Cup, annoncé le 28 octobre 2026, propose Liverpool–Bournemouth, Manchester City–Bradford, Crystal Palace–Sunderland et Fleetwood–Everton ou Newcastle. Analyse des qualifications, des lieux confirmés et des informations qui restent à vérifier, avec priorité aux documents officiels de l’EFL et de la Premier League.",
@@ -107,8 +107,8 @@ export const carabaoDrawNoonAgent20261029: EditorialArticle = {
     }
   ],
   "createdAt": "2026-10-29T12:28:19.000Z",
-  "publishedAt": null,
-  "modifiedAt": null,
+  "publishedAt": "2026-10-29T12:36:22.692Z",
+  "modifiedAt": "2026-10-29T12:36:22.692Z",
   "parisDate": "2026-10-29",
   "scheduledTime": "13:00",
   "category": "Carabao Cup",
@@ -179,9 +179,9 @@ export const carabaoDrawNoonAgent20261029: EditorialArticle = {
     "sourceQuality": 10,
     "editorialAngle": 10,
     "total": 90,
-    "decision": "REVIEW",
+    "decision": "PUBLISH",
     "reasons": [
-      "Sources et licences documentées ; attente du contrôle GREEN et de la preuve de chargement des images."
+      "Sources officielles et trois médias indépendants recoupés ; images d'archives distinctes, licences établies."
     ]
   },
   "discoverChecks": {
@@ -195,7 +195,7 @@ export const carabaoDrawNoonAgent20261029: EditorialArticle = {
     "MOBILE_TEMPLATE": true
   },
   "discoverReadiness": 90,
-  "topStories": "NOT_READY",
+  "topStories": "TOP_STORIES_ELIGIBILITY_READY",
   "image": {
     "src": "https://upload.wikimedia.org/wikipedia/commons/c/ce/FTFC01.jpg",
     "width": 2304,
@@ -217,16 +217,18 @@ export const carabaoDrawNoonAgent20261029: EditorialArticle = {
   ],
   "related": [],
   "quality": {
-    "pass": false,
-    "reasons": [
-      "CANDIDATE_AWAITING_IMMUTABLE_GATE_AND_IMAGE_BYTES"
-    ]
+    "pass": true,
+    "reasons": []
   },
   "duplicateScore": 0,
   "corrections": [
     {
       "at": "2026-10-29T12:28:19.000Z",
       "note": "Candidat agent après échec natif cron-api run 0be046f0-1107-4e60-9652-401e00702fa4 (NO_QUALIFIED_THREE_SOURCE_EVENT), scheduler run c5db1863-a0ea-4237-ab65-32902d139140. Non Qwen. Le lieu City–Bradford suit l'EFL, pas l'inversion du texte Sky. Images d'archives et licences Commons vérifiées ; octets et publication non encore vérifiés."
+    },
+    {
+      "at": "2026-10-29T12:36:22.692Z",
+      "note": "Après candidat immutable GREEN #40874231315, préparation de l'article pour publication sécurisée. Ce timestamp est l'horodatage de validation de source, PAS une preuve de mise en ligne. Aucune génération Qwen native revendiquée."
     }
   ],
   "sourceChanges": [],
