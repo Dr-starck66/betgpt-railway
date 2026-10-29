@@ -9,6 +9,8 @@ const article = JSON.parse(raw.slice(raw.indexOf(" = {") + 3, raw.lastIndexOf(";
 function audit(candidate) {
   const errors = [];
   const body = [candidate.lead, ...candidate.paragraphs.flatMap(p => [p.body, ...(p.subsections || []).map(s => s.body)])].join(" ");
+  if (candidate.paragraphs.some(p => p.body.length >= 1200 && !(p.subsections || []).length)) errors.push("flat_heading_architecture");
+  if (candidate.paragraphs.some(p => (p.subsections || []).some(s => !s.sourceIds?.length))) errors.push("uncited_subsection");
   const words = body.split(/\s+/u).filter(Boolean).length;
   if (words < 1500) errors.push("under_1500_words");
   if (candidate.paragraphs.length < 7) errors.push("under_7_sections");
