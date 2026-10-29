@@ -1,0 +1,33 @@
+import { readFileSync } from "node:fs";
+import { test } from "node:test";
+import assert from "node:assert/strict";
+const raw=readFileSync(new URL("../src/lib/editorial/manual-genoa-juventus-evening-agent-2026-10-29.ts",import.meta.url),"utf8");
+const article=JSON.parse(raw.slice(raw.indexOf(" = {")+3,raw.lastIndexOf(";")).trim());
+function audit(a) {
+ const errors=[];
+ const text=[a.lead,...a.paragraphs.flatMap(p=>[p.body,...(p.subsections||[]).map(s=>s.body)])].join(" ");
+ const words=text.split(/\s+/u).filter(Boolean).length;
+ if(words<1500)errors.push("word_count");
+ if(a.paragraphs.length<7)errors.push("h2_count");
+ if(new Set(a.paragraphs.map(p=>p.h2)).size!==a.paragraphs.length)errors.push("duplicate_headings");
+ const sourceIds=new Set(a.sources.map(s=>s.id));
+ if(a.paragraphs.some(p=>!p.sourceIds?.length||p.sourceIds.some(id=>!sourceIds.has(id))||(p.subsections||[]).some(s=>!s.sourceIds?.length||s.sourceIds.some(id=>!sourceIds.has(id)))))errors.push("source_attribution");
+ const hosts=new Set(a.sources.filter(s=>s.status!=="OFFICIAL").map(s=>new URL(s.url).hostname.replace(/^www\./,"")));
+ if(!a.sources.some(s=>s.status==="OFFICIAL")||hosts.size<3)errors.push("source_independence");
+ const inline=a.paragraphs.flatMap((p,i)=>p.inlineImage?[{...p.inlineImage,section:i}]:[]);
+ if(inline.length<2||new Set(inline.map(x=>x.section)).size<2)errors.push("inline_images");
+ if(new Set([a.image.src,...inline.map(x=>x.src)]).size!==inline.length+1)errors.push("distinct_images");
+ if([a.image,...inline].some(x=>x.width<1200||!x.alt||!x.credit||!x.sourceUrl||!x.licenseUrl))errors.push("image_rights");
+ if(inline.some(x=>!x.caption))errors.push("image_captions");
+ if(a.image.width/a.image.height<1.45||a.image.width/a.image.height>2.05)errors.push("cover_ratio");
+ if(a.status!=="SCHEDULED"||a.publishedAt!==null)errors.push("premature_publication");
+ if(a.generationProof)errors.push("false_qwen_provenance");
+ if(a.slot!=="evening"||a.parisDate!=="2026-10-29"||a.id.startsWith("ed-"))errors.push("bad_slot");
+ if(!a.corrections.some(c=>c.note.includes("66cab937-e67c-8329-a299-1e77885687e9")))errors.push("scheduled_run_proof_missing");
+ return {words,errors};
+}
+test("original evening candidate has full immutable quality requirements",()=>{const r=audit(article);assert.deepEqual(r.errors,[]);assert.ok(r.words>=1500);});
+test("reject missing second image",()=>{const a=structuredClone(article);delete a.paragraphs[4].inlineImage;assert.ok(audit(a).errors.includes("inline_images"));});
+test("reject false native proof",()=>{const a=structuredClone(article);a.generationProof={generator:"astra-auto-reporter-v2",modelRequests:7};assert.ok(audit(a).errors.includes("false_qwen_provenance"));});
+test("reject premature publication",()=>{const a=structuredClone(article);a.status="PUBLISHED";assert.ok(audit(a).errors.includes("premature_publication"));});
+test("reject unlicensed image",()=>{const a=structuredClone(article);delete a.paragraphs[2].inlineImage.licenseUrl;assert.ok(audit(a).errors.includes("image_rights"));});
