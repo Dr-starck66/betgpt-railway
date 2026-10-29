@@ -8,10 +8,36 @@ import { editorialGoldStandardGate } from "./gold-standard.ts";
 import { optimizeTimes, parisDate, slotInstant } from "./time.ts";
 import type { ArticleType, EditorialMatch, EditorialNewsSignal, SlotId } from "./types.ts";
 import { autoPublishableCluster, clusterSignals, fairPublisherSignals, parseGoogleNewsRss, parsePublisherRss, sourceTier } from "./news-scout.server.ts";
-import { hasAutomaticProof, publishedTodayForQuota, eligiblePublishingSlots, boundedEvidenceSlices, extractPublicArticle, publicPublisherRssEvidence, publisherUrl } from "./auto-reporter.server.ts";
+import { hasAutomaticProof, publishedTodayForQuota, eligiblePublishingSlots, sectionResponseSchema, boundedEvidenceSlices, extractPublicArticle, publicPublisherRssEvidence, publisherUrl } from "./auto-reporter.server.ts";
 import { clusterSignals as clusterAutoReporterSignals, isMaterialDevelopment as isAutoReporterMaterial } from "./news-cluster.ts";
 import { attachVerifiedInlineImages } from "./verified-inline-images.ts";
 import { inlineImageProof } from "./inline-image-proof.ts";
+
+describe("native Qwen H2 uniqueness", () => {
+  it("constrains each of the seven model responses to a different predetermined H2 without relaxing length or source guards", () => {
+    const first = sectionResponseSchema(["source-1", "source-2"], true, "Les faits confirmés et leur importance immédiate") as { oneOf: Array<{ properties: Record<string, { const?: string; minLength?: number; minItems?: number; items?: { enum?: string[] } }> }> };
+    const second = sectionResponseSchema(["source-1", "source-2"], false, "La chronologie établie par les sources") as { oneOf: Array<{ properties: Record<string, { const?: string; minLength?: number; minItems?: number; items?: { enum?: string[] } }> }> };
+    assert.equal(first.oneOf[1]!.properties.h2?.const, "Les faits confirmés et leur importance immédiate");
+    assert.equal(second.oneOf[1]!.properties.h2?.const, "La chronologie établie par les sources");
+    assert.notEqual(first.oneOf[1]!.properties.h2?.const, second.oneOf[1]!.properties.h2?.const);
+    assert.equal(first.oneOf[1]!.properties.body?.minLength, 800);
+    assert.equal(second.oneOf[1]!.properties.subsections?.minItems, 1);
+    assert.deepEqual(second.oneOf[1]!.properties.sourceIds?.items?.enum, ["source-1", "source-2"]);
+  });
+  it("constrains native H3 headings while preserving the 600-character minimum and evidence source IDs", () => {
+    const schema = sectionResponseSchema(["source-1", "source-2"], false, "Le contexte sportif vérifiable", "Les repères sportifs effectivement documentés") as {
+      oneOf: Array<{ properties: { subsections: { items: { properties: {
+        h3: { const: string; minLength: number }; body: { minLength: number };
+        sourceIds: { items: { enum: string[] } };
+      } } } } }>;
+    };
+    const sub = schema.oneOf[1]!.properties.subsections.items.properties;
+    assert.equal(sub.h3.const, "Les repères sportifs effectivement documentés");
+    assert.equal(sub.h3.minLength, 12);
+    assert.equal(sub.body.minLength, 600);
+    assert.deepEqual(sub.sourceIds.items.enum, ["source-1", "source-2"]);
+  });
+});
 
 function match(over: Partial<EditorialMatch> & Pick<EditorialMatch, "id" | "home" | "away" | "kickoff">): EditorialMatch {
   return {
