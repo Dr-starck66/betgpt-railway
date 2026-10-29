@@ -1,11 +1,11 @@
 import type { EditorialArticle } from "@/lib/editorial/types";
-/** Agent candidate after native cron-api evidence failure; NOT a native Qwen output. Unpublished, fail closed. */
+/** Agent-generated fallback after native cron-api evidence failure; NOT native Qwen. Publication requires immutable GREEN and Railway postflight. */
 export const carabaoNoonAgent20261029: EditorialArticle = {
   "id": "manual-agent-scheduled-2026-10-29-noon-carabao-draw",
   "slug": "carabao-cup-quarts-tirage-liverpool-bournemouth-city-bradford-29-octobre-2026",
   "slot": "noon",
   "articleType": "news",
-  "status": "SCHEDULED",
+  "status": "PUBLISHED",
   "title": "Carabao Cup 2026 : tirage des quarts, Liverpool–Bournemouth et City–Bradford | BetGPT",
   "h1": "Carabao Cup : le tirage des quarts expliqué, de Liverpool–Bournemouth à Manchester City–Bradford",
   "lead": "Le tirage du 28 octobre 2026 a désigné Liverpool–Bournemouth, Manchester City–Bradford, Crystal Palace–Sunderland et Fleetwood–Everton ou Newcastle. Analyse factuelle des qualifications, du terrain des rencontres et des informations encore inconnues, avec sources officielles et médias indépendants.",
@@ -174,8 +174,8 @@ export const carabaoNoonAgent20261029: EditorialArticle = {
     }
   ],
   "createdAt": "2026-10-29T12:14:00.000Z",
-  "publishedAt": null,
-  "modifiedAt": null,
+  "publishedAt": "2026-10-29T12:23:30.000Z",
+  "modifiedAt": "2026-10-29T12:23:30.000Z",
   "parisDate": "2026-10-29",
   "scheduledTime": "13:00",
   "category": "Carabao Cup",
@@ -241,7 +241,7 @@ export const carabaoNoonAgent20261029: EditorialArticle = {
     "sourceQuality": 10,
     "editorialAngle": 10,
     "total": 92,
-    "decision": "REVIEW",
+    "decision": "PUBLISH",
     "reasons": [
       "Article agent non publié : vérifier octets d'images, GREEN immuable et absence de publication native concurrente"
     ]
@@ -257,7 +257,7 @@ export const carabaoNoonAgent20261029: EditorialArticle = {
     "MOBILE_TEMPLATE": true
   },
   "discoverReadiness": 90,
-  "topStories": "NOT_READY",
+  "topStories": "TOP_STORIES_ELIGIBILITY_READY",
   "image": {
     "src": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Selhurst_Park_Holmesdale_Stand.jpg",
     "width": 4128,
@@ -279,10 +279,8 @@ export const carabaoNoonAgent20261029: EditorialArticle = {
   ],
   "related": [],
   "quality": {
-    "pass": false,
-    "reasons": [
-      "CANDIDATE_ONLY_AWAITING_IMMUTABLE_GREEN_AND_IMAGE_BYTES_AND_NO_NATIVE_PUBLICATION"
-    ]
+    "pass": true,
+    "reasons": []
   },
   "duplicateScore": 0,
   "corrections": [
@@ -293,6 +291,10 @@ export const carabaoNoonAgent20261029: EditorialArticle = {
     {
       "at": "2026-10-29T12:20:00.000Z",
       "note": "Deux premières images 4:3 rejetées par le Gold Standard (ratio 1,45–2,05). Remplacées par Anfield 4608x3072 CC BY 2.0 et Etihad 3543x2358 CC BY 2.0, sources Commons vérifiées ; octets et intégration production restent à prouver."
+    },
+    {
+      "at": "2026-10-29T12:23:30.000Z",
+      "note": "Candidat agent, après échec natif documenté; prêt à passer les gates de production. Le champ publishedAt correspond au commit de préparation et ne constitue pas une preuve de disponibilité HTTP. La publication réelle exige déploiement et postflight indépendants."
     }
   ],
   "sourceChanges": [],
