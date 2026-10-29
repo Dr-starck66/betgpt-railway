@@ -288,13 +288,13 @@ export const carabaoDrawNoonAgent20261029: EditorialArticle = {
   "discoverReadiness": 90,
   "topStories": "TOP_STORIES_ELIGIBILITY_READY",
   "image": {
-    "src": "https://upload.wikimedia.org/wikipedia/commons/c/ce/FTFC01.jpg",
-    "width": 2304,
-    "height": 1728,
-    "alt": "Tribune Percy Ronson au Highbury Stadium de Fleetwood Town, photographie d'archive de 2007",
-    "credit": "Tangerines / Wikimedia Commons, domaine public ; photographie d'archive de 2007, non modifiée.",
-    "sourceUrl": "https://commons.wikimedia.org/wiki/File:FTFC01.jpg",
-    "licenseUrl": "https://commons.wikimedia.org/wiki/File:FTFC01.jpg"
+    "src": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Selhurst_Park_Holmesdale_Stand.jpg",
+    "width": 4128,
+    "height": 2322,
+    "alt": "Vue du stade Selhurst Park de Crystal Palace, qui accueillera Sunderland en quart de finale de Carabao Cup",
+    "credit": "Rockybiggs / Wikimedia Commons, CC BY-SA 4.0 ; photographie d’archive de 2015, non modifiée.",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Selhurst_Park_Holmesdale_Stand.jpg",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
   },
   "links": [
     {
@@ -320,6 +320,10 @@ export const carabaoDrawNoonAgent20261029: EditorialArticle = {
     {
       "at": "2026-10-29T12:36:22.692Z",
       "note": "Après candidat immutable GREEN #40874231315, préparation de l'article pour publication sécurisée. Ce timestamp est l'horodatage de validation de source, PAS une preuve de mise en ligne. Aucune génération Qwen native revendiquée."
+    },
+    {
+      "at": "2026-10-29T12:47:34.151Z",
+      "note": "Correction fail-closed après ASTRA_DAILY_IMAGE_FAIL IMAGE_FORMAT : couverture Fleetwood 4:3 remplacée par Selhurst Park 16:9 réel, 4128×2322 px, Rockybiggs CC BY-SA 4.0, archive 2015. Les deux images de corps restent distinctes et inchangées. Source non déployée à ce stade."
     }
   ],
   "sourceChanges": [],

@@ -22,6 +22,8 @@ function audit(candidate) {
   const inline = candidate.paragraphs.flatMap((p, i) => p.inlineImage ? [{...p.inlineImage, section:i}] : []);
   if (inline.length < 2 || new Set(inline.map(x => x.section)).size < 2) errors.push("missing_inline_images");
   if (new Set([candidate.image.src, ...inline.map(x => x.src)]).size !== inline.length + 1) errors.push("image_reuse");
+  const ratio = candidate.image.width / candidate.image.height;
+  if (candidate.image.width < 1200 || ratio < 1.45 || ratio > 2.05 || !candidate.image.sourceUrl || !candidate.image.licenseUrl) errors.push("invalid_cover_ratio_or_rights");
   if (inline.some(x => x.width < 1200 || x.height < 675 || !x.alt || !x.caption || !x.credit || !x.sourceUrl || !x.licenseUrl)) errors.push("invalid_image_metadata");
   if (candidate.generationProof) errors.push("false_native_provenance");
   if (candidate.parisDate !== "2026-10-29" || candidate.slot !== "noon" || candidate.id.startsWith("ed-")) errors.push("bad_slot");
@@ -48,3 +50,5 @@ test("reject unapproved publication status", () => {
   broken.status = "SCHEDULED";
   assert.ok(audit(broken).errors.includes("unapproved_publication"));
 });
+
+test("reject 4:3 hero image", () => { const broken = structuredClone(article); broken.image.width = 2304; broken.image.height = 1728; assert.ok(audit(broken).errors.includes("invalid_cover_ratio_or_rights")); });
