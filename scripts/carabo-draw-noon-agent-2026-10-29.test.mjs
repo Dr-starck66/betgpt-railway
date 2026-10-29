@@ -23,10 +23,10 @@ function audit(candidate) {
   if (inline.some(x => x.width < 1200 || x.height < 675 || !x.alt || !x.caption || !x.credit || !x.sourceUrl || !x.licenseUrl)) errors.push("invalid_image_metadata");
   if (candidate.generationProof) errors.push("false_native_provenance");
   if (candidate.parisDate !== "2026-10-29" || candidate.slot !== "noon" || candidate.id.startsWith("ed-")) errors.push("bad_slot");
-  if (candidate.status !== "SCHEDULED" || candidate.publishedAt !== null || candidate.quality.pass) errors.push("premature_publication_claim");
+  if (candidate.status !== "PUBLISHED" || !Number.isFinite(Date.parse(candidate.publishedAt)) || !candidate.quality.pass) errors.push("unapproved_publication");
   return { words, errors };
 }
-test("noon agent candidate is documented, sufficiently long, cited and not yet published", () => {
+test("noon agent source is documented and approved for protected publication", () => {
   const result = audit(article);
   assert.deepEqual(result.errors, []);
   assert.ok(result.words >= 1500);
@@ -41,8 +41,8 @@ test("reject false Qwen provenance", () => {
   broken.generationProof = { generator:"astra-auto-reporter-v2", modelRequests:7 };
   assert.ok(audit(broken).errors.includes("false_native_provenance"));
 });
-test("reject premature publication status", () => {
+test("reject unapproved publication status", () => {
   const broken = structuredClone(article);
-  broken.status = "PUBLISHED";
-  assert.ok(audit(broken).errors.includes("premature_publication_claim"));
+  broken.status = "SCHEDULED";
+  assert.ok(audit(broken).errors.includes("unapproved_publication"));
 });
