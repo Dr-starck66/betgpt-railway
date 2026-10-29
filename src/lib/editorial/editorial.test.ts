@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { buildEdition, applyEventOverride, composeNews } from "./engine.ts";
-import { newsEntries, learnTopics, renderNewsSitemap } from "./feed.ts";
+import { newsEntries, learnTopics, renderNewsSitemap, isEditorialIndexable } from "./feed.ts";
 import { qualityGate } from "./quality.ts";
 import { manualEditorialArticles } from "./manual-articles.ts";
 import { editorialGoldStandardGate } from "./gold-standard.ts";
@@ -1006,5 +1006,20 @@ describe("verified image attachment in native article pipeline", () => {
     assert.equal(attachVerifiedInlineImages(sections, "Arsenal - Chelsea", sourceTitles, "2026-10-28").some((s) => s.inlineImage), false);
     assert.equal(attachVerifiedInlineImages(sections, "Bayern - Real Madrid", sourceTitles, "2026-10-29").some((s) => s.inlineImage), false);
     assert.equal(attachVerifiedInlineImages(sections, "Bayern - Real Madrid", [sourceTitles[0]!], "2026-10-28").some((s) => s.inlineImage), false);
+  });
+});
+
+
+describe("Genoa Juventus 29 October postmatch public indexability regression", () => {
+  it("passes the unchanged live postmatch gate, never noindex, and enters News sitemap", () => {
+    const article = manualEditorialArticles().find((a) => a.id === "manual-agent-scheduled-2026-10-29-evening-genoa-juventus");
+    assert.ok(article, "published Genoa–Juventus article must be registered");
+    const strict = qualityGate(article, []);
+    assert.deepEqual(strict.reasons, [], "live postmatch gate must pass without relaxing checks");
+    assert.equal(isEditorialIndexable(article), true, "a published qualified article must not emit noindex");
+    const edition = { articles: [article] } as Parameters<typeof newsEntries>[0];
+    const entries = newsEntries(edition, Date.parse("2026-10-29T20:00:00Z"));
+    assert.equal(entries.length, 1, "article must be present in 48h News sitemap");
+    assert.equal(entries[0]?.loc, "https://betgpt.live/actualites/genoa-juventus-2-0-baldanzi-ehizibue-analyse-29-octobre-2026");
   });
 });
