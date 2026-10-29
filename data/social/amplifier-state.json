@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T19:15:37.479Z",
+      "lastCheckedAt": "2026-10-29T22:02:34.185Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -114,19 +114,24 @@
           "url": "https://betgpt.live/actualites/carabao-cup-quarts-tirage-liverpool-city-fleetwood-29-octobre-2026",
           "date": "2026-10-29T12:36:22.692Z",
           "seenAt": "2026-10-29T18:34:40.914Z"
+        },
+        "aad8d141382f4c3394": {
+          "url": "https://betgpt.live/actualites/genoa-juventus-2-0-baldanzi-ehizibue-analyse-29-octobre-2026",
+          "date": "2026-10-29T18:29:52.182Z",
+          "seenAt": "2026-10-29T22:02:34.185Z"
         }
       },
       "sourceStatus": "VERIFIED"
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T19:15:38.099Z",
+      "lastCheckedAt": "2026-10-29T22:02:40.116Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T19:15:39.598Z",
+      "lastCheckedAt": "2026-10-29T22:02:41.612Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -143,7 +148,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T19:15:40.203Z",
+      "lastCheckedAt": "2026-10-29T22:02:42.197Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -175,19 +180,19 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T19:15:41.382Z",
+      "lastCheckedAt": "2026-10-29T22:02:43.470Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T19:15:38.708Z",
+      "lastCheckedAt": "2026-10-29T22:02:40.732Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T19:15:40.802Z",
+      "lastCheckedAt": "2026-10-29T22:02:42.885Z",
       "seen": {
         "c022035f3d7190f6f1": {
           "url": "https://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/",
@@ -1266,6 +1271,34 @@
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Selhurst_Park_Holmesdale_Stand.jpg",
       "text": "Carabao Cup 2026 : tirage des quarts, Liverpool–Bournemouth et City–Bradford | BetGPT\nhttps://betgpt.live/actualites/carabao-cup-quarts-tirage-liverpool-city-fleetwood-29-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
       "createdAt": "2026-10-29T18:34:41.327Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:aad8d141382f4c3394": {
+      "id": "instagram:aad8d141382f4c3394",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/genoa-juventus-2-0-baldanzi-ehizibue-analyse-29-octobre-2026",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Foto_Gradinata_Nord_Genoa_2023-24.jpg",
+      "text": "Genoa–Juventus 2-0 : Baldanzi et Ehizibue, l&#x27;analyse du revers turinois | BetGPT\n\nLe Genoa a battu la Juventus 2-0 le 28 octobre 2026 au stade Luigi-Ferraris, avec des buts de Kingsley Ehizibue (12e) et Tommaso Baldanzi (28e). Retour sur les actions décisives, les changements de Spalletti, la résistance génoise et les conséquences au classement, à partir de la Lega Serie A, de la Juventus et de plusieurs rédactions indépendantes.\n\nhttps://betgpt.live/actualites/genoa-juventus-2-0-baldanzi-ehizibue-analyse-29-octobre-2026?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #GenoaJuventus #Baldanzi #Ehizibue",
+      "createdAt": "2026-10-29T22:02:39.529Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:aad8d141382f4c3394": {
+      "id": "x:aad8d141382f4c3394",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/genoa-juventus-2-0-baldanzi-ehizibue-analyse-29-octobre-2026",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Foto_Gradinata_Nord_Genoa_2023-24.jpg",
+      "text": "Genoa–Juventus 2-0 : Baldanzi et Ehizibue, l&#x27;analyse du revers turinois | BetGPT\nhttps://betgpt.live/actualites/genoa-juventus-2-0-baldanzi-ehizibue-analyse-29-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-29T22:02:39.530Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,
