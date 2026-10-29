@@ -300,7 +300,7 @@ export const genoaJuventusEveningAgent20261029: EditorialArticle = {
   "discoverReadiness": 91,
   "topStories": "TOP_STORIES_ELIGIBILITY_READY",
   "image": {
-    "src": "https://upload.wikimedia.org/wikipedia/commons/8/83/Foto_Gradinata_Nord_Genoa_2023-24.jpg",
+    "src": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Foto_Gradinata_Nord_Genoa_2023-24.jpg",
     "width": 3840,
     "height": 2160,
     "alt": "Tribune nord du Genoa au stade Luigi-Ferraris, photographie d'archive de 2023",
