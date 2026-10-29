@@ -17,7 +17,7 @@ const audit = (candidate) => {
   const inline = candidate.paragraphs.flatMap((p, index) => p.inlineImage ? [{...p.inlineImage,index}] : []);
   if (inline.length !== 2 || new Set(inline.map((x) => x.index)).size !== 2) reasons.push("missing_two_in_body_images");
   if (new Set([candidate.image.src, ...inline.map((x) => x.src)]).size !== 3) reasons.push("duplicate_cover_or_inline_image");
-  if (inline.some((x) => x.width < 1200 || x.height < 675 || !x.alt || !x.caption || !x.credit || !x.sourceUrl || !x.licenseUrl)) reasons.push("invalid_image_metadata");
+  if (inline.some((x) => x.width < 1200 || x.height < 675 || x.width/x.height < 1.45 || x.width/x.height > 2.05 || !x.alt || !x.caption || !x.credit || !x.sourceUrl || !x.licenseUrl)) reasons.push("invalid_image_metadata");
   if (candidate.generationProof) reasons.push("agent_claims_native_qwen");
   return {words,reasons};
 };
@@ -48,4 +48,8 @@ test("noon Carabao candidate fails when word count falls below 1500", () => {
 test("noon Carabao candidate rejects forged native generation proof", () => {
   const a=structuredClone(article);a.generationProof={generator:"astra-auto-reporter-v2",modelRequests:7};
   assert.ok(audit(a).reasons.includes("agent_claims_native_qwen"));
+});
+test("noon Carabao candidate rejects 4:3 inline image even if licensed", () => {
+  const a=structuredClone(article);a.paragraphs[1].inlineImage.width=4320;a.paragraphs[1].inlineImage.height=3240;
+  assert.ok(audit(a).reasons.includes("invalid_image_metadata"));
 });
