@@ -5,7 +5,7 @@ export const arsenalBenficaMorningAgent20261029: EditorialArticle = {
   "slug": "arsenal-benfica-3-0-russo-triple-record-analyse-29-octobre-2026",
   "slot": "morning",
   "articleType": "postmatch",
-  "status": "PUBLISHED",
+  "status": "SCHEDULED",
   "title": "Arsenal–Benfica 3-0 : triplé de Russo, record anglais et analyse du match | BetGPT",
   "h1": "Arsenal–Benfica 3-0 : comment le triplé de Russo a changé la troisième journée européenne",
   "lead": "Arsenal a battu Benfica 3-0 le 28 octobre 2026 à Meadow Park, avec un triplé d’Alessia Russo (39e, 66e, 79e sur penalty). Au-delà du record anglais de 23 buts en compétition européenne, le match révèle une domination offensive mesurable, une résistance portugaise longtemps portée par Lena Pauels et des enjeux distincts pour les deux clubs. Analyse recoupée avec l’UEFA, Benfica et quatre médias indépendants.",
@@ -174,7 +174,7 @@ export const arsenalBenficaMorningAgent20261029: EditorialArticle = {
     }
   ],
   "createdAt": "2026-10-29T09:04:21.000Z",
-  "publishedAt": "2026-10-29T09:04:21.000Z",
+  "publishedAt": null,
   "modifiedAt": "2026-10-29T09:04:21.000Z",
   "parisDate": "2026-10-29",
   "scheduledTime": "08:00",
