@@ -30,6 +30,29 @@ const BAYERN_REAL_WOMEN_20261028: readonly EditorialImage[] = [
   },
 ];
 
+/** Individually verified Commons archives for Arsenal–Benfica women (28 Oct 2026).
+ * These depict Russo in 2024 and Meadow Park in 2022, not the 2026 match. */
+const ARSENAL_BENFICA_WOMEN_20261029: readonly EditorialImage[] = [
+  {
+    src: "https://upload.wikimedia.org/wikipedia/commons/9/9c/Valerenga-Arsenal_WUCL_12-12-2024_CG3A4421_05.jpg",
+    width: 4480, height: 2986,
+    alt: "Alessia Russo avec Arsenal face à Vålerenga en Ligue des champions féminine en décembre 2024",
+    caption: "Alessia Russo avec Arsenal contre Vålerenga le 12 décembre 2024 : archive, pas le match face à Benfica du 28 octobre 2026.",
+    credit: "MichaelEmilio / Wikimedia Commons, CC BY 4.0 ; photographie non modifiée.",
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:Valerenga-Arsenal_WUCL_12-12-2024_CG3A4421_05.jpg",
+    licenseUrl: "https://creativecommons.org/licenses/by/4.0/",
+  },
+  {
+    src: "https://upload.wikimedia.org/wikipedia/commons/8/8f/Meadow_Park_Stadium%2C_Borehamwood_-_geograph.org.uk_-_7273530.jpg",
+    width: 1920, height: 1280,
+    alt: "Vue extérieure de Meadow Park à Borehamwood, stade du match Arsenal féminin contre Benfica",
+    caption: "Vue extérieure de Meadow Park à Borehamwood en septembre 2022 : archive du stade, pas du match du 28 octobre 2026.",
+    credit: "David Howard / Geograph / Wikimedia Commons, CC BY-SA 2.0 ; photographie non modifiée.",
+    sourceUrl: "https://commons.wikimedia.org/wiki/File:Meadow_Park_Stadium,_Borehamwood_-_geograph.org.uk_-_7273530.jpg",
+    licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0/",
+  },
+];
+
 function mentionsClubs(text: string): boolean {
   const normalized = text.toLocaleLowerCase("fr").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   return /bayern/.test(normalized) && /real madrid/.test(normalized);
@@ -48,6 +71,15 @@ export function attachVerifiedInlineImages(
   parisDay: string,
 ): EditorialParagraph[] {
   const safeCopy = paragraphs.map((part) => ({ ...part }));
+  if (safeCopy.length < 7) return safeCopy;
+  const normalizedTitle = title.toLocaleLowerCase("fr").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  if (parisDay === "2026-10-29" && /arsenal/.test(normalizedTitle) && /benfica/.test(normalizedTitle)) {
+    const supporting = sourceTitles.filter((source) => /arsenal/i.test(source) && /benfica/i.test(source) && mentionsWomen(source));
+    if (supporting.length < 2) return safeCopy;
+    safeCopy[1] = { ...safeCopy[1]!, inlineImage: { ...ARSENAL_BENFICA_WOMEN_20261029[0]! } };
+    safeCopy[4] = { ...safeCopy[4]!, inlineImage: { ...ARSENAL_BENFICA_WOMEN_20261029[1]! } };
+    return safeCopy;
+  }
   if (parisDay !== "2026-10-28" || safeCopy.length < 7 || !mentionsClubs(title)) return safeCopy;
   const supporting = sourceTitles.filter((source) => mentionsClubs(source) && mentionsWomen(source));
   if (supporting.length < 2) return safeCopy;
