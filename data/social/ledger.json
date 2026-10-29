@@ -743,5 +743,26 @@
     "remotePostUrl": null,
     "error": null,
     "retryCount": 0
+  },
+  {
+    "id": "x:manual-agent-scheduled-2026-10-29-evening-genoa-juventus:v1",
+    "articleId": "manual-agent-scheduled-2026-10-29-evening-genoa-juventus",
+    "articleSlug": "genoa-juventus-2-0-baldanzi-ehizibue-analyse-29-octobre-2026",
+    "articleTitle": "Genoa–Juventus 2-0 : pourquoi Baldanzi et Ehizibue ont fait basculer le match",
+    "articleUrl": "https://betgpt.live/actualites/genoa-juventus-2-0-baldanzi-ehizibue-analyse-29-octobre-2026",
+    "trackedUrl": "https://betgpt.live/actualites/genoa-juventus-2-0-baldanzi-ehizibue-analyse-29-octobre-2026?utm_source=x&utm_medium=social&utm_campaign=editorial_auto&utm_content=genoa-juventus-2-0-baldanzi-ehizibue-analyse-29-octobre-2026",
+    "network": "x",
+    "text": "⚽ Genoa–Juventus 2-0 : pourquoi Baldanzi et Ehizibue ont fait basculer le match\n\nÀ lire sur BetGPT 👇\n\nhttps://betgpt.live/actualites/genoa-juventus-2-0-baldanzi-ehizibue-analyse-29-octobre-2026?utm_source=x&utm_medium=social&utm_campaign=editorial_auto&utm_content=genoa-juventus",
+    "hashtags": [],
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Foto_Gradinata_Nord_Genoa_2023-24.jpg",
+    "createdAt": "2026-10-29T18:33:23.335Z",
+    "scheduledAt": "2026-10-29T18:29:52.182Z",
+    "attemptedAt": null,
+    "publishedAt": null,
+    "status": "READY_TO_X",
+    "remotePostId": null,
+    "remotePostUrl": null,
+    "error": null,
+    "retryCount": 0
   }
 ]
