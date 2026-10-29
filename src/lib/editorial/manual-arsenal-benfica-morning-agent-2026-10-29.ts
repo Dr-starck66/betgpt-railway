@@ -1,7 +1,6 @@
 import type { EditorialArticle } from "@/lib/editorial/types";
 /** Article de secours produit par agent après échec du Qwen natif (run scheduler 30db615b-92ea-4aba-8fcf-92807837f791). NE PAS attribuer generationProof natif. Candidat soumis aux gates ASTRA, non prouvé publié. */
-export const arsenalBenficaMorningAgent20261029: EditorialArticle = 
-{
+export const arsenalBenficaMorningAgent20261029: EditorialArticle = {
   "id": "manual-agent-scheduled-2026-10-29-morning-arsenal-benfica",
   "slug": "arsenal-benfica-3-0-russo-triple-record-analyse-29-octobre-2026",
   "slot": "morning",
