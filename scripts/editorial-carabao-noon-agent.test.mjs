@@ -21,14 +21,14 @@ const audit = (candidate) => {
   if (candidate.generationProof) reasons.push("agent_claims_native_qwen");
   return {words,reasons};
 };
-test("noon Carabao candidate meets structural and provenance minimum, but remains unpublished", () => {
+test("noon Carabao article meets structural and provenance minimum before protected deployment", () => {
   const result = audit(article);
   assert.deepEqual(result.reasons, []);
   assert.ok(result.words >= 1500);
-  assert.equal(article.status,"SCHEDULED");
-  assert.equal(article.publishedAt,null);
-  assert.equal(article.quality.pass,false);
-  assert.equal(article.discoverOpportunity.decision,"REVIEW");
+  assert.equal(article.status,"PUBLISHED");
+  assert.ok(Number.isFinite(Date.parse(article.publishedAt)));
+  assert.equal(article.quality.pass,true);
+  assert.equal(article.discoverOpportunity.decision,"PUBLISH");
   assert.equal(article.slot,"noon");
   assert.equal(article.parisDate,"2026-10-29");
   assert.ok(!article.generationProof);
