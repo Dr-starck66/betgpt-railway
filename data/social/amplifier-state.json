@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T10:08:44.172Z",
+      "lastCheckedAt": "2026-10-29T11:32:48.245Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -104,19 +104,24 @@
           "url": "https://betgpt.live/actualites/ol-lyonnes-inter-ligue-champions-feminine-28-octobre-2026-analyse",
           "date": "2026-10-28T07:15:23.504Z",
           "seenAt": "2026-10-28T09:26:41.682Z"
+        },
+        "d555c556897750ee02": {
+          "url": "https://betgpt.live/actualites/arsenal-benfica-3-0-russo-triple-record-analyse-29-octobre-2026",
+          "date": "2026-10-29T10:01:23.104Z",
+          "seenAt": "2026-10-29T11:32:48.245Z"
         }
       },
       "sourceStatus": "VERIFIED"
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T10:08:44.945Z",
+      "lastCheckedAt": "2026-10-29T11:32:53.755Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T10:08:46.912Z",
+      "lastCheckedAt": "2026-10-29T11:32:56.049Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -133,7 +138,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T10:08:47.858Z",
+      "lastCheckedAt": "2026-10-29T11:32:57.110Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -165,19 +170,19 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T10:08:49.388Z",
+      "lastCheckedAt": "2026-10-29T11:32:58.939Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T10:08:45.765Z",
+      "lastCheckedAt": "2026-10-29T11:32:54.629Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T10:08:48.666Z",
+      "lastCheckedAt": "2026-10-29T11:32:58.092Z",
       "seen": {
         "c022035f3d7190f6f1": {
           "url": "https://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/",
@@ -1200,6 +1205,34 @@
       "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/OL-Stade_Rennais_saison_2022-2023_Groupama_Stadium_08.jpg",
       "text": "OL Lyonnes–Inter : forme, enjeux et faits confirmés avant le match du 28 octobre | BetGPT\nhttps://betgpt.live/actualites/ol-lyonnes-inter-ligue-champions-feminine-28-octobre-2026-analyse?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
       "createdAt": "2026-10-28T09:26:41.958Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:d555c556897750ee02": {
+      "id": "instagram:d555c556897750ee02",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/arsenal-benfica-3-0-russo-triple-record-analyse-29-octobre-2026",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/38/Valerenga-Arsenal_WUCL_12-12-2024_CG3A4421_08.jpg",
+      "text": "Arsenal–Benfica 3-0 : triplé de Russo, record anglais et analyse du match | BetGPT\n\nArsenal a battu Benfica 3-0 le 28 octobre 2026 à Meadow Park, avec un triplé d’Alessia Russo (39e, 66e, 79e sur penalty). Au-delà du record anglais de 23 buts en compétition européenne, le match révèle une domination offensive mesurable, une résistance portugaise longtemps portée par Lena Pauels et des enjeux distincts pour les deux clubs. Analyse recoupée avec l’UEFA, Benfica et quatre médias indépendants.\n\nhttps://betgpt.live/actualites/arsenal-benfica-3-0-russo-triple-record-analyse-29-octobre-2026?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #ArsenalBenfica #triple #Russo",
+      "createdAt": "2026-10-29T11:32:53.012Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:d555c556897750ee02": {
+      "id": "x:d555c556897750ee02",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/arsenal-benfica-3-0-russo-triple-record-analyse-29-octobre-2026",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/38/Valerenga-Arsenal_WUCL_12-12-2024_CG3A4421_08.jpg",
+      "text": "Arsenal–Benfica 3-0 : triplé de Russo, record anglais et analyse du match | BetGPT\nhttps://betgpt.live/actualites/arsenal-benfica-3-0-russo-triple-record-analyse-29-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-29T11:32:53.012Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,
