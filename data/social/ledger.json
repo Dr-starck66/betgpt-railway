@@ -722,5 +722,26 @@
     "remotePostUrl": null,
     "error": null,
     "retryCount": 0
+  },
+  {
+    "id": "x:manual-agent-scheduled-2026-10-29-noon-carabao-draw:v1",
+    "articleId": "manual-agent-scheduled-2026-10-29-noon-carabao-draw",
+    "articleSlug": "carabao-cup-quarts-tirage-liverpool-city-fleetwood-29-octobre-2026",
+    "articleTitle": "Carabao Cup : Liverpool–Bournemouth, City–Bradford et le tableau des quarts vérifié",
+    "articleUrl": "https://betgpt.live/actualites/carabao-cup-quarts-tirage-liverpool-city-fleetwood-29-octobre-2026",
+    "trackedUrl": "https://betgpt.live/actualites/carabao-cup-quarts-tirage-liverpool-city-fleetwood-29-octobre-2026?utm_source=x&utm_medium=social&utm_campaign=editorial_auto&utm_content=carabao-cup-quarts-tirage-liverpool-city-fleetwood-29-octobre-2026",
+    "network": "x",
+    "text": "🔴 Carabao Cup : Liverpool–Bournemouth, City–Bradford et le tableau des quarts vérifié\n\nÀ lire sur BetGPT 👇\n\nhttps://betgpt.live/actualites/carabao-cup-quarts-tirage-liverpool-city-fleetwood-29-octobre-2026?utm_source=x&utm_medium=social&utm_campaign=editorial_auto&utm_content=c",
+    "hashtags": [],
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Selhurst_Park_Holmesdale_Stand.jpg",
+    "createdAt": "2026-10-29T12:51:16.980Z",
+    "scheduledAt": "2026-10-29T12:36:22.692Z",
+    "attemptedAt": null,
+    "publishedAt": null,
+    "status": "READY_TO_X",
+    "remotePostId": null,
+    "remotePostUrl": null,
+    "error": null,
+    "retryCount": 0
   }
 ]
