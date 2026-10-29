@@ -27,6 +27,8 @@ test("2026-10-29 morning agent candidate preserves 1500 words, seven cited H2 an
   assert.equal(result.reasons.length, 0, result.reasons.join(","));
   assert.ok(result.words >= 1500);
   assert.equal(article.quality.pass, false, "candidate must not masquerade as production GREEN");
+  assert.equal(article.status, "SCHEDULED");
+  assert.equal(article.publishedAt, null);
 });
 test("agent candidate is rejected if one inline image disappears", () => {
   const candidate = structuredClone(article);
