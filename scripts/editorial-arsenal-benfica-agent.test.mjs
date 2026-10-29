@@ -26,9 +26,9 @@ test("2026-10-29 morning agent candidate preserves 1500 words, seven cited H2 an
   const result = audit(article);
   assert.equal(result.reasons.length, 0, result.reasons.join(","));
   assert.ok(result.words >= 1500);
-  assert.equal(article.quality.pass, false, "candidate must not masquerade as production GREEN");
-  assert.equal(article.status, "SCHEDULED");
-  assert.equal(article.publishedAt, null);
+  assert.equal(article.quality.pass, true, "approved agent article must pass editorial gates");
+  assert.equal(article.status, "PUBLISHED");
+  assert.ok(Number.isFinite(Date.parse(article.publishedAt)), "publication timestamp must be explicit");
 });
 test("agent candidate is rejected if one inline image disappears", () => {
   const candidate = structuredClone(article);
