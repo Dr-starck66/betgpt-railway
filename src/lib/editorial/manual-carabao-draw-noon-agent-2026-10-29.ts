@@ -8,7 +8,7 @@ export const carabaoDrawNoonAgent20261029: EditorialArticle = {
   "status": "PUBLISHED",
   "title": "Carabao Cup 2026 : tirage des quarts, Liverpool–Bournemouth et City–Bradford | BetGPT",
   "h1": "Carabao Cup : Liverpool–Bournemouth, City–Bradford et le tableau des quarts vérifié",
-  "lead": "Le tirage des quarts de finale de la Carabao Cup, annoncé le 28 octobre 2026, propose Liverpool–Bournemouth, Manchester City–Bradford, Crystal Palace–Sunderland et Fleetwood–Everton ou Newcastle. Analyse des qualifications, des lieux confirmés et des informations qui restent à vérifier, avec priorité aux documents officiels de l’EFL et de la Premier League.",
+  "lead": "Le tirage des quarts de finale de la Carabao Cup, annoncé le 28 octobre 2026, propose Liverpool–Bournemouth, Manchester City–Bradford, Crystal Palace–Sunderland et Fleetwood–Everton ou Newcastle. Liverpool a éliminé Chelsea (1-1, 6-5 aux tirs au but) et Manchester City a sorti Brighton (2-2, 4-3 aux tirs au but) avant ce tirage. Analyse des qualifications, des lieux confirmés et des informations encore ouvertes, avec priorité aux documents officiels de l’EFL et de la Premier League.",
   "paragraphs": [
     {
       "h2": "Un tirage encore incomplet, mais quatre affiches déjà fixées",
@@ -210,7 +210,9 @@ export const carabaoDrawNoonAgent20261029: EditorialArticle = {
     "Bradford City",
     "Fleetwood Town",
     "Crystal Palace",
-    "Sunderland"
+    "Sunderland",
+    "Chelsea",
+    "Brighton"
   ],
   "matchId": null,
   "competition": "Carabao Cup 2026/27",
@@ -238,10 +240,10 @@ export const carabaoDrawNoonAgent20261029: EditorialArticle = {
     },
     {
       "id": "guardian",
-      "label": "The Guardian — Liverpool–Chelsea",
+      "label": "The Guardian — Carabao Cup, Liverpool–Chelsea",
       "status": "HIGH_CONFIDENCE",
       "url": "https://www.theguardian.com/football/2026/oct/28/liverpool-chelsea-carabao-cup-fourth-round-match-report",
-      "note": "Compte rendu du 1-1 et des tirs au but."
+      "note": "Compte rendu du quatrième tour de Carabao Cup : Liverpool élimine Chelsea 1-1 puis 6-5 aux tirs au but et accède aux quarts face à Bournemouth."
     },
     {
       "id": "sky",
