@@ -25,7 +25,7 @@ export const bayernRealWomenEveningAgent20261029: EditorialArticle = {
       ],
       "subsections": [
         {
-          "h3": "Ce qui est confirmé, et ce qui reste une interprétation",
+          "h3": "Deux lectures officielles d'un résultat nul",
           "body": "Deux constats résistent à toutes les interprétations : Madrid a frappé deux fois en début de rencontre, et Munich a répondu sans jamais inscrire le troisième but. Les déclarations d'après-match, lorsqu'elles sont rapportées par les clubs, éclairent le ressenti des joueuses ; elles ne remplacent ni les actions observables ni les données de match.",
           "sourceIds": [
             "bayern",
@@ -55,7 +55,7 @@ export const bayernRealWomenEveningAgent20261029: EditorialArticle = {
       ],
       "subsections": [
         {
-          "h3": "La portée exacte de cette séquence",
+          "h3": "Pourquoi l'efficacité initiale n'a pas suffi",
           "body": "Le Real a montré sa capacité à convertir rapidement deux occasions de nature différente. Cela ne prouve pas que son plan de jeu pouvait rester inchangé pendant quatre-vingt-dix minutes. L'enjeu suivant était de conserver assez de possession et de sorties de balle pour empêcher Munich d'installer sa pression.",
           "sourceIds": [
             "bayern",
@@ -85,7 +85,7 @@ export const bayernRealWomenEveningAgent20261029: EditorialArticle = {
       ],
       "subsections": [
         {
-          "h3": "Ce qui est confirmé, et ce qui reste une interprétation",
+          "h3": "Le premier but européen d'Imade, sans extrapolation",
           "body": "Le fait vérifiable est une réduction de l'écart sur corner, non une série imaginaire d'occasions chiffrées. Les sources officielles décrivent plusieurs situations munichoises, mais seules les statistiques publiées séparément par le club permettent de quantifier l'ensemble du match.",
           "sourceIds": [
             "bayern",
@@ -125,7 +125,7 @@ export const bayernRealWomenEveningAgent20261029: EditorialArticle = {
       ],
       "subsections": [
         {
-          "h3": "La portée exacte de cette séquence",
+          "h3": "Égaliser tôt ne signifie pas gagner",
           "body": "Cette égalisation transforme le scénario, pas le résultat final : deux équipes à égalité doivent encore marquer pour gagner. La distinction est essentielle dans une analyse qui refuse de faire passer un élan offensif pour trois points effectivement obtenus.",
           "sourceIds": [
             "bayern",
@@ -155,7 +155,7 @@ export const bayernRealWomenEveningAgent20261029: EditorialArticle = {
       ],
       "subsections": [
         {
-          "h3": "Ce qui est confirmé, et ce qui reste une interprétation",
+          "h3": "Lire les statistiques sans inventer de xG",
           "body": "Les statistiques sont celles publiées par le Bayern pour cette rencontre, non des estimations reconstruites. Les chiffres de possession et de tirs sont un cadre de lecture ; ils ne remplacent ni l'observation des phases de jeu ni la chronologie des quatre buts.",
           "sourceIds": [
             "bayern",
@@ -185,7 +185,7 @@ export const bayernRealWomenEveningAgent20261029: EditorialArticle = {
       ],
       "subsections": [
         {
-          "h3": "La portée exacte de cette séquence",
+          "h3": "Le poteau ne transforme pas le nul en victoire",
           "body": "Le poteau de Proost est une action réelle et datée, pas une preuve que le Bayern aurait nécessairement remporté la rencontre en rejouant les mêmes situations. La valeur du compte rendu réside dans cette précision : ce qui a failli se produire n'est pas ce qui s'est produit.",
           "sourceIds": [
             "bayern",
@@ -225,7 +225,7 @@ export const bayernRealWomenEveningAgent20261029: EditorialArticle = {
       ],
       "subsections": [
         {
-          "h3": "Ce qui est confirmé, et ce qui reste une interprétation",
+          "h3": "Un calendrier à suivre sans prédire le classement",
           "body": "Ce bilan distingue les faits du calendrier des hypothèses sportives. Les cinq et trois points proviennent des résultats confirmés ; aucune probabilité de qualification n'est avancée, faute de modèle transparent et de données exhaustives.",
           "sourceIds": [
             "bayern",
