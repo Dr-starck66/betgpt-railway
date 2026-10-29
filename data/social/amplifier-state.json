@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T18:34:07.983Z",
+      "lastCheckedAt": "2026-10-29T18:34:40.914Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -109,19 +109,24 @@
           "url": "https://betgpt.live/actualites/arsenal-benfica-3-0-russo-triple-record-analyse-29-octobre-2026",
           "date": "2026-10-29T10:01:23.104Z",
           "seenAt": "2026-10-29T11:32:48.245Z"
+        },
+        "91c95f5130d4daba6b": {
+          "url": "https://betgpt.live/actualites/carabao-cup-quarts-tirage-liverpool-city-fleetwood-29-octobre-2026",
+          "date": "2026-10-29T12:36:22.692Z",
+          "seenAt": "2026-10-29T18:34:40.914Z"
         }
       },
       "sourceStatus": "VERIFIED"
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T18:34:15.362Z",
+      "lastCheckedAt": "2026-10-29T18:34:41.896Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T18:34:17.618Z",
+      "lastCheckedAt": "2026-10-29T18:34:43.447Z",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -138,7 +143,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T18:34:18.711Z",
+      "lastCheckedAt": "2026-10-29T18:34:44.133Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -170,19 +175,19 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T18:34:20.496Z",
+      "lastCheckedAt": "2026-10-29T18:34:45.179Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T18:34:16.300Z",
+      "lastCheckedAt": "2026-10-29T18:34:42.452Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T18:34:19.673Z",
+      "lastCheckedAt": "2026-10-29T18:34:44.664Z",
       "seen": {
         "c022035f3d7190f6f1": {
           "url": "https://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/",
@@ -1233,6 +1238,34 @@
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/38/Valerenga-Arsenal_WUCL_12-12-2024_CG3A4421_08.jpg",
       "text": "Arsenal–Benfica 3-0 : triplé de Russo, record anglais et analyse du match | BetGPT\nhttps://betgpt.live/actualites/arsenal-benfica-3-0-russo-triple-record-analyse-29-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
       "createdAt": "2026-10-29T11:32:53.012Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:91c95f5130d4daba6b": {
+      "id": "instagram:91c95f5130d4daba6b",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/carabao-cup-quarts-tirage-liverpool-city-fleetwood-29-octobre-2026",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Selhurst_Park_Holmesdale_Stand.jpg",
+      "text": "Carabao Cup 2026 : tirage des quarts, Liverpool–Bournemouth et City–Bradford | BetGPT\n\nLe tirage des quarts de finale de la Carabao Cup, annoncé le 28 octobre 2026, propose Liverpool–Bournemouth, Manchester City–Bradford, Crystal Palace–Sunderland et Fleetwood–Everton ou Newcastle. Liverpool a éliminé Chelsea (1-1, 6-5 aux tirs au but) et Manchester City a sorti Brighton (2-2, 4-3 aux tirs au but) avant ce tirage. Analyse des qualifications, des lieux confirmés et des informations encore ouvertes, avec priorité aux documents officiels de l’EFL et de la Premier \n\nhttps://betgpt.live/actualites/carabao-cup-quarts-tirage-liverpool-city-fleetwood-29-octobre-2026?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #Carabao #tirage #quarts",
+      "createdAt": "2026-10-29T18:34:41.327Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:91c95f5130d4daba6b": {
+      "id": "x:91c95f5130d4daba6b",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/carabao-cup-quarts-tirage-liverpool-city-fleetwood-29-octobre-2026",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Selhurst_Park_Holmesdale_Stand.jpg",
+      "text": "Carabao Cup 2026 : tirage des quarts, Liverpool–Bournemouth et City–Bradford | BetGPT\nhttps://betgpt.live/actualites/carabao-cup-quarts-tirage-liverpool-city-fleetwood-29-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-29T18:34:41.327Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,
