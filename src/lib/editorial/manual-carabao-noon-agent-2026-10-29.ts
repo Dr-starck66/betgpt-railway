@@ -50,14 +50,14 @@ export const carabaoNoonAgent20261029: EditorialArticle = {
         }
       ],
       "inlineImage": {
-        "src": "https://upload.wikimedia.org/wikipedia/commons/e/ec/Anfield_Stadium%2C_Liverpool_%2810%29.JPG",
-        "width": 4320,
-        "height": 3240,
-        "alt": "Vue extérieure d'Anfield à Liverpool, stade qui accueillera Bournemouth en quart de finale de Carabao Cup",
-        "caption": "Anfield photographié en septembre 2012 : illustration d'archive du stade où Liverpool doit recevoir Bournemouth, et non photographie du match contre Chelsea.",
-        "credit": "Rept0n1x / Wikimedia Commons, CC BY-SA 3.0 ; photographie d'archive non modifiée.",
-        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Anfield_Stadium,_Liverpool_(10).JPG",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/"
+        "src": "https://upload.wikimedia.org/wikipedia/commons/5/57/Anfield%2C_Liverpool_%2812969114725%29.jpg",
+        "width": 4608,
+        "height": 3072,
+        "alt": "Vue extérieure du stade Anfield à Liverpool, futur lieu du quart de finale Liverpool–Bournemouth",
+        "caption": "Anfield en mars 2014 : photographie d'archive du stade où Liverpool doit recevoir Bournemouth, et non du match Liverpool–Chelsea.",
+        "credit": "Daniel (daniel0685) / Wikimedia Commons, CC BY 2.0 ; photographie non modifiée.",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Anfield,_Liverpool_(12969114725).jpg",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
       }
     },
     {
@@ -81,14 +81,14 @@ export const carabaoNoonAgent20261029: EditorialArticle = {
         }
       ],
       "inlineImage": {
-        "src": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Etihad_Man._City_Stadium.jpg",
-        "width": 4032,
-        "height": 3024,
-        "alt": "Façade de l'Etihad Stadium à Manchester où Manchester City recevra Bradford City en Carabao Cup",
-        "caption": "Etihad Stadium photographié en avril 2023 : photo d'archive du lieu annoncé pour Manchester City–Bradford, pas du match du 28 octobre 2026.",
-        "credit": "Vojta.zurek / Wikimedia Commons, CC BY-SA 4.0 ; photographie d'archive non modifiée.",
-        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Etihad_Man._City_Stadium.jpg",
-        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+        "src": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Etihad_Stadium.jpg",
+        "width": 3543,
+        "height": 2358,
+        "alt": "Vue intérieure de l'Etihad Stadium à Manchester, lieu du quart de finale Manchester City–Bradford",
+        "caption": "Etihad Stadium en mai 2016 : photographie d'archive du stade qui accueillera Bradford, sans lien photographique avec Manchester City–Brighton du 28 octobre 2026.",
+        "credit": "Cléria De Souza / Wikimedia Commons, CC BY 2.0 ; photographie non modifiée.",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Etihad_Stadium.jpg",
+        "licenseUrl": "https://creativecommons.org/licenses/by/2.0/"
       }
     },
     {
@@ -289,6 +289,10 @@ export const carabaoNoonAgent20261029: EditorialArticle = {
     {
       "at": "2026-10-29T12:14:00.000Z",
       "note": "Agent de secours après run natif cron-api 0be046f0-1107-4e60-9652-401e00702fa4, evidenceThresholdPassed=0, modelCompleted=0, NO_QUALIFIED_THREE_SOURCE_EVENT ; ne pas attribuer à Qwen."
+    },
+    {
+      "at": "2026-10-29T12:20:00.000Z",
+      "note": "Deux premières images 4:3 rejetées par le Gold Standard (ratio 1,45–2,05). Remplacées par Anfield 4608x3072 CC BY 2.0 et Etihad 3543x2358 CC BY 2.0, sources Commons vérifiées ; octets et intégration production restent à prouver."
     }
   ],
   "sourceChanges": [],
