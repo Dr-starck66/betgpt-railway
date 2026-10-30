@@ -40,13 +40,13 @@ export const cityPsgEveningAgentCandidate20261030: EditorialArticle = {
         "footmercato"
       ],
       "inlineImage": {
-        "src": "https://upload.wikimedia.org/wikipedia/commons/d/d2/Manchester_City_W.F.C._-_FC_Barcelona_Femen%C3%AD_-_Joie_Stadium_-_9_October_2024_03.jpg",
-        "width": 4032,
-        "height": 3024,
-        "alt": "Joueuses de Manchester City et Barcelone au Joie Stadium en octobre 2024, photographie d'archive sans rapport avec PSG 2026",
-        "caption": "Manchester City–FC Barcelone féminin au Joie Stadium le 9 octobre 2024. Archive d'une autre rencontre, pas une photo du PSG en 2026.",
-        "credit": "Hmickey / Wikimedia Commons, CC BY-SA 4.0, photographie d'archive non modifiée.",
-        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Manchester_City_W.F.C._-_FC_Barcelona_Femen%C3%AD_-_Joie_Stadium_-_9_October_2024_03.jpg",
+        "src": "https://upload.wikimedia.org/wikipedia/commons/2/22/Academy_Stadium.jpg",
+        "width": 4576,
+        "height": 3056,
+        "alt": "Vue extérieure du Joie Stadium, ancien Academy Stadium, photographié à Manchester en février 2015",
+        "caption": "Le Joie Stadium, alors nommé Academy Stadium, photographié le 20 février 2015. Archive du lieu du match, et non du City–PSG du 29 octobre 2026.",
+        "credit": "Espandero / Wikimedia Commons — CC BY-SA 4.0 ; photographie de 2015 non modifiée.",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Academy_Stadium.jpg",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
       }
     },
@@ -80,13 +80,13 @@ export const cityPsgEveningAgentCandidate20261030: EditorialArticle = {
         "footmercato"
       ],
       "inlineImage": {
-        "src": "https://upload.wikimedia.org/wikipedia/commons/5/54/Manchester_City_W.F.C._-_FC_Barcelona_Femen%C3%AD_-_Joie_Stadium_-_9_October_2024_04.jpg",
-        "width": 4032,
-        "height": 3024,
-        "alt": "Vue générale de Manchester City Barcelone féminin au Joie Stadium en 2024, photographie d'archive distincte",
-        "caption": "Vue du Joie Stadium lors de Manchester City–FC Barcelone féminin le 9 octobre 2024. Archive, sans lien photographique avec le match du PSG en 2026.",
-        "credit": "Hmickey / Wikimedia Commons, CC BY-SA 4.0, photographie d'archive non modifiée.",
-        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Manchester_City_W.F.C._-_FC_Barcelona_Femen%C3%AD_-_Joie_Stadium_-_9_October_2024_04.jpg",
+        "src": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Etihad_Stadium_from_Academy_Stadium.jpg",
+        "width": 4576,
+        "height": 3056,
+        "alt": "Vue de l'Etihad Stadium depuis l'Academy Stadium de Manchester City en février 2015",
+        "caption": "L'Etihad Stadium vu depuis l'Academy Stadium, février 2015 : illustration d'archive du campus Manchester City. Le match féminin de 2026 s'est joué au Joie Stadium, pas à l'Etihad.",
+        "credit": "Espandero / Wikimedia Commons — CC BY-SA 4.0 ; photographie d'archive 2015 non modifiée.",
+        "sourceUrl": "https://commons.wikimedia.org/wiki/File:Etihad_Stadium_from_Academy_Stadium.jpg",
         "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
       }
     },
@@ -218,6 +218,10 @@ export const cityPsgEveningAgentCandidate20261030: EditorialArticle = {
     {
       "at": "2026-10-30T20:55:48.000Z",
       "note": "Candidat autonome sur branche isolée ; distinct de Qwen. Reçu natif Railway 3c06010e-56d2-4af9-ad0b-fc1a4185ac9a : aucun article publié, NO_QUALIFIED_THREE_SOURCE_EVENT. Aucun run de génération Qwen à sept appels prouvé pour ce candidat."
+    },
+    {
+      "at": "2026-10-30T20:55:48.000Z",
+      "note": "Correction des deux images en corps : anciennes photos 4:3 non conformes au ratio du gate immutable (1,45–2,05). Deux nouvelles archives CC BY-SA 4.0 de 4576×3056 (ratio 1,497) vérifiées sur Commons, distinctes de la couverture. Aucune modification du gate."
     }
   ],
   "sourceChanges": [],
