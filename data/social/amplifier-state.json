@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-30T08:58:47.773Z",
+      "lastCheckedAt": "2026-10-30T11:25:13.671Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {
         "f60130248d48db11bc": {
@@ -125,13 +125,13 @@
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-30T08:58:48.355Z",
+      "lastCheckedAt": "2026-10-30T11:25:14.324Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {}
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-30T08:58:49.513Z",
+      "lastCheckedAt": "2026-10-30T11:25:15.527Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {
         "113acfc5949a8ca9ca": {
@@ -148,7 +148,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-30T08:58:50.106Z",
+      "lastCheckedAt": "2026-10-30T11:25:16.146Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {
         "8d1925756df5539dba": {
@@ -180,19 +180,19 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-30T08:58:51.286Z",
+      "lastCheckedAt": "2026-10-30T11:25:17.290Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {}
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-30T08:58:49.068Z",
-      "seen": {},
-      "sourceStatus": "VERIFIED"
+      "lastCheckedAt": "2026-10-30T11:25:14.963Z",
+      "sourceStatus": "BLOCKED_SOURCE",
+      "seen": {}
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-30T08:58:50.698Z",
+      "lastCheckedAt": "2026-10-30T11:25:16.716Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {
         "c022035f3d7190f6f1": {
