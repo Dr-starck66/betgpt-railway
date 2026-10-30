@@ -5,13 +5,14 @@ import { editorialGoldStandardGate } from "./gold-standard.ts";
 import { inlineImageProof } from "./inline-image-proof.ts";
 import { qualityGate } from "./quality.ts";
 
-describe("City–PSG 2026-10-30 immutable unpublished agent candidate", () => {
-  it("never claims native Qwen provenance or a public deployment", () => {
-    assert.equal(article.status, "SCHEDULED");
-    assert.equal(article.publishedAt, null);
-    assert.equal(article.generationProof, undefined);
-    assert.equal(article.discoverChecks.INDEXABLE, false);
-    assert.equal(article.quality.pass, false, "candidate remains pending GREEN and postflight");
+describe("City–PSG 2026-10-30 immutable scheduled-agent fallback candidate", () => {
+  it("records the real agent catch-up timestamp without native Qwen provenance", () => {
+    assert.equal(article.status, "PUBLISHED");
+    assert.ok(article.publishedAt?.startsWith("2026-10-30T21:"), "catch-up timestamp is after the nominal slot, not backdated");
+    assert.equal(article.generationProof, undefined, "agent fallback must not masquerade as Qwen");
+    assert.ok(article.corrections.some((c) => c.note.includes("aa7a05e1-c540-832b-80fb-475823c96263")), "real scheduled agent run ID required");
+    assert.equal(article.discoverChecks.INDEXABLE, true);
+    assert.equal(article.quality.pass, true, "quality pass is established by unchanged source gates; public postflight remains separate");
   });
 
   it("meets the unchanged editorial Gold Standard without padding", () => {
