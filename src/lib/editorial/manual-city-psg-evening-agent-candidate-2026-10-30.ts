@@ -196,7 +196,7 @@ export const cityPsgEveningAgentCandidate20261030: EditorialArticle = {
       "subsections": [
         {
           "h3": "Ce qu'il faut réellement observer lors des prochains matchs",
-          "body": "Pour City, l'objectif observable est de convertir ses périodes fortes en victoires et de mieux gérer les minutes suivant un but. Pour le PSG, le défi est de conserver cette efficacité de réaction tout en limitant les situations où l'équipe dépend d'un exploit tardif. Les deux équipes peuvent tirer des enseignements d'un match nul sans que les mêmes conclusions s'imposent à leurs staffs. Le véritable verdict reste celui de la feuille de match : Shaw, 85e ; Elimbi Gilbert, 88e ; un point chacune.\n\nSources directes consultées le 30 octobre 2026 : Manchester City, compte rendu officiel ; The Guardian, reportage du 29 octobre ; Sky Sports, compte rendu du 29 octobre ; Foot Mercato, feuille de match du 29 octobre. Trois éditeurs indépendants de la source officielle. Les photographies illustrent le lieu ou une ancienne rencontre, avec attribution et licences sur chaque image.\n\nStatut de ce document : BROUILLON CANDIDAT. Aucun reçu Qwen natif, aucune preuve d'un run planifié agent, aucun GREEN de publication, aucune persistance ni URL publique HTTP 200. Ne pas inscrire cet article au quota quotidien et ne pas le promouvoir sans contrôles complets.",
+          "body": "Pour City, l'objectif observable est de convertir ses périodes fortes en victoires et de mieux gérer les minutes suivant un but. Pour le PSG, le défi est de conserver cette efficacité de réaction tout en limitant les situations où l'équipe dépend d'un exploit tardif. Les deux équipes peuvent tirer des enseignements d'un match nul sans que les mêmes conclusions s'imposent à leurs staffs. Le véritable verdict reste celui de la feuille de match : Shaw, 85e ; Elimbi Gilbert, 88e ; un point chacune.\n\nSources directes consultées le 30 octobre 2026 : Manchester City, compte rendu officiel ; The Guardian, reportage du 29 octobre ; Sky Sports, compte rendu du 29 octobre ; Foot Mercato, feuille de match du 29 octobre. Trois éditeurs indépendants de la source officielle. Les photographies illustrent le lieu ou une ancienne rencontre, avec attribution et licences sur chaque image.\n\nCe résultat appelle une lecture mesurée : City a créé davantage mais n'a pas conservé son avance ; Paris a su revenir sans que cela efface ses difficultés antérieures. Les prochaines rencontres, et non ce seul match nul, détermineront les trajectoires européennes des deux clubs.",
           "sourceIds": [
             "city",
             "guardian",
@@ -226,7 +226,7 @@ export const cityPsgEveningAgentCandidate20261030: EditorialArticle = {
       "id": "city",
       "label": "Manchester City — compte rendu officiel du 29 octobre 2026",
       "status": "OFFICIAL",
-      "url": "https://fr.mancity.com/news/womens/city-psg-ligue-des-champions-feminines-63928949",
+      "url": "https://live.mancity.com/news/womens/city-v-psg-match-report-uefa-womens-champions-league-2627-63928893",
       "note": "Résultat 1-1, chronologie des buts et analyse du club."
     },
     {
