@@ -3,7 +3,8 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T22:58:50.577Z",
+      "lastCheckedAt": "2026-10-30T01:58:43.594Z",
+      "sourceStatus": "BLOCKED_SOURCE",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -120,18 +121,18 @@
           "date": "2026-10-29T18:29:52.182Z",
           "seenAt": "2026-10-29T22:02:34.185Z"
         }
-      },
-      "sourceStatus": "VERIFIED"
+      }
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T22:58:50.972Z",
-      "seen": {},
-      "sourceStatus": "VERIFIED"
+      "lastCheckedAt": "2026-10-30T01:58:44.126Z",
+      "sourceStatus": "BLOCKED_SOURCE",
+      "seen": {}
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T22:58:51.929Z",
+      "lastCheckedAt": "2026-10-30T01:58:44.993Z",
+      "sourceStatus": "BLOCKED_SOURCE",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -143,12 +144,12 @@
           "date": "2026-10-15T08:35:00+02:00",
           "seenAt": "2026-10-15T09:06:51.957Z"
         }
-      },
-      "sourceStatus": "VERIFIED"
+      }
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T22:58:52.267Z",
+      "lastCheckedAt": "2026-10-30T01:58:45.477Z",
+      "sourceStatus": "BLOCKED_SOURCE",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -175,24 +176,24 @@
           "date": "Fri, 23 Oct 2026 00:00:00 GMT",
           "seenAt": "2026-10-23T19:09:53.043Z"
         }
-      },
-      "sourceStatus": "VERIFIED"
+      }
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T22:58:53.005Z",
-      "seen": {},
-      "sourceStatus": "VERIFIED"
+      "lastCheckedAt": "2026-10-30T01:58:46.551Z",
+      "sourceStatus": "BLOCKED_SOURCE",
+      "seen": {}
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T22:58:51.386Z",
-      "seen": {},
-      "sourceStatus": "VERIFIED"
+      "lastCheckedAt": "2026-10-30T01:58:44.559Z",
+      "sourceStatus": "BLOCKED_SOURCE",
+      "seen": {}
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-29T22:58:52.640Z",
+      "lastCheckedAt": "2026-10-30T01:58:45.843Z",
+      "sourceStatus": "BLOCKED_SOURCE",
       "seen": {
         "c022035f3d7190f6f1": {
           "url": "https://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/",
@@ -264,8 +265,7 @@
           "date": "Sun, 25 Oct 2026 00:00:00 GMT",
           "seenAt": "2026-10-25T18:19:58.471Z"
         }
-      },
-      "sourceStatus": "VERIFIED"
+      }
     }
   },
   "jobs": {
