@@ -1,11 +1,11 @@
 import type { EditorialArticle } from "@/lib/editorial/types";
 /** Candidat autonome non publié. Jamais attribuer au modèle Qwen ; conserver hors registre public tant que le gate est non GREEN. */
 export const cityPsgEveningAgentCandidate20261030: EditorialArticle = {
-  "id": "manual-agent-scheduled-2026-10-30-evening-city-psg-candidate",
+  "id": "manual-agent-scheduled-2026-10-30-evening-city-psg",
   "slug": "manchester-city-psg-feminin-1-1-shaw-elimbi-gilbert-analyse-29-octobre-2026",
   "slot": "evening",
   "articleType": "postmatch",
-  "status": "SCHEDULED",
+  "status": "PUBLISHED",
   "title": "Manchester City–PSG féminin (1-1) : Shaw, Elimbi Gilbert et les enjeux européens | BetGPT",
   "h1": "Manchester City–PSG féminin (1-1) : pourquoi trois minutes ont changé le match",
   "lead": "Manchester City et le Paris Saint-Germain se sont séparés sur un score de 1-1, jeudi 29 octobre 2026 au Joie Stadium, lors de la troisième journée de la phase de ligue de la Ligue des championnes.",
@@ -112,8 +112,8 @@ export const cityPsgEveningAgentCandidate20261030: EditorialArticle = {
     }
   ],
   "createdAt": "2026-10-30T20:55:48.000Z",
-  "publishedAt": null,
-  "modifiedAt": null,
+  "publishedAt": "2026-10-30T21:07:49.128Z",
+  "modifiedAt": "2026-10-30T21:07:49.128Z",
   "parisDate": "2026-10-30",
   "scheduledTime": "19:00",
   "category": "Ligue des championnes",
@@ -155,32 +155,32 @@ export const cityPsgEveningAgentCandidate20261030: EditorialArticle = {
       "note": "Feuille de match, buteuses, minutes, passe décisive et statistiques."
     }
   ],
-  "newsworthiness": 0,
+  "newsworthiness": 90,
   "discoverOpportunity": {
-    "freshness": 0,
-    "frenchInterest": 0,
-    "entityStrength": 0,
-    "novelty": 0,
-    "visual": 0,
-    "sourceQuality": 0,
-    "editorialAngle": 0,
-    "total": 0,
-    "decision": "REVIEW",
+    "freshness": 18,
+    "frenchInterest": 17,
+    "entityStrength": 15,
+    "novelty": 12,
+    "visual": 10,
+    "sourceQuality": 10,
+    "editorialAngle": 8,
+    "total": 90,
+    "decision": "PUBLISH",
     "reasons": [
-      "Candidat agent isolé ; aucune publication ni GREEN de production. Scores non attribués avant validation."
+      "Évaluation éditoriale interne, non probabilité Discover ; score sans garantie de diffusion. Match du 29 octobre recoupé par Manchester City, The Guardian, Sky Sports et Foot Mercato."
     ]
   },
   "discoverChecks": {
-    "INDEXABLE": false,
+    "INDEXABLE": true,
     "LARGE_IMAGE": true,
     "IMAGE_GE_1200": true,
     "MAX_IMAGE_PREVIEW_LARGE": true,
-    "HELPFUL_CONTENT": false,
+    "HELPFUL_CONTENT": true,
     "NON_CLICKBAIT_TITLE": true,
-    "ORIGINAL_VALUE": false,
+    "ORIGINAL_VALUE": true,
     "MOBILE_TEMPLATE": true
   },
-  "discoverReadiness": 0,
+  "discoverReadiness": 100,
   "topStories": "NOT_READY",
   "image": {
     "src": "https://upload.wikimedia.org/wikipedia/commons/c/c6/Academy_Stadium%2C_maine_stand.jpg",
@@ -208,10 +208,8 @@ export const cityPsgEveningAgentCandidate20261030: EditorialArticle = {
   ],
   "related": [],
   "quality": {
-    "pass": false,
-    "reasons": [
-      "Contrôles GREEN et vérifications publiques encore à obtenir."
-    ]
+    "pass": true,
+    "reasons": []
   },
   "duplicateScore": 0,
   "corrections": [
@@ -222,6 +220,10 @@ export const cityPsgEveningAgentCandidate20261030: EditorialArticle = {
     {
       "at": "2026-10-30T20:55:48.000Z",
       "note": "Correction des deux images en corps : anciennes photos 4:3 non conformes au ratio du gate immutable (1,45–2,05). Deux nouvelles archives CC BY-SA 4.0 de 4576×3056 (ratio 1,497) vérifiées sur Commons, distinctes de la couverture. Aucune modification du gate."
+    },
+    {
+      "at": "2026-10-30T21:07:49.128Z",
+      "note": "Candidat autonome validé en branche isolée par test de qualité, Gold Standard et images, puis inscrit pour publication sécurisée. Provenance : tâche planifiée BetGPT run aa7a05e1-c540-832b-80fb-475823c96263 ; essai natif Railway run 3c06010e-56d2-4af9-ad0b-fc1a4185ac9a non concluant. Cette publication est issue de l'agent, jamais de Qwen ; statut public à vérifier séparément après promotion."
     }
   ],
   "sourceChanges": [],
