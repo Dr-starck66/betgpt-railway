@@ -42,9 +42,9 @@ Aucune de ces réponses n'est automatiquement correcte. Reculer trop bas peut in
 
 Shaw reste au centre du récit, mais il faut résister à la tentation de réduire la rencontre à sa réussite individuelle. Elle a marqué le seul but de City ; le PSG a égalisé collectivement quelques instants plus tard. Le score final illustre un principe simple : même une attaquante décisive ne peut garantir à elle seule la maîtrise des minutes qui suivent. Sky Sports souligne par ailleurs les conséquences de ce troisième nul pour le classement européen. Le penalty a changé le score ; il n'a pas suffi à changer la dynamique comptable de la compétition.
 
-![Manchester City et Barcelone féminin sur la pelouse du Joie Stadium en octobre 2024, photographie d'archive](https://upload.wikimedia.org/wikipedia/commons/d/d2/Manchester_City_W.F.C._-_FC_Barcelona_Femen%C3%AD_-_Joie_Stadium_-_9_October_2024_03.jpg)
+![Vue extérieure du Joie Stadium de Manchester City, ancien Academy Stadium, en février 2015](https://upload.wikimedia.org/wikipedia/commons/2/22/Academy_Stadium.jpg)
 
-*Photo dans le corps, section 3 : Manchester City–FC Barcelone féminin, **9 octobre 2024**, au Joie Stadium. Image d'archive du même lieu, **ne représente ni Shaw contre le PSG ni le match de 2026**. Photo : Hmickey / [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Manchester_City_W.F.C._-_FC_Barcelona_Femen%C3%AD_-_Joie_Stadium_-_9_October_2024_03.jpg), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), non modifiée. Original : 4 032 × 3 024 px.*
+*Photo dans le corps, section 3 : le Joie Stadium (alors Academy Stadium), **20 février 2015**. Archive du lieu du match, **pas une photographie de City–PSG en 2026**. Photo : Espandero / [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Academy_Stadium.jpg), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), non modifiée. Original : 4 576 × 3 056 px.*
 
 ## 4. Tara Elimbi Gilbert : une égalisation qui change le récit parisien
 
@@ -70,9 +70,9 @@ Selon Sky Sports, City occupe la dixième place après cette troisième journée
 
 Le cas de City pose une question concrète : comment transformer une équipe difficile à battre en équipe capable d'accumuler les victoires ? La réponse ne se trouve pas dans une formule unique. Elle dépend de la qualité des occasions, de l'efficacité devant le but et de la capacité à gérer les périodes qui suivent un événement favorable. Contre Paris, City a montré qu'elle pouvait imposer une pression, mais pas encore qu'elle savait la convertir en trois points européens. Le prochain rendez-vous sera donc évalué autant sur la manière que sur le résultat.
 
-![Vue générale du Joie Stadium lors de Manchester City–Barcelone féminin en 2024, photographie d'archive](https://upload.wikimedia.org/wikipedia/commons/5/54/Manchester_City_W.F.C._-_FC_Barcelona_Femen%C3%AD_-_Joie_Stadium_-_9_October_2024_04.jpg)
+![Vue de l'Etihad Stadium depuis l'Academy Stadium de Manchester City en février 2015](https://upload.wikimedia.org/wikipedia/commons/9/9a/Etihad_Stadium_from_Academy_Stadium.jpg)
 
-*Photo dans le corps, section 6 : vue du Joie Stadium lors de Manchester City–FC Barcelone féminin, **9 octobre 2024**. Archive du stade et d'une autre rencontre, **pas une photographie de City–PSG en 2026**. Photo : Hmickey / [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Manchester_City_W.F.C._-_FC_Barcelona_Femen%C3%AD_-_Joie_Stadium_-_9_October_2024_04.jpg), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), non modifiée. Original : 4 032 × 3 024 px.*
+*Photo dans le corps, section 6 : l'Etihad Stadium vu depuis l'Academy Stadium en **février 2015**. Archive du campus Manchester City : **la rencontre féminine de 2026 s'est déroulée au Joie Stadium, pas à l'Etihad**. Photo : Espandero / [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Etihad_Stadium_from_Academy_Stadium.jpg), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), non modifiée. Original : 4 576 × 3 056 px.*
 
 ## 7. Le classement et les enjeux : un point précieux, aucune certitude
 
