@@ -1,6 +1,6 @@
 import type { EditorialArticle } from "@/lib/editorial/types";
 /** Candidat de secours agent (PAS Qwen). Run planifié 4e5cbbb4-d270-42e6-baa6-53a47a6be817 : zéro génération native. Ne pas publier sans GREEN immuable et postflight public. */
-export const leHavrePsgMorningAgent20261031: EditorialArticle = {
+export const leHavrePsgMorningAgent20261031: EditorialArticle =  {
   "id": "manual-agent-scheduled-2026-10-31-morning-le-havre-psg",
   "slug": "le-havre-psg-1-5-hakimi-triple-analyse-30-octobre-2026",
   "slot": "morning",
@@ -27,9 +27,9 @@ export const leHavrePsgMorningAgent20261031: EditorialArticle = {
         "hac"
       ],
       "inlineImage": {
-        "src": "https://upload.wikimedia.org/wikipedia/commons/f/f9/Achraf_Hakimi_vs_Niger.jpg",
-        "width": 5070,
-        "height": 6337,
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f9/Achraf_Hakimi_vs_Niger.jpg/1920px-Achraf_Hakimi_vs_Niger.jpg",
+        "width": 1920,
+        "height": 2400,
         "alt": "Achraf Hakimi en sélection du Maroc contre le Niger en septembre 2025, photo d'archive",
         "caption": "Achraf Hakimi avec le Maroc en 2025, photographie d'archive sans lien direct avec Le Havre–PSG du 30 octobre 2026.",
         "credit": "Laloumance / Wikimedia Commons, CC BY 4.0, image originale non modifiée.",
@@ -72,9 +72,9 @@ export const leHavrePsgMorningAgent20261031: EditorialArticle = {
         "reuters"
       ],
       "inlineImage": {
-        "src": "https://upload.wikimedia.org/wikipedia/commons/0/00/Stade_Oc%C3%A9ane_2018_04.jpg",
-        "width": 4288,
-        "height": 2848,
+        "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/Stade_Oc%C3%A9ane_2018_04.jpg/1280px-Stade_Oc%C3%A9ane_2018_04.jpg",
+        "width": 1280,
+        "height": 850,
         "alt": "Stade Océane au Havre photographié en 2018, photo d'archive de l'enceinte de Le Havre PSG",
         "caption": "Le stade Océane photographié en avril 2018. Image d'archive, non prise lors du match du 30 octobre 2026.",
         "credit": "Philippe Alès / Wikimedia Commons, CC BY-SA 4.0, photographie originale non modifiée.",
@@ -180,9 +180,9 @@ export const leHavrePsgMorningAgent20261031: EditorialArticle = {
   "discoverReadiness": 0,
   "topStories": "NOT_READY",
   "image": {
-    "src": "https://upload.wikimedia.org/wikipedia/commons/f/f9/Achraf_Hakimi_vs_Niger.jpg",
-    "width": 5070,
-    "height": 6337,
+    "src": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f9/Achraf_Hakimi_vs_Niger.jpg/1920px-Achraf_Hakimi_vs_Niger.jpg",
+    "width": 1920,
+    "height": 2400,
     "alt": "Achraf Hakimi en sélection du Maroc contre le Niger en septembre 2025, photo d'archive",
     "caption": "Achraf Hakimi avec le Maroc en 2025, photographie d'archive sans lien direct avec Le Havre–PSG du 30 octobre 2026.",
     "credit": "Laloumance / Wikimedia Commons, CC BY 4.0, image originale non modifiée.",
