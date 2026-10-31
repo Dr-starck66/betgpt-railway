@@ -135,21 +135,21 @@ export const leHavrePsgMorningAgent20261031: EditorialArticle =  {
       "label": "Reuters — 30 octobre 2026",
       "status": "HIGH_CONFIDENCE",
       "url": "https://www.reuters.com/sports/soccer/hakimi-hat-trick-leads-psg-5-1-win-le-havre-2026-10-30/",
-      "note": "Triplé, passes décisives, série et classement."
+      "note": "Le Havre–PSG 1-5 : triplé d'Achraf Hakimi, deux passes décisives, classement et série parisienne du 30 octobre 2026."
     },
     {
       "id": "eurosport",
       "label": "Eurosport — feuille de match du 30 octobre 2026",
       "status": "HIGH_CONFIDENCE",
       "url": "https://www.eurosport.fr/football/ligue-1/2026-2027/live-havre-ac-paris-saint-germain_mtc21875704/live.shtml",
-      "note": "Chronologie et statistiques attribuées au fournisseur."
+      "note": "Le Havre–PSG 1-5 : chronologie, tirs cadrés, possession, triplé d'Hakimi et statistiques du match du 30 octobre 2026."
     },
     {
       "id": "leparisien",
       "label": "Le Parisien — 30 octobre 2026",
       "status": "HIGH_CONFIDENCE",
       "url": "https://www.leparisien.fr/sports/football/ligue-1/le-havre-psg-1-5-les-notes-des-joueurs-parisiens-avec-hakimi-en-feu-et-godts-inspire-30-10-2026-BQ6D4NFGL5AYHFXSUXE5DZC3EI.php",
-      "note": "Article original et synthèse de la performance parisienne."
+      "note": "Le Havre–PSG 1-5 : notes et analyse du triplé d'Achraf Hakimi et du jeu de Godts, 30 octobre 2026."
     }
   ],
   "newsworthiness": 0,
