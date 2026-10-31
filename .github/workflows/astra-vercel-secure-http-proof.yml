@@ -44,6 +44,15 @@ jobs:
               row={'attempt':i,'status':status,'url':url,'bytes':len(html.encode()),
                    'content':content,'canonical':canonical,'noindex':noindex,'excerpt':html[:160] if status!=200 else ''}
               print('ASTRA_ARTICLE_HTTP',json.dumps(row,ensure_ascii=False),flush=True)
+              titles=re.findall(r'<title[^>]*>(.*?)</title>',html,re.I|re.S)
+              heads=re.findall(r'<h1[^>]*>(.*?)</h1>',html,re.I|re.S)
+              text_body=re.sub(r'<script[^>]*>[\\s\\S]*?</script>',' ',html,flags=re.I)
+              text_body=re.sub(r'<style[^>]*>[\\s\\S]*?</style>',' ',text_body,flags=re.I)
+              text_body=re.sub(r'<[^>]+>',' ',text_body)
+              text_body=re.sub(r'\\s+',' ',text_body)
+              print('ASTRA_HTML_IDENTITY',json.dumps({'title':titles[:2],'h1':heads[:2],
+                  'plainTextStart':text_body[:800],'htmlStart':html[:350],
+                  'mentionsVercel':('vercel' in html.lower()),'mentionsBetGPT':('betgpt' in html.lower())},ensure_ascii=False),flush=True)
               ok.append(status==200 and content and canonical and not noindex)
               time.sleep(3)
           for path in ('/news-sitemap.xml','/api/editorial-agent-status'):
