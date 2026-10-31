@@ -1,0 +1,63 @@
+name: ASTRA Vercel runtime import diagnosis (one-shot)
+on:
+  push:
+    branches:
+      - astra/vercel-editorial-failclosed-20261031
+    paths:
+      - .github/workflows/astra-vercel-runtime-repro.yml
+permissions:
+  contents: read
+jobs:
+  runtime-repro:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '24'
+      - name: Install production build dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Compile using production Vercel preset
+        env:
+          NITRO_PRESET: vercel
+          CI: 'true'
+        run: |
+          npm run build
+      - name: Inspect actual Vercel function entrypoint and import
+        env:
+          NODE_ENV: production
+          CI: 'true'
+        run: |
+          set -euo pipefail
+          echo "ASTRA_VERCEL_FUNCTION_TREE"
+          find .vercel/output/functions -maxdepth 3 -name '.vc-config.json' -o -name 'index.mjs' -o -name 'package.json' | head -60
+          echo "ASTRA_VERCEL_RUNTIME_IMPORT"
+          node --input-type=module <<'JS'
+          import { existsSync, readdirSync, readFileSync } from 'node:fs';
+          import { resolve } from 'node:path';
+          import { pathToFileURL } from 'node:url';
+          const root='.vercel/output/functions';
+          if(!existsSync(root)) { console.error('ASTRA_VERCEL_RUNTIME_MISSING_FUNCTIONS'); process.exit(10); }
+          const dirs=readdirSync(root).filter(name=>name.endsWith('.func'));
+          console.log('ASTRA_VERCEL_FUNCTION_DIRS',JSON.stringify(dirs));
+          let passed=0;
+          for(const name of dirs.slice(0,5)){
+            const d=resolve(root,name);
+            const cfg=d+'/.vc-config.json';
+            if(existsSync(cfg)){const x=JSON.parse(readFileSync(cfg,'utf8'));console.log('ASTRA_VERCEL_ENTRY_CONFIG',JSON.stringify({name,runtime:x.runtime,handler:x.handler}));}
+            const entry=d+'/index.mjs';
+            if(!existsSync(entry))continue;
+            try{
+              const m=await import(pathToFileURL(entry).href);
+              console.log('ASTRA_VERCEL_IMPORT_PASS',name,Object.keys(m));
+              passed++;
+            }catch(e){
+              console.error('ASTRA_VERCEL_IMPORT_FAIL',name,e?.stack||String(e));
+              process.exitCode=11;
+            }
+          }
+          if(passed===0) {console.error('ASTRA_VERCEL_NO_IMPORT_PASS');process.exitCode=12;}
+          JS
