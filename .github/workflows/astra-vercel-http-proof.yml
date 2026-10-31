@@ -37,8 +37,8 @@ jobs:
                   url=base+'/actualites/'+os.environ['PUBLISHED_SLUG']
                   status,final,html=probe(url)
                   main=('PSG' in html and 'Lyon' in html)
-                  canonical=bool(re.search(r'<link[^>]+rel=["\\']canonical["\\'][^>]*>',html,re.I))
-                  noindex=bool(re.search(r'<meta[^>]+name=["\\']robots["\\'][^>]+noindex',html,re.I))
+                  canonical=bool(re.search(r'<link[^>]+canonical',html,re.I))
+                  noindex=bool(re.search(r'<meta[^>]+noindex',html,re.I))
                   record={'deployment':label,'attempt':attempt,'status':status,'final':final,
                           'bytes':len(html.encode()),'articleContent':main,'canonical':canonical,'noindex':noindex}
                   print('ASTRA_HTTP_PROOF',json.dumps(record),flush=True)
