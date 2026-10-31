@@ -1,0 +1,57 @@
+name: ASTRA Vercel secure article HTTP proof (one-shot)
+on:
+  push:
+    branches:
+      - astra/vercel-tanstack-secure-1694-20261031
+    paths:
+      - .github/workflows/astra-vercel-secure-http-proof.yml
+permissions:
+  contents: read
+jobs:
+  http-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Probe real Vercel HTTP from independent GitHub runner
+        env:
+          BASE: https://betgpt-lehk0c9bu-ced-starcks-projects.vercel.app
+          SLUG: psg-lyon-reporte-lundi-26-octobre-2026
+        run: |
+          python - <<'PY'
+          import os,sys,time,json,re,urllib.request,urllib.error
+          BASE=os.environ['BASE']
+          def get(path):
+              req=urllib.request.Request(BASE+path,headers={'User-Agent':'ASTRA-vercel-secure-http-proof/1.0','Accept':'text/html,application/xhtml+xml,*/*'})
+              try:
+                  with urllib.request.urlopen(req,timeout=30) as resp:
+                      return resp.status,resp.geturl(),resp.read(350000).decode('utf-8','replace')
+              except urllib.error.HTTPError as e:
+                  return e.code,e.geturl(),e.read(1500).decode('utf-8','replace')
+              except Exception as e:
+                  return 0,BASE+path,type(e).__name__+': '+str(e)[:200]
+          for i in range(16):
+              st,_,b=get('/')
+              print('ASTRA_VERCEL_READINESS',json.dumps({'attempt':i+1,'status':st,'body':b[:130] if st!=200 else None}),flush=True)
+              if st==200 or (st==500 and 'FUNCTION_INVOCATION_FAILED' in b):break
+              time.sleep(9)
+          ok=[]
+          for i in (1,2):
+              path='/actualites/'+os.environ['SLUG']
+              status,url,html=get(path)
+              content=('PSG' in html and 'Lyon' in html)
+              canonical=bool(re.search(r'<link[^>]+canonical',html,re.I))
+              noindex=bool(re.search(r'<meta[^>]+noindex',html,re.I))
+              row={'attempt':i,'status':status,'url':url,'bytes':len(html.encode()),
+                   'content':content,'canonical':canonical,'noindex':noindex,'excerpt':html[:160] if status!=200 else ''}
+              print('ASTRA_ARTICLE_HTTP',json.dumps(row,ensure_ascii=False),flush=True)
+              ok.append(status==200 and content and canonical and not noindex)
+              time.sleep(3)
+          for path in ('/news-sitemap.xml','/api/editorial-agent-status'):
+              status,url,html=get(path)
+              print('ASTRA_ADDITIONAL_HTTP',json.dumps({'path':path,'status':status,'bytes':len(html.encode()),'excerpt':html[:160]}),flush=True)
+          status,url,html=get('/actualites/le-havre-psg-1-5-hakimi-triple-analyse-30-octobre-2026')
+          print('ASTRA_NEGATIVE_CONTROL',json.dumps({'status':status,'url':url,'excerpt':html[:180] if status!=404 else ''}),flush=True)
+          ok.append(status in (404,410))
+          print('ASTRA_HTTP_FINAL','PASS' if all(ok) else 'FAIL',flush=True)
+          if not all(ok):sys.exit(1)
+          PY
