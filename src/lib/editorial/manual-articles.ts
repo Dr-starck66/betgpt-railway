@@ -16,7 +16,7 @@ import { cityVerdict20261012 } from "@/lib/editorial/manual-city-verdict-2026-10
 import { astonVillaCityLineups20261024 } from "@/lib/editorial/manual-aston-villa-city-2026-10-24";
 import { psgLyonRescheduled20261023 } from "@/lib/editorial/manual-psg-lyon-report-2026-10-23";
 import { liverpoolManchesterCityPostmatch } from "@/lib/editorial/manual-postmatch-liverpool-city";
-import type { EditorialArticle } from "@/lib/editorial/types";
+import { isPublicArticle, type EditorialArticle } from "@/lib/editorial/types";
 
 const ARTICLES: EditorialArticle[] = [
   genoaJuventusEveningAgent20261029,
@@ -643,5 +643,5 @@ export function manualEditorialArticles(): EditorialArticle[] {
 }
 
 export function manualEditorialArticleBySlug(slug: string): EditorialArticle | null {
-  return manualEditorialArticles().find((article) => article.slug === slug) ?? null;
+  return manualEditorialArticles().find((article) => article.slug === slug && isPublicArticle(article)) ?? null;
 }
