@@ -1,0 +1,35 @@
+name: ASTRA Vercel secure TanStack lock repair (one-shot)
+on:
+  push:
+    branches:
+      - astra/vercel-tanstack-secure-1694-20261031
+    paths:
+      - .github/workflows/astra-vercel-secure-lock-repair.yml
+permissions:
+  contents: write
+jobs:
+  lock-repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '24'
+      - name: Resolve safe fixed TanStack versions with npm (no package scripts)
+        run: |
+          set -euo pipefail
+          node -e "const p=require('./package.json');if(p.dependencies['@tanstack/react-start']!=='1.169.4')process.exit(8)"
+          npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+          node -e "const p=require('./package-lock.json');const a=p.packages['node_modules/@tanstack/react-start'];const s=p.packages['node_modules/@tanstack/start-server-core'];console.log('ASTRA_SECURE_TANSTACK_RESOLVED',a.version,s.version);if(a.version!=='1.169.4'||s.version.split('.').map(Number).reduce((n,d,i)=>n+d*Math.pow(100,2-i),0)<(1*10000+169*100+39))process.exit(9)"
+          git diff --stat -- package-lock.json
+          git add package-lock.json
+          if ! git diff --cached --quiet; then
+            git -c user.name='astra-ci[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'fix(vercel): lock secure TanStack Start 1.169.4'
+            git push origin HEAD:refs/heads/astra/vercel-tanstack-secure-1694-20261031
+            echo ASTRA_SECURE_TANSTACK_LOCK_COMMITTED_PASS
+          else
+            echo ASTRA_SECURE_TANSTACK_LOCK_UNCHANGED
+          fi
