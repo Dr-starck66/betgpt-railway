@@ -152,19 +152,19 @@ export const leHavrePsgMorningAgent20261031: EditorialArticle =  {
       "note": "Article original et synthèse de la performance parisienne."
     }
   ],
-  "newsworthiness": 87,
+  "newsworthiness": 0,
   "discoverOpportunity": {
-    "freshness": 20,
-    "frenchInterest": 15,
-    "entityStrength": 15,
-    "novelty": 12,
-    "visual": 10,
-    "sourceQuality": 10,
-    "editorialAngle": 10,
-    "total": 92,
+    "freshness": 0,
+    "frenchInterest": 0,
+    "entityStrength": 0,
+    "novelty": 0,
+    "visual": 0,
+    "sourceQuality": 0,
+    "editorialAngle": 0,
+    "total": 0,
     "decision": "REVIEW",
     "reasons": [
-      "Candidat agent de secours du créneau planifié ; publication conditionnée au GREEN immuable et à la preuve HTTP."
+      "Non noté par le moteur natif. La conformité éditoriale statique ne vaut ni GREEN immuable ni preuve de publication."
     ]
   },
   "discoverChecks": {
