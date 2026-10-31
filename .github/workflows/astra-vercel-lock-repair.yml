@@ -1,0 +1,35 @@
+name: ASTRA Vercel TanStack lock repair (one-shot)
+on:
+  push:
+    branches:
+      - astra/vercel-tanstack-ssr-rollback-20261031
+    paths:
+      - .github/workflows/astra-vercel-lock-repair.yml
+permissions:
+  contents: write
+jobs:
+  lock-repair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '24'
+      - name: Re-resolve exact TanStack 1.168.26 without executing package scripts
+        run: |
+          set -euo pipefail
+          node -e "const p=require('./package.json');if(p.dependencies['@tanstack/react-start']!=='1.168.26')process.exit(8)"
+          npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+          node -e "const p=require('./package-lock.json');let a=p.packages['node_modules/@tanstack/react-start'];console.log('ASTRA_TANSTACK_RESOLVED',a.version,a.dependencies?.['@tanstack/start-server-core']);if(a.version!=='1.168.26')process.exit(9)"
+          git diff --stat -- package-lock.json
+          git add package-lock.json
+          if ! git diff --cached --quiet; then
+            git -c user.name='astra-ci[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'fix(vercel): regenerate lock for TanStack Start 1.168.26'
+            git push origin HEAD:refs/heads/astra/vercel-tanstack-ssr-rollback-20261031
+            echo ASTRA_TANSTACK_LOCK_COMMITTED_PASS
+          else
+            echo ASTRA_TANSTACK_LOCK_UNCHANGED
+          fi
