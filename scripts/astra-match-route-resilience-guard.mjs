@@ -20,6 +20,8 @@ const checks = [
       "matchId={data.match.slug ?? data.match.id}",
       "homeName={data.match.home.name}",
       "awayName={data.match.away.name}",
+      "homeFormation={data.match.home.formation}",
+      "awayFormation={data.match.away.formation}",
     ],
   ],
   [
@@ -57,8 +59,23 @@ const checks = [
     "src/components/match-lineups.tsx",
     [
       "data-lineups-status",
+      "data-pitch-global",
+      "data-pitch-scope",
+      "all-match-routes",
+      "data-pitch-pair",
+      "data-pitch-mode",
+      "buildSchematicPitchLayout",
+      "MatchPitch name={homeName}",
+      "MatchPitch name={awayName}",
       "jamais remplacées par une composition probable",
       "les 11 titulaires des deux équipes",
+    ],
+  ],
+  [
+    "src/engine/lineup-pitch.ts",
+    [
+      "export function buildSchematicPitchLayout",
+      "export function buildVerifiedPitchLayout",
     ],
   ],
 ];

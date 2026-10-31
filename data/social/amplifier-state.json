@@ -3,7 +3,8 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T13:37:34.627Z",
+      "lastCheckedAt": "2026-10-31T16:12:30.438Z",
+      "sourceStatus": "BLOCKED_SOURCE",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -49,19 +50,89 @@
           "url": "https://betgpt.live/actualites/aston-villa-manchester-city-compositions-record-24-octobre-2026",
           "date": "2026-10-24T11:03:22.000Z",
           "seenAt": "2026-10-24T11:23:46.442Z"
+        },
+        "3817f06c0ca612c3e5": {
+          "url": "https://betgpt.live/actualites/aston-villa-manchester-city-2-1-double-jackson-analyse-24-octobre-2026",
+          "date": "2026-10-24T17:00:00.000Z",
+          "seenAt": "2026-10-24T17:24:51.867Z"
+        },
+        "5b21394b0e6c6d02fe": {
+          "url": "https://betgpt.live/actualites/arsenal-everton-2-0-konsa-gabriel-course-titre-24-octobre-2026",
+          "date": "2026-10-24T20:29:00.000Z",
+          "seenAt": "2026-10-24T21:55:50.180Z"
+        },
+        "148fc6f27d38b24aa1": {
+          "url": "https://betgpt.live/actualites/barcelone-real-madrid-clasico-25-octobre-2026-kounde-vinicius-enjeux",
+          "date": "2026-10-25T07:00:00.000Z",
+          "seenAt": "2026-10-25T09:46:46.322Z"
+        },
+        "d383bfbc3bf688899b": {
+          "url": "https://betgpt.live/actualites/liverpool-brighton-maintenu-tempete-boelo-25-octobre-2026-absences-analyse",
+          "date": "2026-10-25T12:00:00.000Z",
+          "seenAt": "2026-10-25T12:33:01.775Z"
+        },
+        "7c6a7f4ce0831f6659": {
+          "url": "https://betgpt.live/actualites/manchester-united-bournemouth-0-3-carrick-fernandes-analyse-26-octobre-2026",
+          "date": "2026-10-26T07:00:00.000Z",
+          "seenAt": "2026-10-26T10:36:51.720Z"
+        },
+        "466d881f783fce76fb": {
+          "url": "https://betgpt.live/actualites/ballon-dor-2026-kane-yamal-mbappe-ceremonie-londres-26-octobre",
+          "date": "2026-10-26T12:00:00.000Z",
+          "seenAt": "2026-10-26T13:23:30.657Z"
+        },
+        "90f72f0efc2ac1b772": {
+          "url": "https://betgpt.live/actualites/barcelone-real-madrid-1-2-mbappe-double-clasico-analyse-26-octobre-2026",
+          "date": "2026-10-26T14:29:06.358Z",
+          "seenAt": "2026-10-26T14:44:29.301Z"
+        },
+        "55c257679ce7b4f751": {
+          "url": "https://betgpt.live/actualites/psg-lyon-2-0-mayulu-godts-analyse-27-octobre-2026",
+          "date": "2026-10-27T07:59:00.000Z",
+          "seenAt": "2026-10-27T16:09:16.652Z"
+        },
+        "c85bb1b5269a863c0b": {
+          "url": "https://betgpt.live/actualites/liverpool-chelsea-carabao-cup-28-octobre-2026-analyse-avant-match",
+          "date": "2026-10-27T16:07:16.000Z",
+          "seenAt": "2026-10-27T16:22:06.076Z"
+        },
+        "e04407e89bb8ae9f39": {
+          "url": "https://betgpt.live/actualites/fleetwood-arsenal-carabao-cup-27-octobre-2026-avant-match",
+          "date": "2026-10-27T18:20:52.636Z",
+          "seenAt": "2026-10-27T20:43:20.817Z"
+        },
+        "5259c291a211ef8403": {
+          "url": "https://betgpt.live/actualites/ol-lyonnes-inter-ligue-champions-feminine-28-octobre-2026-analyse",
+          "date": "2026-10-28T07:15:23.504Z",
+          "seenAt": "2026-10-28T09:26:41.682Z"
+        },
+        "d555c556897750ee02": {
+          "url": "https://betgpt.live/actualites/arsenal-benfica-3-0-russo-triple-record-analyse-29-octobre-2026",
+          "date": "2026-10-29T10:01:23.104Z",
+          "seenAt": "2026-10-29T11:32:48.245Z"
+        },
+        "91c95f5130d4daba6b": {
+          "url": "https://betgpt.live/actualites/carabao-cup-quarts-tirage-liverpool-city-fleetwood-29-octobre-2026",
+          "date": "2026-10-29T12:36:22.692Z",
+          "seenAt": "2026-10-29T18:34:40.914Z"
+        },
+        "aad8d141382f4c3394": {
+          "url": "https://betgpt.live/actualites/genoa-juventus-2-0-baldanzi-ehizibue-analyse-29-octobre-2026",
+          "date": "2026-10-29T18:29:52.182Z",
+          "seenAt": "2026-10-29T22:02:34.185Z"
         }
-      },
-      "sourceStatus": "VERIFIED"
+      }
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T13:37:35.400Z",
-      "seen": {},
-      "sourceStatus": "VERIFIED"
+      "lastCheckedAt": "2026-10-31T16:12:31.275Z",
+      "sourceStatus": "BLOCKED_SOURCE",
+      "seen": {}
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T13:37:37.623Z",
+      "lastCheckedAt": "2026-10-31T16:12:32.886Z",
+      "sourceStatus": "BLOCKED_SOURCE",
       "seen": {
         "113acfc5949a8ca9ca": {
           "url": "https://www.bizarresexuality.com/news/inner-sky-labs-physical-ai-safety-companion-robots-2026",
@@ -73,12 +144,12 @@
           "date": "2026-10-15T08:35:00+02:00",
           "seenAt": "2026-10-15T09:06:51.957Z"
         }
-      },
-      "sourceStatus": "VERIFIED"
+      }
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T13:37:38.635Z",
+      "lastCheckedAt": "2026-10-31T16:12:33.718Z",
+      "sourceStatus": "BLOCKED_SOURCE",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -105,24 +176,24 @@
           "date": "Fri, 23 Oct 2026 00:00:00 GMT",
           "seenAt": "2026-10-23T19:09:53.043Z"
         }
-      },
-      "sourceStatus": "VERIFIED"
+      }
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T13:37:40.414Z",
-      "seen": {},
-      "sourceStatus": "VERIFIED"
+      "lastCheckedAt": "2026-10-31T16:12:35.315Z",
+      "sourceStatus": "BLOCKED_SOURCE",
+      "seen": {}
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T13:37:36.286Z",
-      "seen": {},
-      "sourceStatus": "VERIFIED"
+      "lastCheckedAt": "2026-10-31T16:12:32.113Z",
+      "sourceStatus": "BLOCKED_SOURCE",
+      "seen": {}
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-10-24T13:37:39.538Z",
+      "lastCheckedAt": "2026-10-31T16:12:34.498Z",
+      "sourceStatus": "BLOCKED_SOURCE",
       "seen": {
         "c022035f3d7190f6f1": {
           "url": "https://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/",
@@ -183,9 +254,18 @@
           "url": "https://andaluztarija.com/2021/10/26/oscar-montes-en-campana-para-eliminar-la-ley-del-206-a-favor-de-municipios/",
           "date": "Fri, 23 Oct 2026 00:00:00 GMT",
           "seenAt": "2026-10-23T15:01:24.199Z"
+        },
+        "3c6bcb2a605cd33fb7": {
+          "url": "https://andaluztarija.com/diario/futbol-ciclon-mas-ligueros/",
+          "date": "Sun, 25 Oct 2026 00:00:00 GMT",
+          "seenAt": "2026-10-25T17:37:43.314Z"
+        },
+        "91178d2d646296a3ea": {
+          "url": "https://andaluztarija.com/2018/11/26/bernardo-leon-de-glas-casa-real-termino-segundo-en-la-vuelta-a-cochabamba/",
+          "date": "Sun, 25 Oct 2026 00:00:00 GMT",
+          "seenAt": "2026-10-25T18:19:58.471Z"
         }
-      },
-      "sourceStatus": "VERIFIED"
+      }
     }
   },
   "jobs": {
@@ -771,6 +851,454 @@
       "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Birmingham_aston_villa_park_stadium.jpg",
       "text": "Aston Villa–Manchester City : titulaires, Haaland et record en jeu le 24 octobre | BetGPT\nhttps://betgpt.live/actualites/aston-villa-manchester-city-compositions-record-24-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
       "createdAt": "2026-10-24T11:23:49.663Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:3817f06c0ca612c3e5": {
+      "id": "instagram:3817f06c0ca612c3e5",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/aston-villa-manchester-city-2-1-double-jackson-analyse-24-octobre-2026",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Birmingham_aston_villa_park_stadium.jpg?width=1600",
+      "text": "Aston Villa–Manchester City 2-1 : Jackson, Suzuki et la fin de série | BetGPT\n\nManchester City a perdu 2-1 à Villa Park samedi 24 octobre 2026 après sept victoires consécutives en Premier League. Nicolas Jackson a marqué à la 6e et à la 60e minute pour Aston Villa, malgré l&#x27;égalisation d&#x27;Erling Haaland à la 52e. Pourquoi City a-t-il perdu avec sept tirs cadrés contre deux, et quel rôle ont joué les arrêts de Zion Suzuki ? Analyse originale et sourcée du résultat, des décisions tactiques et des conséquences.\n\nhttps://betgpt.live/actualites/aston-villa-manchester-city-2-1-double-jackson-analyse-24-octobre-2026?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #VillaManchester #Jackson #Suzuki",
+      "createdAt": "2026-10-24T17:24:53.988Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:3817f06c0ca612c3e5": {
+      "id": "x:3817f06c0ca612c3e5",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/aston-villa-manchester-city-2-1-double-jackson-analyse-24-octobre-2026",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Birmingham_aston_villa_park_stadium.jpg?width=1600",
+      "text": "Aston Villa–Manchester City 2-1 : Jackson, Suzuki et la fin de série | BetGPT\nhttps://betgpt.live/actualites/aston-villa-manchester-city-2-1-double-jackson-analyse-24-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-24T17:24:53.988Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:5b21394b0e6c6d02fe": {
+      "id": "instagram:5b21394b0e6c6d02fe",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/arsenal-everton-2-0-konsa-gabriel-course-titre-24-octobre-2026",
+      "imageUrl": "https://betgpt.live/blog/discover/inline-shot.jpg",
+      "text": "Arsenal–Everton 2-0 : Konsa, Gabriel et 21 points, l&#x27;analyse de la victoire | BetGPT\n\nArsenal a battu Everton 2-0 à l&#x27;Emirates Stadium samedi 24 octobre 2026. Ezri Konsa a ouvert la marque à la 7e minute après un corner et Gabriel Magalhães a inscrit le second but à la 68e, sur un centre de Ben White. Les Gunners rejoignent Manchester City avec 21 points en huit journées, après la défaite de City à Aston Villa. Au-delà des deux défenseurs buteurs, l&#x27;analyse des occasions et des réponses d&#x27;Everton permet de comprendre pourquoi ce résultat compte \n\nhttps://betgpt.live/actualites/arsenal-everton-2-0-konsa-gabriel-course-titre-24-octobre-2026?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #ArsenalEverton #Konsa #Gabriel",
+      "createdAt": "2026-10-24T21:55:54.354Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:5b21394b0e6c6d02fe": {
+      "id": "x:5b21394b0e6c6d02fe",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/arsenal-everton-2-0-konsa-gabriel-course-titre-24-octobre-2026",
+      "imageUrl": "https://betgpt.live/blog/discover/inline-shot.jpg",
+      "text": "Arsenal–Everton 2-0 : Konsa, Gabriel et 21 points, l&#x27;analyse de la victoire | BetGPT\nhttps://betgpt.live/actualites/arsenal-everton-2-0-konsa-gabriel-course-titre-24-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-24T21:55:54.354Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:148fc6f27d38b24aa1": {
+      "id": "instagram:148fc6f27d38b24aa1",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/barcelone-real-madrid-clasico-25-octobre-2026-kounde-vinicius-enjeux",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Camp_nou_FC_Barcelona.jpg?width=1600",
+      "text": "Barcelone–Real Madrid : Koundé et Vinícius absents, les enjeux du Clásico 2026 | BetGPT\n\nBarcelone accueille le Real Madrid dimanche 25 octobre 2026 à 21 heures au Spotify Camp Nou. Le Barça a remporté ses neuf premiers matches de Liga, mais reste sur une défaite 4-2 face au PSG. Jules Koundé, Dani Olmo et Eric Garcia manquent à l&#x27;appel côté catalan, tandis que Vinícius Júnior est suspendu pour Madrid. Entre six points d&#x27;écart, retour de Mourinho et renouvellement des effectifs, voici les enjeux vérifiés et les clés tactiques sans inventer les compositi\n\nhttps://betgpt.live/actualites/barcelone-real-madrid-clasico-25-octobre-2026-kounde-vinicius-enjeux?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #BarceloneReal #Madrid #Kounde",
+      "createdAt": "2026-10-25T09:46:51.386Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:148fc6f27d38b24aa1": {
+      "id": "x:148fc6f27d38b24aa1",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/barcelone-real-madrid-clasico-25-octobre-2026-kounde-vinicius-enjeux",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Camp_nou_FC_Barcelona.jpg?width=1600",
+      "text": "Barcelone–Real Madrid : Koundé et Vinícius absents, les enjeux du Clásico 2026 | BetGPT\nhttps://betgpt.live/actualites/barcelone-real-madrid-clasico-25-octobre-2026-kounde-vinicius-enjeux?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-25T09:46:51.387Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:d383bfbc3bf688899b": {
+      "id": "instagram:d383bfbc3bf688899b",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/liverpool-brighton-maintenu-tempete-boelo-25-octobre-2026-absences-analyse",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Anfield_Stadium.jpg?width=1600",
+      "text": "Liverpool–Brighton maintenu malgré Boelo : horaire, absences et clés du match | BetGPT\n\nLiverpool a confirmé dimanche 25 octobre 2026 le maintien de son match contre Brighton malgré les vents de la tempête Boelo. Coup d&#x27;envoi annoncé à 15 heures, heure de Paris. Au-delà de l&#x27;alerte météo, Brighton arrive avec quatre succès de championnat consécutifs sans encaisser de but et Liverpool doit composer sans Dominik Szoboszlai. Voici ce qui est officiellement établi, les incertitudes d&#x27;effectif et les enjeux tactiques, sans inventer de compositions ni d\n\nhttps://betgpt.live/actualites/liverpool-brighton-maintenu-tempete-boelo-25-octobre-2026-absences-analyse?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #LiverpoolBrighton #maintenu #malgre",
+      "createdAt": "2026-10-25T12:33:05.684Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:d383bfbc3bf688899b": {
+      "id": "x:d383bfbc3bf688899b",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/liverpool-brighton-maintenu-tempete-boelo-25-octobre-2026-absences-analyse",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Anfield_Stadium.jpg?width=1600",
+      "text": "Liverpool–Brighton maintenu malgré Boelo : horaire, absences et clés du match | Bet\nhttps://betgpt.live/actualites/liverpool-brighton-maintenu-tempete-boelo-25-octobre-2026-absences-analyse?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-25T12:33:05.685Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:3c6bcb2a605cd33fb7": {
+      "id": "instagram:3c6bcb2a605cd33fb7",
+      "siteId": "andaluztarija",
+      "network": "instagram",
+      "articleUrl": "https://andaluztarija.com/diario/futbol-ciclon-mas-ligueros/",
+      "imageUrl": null,
+      "text": "Atlético Ciclón: los refuerzos ligueros y la reconstrucción del plantel de 2014\n\nArchivo temático documentado: Félix Candía, Kevin Morales y la preparación de Ciclón para el Nacional B 2014-2015, con fuentes identificadas.\n\nhttps://andaluztarija.com/diario/futbol-ciclon-mas-ligueros/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija #noticias #Atletico #Ciclon #refuerzos",
+      "createdAt": "2026-10-25T17:37:43.422Z",
+      "status": "WAIT_IMAGE",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:3c6bcb2a605cd33fb7": {
+      "id": "x:3c6bcb2a605cd33fb7",
+      "siteId": "andaluztarija",
+      "network": "x",
+      "articleUrl": "https://andaluztarija.com/diario/futbol-ciclon-mas-ligueros/",
+      "imageUrl": null,
+      "text": "Atlético Ciclón: los refuerzos ligueros y la reconstrucción del plantel de 2014\nhttps://andaluztarija.com/diario/futbol-ciclon-mas-ligueros/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija",
+      "createdAt": "2026-10-25T17:37:43.422Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:91178d2d646296a3ea": {
+      "id": "instagram:91178d2d646296a3ea",
+      "siteId": "andaluztarija",
+      "network": "instagram",
+      "articleUrl": "https://andaluztarija.com/2018/11/26/bernardo-leon-de-glas-casa-real-termino-segundo-en-la-vuelta-a-cochabamba/",
+      "imageUrl": null,
+      "text": "Bernardo León fue segundo en la Vuelta a Cochabamba de 2018: clasificación y contexto\n\nResultados de la Vuelta a Cochabamba 2018: Bernardo León, del equipo Glas Casa Real, concluyó segundo en la general, a 15 segundos de Javier Arando.\n\nhttps://andaluztarija.com/2018/11/26/bernardo-leon-de-glas-casa-real-termino-segundo-en-la-vuelta-a-cochabamba/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija #noticias #Bernardo #segundo #Vuelta",
+      "createdAt": "2026-10-25T18:20:02.115Z",
+      "status": "WAIT_IMAGE",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:91178d2d646296a3ea": {
+      "id": "x:91178d2d646296a3ea",
+      "siteId": "andaluztarija",
+      "network": "x",
+      "articleUrl": "https://andaluztarija.com/2018/11/26/bernardo-leon-de-glas-casa-real-termino-segundo-en-la-vuelta-a-cochabamba/",
+      "imageUrl": null,
+      "text": "Bernardo León fue segundo en la Vuelta a Cochabamba de 2018: clasificación y conte\nhttps://andaluztarija.com/2018/11/26/bernardo-leon-de-glas-casa-real-termino-segundo-en-la-vuelta-a-cochabamba/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#Bolivia #Tarija",
+      "createdAt": "2026-10-25T18:20:02.115Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:7c6a7f4ce0831f6659": {
+      "id": "instagram:7c6a7f4ce0831f6659",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/manchester-united-bournemouth-0-3-carrick-fernandes-analyse-26-octobre-2026",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Old_Trafford,_view_from_Stretford_End_4.jpg?width=1600",
+      "text": "Manchester United–Bournemouth 0-3 : Carrick, Fernandes et les clés du naufrage | BetGPT\n\nBournemouth a battu Manchester United 3-0 à Old Trafford dimanche 25 octobre 2026 grâce à Rayan, Marcus Tavernier et Evanilson. Au lendemain de cette défaite, l&#x27;absence de Bruno Fernandes du onze, les trois séquences défensives décisives et l&#x27;avenir incertain de Michael Carrick méritent une analyse sourcée. Voici ce que confirment les clubs et les médias, sans annoncer de départ non officiel ni inventer de statistiques.\n\nhttps://betgpt.live/actualites/manchester-united-bournemouth-0-3-carrick-fernandes-analyse-26-octobre-2026?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #Manchester #UnitedBournemouth #Carrick",
+      "createdAt": "2026-10-26T10:36:56.211Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:7c6a7f4ce0831f6659": {
+      "id": "x:7c6a7f4ce0831f6659",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/manchester-united-bournemouth-0-3-carrick-fernandes-analyse-26-octobre-2026",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Old_Trafford,_view_from_Stretford_End_4.jpg?width=1600",
+      "text": "Manchester United–Bournemouth 0-3 : Carrick, Fernandes et les clés du naufrage | B\nhttps://betgpt.live/actualites/manchester-united-bournemouth-0-3-carrick-fernandes-analyse-26-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-26T10:36:56.211Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:466d881f783fce76fb": {
+      "id": "instagram:466d881f783fce76fb",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/ballon-dor-2026-kane-yamal-mbappe-ceremonie-londres-26-octobre",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/FIFA_Ballon_D%E2%80%98OR_Awards%2C_FIFA_Museum_%28_Ank_Kumar%2C_Infosys%29_08.jpg?width=1600",
+      "text": "Ballon d’Or 2026 : Kane, Yamal, Mbappé, horaires et enjeux de la cérémonie | BetGPT\n\nCe lundi 26 octobre 2026, le Ballon d’Or fête ses 70 ans au London Palladium. Harry Kane est cité comme favori par la presse britannique, tandis que Lamine Yamal et Kylian Mbappé avancent des arguments sportifs différents. À 13 heures, aucun gagnant n’est officiellement annoncé : voici le guide sourcé de la cérémonie de 21 heures à Paris, des trente nommés masculins et féminins et des critères à ne pas confondre avec les pronostics.\n\nhttps://betgpt.live/actualites/ballon-dor-2026-kane-yamal-mbappe-ceremonie-londres-26-octobre?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #Ballon #Yamal #Mbappe",
+      "createdAt": "2026-10-26T13:23:35.558Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:466d881f783fce76fb": {
+      "id": "x:466d881f783fce76fb",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/ballon-dor-2026-kane-yamal-mbappe-ceremonie-londres-26-octobre",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/FIFA_Ballon_D%E2%80%98OR_Awards%2C_FIFA_Museum_%28_Ank_Kumar%2C_Infosys%29_08.jpg?width=1600",
+      "text": "Ballon d’Or 2026 : Kane, Yamal, Mbappé, horaires et enjeux de la cérémonie | BetGPT\nhttps://betgpt.live/actualites/ballon-dor-2026-kane-yamal-mbappe-ceremonie-londres-26-octobre?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-26T13:23:35.558Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:90f72f0efc2ac1b772": {
+      "id": "instagram:90f72f0efc2ac1b772",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/barcelone-real-madrid-1-2-mbappe-double-clasico-analyse-26-octobre-2026",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Kylian_Mbappe_France_v_Spain_7.24.26-135.jpg?width=1600",
+      "text": "Barcelone–Real Madrid 1-2 : Mbappé décisif, les clés du Clásico | BetGPT\n\nLe Real Madrid s&#x27;est imposé 2-1 au Camp Nou le 25 octobre 2026 et a mis fin aux neuf victoires initiales du Barça en Liga. Kylian Mbappé a marqué aux 41e et 87e minutes, Raphinha a égalisé à la 61e. Au-delà du score, l&#x27;analyse croisée des feuilles de match officielles, de Reuters, du Guardian, de Sky Sports et des données Opta éclaire le pressing, les transitions, l&#x27;arrêt décisif de Lunin et les conséquences au classement.\n\nhttps://betgpt.live/actualites/barcelone-real-madrid-1-2-mbappe-double-clasico-analyse-26-octobre-2026?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #BarceloneReal #Madrid #Mbappe",
+      "createdAt": "2026-10-26T14:44:29.689Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:90f72f0efc2ac1b772": {
+      "id": "x:90f72f0efc2ac1b772",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/barcelone-real-madrid-1-2-mbappe-double-clasico-analyse-26-octobre-2026",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Kylian_Mbappe_France_v_Spain_7.24.26-135.jpg?width=1600",
+      "text": "Barcelone–Real Madrid 1-2 : Mbappé décisif, les clés du Clásico | BetGPT\nhttps://betgpt.live/actualites/barcelone-real-madrid-1-2-mbappe-double-clasico-analyse-26-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-26T14:44:29.689Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:55c257679ce7b4f751": {
+      "id": "instagram:55c257679ce7b4f751",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/psg-lyon-2-0-mayulu-godts-analyse-27-octobre-2026",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Match_Football_Paris_SG_x_AS_Saint_%C3%89tienne_Stade_Parc_Princes_-_Paris_XVI_(FR75)_-_2025-01-12_-_33.jpg?width=1600",
+      "text": "PSG-Lyon 2-0 : Mayulu, Godts et les clés du succès | BetGPT\n\nLe PSG a battu Lyon 2-0 lundi 26 octobre 2026 au Parc des Princes. Les entrants Senny Mayulu (72e) et Mika Godts (84e) ont fait la différence après une longue résistance lyonnaise et plusieurs arrêts des gardiens. Analyse de la chronologie, des changements de Luis Enrique, des occasions de l’OL et du classement, à partir du PSG, de Reuters et de médias indépendants.\n\nhttps://betgpt.live/actualites/psg-lyon-2-0-mayulu-godts-analyse-27-octobre-2026?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #PSGLyon #Mayulu #succes",
+      "createdAt": "2026-10-27T16:09:20.466Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:55c257679ce7b4f751": {
+      "id": "x:55c257679ce7b4f751",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/psg-lyon-2-0-mayulu-godts-analyse-27-octobre-2026",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Match_Football_Paris_SG_x_AS_Saint_%C3%89tienne_Stade_Parc_Princes_-_Paris_XVI_(FR75)_-_2025-01-12_-_33.jpg?width=1600",
+      "text": "PSG-Lyon 2-0 : Mayulu, Godts et les clés du succès | BetGPT\nhttps://betgpt.live/actualites/psg-lyon-2-0-mayulu-godts-analyse-27-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-27T16:09:20.466Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:c85bb1b5269a863c0b": {
+      "id": "instagram:c85bb1b5269a863c0b",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/liverpool-chelsea-carabao-cup-28-octobre-2026-analyse-avant-match",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Anfield%2C_Liverpool_Football_Club_-_geograph.org.uk_-_7681752.jpg?width=1600",
+      "text": "Liverpool–Chelsea : horaire, enjeux et clés du choc en Carabao Cup | BetGPT\n\nLiverpool reçoit Chelsea mercredi 28 octobre 2026 à Anfield en huitième de finale de la Carabao Cup. Horaire confirmé, historique, statistiques officielles de l&#x27;EFL et enjeux tactiques : une avant-première documentée sans composition ni pronostic inventé.\n\nhttps://betgpt.live/actualites/liverpool-chelsea-carabao-cup-28-octobre-2026-analyse-avant-match?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #LiverpoolChelsea #horaire #enjeux",
+      "createdAt": "2026-10-27T16:22:06.439Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:c85bb1b5269a863c0b": {
+      "id": "x:c85bb1b5269a863c0b",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/liverpool-chelsea-carabao-cup-28-octobre-2026-analyse-avant-match",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Anfield%2C_Liverpool_Football_Club_-_geograph.org.uk_-_7681752.jpg?width=1600",
+      "text": "Liverpool–Chelsea : horaire, enjeux et clés du choc en Carabao Cup | BetGPT\nhttps://betgpt.live/actualites/liverpool-chelsea-carabao-cup-28-octobre-2026-analyse-avant-match?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-27T16:22:06.439Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:e04407e89bb8ae9f39": {
+      "id": "instagram:e04407e89bb8ae9f39",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/fleetwood-arsenal-carabao-cup-27-octobre-2026-avant-match",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/The_BES_Parkside_Stand_in_Highbury_Stadium_-_geograph.org.uk_-_5590434.jpg?width=1600",
+      "text": "Fleetwood–Arsenal : horaire, enjeu historique et clés du match de Carabao Cup | BetGPT\n\nFleetwood reçoit Arsenal mardi 27 octobre 2026 à 21 h, heure de Paris, au quatrième tour de Carabao Cup. Analyse originale de la première confrontation, chiffres officiels de l’EFL, enjeux de rotation et contexte du stade Highbury de Fleetwood, sans résultat ni composition inventés.\n\nhttps://betgpt.live/actualites/fleetwood-arsenal-carabao-cup-27-octobre-2026-avant-match?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #FleetwoodArsenal #horaire #historique",
+      "createdAt": "2026-10-27T20:43:26.763Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:e04407e89bb8ae9f39": {
+      "id": "x:e04407e89bb8ae9f39",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/fleetwood-arsenal-carabao-cup-27-octobre-2026-avant-match",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/The_BES_Parkside_Stand_in_Highbury_Stadium_-_geograph.org.uk_-_5590434.jpg?width=1600",
+      "text": "Fleetwood–Arsenal : horaire, enjeu historique et clés du match de Carabao Cup | BetGPT\nhttps://betgpt.live/actualites/fleetwood-arsenal-carabao-cup-27-octobre-2026-avant-match?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-27T20:43:26.763Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:5259c291a211ef8403": {
+      "id": "instagram:5259c291a211ef8403",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/ol-lyonnes-inter-ligue-champions-feminine-28-octobre-2026-analyse",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/OL-Stade_Rennais_saison_2022-2023_Groupama_Stadium_08.jpg",
+      "text": "OL Lyonnes–Inter : forme, enjeux et faits confirmés avant le match du 28 octobre | BetGPT\n\nOL Lyonnes reçoit l’Inter Milan mercredi 28 octobre 2026 à 21 heures au Groupama Stadium pour la troisième journée de Ligue des champions féminine. Les deux équipes ont quatre points, mais leurs parcours et leurs prochains adversaires diffèrent. Voici une analyse factuelle, sans score ni composition inventés.\n\nhttps://betgpt.live/actualites/ol-lyonnes-inter-ligue-champions-feminine-28-octobre-2026-analyse?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #LyonnesInter #forme #enjeux",
+      "createdAt": "2026-10-28T09:26:41.958Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:5259c291a211ef8403": {
+      "id": "x:5259c291a211ef8403",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/ol-lyonnes-inter-ligue-champions-feminine-28-octobre-2026-analyse",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/OL-Stade_Rennais_saison_2022-2023_Groupama_Stadium_08.jpg",
+      "text": "OL Lyonnes–Inter : forme, enjeux et faits confirmés avant le match du 28 octobre | BetGPT\nhttps://betgpt.live/actualites/ol-lyonnes-inter-ligue-champions-feminine-28-octobre-2026-analyse?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-28T09:26:41.958Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:d555c556897750ee02": {
+      "id": "instagram:d555c556897750ee02",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/arsenal-benfica-3-0-russo-triple-record-analyse-29-octobre-2026",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/38/Valerenga-Arsenal_WUCL_12-12-2024_CG3A4421_08.jpg",
+      "text": "Arsenal–Benfica 3-0 : triplé de Russo, record anglais et analyse du match | BetGPT\n\nArsenal a battu Benfica 3-0 le 28 octobre 2026 à Meadow Park, avec un triplé d’Alessia Russo (39e, 66e, 79e sur penalty). Au-delà du record anglais de 23 buts en compétition européenne, le match révèle une domination offensive mesurable, une résistance portugaise longtemps portée par Lena Pauels et des enjeux distincts pour les deux clubs. Analyse recoupée avec l’UEFA, Benfica et quatre médias indépendants.\n\nhttps://betgpt.live/actualites/arsenal-benfica-3-0-russo-triple-record-analyse-29-octobre-2026?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #ArsenalBenfica #triple #Russo",
+      "createdAt": "2026-10-29T11:32:53.012Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:d555c556897750ee02": {
+      "id": "x:d555c556897750ee02",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/arsenal-benfica-3-0-russo-triple-record-analyse-29-octobre-2026",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/38/Valerenga-Arsenal_WUCL_12-12-2024_CG3A4421_08.jpg",
+      "text": "Arsenal–Benfica 3-0 : triplé de Russo, record anglais et analyse du match | BetGPT\nhttps://betgpt.live/actualites/arsenal-benfica-3-0-russo-triple-record-analyse-29-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-29T11:32:53.012Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:91c95f5130d4daba6b": {
+      "id": "instagram:91c95f5130d4daba6b",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/carabao-cup-quarts-tirage-liverpool-city-fleetwood-29-octobre-2026",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Selhurst_Park_Holmesdale_Stand.jpg",
+      "text": "Carabao Cup 2026 : tirage des quarts, Liverpool–Bournemouth et City–Bradford | BetGPT\n\nLe tirage des quarts de finale de la Carabao Cup, annoncé le 28 octobre 2026, propose Liverpool–Bournemouth, Manchester City–Bradford, Crystal Palace–Sunderland et Fleetwood–Everton ou Newcastle. Liverpool a éliminé Chelsea (1-1, 6-5 aux tirs au but) et Manchester City a sorti Brighton (2-2, 4-3 aux tirs au but) avant ce tirage. Analyse des qualifications, des lieux confirmés et des informations encore ouvertes, avec priorité aux documents officiels de l’EFL et de la Premier \n\nhttps://betgpt.live/actualites/carabao-cup-quarts-tirage-liverpool-city-fleetwood-29-octobre-2026?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #Carabao #tirage #quarts",
+      "createdAt": "2026-10-29T18:34:41.327Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:91c95f5130d4daba6b": {
+      "id": "x:91c95f5130d4daba6b",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/carabao-cup-quarts-tirage-liverpool-city-fleetwood-29-octobre-2026",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Selhurst_Park_Holmesdale_Stand.jpg",
+      "text": "Carabao Cup 2026 : tirage des quarts, Liverpool–Bournemouth et City–Bradford | BetGPT\nhttps://betgpt.live/actualites/carabao-cup-quarts-tirage-liverpool-city-fleetwood-29-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-29T18:34:41.327Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:aad8d141382f4c3394": {
+      "id": "instagram:aad8d141382f4c3394",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/genoa-juventus-2-0-baldanzi-ehizibue-analyse-29-octobre-2026",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Foto_Gradinata_Nord_Genoa_2023-24.jpg",
+      "text": "Genoa–Juventus 2-0 : Baldanzi et Ehizibue, l&#x27;analyse du revers turinois | BetGPT\n\nLe Genoa a battu la Juventus 2-0 le 28 octobre 2026 au stade Luigi-Ferraris, avec des buts de Kingsley Ehizibue (12e) et Tommaso Baldanzi (28e). Retour sur les actions décisives, les changements de Spalletti, la résistance génoise et les conséquences au classement, à partir de la Lega Serie A, de la Juventus et de plusieurs rédactions indépendantes.\n\nhttps://betgpt.live/actualites/genoa-juventus-2-0-baldanzi-ehizibue-analyse-29-octobre-2026?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #GenoaJuventus #Baldanzi #Ehizibue",
+      "createdAt": "2026-10-29T22:02:39.529Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:aad8d141382f4c3394": {
+      "id": "x:aad8d141382f4c3394",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/genoa-juventus-2-0-baldanzi-ehizibue-analyse-29-octobre-2026",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Foto_Gradinata_Nord_Genoa_2023-24.jpg",
+      "text": "Genoa–Juventus 2-0 : Baldanzi et Ehizibue, l&#x27;analyse du revers turinois | BetGPT\nhttps://betgpt.live/actualites/genoa-juventus-2-0-baldanzi-ehizibue-analyse-29-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-10-29T22:02:39.530Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,

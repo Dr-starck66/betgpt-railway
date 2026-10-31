@@ -14,6 +14,11 @@ on:
       - "src/engine/live.ts"
       - "scripts/ts-alias-hooks.mjs"
       - "scripts/astra-release-gate.mjs"
+      - "scripts/editorial-image-proof.mjs"
+      - "scripts/editorial-gate.test.mjs"
+      - "config/astra-master-site.json"
+      - "src/lib/editorial/manual-aston-villa-city-2026-10-24.ts"
+      - "src/lib/editorial/manual-aston-villa-city-postmatch-2026-10-24.ts"
       - "scripts/astra-safe-push.mjs"
       - "config/astra-release-gate.json"
       - "scripts/run-editorial-publish.ts"
@@ -29,6 +34,11 @@ on:
       - "migrations/0004_social_ledger.sql"
       - "data/social/ledger.json"
       - "scripts/run-editorial-publish.ts"
+      - "scripts/astra-release-gate.mjs"
+      - "scripts/editorial-image-proof.mjs"
+      - "scripts/editorial-gate.test.mjs"
+      - "config/astra-master-site.json"
+      - "config/astra-release-gate.json"
       - "package.json"
       - "api/editorial-run.ts"
       - ".github/workflows/editorial.yml"
@@ -53,6 +63,10 @@ jobs:
           cache: npm
       - run: npm ci
 
+      - name: Verify refusal exits nonzero and images have distinct real 16:9 binaries
+        run: |
+          node --test scripts/editorial-gate.test.mjs
+          node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/editorial-image-proof.mjs
       - name: Validate ASTRA release manifest
         run: npm run release:validate
 
@@ -70,7 +84,7 @@ jobs:
         run: npm run release:pipeline:editorial
 
       - name: Persist editorial and social ledgers safely
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && steps.editorial_gate.outputs.blocked != 'true'
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && steps.editorial_gate.outcome == 'success'
         run: >-
           node scripts/astra-safe-push.mjs
           --branch main

@@ -36,6 +36,7 @@
         "npm run test:module-resolution",
         "npm run news",
         "npm run social:audit",
+        "node --experimental-strip-types --import ./scripts/ts-alias.mjs scripts/editorial-image-proof.mjs",
         "npm run editorial:publish"
       ]
     }

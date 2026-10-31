@@ -1,6 +1,6 @@
 # BetGPT public prediction evidence pack
 
-Generated: 2026-10-19T14:47:19.478Z
+Generated: 2026-10-28T07:34:56.423Z
 
 Canonical site: https://betgpt.live
 
@@ -15,9 +15,9 @@ This package mirrors BetGPT's public evidence surfaces so journalists, analysts 
 
 ## Snapshot
 
-- Public register rows: 889
-- JSON SHA-256: `54f66e1e051a0bd9cd43418b7ef65d0b997e32d56cda51334f73e14eff331d1c`
-- CSV SHA-256: `77bac64df26077ceeaadf3d4742631efc80cfe5b7d9e10896257ea1246666d69`
+- Public register rows: 992
+- JSON SHA-256: `c832c62f23f10cdb9fd249685f7f2ca2fb710741ba8095c15e33cbb5ffd96d75`
+- CSV SHA-256: `c6029054ad674975c395f5a9b7f734263c4f1d436ac5bbe68711f80578096087`
 
 ## Citation
 

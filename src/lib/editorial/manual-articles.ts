@@ -1,3 +1,17 @@
+import { genoaJuventusEveningAgent20261029 } from "@/lib/editorial/manual-genoa-juventus-evening-agent-2026-10-29";
+import { carabaoDrawNoonAgent20261029 } from "@/lib/editorial/manual-carabao-draw-noon-agent-2026-10-29";
+import { arsenalBenficaMorningAgent20261029 } from "@/lib/editorial/manual-arsenal-benfica-morning-agent-2026-10-29";
+import { olLyonnesInterMorningAgent20261028 } from "@/lib/editorial/manual-ol-lyonnes-inter-morning-agent-2026-10-28";
+import { fleetwoodArsenalEveningAgent20261027 } from "@/lib/editorial/manual-fleetwood-arsenal-evening-agent-2026-10-27";
+import { liverpoolChelseaNoonAgent20261027 } from "@/lib/editorial/manual-liverpool-chelsea-noon-agent-2026-10-27";
+import { psgLyonMorningAgent20261027 } from "@/lib/editorial/manual-psg-lyon-morning-agent-2026-10-27";
+import { clasicoPostmatchAgentCatchup20261026 } from "@/lib/editorial/manual-clasico-postmatch-agent-catchup-2026-10-26";
+import { ballonDorNoon20261026 } from "@/lib/editorial/manual-ballon-dor-noon-2026-10-26";
+import { manutdBournemouthMorning20261026 } from "@/lib/editorial/manual-manutd-bournemouth-morning-2026-10-26";
+import { liverpoolBrightonBoeloNoon20261025 } from "@/lib/editorial/manual-liverpool-brighton-boelo-noon-2026-10-25";
+import { clasicoMorning20261025 } from "@/lib/editorial/manual-clasico-morning-2026-10-25";
+import { arsenalEverton20261024 } from "@/lib/editorial/manual-arsenal-everton-2026-10-24";
+import { astonVillaCityPostmatch20261024 } from "@/lib/editorial/manual-aston-villa-city-postmatch-2026-10-24";
 import { cityVerdict20261012 } from "@/lib/editorial/manual-city-verdict-2026-10-12";
 import { astonVillaCityLineups20261024 } from "@/lib/editorial/manual-aston-villa-city-2026-10-24";
 import { psgLyonRescheduled20261023 } from "@/lib/editorial/manual-psg-lyon-report-2026-10-23";
@@ -5,6 +19,20 @@ import { liverpoolManchesterCityPostmatch } from "@/lib/editorial/manual-postmat
 import type { EditorialArticle } from "@/lib/editorial/types";
 
 const ARTICLES: EditorialArticle[] = [
+  genoaJuventusEveningAgent20261029,
+  carabaoDrawNoonAgent20261029,
+  arsenalBenficaMorningAgent20261029,
+  olLyonnesInterMorningAgent20261028,
+  fleetwoodArsenalEveningAgent20261027,
+  liverpoolChelseaNoonAgent20261027,
+  psgLyonMorningAgent20261027,
+  clasicoPostmatchAgentCatchup20261026,
+  ballonDorNoon20261026,
+  manutdBournemouthMorning20261026,
+  liverpoolBrightonBoeloNoon20261025,
+  clasicoMorning20261025,
+  arsenalEverton20261024,
+  astonVillaCityPostmatch20261024,
   astonVillaCityLineups20261024,
   psgLyonRescheduled20261023,
   cityVerdict20261012,

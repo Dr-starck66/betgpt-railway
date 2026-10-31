@@ -75,8 +75,9 @@ async function runCommands(label, commands = []) {
       break;
     }
   }
-  const pass =
-    blockedContent || (results.length === commands.length && results.every((r) => r.pass));
+  // A refused editorial publication is NEVER a successful pipeline. The
+  // refusal is preserved in the evidence but must fail the CI job as well.
+  const pass = results.length === commands.length && results.every((r) => r.pass);
   const evidence = {
     schema: "astra-single-source-release-gate/commands-v1",
     siteId: cfg.siteId,
@@ -92,8 +93,8 @@ async function runCommands(label, commands = []) {
     if (process.env.GITHUB_OUTPUT) {
       fs.appendFileSync(process.env.GITHUB_OUTPUT, "blocked=true\n");
     }
-    console.log(`ASTRA_RELEASE_GATE_BLOCKED_CONTENT ${label}`);
-    return;
+    console.error(`ASTRA_RELEASE_GATE_BLOCKED_CONTENT ${label}`);
+    process.exit(78);
   }
   if (!pass) {
     console.error(`ASTRA_RELEASE_GATE_FAIL ${label}`);
