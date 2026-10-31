@@ -32,6 +32,9 @@ jobs:
               except urllib.error.HTTPError as ex:
                   return ex.code,ex.geturl(),ex.read(4000).decode('utf-8','replace')
           checks=[]
+          for suffix in ('/','/favicon.ico'):
+              st,final,body=probe(os.environ['NEW_BASE']+suffix)
+              print('ASTRA_RUNTIME_DIAGNOSTIC',json.dumps({'path':suffix,'status':st,'bytes':len(body),'excerpt':body[:180]}),flush=True)
           for label,base in [('old',os.environ['OLD_BASE']),('new',os.environ['NEW_BASE'])]:
               for attempt in range(1,3):
                   url=base+'/actualites/'+os.environ['PUBLISHED_SLUG']
@@ -41,14 +44,15 @@ jobs:
                   noindex=bool(re.search(r'<meta[^>]+noindex',html,re.I))
                   record={'deployment':label,'attempt':attempt,'status':status,'final':final,
                           'bytes':len(html.encode()),'articleContent':main,'canonical':canonical,'noindex':noindex}
+                  record['responseExcerpt']=html[:180] if status!=200 else None
                   print('ASTRA_HTTP_PROOF',json.dumps(record),flush=True)
                   checks.append(status==200 and main and canonical and not noindex)
                   time.sleep(3)
           status,final,html=probe(os.environ['NEW_BASE']+'/news-sitemap.xml')
-          print('ASTRA_SITEMAP_PROOF',json.dumps({'status':status,'url':final,'bytes':len(html.encode())}),flush=True)
+          print('ASTRA_SITEMAP_PROOF',json.dumps({'status':status,'url':final,'bytes':len(html.encode()),'excerpt':html[:180]}),flush=True)
           checks.append(status==200 and ('sitemap' in html or 'urlset' in html))
           status,final,html=probe(os.environ['NEW_BASE']+'/api/editorial-agent-status')
-          print('ASTRA_AGENT_STATUS_PROOF',json.dumps({'status':status,'url':final,'jsonMode':('ASTRA_AGENT_GITHUB_VERCEL' in html)}),flush=True)
+          print('ASTRA_AGENT_STATUS_PROOF',json.dumps({'status':status,'url':final,'jsonMode':('ASTRA_AGENT_GITHUB_VERCEL' in html),'excerpt':html[:180]}),flush=True)
           checks.append(status==200 and 'ASTRA_AGENT_GITHUB_VERCEL' in html)
           status,final,html=probe(os.environ['CANDIDATE_BASE']+'/actualites/'+os.environ['UNPUBLISHED_SLUG'])
           print('ASTRA_NEGATIVE_CONTROL',json.dumps({'status':status,'url':final,'bytes':len(html.encode())}),flush=True)
