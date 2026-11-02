@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-02T05:56:21.341Z",
+      "lastCheckedAt": "2026-11-02T13:31:59.279Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {
         "f60130248d48db11bc": {
@@ -125,13 +125,13 @@
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-02T05:56:21.960Z",
+      "lastCheckedAt": "2026-11-02T13:32:00.044Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {}
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-02T05:56:23.069Z",
+      "lastCheckedAt": "2026-11-02T13:32:01.724Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {
         "113acfc5949a8ca9ca": {
@@ -148,8 +148,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-02T05:56:23.610Z",
-      "sourceStatus": "BLOCKED_SOURCE",
+      "lastCheckedAt": "2026-11-02T13:32:02.512Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -176,23 +175,24 @@
           "date": "Fri, 23 Oct 2026 00:00:00 GMT",
           "seenAt": "2026-10-23T19:09:53.043Z"
         }
-      }
+      },
+      "sourceStatus": "VERIFIED"
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-02T05:56:24.763Z",
-      "sourceStatus": "BLOCKED_SOURCE",
-      "seen": {}
+      "lastCheckedAt": "2026-11-02T13:32:03.993Z",
+      "seen": {},
+      "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-02T05:56:22.455Z",
+      "lastCheckedAt": "2026-11-02T13:32:00.870Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {}
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-02T05:56:24.152Z",
+      "lastCheckedAt": "2026-11-02T13:32:03.419Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {
         "c022035f3d7190f6f1": {
