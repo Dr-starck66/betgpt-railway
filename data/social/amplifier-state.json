@@ -3,8 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-02T15:41:25.611Z",
-      "sourceStatus": "BLOCKED_SOURCE",
+      "lastCheckedAt": "2026-11-02T22:30:14.412Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -121,17 +120,18 @@
           "date": "2026-10-29T18:29:52.182Z",
           "seenAt": "2026-10-29T22:02:34.185Z"
         }
-      }
+      },
+      "sourceStatus": "VERIFIED"
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-02T15:41:26.242Z",
+      "lastCheckedAt": "2026-11-02T22:30:15.058Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {}
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-02T15:41:27.386Z",
+      "lastCheckedAt": "2026-11-02T22:30:16.144Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {
         "113acfc5949a8ca9ca": {
@@ -148,7 +148,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-02T15:41:28.083Z",
+      "lastCheckedAt": "2026-11-02T22:30:16.716Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -180,19 +180,25 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-02T15:41:29.293Z",
-      "seen": {},
+      "lastCheckedAt": "2026-11-02T22:30:17.883Z",
+      "seen": {
+        "b24e80016714b0bbd2": {
+          "url": "https://avocat-belgique.com/actualites/frais-colis-hors-ue-novembre-2026/",
+          "date": "2026-11-02T15:43:38.154Z",
+          "seenAt": "2026-11-02T22:30:17.883Z"
+        }
+      },
       "sourceStatus": "VERIFIED"
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-02T15:41:26.810Z",
+      "lastCheckedAt": "2026-11-02T22:30:15.564Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {}
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-02T15:41:28.658Z",
+      "lastCheckedAt": "2026-11-02T22:30:17.306Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {
         "c022035f3d7190f6f1": {
@@ -1299,6 +1305,34 @@
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Foto_Gradinata_Nord_Genoa_2023-24.jpg",
       "text": "Genoa–Juventus 2-0 : Baldanzi et Ehizibue, l&#x27;analyse du revers turinois | BetGPT\nhttps://betgpt.live/actualites/genoa-juventus-2-0-baldanzi-ehizibue-analyse-29-octobre-2026?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
       "createdAt": "2026-10-29T22:02:39.530Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:b24e80016714b0bbd2": {
+      "id": "instagram:b24e80016714b0bbd2",
+      "siteId": "avocatbelgique",
+      "network": "instagram",
+      "articleUrl": "https://avocat-belgique.com/actualites/frais-colis-hors-ue-novembre-2026/",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Box%20package.jpg?width=1600",
+      "text": "Colis hors UE en Belgique : les nouveaux frais du 1er novembre 2026 expliqués\n\nDepuis le 1er novembre 2026, de nouveaux frais européens de 2 € par catégorie de produit s\n\nhttps://avocat-belgique.com/actualites/frais-colis-hors-ue-novembre-2026/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#droitbelge #avocat #Belgique #nouveaux #novembre #expliques",
+      "createdAt": "2026-11-02T22:30:18.389Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:b24e80016714b0bbd2": {
+      "id": "x:b24e80016714b0bbd2",
+      "siteId": "avocatbelgique",
+      "network": "x",
+      "articleUrl": "https://avocat-belgique.com/actualites/frais-colis-hors-ue-novembre-2026/",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Box%20package.jpg?width=1600",
+      "text": "Colis hors UE en Belgique : les nouveaux frais du 1er novembre 2026 expliqués\nhttps://avocat-belgique.com/actualites/frais-colis-hors-ue-novembre-2026/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#droitbelge #avocat",
+      "createdAt": "2026-11-02T22:30:18.389Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,
