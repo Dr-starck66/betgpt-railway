@@ -146,7 +146,9 @@ try {
   evidence.checks.images = checkSameOriginLocs("images", imageLocs);
   evidence.checks.news = checkSameOriginLocs("news", newsLocs);
 
-  if (sitemapLocs.length < 25) fail("sitemap-too-small", String(sitemapLocs.length));
+  // Railway production exposed more than the 55 URLs of the static rescue.
+  // This conservative threshold is NOT a claim of 100% URL recovery.
+  if (sitemapLocs.length < 100) fail("sitemap-too-small", String(sitemapLocs.length));
   if (sitemapLocs.length > 50000) fail("sitemap-too-large", String(sitemapLocs.length));
   if (imageLocs.length < 1) fail("images-sitemap-empty");
   if (newsLocs.length > 1000) fail("news-sitemap-too-large", String(newsLocs.length));
@@ -198,6 +200,63 @@ try {
       fail("representative-canonical-mismatch", `${representative} -> ${canonicals.join(",") || "none"}`);
     }
     evidence.checks.representative = { url: representative, status: page.status, canonicals, robotsMeta: metas };
+  }
+
+  // Fail closed on the 2026-11-02 regression: a 200 homepage or 55-URL
+  // sitemap is insufficient. Core Railway features must render real SSR HTML.
+  // /chat intentionally stays noindex; do not demand it in the XML sitemap.
+  const coreRoutes = [
+    { key: "pronostics", path: "/pronostics-football", marker: /Pronostics football du jour/i },
+    { key: "ledger", path: "/ledger", marker: /Bilan(?: et historique)? des pronostics/i },
+    { key: "chat", path: "/chat", marker: /Pose ta question à BetGPT/i },
+    { key: "statistics", path: "/statistics", marker: /statistiques|statistics/i },
+  ];
+  const coreResults = await Promise.all(
+    coreRoutes.map(async (route) => {
+      try {
+        const res = await get(route.path, "text/html");
+        return { route, res, error: null };
+      } catch (error) {
+        return { route, res: null, error: error instanceof Error ? error.message : String(error) };
+      }
+    }),
+  );
+  evidence.checks.railwayCoreParity = {};
+  for (const { route, res, error } of coreResults) {
+    const status = res?.status ?? null;
+    const html = Boolean(res && /text\/html/i.test(res.contentType) && /<html\b/i.test(res.text));
+    const featurePresent = Boolean(html && route.marker.test(res.text));
+    const correctOrigin = Boolean(res && new URL(res.finalUrl).origin === ORIGIN);
+    evidence.checks.railwayCoreParity[route.key] = {
+      url: new URL(route.path, ORIGIN).toString(), status, html,
+      featurePresent, correctOrigin, error,
+    };
+    if (!res?.ok) fail("railway-core-route-http", `${route.path} ${status ?? error ?? "unknown"}`);
+    if (res?.ok && !html) fail("railway-core-route-not-html", route.path);
+    if (res?.ok && !featurePresent) fail("railway-core-route-missing-feature", route.path);
+    if (res?.ok && !correctOrigin) fail("railway-core-route-cross-origin", route.path);
+  }
+  const indexedEssential = ["/pronostics-football", "/ledger", "/statistics"];
+  for (const required of indexedEssential) {
+    if (!sitemapLocs.some((loc) => normalizeUrl(loc) === normalizeUrl(required))) {
+      fail("railway-core-url-missing-from-sitemap", required);
+    }
+  }
+  try {
+    const health = await get("/api/health", "application/json");
+    let payload = null;
+    try { payload = JSON.parse(health.text); } catch {}
+    evidence.checks.railwayHealth = {
+      status: health.status,
+      parsed: Boolean(payload),
+      declaredStatus: typeof payload?.status === "string" ? payload.status : null,
+    };
+    if (!health.ok || !payload) fail("railway-api-health", String(health.status));
+    if (/^(?:FAIL|PARTIAL|UNCONFIGURED)$/i.test(String(payload?.status || ""))) {
+      fail("railway-api-degraded", String(payload.status));
+    }
+  } catch (error) {
+    fail("railway-api-health-exception", error instanceof Error ? error.message : String(error));
   }
 
   evidence.status = failures.length ? "FAIL" : "PASS";
