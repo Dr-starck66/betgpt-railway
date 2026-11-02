@@ -89,6 +89,43 @@ function checkSameOriginLocs(label, locs) {
   return { count: locs.length, foreign: foreign.length, malformed: malformed.length, duplicates: duplicates.length };
 }
 
+// Verify every source route against the last preserved Railway-era baseline.
+// A page-count-only check could pass while older functionality disappears.
+function countPublicFiles(directory) {
+  if (!fs.existsSync(directory)) return 0;
+  return fs.readdirSync(directory, { withFileTypes: true }).reduce((total, item) => {
+    const name = path.join(directory, item.name);
+    return total + (item.isDirectory() ? countPublicFiles(name) : item.isFile() ? 1 : 0);
+  }, 0);
+}
+function verifyRailwaySourceBaseline() {
+  const manifestPath = "URL-PRESERVATION-MANIFEST.json";
+  try {
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+    const baseline = manifest.route_files;
+    if (!Array.isArray(baseline) || baseline.length !== 101) {
+      fail("railway-source-baseline-invalid", String(baseline?.length ?? "missing"));
+      return;
+    }
+    const missing = baseline.filter((file) => !fs.existsSync(file));
+    const publicFiles = countPublicFiles("public");
+    const publicFloor = Number(manifest.public_file_count);
+    evidence.checks.railwaySourceBaseline = {
+      manifest: manifestPath, preservedRoutes: baseline.length - missing.length,
+      requiredRoutes: baseline.length, missingRoutes: missing,
+      publicFiles, requiredPublicFiles: publicFloor,
+    };
+    if (missing.length) fail("railway-source-routes-missing", missing.join(", "));
+    if (!Number.isSafeInteger(publicFloor) || publicFloor < 230 ||
+        publicFiles < publicFloor) {
+      fail("railway-source-public-assets-missing", `${publicFiles}/${publicFloor}`);
+    }
+  } catch (error) {
+    fail("railway-source-baseline-unavailable", error instanceof Error ? error.message : String(error));
+  }
+}
+verifyRailwaySourceBaseline();
+
 try {
   const [robots, sitemap, images, news, home, actualites] = await Promise.all([
     get("/robots.txt", "text/plain"),
