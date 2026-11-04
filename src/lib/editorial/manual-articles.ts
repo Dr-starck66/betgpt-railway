@@ -1,3 +1,4 @@
+import { leHavrePsgMorningAgent20261031 } from "@/lib/editorial/manual-le-havre-psg-morning-agent-2026-10-31";
 import { genoaJuventusEveningAgent20261029 } from "@/lib/editorial/manual-genoa-juventus-evening-agent-2026-10-29";
 import { carabaoDrawNoonAgent20261029 } from "@/lib/editorial/manual-carabao-draw-noon-agent-2026-10-29";
 import { arsenalBenficaMorningAgent20261029 } from "@/lib/editorial/manual-arsenal-benfica-morning-agent-2026-10-29";
@@ -19,6 +20,7 @@ import { liverpoolManchesterCityPostmatch } from "@/lib/editorial/manual-postmat
 import type { EditorialArticle } from "@/lib/editorial/types";
 
 const ARTICLES: EditorialArticle[] = [
+  leHavrePsgMorningAgent20261031,
   genoaJuventusEveningAgent20261029,
   carabaoDrawNoonAgent20261029,
   arsenalBenficaMorningAgent20261029,
