@@ -19,4 +19,8 @@ const func=JSON.parse(readFileSync(fullFunctionConfig,"utf8"));
 delete func.supportsResponseStreaming;
 writeFileSync(fullFunctionConfig,JSON.stringify(func));
 console.log("ASTRA_MAIN_FUNCTION_STREAMING_DISABLED_FOR_ISOLATED_PROOF");
+const fullFunctionEntry=join(out,"functions","__server.func","index.mjs");
+writeFileSync(fullFunctionEntry,'export default function(req,res){res.statusCode=200;res.setHeader("content-type","application/json");res.end(JSON.stringify({ok:true,control:"FULL_BUNDLE_TINY_HANDLER_READY"}));}\n');
+console.log("ASTRA_FULL_BUNDLE_ENTRY_REPLACED_FOR_ISOLATION");
+
 console.log("ASTRA_INDEPENDENT_NODE_CONTROL_PACKAGED_POSTBUILD");
