@@ -1,6 +1,7 @@
 import { evergreenFootballRulesRecords20261025 } from "@/lib/evergreen-football-rules-records-20261025";
 import { evergreenOmega20261025 } from "@/lib/evergreen-omega-20261025";
 import { allPlayerCocoonArticles, PLAYER_PROFILES } from "@/lib/player-cocoons";
+import { englishPremierLeague2026Articles } from "@/lib/premier-league-english-2026";
 import { lumistadeCocoonArticles } from "@/lib/lumistade-cocoon";
 
 export type BlogArticle = {
@@ -1191,3 +1192,12 @@ export function relatedArticles(slug: string): BlogArticle[] {
 export function clusterArticles(cluster: string): BlogArticle[] {
   return publishedBlogArticles().filter((a) => a.cluster === cluster);
 }
+
+// Cocon transversal cinq joueurs anglais de Premier League : maillage réciproque,
+// entrée depuis /blog et /actualites, intégration au sitemap éditorial existant.
+BLOG.push(...englishPremierLeague2026Articles);
+CLUSTERS["joueur-anglais-premier-league"] = {
+  title: "Cinq footballeurs anglais de Premier League en 2026",
+  pillar: "cole-palmer-chelsea-analyse-2026",
+  pillarH1: "Cole Palmer et les cinq stars anglaises de Premier League en 2026",
+};
