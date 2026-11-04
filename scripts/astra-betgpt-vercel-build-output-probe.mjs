@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /** Preview-only Vercel independent function probe. No production publish. */
-import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, readdirSync, writeFileSync } from "node:fs";
+import { copyFileSync, cpSync, existsSync, mkdirSync, readFileSync, rmSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 const root=process.cwd();
 if (!existsSync(join(root,"config","astra-betgpt-vercel-probe.active"))) process.exit(0);
@@ -20,6 +20,22 @@ delete func.supportsResponseStreaming;
 writeFileSync(fullFunctionConfig,JSON.stringify(func));
 console.log("ASTRA_MAIN_FUNCTION_STREAMING_DISABLED_FOR_ISOLATED_PROOF");
 const fullFunctionEntry=join(out,"functions","__server.func","index.mjs");
+const fullRuntimeDir=join(out,"functions","betgpt_full_runtime.func");
+cpSync(join(out,"functions","__server.func"),fullRuntimeDir,{recursive:true,force:true});
+const preservedEntry=join(fullRuntimeDir,"index.astra-original.mjs");
+if(!existsSync(preservedEntry))throw new Error("ASTRA_FULL_RUNTIME_ORIGINAL_MISSING");
+copyFileSync(preservedEntry,join(fullRuntimeDir,"index.mjs"));
+console.log("ASTRA_FULL_RUNTIME_CLONE_PACKAGED");
+conf.routes=[
+  {src:"/api/health",dest:"/betgpt_full_runtime"},
+  {src:"/ledger",dest:"/betgpt_full_runtime"},
+  {src:"/chat",dest:"/betgpt_full_runtime"},
+  {src:"/pronostics-football/ligue-1",dest:"/betgpt_full_runtime"},
+  {src:"/actualites",dest:"/betgpt_full_runtime"},
+  {src:"/__astra_full_unknown",dest:"/betgpt_full_runtime"},
+  ...conf.routes
+];
+writeFileSync(configFile,JSON.stringify(conf));
 writeFileSync(fullFunctionEntry,'export default function(req,res){res.statusCode=200;res.setHeader("content-type","application/json");res.end(JSON.stringify({ok:true,control:"FULL_BUNDLE_TINY_HANDLER_READY"}));}\n');
 console.log("ASTRA_FULL_BUNDLE_ENTRY_REPLACED_FOR_ISOLATION");
 const fnDir=join(out,"functions","__server.func");
