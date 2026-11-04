@@ -1,4 +1,4 @@
-import { copyFileSync, existsSync, mkdirSync, readdirSync, readlinkSync, renameSync, unlinkSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readdirSync, renameSync, unlinkSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Plugin } from "vite";
 import { defineConfig } from "vite";
@@ -101,14 +101,14 @@ function pgliteVercelAssetsPlugin(): Plugin {
       root = config.root;
     },
     closeBundle() {
-      // Nitro regenerates these aliases in its compiled hook. Remove only
-      // aliases targeting this function, including those left by a prior build.
+      // Preserve live Nitro .func symlink aliases; Vercel routes can target them.
+      // Delete only dangling aliases left by prior builds, never valid routes.
       const functionsDir = join(root, ".vercel", "output", "functions");
       const clearAliases = (dir: string) => {
         if (!existsSync(dir)) return;
         for (const entry of readdirSync(dir, { withFileTypes: true })) {
           const path = join(dir, entry.name);
-          if (entry.isSymbolicLink() && entry.name.endsWith(".func") && readlinkSync(path).endsWith("__server.func")) unlinkSync(path);
+          if (entry.isSymbolicLink() && entry.name.endsWith(".func") && !existsSync(path)) unlinkSync(path);
           else if (entry.isDirectory() && !entry.name.endsWith(".func")) clearAliases(path);
         }
       };
