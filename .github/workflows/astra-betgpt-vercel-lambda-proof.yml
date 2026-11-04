@@ -32,6 +32,7 @@ jobs:
           set -euo pipefail
           test -s .vercel/output/config.json
           test -s .vercel/output/functions/__server.func/index.mjs
+          cat .vercel/output/functions/__server.func/.vc-config.json
           node --input-type=module <<'JS'
           import { createServer } from "node:http";
           const target = "./.vercel/output/functions/__server.func/index.mjs";
@@ -44,38 +45,55 @@ jobs:
             process.exit(1);
           }
           console.log("ASTRA_VERCEL_LAMBDA_IMPORT_PASS", Object.keys(mod).sort().join(","));
-          const fn = typeof mod.default === "function"
-            ? mod.default
-            : typeof mod.handler === "function" ? mod.handler : null;
-          if (!fn) {
-            console.error("ASTRA_VERCEL_LAMBDA_HANDLER_UNVERIFIED", typeof mod.default);
+          const def = mod.default;
+          console.log("ASTRA_VERCEL_LAMBDA_DEFAULT_SHAPE", typeof def, def && typeof def === "object" ? Object.fromEntries(Object.keys(def).map(k => [k, typeof def[k]])) : null);
+          const nodeFn = typeof def === "function" ? def : typeof mod.handler === "function" ? mod.handler : null;
+          const fetchFn = typeof def?.fetch === "function" ? def.fetch.bind(def) : null;
+          if (!nodeFn && !fetchFn) {
+            console.error("ASTRA_VERCEL_LAMBDA_HANDLER_UNVERIFIED");
             process.exit(1);
           }
-          console.log("ASTRA_VERCEL_LAMBDA_HANDLER_EXPORT_PASS");
-          const server = createServer((req, res) => {
-            Promise.resolve(fn(req, res)).catch((error) => {
-              console.error("ASTRA_VERCEL_LAMBDA_REQUEST_FAIL", error instanceof Error ? error.stack : String(error));
-              if (!res.headersSent) res.writeHead(500);
-              res.end("lambda request failed");
-            });
-          });
-          await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
-          const port = server.address().port;
+          console.log("ASTRA_VERCEL_LAMBDA_HANDLER_EXPORT_PASS", nodeFn ? "node" : "fetch");
           const paths = ["/api/health", "/ledger", "/pronostics-football/ligue-1"];
           let failed = 0;
-          try {
+          if (fetchFn) {
             for (const path of paths) {
               try {
-                const response = await fetch("http://127.0.0.1:" + port + path, { signal: AbortSignal.timeout(12000), redirect: "manual" });
+                const response = await Promise.race([
+                  fetchFn(new Request("https://betgpt.local" + path)),
+                  new Promise((_, reject) => setTimeout(() => reject(Error("timeout 12s")), 12000))
+                ]);
                 console.log("ASTRA_VERCEL_LAMBDA_HTTP", response.status, path);
                 if (response.status !== 200) failed++;
               } catch (error) {
-                console.error("ASTRA_VERCEL_LAMBDA_HTTP_FAIL", path, error instanceof Error ? error.message : String(error));
+                console.error("ASTRA_VERCEL_LAMBDA_HTTP_FAIL", path, error instanceof Error ? error.stack : String(error));
                 failed++;
               }
             }
-          } finally {
-            await new Promise((resolve) => server.close(resolve));
+          } else {
+            const server = createServer((req, res) => {
+              Promise.resolve(nodeFn(req, res)).catch((error) => {
+                console.error("ASTRA_VERCEL_LAMBDA_REQUEST_FAIL", error instanceof Error ? error.stack : String(error));
+                if (!res.headersSent) res.writeHead(500);
+                res.end("lambda request failed");
+              });
+            });
+            await new Promise(resolve => server.listen(0, "127.0.0.1", resolve));
+            const port = server.address().port;
+            try {
+              for (const path of paths) {
+                try {
+                  const response = await fetch("http://127.0.0.1:" + port + path, { signal: AbortSignal.timeout(12000), redirect: "manual" });
+                  console.log("ASTRA_VERCEL_LAMBDA_HTTP", response.status, path);
+                  if (response.status !== 200) failed++;
+                } catch (error) {
+                  console.error("ASTRA_VERCEL_LAMBDA_HTTP_FAIL", path, error instanceof Error ? error.stack : String(error));
+                  failed++;
+                }
+              }
+            } finally {
+              await new Promise(resolve => server.close(resolve));
+            }
           }
           if (failed) process.exit(1);
           console.log("ASTRA_VERCEL_LAMBDA_HTTP_PASS");
