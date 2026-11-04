@@ -1,0 +1,29 @@
+name: ASTRA BetGPT Minimal Bundle A-B Probe
+on:
+  push:
+    branches: [astra/vercel-full-ssr-restore-20261104]
+    paths: [".github/workflows/astra-betgpt-minimal-bundle-probe.yml"]
+permissions:
+  contents: read
+jobs:
+  http:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: HTTP probe Vercel minimal main and independent control
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          const base='https://betgpt-psc9unzxv-ced-starcks-projects.vercel.app';
+          const statuses={};
+          for(const path of ['/__astra_control','/__astra_ping','/api/health','/']){
+            try{
+             const r=await fetch(base+path,{redirect:'manual',signal:AbortSignal.timeout(8500)});
+             const txt=await r.text();
+             statuses[path]=r.status;
+             console.log('ASTRA_MINIMUM_LAMBDA_HTTP',path,r.status,txt.slice(0,180));
+            }catch(err){statuses[path]=0;console.log('ASTRA_MINIMUM_LAMBDA_ERROR',path,String(err));}
+          }
+          console.log('ASTRA_MINIMUM_DIAGNOSTIC',JSON.stringify(statuses));
+          if(statuses['/__astra_control']!==200||statuses['/api/health']!==200)process.exitCode=1;
+          NODE
