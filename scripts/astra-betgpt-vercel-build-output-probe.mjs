@@ -14,4 +14,9 @@ writeFileSync(join(dir,"index.mjs"),'export default function(req,res){res.status
 const conf=JSON.parse(readFileSync(configFile,"utf8"));
 conf.routes=[{src:"/__astra_control",dest:"/__astra_control"},...(conf.routes||[]).filter(x=>x.src!=="/__astra_control")];
 writeFileSync(configFile,JSON.stringify(conf));
+const fullFunctionConfig=join(out,"functions","__server.func",".vc-config.json");
+const func=JSON.parse(readFileSync(fullFunctionConfig,"utf8"));
+delete func.supportsResponseStreaming;
+writeFileSync(fullFunctionConfig,JSON.stringify(func));
+console.log("ASTRA_MAIN_FUNCTION_STREAMING_DISABLED_FOR_ISOLATED_PROOF");
 console.log("ASTRA_INDEPENDENT_NODE_CONTROL_PACKAGED_POSTBUILD");
