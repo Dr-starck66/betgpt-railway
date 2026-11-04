@@ -1,0 +1,24 @@
+name: ASTRA BetGPT Netlify Free Auth Preflight (no deploy)
+on:
+  push:
+    branches: [astra/vercel-full-ssr-restore-20261104]
+    paths: [".github/workflows/astra-betgpt-netlify-free-auth-preflight.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Check authorized existing Netlify deployment credential, no disclosure
+        shell: bash
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: |
+          if [ -n "${NETLIFY_AUTH_TOKEN:-}" ]; then
+            echo "ASTRA_NETLIFY_DEPLOY_TOKEN_AVAILABLE_PASS"
+          else
+            echo "ASTRA_NETLIFY_DEPLOY_TOKEN_MISSING_FAIL"
+            exit 1
+          fi
