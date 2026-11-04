@@ -1,0 +1,79 @@
+{
+  "schema": "astra-betgpt-editorial-proof/v1",
+  "createdAt": "2026-11-04T15:13:26.386Z",
+  "target": "https://betgpt.live",
+  "category": "football association",
+  "status": "PASS_ONE_LIVE_PUBLICATION__RECURRING_AUTOMATION_PARTIAL",
+  "git": {
+    "repository": "Dr-starck66/betgpt-railway",
+    "branch": "astra/betgpt-editorial-repair-20261104",
+    "articleCommit": "6c8db94494bc00372bf87e78f706ec1411110a70",
+    "articlePath": "editorial/2026-11-04/ligue-des-champions-psg-villarreal-6-0-lille-bodo-lens-como-4-novembre-2026.html"
+  },
+  "article": {
+    "slug": "ligue-des-champions-psg-villarreal-6-0-lille-bodo-lens-como-4-novembre-2026",
+    "url": "https://betgpt.live/actualites/ligue-des-champions-psg-villarreal-6-0-lille-bodo-lens-como-4-novembre-2026/",
+    "datePublished": "2026-11-04T15:06:16.025Z",
+    "type": "NewsArticle",
+    "verifiedSources": [
+      "UEFA fixtures and matchday 4 results 2026-11-03",
+      "UEFA J4 recap 2026-11-03",
+      "PSG official match sheet 2026-11-03"
+    ],
+    "licensedPhotos": 3
+  },
+  "vercel": {
+    "primaryProjectId": "prj_YlO1eY3UtqhfeHihPDUANF4DZcMf",
+    "isolatedExistingRescueProject": "prj_jOkv9zXAePNkzdcLYPkWVK76u3pi",
+    "staticPreviewDeploymentId": "dpl_9rgS5JkXgsDtYjYKtAd1EUd35A6G",
+    "liveRoutingVersion": "71960cdd-be16-4aee-a8e9-237c4998fd98",
+    "liveRoutes": 9,
+    "protectedRoutes": [
+      "/scores-en-direct",
+      "/api/scores",
+      "/pronostics-football",
+      "/api/predict"
+    ],
+    "newRouteIds": [
+      "bba78d73-072b-4be6-9ea2-e7e04b2e8ba7",
+      "80553225-fe6e-4112-82d4-714411de9fb1",
+      "f8e4379f-2c02-4376-a8c2-c80b6b2f9ed9",
+      "5e18a4b1-6232-416d-99c0-6dc5e282d67d",
+      "0315181f-f1a9-4afb-87f3-904d8c090f94"
+    ]
+  },
+  "sitemap": {
+    "main": "https://betgpt.live/sitemap.xml",
+    "originalUrlsPreserved": 55,
+    "currentUrls": 57,
+    "news": "https://betgpt.live/sitemap-news.xml",
+    "newsWindowHours": 48,
+    "newsRemovalMustOccurAfter": "2026-11-06T15:06:16.025Z"
+  },
+  "independentPublicAudit": {
+    "article": true,
+    "journal": true,
+    "canonical": true,
+    "robots": "index,follow,max-image-preview:large",
+    "sitemap57": true,
+    "newsSitemap1": true,
+    "oldArchive": true,
+    "oldArticle": true,
+    "scoresPage": true,
+    "pronosticsPage": true,
+    "imagesBrowserLoaded": [
+      1920,
+      1920,
+      1920
+    ],
+    "browserAuditNote": "Firecrawl visual browser eventually reported all three images loaded; asynchronous first snapshot did not yet finish 2 lazy images."
+  },
+  "limits": [
+    "Google indexing, News and Discover distribution not verified.",
+    "Preview deployment is an existing-project immutable deployment; must not be called permanent infrastructure.",
+    "Recurring automatic publishing is not proven by the manual pilot.",
+    "Google News sitemap must remove item after 48h; do not leave it stale.",
+    "Never change or redirect the four protected API/function routes."
+  ],
+  "nextAction": "Use existing ASTRA central automation to process BetGPT before other editorial tasks each cycle, update the live sitemap and news-window, and publish new unique articles after source / image / route audit; no new cron."
+}
