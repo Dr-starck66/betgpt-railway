@@ -1,0 +1,82 @@
+name: ASTRA BetGPT Legacy URL HTTP Audit (no promotion)
+on:
+  push:
+    branches: [astra/vercel-full-ssr-restore-20261104]
+    paths: [".github/workflows/astra-betgpt-legacy-url-http-audit.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  crawl-canonical-and-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check each discovered historical URL and capture status
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
+          const manifest=JSON.parse(readFileSync('URL-PRESERVATION-MANIFEST.json','utf8'));
+          const canon='https://betgpt.live';
+          const previews=['https://betgpt-r9c09nd0y-ced-starcks-projects.vercel.app'];
+          const discovery=[canon,'https://betgpt-3ieum5jn7-ced-starcks-projects.vercel.app'];
+          const sitemapPaths=new Set();
+          const sources=[];
+          for (const host of discovery) {
+            for(const file of ['/sitemap.xml','/sitemap-news.xml','/sitemap-images.xml']){
+              try{
+                const r=await fetch(host+file,{signal:AbortSignal.timeout(9000),redirect:'manual'});
+                const body=await r.text();
+                const urls=[...body.matchAll(/<loc>([^<]+)<\/loc>/g)].map(x=>{try{return new URL(x[1]).pathname}catch{return null}}).filter(Boolean);
+                urls.forEach(x=>sitemapPaths.add(x));
+                sources.push({host,file,status:r.status,urls:urls.length});
+              }catch(e){sources.push({host,file,error:String(e)})}
+            }
+          }
+          const staticSource=new Set();
+          let dynamicTemplateCount=0;
+          for(const route of manifest.route_files){
+            const stripped=route.replace(/^src\/routes\//,'').replace(/\.tsx$/,'');
+            if(stripped==='__root')continue;
+            if(stripped.includes('$')){dynamicTemplateCount++;continue}
+            const path='/'+stripped.split('.').filter(Boolean).filter(x=>x!=='_index'&&x!=='index').map(x=>x.replace(/_$/,'')).join('/');
+            staticSource.add(path==='/'?'/':path.replace(/\/+$/,'')||'/');
+          }
+          const paths=[...new Set([...sitemapPaths,...staticSource])].sort();
+          const report={generatedAt:new Date().toISOString(),sourceManifestRouteFiles:manifest.route_files.length,dynamicTemplatesNotDirectlyProbeable:dynamicTemplateCount,sitemapDiscovery:sources,sitemapDiscovered:sitemapPaths.size,staticRoutes:staticSource.size,urls:paths.length,results:[]};
+          const targets=[canon,...previews];
+          let next=0;const requests=targets.flatMap(host=>paths.map(path=>({host,path,fromSitemap:sitemapPaths.has(path),fromStaticSource:staticSource.has(path)})));
+          async function worker(){
+            while(next<requests.length){
+              const row=requests[next++];
+              try{
+                const r=await fetch(row.host+row.path,{signal:AbortSignal.timeout(11000),redirect:'manual',headers:{'user-agent':'ASTRA-BETGPT-URL-RESTORE-AUDIT/1.0'}});
+                const text=await r.text();
+                report.results.push({...row,status:r.status,bytes:text.length,location:r.headers.get('location')});
+              }catch(e){report.results.push({...row,status:0,error:String(e)})}
+            }
+          }
+          await Promise.all(Array.from({length:6},()=>worker()));
+          report.results.sort((a,b)=>a.host.localeCompare(b.host)||a.path.localeCompare(b.path));
+          const counts={};for(const host of targets){const rs=report.results.filter(x=>x.host===host);counts[host]={tested:rs.length,ok:rs.filter(x=>x.status>=200&&x.status<300).length,redirect:rs.filter(x=>x.status>=300&&x.status<400).length,notFound:rs.filter(x=>x.status===404).length,serverErrors:rs.filter(x=>x.status>=500).length,networkFailures:rs.filter(x=>x.status===0).length};}
+          report.counts=counts;
+          mkdirSync('astra-audit-output',{recursive:true});
+          writeFileSync('astra-audit-output/routes.json',JSON.stringify(report,null,2));
+          const lines=['host,path,http_status,from_sitemap,from_source_route,location'];
+          const csvValue=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+          for(const r of report.results)lines.push([r.host,r.path,r.status,r.fromSitemap,r.fromStaticSource,r.location].map(csvValue).join(','));
+          writeFileSync('astra-audit-output/routes.csv',lines.join('\n')+'\n');
+          console.log('ASTRA_HTTP_AUDIT',JSON.stringify({counts,discovered:report.urls,sitemapDiscovered:report.sitemapDiscovered,sourceRoutes:manifest.route_files.length,dynamicTemplateCount}));
+          for(const r of report.results.filter(x=>x.status===0||x.status>=400).slice(0,100))console.log('ASTRA_URL_FAIL',r.host,r.status,r.path,r.error||'');
+          if(report.results.some(r=>r.fromSitemap&&(r.status===0||r.status>=400)))process.exitCode=1;
+          NODE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: betgpt-legacy-url-http-audit
+          path: astra-audit-output/
+          retention-days: 7
