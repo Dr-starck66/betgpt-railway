@@ -36,13 +36,20 @@ jobs:
           console.log('ASTRA_MAIN_ENTRY_PROOF',readFileSync(base+'/__server.func/index.mjs','utf8').slice(0,220));
           NODE
           find .vercel/output/functions -maxdepth 3 -type l -name '*.func' | head -n 20 || true
+      - name: Measure full function bundle bytes and largest files
+        shell: bash
+        run: |
+          echo "ASTRA_FULL_BUNDLE_SIZE"
+          du -sh .vercel/output/functions/__server.func
+          echo "ASTRA_FULL_BUNDLE_LARGEST"
+          find .vercel/output/functions/__server.func -type f -printf '%s %p\n' | sort -nr | head -n 16 || true
       - name: Verify recovery preview wrapper actually emitted
         shell: bash
         run: |
-          if grep -q 'ASTRA_FUNCTION_ENTRY_REACHED' .vercel/output/functions/__server.func/index.mjs; then
-            echo 'ASTRA_DIAG_WRAPPER_BUILT_PASS'
+          if grep -q 'FULL_BUNDLE_TINY_HANDLER_READY' .vercel/output/functions/__server.func/index.mjs; then
+            echo 'ASTRA_BIG_FUNCTION_TINY_ENTRY_BUILT_PASS'
           else
-            echo 'ASTRA_DIAG_WRAPPER_NOT_INCLUDED'
+            echo 'ASTRA_BIG_FUNCTION_TINY_ENTRY_NOT_INCLUDED'
             exit 1
           fi
       - name: Verify bundle, exported handler, and import-time startup
