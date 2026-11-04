@@ -364,6 +364,9 @@ export default defineConfig(({ command, isPreview }) => ({
     ...(command === "build" || isPreview
       ? [
           nitro({
+            // Nitro Vercel web entry replaces runtime.node; SSR stream needs the Node adapter.
+            // https://nitro.build/deploy/providers/vercel
+            vercel: { entryFormat: "node" },
             preset:
               process.env.NITRO_PRESET ||
               (process.env.RAILWAY_ENVIRONMENT ||
