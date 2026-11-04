@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /** Preview-only Vercel independent function probe. No production publish. */
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, rmSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 const root=process.cwd();
 if (!existsSync(join(root,"config","astra-betgpt-vercel-probe.active"))) process.exit(0);
@@ -22,5 +22,8 @@ console.log("ASTRA_MAIN_FUNCTION_STREAMING_DISABLED_FOR_ISOLATED_PROOF");
 const fullFunctionEntry=join(out,"functions","__server.func","index.mjs");
 writeFileSync(fullFunctionEntry,'export default function(req,res){res.statusCode=200;res.setHeader("content-type","application/json");res.end(JSON.stringify({ok:true,control:"FULL_BUNDLE_TINY_HANDLER_READY"}));}\n');
 console.log("ASTRA_FULL_BUNDLE_ENTRY_REPLACED_FOR_ISOLATION");
+const fnDir=join(out,"functions","__server.func");
+for(const file of readdirSync(fnDir)) { if (file === ".vc-config.json" || file === "index.mjs") continue; rmSync(join(fnDir,file),{recursive:true,force:true}); }
+console.log("ASTRA_ISOLATED_MINIMAL_FULL_FUNCTION_READY");
 
 console.log("ASTRA_INDEPENDENT_NODE_CONTROL_PACKAGED_POSTBUILD");
