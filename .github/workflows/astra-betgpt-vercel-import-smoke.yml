@@ -24,6 +24,11 @@ jobs:
         run: |
           set -euo pipefail
           test -f .vercel/output/functions/__server.func/index.mjs
+          echo "ASTRA_VERCEL_FUNCTION_CONFIG"
+          cat .vercel/output/functions/__server.func/.vc-config.json
+          echo "ASTRA_VERCEL_OUTPUT_CONFIG"
+          head -c 2400 .vercel/output/config.json || true
+          echo
           echo "ASTRA_VERCEL_FUNCTION_ENTRY_FOUND"
           node --input-type=module <<'NODE'
           try {
