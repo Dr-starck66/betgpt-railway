@@ -1,0 +1,82 @@
+name: ASTRA BetGPT Vercel Lambda Import Proof (isolated)
+on:
+  push:
+    branches: [astra/betgpt-vercel-runtime-diagnostic-20261104]
+    paths:
+      - ".github/workflows/astra-betgpt-vercel-lambda-proof.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  lambda-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Build original BetGPT for Vercel Lambda
+        env:
+          NITRO_PRESET: vercel
+          DATABASE_URL: ""
+        run: npm run build
+      - name: Verify Vercel runtime artifact and attempt module import
+        env:
+          DATABASE_URL: ""
+          NODE_ENV: production
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s .vercel/output/config.json
+          test -s .vercel/output/functions/__server.func/index.mjs
+          node --input-type=module <<'JS'
+          import { createServer } from "node:http";
+          const target = "./.vercel/output/functions/__server.func/index.mjs";
+          let mod;
+          try {
+            mod = await import(target);
+          } catch (error) {
+            console.error("ASTRA_VERCEL_LAMBDA_IMPORT_FAIL");
+            console.error(error instanceof Error ? error.stack : String(error));
+            process.exit(1);
+          }
+          console.log("ASTRA_VERCEL_LAMBDA_IMPORT_PASS", Object.keys(mod).sort().join(","));
+          const fn = typeof mod.default === "function"
+            ? mod.default
+            : typeof mod.handler === "function" ? mod.handler : null;
+          if (!fn) {
+            console.error("ASTRA_VERCEL_LAMBDA_HANDLER_UNVERIFIED", typeof mod.default);
+            process.exit(1);
+          }
+          console.log("ASTRA_VERCEL_LAMBDA_HANDLER_EXPORT_PASS");
+          const server = createServer((req, res) => {
+            Promise.resolve(fn(req, res)).catch((error) => {
+              console.error("ASTRA_VERCEL_LAMBDA_REQUEST_FAIL", error instanceof Error ? error.stack : String(error));
+              if (!res.headersSent) res.writeHead(500);
+              res.end("lambda request failed");
+            });
+          });
+          await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+          const port = server.address().port;
+          const paths = ["/api/health", "/ledger", "/pronostics-football/ligue-1"];
+          let failed = 0;
+          try {
+            for (const path of paths) {
+              try {
+                const response = await fetch("http://127.0.0.1:" + port + path, { signal: AbortSignal.timeout(12000), redirect: "manual" });
+                console.log("ASTRA_VERCEL_LAMBDA_HTTP", response.status, path);
+                if (response.status !== 200) failed++;
+              } catch (error) {
+                console.error("ASTRA_VERCEL_LAMBDA_HTTP_FAIL", path, error instanceof Error ? error.message : String(error));
+                failed++;
+              }
+            }
+          } finally {
+            await new Promise((resolve) => server.close(resolve));
+          }
+          if (failed) process.exit(1);
+          console.log("ASTRA_VERCEL_LAMBDA_HTTP_PASS");
+          JS
