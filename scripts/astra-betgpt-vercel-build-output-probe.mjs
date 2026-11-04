@@ -47,5 +47,24 @@ conf.routes=[{src:"/__astra_clone",dest:"/betgpt_runtime"},...conf.routes];
 writeFileSync(configFile,JSON.stringify(conf));
 console.log("ASTRA_CLONED_MAIN_AS_REAL_FUNCTION_DIRECTORY");
 
+function removeLegacyFunctionAliasLinks(dir) {
+  for (const e of readdirSync(dir,{withFileTypes:true})) {
+    const filepath=join(dir,e.name);
+    if (e.isSymbolicLink() && e.name.endsWith(".func")) rmSync(filepath,{force:true});
+    else if (e.isDirectory() && !e.name.endsWith(".func")) removeLegacyFunctionAliasLinks(filepath);
+  }
+}
+removeLegacyFunctionAliasLinks(join(out,"functions"));
+conf.routes=[
+  {src:"/__astra_control",dest:"/__astra_control"},
+  {src:"/__astra_clone",dest:"/betgpt_runtime"},
+  ...conf.routes.filter(x=>x.headers && x.src),
+  {handle:"filesystem"},
+  {src:"/(.*)",dest:"/betgpt_full_runtime"}
+];
+writeFileSync(configFile,JSON.stringify(conf));
+console.log("ASTRA_ALL_NITRO_ROUTES_REROUTED_TO_REAL_LAMBDA");
+
+
 
 console.log("ASTRA_INDEPENDENT_NODE_CONTROL_PACKAGED_POSTBUILD");
