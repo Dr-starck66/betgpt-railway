@@ -19,6 +19,23 @@ jobs:
       - run: npm ci --no-audit --no-fund
       - name: Generate the real Vercel Nitro bundle
         run: NITRO_PRESET=vercel npm run build
+      - name: Inspect generated Vercel routing targets and actual function dirs
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync, existsSync, lstatSync } from 'node:fs';
+          const base='.vercel/output/functions';
+          const conf=JSON.parse(readFileSync('.vercel/output/config.json','utf8'));
+          console.log('ASTRA_ROUTES_LAST_12',JSON.stringify(conf.routes.slice(-12)));
+          console.log('ASTRA_ROUTES_FIRST_8',JSON.stringify(conf.routes.slice(0,8)));
+          for(const p of ['/','/api/health','/chat','/ledger','/__astra_ping','/__astra_control']){
+           const target=p.replace(/^\//,'');
+           const fp=base+'/'+target+'.func';
+           console.log('ASTRA_FUNC_TARGET_EXISTS',p,existsSync(fp),existsSync(fp)?(lstatSync(fp).isSymbolicLink()?'symlink':'directory'):'missing');
+          }
+          console.log('ASTRA_MAIN_ENTRY_PROOF',readFileSync(base+'/__server.func/index.mjs','utf8').slice(0,220));
+          NODE
+          find .vercel/output/functions -maxdepth 3 -type l -name '*.func' | head -n 20 || true
       - name: Verify recovery preview wrapper actually emitted
         shell: bash
         run: |
