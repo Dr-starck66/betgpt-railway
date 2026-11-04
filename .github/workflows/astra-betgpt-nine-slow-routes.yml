@@ -1,0 +1,33 @@
+name: ASTRA BetGPT 9 Slow Routes — Isolated Long Timeout
+on:
+  push:
+    branches: [astra/vercel-full-ssr-restore-20261104]
+    paths: [".github/workflows/astra-betgpt-nine-slow-routes.yml"]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: HTTP 9 slow pages 30-second deadline each
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          const base='https://betgpt-8ejek3xq5-ced-starcks-projects.vercel.app';
+          const paths=['/','/actualites','/actualites/6-33-millions-de-telespectateurs-devant-france-belgique-sur-tf1-2026-10-06','/actualites/affaire-negreira-uefa-documents-real-madrid-barca-repond-2026-10-01','/actualites/aime-jacquet-present-au-stade-de-france-pour-le-match-des-bleus-contre-la-belgique-2026-10','/actualites/france-italie-ligue-des-nations-a-match-en-direct-le-02-10-2026-2026-10-02','/actualites/olise-cherki-doue-les-entrants-ont-tout-change-les-notes-de-france-belgique-2026-10-05','/score-hunter','/serie-a'];
+          const r=[];
+          for(const path of paths) {
+            const started=Date.now();
+            try{
+              const res=await fetch(base+path,{signal:AbortSignal.timeout(30000),redirect:'manual',headers:{'user-agent':'ASTRA-SSR-POSTFIX-SLOW-ROUTE/1.0'}});
+              const text=await res.text();
+              const item={path,status:res.status,ms:Date.now()-started,bytes:text.length,contentType:res.headers.get('content-type')};r.push(item);
+              console.log('ASTRA_SLOW_ROUTE',JSON.stringify(item));
+            }catch(e){
+              const item={path,status:0,ms:Date.now()-started,error:String(e)};r.push(item);console.log('ASTRA_SLOW_ROUTE',JSON.stringify(item));
+            }
+          }
+          console.log('ASTRA_SLOW_SUMMARY',JSON.stringify({total:r.length,successful:r.filter(x=>x.status>=200&&x.status<400).length,failed:r.filter(x=>x.status===0||x.status>=400).length}));
+          if(r.some(x=>!x.status||x.status>=500))process.exitCode=1;
+          NODE
