@@ -42,3 +42,27 @@ jobs:
             process.exitCode = 1;
           }
           NODE
+
+      - name: Exercise production Vercel Node handler with HTTP server
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import { createServer } from 'node:http';
+          const handle = (await import('./.vercel/output/functions/__server.func/index.mjs')).default;
+          if (typeof handle !== 'function') throw new Error('not a Node handler');
+          const srv = createServer((req,res) => {
+            Promise.resolve().then(() => handle(req,res)).catch(e => {
+              console.error('ASTRA_VERCEL_NODE_HANDLER_ERROR', e?.stack || e);
+              if (!res.headersSent) { res.statusCode = 500; res.end('error'); }
+            });
+          });
+          await new Promise((resolve,reject)=>srv.once('error',reject).listen(0,'127.0.0.1',resolve));
+          try {
+            for (const path of ['/api/health','/ledger','/pronostics-football/ligue-1','/chat']) {
+              const r = await fetch('http://127.0.0.1:'+srv.address().port+path,{redirect:'manual',signal:AbortSignal.timeout(15000)});
+              const body=await r.text();
+              console.log('ASTRA_VERCEL_NODE_PROBE',path,r.status,body.slice(0,200));
+              if(r.status>=500) process.exitCode = 1;
+            }
+          } finally { await new Promise(resolve=>srv.close(resolve)); }
+          NODE
