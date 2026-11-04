@@ -19,7 +19,7 @@ jobs:
           cache: npm
       - run: npm ci --no-audit --no-fund
       - name: Build original app (strict repository gates)
-        run: npm run build
+        run: NITRO_PRESET=node-server npm run build
       - name: Probe real Node SSR process and record sanitized startup errors
         shell: bash
         run: |
