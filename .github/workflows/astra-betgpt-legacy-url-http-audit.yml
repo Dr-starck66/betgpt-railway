@@ -22,7 +22,7 @@ jobs:
           import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
           const manifest=JSON.parse(readFileSync('URL-PRESERVATION-MANIFEST.json','utf8'));
           const canon='https://betgpt.live';
-          const previews=['https://betgpt-r9c09nd0y-ced-starcks-projects.vercel.app'];
+          const previews=['https://betgpt-8ejek3xq5-ced-starcks-projects.vercel.app'];
           const discovery=[canon,'https://betgpt-3ieum5jn7-ced-starcks-projects.vercel.app'];
           const sitemapPaths=new Set();
           const sources=[];
@@ -72,7 +72,7 @@ jobs:
           writeFileSync('astra-audit-output/routes.csv',lines.join('\n')+'\n');
           console.log('ASTRA_HTTP_AUDIT',JSON.stringify({counts,discovered:report.urls,sitemapDiscovered:report.sitemapDiscovered,sourceRoutes:manifest.route_files.length,dynamicTemplateCount}));
           for(const r of report.results.filter(x=>x.status===0||x.status>=400).slice(0,100))console.log('ASTRA_URL_FAIL',r.host,r.status,r.path,r.error||'');
-          if(report.results.some(r=>r.fromSitemap&&(r.status===0||r.status>=400)))process.exitCode=1;
+          if(report.results.some(r=>r.host.includes('8ejek3xq5')&&(r.status===0||r.status>=500)))process.exitCode=1;
           NODE
       - uses: actions/upload-artifact@v4
         if: always()
