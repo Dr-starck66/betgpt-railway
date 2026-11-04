@@ -43,6 +43,23 @@ jobs:
           }
           NODE
 
+      - name: Verify Vercel function module outside repository node_modules (cold deploy parity)
+        shell: bash
+        run: |
+          set -euo pipefail
+          tmp="$(mktemp -d)"
+          cp -a .vercel/output/functions/__server.func "$tmp/function"
+          cd "$tmp"
+          echo "ASTRA_FUNCTION_CLEAN_ROOM_ROOT=$tmp"
+          node --input-type=module <<'NODE'
+          try {
+            const mod=await import('./function/index.mjs');
+            console.log('ASTRA_VERCEL_ISOLATED_IMPORT_PASS',typeof mod.default);
+          }catch(e){
+            console.error('ASTRA_VERCEL_ISOLATED_IMPORT_FAIL',e?.stack||e);
+            process.exitCode=1;
+          }
+          NODE
       - name: Exercise production Vercel Node handler with HTTP server
         shell: bash
         run: |
