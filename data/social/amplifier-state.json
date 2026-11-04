@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-04T14:35:45.343Z",
+      "lastCheckedAt": "2026-11-04T16:49:45.244Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -119,19 +119,29 @@
           "url": "https://betgpt.live/actualites/genoa-juventus-2-0-baldanzi-ehizibue-analyse-29-octobre-2026",
           "date": "2026-10-29T18:29:52.182Z",
           "seenAt": "2026-10-29T22:02:34.185Z"
+        },
+        "76c6969ba9bdc830f2": {
+          "url": "https://betgpt.live/actualites/ligue-des-champions-psg-villarreal-6-0-lille-bodo-lens-como-4-novembre-2026/",
+          "date": "2026-11-04T15:06:16.025Z",
+          "seenAt": "2026-11-04T16:49:45.244Z"
+        },
+        "1ac556398ddba901b0": {
+          "url": "https://betgpt.live/actualites/barcelone-aston-villa-3-0-yamal-record-raphinha-double-4-novembre-2026/",
+          "date": "2026-11-04T15:57:30.648Z",
+          "seenAt": "2026-11-04T16:49:45.244Z"
         }
       },
       "sourceStatus": "VERIFIED"
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-04T14:35:45.906Z",
+      "lastCheckedAt": "2026-11-04T16:49:46.588Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {}
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-04T14:35:47.151Z",
+      "lastCheckedAt": "2026-11-04T16:49:47.783Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {
         "113acfc5949a8ca9ca": {
@@ -148,7 +158,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-04T14:35:47.589Z",
+      "lastCheckedAt": "2026-11-04T16:49:48.236Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -180,7 +190,7 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-04T14:35:48.644Z",
+      "lastCheckedAt": "2026-11-04T16:49:50.196Z",
       "seen": {
         "b24e80016714b0bbd2": {
           "url": "https://avocat-belgique.com/actualites/frais-colis-hors-ue-novembre-2026/",
@@ -192,13 +202,13 @@
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-04T14:35:46.529Z",
+      "lastCheckedAt": "2026-11-04T16:49:47.212Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {}
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-04T14:35:48.113Z",
+      "lastCheckedAt": "2026-11-04T16:49:48.963Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {
         "c022035f3d7190f6f1": {
@@ -1333,6 +1343,62 @@
       "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Box%20package.jpg?width=1600",
       "text": "Colis hors UE en Belgique : les nouveaux frais du 1er novembre 2026 expliqués\nhttps://avocat-belgique.com/actualites/frais-colis-hors-ue-novembre-2026/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#droitbelge #avocat",
       "createdAt": "2026-11-02T22:30:18.389Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:76c6969ba9bdc830f2": {
+      "id": "instagram:76c6969ba9bdc830f2",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/ligue-des-champions-psg-villarreal-6-0-lille-bodo-lens-como-4-novembre-2026/",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Villarreal%20CF%20vs%20RCD%20Mallorca%20-%20LALIGA.jpg?width=1600",
+      "text": "PSG 6-0 à Villarreal, Lille 0-0 à Bodø et Lens–Côme : le vrai bilan français de la J4\n\nLigue des champions 2026-2027 : les six buts de Paris, le point ramené par Lille et les enjeux vérifiés de Lens–Côme mercredi 4 novembre.\n\nhttps://betgpt.live/actualites/ligue-des-champions-psg-villarreal-6-0-lille-bodo-lens-como-4-novembre-2026/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #Villarreal #LensCome #francais",
+      "createdAt": "2026-11-04T16:49:45.624Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:76c6969ba9bdc830f2": {
+      "id": "x:76c6969ba9bdc830f2",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/ligue-des-champions-psg-villarreal-6-0-lille-bodo-lens-como-4-novembre-2026/",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/Villarreal%20CF%20vs%20RCD%20Mallorca%20-%20LALIGA.jpg?width=1600",
+      "text": "PSG 6-0 à Villarreal, Lille 0-0 à Bodø et Lens–Côme : le vrai bilan français de l\nhttps://betgpt.live/actualites/ligue-des-champions-psg-villarreal-6-0-lille-bodo-lens-como-4-novembre-2026/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-11-04T16:49:45.624Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:1ac556398ddba901b0": {
+      "id": "instagram:1ac556398ddba901b0",
+      "siteId": "betgpt",
+      "network": "instagram",
+      "articleUrl": "https://betgpt.live/actualites/barcelone-aston-villa-3-0-yamal-record-raphinha-double-4-novembre-2026/",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/LamineYamal%20-%20FCB%20-%20Partido%20Athletic%20Club%20vs%20FC%20Barcelona.jpg?width=1920",
+      "text": "Barça–Aston Villa (3-0) : Yamal entre dans l’histoire, Raphinha change le match\n\nLamine Yamal buteur et recordman, Raphinha décisif deux fois : analyse sourcée du Barça–Aston Villa du 3 novembre 2026.\n\nhttps://betgpt.live/actualites/barcelone-aston-villa-3-0-yamal-record-raphinha-double-4-novembre-2026/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics #ligue1 #BarcaAston #lhistoire #Raphinha",
+      "createdAt": "2026-11-04T16:49:46.008Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:1ac556398ddba901b0": {
+      "id": "x:1ac556398ddba901b0",
+      "siteId": "betgpt",
+      "network": "x",
+      "articleUrl": "https://betgpt.live/actualites/barcelone-aston-villa-3-0-yamal-record-raphinha-double-4-novembre-2026/",
+      "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/LamineYamal%20-%20FCB%20-%20Partido%20Athletic%20Club%20vs%20FC%20Barcelona.jpg?width=1920",
+      "text": "Barça–Aston Villa (3-0) : Yamal entre dans l’histoire, Raphinha change le match\nhttps://betgpt.live/actualites/barcelone-aston-villa-3-0-yamal-record-raphinha-double-4-novembre-2026/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
+      "createdAt": "2026-11-04T16:49:46.008Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,
