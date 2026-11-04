@@ -1,0 +1,37 @@
+name: ASTRA BetGPT Vercel Bundle Import Smoke (isolated)
+on:
+  push:
+    branches: [astra/vercel-full-ssr-restore-20261104]
+    paths: [".github/workflows/astra-betgpt-vercel-import-smoke.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  vercel-import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Generate the real Vercel Nitro bundle
+        run: NITRO_PRESET=vercel npm run build
+      - name: Verify bundle, exported handler, and import-time startup
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f .vercel/output/functions/__server.func/index.mjs
+          echo "ASTRA_VERCEL_FUNCTION_ENTRY_FOUND"
+          node --input-type=module <<'NODE'
+          try {
+            const mod = await import("./.vercel/output/functions/__server.func/index.mjs");
+            console.log("ASTRA_VERCEL_FUNCTION_IMPORT_PASS", Object.keys(mod).join(","));
+            if (typeof mod.default !== "function") throw new Error("missing default Vercel handler");
+          } catch (e) {
+            console.error("ASTRA_VERCEL_FUNCTION_IMPORT_FAIL", e?.stack || e);
+            process.exitCode = 1;
+          }
+          NODE
