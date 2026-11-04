@@ -1,0 +1,72 @@
+{
+  "schema": "astra-editorial-production-receipt/v1",
+  "date": "2026-11-04",
+  "publishedAt": "2026-11-04T15:57:30.648Z",
+  "target": "BetGPT.live",
+  "topic": "Barcelone 3-0 Aston Villa, Lamine Yamal record, Raphinha doublé",
+  "publicArticle": "https://betgpt.live/actualites/barcelone-aston-villa-3-0-yamal-record-raphinha-double-4-novembre-2026/",
+  "status": "PASS_ARTICLE_PUBLIC_NOT_PASS_DISCOVER",
+  "sources": [
+    "UEFA J4 2026-11-03",
+    "FC Barcelona compte rendu 2026-11-03",
+    "Aston Villa compte rendu 2026-11-03",
+    "UEFA fixtures by team"
+  ],
+  "git": {
+    "repo": "Dr-starck66/betgpt-railway",
+    "branch": "astra/betgpt-editorial-repair-20261104",
+    "commit": "d3aac46a6a13d10abd309558ddd878c1fd42ec21",
+    "path": "editorial/2026-11-04/barcelone-aston-villa-3-0-yamal-record-raphinha-double-4-novembre-2026.html"
+  },
+  "vercel": {
+    "projectId": "prj_jOkv9zXAePNkzdcLYPkWVK76u3pi",
+    "deploymentId": "dpl_217xMYpiFzpFuo3gSa4ZfkKvTqBv",
+    "deploymentStatus": "READY",
+    "productionMainProjectId": "prj_YlO1eY3UtqhfeHihPDUANF4DZcMf",
+    "productionRouteVersion": "05b9986d-a19e-4733-b191-708e425d9dae",
+    "productionRouteCount": 10,
+    "protectedPaths": [
+      "/scores-en-direct",
+      "/api/scores",
+      "/pronostics-football",
+      "/api/predict"
+    ]
+  },
+  "evidence": {
+    "independentPublicFetch": true,
+    "canonicalCorrect": true,
+    "robotsIndexFollowLarge": true,
+    "newsArticleJsonLd": true,
+    "publicJournalIndex": true,
+    "publicSitemapCount": 58,
+    "publicNewsSitemapCount": 2,
+    "previousArticleUnchanged": true,
+    "oldHistoricalUrlsPreserved": 55,
+    "protectedRoutesRetested": true,
+    "imageLinksFound": 3,
+    "browserPreviewImagesVerifiedNaturalSizes": [
+      [
+        1510,
+        1080
+      ],
+      [
+        1920,
+        2880
+      ],
+      [
+        1920,
+        1275
+      ]
+    ],
+    "mobileOverflow": false
+  },
+  "caveats": [
+    "Google Discover diffusion UNVERIFIED",
+    "Google News listing UNVERIFIED",
+    "GSC indexing UNVERIFIED",
+    "Automated recurring publishing not independently established by this manual publication",
+    "News sitemap 48h entries must be removed after their individual publication time."
+  ],
+  "duplicateGuard": "Do not republish or count this 4 November 2026 article as a new publication in subsequent scheduled runs. Existing earlier PSG/Lille/Lens article from same day also protected.",
+  "costEur": 0
+}
