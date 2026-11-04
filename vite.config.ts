@@ -364,6 +364,7 @@ export default defineConfig(({ command, isPreview }) => ({
     ...(command === "build" || isPreview
       ? [
           nitro({
+            vercel: { entryFormat: "node" },
             preset:
               process.env.NITRO_PRESET ||
               (process.env.RAILWAY_ENVIRONMENT ||
