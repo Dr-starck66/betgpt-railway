@@ -1,0 +1,49 @@
+name: ASTRA BetGPT Original Runtime Smoke (isolated candidate)
+on:
+  push:
+    branches: [astra/vercel-full-ssr-restore-20261104]
+    paths:
+      - ".github/workflows/astra-betgpt-ssr-runtime-smoke.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  node-ssr-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Build original app (strict repository gates)
+        run: npm run build
+      - name: Probe real Node SSR process and record sanitized startup errors
+        shell: bash
+        run: |
+          set -uo pipefail
+          PORT=8234 NODE_ENV=production DATABASE_URL="" node .output/server/index.mjs > /tmp/astra-betgpt-runtime.log 2>&1 &
+          pid=$!
+          trap 'kill "$pid" 2>/dev/null || true' EXIT
+          for i in $(seq 1 35); do
+            if ! kill -0 "$pid" 2>/dev/null; then
+              echo "ASTRA_NODE_SSR_EXITED before health"
+              tail -n 130 /tmp/astra-betgpt-runtime.log
+              exit 1
+            fi
+            code="$(curl -sS -o /tmp/astra-betgpt-health.html -w '%{http_code}' --max-time 5 http://127.0.0.1:8234/api/health 2>/dev/null || true)"
+            if [ "$code" = "200" ]; then
+              echo "ASTRA_NODE_SSR_HEALTH_HTTP_200"
+              for path in / /chat /ledger /pronostics-football /pronostics-football/ligue-1 /sitemap.xml; do
+                code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 10 "http://127.0.0.1:8234$path" 2>/dev/null || true)"
+                printf '%s %s\n' "$code" "$path"
+              done
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "ASTRA_NODE_SSR_HEALTH_FAIL"
+          tail -n 130 /tmp/astra-betgpt-runtime.log
+          exit 1
