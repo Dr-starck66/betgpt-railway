@@ -31,6 +31,7 @@ jobs:
             console.log("ASTRA_VERCEL_MODULE_IMPORT_PASS", Object.keys(mod).join(","));
             console.log("ASTRA_VERCEL_DEFAULT_TYPE", typeof mod.default); console.log("ASTRA_VERCEL_DEFAULT_KEYS", Object.keys(mod.default ?? {}).slice(0,25).join(",")); console.log("ASTRA_VERCEL_FUNCTION_EXPORTS", Object.entries(mod).filter(([k,v])=>typeof v==="function").map(([k])=>k).join(","));
             if (typeof mod.default !== "function" && typeof mod.default?.fetch !== "function" && typeof mod.default?.handler !== "function") throw new Error("no callable function in default export");
+            if (typeof mod.default?.fetch === "function") { const response = await Promise.race([mod.default.fetch(new Request("https://betgpt.live/api/health")), new Promise((_, reject) => setTimeout(() => reject(new Error("fetch handler timed out")), 12000))]); const body = await response.text(); console.log("ASTRA_VERCEL_HANDLER_HEALTH", response.status, body.slice(0,500)); if(response.status !== 200) throw new Error("bundled Vercel handler health non-200"); }
           } catch (e) {
             console.error("ASTRA_VERCEL_FUNCTION_IMPORT_FAIL", e?.stack || e);
             process.exitCode = 1;
