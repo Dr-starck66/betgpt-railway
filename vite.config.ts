@@ -1,4 +1,4 @@
-import { copyFileSync, existsSync, mkdirSync, readdirSync, readlinkSync, unlinkSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readlinkSync, renameSync, unlinkSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Plugin } from "vite";
 import { defineConfig } from "vite";
@@ -172,6 +172,42 @@ function pgliteVercelAssetsPlugin(): Plugin {
       console.log(
         `[app-builder] copied PGlite runtime assets and ${migrationNames.length} migrations to runtime outputs`,
       );
+      // TEMPORARY recovery-branch instrumentation; not part of the production release.
+      // A preview-only sentinel enables a cold-start probe without changing canonical URLs.
+      if (existsSync(join(root, "config", "astra-betgpt-vercel-probe.active"))) {
+        const functionRoot = join(root, ".vercel", "output", "functions", "__server.func");
+        const original = join(functionRoot, "index.mjs");
+        const displaced = join(functionRoot, "index.astra-original.mjs");
+        if (existsSync(original) && !existsSync(displaced)) {
+          renameSync(original, displaced);
+          writeFileSync(original, `
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+let appPromise;
+const json=(res,status,data)=>{res.statusCode=status;res.setHeader("Content-Type","application/json; charset=utf-8");res.end(JSON.stringify(data));};
+const load=()=>{appPromise ??= import("./index.astra-original.mjs").catch(e=>{appPromise=undefined;throw e;});return appPromise;};
+export default async function astraVerifiedEntry(req,res){
+ const route=String(req.url||"").split("?")[0];
+ if(route==="/__astra_ping"){
+  return json(res,200,{status:"ASTRA_FUNCTION_ENTRY_REACHED",node:process.version,hasDatabaseUrl:!!process.env.DATABASE_URL,hasMigrations:existsSync(join(process.cwd(),"migrations")),cwdSuffix:process.cwd().split("/").slice(-2)});
+ }
+ try{
+  const mod=await load();
+  if(route==="/__astra_diag"){return json(res,200,{status:"ASTRA_MODULE_IMPORTED",handler:typeof mod.default});}
+  return await mod.default(req,res);
+ }catch(err){
+  const name=String(err?.name||"Error"),code=String(err?.code||"UNKNOWN");
+  console.error("ASTRA_VERCEL_PREVIEW_BOOT_ERROR",name,code,err?.stack||"");
+  if(!res.headersSent){
+   const message=String(err?.message||"").replace(/postgres(?:ql)?:\\/\\/[^\\s]+/g,"[REDACTED_DATABASE_URL]").slice(0,220);
+   return json(res,500,{status:"ASTRA_PREVIEW_BOOT_ERROR",name,code,diagnostic:route==="/__astra_diag"?message:undefined});
+  }
+ }
+}
+`);
+          console.log("ASTRA_PREVIEW_DIAGNOSTIC_WRAPPER_PACKAGED");
+        }
+      }
     },
   };
 }
