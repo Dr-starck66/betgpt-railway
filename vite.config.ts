@@ -1,4 +1,4 @@
-import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, renameSync, unlinkSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readdirSync, renameSync, unlinkSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Plugin } from "vite";
 import { defineConfig } from "vite";
@@ -206,16 +206,7 @@ export default async function astraVerifiedEntry(req,res){
 }
 `);
           console.log("ASTRA_PREVIEW_DIAGNOSTIC_WRAPPER_PACKAGED");
-          // Independent tiny lambda control: separates Vercel platform faults from the full app.
-          const control = join(root, ".vercel", "output", "functions", "__astra_control.func");
-          mkdirSync(control, { recursive: true });
-          writeFileSync(join(control, ".vc-config.json"), JSON.stringify({ handler: "index.mjs", runtime: "nodejs22.x", launcherType: "Nodejs", shouldAddHelpers: false }));
-          writeFileSync(join(control, "index.mjs"), 'export default function(req,res){res.statusCode=200;res.setHeader("content-type","application/json");res.end(JSON.stringify({ok:true,control:"VERCEL_NODE_FUNCTION_READY"}));}\n');
-          const vercelConfig = join(root, ".vercel", "output", "config.json");
-          const config = JSON.parse(readFileSync(vercelConfig, "utf8"));
-          config.routes = [{ src: "/__astra_control", dest: "/__astra_control" }, ...(config.routes ?? [])];
-          writeFileSync(vercelConfig, JSON.stringify(config));
-          console.log("ASTRA_INDEPENDENT_NODE_CONTROL_PACKAGED");
+
 
         }
       }
