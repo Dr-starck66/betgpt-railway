@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-04T20:55:53.290Z",
+      "lastCheckedAt": "2026-11-05T01:05:54.965Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -135,13 +135,13 @@
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-04T20:55:53.970Z",
-      "sourceStatus": "BLOCKED_SOURCE",
-      "seen": {}
+      "lastCheckedAt": "2026-11-05T01:05:55.363Z",
+      "seen": {},
+      "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-04T20:55:55.375Z",
+      "lastCheckedAt": "2026-11-05T01:05:56.826Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {
         "113acfc5949a8ca9ca": {
@@ -158,7 +158,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-04T20:55:56.970Z",
+      "lastCheckedAt": "2026-11-05T01:05:57.496Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -190,7 +190,7 @@
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-04T20:55:58.538Z",
+      "lastCheckedAt": "2026-11-05T01:05:59.032Z",
       "seen": {
         "b24e80016714b0bbd2": {
           "url": "https://avocat-belgique.com/actualites/frais-colis-hors-ue-novembre-2026/",
@@ -202,13 +202,13 @@
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-04T20:55:54.740Z",
+      "lastCheckedAt": "2026-11-05T01:05:56.168Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {}
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-04T20:55:57.839Z",
+      "lastCheckedAt": "2026-11-05T01:05:58.581Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {
         "c022035f3d7190f6f1": {
