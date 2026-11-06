@@ -38,17 +38,32 @@ jobs:
           set -euo pipefail
           rm -f /tmp/runtime-learning-checkpoint.json
           for i in $(seq 1 3); do
-            if curl -fsS --connect-timeout 8 --max-time 25               -H 'accept: application/json'               -H 'cache-control: no-cache'               https://betgpt.live/api/learning-checkpoint               -o /tmp/runtime-learning-checkpoint.json               && jq -e '
+            # Only transient HTTP failures may retry; a deterministic 404 is a
+            # deployment/routing defect, NOT a flaky network error.
+            status=$(curl -sS --connect-timeout 8 --max-time 25 \
+              -H 'accept: application/json' \
+              -H 'cache-control: no-cache' \
+              -w '%{http_code}' -o /tmp/runtime-learning-checkpoint.json \
+              https://betgpt.live/api/learning-checkpoint || true)
+            if [ "$status" = "200" ]; then
+              if jq -e '
                 .schema == "astra-betgpt-runtime-checkpoint/v2" and
                 .refresh.status == "PASS" and
                 (.tickets | type == "array") and
                 (.learning.schema == "astra-betgpt-learning-memory/v1")
               ' /tmp/runtime-learning-checkpoint.json >/dev/null; then
-              echo "ASTRA_LEARNING_CHECKPOINT_FETCH_PASS attempt=$i tickets=$(jq '.tickets|length' /tmp/runtime-learning-checkpoint.json)"
-              break
+                echo "ASTRA_LEARNING_CHECKPOINT_FETCH_PASS attempt=$i tickets=$(jq '.tickets|length' /tmp/runtime-learning-checkpoint.json)"
+                break
+              fi
+              echo "::error::ASTRA_LEARNING_CHECKPOINT_SCHEMA_OR_REFRESH_FAILED; no retry for contract failure" >&2
+              exit 1
             fi
             rm -f /tmp/runtime-learning-checkpoint.json
-            echo "ASTRA_LEARNING_CHECKPOINT_WAIT attempt=$i"
+            case "$status" in
+              000|408|429|500|502|503|504) ;;
+              *) echo "::error::ASTRA_LEARNING_CHECKPOINT_HTTP_$status; non-transient, no retry; inspect production route" >&2; exit 1 ;;
+            esac
+            echo "ASTRA_LEARNING_CHECKPOINT_WAIT attempt=$i http=$status"
             sleep 15
           done
           test -s /tmp/runtime-learning-checkpoint.json
