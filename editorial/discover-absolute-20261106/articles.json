@@ -1,0 +1,468 @@
+[
+  {
+    "slug": "xg-football-lire-chiffre-modele-sans-faux-score",
+    "title": "xG au football : lire une estimation sans la transformer en score qui aurait dû exister",
+    "description": "Comprendre un total d’expected goals, comparer les fournisseurs et vérifier le périmètre des données avec un exemple clairement fictif.",
+    "intro": "Un total de 1,8 xG ne signifie pas qu’une équipe devait inscrire exactement deux buts. Les expected goals additionnent des estimations associées aux tirs selon un modèle. Pour utiliser ce chiffre, identifiez son fournisseur, les actions incluses et le contexte du match avant d’en tirer une conclusion sur le jeu ou le prochain résultat.",
+    "sources": [
+      {
+        "url": "https://blogarchive.statsbomb.com/articles/soccer/upgrading-expected-goals/",
+        "name": "StatsBomb, Dinesh Vatvani : Upgrading Expected Goals, archive du 15 mai 2022"
+      },
+      {
+        "url": "https://blogarchive.statsbomb.com/articles/soccer/understanding-statsbomb-radars/",
+        "name": "StatsBomb, Ted Knutson : Understanding StatsBomb Radars, archive du 16 juillet 2021"
+      }
+    ],
+    "diagrams": [
+      {
+        "title": "Un total xG : une estimation, pas un score alternatif",
+        "cards": [
+          [
+            "TIRS",
+            "Des situations enregistrées"
+          ],
+          [
+            "MODÈLE",
+            "Une estimation pour chaque tir"
+          ],
+          [
+            "TOTAL",
+            "Une somme à contextualiser"
+          ]
+        ],
+        "foot": "Aucun match réel ni résultat de pronostic n’est représenté."
+      },
+      {
+        "title": "Exemple fictif : trois tirs, 0,60 xG au total",
+        "cards": [
+          [
+            "TIR A",
+            "Valeur pédagogique : 0,10"
+          ],
+          [
+            "TIR B",
+            "Valeur pédagogique : 0,20"
+          ],
+          [
+            "TIR C",
+            "Valeur pédagogique : 0,30"
+          ]
+        ],
+        "foot": "0,10 + 0,20 + 0,30 = 0,60 ; aucun nombre de buts n’est garanti."
+      },
+      {
+        "title": "Avant de comparer deux tableaux",
+        "cards": [
+          [
+            "SOURCE",
+            "Quel fournisseur et quelle version ?"
+          ],
+          [
+            "PÉRIMÈTRE",
+            "Quels tirs et quelle durée ?"
+          ],
+          [
+            "CONTEXTE",
+            "Quelle évolution du match ?"
+          ]
+        ],
+        "foot": "Des modèles différents ne donnent pas nécessairement les mêmes valeurs."
+      }
+    ],
+    "sections": [
+      [
+        "Commencer par retrouver la provenance du chiffre",
+        "Un graphique partagé sans source permet difficilement de comprendre ce qu’il mesure. Recherchez le fournisseur, la date de consultation et le match concerné. Vérifiez si la valeur correspond à toute la rencontre ou seulement à une période. Cette fiche de provenance constitue notre première recommandation pratique : elle évite de comparer des nombres dont les périmètres sont différents. Si ces éléments manquent, écrivez que le total est non vérifié au lieu d’en faire une preuve décisive. Une image soignée et de nombreuses décimales ne remplacent pas une source identifiable. Le même principe vaut lorsque le chiffre apparaît dans un commentaire vidéo, un fil social ou un tableau repris par un autre site."
+      ],
+      [
+        "Ce que le modèle estime pour un tir",
+        "Les présentations techniques de StatsBomb décrivent l’attribution d’une valeur à une occasion à partir de caractéristiques observées, par exemple sa position ou le type de tir. L’information disponible dépend du modèle. Certains utilisent un contexte plus riche autour des défenseurs et du gardien. Un xG est donc une estimation produite dans un cadre défini, pas une propriété universelle attachée à une image. Pour lire une publication, demandez ce que son fournisseur annonce effectivement prendre en compte. Ne déduisez pas qu’il possède toutes les informations d’un autre service. Cette vérification est particulièrement utile quand deux tableaux affichent des totaux différents pour une même rencontre."
+      ],
+      [
+        "Un exemple fictif pour comprendre une somme",
+        "Imaginons trois tirs auxquels un modèle attribue respectivement 0,10, 0,20 et 0,30. Leur somme vaut 0,60 xG. Les nombres de cet exemple sont inventés pour expliquer l’addition ; ils ne proviennent d’aucun match ni d’une exécution du modèle BetGPT. Le total ne décrit pas une action ayant eu lieu six dixièmes de fois. Il agrège des estimations sur les situations retenues. Une équipe peut marquer sur un tir jugé peu favorable ou manquer une occasion importante. Ce contraste ne suffit pas, à lui seul, à invalider toute méthode statistique ou à proclamer qu’un joueur a définitivement changé de niveau."
+      ],
+      [
+        "Ne pas confondre somme et probabilité de gagner",
+        "Le total de l’exemple n’est pas directement une probabilité de victoire, de but au prochain match ou de réussite d’un pari. Passer de tirs observés à une prévision demande d’autres hypothèses et une validation adaptée. Notre recommandation de lecture est de séparer la description d’un match passé et la prédiction d’un événement futur. Demandez quelle question le chiffre prétend résoudre, puis cherchez la méthode correspondante. Si aucune méthode n’est donnée, la conclusion doit rester limitée. Aucun taux de réussite ni avantage financier n’est établi par cette page. Une transformation mathématique présentée sans conditions ne devient pas une garantie parce qu’elle utilise une statistique connue."
+      ],
+      [
+        "Le déroulement du match change la question posée",
+        "Avant de comparer deux équipes, notez les moments importants que vous avez pu vérifier : ouverture du score, exclusion, changement de rythme ou période considérée. Ces événements ne permettent pas d’expliquer automatiquement tout le total, mais ils donnent des questions à poser à la vidéo et aux données. Une équipe menée peut attaquer davantage ; il faut examiner le match pour savoir ce qui s’est réellement passé. Évitez de raconter ce scénario sans l’avoir observé. Le travail utile consiste à croiser une chronologie sourcée et des occasions identifiées, puis à dire ce qui reste incertain. Un total final seul ne restitue ni l’ordre des situations ni leur enchaînement."
+      ],
+      [
+        "Pourquoi deux services peuvent diverger sans erreur de calcul",
+        "StatsBomb insiste sur les différences de données et de conception entre modèles d’expected goals. Pour une comparaison honnête, conservez le même fournisseur lorsque vous suivez une série, puis signalez une rupture de méthode si elle survient. Cela ne revient pas à déclarer ce fournisseur supérieur dans tous les cas. Vous cherchez d’abord une cohérence de lecture. Si un écart entre deux services vous intéresse, comparez les tirs qu’ils recensent avant d’interpréter les valeurs. Une occasion absente d’un tableau et une occasion évaluée autrement posent des problèmes différents. Sans accès au détail, il est préférable de documenter l’écart que de lui inventer une explication technique."
+      ],
+      [
+        "Écrire une analyse qui distingue observation et interprétation",
+        "Vous pouvez organiser une note en trois colonnes : fait vérifié, chiffre sourcé et hypothèse de lecture. Dans la première, inscrivez un événement identifié. Dans la deuxième, conservez le total et sa provenance. Dans la troisième, formulez la question que vous souhaitez examiner dans les images. Cette organisation proposée par la rédaction évite de présenter une impression tactique comme une mesure calculée. Elle rend aussi possible une correction ultérieure sans réécrire toute l’histoire. Si vous n’avez regardé qu’un résumé, dites-le. Si certaines données sont inaccessibles, la conclusion doit refléter cette limite plutôt que de prendre le ton d’un rapport d’observation complet."
+      ],
+      [
+        "Une série demande plus qu’un chiffre impressionnant",
+        "Pour comparer des performances dans le temps, conservez les dates, les adversaires et les périmètres retenus. Ne mélangez pas silencieusement une période complète avec quelques minutes jouées ou des compétitions différentes. Les choix de présentation influencent la question à laquelle le lecteur croit recevoir une réponse. Cette page ne fixe aucun nombre de rencontres qui transformerait automatiquement une tendance en certitude. Elle recommande de publier le périmètre réel et d’éviter une généralisation immédiate à partir d’un seul résultat. Une différence qui mérite une enquête reste une différence à examiner. Elle ne permet pas de qualifier un futur score de certain ni de promettre une rentabilité de pronostics."
+      ],
+      [
+        "La vérification utile avant de partager un total",
+        "Retrouvez la source, relevez le périmètre, distinguez l’addition descriptive d’une prévision et vérifiez la chronologie du match. Ces quatre questions rendent le chiffre plus lisible sans lui demander de tout expliquer. Pour préparer l’avant-match, notre guide sur <a href=\"/guides/composition-probable-officielle-football-verifier-source/\">les compositions probables et officielles</a> distingue information confirmée et hypothèse tactique. Pour une décision contestée pendant le jeu, le <a href=\"/guides/var-football-2026-2027-verification-analyse-differences/\">guide de lecture de la VAR en 2026/2027</a> traite une autre source de confusion. Aucun de ces outils ne remplace l’examen des faits propres à la rencontre ni n’accorde une certitude sur son résultat."
+      ]
+    ],
+    "publishedAt": "2026-11-06T21:22:59Z",
+    "checkedAt": "2026-11-06",
+    "canonical": "https://betgpt.live/guides/xg-football-lire-chiffre-modele-sans-faux-score/",
+    "images": [
+      {
+        "file": "xg-football-lire-chiffre-modele-sans-faux-score-0.webp",
+        "url": "https://betgpt.live/assets/editorial-20261106/xg-football-lire-chiffre-modele-sans-faux-score-0.webp",
+        "width": 1600,
+        "height": 900,
+        "sha256": "983a6544dd832917c84b554edf09fd523fcb9c84ff6f4c329bb99df19ff77888",
+        "bytes": 54210,
+        "role": "hero",
+        "alt": "Un total xG : une estimation, pas un score alternatif. TIRS: Des situations enregistrées. MODÈLE: Une estimation pour chaque tir. TOTAL: Une somme à contextualiser",
+        "creator": "BetGPT — rédaction",
+        "licenseUrl": "https://betgpt.live/assets/editorial-20261106/rights.json",
+        "provenanceUrl": "https://betgpt.live/assets/editorial-20261106/rights.json"
+      },
+      {
+        "file": "xg-football-lire-chiffre-modele-sans-faux-score-1.webp",
+        "url": "https://betgpt.live/assets/editorial-20261106/xg-football-lire-chiffre-modele-sans-faux-score-1.webp",
+        "width": 1600,
+        "height": 900,
+        "sha256": "800e96aa78f4e6c5cc6cce4e0c69279a820bd5e987c66da74d998d62e427e6f2",
+        "bytes": 48934,
+        "role": "body",
+        "alt": "Exemple fictif : trois tirs, 0,60 xG au total. TIR A: Valeur pédagogique : 0,10. TIR B: Valeur pédagogique : 0,20. TIR C: Valeur pédagogique : 0,30",
+        "creator": "BetGPT — rédaction",
+        "licenseUrl": "https://betgpt.live/assets/editorial-20261106/rights.json",
+        "provenanceUrl": "https://betgpt.live/assets/editorial-20261106/rights.json"
+      },
+      {
+        "file": "xg-football-lire-chiffre-modele-sans-faux-score-2.webp",
+        "url": "https://betgpt.live/assets/editorial-20261106/xg-football-lire-chiffre-modele-sans-faux-score-2.webp",
+        "width": 1600,
+        "height": 900,
+        "sha256": "095b96658a84b05c82f4786c0fc462570595ac2f02dc0e74e372759d16956680",
+        "bytes": 53898,
+        "role": "body",
+        "alt": "Avant de comparer deux tableaux. SOURCE: Quel fournisseur et quelle version ?. PÉRIMÈTRE: Quels tirs et quelle durée ?. CONTEXTE: Quelle évolution du match ?",
+        "creator": "BetGPT — rédaction",
+        "licenseUrl": "https://betgpt.live/assets/editorial-20261106/rights.json",
+        "provenanceUrl": "https://betgpt.live/assets/editorial-20261106/rights.json"
+      }
+    ]
+  },
+  {
+    "slug": "composition-probable-officielle-football-verifier-source",
+    "title": "Composition probable ou officielle : vérifier la source avant d’analyser un match",
+    "description": "Une méthode pour suivre l’annonce d’une équipe, dater les corrections et séparer joueurs confirmés, système tactique supposé et absence inexpliquée.",
+    "intro": "Une composition probable est une hypothèse éditoriale. Une liste publiée par l’organisateur ou le club fournit une confirmation plus solide des noms annoncés, mais son dessin tactique ne démontre pas tous les rôles qui seront joués. Avant de commenter une absence ou un changement de système, vérifiez la source, l’heure et les éventuelles corrections.",
+    "sources": [
+      {
+        "url": "https://www.theifab.com/fr/laws/latest/the-players/",
+        "name": "IFAB, Lois du Jeu 2026/2027 : loi 3, joueurs et remplaçants"
+      },
+      {
+        "url": "https://www.theifab.com/fr/laws/latest/the-referee/",
+        "name": "IFAB, Lois du Jeu 2026/2027 : loi 5, arbitre"
+      }
+    ],
+    "diagrams": [
+      {
+        "title": "Trois niveaux d’information avant le coup d’envoi",
+        "cards": [
+          [
+            "PROBABLE",
+            "Une sélection encore supposée"
+          ],
+          [
+            "ANNONCÉE",
+            "Des noms publiés par une source"
+          ],
+          [
+            "OBSERVÉE",
+            "Des rôles constatés dans le jeu"
+          ]
+        ],
+        "foot": "Une représentation tactique n’est pas une preuve de tous les déplacements."
+      },
+      {
+        "title": "Une source vérifiable conserve son contexte",
+        "cards": [
+          [
+            "MATCH",
+            "Équipes, date et compétition"
+          ],
+          [
+            "SOURCE",
+            "Page ou compte officiel"
+          ],
+          [
+            "HEURE",
+            "Publication et correction éventuelle"
+          ]
+        ],
+        "foot": "Aucune composition réelle n’est inventée dans ce guide."
+      },
+      {
+        "title": "Une absence ne donne pas automatiquement sa cause",
+        "cards": [
+          [
+            "CONSTAT",
+            "Le nom ne figure pas sur la liste"
+          ],
+          [
+            "EXPLICATION",
+            "Un communiqué doit être vérifié"
+          ],
+          [
+            "LIMITE",
+            "Pas de diagnostic ni conflit supposé"
+          ]
+        ],
+        "foot": "Distinguer ce qui est confirmé de ce qui reste inconnu."
+      }
+    ],
+    "sections": [
+      [
+        "Lire le statut de l’annonce avant de regarder les noms",
+        "Cherchez les mots probable, pressentie, officielle ou confirmée. Ils décrivent des niveaux d’engagement différents. Une illustration avec un terrain et onze noms peut paraître définitive tout en restant une proposition de journaliste. Conservez la formulation originale quand vous la reprenez. Si la source ne précise rien, n’ajoutez pas vous-même le mot officielle pour rendre le titre plus séduisant. Cette petite vérification protège le lecteur contre un changement de statut invisible. Elle permet aussi de comparer ensuite ce qui avait été anticipé avec ce qui a réellement été annoncé, sans transformer une prévision corrigée en information qui aurait été confirmée dès le départ."
+      ],
+      [
+        "Retrouver une publication liée au bon match",
+        "Un ancien visuel peut être repartagé à côté d’une nouvelle affiche. Vérifiez les deux équipes, la compétition et la date plutôt que de reconnaître seulement le logo du club. Ouvrez la publication d’origine lorsque c’est possible et relevez son heure. Pour un compte social, assurez-vous de sa relation officielle avec le club ou l’organisateur en partant de leur site, sans vous fier uniquement à une capture recadrée. Ces étapes constituent une méthode de vérification éditoriale proposée ici. Elles ne garantissent pas qu’une annonce ne sera jamais corrigée. Elles permettent de montrer au lecteur quelle information était effectivement disponible au moment où l’analyse a été écrite."
+      ],
+      [
+        "Ce que la loi 3 apporte à la distinction",
+        "La loi 3 de l’IFAB encadre les joueurs et les remplaçants ; elle distingue notamment les participants désignés sur la feuille d’équipe. Ce cadre réglementaire ne transforme pas une prévision publiée par un média en feuille officielle. Il rappelle pourquoi les noms annoncés et le déroulement effectif doivent être suivis séparément. Pour les modalités pratiques propres à un tournoi, consultez aussi le règlement et les communications de son organisateur. N’appliquez pas un nombre de remplaçants ou une heure limite vus dans une autre compétition sans vérification. Cette page n’annonce aucune règle unique de publication des compositions valable pour toutes les rencontres professionnelles, amicales ou de jeunes."
+      ],
+      [
+        "Ne pas confondre titulaire annoncé et rôle tactique prouvé",
+        "La présence d’un joueur parmi les titulaires ne suffit pas à déterminer sa position dans chaque phase. Un dessin d’équipe ordonne les noms pour faciliter la lecture ; il peut rester une interprétation. Avant le coup d’envoi, décrivez un système comme attendu si vous ne disposez pas d’une confirmation plus précise. Pendant le match, distinguez ce qui est observé avec et sans ballon. Ce soin évite de qualifier de surprise un rôle que le visuel n’avait jamais garanti. Il permet aussi de commenter une évolution tactique sans prétendre connaître une instruction du staff qui n’a pas été rendue publique ou expliquée par une source identifiable."
+      ],
+      [
+        "Une absence exige une source pour son explication",
+        "Si un nom manque, le constat vérifié est d’abord cette absence de la liste consultée. Blessure, sanction, choix sportif ou problème personnel sont des explications distinctes qui demandent des éléments propres. Ne déduisez pas un diagnostic d’une simple omission, et ne présentez pas une tension dans le vestiaire comme un fait parce qu’un joueur ne débute pas. Recherchez une communication du club, de l’organisateur ou une déclaration attribuable. Si rien n’est publié, gardez l’explication ouverte. Le lecteur peut comprendre une limite clairement écrite. Une histoire précise mais inventée lui ferait croire que l’analyse possède un accès au groupe qu’elle n’a pas réellement."
+      ],
+      [
+        "Conserver les corrections plutôt que les effacer mentalement",
+        "Une annonce peut être remplacée ou précisée. Dans votre note de suivi, gardez la première heure observée et la modification dont vous avez la preuve. Ne mélangez pas des captures prises à des moments différents comme si elles décrivaient une liste unique. Lorsque vous mettez à jour un article, indiquez la correction qui change l’analyse : un nom remplacé, une source mieux confirmée ou une précision sur le statut. Il n’est pas nécessaire de dramatiser chaque ajustement. Le but est de rendre la lecture vérifiable et de ne pas faire passer une interprétation écrite après coup pour une anticipation réussie. La chronologie est une partie de la preuve."
+      ],
+      [
+        "Construire une fiche d’avant-match qui reste honnête",
+        "Prévoyez un bloc pour les noms confirmés, un autre pour les informations encore supposées et un troisième pour les questions tactiques à observer. Ajoutez les liens et l’heure de consultation plutôt que des affirmations sans provenance. Cette présentation est utile même si vous ne publiez qu’une courte analyse : elle vous oblige à distinguer les matériaux employés. Une question comme qui assurera la largeur peut être pertinente sans recevoir une réponse certaine avant le match. Ne remplissez pas une case vide avec une composition fabriquée. Si une équipe n’a pas encore annoncé sa liste, dites-le et conservez la prévision sous son statut d’hypothèse."
+      ],
+      [
+        "Éviter une conclusion de pronostic automatique",
+        "Une composition différente de celle attendue peut changer les questions à poser au match. Elle ne démontre pas, à elle seule, qu’une équipe gagnera, qu’un joueur marquera ou qu’un marché serait mal évalué. Une conclusion prédictive demanderait une méthode et des données qui ne sont pas produites par cette page. Notre objectif est la qualité de l’information avant l’interprétation. Les scores et les annonces consultés doivent conserver leur date, car un lecteur peut revenir plusieurs jours après. N’employez pas une formulation en direct si le suivi est terminé. Un article conservé en archive doit permettre de comprendre le moment qu’il décrit sans feindre une actualisation permanente."
+      ],
+      [
+        "Passer de l’annonce à l’observation du jeu",
+        "Au coup d’envoi, comparez les noms annoncés à ce qui est effectivement constaté, puis observez les questions tactiques que vous aviez formulées. Corrigez une hypothèse si les faits ne la soutiennent pas. Pour lire ensuite les occasions, le <a href=\"/guides/xg-football-lire-chiffre-modele-sans-faux-score/\">guide des expected goals</a> explique pourquoi un total n’est pas un score alternatif. Pour un incident arbitral, notre <a href=\"/guides/var-football-2026-2027-verification-analyse-differences/\">lecture du protocole VAR 2026/2027</a> rappelle de vérifier la version applicable. Les trois démarches partagent une exigence simple : nommer la source, conserver le contexte et ne pas transformer une information partielle en certitude sur tout le match."
+      ]
+    ],
+    "publishedAt": "2026-11-06T21:22:59Z",
+    "checkedAt": "2026-11-06",
+    "canonical": "https://betgpt.live/guides/composition-probable-officielle-football-verifier-source/",
+    "images": [
+      {
+        "file": "composition-probable-officielle-football-verifier-source-0.webp",
+        "url": "https://betgpt.live/assets/editorial-20261106/composition-probable-officielle-football-verifier-source-0.webp",
+        "width": 1600,
+        "height": 900,
+        "sha256": "27111b6de382558b5ebb2bf85da95039fba113c0303b54765d3d7f98c74d7731",
+        "bytes": 59756,
+        "role": "hero",
+        "alt": "Trois niveaux d’information avant le coup d’envoi. PROBABLE: Une sélection encore supposée. ANNONCÉE: Des noms publiés par une source. OBSERVÉE: Des rôles constatés dans le jeu",
+        "creator": "BetGPT — rédaction",
+        "licenseUrl": "https://betgpt.live/assets/editorial-20261106/rights.json",
+        "provenanceUrl": "https://betgpt.live/assets/editorial-20261106/rights.json"
+      },
+      {
+        "file": "composition-probable-officielle-football-verifier-source-1.webp",
+        "url": "https://betgpt.live/assets/editorial-20261106/composition-probable-officielle-football-verifier-source-1.webp",
+        "width": 1600,
+        "height": 900,
+        "sha256": "0b4464d23b06640c843116c866f45960227048b920279b99ce390f72b9c7d2cd",
+        "bytes": 53622,
+        "role": "body",
+        "alt": "Une source vérifiable conserve son contexte. MATCH: Équipes, date et compétition. SOURCE: Page ou compte officiel. HEURE: Publication et correction éventuelle",
+        "creator": "BetGPT — rédaction",
+        "licenseUrl": "https://betgpt.live/assets/editorial-20261106/rights.json",
+        "provenanceUrl": "https://betgpt.live/assets/editorial-20261106/rights.json"
+      },
+      {
+        "file": "composition-probable-officielle-football-verifier-source-2.webp",
+        "url": "https://betgpt.live/assets/editorial-20261106/composition-probable-officielle-football-verifier-source-2.webp",
+        "width": 1600,
+        "height": 900,
+        "sha256": "a51aba0aeae7022e9019894c0e8bfb182a9fdd7e8a7dfa5a9f9da547f3942a8e",
+        "bytes": 58500,
+        "role": "body",
+        "alt": "Une absence ne donne pas automatiquement sa cause. CONSTAT: Le nom ne figure pas sur la liste. EXPLICATION: Un communiqué doit être vérifié. LIMITE: Pas de diagnostic ni conflit supposé",
+        "creator": "BetGPT — rédaction",
+        "licenseUrl": "https://betgpt.live/assets/editorial-20261106/rights.json",
+        "provenanceUrl": "https://betgpt.live/assets/editorial-20261106/rights.json"
+      }
+    ]
+  },
+  {
+    "slug": "var-football-2026-2027-verification-analyse-differences",
+    "title": "VAR en 2026/2027 : distinguer vérification, analyse et règle applicable",
+    "description": "Lire une intervention vidéo avec le protocole IFAB actuel, sans reprendre les anciennes exclusions comme si elles étaient toujours absolues.",
+    "intro": "L’absence de passage de l’arbitre devant un écran ne prouve pas qu’aucune vérification vidéo n’a eu lieu. Pour comprendre un incident, distinguez la vérification, une éventuelle analyse et la décision finale. Vérifiez aussi la saison : les modifications IFAB 2026/2027 comportent des évolutions que les anciens résumés du protocole ne reflètent pas forcément.",
+    "sources": [
+      {
+        "url": "https://www.theifab.com/fr/laws/latest/video-assistant-referee-var-protocol/",
+        "name": "IFAB : protocole d’assistance vidéo à l’arbitrage, version 2026/2027 consultée"
+      },
+      {
+        "url": "https://www.theifab.com/fr/law-changes/latest/",
+        "name": "IFAB : modifications des Lois du Jeu 2026/2027"
+      },
+      {
+        "url": "https://www.theifab.com/fr/laws/latest/the-referee/",
+        "name": "IFAB : loi 5, rôle de l’arbitre"
+      }
+    ],
+    "diagrams": [
+      {
+        "title": "Trois moments à ne pas confondre",
+        "cards": [
+          [
+            "VÉRIFICATION",
+            "Les images sont examinées"
+          ],
+          [
+            "ANALYSE",
+            "Un incident peut être revu"
+          ],
+          [
+            "DÉCISION",
+            "L’arbitre reste décisionnaire"
+          ]
+        ],
+        "foot": "Schéma de lecture du protocole, pas la reconstitution d’un match."
+      },
+      {
+        "title": "La saison compte avant de citer une règle",
+        "cards": [
+          [
+            "VERSION",
+            "Identifier 2026/2027"
+          ],
+          [
+            "COMPÉTITION",
+            "Vérifier les options appliquées"
+          ],
+          [
+            "INCIDENT",
+            "Décrire la catégorie exacte"
+          ]
+        ],
+        "foot": "Un ancien résumé ne suffit pas à établir la règle actuelle."
+      },
+      {
+        "title": "Une séquence courte laisse des questions ouvertes",
+        "cards": [
+          [
+            "AVANT",
+            "Quelle action précède l’incident ?"
+          ],
+          [
+            "IMAGES",
+            "Quel angle et quelle vitesse ?"
+          ],
+          [
+            "SOURCE",
+            "Quelle explication est publiée ?"
+          ]
+        ],
+        "foot": "Ne pas inventer les échanges entre les arbitres."
+      }
+    ],
+    "sections": [
+      [
+        "Identifier le match et la version des Lois du Jeu",
+        "Avant de discuter la décision, notez la compétition, la date et la saison réglementaire concernée. Cette page s’appuie sur les textes IFAB 2026/2027 consultés le 6 novembre 2026. Elle ne juge aucun incident particulier. Un ancien message, même très partagé, peut décrire correctement une autre édition tout en donnant une réponse incomplète aujourd’hui. Conservez le lien de la version consultée et les éventuelles dispositions de l’organisateur. Cette étape paraît administrative, mais elle permet de séparer un véritable désaccord d’interprétation et une comparaison entre deux règles différentes. Elle évite aussi d’attribuer à l’arbitre une obligation simplement lue dans un résumé périmé."
+      ],
+      [
+        "Une vérification n’est pas nécessairement un passage à l’écran",
+        "Le protocole distingue la vérification des images et la procédure d’analyse. Une intervention peut aussi fournir des informations à l’arbitre sans qu’il aille lui-même regarder l’écran au bord du terrain. Le texte maintient l’arbitre comme décisionnaire final. Pour commenter honnêtement une séquence, décrivez ce que la retransmission permet réellement de voir : interruption, geste, déplacement et décision annoncée. N’ajoutez pas un dialogue supposé entre les officiels. L’absence d’une image à l’antenne ne suffit pas à établir l’absence d’un travail vidéo. Si une communication officielle explique ensuite le processus, elle devient une source à citer et à distinguer des premières impressions du direct."
+      ],
+      [
+        "Le protocole ne donne pas un second arbitrage illimité",
+        "L’IFAB définit des catégories et des conditions d’intervention ; la VAR n’a pas pour fonction de rejuger librement chaque contact montré au ralenti. Le texte emploie notamment les notions d’erreur manifeste et d’incident grave manqué. Pour une analyse, commencez par identifier la catégorie invoquée avant de débattre d’une image. Demandez ensuite ce qui est établi et ce qui relève d’une appréciation. Une opinion tranchée d’un commentateur ne remplace pas ce classement. Cette démarche n’exige pas de prendre parti pour ou contre la technologie. Elle sert à poser une question compatible avec le protocole plutôt qu’à lui demander d’examiner tout ce qui paraît discutable au spectateur."
+      ],
+      [
+        "Les anciens raccourcis sur les cartons doivent être vérifiés",
+        "Les modifications 2026/2027 mentionnent le cas d’un second carton jaune manifestement infligé à tort. Il serait donc inexact de reprendre sans nuance une ancienne formule affirmant qu’un deuxième avertissement ne peut jamais être concerné. Cette évolution ne signifie pas que toute situation de carton jaune bénéficie d’un réexamen général. Pour un cas réel, retrouvez le passage applicable et l’incident exact au lieu d’étendre une exception à tout le match. Le lecteur gagne à voir la différence entre un principe, une condition et une nouvelle possibilité. Notre commentaire se limite à cette vérification documentaire et ne prétend pas connaître la mise en œuvre d’un tournoi non identifié."
+      ],
+      [
+        "Le corner est un exemple de condition à lire jusqu’au bout",
+        "Le protocole actuel présente aussi une possibilité concernant un corner manifestement accordé à tort, sous conditions de correction immédiate et sans retard de la reprise, à la discrétion des compétitions. Dire simplement que tous les corners sont désormais revus ferait disparaître ces limites. Pour un match précis, il faut donc vérifier l’option appliquée par son organisateur. Cet exemple montre pourquoi une liste de nouveautés sans ses conditions peut induire en erreur. Le bon réflexe est de conserver la phrase réglementaire dans son contexte et de formuler seulement la conséquence qu’elle autorise. Une nouveauté de texte ne prouve pas automatiquement qu’une décision donnée aurait dû être modifiée."
+      ],
+      [
+        "Une courte vidéo ne fournit pas toujours la séquence pertinente",
+        "Un extrait peut commencer après une action utile à l’analyse ou s’arrêter avant l’explication de la décision. Avant de publier une accusation, recherchez une séquence plus complète et une source identifiable. Notez les angles disponibles et les questions qu’ils laissent ouvertes, sans prétendre reproduire les outils de la salle vidéo. Un arrêt sur image aide à observer un instant ; il ne remplace pas toujours le mouvement qui lui donne sens. Si vous ne disposez que d’un extrait, indiquez cette limite. Vous pouvez expliquer pourquoi une situation vous paraît ambiguë sans affirmer que les officiels ont vu exactement les mêmes images, au même moment et dans le même contexte."
+      ],
+      [
+        "Séparer un fait observable, une règle et une opinion",
+        "Une note claire peut distinguer trois lignes. D’abord, le fait observable, par exemple le geste effectué et la décision annoncée. Ensuite, la règle citée avec sa version. Enfin, votre interprétation, accompagnée de ce qui pourrait la modifier. Cette organisation est une proposition de la rédaction pour rendre le débat vérifiable. Elle n’est pas un compte rendu officiel d’arbitrage. Elle facilite une correction si un angle nouveau ou une explication apparaît. Évitez de décrire une intention de favoriser un club à partir d’un désaccord sur une image. Une affirmation sur l’intégrité d’une personne demanderait des éléments d’une autre nature qu’une préférence de spectateur."
+      ],
+      [
+        "Lire une explication officielle sans lui ajouter des détails",
+        "Lorsqu’un organisateur ou une instance publie une explication, conservez son auteur, sa date et le périmètre exact de ce qui est expliqué. Une communication sur un incident ne répond pas nécessairement à toutes les questions soulevées par le match. Ne transformez pas une absence de commentaire sur un autre épisode en confirmation de votre hypothèse. De même, une correction reconnue sur une action ne fournit pas un diagnostic général de tous les arbitres. Vous pouvez comparer l’explication au texte et signaler un point restant ouvert. Cette lecture garde la possibilité d’un désaccord argumenté tout en évitant d’inventer des conversations, des consignes ou des motivations qui n’ont pas été rendues publiques."
+      ],
+      [
+        "Une grille de vérification utilisable pendant et après le match",
+        "Relevez la version, la catégorie, les images réellement accessibles et la source de la décision finale. Si l’une manque, décrivez ce manque dans votre analyse. Pour l’avant-match, notre guide sur <a href=\"/guides/composition-probable-officielle-football-verifier-source/\">les compositions probables et officielles</a> applique la même distinction entre annonce et interprétation. Pour les statistiques, le <a href=\"/guides/xg-football-lire-chiffre-modele-sans-faux-score/\">guide des xG</a> sépare estimation et résultat. Ces repères ne suppriment pas les controverses ; ils rendent les désaccords plus précis. Le lecteur peut alors refaire le chemin documentaire au lieu d’adopter une certitude fondée sur un ancien règlement, une capture isolée ou une conversation supposée entre les arbitres."
+      ]
+    ],
+    "publishedAt": "2026-11-06T21:22:59Z",
+    "checkedAt": "2026-11-06",
+    "canonical": "https://betgpt.live/guides/var-football-2026-2027-verification-analyse-differences/",
+    "images": [
+      {
+        "file": "var-football-2026-2027-verification-analyse-differences-0.webp",
+        "url": "https://betgpt.live/assets/editorial-20261106/var-football-2026-2027-verification-analyse-differences-0.webp",
+        "width": 1600,
+        "height": 900,
+        "sha256": "fc7db5308feb0fb0f2846d0e6f83cd59bccf115da919f2049e9f3436986349ff",
+        "bytes": 52106,
+        "role": "hero",
+        "alt": "Trois moments à ne pas confondre. VÉRIFICATION: Les images sont examinées. ANALYSE: Un incident peut être revu. DÉCISION: L’arbitre reste décisionnaire",
+        "creator": "BetGPT — rédaction",
+        "licenseUrl": "https://betgpt.live/assets/editorial-20261106/rights.json",
+        "provenanceUrl": "https://betgpt.live/assets/editorial-20261106/rights.json"
+      },
+      {
+        "file": "var-football-2026-2027-verification-analyse-differences-1.webp",
+        "url": "https://betgpt.live/assets/editorial-20261106/var-football-2026-2027-verification-analyse-differences-1.webp",
+        "width": 1600,
+        "height": 900,
+        "sha256": "6d66e4e109190f90d8ff42c745dbfdb4c817ab83a2dec256eea835f621f8f2dd",
+        "bytes": 52618,
+        "role": "body",
+        "alt": "La saison compte avant de citer une règle. VERSION: Identifier 2026/2027. COMPÉTITION: Vérifier les options appliquées. INCIDENT: Décrire la catégorie exacte",
+        "creator": "BetGPT — rédaction",
+        "licenseUrl": "https://betgpt.live/assets/editorial-20261106/rights.json",
+        "provenanceUrl": "https://betgpt.live/assets/editorial-20261106/rights.json"
+      },
+      {
+        "file": "var-football-2026-2027-verification-analyse-differences-2.webp",
+        "url": "https://betgpt.live/assets/editorial-20261106/var-football-2026-2027-verification-analyse-differences-2.webp",
+        "width": 1600,
+        "height": 900,
+        "sha256": "886fd43369d3af99b5ef137f7d2b6258fe372b83219397e47ae55d1c02566a7d",
+        "bytes": 56062,
+        "role": "body",
+        "alt": "Une séquence courte laisse des questions ouvertes. AVANT: Quelle action précède l’incident ?. IMAGES: Quel angle et quelle vitesse ?. SOURCE: Quelle explication est publiée ?",
+        "creator": "BetGPT — rédaction",
+        "licenseUrl": "https://betgpt.live/assets/editorial-20261106/rights.json",
+        "provenanceUrl": "https://betgpt.live/assets/editorial-20261106/rights.json"
+      }
+    ]
+  }
+]
