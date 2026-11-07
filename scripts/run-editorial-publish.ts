@@ -32,6 +32,29 @@ if (authorityFailures.length) {
   process.exit(78);
 }
 
+// A duplicated or falsely dimensioned headline photo is a blocked release,
+// never silently relabel a portrait/4:3 source as a 16:9 Discover image.
+const todayImages = published.filter((article) => article.parisDate === parisDate(now));
+const usedTodayImages = new Map<string, string>();
+const dailyImageErrors: string[] = [];
+for (const article of todayImages) {
+  const photo = article.image;
+  const ratio = Number(photo?.width) / Number(photo?.height);
+  if (!photo?.src || !Number.isFinite(ratio) || ratio < 1.45 || ratio > 2.05 ||
+      Number(photo.width) < 1200 || Number(photo.width) * Number(photo.height) <= 300000) {
+    dailyImageErrors.push(`${article.slug}:IMAGE_FORMAT`);
+  }
+  if (photo?.src && usedTodayImages.has(photo.src)) {
+    dailyImageErrors.push(`${article.slug}:DUPLICATE_IMAGE_WITH:${usedTodayImages.get(photo.src)}`);
+  } else if (photo?.src) {
+    usedTodayImages.set(photo.src, article.slug);
+  }
+}
+if (dailyImageErrors.length) {
+  for (const failure of dailyImageErrors) console.error("ASTRA_DAILY_IMAGE_FAIL " + failure);
+  process.exit(78);
+}
+
 const discoverCandidates = recentDiscoverCandidates(published, now, 48);
 const discoverAudits = discoverCandidates.map((article) => discoverLaunchpadStaticAudit(article, now));
 const discoverFailures = discoverAudits.filter((audit) => !audit.hardPass);

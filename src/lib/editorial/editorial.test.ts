@@ -1,15 +1,43 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { buildEdition, applyEventOverride, composeNews } from "./engine.ts";
-import { newsEntries, learnTopics, renderNewsSitemap } from "./feed.ts";
+import { newsEntries, learnTopics, renderNewsSitemap, isEditorialIndexable } from "./feed.ts";
 import { qualityGate } from "./quality.ts";
 import { manualEditorialArticles } from "./manual-articles.ts";
 import { editorialGoldStandardGate } from "./gold-standard.ts";
 import { optimizeTimes, parisDate, slotInstant } from "./time.ts";
 import type { ArticleType, EditorialMatch, EditorialNewsSignal, SlotId } from "./types.ts";
-import { autoPublishableCluster, clusterSignals, parseGoogleNewsRss, parsePublisherRss, sourceTier } from "./news-scout.server.ts";
-import { publisherUrl } from "./auto-reporter.server.ts";
+import { autoPublishableCluster, clusterSignals, fairPublisherSignals, parseGoogleNewsRss, parsePublisherRss, sourceTier } from "./news-scout.server.ts";
+import { hasAutomaticProof, publishedTodayForQuota, eligiblePublishingSlots, sectionResponseSchema, boundedEvidenceSlices, extractPublicArticle, publicPublisherRssEvidence, publisherUrl } from "./auto-reporter.server.ts";
 import { clusterSignals as clusterAutoReporterSignals, isMaterialDevelopment as isAutoReporterMaterial } from "./news-cluster.ts";
+import { attachVerifiedInlineImages } from "./verified-inline-images.ts";
+import { inlineImageProof } from "./inline-image-proof.ts";
+
+describe("native Qwen H2 uniqueness", () => {
+  it("constrains each of the seven model responses to a different predetermined H2 without relaxing length or source guards", () => {
+    const first = sectionResponseSchema(["source-1", "source-2"], true, "Les faits confirmés et leur importance immédiate") as { oneOf: Array<{ properties: Record<string, { const?: string; minLength?: number; minItems?: number; items?: { enum?: string[] } }> }> };
+    const second = sectionResponseSchema(["source-1", "source-2"], false, "La chronologie établie par les sources") as { oneOf: Array<{ properties: Record<string, { const?: string; minLength?: number; minItems?: number; items?: { enum?: string[] } }> }> };
+    assert.equal(first.oneOf[1]!.properties.h2?.const, "Les faits confirmés et leur importance immédiate");
+    assert.equal(second.oneOf[1]!.properties.h2?.const, "La chronologie établie par les sources");
+    assert.notEqual(first.oneOf[1]!.properties.h2?.const, second.oneOf[1]!.properties.h2?.const);
+    assert.equal(first.oneOf[1]!.properties.body?.minLength, 800);
+    assert.equal(second.oneOf[1]!.properties.subsections?.minItems, 1);
+    assert.deepEqual(second.oneOf[1]!.properties.sourceIds?.items?.enum, ["source-1", "source-2"]);
+  });
+  it("constrains native H3 headings while preserving the 600-character minimum and evidence source IDs", () => {
+    const schema = sectionResponseSchema(["source-1", "source-2"], false, "Le contexte sportif vérifiable", "Les repères sportifs effectivement documentés") as {
+      oneOf: Array<{ properties: { subsections: { items: { properties: {
+        h3: { const: string; minLength: number }; body: { minLength: number };
+        sourceIds: { items: { enum: string[] } };
+      } } } } }>;
+    };
+    const sub = schema.oneOf[1]!.properties.subsections.items.properties;
+    assert.equal(sub.h3.const, "Les repères sportifs effectivement documentés");
+    assert.equal(sub.h3.minLength, 12);
+    assert.equal(sub.body.minLength, 600);
+    assert.deepEqual(sub.sourceIds.items.enum, ["source-1", "source-2"]);
+  });
+});
 
 function match(over: Partial<EditorialMatch> & Pick<EditorialMatch, "id" | "home" | "away" | "kickoff">): EditorialMatch {
   return {
@@ -61,6 +89,119 @@ function board(): EditorialMatch[] {
     }),
   ];
 }
+
+
+describe("first-party full-text RSS evidence", () => {
+  it("accepts publisher-owned content:encoded only for verified canonical publisher URLs", () => {
+    const now = new Date("2026-10-24T18:00:00.000Z");
+    const body = "<p>" + "Compte rendu officiel public avec des faits détaillés et des citations vérifiables. ".repeat(13) + "</p>";
+    const rss = '<rss><channel><item><title>Événement vérifié</title><link>https://www.sofoot.com/football/evenement-verifie</link>' +
+      '<pubDate>Sat, 24 Oct 2026 17:00:00 GMT</pubDate><description>Résumé court</description>' +
+      '<content:encoded><![CDATA[' + body + ']]></content:encoded></item></channel></rss>';
+    const signals = parsePublisherRss(rss, now, { sourceName: "So Foot", origin: "https://www.sofoot.com", tier: "TIER1" });
+    assert.equal(signals.length, 1);
+    assert.ok((signals[0]?.publisherRssBody?.length ?? 0) >= 750);
+    assert.ok(publicPublisherRssEvidence(signals[0]!)?.text.length);
+  });
+  it("rejects a short snippet, aggregator pointer and missing full feed body", () => {
+    const now = new Date("2026-10-24T18:00:00.000Z");
+    const rss = '<rss><channel><item><title>Actualité</title><link>https://news.google.com/rss/articles/abc123</link>' +
+      '<pubDate>Sat, 24 Oct 2026 17:00:00 GMT</pubDate><content:encoded><![CDATA[' +
+      "Faits divers. ".repeat(110) + ']]></content:encoded></item></channel></rss>';
+    assert.equal(parsePublisherRss(rss, now, { sourceName: "So Foot", origin: "https://www.sofoot.com", tier: "TIER1" }).length, 0);
+    const valid = parsePublisherRss(rss.replace("https://news.google.com/rss/articles/abc123",
+      "https://www.sofoot.com/football/article-reel"), now,
+      { sourceName: "So Foot", origin: "https://www.sofoot.com", tier: "TIER1" })[0]!;
+    assert.ok(publicPublisherRssEvidence(valid));
+    assert.equal(publicPublisherRssEvidence({ ...valid, publisherRssBody: "Résumé trop court" }), null);
+  });
+});
+
+describe("first-party article evidence extraction", () => {
+  it("recovers public NewsArticle JSON-LD from a publisher's client-rendered article", () => {
+    const body = "Le communiqué précise la décision, sa chronologie et les conséquences sportives documentées. ".repeat(17).trim();
+    const html = '<script type="application/ld+json">' +
+      JSON.stringify({ "@graph": [{ "@type": "NewsArticle", articleBody: body }] }) +
+      '</script><article><div id="client-render"></div></article>';
+    assert.equal(extractPublicArticle(html), body);
+  });
+  it("refuses navigation padding and unrelated JSON-LD", () => {
+    const filler = "Le menu de navigation ne prouve aucun événement journalistique et doit être rejeté. ".repeat(20);
+    const html = '<nav><p>' + filler + '</p></nav><script type="application/ld+json">' +
+      JSON.stringify({ "@type": "WebSite", articleBody: filler }) + '</script><article><p>Une dépêche courte.</p></article>';
+    assert.equal(extractPublicArticle(html), "");
+  });
+  it("accepts long first-party article paragraphs without JSON-LD", () => {
+    const p = "Le club précise son calendrier et communique une information officielle détaillée concernant la rencontre. ";
+    const html = '<article>' + Array.from({ length: 10 }, (_v, n) => '<p>' + n + ' ' + p + '</p>').join("") + '</article>';
+    assert.ok(extractPublicArticle(html).length >= 750);
+  });
+});
+
+
+describe("publisher article body recovery (strict 750-character gate)", () => {
+  it("retains first-party short paragraphs without lowering the evidence threshold", () => {
+    const p = "Le club confirme un nouveau fait précis sur ce match.";
+    const html = "<article>" + Array.from({ length: 20 }, (_, i) => "<p>" + i + " " + p + "</p>").join("") + "</article>";
+    assert.ok(extractPublicArticle(html).length >= 750);
+    assert.equal(extractPublicArticle("<article><p>" + p + "</p></article>"), "");
+  });
+  it("accepts explicit publisher article-body containers, not arbitrary page filler", () => {
+    const line = "Le rapport officiel précise le score et la chronologie vérifiée de la rencontre.";
+    const body = Array.from({ length: 13 }, (_, i) => "<p>" + i + " " + line + "</p>").join("");
+    assert.ok(extractPublicArticle('<nav>' + body + '</nav><div data-testid="article-body">' + body + '</div>').length >= 750);
+    assert.equal(extractPublicArticle('<nav>' + body + '</nav><div class="navigation-menu">' + body + '</div>'), "");
+  });
+});
+
+
+describe("event-level source corroboration stays fail-closed", () => {
+  it("separates unrelated same-team results despite generic shared result language", () => {
+    const row = (id: string, title: string, entities: string[]): EditorialNewsSignal => ({
+      id, title, url: "https://" + id + ".example.com/football/story",
+      sourceName: id, sourceUrl: "https://" + id + ".example.com",
+      publishedAt: "2026-10-28T08:00:00.000Z", sourceTier: "TIER1",
+      entities, language: "en",
+    });
+    const rows = [
+      row("bbc", "Arsenal knocked out by Fleetwood in League Cup", ["Arsenal", "Fleetwood"]),
+      row("sky", "Fleetwood eliminate Arsenal on penalties", ["Arsenal", "Fleetwood"]),
+      row("unrelated", "Arsenal lose historic match to Chelsea in Premier League", ["Arsenal", "Chelsea"]),
+    ];
+    const clusters = clusterAutoReporterSignals(rows);
+    const fleetwood = clusters.find((c) => c.signals.some((s) => s.id === "bbc"))!;
+    assert.deepEqual(fleetwood.signals.map((s) => s.id).sort(), ["bbc", "sky"]);
+    assert.equal(clusters.reduce((n, c) => n + c.signals.length, 0), 3);
+    assert.equal(clusters.length, 2);
+  });
+});
+
+
+describe("publisher evidence diversity under a bounded quota", () => {
+  it("does not starve late independent editorial outlets behind high-volume feeds", () => {
+    const make = (publisher: string, index: number): EditorialNewsSignal => ({
+      id: publisher + "-" + index,
+      title: "Actualité football vérifiée " + publisher + " événement distinct numero " + String(index).padStart(4, "0"),
+      url: "https://" + publisher.toLowerCase() + ".example/football/article-" + index,
+      sourceName: publisher,
+      sourceUrl: "https://" + publisher.toLowerCase() + ".example",
+      publishedAt: "2026-10-24T11:00:00.000Z",
+      description: "Une actualité dont les faits resteront à corroborer avant publication.",
+      sourceTier: "TIER1",
+      entities: ["Football"],
+      language: "fr",
+    });
+    const early = Array.from({ length: 6 }, (_unused, i) =>
+      Array.from({ length: 16 }, (_unused, n) => make("Early" + i, n)));
+    const late = [make("SoFoot", 1), make("Football365", 1)];
+    const selected = fairPublisherSignals([...early, [late[0]!], [late[1]!]], 90);
+    assert.equal(selected.length, 90);
+    assert.ok(selected.some((signal) => signal.sourceName === "SoFoot"));
+    assert.ok(selected.some((signal) => signal.sourceName === "Football365"));
+    assert.equal(new Set(selected.map((signal) => signal.url)).size, 90);
+    assert.ok(selected.filter((signal) => signal.sourceName === "Early0").length <= 16);
+  });
+});
 
 describe("publisher source provenance", () => {
   it("only accepts fresh HTTPS deep links on the publisher's real domain", () => {
@@ -765,5 +906,120 @@ describe("automatic publisher multilingual event correlation", () => {
     assert.equal(arsenal.newsworthy, true);
     assert.equal(isAutoReporterMaterial("Arsenal manager departure confirmed"), true);
     assert.equal(clusters.reduce((sum, cluster) => sum + cluster.signals.length, 0), 4);
+  });
+});
+
+
+describe("ASTRA editorial local model context budget", () => {
+  it("joins the same named Clasico across languages without counting unrelated Real Madrid mentions", () => {
+    const signal = (id: string, title: string, entities: string[], date: string) => ({ id, title, entities, publishedAt: date, sourceName: id, sourceTier: "TIER1", url: "https://"+id+".example.com/report", language: "en" } as EditorialNewsSignal);
+    const rows = [
+      signal("guardian", "Mbappé double secures Real Madrid late victory at Barcelona", ["Real Madrid", "Barcelone", "Kylian Mbappé"], "2026-10-25T22:00:00Z"),
+      signal("rmc", "Barça-Real Madrid : le Real remporte le Clasico", ["Real Madrid", "Barcelone"], "2026-10-26T12:30:00Z"),
+      signal("sky", "Mbappe's late strike earns Real Clasico glory at Barca", ["Real Madrid", "Barcelone"], "2026-10-26T09:00:00Z"),
+      signal("unrelated", "Alex Freeman scores as Villarreal win", ["Real Madrid"], "2026-10-26T10:00:00Z"),
+      signal("award", "Ballon d'Or : Real Madrid and Mbappé await the decision", ["Real Madrid", "Kylian Mbappé"], "2026-10-26T10:00:00Z"),
+    ];
+    const clusters = clusterAutoReporterSignals(rows);
+    const clasico = clusters.find((c) => c.signals.some((s) => s.id === "guardian"))!;
+    assert.equal(clasico.distinctSources, 3);
+    assert.deepEqual(clasico.signals.map((s) => s.id).sort(), ["guardian", "rmc", "sky"]);
+  });
+  it("never treats a seeded slot ID or an operator catchup as scheduled generation proof", () => {
+    const article = manualEditorialArticles()[0]!;
+    assert.equal(hasAutomaticProof(article), false);
+    const proof = { generator: "astra-auto-reporter-v2" as const, runId: "run-test", generatedAt: "2026-10-26T13:00:00Z", modelRequests: 7 };
+    assert.equal(hasAutomaticProof({ ...article, generationProof: { ...proof, trigger: "operator-catchup" } }), false);
+    assert.equal(hasAutomaticProof({ ...article, generationProof: { ...proof, trigger: "scheduler" }, status: "PUBLISHED" }), false, "A manual article cannot gain native provenance by adding seven-call metadata");
+    assert.equal(hasAutomaticProof({ ...article, generationProof: { ...proof, trigger: "scheduler" }, status: "SCHEDULED" }), false);
+  });
+  it("counts a scheduled-agent catchup toward the three-page cap without spoofing native proof", () => {
+    const seed = manualEditorialArticles().find((a) => a.parisDate === "2026-10-26")!;
+    assert.ok(seed);
+    const morning = { ...seed, id: "ed-2026-10-26-morning", slug: "quota-morning", slot: "morning" as const, status: "PUBLISHED" as const };
+    const noon = { ...seed, id: "ed-2026-10-26-noon", slug: "quota-noon", slot: "noon" as const, status: "PUBLISHED" as const };
+    const fallback = { ...seed, id: "manual-agent-catchup-2026-10-26-evening", slug: "quota-evening", slot: "evening" as const, status: "PUBLISHED" as const, generationProof: undefined };
+    const duplicate = { ...fallback, id: "manual-duplicate" };
+    const scheduled = { ...fallback, slug: "not-yet-public", status: "SCHEDULED" as const };
+    const old = { ...fallback, slug: "yesterday", parisDate: "2026-10-25" };
+    const publicToday = publishedTodayForQuota([morning, noon, fallback, duplicate, scheduled, old], "2026-10-26");
+    assert.equal(publicToday.length, 3, "A fallback must consume the final daily publication slot");
+    assert.deepEqual(publicToday.map((a) => a.slot).sort(), ["evening", "morning", "noon"]);
+    assert.equal(hasAutomaticProof(fallback), false, "Fallback is not native Qwen output");
+    assert.equal(Math.max(0, 3 - publicToday.length), 0, "No fourth article may be generated");
+  });
+  it("bounds publisher evidence for llama.cpp 2048-token requests without losing attribution", () => {
+    const evidence = Array.from({ length: 4 }, (_, index) => ({
+      signal: {
+        id: "publisher-" + index,
+        sourceName: "Official Publisher " + index,
+        title: "Verified football news " + index,
+        publishedAt: "2026-10-26T08:00:00Z",
+        url: "https://publisher" + index + ".example.com/football/verified-report",
+        sourceTier: "TIER1",
+      } as EditorialNewsSignal,
+      text: Array.from({ length: 80 }, (_, n) => "Verified passage " + n + " publisher " + index + ".").join(" "),
+    }));
+    const first = boundedEvidenceSlices(evidence, 0);
+    const last = boundedEvidenceSlices(evidence, 6);
+    assert.ok(first.length < 3400, "The model must not receive the former 20,000-character evidence prompt");
+    assert.ok(last.length < 3400);
+    assert.notEqual(first, last, "Each section must read a different part of the genuine publisher body");
+    for (let n = 0; n < 4; n += 1) {
+      assert.ok(first.includes("id=publisher-" + n), "Publisher attribution must be retained");
+      assert.ok(last.includes("id=publisher-" + n));
+    }
+  });
+});
+
+
+describe("catch-up slot safety in Europe/Paris", () => {
+  it("never makes 13 h or 19 h eligible before their actual deadline", () => {
+    assert.deepEqual(eligiblePublishingSlots(new Date("2026-10-28T06:59:59Z")), []);
+    assert.deepEqual(eligiblePublishingSlots(new Date("2026-10-28T07:00:00Z")), ["morning"]);
+    assert.deepEqual(eligiblePublishingSlots(new Date("2026-10-28T10:05:00Z")), ["morning"]);
+    assert.deepEqual(eligiblePublishingSlots(new Date("2026-10-28T12:00:00Z")), ["morning", "noon"]);
+    assert.deepEqual(eligiblePublishingSlots(new Date("2026-10-28T18:00:00Z")), ["morning", "noon", "evening"]);
+  });
+});
+
+
+describe("verified image attachment in native article pipeline", () => {
+  const sections = Array.from({ length: 7 }, (_, i) => ({ h2: "Section " + i, body: "Factuel" }));
+  const sourceTitles = [
+    "Bayern Munich vs Real Madrid Women UEFA Champions League",
+    "FC Bayern Women face Real Madrid at Unterhaching",
+  ];
+  it("adds two source-scoped Commons archives to separate H2, not to the cover", () => {
+    const original = sections.map((s) => ({ ...s }));
+    const result = attachVerifiedInlineImages(original, "Bayern Munich - Real Madrid féminin", sourceTitles, "2026-10-28");
+    assert.equal(result.filter((s) => s.inlineImage).length, 2);
+    assert.deepEqual(original, sections);
+    const proof = inlineImageProof({
+      image: { src: "/cover.jpg", alt: "Couverture", width: 1200, height: 675, credit: "Illustration" },
+      paragraphs: result,
+    });
+    assert.equal(proof.pass, true);
+    assert.equal(proof.count, 2);
+  });
+  it("fails closed for unrelated match, wrong date and inadequate sources", () => {
+    assert.equal(attachVerifiedInlineImages(sections, "Arsenal - Chelsea", sourceTitles, "2026-10-28").some((s) => s.inlineImage), false);
+    assert.equal(attachVerifiedInlineImages(sections, "Bayern - Real Madrid", sourceTitles, "2026-10-29").some((s) => s.inlineImage), false);
+    assert.equal(attachVerifiedInlineImages(sections, "Bayern - Real Madrid", [sourceTitles[0]!], "2026-10-28").some((s) => s.inlineImage), false);
+  });
+});
+
+
+describe("Genoa Juventus 29 October postmatch public indexability regression", () => {
+  it("passes the unchanged live postmatch gate, never noindex, and enters News sitemap", () => {
+    const article = manualEditorialArticles().find((a) => a.id === "manual-agent-scheduled-2026-10-29-evening-genoa-juventus");
+    assert.ok(article, "published Genoa–Juventus article must be registered");
+    const strict = qualityGate(article, []);
+    assert.deepEqual(strict.reasons, [], "live postmatch gate must pass without relaxing checks");
+    assert.equal(isEditorialIndexable(article), true, "a published qualified article must not emit noindex");
+    const edition = { articles: [article] } as Parameters<typeof newsEntries>[0];
+    const entries = newsEntries(edition, Date.parse("2026-10-29T20:00:00Z"));
+    assert.equal(entries.length, 1, "article must be present in 48h News sitemap");
+    assert.equal(entries[0]?.loc, "https://betgpt.live/actualites/genoa-juventus-2-0-baldanzi-ehizibue-analyse-29-octobre-2026");
   });
 });

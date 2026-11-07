@@ -1,4 +1,8 @@
+import { evergreenFootballRulesRecords20261025 } from "@/lib/evergreen-football-rules-records-20261025";
+import { evergreenOmega20261025 } from "@/lib/evergreen-omega-20261025";
 import { allPlayerCocoonArticles, PLAYER_PROFILES } from "@/lib/player-cocoons";
+import { englishPremierLeague2026Articles } from "@/lib/premier-league-english-2026";
+import { lumistadeCocoonArticles } from "@/lib/lumistade-cocoon";
 
 export type BlogArticle = {
   slug: string;
@@ -1143,7 +1147,20 @@ export const BLOG: BlogArticle[] = [
   },
 ];
 
+// New evergreen articles join the same blog, route and sitemap as existing pages.
+BLOG.push(...evergreenOmega20261025);
+CLUSTERS["evergreen-stats"] = { title: "Statistiques et analyse du football", pillar: "statistiques-football-analyser-match", pillarH1: "Statistiques football : comment analyser un match" };
+CLUSTERS["evergreen-marches"] = { title: "Comprendre les marchés de paris football", pillar: "btts-signification-pari-football", pillarH1: "BTTS : les deux équipes marquent" };
+BLOG.push(...evergreenFootballRulesRecords20261025);
+CLUSTERS["evergreen-regles"] = { title: "Règles du football expliquées", pillar: "regle-hors-jeu-football", pillarH1: "Hors-jeu : règle et exemples" };
+CLUSTERS["evergreen-records"] = { title: "Palmarès et records du football", pillar: "palmares-ligue-des-champions", pillarH1: "Palmarès de la Ligue des champions" };
 // Ten topic clusters: 1 pillar + 3 distinct satellites apiece.
+BLOG.push(...lumistadeCocoonArticles);
+CLUSTERS.lumistade = {
+  title: "Lumistade — stades 3D de football",
+  pillar: "lumistade",
+  pillarH1: "Lumistade : que vaut le concept des stades de football 3D lumineux ?",
+};
 BLOG.push(...allPlayerCocoonArticles());
 for (const p of PLAYER_PROFILES) {
   CLUSTERS["joueur-" + p.slug] = {
@@ -1175,3 +1192,12 @@ export function relatedArticles(slug: string): BlogArticle[] {
 export function clusterArticles(cluster: string): BlogArticle[] {
   return publishedBlogArticles().filter((a) => a.cluster === cluster);
 }
+
+// Cocon transversal cinq joueurs anglais de Premier League : maillage réciproque,
+// entrée depuis /blog et /actualites, intégration au sitemap éditorial existant.
+BLOG.push(...englishPremierLeague2026Articles);
+CLUSTERS["joueur-anglais-premier-league"] = {
+  title: "Cinq footballeurs anglais de Premier League en 2026",
+  pillar: "cole-palmer-chelsea-analyse-2026",
+  pillarH1: "Cole Palmer et les cinq stars anglaises de Premier League en 2026",
+};

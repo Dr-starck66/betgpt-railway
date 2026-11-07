@@ -30,6 +30,15 @@ function eventFamilies(text: string): string[] {
   return EVENT_FAMILIES.filter(([pattern]) => pattern.test(text)).map(([, label]) => label);
 }
 
+/** Explicit named events prevent both multilingual fragmentation and topic drift. */
+function namedEvent(title: string): string | null {
+  const folded = title.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  if (/ballon.{0,4}or/.test(folded)) return "ballon-dor";
+  if (/clasico|classico/.test(folded) ||
+      ((/barcelon|barca/.test(folded)) && /\breal\b/.test(folded))) return "clasico";
+  return null;
+}
+
 export type NewsCluster = {
   id: string;
   signals: EditorialNewsSignal[];
@@ -65,17 +74,37 @@ export function clusterSignals(signals: EditorialNewsSignal[]): NewsCluster[] {
         !clusterMaterial &&
         deltaHours >= 0.35;
       const sharedEntityCount = signal.entities.filter((entity) => cluster.entities.includes(entity)).length;
+      // Opposing named-event participants must not be mixed into one story:
+      // Arsenal–Fleetwood and Arsenal–Chelsea share Arsenal and result vocabulary
+      // but are different matches. Preserve single-entity/player stories and
+      // multilingual coverage when the actual named participants agree.
+      const conflictingParticipants =
+        signal.entities.length >= 2 && cluster.entities.length >= 2 &&
+        sharedEntityCount < 2 &&
+        signal.entities.some((entity) => !cluster.entities.includes(entity)) &&
+        cluster.entities.some((entity) => !signal.entities.includes(entity));
       const sameMaterialDevelopment =
         entityOverlap &&
         incomingMaterial &&
         clusterMaterial &&
         deltaHours <= 12 &&
         sharedEntityCount >= Math.min(2, Math.max(1, Math.min(signal.entities.length, cluster.entities.length)));
+      const incomingEvent = namedEvent(signal.title);
+      const clusterEvents = new Set(cluster.signals.map((row) => namedEvent(row.title)).filter(Boolean));
+      const eventCompatible = incomingEvent ? clusterEvents.size === 0 || clusterEvents.has(incomingEvent) : clusterEvents.size === 0;
+      const sameNamedEvent = Boolean(incomingEvent && clusterEvents.has(incomingEvent) && deltaHours <= 24 && entityOverlap);
       const sameStory =
+        !conflictingParticipants &&
         !materialStateChange &&
-        (score >= 0.34 ||
+        eventCompatible &&
+        (sameNamedEvent || score >= 0.34 ||
           (entityOverlap && score >= 0.24) ||
-          (entityOverlap && familyOverlap && deltaHours <= 12) ||
+          // A shared team plus a generic injury/result/coach vocabulary does not
+          // establish the same event. Require two shared named entities or
+          // independently overlapping headline terms before combining sources.
+          (entityOverlap && familyOverlap && deltaHours <= 12 &&
+            (sharedEntityCount >= 2 || score >= 0.15 ||
+              (sharedEntityCount === 1 && signal.entities.length === 1 && cluster.entities.length === 1))) ||
           sameMaterialDevelopment);
       if (sameStory && (score > bestScore || (best == null && (familyOverlap || sameMaterialDevelopment)))) {
         best = cluster;

@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { TeamLine } from "@/components/crest";
 import { getPublicDesk } from "@/lib/desk.functions";
 import { bestThreeWay } from "@/lib/money";
+import { freshBookSnapshots } from "@/engine/best-odds-engine";
 import { SITE_URL } from "@/lib/programmatic";
 import { fmtOdds } from "@/lib/utils";
 import { bookmakerDestination } from "@/lib/bookmaker-url";
@@ -12,7 +13,7 @@ function OddsCell({
   line,
   match,
 }: {
-  line: { odds: number; book: string; url?: string };
+  line: { odds: number; book: string; url?: string; observedAt?: string };
   match: MatchInput;
 }) {
   const href = bookmakerDestination(line.book, match.league, line.url);
@@ -21,6 +22,7 @@ function OddsCell({
       <>
         <strong className="tabular text-paper">{fmtOdds(line.odds)}</strong>
         <div className="text-xs text-muted">{line.book}</div>
+        {line.observedAt ? <div className="text-[10px] text-muted">Relevé {new Date(line.observedAt).toLocaleTimeString("fr-FR", { timeZone: "Europe/Paris", hour: "2-digit", minute: "2-digit" })}</div> : null}
       </>
     );
   }
@@ -36,6 +38,7 @@ function OddsCell({
       <strong className="tabular text-base font-black leading-none">{fmtOdds(line.odds)}</strong>
       <span className="mt-1 max-w-full truncate text-[11px] font-bold">{line.book}</span>
       <span className="mt-1 text-[9px] font-black uppercase tracking-[0.08em]">Voir la cote →</span>
+      {line.observedAt ? <span className="mt-1 text-[9px]">Relevé {new Date(line.observedAt).toLocaleTimeString("fr-FR", { timeZone: "Europe/Paris", hour: "2-digit", minute: "2-digit" })}</span> : null}
     </a>
   );
 }
@@ -63,7 +66,7 @@ function OddsCompare() {
     .slice()
     .sort((a, b) => Date.parse(a.kickoff) - Date.parse(b.kickoff));
 
-  const rows = matches.map((m) => ({ m, best: bestThreeWay(m) }));
+  const rows = matches.map((m) => ({ m, best: bestThreeWay(m), nBooks: new Set(freshBookSnapshots(m.current).map((b) => b.book)).size }));
   const withOdds = rows.filter((row) => row.best).length;
 
   return (
@@ -104,7 +107,7 @@ function OddsCompare() {
                 </tr>
               </thead>
               <tbody>
-                {rows.map(({ m, best }) => (
+                {rows.map(({ m, best, nBooks }) => (
                   <tr key={m.id} className="border-t border-line align-middle">
                     <td className="min-w-0 px-2 py-3 sm:px-3">
                       <Link to="/cotes/$matchId" params={{ matchId: m.slug ?? m.id }} className="block min-w-0 hover:text-sage">
@@ -121,6 +124,7 @@ function OddsCompare() {
                           minute: "2-digit",
                         })}
                       </div>
+                      <div className="mt-1 text-[10px] text-muted">{nBooks} bookmaker{nBooks > 1 ? "s" : ""} avec cote 1N2 récente vérifiée</div>
                     </td>
                     <td className="min-w-0 px-2 py-3 sm:px-3">
                       {best ? (
@@ -164,7 +168,7 @@ function OddsCompare() {
         <h2 className="text-base font-semibold text-paper">Lecture simple</h2>
         <p className="mt-2">
           <strong>1</strong> = victoire à domicile, <strong>N</strong> = match nul, <strong>2</strong> = victoire à l’extérieur.
-          Le nom sous la cote indique le bookmaker qui fournit la meilleure valeur observée parmi les données disponibles.
+          Le nom sous la cote indique le bookmaker offrant la meilleure valeur parmi les flux français réellement disponibles à l’heure du relevé (Paris). La comparaison n’est pas exhaustive si un opérateur n’a pas fourni de prix vérifié.
         </p>
         <p className="mt-2 text-xs text-muted">
           Comparatif informatif. Les cotes peuvent évoluer. 18+. Aucun gain n’est garanti.

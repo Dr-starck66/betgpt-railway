@@ -49,6 +49,22 @@ function strongHosts(article) {
   }
   return hosts.size;
 }
+// Canonical seven-model-call evidence is required; slot-shaped IDs are not proof.
+function hasNativeGenerationProof(article, day) {
+  const proof = article?.generationProof;
+  return article?.id === `ed-${day}-${article.slot}` &&
+    article?.parisDate === day &&
+    Boolean(article?.publishedAt) &&
+    Number.isFinite(Date.parse(article.publishedAt)) &&
+    parisDay(new Date(article.publishedAt)) === day &&
+    ["PUBLISHED", "UPDATED"].includes(article?.status) &&
+    article?.quality?.pass === true &&
+    proof?.generator === "astra-auto-reporter-v2" &&
+    typeof proof?.runId === "string" && proof.runId.length > 0 &&
+    ["scheduler", "cron-api"].includes(proof?.trigger) &&
+    proof?.modelRequests === 7 &&
+    Number.isFinite(Date.parse(proof?.generatedAt ?? ""));
+}
 function articleFailures(article, day) {
   const failed = [];
   if (!article || !["PUBLISHED", "UPDATED"].includes(article.status)) failed.push("NOT_PUBLIC");
@@ -56,6 +72,7 @@ function articleFailures(article, day) {
   if (!Number.isFinite(timestamp.getTime()) || parisDay(timestamp) !== day) failed.push("WRONG_PUBLICATION_DATE");
   if (article.parisDate !== day) failed.push("WRONG_EDITORIAL_DATE");
   if (article.quality?.pass !== true) failed.push("QUALITY_GATE");
+  if (!hasNativeGenerationProof(article, day)) failed.push("NATIVE_GENERATION_PROOF");
   if ((article.paragraphs ?? []).length < 7 || textWords(article) < 1500) failed.push("GOLD_STANDARD_STRUCTURE");
   if (strongHosts(article) < 3) failed.push("INDEPENDENT_SOURCES");
   if (!article.image?.src || article.image.width < 1200 || article.image.height < 675 || !article.image.credit?.trim()) failed.push("LARGE_LICENSED_IMAGE");
@@ -65,10 +82,11 @@ function articleFailures(article, day) {
 function analyze(ledger, day) {
   const rows = ledger.filter((a) => a && a.publishedAt && Number.isFinite(Date.parse(a.publishedAt)) &&
     parisDay(new Date(a.publishedAt)) === day && ["PUBLISHED", "UPDATED"].includes(a.status));
-  const auto = rows.filter((a) => /^ed-\d{4}-\d{2}-\d{2}-(morning|noon|evening)$/.test(a.id) && a.parisDate === day);
-  const bySlot = new Map(SLOTS.map((s) => [s, auto.filter((a) => a.slot === s)]));
-  const missingSlots = SLOTS.filter((s) => (bySlot.get(s) ?? []).length !== 1);
-  const violations = auto.flatMap((a) => articleFailures(a, day).map((reason) => ({ slug: a.slug, reason })));
+  const claimedAuto = rows.filter((a) => /^ed-\d{4}-\d{2}-\d{2}-(morning|noon|evening)$/.test(a.id) && a.parisDate === day);
+  const auto = claimedAuto.filter((a) => hasNativeGenerationProof(a, day));
+  const bySlot = new Map(SLOTS.map((slot) => [slot, auto.filter((a) => a.slot === slot)]));
+  const missingSlots = SLOTS.filter((slot) => (bySlot.get(slot) ?? []).length !== 1);
+  const violations = claimedAuto.flatMap((a) => articleFailures(a, day).map((reason) => ({ slug: a.slug, reason })));
   const verdict = missingSlots.length ? "FAIL_DAILY_AUTOMATION_MISSING_SLOTS"
     : violations.length ? "FAIL_EDITORIAL_QUALITY" : "PASS_LEDGER";
   return {
@@ -126,6 +144,7 @@ function testContract() {
     lead: "Preuve de validation",
     paragraphs: Array.from({ length: 7 }, (_, i) => ({ h2: "Section " + i, body: ("mot utile ").repeat(110) })),
     quality: { pass: true },
+    generationProof: { generator: "astra-auto-reporter-v2", runId: "test-native-7-calls", trigger: "cron-api", modelRequests: 7, generatedAt: "2026-10-22T19:14:00Z" },
     sources: ["example.org", "example.net", "example.edu"].map((host) => ({ url: "https://" + host + "/report", status: "OFFICIAL" })),
     image: { src: "/report.jpg", width: 1200, height: 675, credit: "Auteur et licence" },
     discoverChecks: { INDEXABLE: true, MAX_IMAGE_PREVIEW_LARGE: true },
@@ -133,9 +152,12 @@ function testContract() {
   assert.equal(analyze([], day).status, "FAIL_DAILY_AUTOMATION_MISSING_SLOTS");
   assert.equal(analyze([base("morning")], day).status, "FAIL_DAILY_AUTOMATION_MISSING_SLOTS");
   assert.equal(analyze([base("morning"),base("noon"),base("evening")], day).status, "PASS_LEDGER");
+  assert.equal(analyze([base("morning"),base("noon"),{ ...base("evening"), generationProof: undefined }], day).status, "FAIL_DAILY_AUTOMATION_MISSING_SLOTS");
+  assert.equal(analyze([base("morning"),base("noon"),{ ...base("evening"), generationProof: { ...base("evening").generationProof, trigger: "operator-catchup" } }], day).status, "FAIL_DAILY_AUTOMATION_MISSING_SLOTS");
+  assert.equal(analyze([base("morning"),base("noon"),{ ...base("evening"), generationProof: { ...base("evening").generationProof, modelRequests: 0 } }], day).status, "FAIL_DAILY_AUTOMATION_MISSING_SLOTS");
   assert.equal(analyze([{ ...base("morning"), id: "manual-report" }], day).automaticallyPublished.length, 0);
-  assert.equal(analyze([base("morning"),base("noon"),{ ...base("evening"), quality: { pass: false } }],day).status,"FAIL_EDITORIAL_QUALITY");
-  console.log("ASTRA_DISCOVER_DAILY_PROOF_CONTRACT_PASS: zero days fail; manual does not count; 3 quality slots pass; bad quality fails; Paris DST passes");
+  assert.equal(analyze([base("morning"),base("noon"),{ ...base("evening"), quality: { pass: false } }],day).status,"FAIL_DAILY_AUTOMATION_MISSING_SLOTS");
+  console.log("ASTRA_DISCOVER_DAILY_PROOF_CONTRACT_PASS: zero days fail; manual/agent/zero-model does not count; 3 native quality slots pass; bad quality fails; Paris DST passes");
 }
 if (selfTest) {
   testContract();

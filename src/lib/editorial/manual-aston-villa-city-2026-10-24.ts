@@ -274,11 +274,11 @@ export const astonVillaCityLineups20261024: EditorialArticle =  {
   "discoverReadiness": 100,
   "topStories": "TOP_STORIES_ELIGIBILITY_READY",
   "image": {
-    "src": "https://commons.wikimedia.org/wiki/Special:FilePath/Birmingham_aston_villa_park_stadium.jpg?width=1600",
-    "alt": "Vue aérienne du stade Villa Park à Birmingham, où Aston Villa reçoit Manchester City",
-    "width": 1920,
-    "height": 1438,
-    "credit": "Photo : Arne Müseler / arne-mueseler.com / CC BY-SA 3.0 DE — https://creativecommons.org/licenses/by-sa/3.0/de/deed.fr — https://commons.wikimedia.org/wiki/File:Birmingham_aston_villa_park_stadium.jpg (prise en 2023 ; illustration, non photo du match du 24 octobre 2026)."
+    "src": "/blog/discover/inline-aerial.jpg",
+    "alt": "Vue générale aérienne d'une pelouse de football : illustration de l'avant-match Aston Villa–Manchester City, pas une image de la rencontre",
+    "width": 1200,
+    "height": 675,
+    "credit": "Photographie de football sous licence Unsplash/Pexels, recadrée en 1200 × 675 ; crédits : /blog/CREDITS.txt. Image d'illustration, pas du match du 24 octobre 2026."
   },
   "links": [
     {
