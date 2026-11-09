@@ -3,7 +3,7 @@
   "sites": {
     "betgpt": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-09T17:26:46.469Z",
+      "lastCheckedAt": "2026-11-09T23:28:40.957Z",
       "seen": {
         "f60130248d48db11bc": {
           "url": "https://betgpt.live/actualites/manchester-city-18-points-verdict-financier-appel-sanctions-2026-10-12",
@@ -135,13 +135,13 @@
     },
     "gamicnews": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-09T17:26:51.157Z",
+      "lastCheckedAt": "2026-11-09T23:28:41.665Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "bizarre": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-09T17:27:10.827Z",
+      "lastCheckedAt": "2026-11-09T23:28:42.833Z",
       "sourceStatus": "BLOCKED_SOURCE",
       "seen": {
         "113acfc5949a8ca9ca": {
@@ -158,7 +158,7 @@
     },
     "freehotels": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-09T17:27:14.070Z",
+      "lastCheckedAt": "2026-11-09T23:28:43.500Z",
       "seen": {
         "8d1925756df5539dba": {
           "url": "https://freehotels.info/news/fr/vignette-collection-grande-chine-2026/",
@@ -184,13 +184,18 @@
           "url": "https://freehotels.info/news/fr/ihg-1000-hotels-europe-2026/",
           "date": "Fri, 23 Oct 2026 00:00:00 GMT",
           "seenAt": "2026-10-23T19:09:53.043Z"
+        },
+        "f14b950623abcf6941": {
+          "url": "https://freehotels.info/actualites/fr/accor-hard-rock-partenariat-fidelite-2026/",
+          "date": "2026-11-09",
+          "seenAt": "2026-11-09T23:28:43.500Z"
         }
       },
       "sourceStatus": "VERIFIED"
     },
     "avocatbelgique": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-09T17:27:20.482Z",
+      "lastCheckedAt": "2026-11-09T23:28:44.533Z",
       "seen": {
         "b24e80016714b0bbd2": {
           "url": "https://avocat-belgique.com/actualites/frais-colis-hors-ue-novembre-2026/",
@@ -202,13 +207,13 @@
     },
     "cibao": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-09T17:26:54.907Z",
+      "lastCheckedAt": "2026-11-09T23:28:42.069Z",
       "seen": {},
       "sourceStatus": "VERIFIED"
     },
     "andaluztarija": {
       "bootstrapped": true,
-      "lastCheckedAt": "2026-11-09T17:27:17.444Z",
+      "lastCheckedAt": "2026-11-09T23:28:43.993Z",
       "seen": {
         "c022035f3d7190f6f1": {
           "url": "https://andaluztarija.com/2021/03/17/concluyen-trabajo-tres-mesas-tecnicas-para-la-transferencia-de-la-variante/",
@@ -1399,6 +1404,34 @@
       "imageUrl": "https://commons.wikimedia.org/wiki/Special:FilePath/LamineYamal%20-%20FCB%20-%20Partido%20Athletic%20Club%20vs%20FC%20Barcelona.jpg?width=1920",
       "text": "Barça–Aston Villa (3-0) : Yamal entre dans l’histoire, Raphinha change le match\nhttps://betgpt.live/actualites/barcelone-aston-villa-3-0-yamal-record-raphinha-double-4-novembre-2026/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#football #pronostics",
       "createdAt": "2026-11-04T16:49:46.008Z",
+      "status": "WAIT_X_COST",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "instagram:f14b950623abcf6941": {
+      "id": "instagram:f14b950623abcf6941",
+      "siteId": "freehotels",
+      "network": "instagram",
+      "articleUrl": "https://freehotels.info/actualites/fr/accor-hard-rock-partenariat-fidelite-2026/",
+      "imageUrl": "https://freehotels.info/editorial/accor-hard-rock-20261109-original.svg",
+      "text": "Accor et Hard Rock annoncent une alliance : ce qui change pour les réservations et les points\n\nAccor et Hard Rock annoncent le 9 novembre 2026 un partenariat mondial. Statut ALL, points Unity, réservations : ce qui est confirmé et ce qui ne l’est pas.\n\nhttps://freehotels.info/actualites/fr/accor-hard-rock-partenariat-fidelite-2026/?utm_source=instagram&utm_medium=social&utm_campaign=astra_social_auto\n#travel #hotels #destinations #annoncent #alliance #change",
+      "createdAt": "2026-11-09T23:28:43.566Z",
+      "status": "WAIT_AUTH",
+      "remoteId": null,
+      "remoteUrl": null,
+      "claimedRunId": null,
+      "error": null
+    },
+    "x:f14b950623abcf6941": {
+      "id": "x:f14b950623abcf6941",
+      "siteId": "freehotels",
+      "network": "x",
+      "articleUrl": "https://freehotels.info/actualites/fr/accor-hard-rock-partenariat-fidelite-2026/",
+      "imageUrl": "https://freehotels.info/editorial/accor-hard-rock-20261109-original.svg",
+      "text": "Accor et Hard Rock annoncent une alliance : ce qui change pour les réservations et les points\nhttps://freehotels.info/actualites/fr/accor-hard-rock-partenariat-fidelite-2026/?utm_source=twitter&utm_medium=social&utm_campaign=astra_social_auto\n#travel #hotels",
+      "createdAt": "2026-11-09T23:28:43.566Z",
       "status": "WAIT_X_COST",
       "remoteId": null,
       "remoteUrl": null,
