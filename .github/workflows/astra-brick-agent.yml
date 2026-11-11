@@ -47,7 +47,7 @@ jobs:
         run: |
           node library/astra-bricks/registry/astra-brick-rollout.mjs plan \
             --library library \
-            --profile betgpt-v1 \
+            --profile launch-ready-node-web-v1 \
             --target target \
             --json
 
@@ -55,14 +55,14 @@ jobs:
         run: |
           node library/astra-bricks/registry/astra-brick-rollout.mjs apply \
             --library library \
-            --profile betgpt-v1 \
+            --profile launch-ready-node-web-v1 \
             --target target
 
       - name: Verify after rollout
         run: |
           node library/astra-bricks/registry/astra-brick-rollout.mjs verify \
             --library library \
-            --profile betgpt-v1 \
+            --profile launch-ready-node-web-v1 \
             --target target
 
       - name: Persist managed brick state
@@ -83,4 +83,4 @@ jobs:
           echo "ASTRA_BRICK_AGENT_PUSH_PASS"
 
       - name: Evidence
-        run: echo "ASTRA_BRICK_AGENT_PASS profile=betgpt-v1"
+        run: echo "ASTRA_BRICK_AGENT_PASS profile=launch-ready-node-web-v1"
