@@ -12,6 +12,13 @@ type LeagueChoice = LeagueId | "ALL";
 export function YouTubeMatchDirectory() {
   const getSlice = useServerFn(getHomeSlice);
   const [league, setLeague] = useState<LeagueChoice>("ALL");
+  const [customHome, setCustomHome] = useState("");
+  const [customAway, setCustomAway] = useState("");
+  const [customCompetition, setCustomCompetition] = useState("");
+  const [customDate, setCustomDate] = useState("");
+  const [customFixture, setCustomFixture] = useState<{
+    home: { name: string }; away: { name: string }; competition: string; kickoff: string;
+  } | null>(null);
   const [matches, setMatches] = useState<MatchInput[]>([]);
   const [videos, setVideos] = useState<Record<string, CuratedVideo | null>>({});
   const [total, setTotal] = useState(0);
@@ -45,10 +52,52 @@ export function YouTubeMatchDirectory() {
         Vidéos YouTube : tous les championnats couverts
       </h2>
       <p className="max-w-3xl text-sm leading-relaxed text-mist">
-        Accès permanent aux vidéos et analyses des matchs du catalogue BetGPT, sans limite de date.
+        Accès permanent aux vidéos et analyses des matchs, sans limite de date ni de championnat : recherche libre mondiale ou sélection du catalogue BetGPT.
         Le lecteur s’ouvre au clic lorsqu’une vidéo associée est connue ou lorsqu’un lien YouTube est fourni.
         La recherche ouvre YouTube si aucun contenu n’a été vérifié.
       </p>
+      <form
+        className="grid gap-3 rounded-xl border border-line p-4 sm:grid-cols-2"
+        aria-label="Recherche vidéo d’un autre match ou championnat"
+        onSubmit={(event) => {
+          event.preventDefault();
+          if (!customHome.trim() || !customAway.trim()) return;
+          setCustomFixture({
+            home: { name: customHome.trim() },
+            away: { name: customAway.trim() },
+            competition: customCompetition.trim() || "Compétition non précisée",
+            kickoff: customDate ? `${customDate}T12:00:00Z` : "",
+          });
+        }}
+      >
+        <div className="space-y-1">
+          <label htmlFor="video-custom-home" className="text-xs font-semibold text-paper">Équipe à domicile</label>
+          <input id="video-custom-home" type="text" required maxLength={100} value={customHome} onChange={(event) => setCustomHome(event.target.value)} placeholder="Nom de l’équipe" className="w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-paper" />
+        </div>
+        <div className="space-y-1">
+          <label htmlFor="video-custom-away" className="text-xs font-semibold text-paper">Équipe à l’extérieur</label>
+          <input id="video-custom-away" type="text" required maxLength={100} value={customAway} onChange={(event) => setCustomAway(event.target.value)} placeholder="Nom de l’équipe" className="w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-paper" />
+        </div>
+        <div className="space-y-1">
+          <label htmlFor="video-custom-competition" className="text-xs font-semibold text-paper">Compétition (facultatif)</label>
+          <input id="video-custom-competition" type="text" maxLength={100} value={customCompetition} onChange={(event) => setCustomCompetition(event.target.value)} placeholder="Toute compétition mondiale" className="w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-paper" />
+        </div>
+        <div className="space-y-1">
+          <label htmlFor="video-custom-date" className="text-xs font-semibold text-paper">Date du match (facultatif)</label>
+          <input id="video-custom-date" type="date" value={customDate} onChange={(event) => setCustomDate(event.target.value)} className="w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-paper" />
+        </div>
+        <div className="sm:col-span-2">
+          <button type="submit" className="chip-pill font-semibold hover:border-sage/30 hover:text-link">
+            Rechercher ce match sur YouTube
+          </button>
+        </div>
+      </form>
+      {customFixture ? (
+        <div className="space-y-2">
+          <p className="text-xs text-muted">Rencontre saisie manuellement, non vérifiée dans le catalogue BetGPT.</p>
+          <MatchYouTubePanel match={customFixture} />
+        </div>
+      ) : null}
       <div className="flex flex-wrap items-center gap-3">
         <label htmlFor="youtube-league-choice" className="text-sm font-medium text-paper">Championnat</label>
         <select
