@@ -52,7 +52,9 @@ test("All leagues and dates remain available; old one-off placement is gone", ()
   const directory = readFileSync(new URL("../src/components/youtube-match-directory.tsx",import.meta.url),"utf8");
   assert.match(news,/YouTubeMatchDirectory/);
   assert.doesNotMatch(news,/showItalieFranceDebrief|2026-11-15/);
-  assert.match(details,/<MatchYouTubePanel match=\{match\}/);
+  assert.match(details,/<MatchYouTubePanel id="video" match=\{match\}/);
   assert.match(directory,/ALL_LEAGUES/);
   assert.match(directory,/response\.total/);
+  assert.match(directory,/customFixture/);
+  assert.match(directory,/Toute compétition mondiale/);
 });
