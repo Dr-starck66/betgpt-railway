@@ -1,4 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { nocookieEmbed } from "@/lib/serp/video";
 import { getEditorialEdition } from "@/lib/editorial.functions";
 import { HUB_SECTIONS, SECTION_MIN, sectionArticles } from "@/lib/editorial/engine";
 import { formatParis } from "@/lib/editorial/time";
@@ -33,6 +35,9 @@ export const Route = createFileRoute("/actualites/")({
 
 function ActualitesPage() {
   const edition = Route.useLoaderData();
+  const [showDebriefPlayer, setShowDebriefPlayer] = useState(false);
+  // Featured independently produced commentary, never a match livestream or score source.
+  const showItalieFranceDebrief = edition.parisDate >= "2026-11-12" && edition.parisDate <= "2026-11-15";
   const published = edition.articles.filter(isPublicArticle);
   const hubs = HUB_SECTIONS.filter(
     (section) => (sectionArticles(edition, section.slug)?.length ?? 0) >= SECTION_MIN,
@@ -70,6 +75,52 @@ function ActualitesPage() {
           <span className="chip-pill">{edition.parisDate} · Europe/Paris</span>
         </div>
       </section>
+
+      {showItalieFranceDebrief ? (
+        <section className="surface-card space-y-4 p-5 sm:p-6" aria-labelledby="italie-france-video-title">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-link">Débrief football · vidéo externe · 12 novembre 2026</p>
+          <h2 id="italie-france-video-title" className="text-xl font-bold tracking-tight text-paper sm:text-2xl">
+            Italie–France : le débrief annoncé par Paris Central – PSG Podcast
+          </h2>
+          <p className="max-w-3xl text-sm leading-relaxed text-mist">
+            La chaîne YouTube Paris Central – PSG Podcast a programmé une émission de réactions et d’analyse après Italie–France
+            le 12 novembre 2026 à 22 h 50 (heure de Paris). Ce contenu est un commentaire éditorial indépendant,
+            pas une retransmission du match et pas une source de résultat sportif vérifié.
+          </p>
+          {showDebriefPlayer ? (
+            <div className="relative aspect-video max-w-3xl overflow-hidden rounded-xl bg-ink">
+              <iframe
+                className="absolute inset-0 h-full w-full"
+                src={nocookieEmbed("4-vipwrEgwM")}
+                title="Italie–France : débrief Paris Central – PSG Podcast sur YouTube"
+                loading="lazy"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allow="encrypted-media; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setShowDebriefPlayer(true)}
+              className="chip-pill font-semibold hover:border-sage/30 hover:text-link"
+            >
+              Charger le lecteur YouTube
+            </button>
+          )}
+          <p className="text-xs leading-relaxed text-muted">
+            Le lecteur externe est chargé uniquement après votre clic.{" "}
+            <a
+              href="https://www.youtube.com/watch?v=4-vipwrEgwM"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-link hover:underline"
+            >
+              Ouvrir la vidéo sur YouTube
+            </a>
+          </p>
+        </section>
+      ) : null}
 
       {playerFeatures.length ? (
         <section className="space-y-4" aria-label="Dossiers footballeurs recherchés">
