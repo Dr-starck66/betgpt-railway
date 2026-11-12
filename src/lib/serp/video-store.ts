@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import bundledMatchVideos from "../../../data/match-videos.json";
 import type { MatchInput } from "@/engine/types";
 import { isCuratedVideo, videoRelevance, type CuratedVideo } from "@/lib/serp/video";
 
@@ -12,7 +13,10 @@ export function loadCuratedVideos(): CuratedVideo[] {
     if (!Array.isArray(list)) return [];
     return list.filter(isCuratedVideo);
   } catch {
-    return [];
+    // Serverless output may omit the on-disk data/ directory. Bundling the
+    // same verified JSON guarantees deterministic, read-only availability.
+    const list: unknown = bundledMatchVideos.videos;
+    return Array.isArray(list) ? list.filter(isCuratedVideo) : [];
   }
 }
 
