@@ -77,7 +77,7 @@ export function MatchAnswer({
           ))}
         </div>
       ) : null}
-      <MatchYouTubePanel match={match} video={video} />
+      <MatchYouTubePanel id="video" match={match} video={video} />
     </div>
   );
 }
