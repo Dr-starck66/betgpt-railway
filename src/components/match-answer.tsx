@@ -2,7 +2,8 @@ import type { MatchInput } from "@/engine/types";
 import { competitionByLeague } from "@/lib/serp/leagues";
 import { answerFirst, factRows, snippetQuestions } from "@/lib/serp/answer";
 import { scoreFreshness, strictStatus } from "@/lib/serp/status";
-import { nocookieEmbed, videoRelevance, type CuratedVideo } from "@/lib/serp/video";
+import type { CuratedVideo } from "@/lib/serp/video";
+import { MatchYouTubePanel } from "@/components/match-youtube-panel";
 
 export function MatchAnswer({
   match,
@@ -22,7 +23,7 @@ export function MatchAnswer({
   const compName = comp?.title ?? match.competition;
   const rows = factRows(match, { stale });
   const questions = snippetQuestions(match, { stale });
-  const play = video && videoRelevance(video, match).show ? video : null;
+
 
   return (
     <div className="mt-4 space-y-4">
@@ -76,23 +77,7 @@ export function MatchAnswer({
           ))}
         </div>
       ) : null}
-      {play ? (
-        <section id="video" className="space-y-2">
-          <h2 className="text-base font-semibold text-paper">{play.title}</h2>
-          <p className="text-xs text-muted">Source : {play.channelName}. Cette vidéo n’est pas produite par BetGPT.</p>
-          <div className="relative aspect-video overflow-hidden rounded-lg bg-ink">
-            <iframe
-              className="absolute inset-0 h-full w-full"
-              src={nocookieEmbed(play.videoId)}
-              title={play.title}
-              loading="lazy"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allow="encrypted-media; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
-        </section>
-      ) : null}
+      <MatchYouTubePanel match={match} video={video} />
     </div>
   );
 }
