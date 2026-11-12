@@ -1,8 +1,13 @@
 import { useState } from "react";
-import type { MatchInput } from "@/engine/types";
 import { nocookieEmbed, videoRelevance, youtubeIdFromUrl, youtubeMatchSearchUrl, type CuratedVideo } from "@/lib/serp/video";
 
-type MatchVideoRef = Pick<MatchInput, "home" | "away" | "kickoff" | "competition" | "status">;
+type MatchVideoRef = {
+  home: { name: string };
+  away: { name: string };
+  kickoff: string;
+  competition: string;
+  status?: string;
+};
 
 /**
  * Permanent interface on every fixture, irrespective of date or league.
