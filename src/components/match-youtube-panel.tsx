@@ -14,7 +14,7 @@ type MatchVideoRef = {
  * Video discovery is NOT faked: no iframe until a curated video or a visitor's
  * explicit URL is available. The visitor-supplied video remains unverified.
  */
-export function MatchYouTubePanel({ match, video }: { match: MatchVideoRef; video?: CuratedVideo | null }) {
+export function MatchYouTubePanel({ match, video, id }: { match: MatchVideoRef; video?: CuratedVideo | null; id?: string }) {
   const [open, setOpen] = useState(false);
   const [url, setUrl] = useState("");
   const [manualId, setManualId] = useState<string | null>(null);
@@ -24,7 +24,7 @@ export function MatchYouTubePanel({ match, video }: { match: MatchVideoRef; vide
   const chosenByVisitor = Boolean(manualId);
 
   return (
-    <section className="space-y-3 rounded-xl border border-line p-4" aria-label={`Vidéos YouTube : ${match.home.name} contre ${match.away.name}`}>
+    <section id={id} className="space-y-3 rounded-xl border border-line p-4" aria-label={`Vidéos YouTube : ${match.home.name} contre ${match.away.name}`}>
       <h3 className="text-base font-semibold text-paper">Vidéos YouTube du match</h3>
       <p className="text-xs leading-relaxed text-mist">
         Match : {match.home.name} – {match.away.name} · {match.competition}. Lecteur chargé uniquement au clic, sans vidéo ni score inventés.
