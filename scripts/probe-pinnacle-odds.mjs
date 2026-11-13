@@ -8,6 +8,25 @@
  */
 const BASE = "https://api.the-odds-api.com/v4";
 const DEFAULT_SPORT = "soccer_epl";
+function completePinnacleH2h(event, nowMs) {
+  if (!event || typeof event.home_team !== "string" || typeof event.away_team !== "string" ||
+      event.home_team === event.away_team || Date.parse(event.commence_time) <= nowMs ||
+      !Number.isFinite(Date.parse(event.commence_time))) return false;
+  const books = (event.bookmakers ?? []).filter(b => b?.key === "pinnacle");
+  if (books.length !== 1) return false;
+  const markets = (books[0].markets ?? []).filter(m => m?.key === "h2h");
+  if (markets.length !== 1) return false;
+  const at = Date.parse(markets[0].last_update ?? books[0].last_update ?? "");
+  if (!Number.isFinite(at) || at > nowMs || nowMs - at > 5 * 60_000) return false;
+  const selections = markets[0].outcomes;
+  if (!Array.isArray(selections) || selections.length !== 3) return false;
+  for (const name of [event.home_team, "Draw", event.away_team]) {
+    const matches = selections.filter(o => o?.name === name);
+    if (matches.length !== 1 || !Number.isFinite(matches[0].price) ||
+        matches[0].price < 1.05 || matches[0].price > 100) return false;
+  }
+  return true;
+}
 function asQuota(headers) {
   const raw = headers.get("x-requests-remaining");
   if (raw === null || !/^\d+$/.test(raw)) return null;
@@ -41,10 +60,8 @@ export async function probePinnacleKey({
     if (!response.ok) return { status: "ODDS_UNAVAILABLE", httpStatus: response.status, quotaRemaining: asQuota(response.headers) };
     const data = await response.json();
     if (!Array.isArray(data)) return { status: "ODDS_SCHEMA_UNVERIFIED" };
-    const pinnacleEvents = data.filter(e =>
-      Array.isArray(e?.bookmakers) && e.bookmakers.some(b => b?.key === "pinnacle" &&
-        Array.isArray(b?.markets) && b.markets.some(m => m?.key === "h2h"))
-    );
+    const nowMs = Date.now();
+    const pinnacleEvents = data.filter(e => completePinnacleH2h(e, nowMs));
     return {
       status: pinnacleEvents.length ? "PINNACLE_FEED_PRESENT" : "PINNACLE_FEED_ABSENT",
       sport, eventsReturned: data.length, pinnacleEvents: pinnacleEvents.length,
