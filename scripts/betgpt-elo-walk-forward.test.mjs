@@ -76,3 +76,10 @@ test("all metrics have honest failure-to-prove live betting tags",()=>{
  assert.equal(r.scoredHoldout.marketCloseComparator.retrospectiveOnly,true);
  assert.equal(r.calibratedAgainstEmpiricalBaseline,"NO_CLEAR_IMPROVEMENT");
 });
+
+test("two matches for one club on same day are rejected rather than double-counted",()=>{
+  assert.throws(()=>walkForward([
+    f("2024-08-01","A","B",1,0),
+    f("2024-08-01","A","C",2,1)
+  ]),/SAME_DAY_TEAM_CONFLICT/);
+});
