@@ -31,6 +31,7 @@ test("licensed research with separately validated model yields candidate", () =>
   assert.equal(r.status, "RESEARCH_CANDIDATE");
   assert.equal(r.outcomes[0]?.eligible, true);
   assert.ok(r.outcomes[0]!.benchmarkEv > 0);
+  assert.ok(Math.abs(r.outcomes[0]!.referenceEdge - (r.outcomes[0]!.referenceProbability - 1 / r.outcomes[0]!.price)) < 1e-12);
 });
 test("no independent calibration => reference only", () => {
   const r = run({ pinnacle: { ...p, provenance: "LICENSED_FEED" }, model: { ...model, validatedOutOfSample: false } });
