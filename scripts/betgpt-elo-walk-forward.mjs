@@ -81,21 +81,34 @@ function brier(p,y){return p.reduce((sum,x,i)=>sum+(x-(i===y?1:0))**2,0)}
 function loss(p,y){return -Math.log(Math.max(1e-10,p[y]))}
 function avg(items,key){return items.length?items.reduce((s,r)=>s+r[key],0)/items.length:null}
 function bootstrapPaired(rows,field,seed=20261113){
-  if(rows.length < 100) return null;
+  // Match-day cluster resampling: every fixture on a calendar day moves together.
+  // Still exploratory because consecutive days and repeated clubs are correlated.
+  if(rows.length<100) return null;
+  const buckets=new Map();
+  for(const r of rows){
+    const arr=buckets.get(r.date)??[];
+    arr.push(r);buckets.set(r.date,arr);
+  }
+  const groups=[...buckets.values()];
+  if(groups.length<50)return null;
   let state=seed>>>0;
   const rnd=()=>{state^=state<<13;state^=state>>>17;state^=state<<5;return (state>>>0)/4294967296};
-  const vals=new Array(1000);
+  const vals=new Array(2000);
   for(let b=0;b<vals.length;b++){
-    let s=0;for(let i=0;i<rows.length;i++)s+=rows[Math.floor(rnd()*rows.length)][field];
-    vals[b]=s/rows.length;
+    let sum=0,count=0;
+    for(let i=0;i<groups.length;i++){
+      const g=groups[Math.floor(rnd()*groups.length)];
+      for(const row of g){sum+=row[field];count++;}
+    }
+    vals[b]=sum/count;
   }
   vals.sort((a,b)=>a-b);
-  return [round(vals[24]),round(vals[975])];
+  return [round(vals[49]),round(vals[1950])];
 }
 function metricRows(rows){
   const n=rows.length;
   if(!n)return {n:0,brier:null,logLoss:null,meanBaselineBrier:null,meanBaselineLogLoss:null,
-    pairedDeltaBrier:null,pairedDeltaLogLoss:null,pairedDeltaBrierBootstrap95:null,pairedDeltaLogLossBootstrap95:null,
+    pairedDeltaBrier:null,pairedDeltaLogLoss:null,pairedDeltaBrierDateClusterBootstrap95:null,pairedDeltaLogLossDateClusterBootstrap95:null,
     topClassCalibrationEce:null,marketCloseComparator:null};
   const eceBins=Array.from({length:10},()=>({n:0,p:0,y:0}));
   for(const r of rows){
@@ -114,8 +127,8 @@ function metricRows(rows){
     meanBaselineLogLoss:round(avg(rows,"baselineLogLoss")),
     pairedDeltaBrier:round(avg(rows,"deltaBrier")),
     pairedDeltaLogLoss:round(avg(rows,"deltaLogLoss")),
-    pairedDeltaBrierBootstrap95:bootstrapPaired(rows,"deltaBrier"),
-    pairedDeltaLogLossBootstrap95:bootstrapPaired(rows,"deltaLogLoss",20261114),
+    pairedDeltaBrierDateClusterBootstrap95:bootstrapPaired(rows,"deltaBrier"),
+    pairedDeltaLogLossDateClusterBootstrap95:bootstrapPaired(rows,"deltaLogLoss",20261114),
     topClassCalibrationEce:round(eceBins.reduce((s,b)=>s+(b.n/n)*Math.abs(b.p/Math.max(1,b.n)-b.y/Math.max(1,b.n)),0)),
     marketCloseComparator:{
       n:marketRows.length,
@@ -207,7 +220,7 @@ export function walkForward(fixtures){
     subsets[season]=metricRows(out.filter(r=>r.season===season));
   }
   const total=metricRows(out);
-  const deltaCI=total.pairedDeltaBrierBootstrap95;
+  const deltaCI=total.pairedDeltaBrierDateClusterBootstrap95;
   return {
     schema:"astra-betgpt-walk-forward-elo-poisson/v1",
     engine:"EXISTING_BACKTEST_ELO_POISSON_CORE_REPRODUCTION",
@@ -226,7 +239,7 @@ export function walkForward(fixtures){
       "Uniformly frozen model coefficients; Elo and league baseline updated chronologically AFTER each day's games.",
       "The first held-out season (2024/25) starts after a 2023/24 training-only warmup; 2025/26 is a second later prequential holdout.",
       "Closing Bet365 prices are retrospective post-hoc diagnostics, NOT pre-kickoff tradable prices or predictive features.",
-      "A paired fixture-level bootstrap ignores date/team correlation and must be treated as exploratory, not a firm claim.",
+      "A paired match-day cluster bootstrap partially addresses shared-date correlation but not repeat-team or serial dependence; exploratory only.",
       "No provider-observed pre-match bet odds, EV, ROI, CLV, live odds, or true six-model calibration proven.",
     ],
     _predictions:out, // caller removes from console audit; useful for adversarial tests
