@@ -232,8 +232,8 @@ export function walkForward(fixtures){
     trainingCutoff:PRESEASON_CUTOFF,trainingMatches,
     scoredHoldout:total,bySeason:subsets,
     holdoutPredictionStreamSha256:createHash("sha256").update(JSON.stringify(predictionStream)).digest("hex"),
-    calibratedAgainstEmpiricalBaseline:deltaCI&&deltaCI[1]<0?"IMPROVEMENT_CONFIRMED_95_BOOTSTRAP":
-      deltaCI&&deltaCI[0]>0?"DEGRADATION_CONFIRMED_95_BOOTSTRAP":"NO_CLEAR_IMPROVEMENT",
+    calibratedAgainstEmpiricalBaseline:deltaCI&&deltaCI[1]<0?"EXPLORATORY_DAY_CLUSTER_CI_BELOW_ZERO":
+      deltaCI&&deltaCI[0]>0?"EXPLORATORY_DAY_CLUSTER_CI_ABOVE_ZERO":"NO_CLEAR_IMPROVEMENT",
     warnings:[
       "Validation ONLY of BetGPT historical backtest Elo-Poisson core; full live six-model MatchInput is not replayable from this CSV.",
       "Uniformly frozen model coefficients; Elo and league baseline updated chronologically AFTER each day's games.",
