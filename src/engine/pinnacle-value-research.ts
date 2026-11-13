@@ -132,7 +132,7 @@ export function evaluatePinnacleValueResearch(input: {
     rows.push({
       selection, bookmaker: best.bookmaker, price: best.price,
       referenceProbability, modelProbability: model ? model[selection] : null,
-      benchmarkEv, modelEv, referenceEdge: benchmarkEv,
+      benchmarkEv, modelEv, referenceEdge: referenceProbability - 1 / best.price,
       eligible: p.provenance === "LICENSED_FEED" && modelEv !== null &&
         modelEv >= minModelEv && benchmarkEv >= minBenchmarkEv,
     });
