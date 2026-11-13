@@ -51,7 +51,12 @@ test("one snapshot requests Pinnacle 1X2 only, no token in URL", async () => {
   const out=await probePinnacleKey({key,oneSnapshot:true,http:async(url,opts)=>{
     calls.push(url);assert.equal(opts.headers["x-api-key"],key);assert.ok(!url.includes(key));
     return calls.length===1 ? reply(liveSport) :
-      reply([{bookmakers:[{key:"pinnacle",markets:[{key:"h2h",outcomes:[]}]}]}],"9");
+      reply([{
+        home_team:"Paris SG",away_team:"Lyon",commence_time:new Date(Date.now()+3600_000).toISOString(),
+        bookmakers:[{key:"pinnacle",last_update:new Date().toISOString(),markets:[{
+          key:"h2h",outcomes:[{name:"Paris SG",price:2.1},{name:"Draw",price:3.4},{name:"Lyon",price:3.5}]
+        }]}]
+      }],"9");
   }});
   assert.equal(calls.length,2);assert.ok(calls[1].includes("bookmakers=pinnacle"));assert.ok(calls[1].includes("markets=h2h"));
   assert.equal(out.status,"PINNACLE_FEED_PRESENT");assert.equal(out.quotaRemaining,9);
@@ -69,4 +74,12 @@ test("unknown sport blocks without making a network call", async () => {
     calls++;return reply(liveSport);
   }});
   assert.equal(out.status,"SPORT_NOT_ALLOWLISTED");assert.equal(calls,0);
+});
+
+test("mere bookmaker marker without valid prices is rejected", async () => {
+  let calls=0;
+  const out=await probePinnacleKey({key,oneSnapshot:true,http:async()=>{
+    calls++;return calls===1 ? reply(liveSport) : reply([{bookmakers:[{key:"pinnacle",markets:[{key:"h2h",outcomes:[]}]}]}],"9");
+  }});
+  assert.equal(out.status,"PINNACLE_FEED_ABSENT");
 });
