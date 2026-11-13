@@ -1,3 +1,19 @@
 {
-  "videos": []
+  "videos": [
+    {
+      "videoId": "4-vipwrEgwM",
+      "title": "Italie–France : le débrief en direct",
+      "description": "Débrief et analyse du match Italie–France par Paris Central – PSG Podcast. Il ne s'agit pas de la retransmission du match.",
+      "channelName": "Paris Central - PSG Podcast",
+      "publishedAt": "2026-11-11T19:33:36Z",
+      "home": "Italy",
+      "away": "France",
+      "kickoffDay": "2026-11-12",
+      "competition": "Ligue des nations",
+      "kind": "reaction",
+      "official": false,
+      "language": "fr",
+      "livestream": false
+    }
+  ]
 }

@@ -364,6 +364,8 @@ export const getHomeSlice = createServerFn({ method: "GET" })
       total: visible.length,
       matches: slice.map(cardMatch),
       predictions: d.predictions.filter((p) => ids.has(p.matchId)).map(cardPrediction),
+      // Real curated videos only; absent metadata stays null, never a fabricated embed.
+      videos: Object.fromEntries(slice.map((match) => [match.id, pickMatchVideo(match)])),
     };
   });
 

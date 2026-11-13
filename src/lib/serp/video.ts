@@ -131,3 +131,38 @@ export function liveBroadcastLd(video: CuratedVideo): Record<string, unknown> | 
     broadcastOfEvent: { "@type": "VideoObject", embedUrl: `https://www.youtube.com/embed/${video.videoId}` },
   };
 }
+
+/** A lookup link for any fixture, without pretending a matching YouTube ID is known. */
+export function youtubeMatchSearchUrl(match: {
+  home: { name: string };
+  away: { name: string };
+  kickoff?: string;
+  competition?: string;
+  status?: string;
+}): string {
+  const date = /^\d{4}-\d{2}-\d{2}/.exec(match.kickoff ?? "")?.[0] ?? "";
+  const intent = match.status === "finished" ? "résumé analyse football" : "avant match analyse football";
+  const query = [match.home.name, match.away.name, match.competition, date, intent]
+    .map((part) => String(part ?? "").trim())
+    .filter(Boolean).join(" ");
+  return "https://www.youtube.com/results?search_query=" + encodeURIComponent(query);
+}
+
+/** Accept real YouTube URLs only. Never embed arbitrary external origins or search results. */
+export function youtubeIdFromUrl(value: string): string | null {
+  try {
+    const url = new URL(value.trim());
+    if (url.protocol !== "https:") return null;
+    const host = url.hostname.toLowerCase();
+    let id: string | null = null;
+    if (host === "youtu.be" || host === "www.youtu.be") {
+      id = url.pathname.split("/")[1] ?? null;
+    } else if (["youtube.com", "www.youtube.com", "m.youtube.com", "music.youtube.com", "youtube-nocookie.com", "www.youtube-nocookie.com"].includes(host)) {
+      if (url.pathname === "/watch") id = url.searchParams.get("v");
+      else if (/^\/(embed|shorts|live)\//.test(url.pathname)) id = url.pathname.split("/")[2] ?? null;
+    }
+    return id && /^[A-Za-z0-9_-]{11}$/.test(id) ? id : null;
+  } catch {
+    return null;
+  }
+}

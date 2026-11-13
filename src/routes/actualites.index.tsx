@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { YouTubeMatchDirectory } from "@/components/youtube-match-directory";
 import { getEditorialEdition } from "@/lib/editorial.functions";
 import { HUB_SECTIONS, SECTION_MIN, sectionArticles } from "@/lib/editorial/engine";
 import { formatParis } from "@/lib/editorial/time";
@@ -70,6 +71,8 @@ function ActualitesPage() {
           <span className="chip-pill">{edition.parisDate} · Europe/Paris</span>
         </div>
       </section>
+
+      <YouTubeMatchDirectory />
 
       {playerFeatures.length ? (
         <section className="space-y-4" aria-label="Dossiers footballeurs recherchés">
