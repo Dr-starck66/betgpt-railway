@@ -81,7 +81,7 @@ function brier(p,y){return p.reduce((sum,x,i)=>sum+(x-(i===y?1:0))**2,0)}
 function loss(p,y){return -Math.log(Math.max(1e-10,p[y]))}
 function avg(items,key){return items.length?items.reduce((s,r)=>s+r[key],0)/items.length:null}
 function bootstrapPaired(rows,field,seed=20261113){
-  if(!rows.length) return null;
+  if(rows.length < 100) return null;
   let state=seed>>>0;
   const rnd=()=>{state^=state<<13;state^=state>>>17;state^=state<<5;return (state>>>0)/4294967296};
   const vals=new Array(1000);
@@ -104,7 +104,12 @@ function metricRows(rows){
     c.n++;c.p+=r.prob[j];c.y+=(j===r.y?1:0);
   }
   const marketRows=rows.filter(r=>r.marketBrier!==null);
-  return {n,brier:round(avg(rows,"modelBrier")),logLoss:round(avg(rows,"modelLogLoss")),
+  const classCalibration=outcomes.map((name,i)=>({
+    outcome:name,meanPredicted:round(rows.reduce((sum,r)=>sum+r.prob[i],0)/n),
+    observedFrequency:round(rows.filter(r=>r.y===i).length/n),
+  }));
+  const modelTop1Accuracy=rows.filter(r=>r.prob.indexOf(Math.max(...r.prob))===r.y).length/n;
+  return {n,modelTop1Accuracy:round(modelTop1Accuracy),classCalibration,brier:round(avg(rows,"modelBrier")),logLoss:round(avg(rows,"modelLogLoss")),
     meanBaselineBrier:round(avg(rows,"baselineBrier")),
     meanBaselineLogLoss:round(avg(rows,"baselineLogLoss")),
     pairedDeltaBrier:round(avg(rows,"deltaBrier")),
@@ -117,6 +122,10 @@ function metricRows(rows){
       brier:round(avg(marketRows,"marketBrier")),
       logLoss:round(avg(marketRows,"marketLogLoss")),
       usedForPrediction:false, retrospectiveOnly:true,
+      pairedModelMinusMarketCloseBrier:round(marketRows.length?
+        marketRows.reduce((sum,r)=>sum+r.modelBrier-r.marketBrier,0)/marketRows.length:null),
+      pairedModelMinusMarketCloseLogLoss:round(marketRows.length?
+        marketRows.reduce((sum,r)=>sum+r.modelLogLoss-r.marketLogLoss,0)/marketRows.length:null),
     },
   };
 }
@@ -137,7 +146,8 @@ export function walkForward(fixtures){
   const byDate=new Map(),unique=new Set();
   for(const m of fixtures){
     if(!m || !m.date || !m.home || !m.away || !outcomes.includes(m.result) ||
-       !Number.isInteger(m.gh) || !Number.isInteger(m.ga))throw Error("INVALID_FIXTURE");
+       !Number.isInteger(m.gh) || !Number.isInteger(m.ga) || m.gh<0 || m.ga<0 ||
+       (m.gh>m.ga?"H":m.gh===m.ga?"D":"A")!==m.result)throw Error("INVALID_FIXTURE");
     const key=[m.date,m.home,m.away].join("|");
     if(unique.has(key))throw Error("DUPLICATE_FIXTURE");
     unique.add(key);
@@ -148,6 +158,11 @@ export function walkForward(fixtures){
   let trainingMatches=0;
   for(const date of [...byDate.keys()].sort()){
     const batch=byDate.get(date).sort((a,b)=>a.home.localeCompare(b.home)||a.away.localeCompare(b.away));
+    const teamsOfDay=new Set();
+    for(const m of batch){
+      if(teamsOfDay.has(m.home)||teamsOfDay.has(m.away))throw Error("SAME_DAY_TEAM_CONFLICT");
+      teamsOfDay.add(m.home);teamsOfDay.add(m.away);
+    }
     // Predictions are all frozen before ANY result on the same calendar day is used.
     const prepared=batch.map(m=>{
       const h=rating.get(m.home)??DEFAULT_ELO,a=rating.get(m.away)??DEFAULT_ELO;
