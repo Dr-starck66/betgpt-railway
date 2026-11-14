@@ -167,6 +167,7 @@ export function walkForward(fixtures){
     const row=byDate.get(m.date)??[];row.push(m);byDate.set(m.date,row);
   }
   const rating=new Map(),teamMatches=new Map(),occ=[1,1,1], out=[];
+  const trainingPredictions=[];
   const predictionStream=[];
   let trainingMatches=0;
   for(const date of [...byDate.keys()].sort()){
@@ -202,7 +203,12 @@ export function walkForward(fixtures){
         row.deltaLogLoss=row.modelLogLoss-row.baselineLogLoss;
         out.push(row);
         predictionStream.push([date,m.home,m.away,...p.map(round)]);
-      }else trainingMatches++;
+      }else {
+        trainingMatches++;
+        // Frozen prediction was computed before any score for this match/day.
+        // Outcome is exposed only to the offline calibration training stage.
+        trainingPredictions.push({season:m.season,date,p:[...p],y:outcomes.indexOf(m.result)});
+      }
     }
     // Update AFTER all fixtures of the day were predicted and scored.
     for(const {m,h,a} of prepared){
@@ -243,6 +249,7 @@ export function walkForward(fixtures){
       "No provider-observed pre-match bet odds, EV, ROI, CLV, live odds, or true six-model calibration proven.",
     ],
     _predictions:out, // caller removes from console audit; useful for adversarial tests
+    _trainingPredictions:trainingPredictions, // prior-season calibration, not emitted in the public report
   };
 }
 async function download(season) {
@@ -261,7 +268,7 @@ async function main(args){
     } else files[s]=await download(s);
   }
   const {rows,hashes,counts,rejected}=loadFixtures(files);
-  const { _predictions, ...evaluation }=walkForward(rows);
+  const { _predictions, _trainingPredictions, ...evaluation }=walkForward(rows);
   console.log(JSON.stringify({
     ...evaluation,sourceFiles:SEASONS,csvSha256:hashes,sourceRows:counts,rejectedRows:rejected,
   },null,2));
