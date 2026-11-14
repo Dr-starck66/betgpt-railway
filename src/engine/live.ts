@@ -1199,6 +1199,28 @@ export function generateHistory() {
 export function lookupTeam(id: string) {
 	return SNAPSHOT?.teams[id];
 }
+/**
+ * ASTRA research only: execute the ORIGINAL ESPN MatchInput builder in a sandbox.
+ * No runtime snapshot write, IndexNow ping, bookmaker URL inference, ticket,
+ * production deployment, or change to the existing refresh path.
+ * The caller MUST separately audit data provenance and any bookmaker quotes.
+ */
+export async function astraReadOnlyEspnMatchInputs(leagueId: LeagueId) {
+  const spec = LEAGUES.find((entry) => entry.id === leagueId);
+  if (!spec) throw new Error("ASTRA_UNKNOWN_LEAGUE");
+  const startedAt = new Date().toISOString();
+  const data = await fetchLeague(spec);
+  return {
+    source: "BETGPT_LIVE_FETCHLEAGUE_ORIGINAL",
+    league: leagueId,
+    startedAt,
+    capturedAt: new Date().toISOString(),
+    matches: data.matches,
+    teams: data.teams,
+    historyN: data.history.length,
+  };
+}
+
 export function bustLive() {
 	SNAPSHOT = null;
 	INFLIGHT = null;
