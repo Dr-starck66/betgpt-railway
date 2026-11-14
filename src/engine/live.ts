@@ -607,9 +607,11 @@ function parseEvents(payload, league, competition, standings, teams, mode, compe
 				oddsHome: books.opening.home,
 				oddsDraw: books.opening.draw,
 				oddsAway: books.opening.away,
-				closingHome: books.current[0].home,
-				closingDraw: books.current[0].draw,
-				closingAway: books.current[0].away
+				// Real provider may legitimately publish no FR 1X2 quote.
+				// Preserve 0 = UNAVAILABLE; never invent a closing price.
+				closingHome: books.current[0]?.home ?? 0,
+				closingDraw: books.current[0]?.draw ?? 0,
+				closingAway: books.current[0]?.away ?? 0
 			});
 			continue;
 		}
@@ -1199,6 +1201,28 @@ export function generateHistory() {
 export function lookupTeam(id: string) {
 	return SNAPSHOT?.teams[id];
 }
+/**
+ * ASTRA research only: execute the ORIGINAL ESPN MatchInput builder in a sandbox.
+ * No runtime snapshot write, IndexNow ping, bookmaker URL inference, ticket,
+ * production deployment, or change to the existing refresh path.
+ * The caller MUST separately audit data provenance and any bookmaker quotes.
+ */
+export async function astraReadOnlyEspnMatchInputs(leagueId: LeagueId) {
+  const spec = LEAGUES.find((entry) => entry.id === leagueId);
+  if (!spec) throw new Error("ASTRA_UNKNOWN_LEAGUE");
+  const startedAt = new Date().toISOString();
+  const data = await fetchLeague(spec);
+  return {
+    source: "BETGPT_LIVE_FETCHLEAGUE_ORIGINAL",
+    league: leagueId,
+    startedAt,
+    capturedAt: new Date().toISOString(),
+    matches: data.matches,
+    teams: data.teams,
+    historyN: data.history.length,
+  };
+}
+
 export function bustLive() {
 	SNAPSHOT = null;
 	INFLIGHT = null;
