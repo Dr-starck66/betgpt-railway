@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {auditOriginalMatchInputs} from "./betgpt-original-matchinput-audit.mjs";
+import {astraReadOnlyEspnMatchInputs} from "../src/engine/live.ts";
 
 const AT="2026-11-14T00:00:00.000Z", KO="2026-11-21T15:00:00.000Z";
 const source=(url)=>({
@@ -77,4 +78,44 @@ test("raw bookmaker offers never appear as certified strict prices",()=>{
  const a=audit([m({current:[odds(undefined),{...odds(AT),book:"Unapproved"}]})]);
  assert.equal(a.matches[0].strictModelInput.current.length,0);
  assert.equal(a.matches[0].strictModelInput.opening.home,0);
+});
+
+test("REGRESSION: missing historical bookmaker odds MUST NOT erase current BetGPT fixtures", async()=>{
+ const realFetch=globalThis.fetch;
+ const now=Date.now(),iso=d=>new Date(d).toISOString(),ymd=t=>iso(t).slice(0,10);
+ const pastDate=ymd(now-5*86400000),futureDate=ymd(now+5*86400000);
+ const mkEvent=(id,date,finished)=>({
+   id,date:date+"T14:00:00Z",
+   competitions:[{
+     date:date+"T14:00:00Z",
+     status:{type:finished?{name:"STATUS_FINAL",state:"post",completed:true}:
+       {name:"STATUS_SCHEDULED",state:"pre",completed:false}},
+     competitors:[
+       {homeAway:"home",team:{id:"1",displayName:"Test FC"},score:finished?"2":"0"},
+       {homeAway:"away",team:{id:"2",displayName:"Test United"},score:finished?"1":"0"},
+     ],
+     odds:[], // exact historical failure trigger
+   }],
+ });
+ globalThis.fetch=async (url)=>{
+   const u=String(url);
+   const body=u.includes("/calendar/ondays")
+     ? {eventDate:[pastDate,futureDate]}
+     : u.includes("/standings?")
+       ? {children:[{standings:{entries:[]}}]}
+       : u.includes("/scoreboard?")
+         ? {events:u.includes(pastDate.replaceAll("-",""))?
+           [mkEvent("past",pastDate,true)]:
+           u.includes(futureDate.replaceAll("-",""))?
+           [mkEvent("future",futureDate,false)]:[]}
+         : {events:[]};
+   return new Response(JSON.stringify(body),{status:200,headers:{"content-type":"application/json"}});
+ };
+ try {
+   const s=await astraReadOnlyEspnMatchInputs("PL");
+   assert.equal(s.matches.length,1);
+   assert.equal(s.matches[0].id,"espn-future");
+   assert.equal(s.matches[0].current.length,0);
+   assert.equal(s.historyN,1);
+ }finally{globalThis.fetch=realFetch;}
 });
