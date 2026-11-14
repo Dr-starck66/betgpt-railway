@@ -22,6 +22,11 @@ export function auditOriginalMatchInputs(runtime,sourceReads,{at=new Date().toIS
    !Array.isArray(runtime?.matches)||!Array.isArray(sourceReads)||
    !Number.isInteger(maxMatches)||maxMatches<1||maxMatches>50)
    throw Error("ORIGINAL_MATCHINPUT_CAPTURE_INVALID");
+ if(sourceReads.some(s=>!/^https:\/\/(site\.web\.api|sports\.core\.api)\.espn\.com\//.test(s.url??"")||
+   !/^[a-f0-9]{64}$/.test(s.sha256??"")||
+   !Number.isFinite(Date.parse(s.startedAt))||!Number.isFinite(Date.parse(s.finishedAt))||
+   Date.parse(s.finishedAt)<Date.parse(s.startedAt)||
+   Date.parse(s.finishedAt)>t+60_000))throw Error("ESPN_SOURCE_PROVENANCE_INVALID");
  const sources=sourceReads.filter(s=>s.httpStatus===200);
  const verifiedStandings=sources.some(s=>/\/standings\?/.test(s.url));
  const verifiedScoreboard=sources.some(s=>/\/scoreboard\?/.test(s.url));
@@ -63,12 +68,16 @@ export function auditOriginalMatchInputs(runtime,sourceReads,{at=new Date().toIS
     const validOdds=[b.home,b.draw,b.away].every(o=>typeof o==="number"&&Number.isFinite(o)&&o>=1.05&&o<=100);
     const validBook=frBooks.test(String(b.book??""));
     const audit={book:b.book??"UNKNOWN",observedAt:b.observedAt??null};
-    if(validClock&&validOdds&&validBook){
+    // No bookmaker-feed raw payload was captured by the read-only ESPN-only
+    // constructor. Never promote an observedAt field alone to source proof.
+    const quoteEvidenceLinked=false;
+    if(validClock&&validOdds&&validBook&&quoteEvidenceLinked){
       quotes.push({book:b.book,observedAt:b.observedAt,home:b.home,draw:b.draw,away:b.away,
         provenance:"PROVIDER_OBSERVED_QUOTE_TIMESTAMPED"});
     } else {
       rejectedQuotes.push({...audit,reason:!validClock?"MISSING_OR_STALE_PROVIDER_TIMESTAMP":
-        !validOdds?"INVALID_1X2_ODDS":"NON_APPROVED_PROVIDER"});
+        !validOdds?"INVALID_1X2_ODDS":!validBook?"NON_APPROVED_PROVIDER":
+        "NO_LINKED_AUTHENTICATED_BOOKMAKER_PAYLOAD"});
     }
   }
   const cleanModelInput={...m,current:quotes,opening:{
