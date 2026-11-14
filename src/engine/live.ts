@@ -607,9 +607,11 @@ function parseEvents(payload, league, competition, standings, teams, mode, compe
 				oddsHome: books.opening.home,
 				oddsDraw: books.opening.draw,
 				oddsAway: books.opening.away,
-				closingHome: books.current[0].home,
-				closingDraw: books.current[0].draw,
-				closingAway: books.current[0].away
+				// Real provider may legitimately publish no FR 1X2 quote.
+				// Preserve 0 = UNAVAILABLE; never invent a closing price.
+				closingHome: books.current[0]?.home ?? 0,
+				closingDraw: books.current[0]?.draw ?? 0,
+				closingAway: books.current[0]?.away ?? 0
 			});
 			continue;
 		}
