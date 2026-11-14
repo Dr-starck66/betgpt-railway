@@ -1,0 +1,47 @@
+name: ASTRA Editorial Immutable Candidate Proof Ω
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - "src/lib/editorial/**"
+      - "src/routes/actualites.**"
+      - "src/lib/sitemap-urls.ts"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: astra-editorial-immutable-candidate-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  immutable-editorial-candidate:
+    name: Immutable candidate gate
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Checkout exact immutable PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install exact dependencies
+        run: npm ci --include=dev
+
+      - name: Run unchanged ASTRA immutable candidate gate
+        run: npm run release:candidate
+
+      - name: Record verified GREEN SHA
+        run: echo "ASTRA_EDITORIAL_IMMUTABLE_CANDIDATE_GREEN sha=${{ github.event.pull_request.head.sha }}"

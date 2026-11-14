@@ -11,6 +11,11 @@ on:
     types: [created]
   issues:
     types: [opened]
+  # PR evidence is queryable by the connected GitHub integration, whereas
+  # its workflow-run lookup excludes push/dispatch/issue events.
+  pull_request:
+    branches: [astra-green-evidence-20261024]
+    types: [opened, synchronize, reopened]
 
 concurrency:
   group: astra-never-fail-${{ github.ref }}
@@ -24,7 +29,11 @@ jobs:
   candidate-gate:
     name: Candidate gate
     if: >-
-      (github.event_name != 'issue_comment' && github.event_name != 'issues') ||
+      (github.event_name == 'pull_request' &&
+       github.event.pull_request.base.ref == 'astra-green-evidence-20261024' &&
+       github.event.pull_request.head.ref == 'main' &&
+       github.event.pull_request.head.repo.full_name == github.repository) ||
+      (github.event_name != 'pull_request' && github.event_name != 'issue_comment' && github.event_name != 'issues') ||
       (github.actor == 'Dr-starck66' &&
        ((github.event_name == 'issue_comment' &&
          github.event.issue.number == 99 &&
@@ -37,7 +46,7 @@ jobs:
       - name: Checkout immutable candidate
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
 
       - name: Setup Node
@@ -56,14 +65,19 @@ jobs:
 
       - name: Confirm GREEN candidate
         if: steps.gate.outcome == 'success'
-        run: echo "ASTRA_NEVER_FAIL_CANDIDATE_GREEN sha=${{ github.sha }}"
+        run: echo "ASTRA_NEVER_FAIL_CANDIDATE_GREEN sha=${{ github.event.pull_request.head.sha || github.sha }}"
+
+      # A PR run is proof only: it must never attempt to commit repairs to main.
+      - name: Refuse non-GREEN pull request candidate
+        if: github.event_name == 'pull_request' && steps.gate.outcome != 'success'
+        run: exit 1
 
       - name: Apply deterministic SEO self-heal
-        if: steps.gate.outcome != 'success'
+        if: steps.gate.outcome != 'success' && github.event_name != 'pull_request'
         run: node scripts/astra-seo-self-heal.mjs --apply
 
       - name: Require a real source repair
-        if: steps.gate.outcome != 'success'
+        if: steps.gate.outcome != 'success' && github.event_name != 'pull_request'
         shell: bash
         run: |
           if git diff --quiet -- src/lib/sitemap-urls.ts src/lib/seo/astra-self-heal-sitemap.ts; then
@@ -73,11 +87,11 @@ jobs:
           git diff --check
 
       - name: Revalidate repaired working tree end-to-end
-        if: steps.gate.outcome != 'success'
+        if: steps.gate.outcome != 'success' && github.event_name != 'pull_request'
         run: npm run release:candidate
 
       - name: Refuse stale auto-repair
-        if: steps.gate.outcome != 'success'
+        if: steps.gate.outcome != 'success' && github.event_name != 'pull_request'
         shell: bash
         env:
           ORIGINAL_SHA: ${{ github.sha }}
@@ -91,7 +105,7 @@ jobs:
           fi
 
       - name: Commit verified SEO repair
-        if: steps.gate.outcome != 'success'
+        if: steps.gate.outcome != 'success' && github.event_name != 'pull_request'
         shell: bash
         env:
           ORIGINAL_SHA: ${{ github.sha }}
@@ -103,7 +117,7 @@ jobs:
           git push origin "HEAD:${GITHUB_REF_NAME}"
 
       - name: Dispatch immutable gate for repaired SHA
-        if: steps.gate.outcome != 'success'
+        if: steps.gate.outcome != 'success' && github.event_name != 'pull_request'
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
@@ -111,7 +125,7 @@ jobs:
           curl --fail-with-body -L             -X POST             -H "Accept: application/vnd.github+json"             -H "Authorization: Bearer $GH_TOKEN"             -H "X-GitHub-Api-Version: 2022-11-28"             "https://api.github.com/repos/${{ github.repository }}/actions/workflows/astra-never-fail.yml/dispatches"             -d "{\"ref\":\"${GITHUB_REF_NAME}\"}"
 
       - name: Keep original broken SHA non-promotable
-        if: steps.gate.outcome != 'success'
+        if: steps.gate.outcome != 'success' && github.event_name != 'pull_request'
         shell: bash
         run: |
           echo "ASTRA_SELF_HEAL_REPAIR_COMMITTED: original SHA remains non-promotable; repaired SHA owns the next gate."
