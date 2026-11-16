@@ -1,4 +1,5 @@
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
+import { probeDigestStorage } from "./digest-storage";
 import { join } from "node:path";
 import { fmtOdds, fmtPct } from "@/lib/utils";
 import { loadAdmin } from "./admin";
@@ -69,7 +70,12 @@ export function buildDigest(
 }
 
 export async function publishDigest(digest: Digest): Promise<Digest> {
-  mkdirSync(DIR, { recursive: true });
+  // Fail closed on serverless: no durable record means sending could duplicate.
+  const storage = probeDigestStorage(DIR);
+  if (!storage.ok) {
+    console.warn("ASTRA_DIGEST_DISABLED_NO_DURABLE_STORAGE", storage.reason);
+    return { ...digest, sent: false, to: loadAdmin().emailTo };
+  }
   const file = join(DIR, `${digest.date}.json`);
   let existing: Digest | null = null;
   try {
@@ -103,6 +109,10 @@ export async function publishDigest(digest: Digest): Promise<Digest> {
     }
   }
   const out = { ...digest, sent, to: admin.emailTo };
-  writeFileSync(file, JSON.stringify(out, null, 2));
+  try {
+    writeFileSync(file, JSON.stringify(out, null, 2));
+  } catch (error) {
+    console.error("ASTRA_DIGEST_PERSIST_FAILED", error instanceof Error ? error.message : String(error));
+  }
   return out;
 }
