@@ -1815,7 +1815,11 @@ function runEngineUncached(): EngineRun {
   });
   const review = reviewOf(canonicalChampionRows(liveTickets));
   const bets = predictions.flatMap((p) => p.markets.filter((m) => m.decision === "BET").map((m) => ({ p, m })));
-  if (process.env.BETGPT_OFFLINE !== "1") void publishDigest(buildDigest(dailyBest, bets));
+  if (process.env.BETGPT_OFFLINE !== "1") {
+    void publishDigest(buildDigest(dailyBest, bets)).catch((error) => {
+      console.error("ASTRA_DIGEST_PUBLISH_FAILED", error instanceof Error ? error.message : String(error));
+    });
+  }
   const openIds = new Set(kept.filter((m) => m.status !== "finished").map((m) => m.id));
   const openMarkets = predictions.filter((p) => openIds.has(p.matchId)).flatMap((p) => p.markets);
   const asOf = live?.meta.asOf ?? new Date().toISOString();
