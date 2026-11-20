@@ -33,3 +33,7 @@ Tests use temporary virtual environments and synthetic `.pth` hooks; no actual m
 - An offline service has no live startup proof. GitHub PRs, local integration tests, and a staged Railway start command are **not deployment proofs**.
 - Fail closed may prevent startup if vendor tooling uses executable `.pth` hooks, or if platform Python paths do not match the discovered environment. Investigate the logged `PARTIAL` reason instead of bypassing the guard.
 - Never dump `.env`, token values or raw credentials in logs. If a compromised release was installed previously, rotate potentially exposed tokens and rebuild the environment from a trusted base before redeployment.
+
+## Contrôle négatif conservé (ChatGPT sandbox, 20 Nov 2026)
+
+Une analyse directe d’un environnement Python préexistant (et **non** du service Railway) a trouvé 5 hooks `.pth` exécutables et rendu `PARTIAL`, code 1, avant toute importation tierce. Trois noms distincts observés : `000_oai_py_sys_path_prepend.pth`, `a1_coverage.pth`, `distutils-precedence.pth` (les deux derniers apparaissent dans deux racines). Ces marqueurs ne démontrent pas une infection, et le garde n’en exécute aucun. Ils prouvent qu’un environnement légitime peut avoir besoin d’une politique d’examen des hooks documentée, faute de quoi le fail-closed empêchera de démarrer. **Aucun contournement automatique ni mise en service n’a été ajouté.**
