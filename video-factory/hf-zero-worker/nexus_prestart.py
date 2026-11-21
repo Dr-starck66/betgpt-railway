@@ -174,6 +174,8 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--source", default="requirements.txt")
     ap.add_argument("--worker", default="worker.py")
+    ap.add_argument("--preflight-only", action="store_true",
+                    help="audit the runtime without importing or starting worker.py")
     ns = ap.parse_args(argv)
     roots = get_roots()
     report = scan(Path(ns.source), roots)
@@ -186,6 +188,9 @@ def main(argv: list[str] | None = None) -> int:
     print(json.dumps(report, ensure_ascii=False, sort_keys=True), flush=True)
     if report["status"] != "PASS_SCOPED":
         return 2 if report["status"] == "FAIL" else 1
+
+    if ns.preflight_only:
+        return 0
 
     # Safety invariant: Python has *never* loaded site, and will not load it now.
     # Inspected third-party paths are appended directly; .pth, sitecustomize and
