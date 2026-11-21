@@ -257,11 +257,12 @@ function LedgerPage() {
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <p className="eyebrow">Match par match · vérification publique</p>
-            <h2 className="mt-1 font-display text-2xl">Les {canonical.summary.n} paris utilisés pour calculer ce bilan</h2>
+            <h2 className="mt-1 font-display text-2xl">Replay historique · {canonical.summary.n} pronostics simulés</h2>
             <p className="mt-2 max-w-4xl text-sm leading-relaxed text-mist">
-              Ici, rien n’est caché : chaque match du test est affiché avec le pari choisi, la cote utilisée
-              par la simulation, le score final et le gain ou la perte simulé. Les cotes ne sont pas des
-              captures d’un bookmaker prises au moment du match : elles ont été reconstruites pour ce test.
+              Les scores historiques et les pronostics du modèle restent consultables. En revanche, aucune cote
+              bookmaker réellement archivée avant ces matchs n’est disponible ici : nous ne présentons plus
+              les cotes reconstruites comme des offres réelles. Les résultats en euros sont exclusivement simulés.
+              Pour les prochains matchs, consultez le comparateur de cotes vérifiées.
             </p>
           </div>
           <button
@@ -303,10 +304,10 @@ function LedgerPage() {
                 <div>
                   <p className="text-xs font-medium text-muted">{format(new Date(row.kickoff), "dd/MM/yyyy")} · {LEAGUE_LABEL[row.league] ?? row.league}</p>
                   <h3 className="mt-1 text-sm font-bold text-paper">{row.home} – {row.away}</h3>
-                  <p className="mt-1 text-xs text-mist">Pari 1N2 : victoire {row.selection} · cote reconstruite {row.odds.toFixed(2)}</p>
+                  <p className="mt-1 text-xs text-mist">Pronostic 1N2 : victoire {row.selection} · cote bookmaker historique non archivée</p>
                 </div>
                 <span className={row.result === "win" ? "rounded-lg bg-sage/10 px-2 py-1 text-xs font-bold text-sage" : "rounded-lg bg-rust/10 px-2 py-1 text-xs font-bold text-rust"}>
-                  {row.result === "win" ? "GAGNÉ" : "PERDU"}
+                  {row.result === "win" ? "PRONOSTIC JUSTE" : "PRONOSTIC FAUX"}
                 </span>
               </div>
               <div className="mt-4 grid grid-cols-2 gap-3 border-t border-line/70 pt-3 text-sm">
@@ -326,7 +327,7 @@ function LedgerPage() {
                 <th className="py-2 pr-3 font-medium">Date</th>
                 <th className="py-2 pr-3 font-medium">Match</th>
                 <th className="py-2 pr-3 font-medium">Pari</th>
-                <th className="py-2 pr-3 font-medium">Cote du test*</th>
+                <th className="py-2 pr-3 font-medium">Cote bookmaker archivée</th>
                 <th className="py-2 pr-3 font-medium">Score</th>
                 <th className="py-2 pr-3 font-medium">Verdict</th>
                 <th className="py-2 pr-3 font-medium">Protection score exact</th>
@@ -368,7 +369,7 @@ function LedgerPage() {
                   <td className="py-3 pr-3 text-paper">
                     Victoire {row.selection}
                   </td>
-                  <td className="py-3 pr-3 tabular">{row.odds.toFixed(2)}</td>
+                  <td className="py-3 pr-3 text-xs text-muted">Non disponible</td>
                   <td className="py-3 pr-3 tabular font-medium text-paper">{row.score}</td>
                   <td className="py-3 pr-3">
                     <span
@@ -378,12 +379,12 @@ function LedgerPage() {
                           : "inline-flex rounded-full border border-rust/40 bg-rust/10 px-3 py-1 text-xs font-extrabold uppercase tracking-wide text-rust"
                       }
                     >
-                      {row.result === "win" ? "GAGNANT" : "PERDU"}
+                      {row.result === "win" ? "PRONOSTIC JUSTE" : "PRONOSTIC FAUX"}
                     </span>
                   </td>
                   <td className="py-3 pr-3 text-xs text-mist">
                     {row.hedge
-                      ? `${row.hedge.score} à ${row.hedge.odds.toFixed(2)} · ${fmtEur(row.hedge.stake * 100)} · ${row.hedge.hit ? "réussi" : "raté"}`
+                      ? `${row.hedge.score} · simulation ${row.hedge.hit ? "juste" : "fausse"} (cote réelle non archivée)`
                       : "—"}
                   </td>
                   <td className="py-3 pr-3 tabular font-bold">
@@ -405,8 +406,8 @@ function LedgerPage() {
 
         <div className="mt-4 space-y-1 text-xs leading-relaxed text-muted">
           <p>
-            * Cote du test : valeur reconstruite pour la simulation historique, pas une cote bookmaker
-            enregistrée à l’heure du match.
+            Aucune cote historique réelle n’est documentée pour ce replay. Ne pas utiliser ce tableau pour
+            estimer des gains réalisables chez des opérateurs français.
           </p>
           <p>Les scores finaux viennent de l’archive historique des matchs.</p>
           <p>

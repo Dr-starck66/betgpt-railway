@@ -3,7 +3,7 @@ name: BetGPT Chat Gate Fast
 on:
   workflow_dispatch:
   schedule:
-    - cron: "7,17,27,37,47,57 * * * *"
+    - cron: "7 * * * *"
 
 permissions:
   contents: read

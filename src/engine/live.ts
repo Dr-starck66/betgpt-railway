@@ -5,6 +5,7 @@ import { TEAMS } from "./data";
 import { applyAffiliateUrls, isUsOnlyBook, FR_BOOK_RE } from "./affiliates";
 import { fetchBookPages, lookupBookPages } from "./book-pages";
 import { fetchUnibetBooks, oddsKey, EMPTY_TOTALS, sameFixture, lookupUniBook, type UnibetFixture } from "./eu-odds";
+import { fetchFrenchBookmakerOdds, findFrenchFixture } from "./fr-odds-provider";
 import { clamp } from "./math";
 import { matchSlug } from "@/lib/seo";
 import { logoFor } from "@/lib/crests";
@@ -872,8 +873,20 @@ async function loadSnapshot() {
 		if (!listedOpen({ kickoff: f.start, status: "scheduled" })) continue;
 		matches.push(matchFromUnibet(f, teams));
 	}
+	// Compare genuinely published FR prices only when a provider key is available.
+	// Matches and match start times are verified before any bookmaker quote is merged.
+	const quoteLeagues = [...new Set(matches.filter((m) => listedOpen(m)).map((m) => m.league))];
+	const frenchProviderFixtures = await fetchFrenchBookmakerOdds(quoteLeagues);
 	for (const m of matches) {
 		const open = listedOpen(m);
+		if (open) {
+			const verified = findFrenchFixture(frenchProviderFixtures, m.home.name, m.away.name, m.kickoff);
+			for (const q of verified?.books ?? []) {
+				const i = m.current.findIndex((b) => b.book.toLowerCase() === q.book.toLowerCase());
+				if (i < 0) m.current.push(q);
+				else if (Date.parse(q.observedAt ?? "") > Date.parse(m.current[i].observedAt ?? "")) m.current[i] = q;
+			}
+		}
 		const extra = lookupUniBook(uniBooks, m.home.name, m.away.name);
 		if (extra && open) {
 			const merged = {

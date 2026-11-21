@@ -42,8 +42,8 @@ function BlogFigure({ img, priority }: { img: BlogImg; priority?: boolean }) {
       seo={img}
       caption
       priority={priority}
-      width={1200}
-      height={675}
+      width={img.width ?? 1200}
+      height={img.height ?? 675}
       className="aspect-video h-auto w-full object-cover"
       figureClassName="rounded-xl border border-line bg-surface"
     />
