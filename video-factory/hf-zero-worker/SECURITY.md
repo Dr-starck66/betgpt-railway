@@ -37,3 +37,13 @@ Tests use temporary virtual environments and synthetic `.pth` hooks; no actual m
 ## Contrôle négatif conservé (ChatGPT sandbox, 20 Nov 2026)
 
 Une analyse directe d’un environnement Python préexistant (et **non** du service Railway) a trouvé 5 hooks `.pth` exécutables et rendu `PARTIAL`, code 1, avant toute importation tierce. Trois noms distincts observés : `000_oai_py_sys_path_prepend.pth`, `a1_coverage.pth`, `distutils-precedence.pth` (les deux derniers apparaissent dans deux racines). Ces marqueurs ne démontrent pas une infection, et le garde n’en exécute aucun. Ils prouvent qu’un environnement légitime peut avoir besoin d’une politique d’examen des hooks documentée, faute de quoi le fail-closed empêchera de démarrer. **Aucun contournement automatique ni mise en service n’a été ajouté.**
+
+## Read-only provider validation mode (2026-11-21)
+
+Run the guard independently of the worker with no third-party imports or network:
+
+```sh
+python -I -S nexus_prestart.py --source requirements.txt --worker worker.py --preflight-only
+```
+
+Exit codes: `0=PASS_SCOPED`, `1=PARTIAL` (deny unattended startup), `2=FAIL` (known compromise). The preflight-only mode validates the worker entry but does **not** execute it. It does not prove build-time integrity or remote service availability. Associate results with an exact image revision.
