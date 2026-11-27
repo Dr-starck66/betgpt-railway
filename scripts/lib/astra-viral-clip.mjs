@@ -1,11 +1,11 @@
 // Extension of ASTRA LAUNCH VIDEO Ω. No network, shell or paid APIs.
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, writeFileSync, statSync, realpathSync, mkdirSync, renameSync, rmSync, existsSync } from 'node:fs';
+import { mkdtempSync, openSync, readSync, closeSync, writeFileSync, statSync, realpathSync, mkdirSync, renameSync, rmSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { probeVideo, detectBlack, evaluateProbe, sha256File } from './astra-launch-video.mjs';
 
-const slug = s => /^[a-z0-9][a-z0-9-]{0,49}$/.test(s);
+const slug = s => typeof s === 'string' && /^[a-z0-9][a-z0-9-]{0,49}$/.test(s);
 const plain = s => typeof s === 'string' && s.trim() && s.length <= 500 && !/[\x00-\x1f{}\\]/u.test(s);
 const finite = n => typeof n === 'number' && Number.isFinite(n);
 const stop = msg => { throw new Error(msg); };
@@ -30,7 +30,7 @@ export function select(job, duration) {
         last = w.end;
       }
     }
-    if (s.end - s.start < 7 || s.end - s.start > 60) continue;
+    if (s.end - s.start < 7 || s.end - s.start > 60 || (!s.words && s.text.length > 120)) continue;
     // Transparent baseline: not a prediction of views or semantic payoff.
     const score = 2 + 2*Number(/[?]/u.test(s.text)) + 2*Number(/\d/u.test(s.text)) + Number(/[.!?]$/u.test(s.text)) + Number(s.text.split(/\s+/u).length >= 8);
     candidates.push({...s, score});
@@ -52,7 +52,9 @@ export function captions(s, brand) {
 }
 export function render(job, sourceFile, outputRoot) {
   const source=realpathSync(sourceFile);
-  if(!statSync(source).isFile())stop('LOCAL_FILE_REQUIRED');
+  if(!statSync(source).isFile()||statSync(source).size>512*1024*1024||path.extname(source).toLowerCase()!=='.mp4')stop('LOCAL_MP4_REQUIRED');
+  const fd=openSync(source,'r'), header=Buffer.alloc(12);
+  try {if(readSync(fd,header,0,12,0)!==12||header.toString('ascii',4,8)!=='ftyp')stop('LOCAL_MP4_REQUIRED');} finally {closeSync(fd);}
   const p=probeVideo(source), duration=Number(p.format?.duration);
   if(!finite(duration)||!p.streams.some(x=>x.codec_type==='video')||!p.streams.some(x=>x.codec_type==='audio'))stop('VIDEO_AND_AUDIO_REQUIRED');
   const picks=select(job,duration); if(!picks.length)stop('NO_VALID_CLIP');
@@ -64,6 +66,9 @@ export function render(job, sourceFile, outputRoot) {
     const results=[];
     for(let i=0;i<picks.length;i++){
       const s=picks[i], len=s.end-s.start, name=`clip-${i+1}.mp4`, out=path.join(stage,name);
+      const scan=spawnSync('ffmpeg',['-nostdin','-hide_banner','-loglevel','info','-ss',String(s.start),'-i',source,'-t',String(len),'-vf','blackdetect=d=0.4:pix_th=0.05','-an','-f','null','-'],{cwd:work,encoding:'utf8',timeout:180000});
+      if(scan.error||scan.status!==0)stop('SOURCE_SCAN_FAIL');
+      if([...scan.stderr.matchAll(/black_duration:([0-9.]+)/g)].some(m=>Number(m[1])>=0.4))stop('SOURCE_BLACK_FAIL');
       writeFileSync(path.join(work,'captions.ass'),captions(s,job.brand));
       const vf='scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:color=0x172334,setsar=1,fps=30,ass=captions.ass';
       run(['-y','-ss',String(s.start),'-i',source,'-t',String(len),'-map','0:v:0','-map','0:a:0','-vf',vf,'-af','loudnorm=I=-14:TP=-1.5:LRA=11','-c:v','libx264','-threads','2','-preset','veryfast','-crf','22','-pix_fmt','yuv420p','-c:a','aac','-b:a','128k','-ar','48000','-movflags','+faststart',out],work);
