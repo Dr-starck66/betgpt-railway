@@ -29,9 +29,11 @@ export type EditorialNewsSignal = {
   sourceUrl?: string;
   publishedAt: string;
   description?: string;
+  /** Full public body only from an explicitly configured first-party publisher RSS feed. */
+  publisherRssBody?: string;
   sourceTier: NewsSourceTier;
   entities: string[];
-  language: "fr";
+  language: "fr" | "en";
 };
 
 export type EditorialImage = {
@@ -40,6 +42,11 @@ export type EditorialImage = {
   width: number;
   height: number;
   credit: string;
+  /** Description displayed below an inline photo; separate from the cover. */
+  caption?: string;
+  /** Per-file provenance, not a blanket site-wide licence statement. */
+  sourceUrl?: string;
+  licenseUrl?: string;
 };
 
 export type EditorialLink = { href: string; label: string };
@@ -60,6 +67,8 @@ export type EditorialSubsection = {
 export type EditorialParagraph = {
   h2: string;
   body: string;
+  /** Optional verified image displayed inside this H2 section, not the hero. */
+  inlineImage?: EditorialImage;
   sourceIds?: string[];
   subsections?: EditorialSubsection[];
 };
@@ -77,6 +86,13 @@ export type DiscoverCheck =
   | "MOBILE_TEMPLATE";
 
 export type EditorialArticle = {
+  generationProof?: {
+    generator: "astra-auto-reporter-v2";
+    runId: string;
+    trigger: "scheduler" | "cron-api" | "operator-catchup";
+    generatedAt: string;
+    modelRequests: number;
+  };
   id: string;
   slug: string;
   slot: SlotId;
